@@ -17,11 +17,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public void registerCategory(CategoryRegisterRequest request) {
-        Category superCategory = categoryRepository.findById(request.getSuperCategoryNo())
+    public void createCategory(CategoryRegisterRequest categoryRequest) {
+        Category superCategory = categoryRepository.findById(categoryRequest.getSuperCategoryNo())
                                                    .orElseThrow(() -> new CategoryNotFoundException("zz"));
 
-        categoryRepository.save(new Category(request, superCategory));
+        categoryRepository.save(new Category(categoryRequest, superCategory));
     }
 
 }

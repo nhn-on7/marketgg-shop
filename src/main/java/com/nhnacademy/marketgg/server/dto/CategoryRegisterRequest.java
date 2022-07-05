@@ -13,4 +13,6 @@ public class CategoryRegisterRequest {
 
     private Integer sequence;
 
+    private String code;
+
 }

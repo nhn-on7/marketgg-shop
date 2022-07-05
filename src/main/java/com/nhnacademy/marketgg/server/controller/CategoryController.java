@@ -6,14 +6,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin/category/v1/categories")
+@RequestMapping("/admin/v1/categories")
 @RequiredArgsConstructor
 public class CategoryController {
 
-    private final CategoryService service;
+    private final CategoryService categoryService;
 
     @PostMapping
     void categoryRegister(@RequestBody CategoryRegisterRequest request) {
-        service.registerCategory(request);
+        categoryService.createCategory(request);
     }
+
 }

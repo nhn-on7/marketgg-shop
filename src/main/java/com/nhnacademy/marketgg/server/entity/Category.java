@@ -27,9 +27,14 @@ public class Category {
     @Column
     private Integer sequence;
 
+    @Column
+    private String code;
+
     public Category(CategoryRegisterRequest request, Category category) {
         this.category = category;
         this.name = request.getName();
         this.sequence = request.getSequence();
+        this.code = request.getCode();
     }
+
 }
