@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface LabelService {
     List<LabelDto> retrieveLabels();
+
+    void createLabel(LabelDto labelDto);
 }

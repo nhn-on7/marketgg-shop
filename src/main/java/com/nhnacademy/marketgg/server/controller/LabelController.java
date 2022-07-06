@@ -32,6 +32,18 @@ public class LabelController {
                              .body(labelResponse);
     }
 
+    @PostMapping
+    ResponseEntity<Void> registerLabel(@RequestBody LabelDto labelDto) {
+        labelService.createLabel(labelDto);
+
+        headers.setLocation(URI.create("/admin/v1/labels"));
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                             .headers(headers)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
+    }
+
     private HttpHeaders buildHeader() {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
