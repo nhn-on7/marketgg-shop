@@ -5,10 +5,12 @@ import com.nhnacademy.marketgg.server.dto.CategoryRegisterRequest;
 import com.nhnacademy.marketgg.server.service.CategoryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -24,17 +26,17 @@ class CategoryControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @MockBean
-    private CategoryService categoryService;
+    @Autowired
+    ObjectMapper objectMapper;
 
-    ObjectMapper objectMapper = new ObjectMapper();
-    String requestBody = "";
+    @MockBean
+    CategoryService categoryService;
 
     @DisplayName("카테고리 등록 테스트")
     @Test
     void testCreateCategory() throws Exception {
         CategoryRegisterRequest categoryRequest = new CategoryRegisterRequest(0L, "채소", 1, "PROD");
-        requestBody = objectMapper.writeValueAsString(categoryRequest);
+        String requestBody = objectMapper.writeValueAsString(categoryRequest);
 
         doNothing().when(categoryService).createCategory(any());
 
