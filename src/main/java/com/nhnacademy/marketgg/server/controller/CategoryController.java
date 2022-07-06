@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -41,6 +42,18 @@ public class CategoryController {
                                         CategoryRequest categoryRequest) {
 
         categoryService.updateCategory(id, categoryRequest);
+
+        headers.setLocation(URI.create("/admin/v1/categories/" + id));
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .headers(headers)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
+    }
+
+    @DeleteMapping("/{category-id}")
+    ResponseEntity<Void> deleteCategory(@PathVariable("category-id") Long id) {
+        categoryService.deleteCategory(id);
 
         headers.setLocation(URI.create("/admin/v1/categories/" + id));
 
