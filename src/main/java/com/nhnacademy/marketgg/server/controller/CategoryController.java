@@ -2,7 +2,6 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.dto.CategoryRequest;
 import com.nhnacademy.marketgg.server.service.CategoryService;
-import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/admin/v1/categories")
@@ -30,9 +31,9 @@ public class CategoryController {
         headers.setLocation(URI.create("/admin/v1/categories"));
 
         return ResponseEntity.status(HttpStatus.CREATED)
-            .headers(headers)
-            .contentType(MediaType.APPLICATION_JSON)
-            .build();
+                             .headers(headers)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
     }
 
     @PutMapping("/{category-id}")
@@ -44,9 +45,9 @@ public class CategoryController {
         headers.setLocation(URI.create("/admin/v1/categories/" + id));
 
         return ResponseEntity.status(HttpStatus.OK)
-            .headers(headers)
-            .contentType(MediaType.APPLICATION_JSON)
-            .build();
+                             .headers(headers)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
     }
 
     private HttpHeaders buildHttpHeader() {
