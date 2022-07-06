@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.LabelDto;
 import com.nhnacademy.marketgg.server.entity.Label;
+import com.nhnacademy.marketgg.server.exception.LabelNotFoundException;
 import com.nhnacademy.marketgg.server.repository.LabelRepository;
 import com.nhnacademy.marketgg.server.service.LabelService;
 import org.junit.jupiter.api.DisplayName;
@@ -15,8 +16,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -50,4 +53,23 @@ class DefaultLabelServiceTest {
 
         verify(labelRepository, times(1)).save(any(Label.class));
     }
+
+    @Test
+    @DisplayName("라벨 삭제 성공")
+    void deleteLabelSuccess() {
+        when(labelRepository.findById(anyLong())).thenReturn(Optional.of(new Label(new LabelDto("hello"))));
+        doNothing().when(labelRepository).delete(any());
+
+        labelService.deleteLabel(1L);
+
+        verify(labelRepository, times(1)).delete(any(Label.class));
+    }
+
+    @Test
+    @DisplayName("라벨 삭제 실패")
+    void deleteLabelFail() {
+        assertThatThrownBy(()->labelService.deleteLabel(1L))
+                .isInstanceOf(LabelNotFoundException.class);
+    }
+
 }

@@ -44,6 +44,17 @@ public class LabelController {
                              .build();
     }
 
+    @DeleteMapping("/{labels-id}")
+    ResponseEntity<Void> deleteLabel(@PathVariable("labels-id") Long id) {
+        labelService.deleteLabel(id);
+
+        headers.setLocation(URI.create("/admin/v1/labels/" + id));
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .headers(headers)
+                             .build();
+    }
+
     private HttpHeaders buildHeader() {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);

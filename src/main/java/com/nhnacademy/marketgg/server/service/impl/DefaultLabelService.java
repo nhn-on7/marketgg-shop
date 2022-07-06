@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.LabelDto;
 import com.nhnacademy.marketgg.server.entity.Label;
+import com.nhnacademy.marketgg.server.exception.LabelNotFoundException;
 import com.nhnacademy.marketgg.server.repository.LabelRepository;
 import com.nhnacademy.marketgg.server.service.LabelService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,14 @@ public class DefaultLabelService implements LabelService {
         Label label = new Label(labelDto);
 
         labelRepository.save(label);
+    }
+
+    @Transactional
+    @Override
+    public void deleteLabel(Long id) {
+        Label label = labelRepository.findById(id).orElseThrow(()->new LabelNotFoundException("라벨을 찾을 수 없습니다."));
+
+        labelRepository.delete(label);
     }
 
 }

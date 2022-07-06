@@ -17,8 +17,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -61,6 +60,17 @@ class LabelControllerTest {
                 .andExpect(status().isCreated());
 
         verify(labelService, times(1)).createLabel(any(labelDto.getClass()));
+    }
+
+    @Test
+    @DisplayName("라벨 삭제")
+    void deleteLabel() throws Exception {
+        doNothing().when(labelService).deleteLabel(anyLong());
+
+        this.mockMvc.perform(delete("/admin/v1/labels/{label-id}", 1L))
+                .andExpect(status().isOk());
+
+        verify(labelService, times(1)).deleteLabel(1L);
     }
 
 }
