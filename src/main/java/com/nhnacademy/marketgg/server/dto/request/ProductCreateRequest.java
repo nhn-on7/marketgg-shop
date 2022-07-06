@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.dto.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
