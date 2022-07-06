@@ -40,6 +40,7 @@ class DefaultCategoryServiceTest {
 
         List<CategoryResponse> responses = categoryService.retrieveCategories();
 
+        // review size 만 체크 했는데 값까지 체크하는게 더 좋을까요??
         assertThat(responses).hasSize(1);
     }
 
