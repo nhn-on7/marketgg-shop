@@ -18,6 +18,9 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -30,17 +33,16 @@ class DefaultCategoryServiceTest {
     @MockBean
     private CategoryRepository categoryRepository;
 
-    @DisplayName("카테고리 등록 성공")
     @Test
+    @DisplayName("카테고리 등록 성공")
     void testCreateCategorySuccess() {
-        when(categoryRepository.findById(0L))
-                .thenReturn(Optional.of(Category.builder()
-                                                .categoryNo(0L)
-                                                .superCategory(null)
-                                                .name("")
-                                                .sequence(0)
-                                                .code("")
-                                                .build()));
+        when(categoryRepository.findById(0L)).thenReturn(Optional.of(Category.builder()
+                                                                             .categoryNo(0L)
+                                                                             .superCategory(null)
+                                                                             .name("")
+                                                                             .sequence(0)
+                                                                             .code("")
+                                                                             .build()));
 
         Category category = Category.builder()
                                     .categoryNo(1L)
@@ -50,8 +52,7 @@ class DefaultCategoryServiceTest {
                                     .code("PROD")
                                     .build();
 
-        when(categoryRepository.findById(1L))
-                .thenReturn(Optional.of(category));
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
 
         categoryService.createCategory(CategoryRequest.of());
 
@@ -59,26 +60,24 @@ class DefaultCategoryServiceTest {
         assertThat(categoryRepository.findById(1L)).isEqualTo(Optional.of(category));
     }
 
-    @DisplayName("카테고리 등록 실패")
     @Test
+    @DisplayName("카테고리 등록 실패")
     void testCreateCategoryFail() {
         // REVIEW: assertThatThrownBy() 에 노란 라인이 뜨면서 Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.가 뜨는데 원인에 대해 알고 싶습니다.
-        assertThatThrownBy(() -> categoryService.createCategory(
-                new CategoryRequest(-10L, "", 1, "")))
+        assertThatThrownBy(() -> categoryService.createCategory(new CategoryRequest(-10L, "", 1, "")))
                 .isInstanceOf(CategoryNotFoundException.class);
     }
 
-    @DisplayName("카테고리 수정 성공")
     @Test
+    @DisplayName("카테고리 수정 성공")
     void testUpdateCategorySuccess() {
-        when(categoryRepository.findById(0L))
-                .thenReturn(Optional.of(Category.builder()
-                                                .categoryNo(0L)
-                                                .superCategory(null)
-                                                .name("")
-                                                .sequence(0)
-                                                .code("")
-                                                .build()));
+        when(categoryRepository.findById(0L)).thenReturn(Optional.of(Category.builder()
+                                                                             .categoryNo(0L)
+                                                                             .superCategory(null)
+                                                                             .name("")
+                                                                             .sequence(0)
+                                                                             .code("")
+                                                                             .build()));
 
         Category category = Category.builder()
                                     .categoryNo(1L)
@@ -88,8 +87,7 @@ class DefaultCategoryServiceTest {
                                     .code("PROD")
                                     .build();
 
-        when(categoryRepository.findById(1L))
-                .thenReturn(Optional.of(category));
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
 
         categoryService.updateCategory(1L, CategoryRequest.of());
 
@@ -97,31 +95,46 @@ class DefaultCategoryServiceTest {
                           .getName()).isEqualTo("채소");
     }
 
-    @DisplayName("카테고리 수정 실패 (수정할 카테고리 존재 X)")
     @Test
-    void testUpdateCategoryFailWhenNotExistCategory() {
+    @DisplayName("카테고리 수정 실패 (수정할 카테고리 존재 X)")
+    void testUpdateCategoryFailWhenNotExistsCategory() {
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> categoryService.updateCategory(
-                -3L, new CategoryRequest(1L, "채소", 1, "PROD")
-        )).isInstanceOf(CategoryNotFoundException.class);
+        assertThatThrownBy(() -> categoryService.updateCategory(-3L, new CategoryRequest(1L, "채소", 1, "PROD")))
+                .isInstanceOf(CategoryNotFoundException.class);
     }
 
-    @DisplayName("카테고리 수정 실패 (상위 카테고리 존재 X)")
     @Test
-    void testUpdateCategoryFailWhenNotExistSuperCategory() {
-        when(categoryRepository.findById(2L))
-                .thenReturn(Optional.of(Category.builder()
-                                                .categoryNo(2L)
-                                                .superCategory(null)
-                                                .name("채소")
-                                                .sequence(0)
-                                                .code("PROD")
-                                                .build()));
+    @DisplayName("카테고리 수정 실패 (상위 카테고리 존재 X)")
+    void testUpdateCategoryFailWhenNotExistsSuperCategory() {
+        when(categoryRepository.findById(2L)).thenReturn(Optional.of(Category.builder()
+                                                                             .categoryNo(2L)
+                                                                             .superCategory(null)
+                                                                             .name("채소")
+                                                                             .sequence(0)
+                                                                             .code("PROD")
+                                                                             .build()));
 
-        assertThatThrownBy(() -> categoryService.updateCategory(
-                2L, new CategoryRequest(-1L, "채소", 1, "PROD")
-        )).isInstanceOf(CategoryNotFoundException.class);
+        assertThatThrownBy(() -> categoryService.updateCategory(2L, new CategoryRequest(-1L, "채소", 1, "PROD")))
+                .isInstanceOf(CategoryNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("카테고리 삭제 성공")
+    void testDeleteCategory() {
+        doNothing().when(categoryRepository).deleteById(anyLong());
+
+        categoryService.deleteCategory(1L);
+
+        verify(categoryRepository, times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    @DisplayName("카테고리 삭제 실패 (삭제할 카테고리 존재 X)")
+    void testDeleteCategoryFailWhenNotExistsCategory() {
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> categoryService.deleteCategory(1L)).isInstanceOf(CategoryNotFoundException.class);
     }
 
 }

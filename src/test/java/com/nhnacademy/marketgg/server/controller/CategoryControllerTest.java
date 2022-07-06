@@ -60,7 +60,8 @@ class CategoryControllerTest {
                     .content(objectMapper.writeValueAsBytes(categoryRequest)))
                     .andExpect(status().isOk());
 
-        verify(categoryService, times(1)).updateCategory(anyLong(), any(categoryRequest.getClass()));
+        verify(categoryService, times(1))
+                .updateCategory(anyLong(), any(categoryRequest.getClass()));
     }
 
     @Test
