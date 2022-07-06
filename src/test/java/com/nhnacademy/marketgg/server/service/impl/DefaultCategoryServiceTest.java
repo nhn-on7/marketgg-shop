@@ -33,6 +33,16 @@ class DefaultCategoryServiceTest {
     @MockBean
     private CategoryRepository categoryRepository;
 
+    @Test
+    @DisplayName("카테고리 목록 조회")
+    void testRetrieveCategories() {
+        when(categoryRepository.findAllCategories()).thenReturn(List.of(new CategoryResponse()));
+
+        List<CategoryResponse> responses = categoryService.retrieveCategories();
+
+        assertThat(responses).hasSize(1);
+    }
+
     @DisplayName("카테고리 등록 성공")
     @Test
     void testCreateCategorySuccess() {

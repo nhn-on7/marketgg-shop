@@ -37,6 +37,17 @@ class CategoryControllerTest {
     @MockBean
     CategoryService categoryService;
 
+    @Test
+    @DisplayName("카테고리 목록 조회 테스트")
+    void testRetrieveCategories() throws Exception {
+        when(categoryService.retrieveCategories()).thenReturn(List.of());
+
+        this.mockMvc.perform(get("/admin/v1/categories"))
+                    .andExpect(status().isOk());
+
+        verify(categoryService, times(1)).retrieveCategories();
+    }
+
     @DisplayName("카테고리 등록 테스트")
     @Test
     void testCreateCategory() throws Exception {
