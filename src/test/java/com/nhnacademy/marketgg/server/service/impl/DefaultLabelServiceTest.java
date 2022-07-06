@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.LabelDto;
+import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.repository.LabelRepository;
 import com.nhnacademy.marketgg.server.service.LabelService;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +18,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @Transactional
@@ -37,5 +39,15 @@ class DefaultLabelServiceTest {
         List<LabelDto> response = labelService.retrieveLabels();
 
         assertThat(response.get(0).getName()).isEqualTo("hello");
+    }
+
+    @Test
+    @DisplayName("라벨 등록 성공")
+    void createLabelSuccess() {
+        doNothing().when(labelRepository).save(any());
+
+        labelService.createLabel(new LabelDto("hello"));
+
+        verify(labelRepository, times(1)).save(any(Label.class));
     }
 }

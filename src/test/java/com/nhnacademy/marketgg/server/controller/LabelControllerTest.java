@@ -18,6 +18,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,6 +46,21 @@ class LabelControllerTest {
                 .andReturn();
 
         verify(labelService, times(1)).retrieveLabels();
+    }
+
+    @Test
+    @DisplayName("라벨 등록")
+    void createLabel() throws Exception {
+        LabelDto labelDto = new LabelDto("hello");
+
+        doNothing().when(labelService).createLabel(any());
+
+        this.mockMvc.perform(post("/admin/v1/labels")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(labelDto)))
+                .andExpect(status().isCreated());
+
+        verify(labelService, times(1)).createLabel(any(labelDto.getClass()));
     }
 
 }
