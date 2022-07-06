@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
-import com.nhnacademy.marketgg.server.dto.CategoryRegisterRequest;
+import com.nhnacademy.marketgg.server.dto.CategoryRequest;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.exception.CategoryNotFoundException;
 import com.nhnacademy.marketgg.server.repository.CategoryRepository;
@@ -48,7 +48,7 @@ class DefaultCategoryServiceTest {
                                     .code("PROD")
                                     .build();
 
-        categoryService.createCategory(CategoryRegisterRequest.of());
+        categoryService.createCategory(CategoryRequest.of());
 
         // REVIEW: 카테고리 레포지토리의 save가 정상적으로 들어가지 않는 것 같습니다. 원인에 대해 알고 싶습니다.
         assertThat(categoryRepository.findById(1L)).isEqualTo(Optional.of(category));
@@ -59,7 +59,7 @@ class DefaultCategoryServiceTest {
     void testCreateCategoryFail() {
         // REVIEW: assertThatThrownBy() 에 노란 라인이 뜨면서 Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.가 뜨는데 원인에 대해 알고 싶습니다.
         assertThatThrownBy(() -> categoryService.createCategory(
-            new CategoryRegisterRequest(-10L, "", 1, "")))
+            new CategoryRequest(-10L, "", 1, "")))
             .isInstanceOf(CategoryNotFoundException.class);
     }
 

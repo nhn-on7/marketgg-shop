@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.CategoryRegisterRequest;
+import com.nhnacademy.marketgg.server.dto.CategoryRequest;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,11 +38,27 @@ public class Category {
     @Column
     private String code;
 
-    public Category(Category superCategory, CategoryRegisterRequest categoryRequest) {
+    public Category(Category superCategory, CategoryRequest categoryRequest) {
         this.superCategory = superCategory;
         this.name = categoryRequest.getName();
         this.sequence = categoryRequest.getSequence();
         this.code = categoryRequest.getCode();
+    }
+
+    public void setSuperCategory(Category superCategory) {
+        this.superCategory = superCategory;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSequence(Integer sequence) {
+        this.sequence = sequence;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
 }

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class CategoryRegisterRequest {
+public class CategoryRequest {
 
     private Long superCategoryNo;
 
@@ -17,8 +17,8 @@ public class CategoryRegisterRequest {
 
     private String code;
 
-    public static CategoryRegisterRequest of() {
-        return new CategoryRegisterRequest(0L, "채소", 1, "PROD");
+    public static CategoryRequest of() {
+        return new CategoryRequest(0L, "채소", 1, "PROD");
     }
 
 }
