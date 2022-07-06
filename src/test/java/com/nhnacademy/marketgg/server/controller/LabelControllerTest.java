@@ -52,7 +52,7 @@ class LabelControllerTest {
     void createLabel() throws Exception {
         LabelDto labelDto = new LabelDto("hello");
 
-        doNothing().when(labelService).createLabel(any());
+        doNothing().when(labelService).createLabel(any(LabelDto.class));
 
         this.mockMvc.perform(post("/admin/v1/labels")
                 .contentType(MediaType.APPLICATION_JSON)

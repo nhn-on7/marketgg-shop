@@ -10,5 +10,5 @@ import java.util.List;
 public interface LabelRepository extends JpaRepository<Label, Long> {
 
     @Query("select l.name as name from Label l")
-    List<LabelDto> getAll();
+    List<LabelDto> findAllLabels();
 }

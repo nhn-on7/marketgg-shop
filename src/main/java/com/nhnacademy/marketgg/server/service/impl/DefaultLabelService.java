@@ -19,7 +19,7 @@ public class DefaultLabelService implements LabelService {
 
     @Override
     public List<LabelDto> retrieveLabels() {
-        return labelRepository.getAll();
+        return labelRepository.findAllLabels();
     }
 
     @Transactional
