@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
@@ -54,6 +56,7 @@ class DefaultProductServiceTest {
         productService.createProduct(productRequest);
 
         assertThat(productRepository.findById(1L).get().getProductNo()).isEqualTo(product.get().getProductNo());
+        verify(productRepository, atLeastOnce()).save(any());
     }
 
     @DisplayName("상품 등록 실패 테스트")
@@ -63,5 +66,6 @@ class DefaultProductServiceTest {
 
         assertThatThrownBy(() -> productService.createProduct(productRequest)).hasMessageContaining(
             "상품 등록에 실패하였습니다.");
+        verify(productRepository, atLeastOnce()).save(any());
     }
 }
