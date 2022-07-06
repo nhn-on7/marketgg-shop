@@ -16,6 +16,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,6 +61,21 @@ class CategoryControllerTest {
                     .andExpect(status().isOk());
 
         verify(categoryService, times(1)).updateCategory(anyLong(), any(categoryRequest.getClass()));
+    }
+
+    @Test
+    @DisplayName("카테고리 삭제 테스트")
+    void testDeleteCategory() throws Exception {
+        Long categoryId = 1L;
+
+        doNothing().when(categoryService).deleteCategory(anyLong());
+
+        this.mockMvc.perform(delete("/admin/v1/categories/{category-id}", categoryId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(String.valueOf(categoryId)))
+                    .andExpect(status().isOk());
+
+        verify(categoryService, times(1)).deleteCategory(anyLong());
     }
 
 }
