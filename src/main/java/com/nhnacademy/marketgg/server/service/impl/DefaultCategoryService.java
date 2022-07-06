@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.CategoryRequest;
+import com.nhnacademy.marketgg.server.dto.CategoryResponse;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.exception.CategoryNotFoundException;
 import com.nhnacademy.marketgg.server.repository.CategoryRepository;
@@ -8,6 +9,8 @@ import com.nhnacademy.marketgg.server.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -42,5 +45,10 @@ public class DefaultCategoryService implements CategoryService {
         category.setCode(category.getCode());
 
         categoryRepository.save(category);
+    }
+
+    @Override
+    public List<CategoryResponse> retrieveCategories() {
+        return categoryRepository.findAllCategories();
     }
 }
