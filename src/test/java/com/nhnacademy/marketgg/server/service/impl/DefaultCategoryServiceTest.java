@@ -60,9 +60,10 @@ class DefaultCategoryServiceTest {
     @DisplayName("카테고리 등록 실패")
     @Test
     void testCreateCategoryFail() {
+        // REVIEW: assertThatThrownBy() 에 노란 라인이 뜨면서 Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.가 뜨는데 원인에 대해 알고 싶습니다.
         assertThatThrownBy(() -> categoryService.createCategory(
             new CategoryRegisterRequest(-10L, "", 1, "")))
-            .isInstanceOf(CategoryNotFoundException.class);
+                  .isInstanceOf(CategoryNotFoundException.class);
     }
 
 }
