@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.repository;
 
+class ProductRepositoryTest {
+
 import com.nhnacademy.marketgg.server.entity.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
