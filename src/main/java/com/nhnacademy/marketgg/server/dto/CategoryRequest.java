@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class CategoryRegisterRequest {
+public class CategoryRequest {
 
     private Long superCategoryNo;
 
@@ -14,5 +14,4 @@ public class CategoryRegisterRequest {
     private Integer sequence;
 
     private String code;
-
 }
