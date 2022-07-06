@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,6 +42,14 @@ public class Product {
 
     public Product(ProductCreateRequest productRequest) {
         this.categoryNo = productRequest.getCategoryNo();
+        this.name = productRequest.getName();
+        this.content = productRequest.getContent();
+        this.totalStock = productRequest.getTotalStock();
+        this.price = productRequest.getPrice();
+        this.thumbnail = productRequest.getThumbnail();
+    }
+
+    public void updateProduct(ProductUpdateRequest productRequest) {
         this.name = productRequest.getName();
         this.content = productRequest.getContent();
         this.totalStock = productRequest.getTotalStock();
