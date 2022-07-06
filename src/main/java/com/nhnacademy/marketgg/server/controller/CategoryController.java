@@ -59,7 +59,6 @@ public class CategoryController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .headers(headers)
-                             .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
 

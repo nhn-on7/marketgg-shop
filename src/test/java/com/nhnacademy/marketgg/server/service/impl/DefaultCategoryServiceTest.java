@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -122,18 +123,24 @@ class DefaultCategoryServiceTest {
     @Test
     @DisplayName("카테고리 삭제 성공")
     void testDeleteCategory() {
-        doNothing().when(categoryRepository).deleteById(anyLong());
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(Category.builder()
+                                                                                    .categoryNo(1L)
+                                                                                    .superCategory(null)
+                                                                                    .name("채소")
+                                                                                    .sequence(0)
+                                                                                    .code("PROD")
+                                                                                    .build()));
+
+        doNothing().when(categoryRepository).delete(any(Category.class));
 
         categoryService.deleteCategory(1L);
 
-        verify(categoryRepository, times(1)).deleteById(anyLong());
+        verify(categoryRepository, times(1)).delete(any(Category.class));
     }
 
     @Test
     @DisplayName("카테고리 삭제 실패 (삭제할 카테고리 존재 X)")
     void testDeleteCategoryFailWhenNotExistsCategory() {
-        when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
-
         assertThatThrownBy(() -> categoryService.deleteCategory(1L)).isInstanceOf(CategoryNotFoundException.class);
     }
 

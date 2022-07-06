@@ -67,13 +67,9 @@ class CategoryControllerTest {
     @Test
     @DisplayName("카테고리 삭제 테스트")
     void testDeleteCategory() throws Exception {
-        Long categoryId = 1L;
-
         doNothing().when(categoryService).deleteCategory(anyLong());
 
-        this.mockMvc.perform(delete("/admin/v1/categories/{category-id}", categoryId)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(String.valueOf(categoryId)))
+        this.mockMvc.perform(delete("/admin/v1/categories/{category-id}", 1L))
                     .andExpect(status().isOk());
 
         verify(categoryService, times(1)).deleteCategory(anyLong());
