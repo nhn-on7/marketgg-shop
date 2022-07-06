@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
 
     private final CategoryService categoryService;
-    private final HttpHeaders headers;
+    private final HttpHeaders headers = buildHttpHeader();
 
     @PostMapping
     ResponseEntity<Void> createCategory(CategoryRequest categoryRequest) {
@@ -47,6 +47,13 @@ public class CategoryController {
             .headers(headers)
             .contentType(MediaType.APPLICATION_JSON)
             .build();
+    }
+
+    private HttpHeaders buildHttpHeader() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        return httpHeaders;
     }
 
 }
