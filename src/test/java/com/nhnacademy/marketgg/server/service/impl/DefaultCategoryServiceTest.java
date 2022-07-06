@@ -31,13 +31,14 @@ class DefaultCategoryServiceTest {
     @Test
     void testCreateCategorySuccess() {
 
-        when(categoryRepository.findById(0L)).thenReturn(Optional.of(Category.builder()
-                                                                             .categoryNo(0L)
-                                                                             .superCategory(null)
-                                                                             .name("")
-                                                                             .sequence(0)
-                                                                             .code("")
-                                                                             .build()));
+        when(categoryRepository.findById(0L))
+            .thenReturn(Optional.of(Category.builder()
+                                            .categoryNo(0L)
+                                            .superCategory(null)
+                                            .name("")
+                                            .sequence(0)
+                                            .code("")
+                                            .build()));
 
         Category category = Category.builder()
                                     .categoryNo(1L)
@@ -47,11 +48,7 @@ class DefaultCategoryServiceTest {
                                     .code("PROD")
                                     .build();
 
-        categoryService.createCategory(new CategoryRegisterRequest(
-            category.getSuperCategory().getCategoryNo(),
-            category.getName(),
-            category.getSequence(),
-            category.getCode()));
+        categoryService.createCategory(CategoryRegisterRequest.of());
 
         // REVIEW: 카테고리 레포지토리의 save가 정상적으로 들어가지 않는 것 같습니다. 원인에 대해 알고 싶습니다.
         assertThat(categoryRepository.findById(1L)).isEqualTo(Optional.of(category));
@@ -63,7 +60,7 @@ class DefaultCategoryServiceTest {
         // REVIEW: assertThatThrownBy() 에 노란 라인이 뜨면서 Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.가 뜨는데 원인에 대해 알고 싶습니다.
         assertThatThrownBy(() -> categoryService.createCategory(
             new CategoryRegisterRequest(-10L, "", 1, "")))
-                  .isInstanceOf(CategoryNotFoundException.class);
+            .isInstanceOf(CategoryNotFoundException.class);
     }
 
 }

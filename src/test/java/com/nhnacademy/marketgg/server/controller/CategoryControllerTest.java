@@ -33,13 +33,12 @@ class CategoryControllerTest {
     @Test
     void testCreateCategory() throws Exception {
         CategoryRegisterRequest categoryRequest = CategoryRegisterRequest.of();
-        String requestBody = objectMapper.writeValueAsString(categoryRequest);
 
         doNothing().when(categoryService).createCategory(any());
 
         this.mockMvc.perform(post("/admin/v1/categories")
                                    .contentType(MediaType.APPLICATION_JSON)
-                                   .content(requestBody))
+                                   .content(objectMapper.writeValueAsString(categoryRequest)))
                                        .andExpect(status().isCreated());
 
         verify(categoryService, times(1)).createCategory(any(categoryRequest.getClass()));

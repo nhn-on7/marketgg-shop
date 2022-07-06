@@ -17,14 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final HttpHeaders headers;
 
     @PostMapping
     ResponseEntity<Void> createCategory(CategoryRegisterRequest categoryRequest) {
 
         categoryService.createCategory(categoryRequest);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
 
         return ResponseEntity.status(HttpStatus.CREATED)
             .headers(headers)
