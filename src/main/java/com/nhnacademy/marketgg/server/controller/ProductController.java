@@ -21,6 +21,8 @@ public class ProductController {
 
     private final ProductService productService;
 
+    private static final String CREATE_PRODUCT = "/admin/v1/products";
+
     @PostMapping
     public ResponseEntity<Void> createProduct(@RequestBody ProductCreateRequest productRequest)
         throws URISyntaxException {
@@ -28,7 +30,7 @@ public class ProductController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setLocation(new URI("/admin/v1/products"));
+        headers.setLocation(new URI(CREATE_PRODUCT));
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .headers(headers)
