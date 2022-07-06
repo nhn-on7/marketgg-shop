@@ -8,4 +8,6 @@ public interface LabelService {
     List<LabelDto> retrieveLabels();
 
     void createLabel(LabelDto labelDto);
+
+    void deleteLabel(Long id);
 }
