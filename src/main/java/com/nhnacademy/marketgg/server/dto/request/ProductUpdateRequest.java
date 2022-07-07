@@ -14,4 +14,5 @@ public class ProductUpdateRequest {
     private Long totalStock;
     private Long price;
     private String thumbnail;
+
 }
