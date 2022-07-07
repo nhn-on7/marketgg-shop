@@ -7,5 +7,7 @@ public interface ProductService {
 
     void createProduct(ProductCreateRequest productRequest);
 
-    void updateProduct(ProductUpdateRequest productRequest, Long productNo);
+    void updateProduct(ProductUpdateRequest productRequest, Long productId);
+
+    void deleteProduct(Long productId);
 }

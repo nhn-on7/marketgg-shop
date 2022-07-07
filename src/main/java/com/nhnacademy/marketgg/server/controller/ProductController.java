@@ -25,7 +25,9 @@ public class ProductController {
     private final ProductService productService;
 
     private static final String CREATE_PRODUCT = "/admin/v1/products";
-    private static final String UPDATE_PRODUCT = "/admin/v1/products/{product-id}";
+    private static final String UPDATE_PRODUCT = "/admin/v1/products/{productId}";
+
+    private static final String DELETE_PRODUCT = "/admin/v1/products/{productId}";
 
     @PostMapping
     public ResponseEntity<Void> createProduct(@RequestBody ProductCreateRequest productRequest) {
@@ -41,13 +43,27 @@ public class ProductController {
                              .build();
     }
 
-    @PostMapping("/{product-id}")
-    public ResponseEntity<Void> updateProduct(@RequestBody ProductUpdateRequest productRequest, @PathVariable(name = "product-id") Long productNo) {
-        productService.updateProduct(productRequest, productNo);
+    @PostMapping("/{productId}")
+    public ResponseEntity<Void> updateProduct(@RequestBody ProductUpdateRequest productRequest, @PathVariable Long productId) {
+        productService.updateProduct(productRequest, productId);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setLocation(URI.create(UPDATE_PRODUCT));
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .headers(headers)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
+    }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setLocation(URI.create(DELETE_PRODUCT));
 
         return ResponseEntity.status(HttpStatus.OK)
                              .headers(headers)

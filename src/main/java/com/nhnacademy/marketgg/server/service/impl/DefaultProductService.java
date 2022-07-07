@@ -24,12 +24,23 @@ public class DefaultProductService implements ProductService {
 
     @Override
     @Transactional
-    public void updateProduct(ProductUpdateRequest productRequest, Long productNo) {
-        Product product = productRepository.findById(productRequest.getProductNo())
-                             .orElseThrow(() -> new ProductNotFoundException("해당 상품을 찾을 수 없습니다."));
+    public void updateProduct(ProductUpdateRequest productRequest, Long productId) {
+        Product product = productRepository
+            .findById(productRequest.getProductNo())
+            .orElseThrow(() -> new ProductNotFoundException("해당 상품을 찾을 수 없습니다."));
 
         product.updateProduct(productRequest);
         productRepository.save(product);
+    }
+
+    //TODO: 예외처리 - 서비스레이어에서 하는게 맞는지 알아보기.
+    @Override
+    public void deleteProduct(Long productId) {
+        Product product = productRepository
+            .findById(productId)
+            .orElseThrow(() -> new ProductNotFoundException("해당 상품을 찾을 수 없습니다."));
+
+        productRepository.delete(product);
     }
 
 }
