@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 public class LabelRetrieveResponse {
 
-    private String name;
+    private final String name;
 
 }
