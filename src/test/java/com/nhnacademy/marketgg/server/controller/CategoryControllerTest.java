@@ -46,8 +46,8 @@ class CategoryControllerTest {
         doNothing().when(categoryService).createCategory(any(categoryRequest.getClass()));
 
         this.mockMvc.perform(post("/admin/v1/categories")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(requestBody))
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
                     .andExpect(status().isCreated());
 
         verify(categoryService, times(1)).createCategory(any(categoryRequest.getClass()));
@@ -73,8 +73,8 @@ class CategoryControllerTest {
         doNothing().when(categoryService).updateCategory(anyLong(), any(categoryRequest.getClass()));
 
         this.mockMvc.perform(put("/admin/v1/categories/{category-id}", 1L)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(requestBody))
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
                     .andExpect(status().isOk());
 
         verify(categoryService, times(1))

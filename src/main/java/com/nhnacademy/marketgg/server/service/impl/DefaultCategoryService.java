@@ -20,7 +20,7 @@ public class DefaultCategoryService implements CategoryService {
 
     @Transactional
     @Override
-    public void createCategory(CategoryRequest categoryRequest) {
+    public void createCategory(final CategoryRequest categoryRequest) {
         Category superCategory = categoryRepository.findById(categoryRequest.getSuperCategoryNo())
                                                    .orElseThrow(() -> new CategoryNotFoundException(
                                                            "카테고리를 찾을 수 없습니다."));
@@ -30,10 +30,10 @@ public class DefaultCategoryService implements CategoryService {
 
     @Transactional
     @Override
-    public void updateCategory(Long id, CategoryRequest categoryRequest) {
+    public void updateCategory(final Long id, final CategoryRequest categoryRequest) {
         Category category = categoryRepository.findById(id).orElseThrow(
-                                                      () -> new CategoryNotFoundException(
-                                                              "카테고리를 찾을 수 없습니다."));
+                () -> new CategoryNotFoundException(
+                        "카테고리를 찾을 수 없습니다."));
 
         category.setSuperCategory(categoryRepository.findById(categoryRequest.getSuperCategoryNo())
                                                     .orElseThrow(
@@ -53,7 +53,7 @@ public class DefaultCategoryService implements CategoryService {
 
     @Transactional
     @Override
-    public void deleteCategory(Long id) {
+    public void deleteCategory(final Long id) {
         Category category = categoryRepository.findById(id)
                                               .orElseThrow(
                                                       () -> new CategoryNotFoundException(

@@ -28,7 +28,7 @@ public class CategoryController {
     private final HttpHeaders headers = buildHttpHeader();
 
     @PostMapping
-    ResponseEntity<Void> createCategory(CategoryRequest categoryRequest) {
+    ResponseEntity<Void> createCategory(final CategoryRequest categoryRequest) {
 
         categoryService.createCategory(categoryRequest);
 
@@ -52,8 +52,8 @@ public class CategoryController {
     }
 
     @PutMapping("/{categoryId}")
-    ResponseEntity<Void> updateCategory(@PathVariable Long categoryId,
-                                        CategoryRequest categoryRequest) {
+    ResponseEntity<Void> updateCategory(@PathVariable final Long categoryId,
+                                        final CategoryRequest categoryRequest) {
 
         categoryService.updateCategory(categoryId, categoryRequest);
 
