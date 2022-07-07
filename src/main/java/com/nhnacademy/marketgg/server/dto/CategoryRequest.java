@@ -14,4 +14,5 @@ public class CategoryRequest {
     private Integer sequence;
 
     private String code;
+
 }

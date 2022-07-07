@@ -1,16 +1,16 @@
 package com.nhnacademy.marketgg.server.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class CategoryResponse {
 
-    private Long categoryNo;
+    private final Long categoryNo;
 
-    private String name;
+    private final String name;
 
-    private String code;
+    private final String code;
 
 }

@@ -8,8 +8,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,17 +27,6 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final HttpHeaders headers = buildHttpHeader();
 
-    @GetMapping
-    ResponseEntity<List<CategoryResponse>> retrieveCategories() {
-        List<CategoryResponse> categoryResponses = categoryService.retrieveCategories();
-
-        headers.setLocation(URI.create("/admin/v1/categories"));
-
-        return ResponseEntity.status(HttpStatus.OK)
-                             .headers(headers)
-                             .body(categoryResponses);
-    }
-
     @PostMapping
     ResponseEntity<Void> createCategory(CategoryRequest categoryRequest) {
 
@@ -51,13 +40,24 @@ public class CategoryController {
                              .build();
     }
 
-    @PutMapping("/{category-id}")
-    ResponseEntity<Void> updateCategory(@PathVariable("category-id") Long id,
+    @GetMapping
+    ResponseEntity<List<CategoryResponse>> retrieveCategories() {
+        List<CategoryResponse> categoryResponses = categoryService.retrieveCategories();
+
+        headers.setLocation(URI.create("/admin/v1/categories"));
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .headers(headers)
+                             .body(categoryResponses);
+    }
+
+    @PutMapping("/{categoryId}")
+    ResponseEntity<Void> updateCategory(@PathVariable Long categoryId,
                                         CategoryRequest categoryRequest) {
 
-        categoryService.updateCategory(id, categoryRequest);
+        categoryService.updateCategory(categoryId, categoryRequest);
 
-        headers.setLocation(URI.create("/admin/v1/categories/" + id));
+        headers.setLocation(URI.create("/admin/v1/categories/" + categoryId));
 
         return ResponseEntity.status(HttpStatus.OK)
                              .headers(headers)
@@ -65,11 +65,11 @@ public class CategoryController {
                              .build();
     }
 
-    @DeleteMapping("/{category-id}")
-    ResponseEntity<Void> deleteCategory(@PathVariable("category-id") Long id) {
-        categoryService.deleteCategory(id);
+    @DeleteMapping("/{categoryId}")
+    ResponseEntity<Void> deleteCategory(@PathVariable final Long categoryId) {
+        categoryService.deleteCategory(categoryId);
 
-        headers.setLocation(URI.create("/admin/v1/categories/" + id));
+        headers.setLocation(URI.create("/admin/v1/categories/" + categoryId));
 
         return ResponseEntity.status(HttpStatus.OK)
                              .headers(headers)

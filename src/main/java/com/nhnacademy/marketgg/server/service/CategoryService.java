@@ -10,9 +10,9 @@ public interface CategoryService {
 
     void createCategory(CategoryRequest categoryRequest);
 
-    void updateCategory(Long id, CategoryRequest categoryRequest);
-
     List<CategoryResponse> retrieveCategories();
+
+    void updateCategory(Long id, CategoryRequest categoryRequest);
 
     void deleteCategory(Long id);
 
