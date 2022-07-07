@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +29,7 @@ public class CategoryController {
     private final HttpHeaders headers = buildHttpHeader();
 
     @PostMapping
-    ResponseEntity<Void> createCategory(final CategoryRequest categoryRequest) {
+    ResponseEntity<Void> createCategory(@RequestBody final CategoryRequest categoryRequest) {
 
         categoryService.createCategory(categoryRequest);
 
@@ -53,7 +54,7 @@ public class CategoryController {
 
     @PutMapping("/{categoryId}")
     ResponseEntity<Void> updateCategory(@PathVariable final Long categoryId,
-                                        final CategoryRequest categoryRequest) {
+                                        @RequestBody final CategoryRequest categoryRequest) {
 
         categoryService.updateCategory(categoryId, categoryRequest);
 
