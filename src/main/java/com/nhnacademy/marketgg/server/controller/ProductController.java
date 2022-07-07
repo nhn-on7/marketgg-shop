@@ -2,20 +2,17 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.service.ProductService;
-import java.net.URI;
-import java.net.URISyntaxException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/v1/products")
@@ -42,7 +39,8 @@ public class ProductController {
     }
 
     @PostMapping("/{product-id}")
-    public ResponseEntity<Void> updateProduct(@RequestBody ProductUpdateRequest productRequest, @PathVariable(name = "product-id") Long productNo) {
+    public ResponseEntity<Void> updateProduct(@RequestBody ProductUpdateRequest productRequest,
+                                              @PathVariable(name = "product-id") Long productNo) {
         productService.updateProduct(productRequest, productNo);
 
         HttpHeaders headers = new HttpHeaders();
@@ -53,6 +51,15 @@ public class ProductController {
                              .headers(headers)
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ProductResponse>> retrieveProducts() {
+        List<ProductResponse> productList = productService.retrieveProducts();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(productList);
     }
 
 }
