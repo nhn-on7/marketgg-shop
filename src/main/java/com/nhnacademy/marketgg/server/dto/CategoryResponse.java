@@ -7,10 +7,4 @@ import lombok.Getter;
 @Getter
 public class CategoryResponse {
 
-    private final Long categoryNo;
-
-    private final String name;
-
-    private final String code;
-
 }

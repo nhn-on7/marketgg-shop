@@ -9,30 +9,24 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Table(name = "categories")
+@Table(name = "categorizations")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 @Getter
-public class Category {
+public class Categorization {
 
     @Id
-    @Column(name = "category_code")
-    private String categoryCode;
+    @Column(name = "categorization_code")
+    private String categorizationCode;
 
-    @ManyToOne
-    @JoinColumn(name = "categorization_code")
-    private Categorization categorization;
+    @Column(name = "categorization_name")
+    private String categorizationName;
 
-    @Column
-    private String name;
-
-    @Column
-    private Integer sequence;
+    @Column(name = "categorization_mean")
+    private String categorizationMean;
 
 }
