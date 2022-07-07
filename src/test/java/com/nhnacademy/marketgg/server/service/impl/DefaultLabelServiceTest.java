@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.LabelDto;
+import com.nhnacademy.marketgg.server.dto.LabelCreateRequest;
+import com.nhnacademy.marketgg.server.dto.LabelRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.exception.LabelNotFoundException;
 import com.nhnacademy.marketgg.server.repository.LabelRepository;
@@ -37,9 +38,9 @@ class DefaultLabelServiceTest {
     @Test
     @DisplayName("라벨 조회")
     void retrieveLabels() {
-        when(labelRepository.findAllLabels()).thenReturn(List.of(new LabelDto("hello")));
+        when(labelRepository.findAllLabels()).thenReturn(List.of(new LabelRetrieveResponse("hello")));
 
-        List<LabelDto> response = labelService.retrieveLabels();
+        List<LabelRetrieveResponse> response = labelService.retrieveLabels();
 
         assertThat(response.get(0).getName()).isEqualTo("hello");
     }
@@ -49,7 +50,7 @@ class DefaultLabelServiceTest {
     void createLabelSuccess() {
         when(labelRepository.save(any(Label.class))).thenReturn(new Label(1L, "hello"));
 
-        labelService.createLabel(new LabelDto("hello"));
+        labelService.createLabel(new LabelCreateRequest("hello"));
 
         verify(labelRepository, times(1)).save(any(Label.class));
     }
@@ -57,7 +58,7 @@ class DefaultLabelServiceTest {
     @Test
     @DisplayName("라벨 삭제 성공")
     void deleteLabelSuccess() {
-        when(labelRepository.findById(anyLong())).thenReturn(Optional.of(new Label(new LabelDto("hello"))));
+        when(labelRepository.findById(anyLong())).thenReturn(Optional.of(new Label(new LabelCreateRequest("hello"))));
         doNothing().when(labelRepository).delete(any());
 
         labelService.deleteLabel(1L);

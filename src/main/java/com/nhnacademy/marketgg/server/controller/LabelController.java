@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import com.nhnacademy.marketgg.server.dto.LabelDto;
+import com.nhnacademy.marketgg.server.dto.LabelCreateRequest;
+import com.nhnacademy.marketgg.server.dto.LabelRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.LabelService;
 
 import java.net.URI;
@@ -22,8 +23,8 @@ public class LabelController {
     private final HttpHeaders headers = buildHeader();
 
     @PostMapping
-    ResponseEntity<Void> registerLabel(@RequestBody LabelDto labelDto) {
-        labelService.createLabel(labelDto);
+    ResponseEntity<Void> registerLabel(@RequestBody final LabelCreateRequest labelCreateRequest) {
+        labelService.createLabel(labelCreateRequest);
 
         headers.setLocation(URI.create("/admin/v1/labels"));
 
@@ -34,8 +35,8 @@ public class LabelController {
     }
 
     @GetMapping
-    ResponseEntity<List<LabelDto>> retrieveLabels() {
-        List<LabelDto> labelResponse = labelService.retrieveLabels();
+    ResponseEntity<List<LabelRetrieveResponse>> retrieveLabels() {
+        List<LabelRetrieveResponse> labelResponse = labelService.retrieveLabels();
 
         headers.setLocation(URI.create("/admin/v1/labels"));
 
@@ -45,7 +46,7 @@ public class LabelController {
     }
 
     @DeleteMapping("/{labelId}")
-    ResponseEntity<Void> deleteLabel(@PathVariable Long labelId) {
+    ResponseEntity<Void> deleteLabel(@PathVariable final Long labelId) {
         labelService.deleteLabel(labelId);
 
         headers.setLocation(URI.create("/admin/v1/labels/" + labelId));

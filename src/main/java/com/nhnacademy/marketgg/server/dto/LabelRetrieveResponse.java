@@ -1,11 +1,11 @@
 package com.nhnacademy.marketgg.server.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@AllArgsConstructor
 @Getter
-public class LabelDto {
+public class LabelRetrieveResponse {
 
     private String name;
 

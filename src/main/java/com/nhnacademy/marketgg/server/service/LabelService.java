@@ -1,13 +1,14 @@
 package com.nhnacademy.marketgg.server.service;
 
-import com.nhnacademy.marketgg.server.dto.LabelDto;
+import com.nhnacademy.marketgg.server.dto.LabelCreateRequest;
 
+import com.nhnacademy.marketgg.server.dto.LabelRetrieveResponse;
 import java.util.List;
 
 public interface LabelService {
-    List<LabelDto> retrieveLabels();
+    List<LabelRetrieveResponse> retrieveLabels();
 
-    void createLabel(LabelDto labelDto);
+    void createLabel(LabelCreateRequest labelCreateRequest);
 
     void deleteLabel(Long id);
 }

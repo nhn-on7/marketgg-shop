@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.nhnacademy.marketgg.server.dto.LabelDto;
+import com.nhnacademy.marketgg.server.dto.LabelCreateRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,7 +28,7 @@ public class Label {
     @Column
     private String name;
 
-    public Label(LabelDto labelDto) {
-        this.name = labelDto.getName();
+    public Label(LabelCreateRequest labelCreateRequest) {
+        this.name = labelCreateRequest.getName();
     }
 }

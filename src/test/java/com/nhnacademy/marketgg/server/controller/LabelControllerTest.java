@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.LabelDto;
+import com.nhnacademy.marketgg.server.dto.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.service.LabelService;
 import java.util.ArrayList;
 import org.junit.jupiter.api.DisplayName;
@@ -53,16 +53,16 @@ class LabelControllerTest {
     @Test
     @DisplayName("라벨 등록")
     void createLabel() throws Exception {
-        LabelDto labelDto = new LabelDto("hello");
+        LabelCreateRequest labelCreateRequest = new LabelCreateRequest("hello");
 
-        doNothing().when(labelService).createLabel(any(LabelDto.class));
+        doNothing().when(labelService).createLabel(any(LabelCreateRequest.class));
 
         this.mockMvc.perform(post("/admin/v1/labels")
                                      .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(labelDto)))
+                                     .content(objectMapper.writeValueAsString(labelCreateRequest)))
                     .andExpect(status().isCreated());
 
-        verify(labelService, times(1)).createLabel(any(labelDto.getClass()));
+        verify(labelService, times(1)).createLabel(any(labelCreateRequest.getClass()));
     }
 
     @Test

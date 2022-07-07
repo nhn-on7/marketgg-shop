@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.LabelDto;
+import com.nhnacademy.marketgg.server.dto.LabelCreateRequest;
+import com.nhnacademy.marketgg.server.dto.LabelRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.exception.LabelNotFoundException;
 import com.nhnacademy.marketgg.server.repository.LabelRepository;
@@ -19,14 +20,14 @@ public class DefaultLabelService implements LabelService {
 
     @Transactional
     @Override
-    public void createLabel(LabelDto labelDto) {
-        Label label = new Label(labelDto);
+    public void createLabel(LabelCreateRequest labelCreateRequest) {
+        Label label = new Label(labelCreateRequest);
 
         labelRepository.save(label);
     }
 
     @Override
-    public List<LabelDto> retrieveLabels() {
+    public List<LabelRetrieveResponse> retrieveLabels() {
         return labelRepository.findAllLabels();
     }
 
