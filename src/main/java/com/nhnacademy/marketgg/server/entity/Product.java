@@ -34,9 +34,6 @@ public class Product {
     @JoinColumn(name = "category_code")
     private Category category;
 
-    @Column(name = "category_no")
-    private Long categoryNo;
-
     @Column
     private String name;
 
@@ -86,7 +83,7 @@ public class Product {
     private LocalDate deletedAt;
 
     public Product(ProductCreateRequest productRequest) {
-        this.categoryNo = productRequest.getCategoryNo();
+        // Review : category, asset 안받아도되나?
         this.name = productRequest.getName();
         this.content = productRequest.getContent();
         this.totalStock = productRequest.getTotalStock();

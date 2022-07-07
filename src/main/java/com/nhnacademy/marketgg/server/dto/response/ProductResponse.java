@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.dto.response;
 
+import java.time.LocalDate;
+
 public interface ProductResponse {
 
     Long getProductNo();
@@ -15,5 +17,21 @@ public interface ProductResponse {
     Long getPrice();
 
     String getThumbnail();
+
+    String getDescription();
+
+    String getUnit();
+
+    String getDeliveryType();
+
+    String getOrigin();
+
+    String getPackageType();
+
+    LocalDate getExpirationDate();
+
+    String getAllergyInfo();
+
+    String getCapacity();
 
 }
