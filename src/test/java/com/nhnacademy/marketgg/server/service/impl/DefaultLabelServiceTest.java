@@ -36,6 +36,16 @@ class DefaultLabelServiceTest {
     private LabelRepository labelRepository;
 
     @Test
+    @DisplayName("라벨 등록")
+    void createLabelSuccess() {
+        when(labelRepository.save(any(Label.class))).thenReturn(new Label(1L, "hello"));
+
+        labelService.createLabel(new LabelCreateRequest("hello"));
+
+        verify(labelRepository, times(1)).save(any(Label.class));
+    }
+
+    @Test
     @DisplayName("라벨 조회")
     void retrieveLabels() {
         when(labelRepository.findAllLabels()).thenReturn(List.of(new LabelRetrieveResponse("hello")));
@@ -46,20 +56,10 @@ class DefaultLabelServiceTest {
     }
 
     @Test
-    @DisplayName("라벨 등록 성공")
-    void createLabelSuccess() {
-        when(labelRepository.save(any(Label.class))).thenReturn(new Label(1L, "hello"));
-
-        labelService.createLabel(new LabelCreateRequest("hello"));
-
-        verify(labelRepository, times(1)).save(any(Label.class));
-    }
-
-    @Test
     @DisplayName("라벨 삭제 성공")
     void deleteLabelSuccess() {
         when(labelRepository.findById(anyLong())).thenReturn(Optional.of(new Label(new LabelCreateRequest("hello"))));
-        doNothing().when(labelRepository).delete(any());
+        doNothing().when(labelRepository).delete(any(Label.class));
 
         labelService.deleteLabel(1L);
 

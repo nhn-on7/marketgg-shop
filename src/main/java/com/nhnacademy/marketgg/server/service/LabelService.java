@@ -8,7 +8,7 @@ import java.util.List;
 public interface LabelService {
     List<LabelRetrieveResponse> retrieveLabels();
 
-    void createLabel(LabelCreateRequest labelCreateRequest);
+    void createLabel(final LabelCreateRequest labelCreateRequest);
 
-    void deleteLabel(Long id);
+    void deleteLabel(final Long id);
 }

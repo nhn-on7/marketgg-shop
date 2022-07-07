@@ -20,7 +20,7 @@ public class DefaultLabelService implements LabelService {
 
     @Transactional
     @Override
-    public void createLabel(LabelCreateRequest labelCreateRequest) {
+    public void createLabel(final LabelCreateRequest labelCreateRequest) {
         Label label = new Label(labelCreateRequest);
 
         labelRepository.save(label);
@@ -33,7 +33,7 @@ public class DefaultLabelService implements LabelService {
 
     @Transactional
     @Override
-    public void deleteLabel(Long id) {
+    public void deleteLabel(final Long id) {
         Label label = labelRepository.findById(id).orElseThrow(()->new LabelNotFoundException("라벨을 찾을 수 없습니다."));
 
         labelRepository.delete(label);

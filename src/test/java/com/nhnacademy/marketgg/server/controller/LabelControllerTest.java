@@ -37,6 +37,22 @@ class LabelControllerTest {
     private LabelService labelService;
 
     @Test
+    @DisplayName("라벨 등록")
+    void createLabel() throws Exception {
+        LabelCreateRequest labelCreateRequest = new LabelCreateRequest("hello");
+        String requestBody = objectMapper.writeValueAsString(labelCreateRequest);
+
+        doNothing().when(labelService).createLabel(any(LabelCreateRequest.class));
+
+        this.mockMvc.perform(post("/admin/v1/labels")
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
+                    .andExpect(status().isCreated());
+
+        verify(labelService, times(1)).createLabel(any(labelCreateRequest.getClass()));
+    }
+
+    @Test
     @DisplayName("라벨 조회")
     void retrieveLabels() throws Exception {
 
@@ -48,21 +64,6 @@ class LabelControllerTest {
                     .andReturn();
 
         verify(labelService, times(1)).retrieveLabels();
-    }
-
-    @Test
-    @DisplayName("라벨 등록")
-    void createLabel() throws Exception {
-        LabelCreateRequest labelCreateRequest = new LabelCreateRequest("hello");
-
-        doNothing().when(labelService).createLabel(any(LabelCreateRequest.class));
-
-        this.mockMvc.perform(post("/admin/v1/labels")
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(labelCreateRequest)))
-                    .andExpect(status().isCreated());
-
-        verify(labelService, times(1)).createLabel(any(labelCreateRequest.getClass()));
     }
 
     @Test
