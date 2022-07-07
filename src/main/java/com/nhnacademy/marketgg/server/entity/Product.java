@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,6 +25,14 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productNo;
+
+    @OneToOne
+    @JoinColumn(name = "asset_no")
+    private Asset asset;
+
+    @ManyToOne
+    @JoinColumn(name = "category_code")
+    private Category category;
 
     @Column(name = "category_no")
     private Long categoryNo;

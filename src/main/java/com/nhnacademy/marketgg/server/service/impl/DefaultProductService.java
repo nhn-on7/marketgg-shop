@@ -20,7 +20,7 @@ public class DefaultProductService implements ProductService {
 
     @Override
     @Transactional
-    public void createProduct(ProductCreateRequest productRequest) {
+    public void createProduct(final ProductCreateRequest productRequest) {
         productRepository.save(new Product(productRequest));
     }
 
@@ -31,7 +31,7 @@ public class DefaultProductService implements ProductService {
 
     @Override
     @Transactional
-    public void updateProduct(ProductUpdateRequest productRequest, Long productId) {
+    public void updateProduct(final ProductUpdateRequest productRequest, final Long productId) {
         Product product = productRepository
             .findById(productRequest.getProductNo())
             .orElseThrow(() -> new ProductNotFoundException("해당 상품을 찾을 수 없습니다."));
@@ -41,7 +41,7 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public void deleteProduct(Long productId) {
+    public void deleteProduct(final Long productId) {
         Product product = productRepository
             .findById(productId)
             .orElseThrow(() -> new ProductNotFoundException("해당 상품을 찾을 수 없습니다."));
