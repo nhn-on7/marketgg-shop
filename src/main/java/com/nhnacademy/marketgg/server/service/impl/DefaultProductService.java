@@ -25,6 +25,11 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
+    public List<ProductResponse> retrieveProducts() {
+        return productRepository.findAllBy();
+    }
+
+    @Override
     @Transactional
     public void updateProduct(ProductUpdateRequest productRequest, Long productId) {
         Product product = productRepository
@@ -35,8 +40,6 @@ public class DefaultProductService implements ProductService {
         productRepository.save(product);
     }
 
-
-    // TODO: 예외처리 - 서비스레이어에서 하는게 맞는지 알아보기.
     @Override
     public void deleteProduct(Long productId) {
         Product product = productRepository
@@ -44,11 +47,6 @@ public class DefaultProductService implements ProductService {
             .orElseThrow(() -> new ProductNotFoundException("해당 상품을 찾을 수 없습니다."));
 
         productRepository.delete(product);
-    }
-
-    @Override
-    public List<ProductResponse> retrieveProducts() {
-        return productRepository.findAllBy();
     }
 
 }
