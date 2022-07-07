@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.CategoryRequest;
+import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.service.CategoryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,11 +12,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -34,6 +39,17 @@ class CategoryControllerTest {
     CategoryService categoryService;
 
     @Test
+    @DisplayName("카테고리 목록 조회 테스트")
+    void testRetrieveCategories() throws Exception {
+        when(categoryService.retrieveCategories()).thenReturn(List.of());
+
+        this.mockMvc.perform(get("/admin/v1/categories"))
+                    .andExpect(status().isOk());
+
+        verify(categoryService, times(1)).retrieveCategories();
+    }
+
+    @Test
     @DisplayName("카테고리 등록 테스트")
     void testCreateCategory() throws Exception {
         CategoryRequest categoryRequest = CategoryRequest.of();
@@ -41,8 +57,8 @@ class CategoryControllerTest {
         doNothing().when(categoryService).createCategory(any());
 
         this.mockMvc.perform(post("/admin/v1/categories")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(categoryRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(categoryRequest)))
                     .andExpect(status().isCreated());
 
         verify(categoryService, times(1)).createCategory(any(categoryRequest.getClass()));
@@ -56,8 +72,8 @@ class CategoryControllerTest {
         doNothing().when(categoryService).updateCategory(anyLong(), any());
 
         this.mockMvc.perform(put("/admin/v1/categories/{category-id}", 1L)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsBytes(categoryRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(categoryRequest)))
                     .andExpect(status().isOk());
 
         verify(categoryService, times(1))
