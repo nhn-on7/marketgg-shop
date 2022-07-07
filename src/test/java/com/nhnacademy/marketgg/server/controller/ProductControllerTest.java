@@ -13,11 +13,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.net.URI;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
@@ -30,6 +32,8 @@ class ProductControllerTest {
 
     @MockBean
     ProductService productService;
+
+    String CREATE_PRODUCT = "/admin/v1/products";
 
     @Test
     @DisplayName("상품 등록하는 테스트")
@@ -45,13 +49,25 @@ class ProductControllerTest {
         doNothing().when(productService).createProduct(any());
         String content = objectMapper.writeValueAsString(productRequest);
 
-        // TODO header location 값 검증
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setLocation(URI.create(CREATE_PRODUCT));
+
         this.mockMvc.perform(post("/admin/v1/products")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(content))
-                    .andExpect(status().isCreated());
+                    .andExpect(status().isCreated())
+                    .andExpect(header().string("Location", CREATE_PRODUCT));
 
         verify(productService, times(1)).createProduct(any(productRequest.getClass()));
+    }
+
+    @Test
+    @DisplayName("상품 목록 전체 조회하는 테스트")
+    void testRetrieveProducts() throws Exception {
+        this.mockMvc.perform(get("/admin/v1/products"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
 }
