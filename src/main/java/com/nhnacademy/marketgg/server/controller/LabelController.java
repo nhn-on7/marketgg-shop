@@ -21,17 +21,6 @@ public class LabelController {
     private final LabelService labelService;
     private final HttpHeaders headers = buildHeader();
 
-    @GetMapping
-    ResponseEntity<List<LabelDto>> retrieveLabels() {
-        List<LabelDto> labelResponse = labelService.retrieveLabels();
-
-        headers.setLocation(URI.create("/admin/v1/labels"));
-
-        return ResponseEntity.status(HttpStatus.OK)
-                             .headers(headers)
-                             .body(labelResponse);
-    }
-
     @PostMapping
     ResponseEntity<Void> registerLabel(@RequestBody LabelDto labelDto) {
         labelService.createLabel(labelDto);
@@ -44,11 +33,22 @@ public class LabelController {
                              .build();
     }
 
-    @DeleteMapping("/{labels-id}")
-    ResponseEntity<Void> deleteLabel(@PathVariable("labels-id") Long id) {
-        labelService.deleteLabel(id);
+    @GetMapping
+    ResponseEntity<List<LabelDto>> retrieveLabels() {
+        List<LabelDto> labelResponse = labelService.retrieveLabels();
 
-        headers.setLocation(URI.create("/admin/v1/labels/" + id));
+        headers.setLocation(URI.create("/admin/v1/labels"));
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .headers(headers)
+                             .body(labelResponse);
+    }
+
+    @DeleteMapping("/{labelId}")
+    ResponseEntity<Void> deleteLabel(@PathVariable Long labelId) {
+        labelService.deleteLabel(labelId);
+
+        headers.setLocation(URI.create("/admin/v1/labels/" + labelId));
 
         return ResponseEntity.status(HttpStatus.OK)
                              .headers(headers)

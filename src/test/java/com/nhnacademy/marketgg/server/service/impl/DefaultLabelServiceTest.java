@@ -18,7 +18,11 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
@@ -43,7 +47,7 @@ class DefaultLabelServiceTest {
     @Test
     @DisplayName("라벨 등록 성공")
     void createLabelSuccess() {
-        doNothing().when(labelRepository).save(any());
+        when(labelRepository.save(any(Label.class))).thenReturn(new Label(1L, "hello"));
 
         labelService.createLabel(new LabelDto("hello"));
 

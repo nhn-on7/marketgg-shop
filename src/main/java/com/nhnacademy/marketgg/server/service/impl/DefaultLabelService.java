@@ -17,18 +17,17 @@ public class DefaultLabelService implements LabelService {
 
     private final LabelRepository labelRepository;
 
-    @Override
-    public List<LabelDto> retrieveLabels() {
-        return labelRepository.findAllLabels();
-    }
-
     @Transactional
     @Override
     public void createLabel(LabelDto labelDto) {
-
         Label label = new Label(labelDto);
 
         labelRepository.save(label);
+    }
+
+    @Override
+    public List<LabelDto> retrieveLabels() {
+        return labelRepository.findAllLabels();
     }
 
     @Transactional
