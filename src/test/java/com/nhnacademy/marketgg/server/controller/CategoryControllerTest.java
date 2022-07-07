@@ -21,6 +21,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,34 +49,46 @@ class CategoryControllerTest {
         verify(categoryService, times(1)).retrieveCategories();
     }
 
-    @DisplayName("카테고리 등록 테스트")
     @Test
+    @DisplayName("카테고리 등록 테스트")
     void testCreateCategory() throws Exception {
         CategoryRequest categoryRequest = CategoryRequest.of();
 
         doNothing().when(categoryService).createCategory(any());
 
         this.mockMvc.perform(post("/admin/v1/categories")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(categoryRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(categoryRequest)))
                     .andExpect(status().isCreated());
 
         verify(categoryService, times(1)).createCategory(any(categoryRequest.getClass()));
     }
 
-    @DisplayName("카테고리 수정 테스트")
     @Test
+    @DisplayName("카테고리 수정 테스트")
     void testUpdateCategory() throws Exception {
         CategoryRequest categoryRequest = CategoryRequest.of();
 
         doNothing().when(categoryService).updateCategory(anyLong(), any());
 
         this.mockMvc.perform(put("/admin/v1/categories/{category-id}", 1L)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsBytes(categoryRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(categoryRequest)))
                     .andExpect(status().isOk());
 
-        verify(categoryService, times(1)).updateCategory(anyLong(), any(categoryRequest.getClass()));
+        verify(categoryService, times(1))
+                .updateCategory(anyLong(), any(categoryRequest.getClass()));
+    }
+
+    @Test
+    @DisplayName("카테고리 삭제 테스트")
+    void testDeleteCategory() throws Exception {
+        doNothing().when(categoryService).deleteCategory(anyLong());
+
+        this.mockMvc.perform(delete("/admin/v1/categories/{category-id}", 1L))
+                    .andExpect(status().isOk());
+
+        verify(categoryService, times(1)).deleteCategory(anyLong());
     }
 
 }
