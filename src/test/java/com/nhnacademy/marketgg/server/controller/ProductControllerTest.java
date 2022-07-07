@@ -97,4 +97,17 @@ class ProductControllerTest {
                     .andExpect(header().string("Location", DEFAULT_PRODUCT + "/1"));
     }
 
+    @Test
+    @DisplayName("상품 삭제하는 테스트")
+    void testDeleteProduct() throws Exception {
+        headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setLocation(URI.create(DEFAULT_PRODUCT));
+
+        this.mockMvc.perform(delete("/admin/v1/products" + "/1"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(header().string("Location", DEFAULT_PRODUCT + "/1"));
+    }
+
 }
