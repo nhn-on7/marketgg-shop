@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.CategoryRegisterRequest;
+import com.nhnacademy.marketgg.server.dto.CategoryCreateRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,11 +34,11 @@ public class Category {
     @Column
     private Integer sequence;
 
-    public Category(CategoryRegisterRequest categoryRegisterRequest, Categorization categorization) {
-        this.categoryCode = categoryRegisterRequest.getCategoryCode();
+    public Category(CategoryCreateRequest categoryCreateRequest, Categorization categorization) {
+        this.categoryCode = categoryCreateRequest.getCategoryCode();
         this.categorization = categorization;
-        this.name = categoryRegisterRequest.getName();
-        this.sequence = categoryRegisterRequest.getSequence();
+        this.name = categoryCreateRequest.getName();
+        this.sequence = categoryCreateRequest.getSequence();
     }
 
 }

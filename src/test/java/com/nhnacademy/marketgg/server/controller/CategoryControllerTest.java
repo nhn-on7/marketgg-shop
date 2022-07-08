@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.CategoryRegisterRequest;
+import com.nhnacademy.marketgg.server.dto.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.service.CategoryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,17 +34,17 @@ class CategoryControllerTest {
     @DisplayName("카테고리 등록")
     void testCreateCategory() throws Exception {
 
-        CategoryRegisterRequest categoryRegisterRequest = new CategoryRegisterRequest();
-        String requestBody = mapper.writeValueAsString(categoryRegisterRequest);
+        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest();
+        String requestBody = mapper.writeValueAsString(categoryCreateRequest);
 
-        doNothing().when(categoryService).createCategory(any(CategoryRegisterRequest.class));
+        doNothing().when(categoryService).createCategory(any(CategoryCreateRequest.class));
 
         mockMvc.perform(post("/admin/v1/categories")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(requestBody))
                .andExpect(status().isCreated());
 
-        verify(categoryService, times(1)).createCategory(any(CategoryRegisterRequest.class));
+        verify(categoryService, times(1)).createCategory(any(CategoryCreateRequest.class));
     }
 
 }

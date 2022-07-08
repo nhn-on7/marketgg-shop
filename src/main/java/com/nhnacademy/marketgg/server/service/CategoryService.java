@@ -1,9 +1,9 @@
 package com.nhnacademy.marketgg.server.service;
 
-import com.nhnacademy.marketgg.server.dto.CategoryRegisterRequest;
+import com.nhnacademy.marketgg.server.dto.CategoryCreateRequest;
 
 public interface CategoryService {
 
-    void createCategory(CategoryRegisterRequest categoryRegisterRequest);
+    void createCategory(CategoryCreateRequest categoryCreateRequest);
 
 }
