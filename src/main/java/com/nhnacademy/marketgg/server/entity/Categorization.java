@@ -12,8 +12,8 @@ import javax.persistence.Table;
 
 @Table(name = "categorizations")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Categorization {
 
