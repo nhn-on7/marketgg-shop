@@ -40,7 +40,7 @@ class DefaultLabelServiceTest {
     void createLabelSuccess() {
         when(labelRepository.save(any(Label.class))).thenReturn(new Label(1L, "hello"));
 
-        labelService.createLabel(new LabelCreateRequest("hello"));
+        labelService.createLabel(new LabelCreateRequest());
 
         verify(labelRepository, times(1)).save(any(Label.class));
     }
@@ -58,7 +58,7 @@ class DefaultLabelServiceTest {
     @Test
     @DisplayName("라벨 삭제 성공")
     void deleteLabelSuccess() {
-        when(labelRepository.findById(anyLong())).thenReturn(Optional.of(new Label(new LabelCreateRequest("hello"))));
+        when(labelRepository.findById(anyLong())).thenReturn(Optional.of(new Label(new LabelCreateRequest())));
         doNothing().when(labelRepository).delete(any(Label.class));
 
         labelService.deleteLabel(1L);
