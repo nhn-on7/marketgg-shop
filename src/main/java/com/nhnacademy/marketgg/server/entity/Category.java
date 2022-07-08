@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.dto.CategoryRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,9 +15,8 @@ import javax.persistence.Table;
 
 @Table(name = "categories")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Category {
 
@@ -34,5 +33,12 @@ public class Category {
 
     @Column
     private Integer sequence;
+
+    public Category(CategoryRequest categoryRequest, Categorization categorization) {
+        this.categoryCode = categoryRequest.getCategoryCode();
+        this.categorization = categorization;
+        this.name = categoryRequest.getName();
+        this.sequence = categoryRequest.getSequence();
+    }
 
 }

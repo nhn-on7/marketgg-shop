@@ -7,4 +7,12 @@ import lombok.NoArgsConstructor;
 @Getter
 public class CategoryRequest {
 
+    private String categoryCode;
+
+    private String categorizationCode;
+
+    private String name;
+
+    private Integer sequence;
+
 }
