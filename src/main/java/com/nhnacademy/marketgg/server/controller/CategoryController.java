@@ -47,7 +47,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{categoryId}")
-    ResponseEntity<Void> updateCategory(@PathVariable final Long categoryId,
+    ResponseEntity<Void> updateCategory(@PathVariable final String categoryId,
                                         @RequestBody final CategoryUpdateRequest categoryRequest) {
         categoryService.updateCategory(categoryId, categoryRequest);
 
@@ -58,7 +58,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{categoryId}")
-    ResponseEntity<Void> deleteCategory(@PathVariable final Long categoryId) {
+    ResponseEntity<Void> deleteCategory(@PathVariable final String categoryId) {
         categoryService.deleteCategory(categoryId);
 
         return ResponseEntity.status(HttpStatus.OK)
