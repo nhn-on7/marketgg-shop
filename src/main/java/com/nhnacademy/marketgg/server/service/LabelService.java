@@ -11,4 +11,5 @@ public interface LabelService {
     void createLabel(final LabelCreateRequest labelCreateRequest);
 
     void deleteLabel(final Long id);
+
 }

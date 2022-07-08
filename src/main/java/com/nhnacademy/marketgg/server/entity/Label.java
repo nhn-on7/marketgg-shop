@@ -31,4 +31,5 @@ public class Label {
     public Label(LabelCreateRequest labelCreateRequest) {
         this.name = labelCreateRequest.getName();
     }
+
 }

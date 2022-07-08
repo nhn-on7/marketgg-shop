@@ -34,7 +34,7 @@ class LabelControllerTest {
     ObjectMapper objectMapper;
 
     @MockBean
-    private LabelService labelService;
+    LabelService labelService;
 
     @Test
     @DisplayName("라벨 등록")

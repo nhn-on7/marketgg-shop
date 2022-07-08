@@ -30,10 +30,10 @@ import static org.mockito.Mockito.when;
 class DefaultLabelServiceTest {
 
     @Autowired
-    private LabelService labelService;
+    LabelService labelService;
 
     @MockBean
-    private LabelRepository labelRepository;
+    LabelRepository labelRepository;
 
     @Test
     @DisplayName("라벨 등록")
