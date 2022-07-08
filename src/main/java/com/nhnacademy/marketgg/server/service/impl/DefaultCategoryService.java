@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import com.nhnacademy.marketgg.server.dto.CategoryUpdateRequest;
+import com.nhnacademy.marketgg.server.exception.CategoryNotFoundException;
 import com.nhnacademy.marketgg.server.dto.CategoryRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.entity.Categorization;
@@ -20,7 +22,7 @@ public class DefaultCategoryService implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategorizationRepository categorizationRepository;
-
+    
     @Transactional
     @Override
     public void createCategory(final CategoryCreateRequest categoryCreateRequest) {
@@ -36,6 +38,20 @@ public class DefaultCategoryService implements CategoryService {
     @Override
     public List<CategoryRetrieveResponse> retrieveCategories() {
         return categoryRepository.findAllCategories();
+    }
+    
+    @Transactional
+    @Override
+    public void updateCategory(final Long categoryId, final CategoryUpdateRequest categoryRequest) {
+        Category category = categoryRepository.findById(categoryId)
+                                              .orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을 수 없습니다."));
+        Categorization categorization =
+                categorizationRepository.findById(categoryRequest.getCategorizationCode())
+                                        .orElseThrow(() -> new CategorizationNotFoundException("카테고리 분류를 찾을 수 없습니다."));
+
+        category.updateCategory(categoryRequest, categorization);
+
+        categoryRepository.save(category);
     }
 
 }

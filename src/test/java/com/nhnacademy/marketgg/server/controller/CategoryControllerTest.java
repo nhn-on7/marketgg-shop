@@ -1,6 +1,10 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+
+import com.nhnacademy.marketgg.server.dto.CategoryUpdateRequest;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -64,5 +68,23 @@ class CategoryControllerTest {
 
         verify(categoryService, times(1)).retrieveCategories();
     }
+    
+    
+    @Test
+    @DisplayName("카테고리 수정")
+    void testUpdateCategory() throws Exception {
+        String requestBody = objectMapper.writeValueAsString(new CategoryUpdateRequest());
 
+        doNothing().when(categoryService)
+                   .updateCategory(anyLong(), any(CategoryUpdateRequest.class));
+
+        mockMvc.perform(put("/admin/v1/categories/{categoryId}", 1L)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestBody))
+               .andExpect(status().isOk());
+
+        verify(categoryService, times(1)).updateCategory(anyLong(),
+                                                         any(CategoryUpdateRequest.class));
+    }  
+    
 }

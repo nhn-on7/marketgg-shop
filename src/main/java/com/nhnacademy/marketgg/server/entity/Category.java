@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.dto.CategoryUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.CategoryCreateRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -39,6 +40,12 @@ public class Category {
         this.categorization = categorization;
         this.name = categoryCreateRequest.getName();
         this.sequence = categoryCreateRequest.getSequence();
+    }
+        
+    public void updateCategory(CategoryUpdateRequest categoryRequest, Categorization categorization) {
+        this.categorization = categorization;
+        this.name = categoryRequest.getName();
+        this.sequence = categoryRequest.getSequence();
     }
 
 }
