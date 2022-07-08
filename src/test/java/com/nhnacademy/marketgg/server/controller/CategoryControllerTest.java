@@ -25,7 +25,7 @@ class CategoryControllerTest {
     MockMvc mockMvc;
 
     @Autowired
-    ObjectMapper mapper;
+    ObjectMapper objectMapper;
 
     @MockBean
     CategoryService categoryService;
@@ -35,7 +35,7 @@ class CategoryControllerTest {
     void testCreateCategory() throws Exception {
 
         CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest();
-        String requestBody = mapper.writeValueAsString(categoryCreateRequest);
+        String requestBody = objectMapper.writeValueAsString(categoryCreateRequest);
 
         doNothing().when(categoryService).createCategory(any(CategoryCreateRequest.class));
 
