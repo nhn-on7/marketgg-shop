@@ -1,0 +1,10 @@
+POST http://localhost:8080/admin/v1/products
+Content-Type: application/json
+
+{
+  "categoryNo": 1,
+  "name": "맛있는 오렌지",
+  "content": "달콤해요",
+  "totalStock": 500,
+  "price": 10000
+}
