@@ -1,7 +1,6 @@
 package com.nhnacademy.marketgg.server.repository;
 
-import com.nhnacademy.marketgg.server.dto.LabelCreateRequest;
-import com.nhnacademy.marketgg.server.dto.LabelRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.LabelRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Label;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

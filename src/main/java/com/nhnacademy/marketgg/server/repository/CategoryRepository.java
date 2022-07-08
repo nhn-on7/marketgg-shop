@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository;
 
-import com.nhnacademy.marketgg.server.dto.CategoryRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
