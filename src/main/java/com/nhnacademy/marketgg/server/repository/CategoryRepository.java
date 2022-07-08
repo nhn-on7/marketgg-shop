@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface CategoryRepository extends JpaRepository<Category, Long> {
+public interface CategoryRepository extends JpaRepository<Category, String> {
 
     @Query("SELECT cz.categorizationCode as categorizationCode, c.categoryCode as categoryCode, cz.name as categorizationName, c.name as categoryName " +
             "FROM Category c " +
