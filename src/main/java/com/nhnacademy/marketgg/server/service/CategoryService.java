@@ -1,18 +1,9 @@
 package com.nhnacademy.marketgg.server.service;
 
-import com.nhnacademy.marketgg.server.dto.CategoryRequest;
-import com.nhnacademy.marketgg.server.dto.CategoryResponse;
-
-import java.util.List;
+import com.nhnacademy.marketgg.server.dto.CategoryCreateRequest;
 
 public interface CategoryService {
 
-    void createCategory(CategoryRequest categoryRequest);
-
-    List<CategoryResponse> retrieveCategories();
-
-    void updateCategory(Long id, CategoryRequest categoryRequest);
-
-    void deleteCategory(Long id);
+    void createCategory(final CategoryCreateRequest categoryCreateRequest);
 
 }
