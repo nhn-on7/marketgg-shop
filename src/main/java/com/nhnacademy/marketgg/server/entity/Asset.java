@@ -10,6 +10,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Table(name = "assets")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,10 +23,20 @@ public class Asset {
     @Column(name = "asset_no")
     private Long assetNo;
 
-    @Column(name = "is_uploaded")
-    private boolean isUploaded;
+    @Column(name = "created_at")
+    private LocalDate createAt;
 
-    @Column(name = "is_deleted")
-    private boolean isDeleted;
+    @Column(name = "updated_at")
+    private LocalDate updateAt;
+
+    @Column(name = "deleted_at")
+    private LocalDate deletedAt;
+
+    public static Asset create() {
+        Asset asset = new Asset();
+        asset.createAt = LocalDate.now();
+        asset.updateAt = LocalDate.now();
+        return asset;
+    }
 
 }
