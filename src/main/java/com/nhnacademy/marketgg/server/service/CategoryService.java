@@ -4,6 +4,6 @@ import com.nhnacademy.marketgg.server.dto.CategoryCreateRequest;
 
 public interface CategoryService {
 
-    void createCategory(CategoryCreateRequest categoryCreateRequest);
+    void createCategory(final CategoryCreateRequest categoryCreateRequest);
 
 }

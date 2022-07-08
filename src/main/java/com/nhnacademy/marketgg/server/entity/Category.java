@@ -34,7 +34,7 @@ public class Category {
     @Column
     private Integer sequence;
 
-    public Category(CategoryCreateRequest categoryCreateRequest, Categorization categorization) {
+    public Category(final CategoryCreateRequest categoryCreateRequest, final Categorization categorization) {
         this.categoryCode = categoryCreateRequest.getCategoryCode();
         this.categorization = categorization;
         this.name = categoryCreateRequest.getName();

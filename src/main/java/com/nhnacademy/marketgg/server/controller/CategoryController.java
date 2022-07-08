@@ -19,7 +19,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    ResponseEntity<Void> createCategory(CategoryCreateRequest categoryCreateRequest) {
+    ResponseEntity<Void> createCategory(final CategoryCreateRequest categoryCreateRequest) {
 
         categoryService.createCategory(categoryCreateRequest);
 

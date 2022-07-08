@@ -20,7 +20,7 @@ public class DefaultCategoryService implements CategoryService {
 
     @Transactional
     @Override
-    public void createCategory(CategoryCreateRequest categoryCreateRequest) {
+    public void createCategory(final CategoryCreateRequest categoryCreateRequest) {
         Categorization categorization =
                 categorizationRepository.findById(categoryCreateRequest.getCategorizationCode())
                                         .orElseThrow(() -> new CategorizationNotFoundException("카테고리 분류를 찾을 수 없습니다."));
