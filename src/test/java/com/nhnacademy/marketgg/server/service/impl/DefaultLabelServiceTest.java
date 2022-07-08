@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -38,9 +39,11 @@ class DefaultLabelServiceTest {
     @Test
     @DisplayName("라벨 등록")
     void createLabelSuccess() {
+        LabelCreateRequest labelRequest = new LabelCreateRequest();
+        ReflectionTestUtils.setField(labelRequest, "name", "hello");
         when(labelRepository.save(any(Label.class))).thenReturn(new Label(1L, "hello"));
 
-        labelService.createLabel(new LabelCreateRequest("hello"));
+        labelService.createLabel(labelRequest);
 
         verify(labelRepository, times(1)).save(any(Label.class));
     }
@@ -58,7 +61,9 @@ class DefaultLabelServiceTest {
     @Test
     @DisplayName("라벨 삭제 성공")
     void deleteLabelSuccess() {
-        when(labelRepository.findById(anyLong())).thenReturn(Optional.of(new Label(new LabelCreateRequest("hello"))));
+        LabelCreateRequest labelRequest = new LabelCreateRequest();
+        ReflectionTestUtils.setField(labelRequest, "name", "hello");
+        when(labelRepository.findById(anyLong())).thenReturn(Optional.of(new Label(labelRequest)));
         doNothing().when(labelRepository).delete(any(Label.class));
 
         labelService.deleteLabel(1L);
