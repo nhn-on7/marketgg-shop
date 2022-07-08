@@ -27,6 +27,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -102,7 +112,7 @@ class DefaultCategoryServiceTest {
         when(categorizationRepository.findById(anyString())).thenReturn(
                 Optional.of(new Categorization("001", "상품", "product")));
 
-        categoryService.updateCategory(1L, categoryRequest);
+        categoryService.updateCategory("001", categoryRequest);
     }
     
     @Test
@@ -117,7 +127,7 @@ class DefaultCategoryServiceTest {
         when(categorizationRepository.findById(anyString())).thenReturn(
                 Optional.of(new Categorization("001", "상품", "product")));
 
-        assertThatThrownBy(() -> categoryService.updateCategory(1L, categoryRequest))
+        assertThatThrownBy(() -> categoryService.updateCategory("001", categoryRequest))
                 .isInstanceOf(CategoryNotFoundException.class);
     }
 
@@ -133,8 +143,27 @@ class DefaultCategoryServiceTest {
         when(categorizationRepository.findById(anyString())).thenReturn(
                 Optional.empty());
 
-        assertThatThrownBy(() -> categoryService.updateCategory(1L, categoryRequest))
+        assertThatThrownBy(() -> categoryService.updateCategory("001", categoryRequest))
                 .isInstanceOf(CategorizationNotFoundException.class);
+    }
+    
+    @Test
+    @DisplayName("카테고리 삭제 성공")
+    void testDeleteCategory() {
+        when(categoryRepository.findById(anyLong()))
+                .thenReturn(Optional.of(new Category("001001", null, "친환경", 1)));
+        doNothing().when(categoryRepository).delete(any(Category.class));
+
+        categoryService.deleteCategory("001001");
+
+        verify(categoryRepository, times(1)).delete(any(Category.class));
+    }
+
+    @Test
+    @DisplayName("카테고리 삭제 실패 (삭제할 카테고리 존재 X)")
+    void testDeleteCategoryFailWhenNotExistsCategory() {
+        assertThatThrownBy(() -> categoryService.deleteCategory("99999"))
+                .isInstanceOf(CategoryNotFoundException.class);
     }
     
 }

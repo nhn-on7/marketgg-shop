@@ -53,5 +53,14 @@ public class DefaultCategoryService implements CategoryService {
 
         categoryRepository.save(category);
     }
+    
+    @Transactional
+    @Override
+    public void deleteCategory(final Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                                              .orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을 수 없습니다."));
+
+        categoryRepository.delete(category);
+    }
 
 }

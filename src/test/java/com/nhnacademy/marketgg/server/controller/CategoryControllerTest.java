@@ -19,6 +19,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -86,5 +90,16 @@ class CategoryControllerTest {
         verify(categoryService, times(1)).updateCategory(anyLong(),
                                                          any(CategoryUpdateRequest.class));
     }  
+    
+    @Test
+    @DisplayName("카테고리 삭제 테스트")
+    void testDeleteCategory() throws Exception {
+        doNothing().when(categoryService).deleteCategory(anyLong());
+
+        this.mockMvc.perform(delete("/admin/v1/categories/{categoryId}", 1L))
+                    .andExpect(status().isOk());
+
+        verify(categoryService, times(1)).deleteCategory(anyLong());
+    }
     
 }

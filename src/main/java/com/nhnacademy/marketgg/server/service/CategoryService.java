@@ -13,5 +13,7 @@ public interface CategoryService {
     List<CategoryRetrieveResponse> retrieveCategories();
     
     void updateCategory(final Long categoryId, final CategoryUpdateRequest categoryRequest);
+    
+    void deleteCategory(final Long categoryId);
 
 }
