@@ -21,7 +21,7 @@ public class DefaultCategoryService implements CategoryService {
 
     @Transactional
     @Override
-    public void updateCategory(Long categoryId, CategoryUpdateRequest categoryRequest) {
+    public void updateCategory(final Long categoryId, final CategoryUpdateRequest categoryRequest) {
         Category category = categoryRepository.findById(categoryId)
                                               .orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을 수 없습니다."));
         Categorization categorization =
