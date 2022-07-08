@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ProductCreateRequest {
 
-    private Long assetNo;
+    private String imageAddress;
     private String categoryCode;
     private String name;
     private String content;
