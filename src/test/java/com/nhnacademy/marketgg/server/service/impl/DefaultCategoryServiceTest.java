@@ -44,8 +44,8 @@ class DefaultCategoryServiceTest {
         ReflectionTestUtils.setField(categoryCreateRequest, "categorizationCode", "001");
         ReflectionTestUtils.setField(categoryCreateRequest, "name", "채소");
         ReflectionTestUtils.setField(categoryCreateRequest, "sequence", 1);
-        when(categorizationRepository.findById(anyString())).thenReturn(
-                Optional.of(new Categorization("111", "상품", "product")));
+        when(categorizationRepository.findById(anyString()))
+                .thenReturn(Optional.of(new Categorization("111", "상품", "product")));
 
         categoryService.createCategory(categoryCreateRequest);
 
@@ -61,7 +61,8 @@ class DefaultCategoryServiceTest {
         ReflectionTestUtils.setField(categoryCreateRequest, "categorizationCode", "001");
         ReflectionTestUtils.setField(categoryCreateRequest, "name", "채소");
         ReflectionTestUtils.setField(categoryCreateRequest, "sequence", 1);
-        when(categorizationRepository.findById(anyString())).thenReturn(Optional.empty());
+        when(categorizationRepository.findById(anyString()))
+                .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> categoryService.createCategory(categoryCreateRequest))
                 .isInstanceOf(CategorizationNotFoundException.class);
