@@ -18,6 +18,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 @WebMvcTest(CategoryController.class)
 class CategoryControllerTest {
 
@@ -33,7 +41,6 @@ class CategoryControllerTest {
     @Test
     @DisplayName("카테고리 등록")
     void testCreateCategory() throws Exception {
-
         CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest();
         String requestBody = objectMapper.writeValueAsString(categoryCreateRequest);
 
@@ -45,6 +52,17 @@ class CategoryControllerTest {
                .andExpect(status().isCreated());
 
         verify(categoryService, times(1)).createCategory(any(CategoryCreateRequest.class));
+    }
+    
+    @Test
+    @DisplayName("카테고리 목록 조회 테스트")
+    void testRetrieveCategories() throws Exception {
+        when(categoryService.retrieveCategories()).thenReturn(List.of());
+
+        this.mockMvc.perform(get("/admin/v1/categories"))
+                    .andExpect(status().isOk());
+
+        verify(categoryService, times(1)).retrieveCategories();
     }
 
 }
