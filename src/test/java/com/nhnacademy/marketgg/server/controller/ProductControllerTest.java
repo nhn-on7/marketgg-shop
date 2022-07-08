@@ -44,7 +44,6 @@ class ProductControllerTest {
         ReflectionTestUtils.setField(productRequest, "content", "아침에 자몽 쥬스");
         ReflectionTestUtils.setField(productRequest, "totalStock", 100L);
         ReflectionTestUtils.setField(productRequest, "price", 2000L);
-        ReflectionTestUtils.setField(productRequest, "thumbnail", "image address");
     }
 
     @Test

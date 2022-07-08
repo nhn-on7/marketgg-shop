@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ProductCreateRequest {
 
-    private Long categoryNo;
+    private Long assetNo;
+    private String categoryCode;
     private String name;
     private String content;
     private Long totalStock;
     private Long price;
-    private String thumbnail;
     private String description;
     private String unit;
     private String deliveryType;

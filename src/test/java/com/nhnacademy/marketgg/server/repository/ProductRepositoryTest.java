@@ -17,8 +17,8 @@ class ProductRepositoryTest {
 
     private Product product;
 
-    @DisplayName("상품 생성 테스트")
     @Test
+    @DisplayName("상품 생성 테스트")
     void createProductTest() {
 
     }

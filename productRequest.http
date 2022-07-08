@@ -6,6 +6,5 @@ Content-Type: application/json
   "name": "맛있는 오렌지",
   "content": "달콤해요",
   "totalStock": 500,
-  "price": 10000,
-  "thumbnail": "testurl"
+  "price": 10000
 }

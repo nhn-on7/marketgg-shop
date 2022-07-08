@@ -27,12 +27,8 @@ public class ProductController {
     public ResponseEntity<Void> createProduct(@RequestBody final ProductCreateRequest productRequest) {
         productService.createProduct(productRequest);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setLocation(URI.create(DEFAULT_PRODUCT));
-
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .headers(headers)
+                             .location(URI.create(DEFAULT_PRODUCT))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -41,12 +37,8 @@ public class ProductController {
     public ResponseEntity<List<ProductResponse>> retrieveProducts() {
         List<ProductResponse> productList = productService.retrieveProducts();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setLocation(URI.create(DEFAULT_PRODUCT));
-
         return ResponseEntity.status(HttpStatus.OK)
-                             .headers(headers)
+                             .location(URI.create(DEFAULT_PRODUCT))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productList);
     }
@@ -56,12 +48,8 @@ public class ProductController {
                                               @PathVariable final Long productId) {
         productService.updateProduct(productRequest, productId);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setLocation(URI.create(DEFAULT_PRODUCT + "/" + productId.toString()));
-
         return ResponseEntity.status(HttpStatus.OK)
-                             .headers(headers)
+                             .location(URI.create(DEFAULT_PRODUCT + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -70,12 +58,8 @@ public class ProductController {
     public ResponseEntity<Void> deleteProduct(@PathVariable final Long productId) {
         productService.deleteProduct(productId);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setLocation(URI.create(DEFAULT_PRODUCT + "/" + productId.toString()));
-
         return ResponseEntity.status(HttpStatus.OK)
-                             .headers(headers)
+                             .location(URI.create(DEFAULT_PRODUCT + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

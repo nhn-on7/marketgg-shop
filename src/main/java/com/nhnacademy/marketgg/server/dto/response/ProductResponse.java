@@ -16,8 +16,6 @@ public interface ProductResponse {
 
     Long getPrice();
 
-    String getThumbnail();
-
     String getDescription();
 
     String getUnit();
