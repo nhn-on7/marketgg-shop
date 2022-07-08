@@ -47,9 +47,6 @@ public class Product {
     private Long price;
 
     @Column
-    private String thumbnail;
-
-    @Column
     private String description;
 
     @Column
@@ -82,13 +79,13 @@ public class Product {
     @Column(name = "deleted_at")
     private LocalDate deletedAt;
 
-    public Product(ProductCreateRequest productRequest) {
-        // Review : category, asset 안받아도되나?
+    public Product(ProductCreateRequest productRequest, Asset asset, Category category) {
+        this.asset = asset;
+        this.category = category;
         this.name = productRequest.getName();
         this.content = productRequest.getContent();
         this.totalStock = productRequest.getTotalStock();
         this.price = productRequest.getPrice();
-        this.thumbnail = productRequest.getThumbnail();
         this.description = productRequest.getDescription();
         this.unit = productRequest.getUnit();
         this.deliveryType = productRequest.getDeliveryType();
@@ -100,12 +97,13 @@ public class Product {
         this.createdAt = LocalDate.now();
     }
 
-    public void updateProduct(ProductUpdateRequest productRequest) {
+    public void updateProduct(ProductUpdateRequest productRequest, Asset asset, Category category) {
+        this.asset = asset;
+        this.category = category;
         this.name = productRequest.getName();
         this.content = productRequest.getContent();
         this.totalStock = productRequest.getTotalStock();
         this.price = productRequest.getPrice();
-        this.thumbnail = productRequest.getThumbnail();
         this.description = productRequest.getDescription();
         this.unit = productRequest.getUnit();
         this.deliveryType = productRequest.getDeliveryType();
