@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import com.nhnacademy.marketgg.server.dto.CategoryRequest;
+import com.nhnacademy.marketgg.server.dto.CategoryRegisterRequest;
 import com.nhnacademy.marketgg.server.service.CategoryService;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +19,9 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    ResponseEntity<Void> createCategory(CategoryRequest categoryRequest) {
+    ResponseEntity<Void> createCategory(CategoryRegisterRequest categoryRegisterRequest) {
 
-        categoryService.createCategory(categoryRequest);
+        categoryService.createCategory(categoryRegisterRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .location(URI.create("/admin/v1/categories"))

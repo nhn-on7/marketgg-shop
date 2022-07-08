@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class CategoryRequest {
+public class CategoryRegisterRequest {
 
     private String categoryCode;
 

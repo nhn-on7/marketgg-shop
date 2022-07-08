@@ -7,7 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.nhnacademy.marketgg.server.dto.CategoryRequest;
+import com.nhnacademy.marketgg.server.dto.CategoryRegisterRequest;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.exception.CategorizationNotFoundException;
@@ -39,15 +39,15 @@ class DefaultCategoryServiceTest {
     @Test
     @DisplayName("카테고리 생성 성공")
     void testCreateCategorySuccess() {
-        CategoryRequest categoryRequest = new CategoryRequest();
-        ReflectionTestUtils.setField(categoryRequest, "categoryCode", "001");
-        ReflectionTestUtils.setField(categoryRequest, "categorizationCode", "001");
-        ReflectionTestUtils.setField(categoryRequest, "name", "채소");
-        ReflectionTestUtils.setField(categoryRequest, "sequence", 1);
+        CategoryRegisterRequest categoryRegisterRequest = new CategoryRegisterRequest();
+        ReflectionTestUtils.setField(categoryRegisterRequest, "categoryCode", "001");
+        ReflectionTestUtils.setField(categoryRegisterRequest, "categorizationCode", "001");
+        ReflectionTestUtils.setField(categoryRegisterRequest, "name", "채소");
+        ReflectionTestUtils.setField(categoryRegisterRequest, "sequence", 1);
         when(categorizationRepository.findById(anyString())).thenReturn(
                 Optional.of(new Categorization("111", "상품", "product")));
 
-        categoryService.createCategory(categoryRequest);
+        categoryService.createCategory(categoryRegisterRequest);
 
         verify(categorizationRepository, times(1)).findById(anyString());
         verify(categoryRepository, times(1)).save(any(Category.class));
@@ -56,14 +56,14 @@ class DefaultCategoryServiceTest {
     @Test
     @DisplayName("카테고리 생성 실패")
     void testCreateCategoryFail() {
-        CategoryRequest categoryRequest = new CategoryRequest();
-        ReflectionTestUtils.setField(categoryRequest, "categoryCode", "001");
-        ReflectionTestUtils.setField(categoryRequest, "categorizationCode", "001");
-        ReflectionTestUtils.setField(categoryRequest, "name", "채소");
-        ReflectionTestUtils.setField(categoryRequest, "sequence", 1);
+        CategoryRegisterRequest categoryRegisterRequest = new CategoryRegisterRequest();
+        ReflectionTestUtils.setField(categoryRegisterRequest, "categoryCode", "001");
+        ReflectionTestUtils.setField(categoryRegisterRequest, "categorizationCode", "001");
+        ReflectionTestUtils.setField(categoryRegisterRequest, "name", "채소");
+        ReflectionTestUtils.setField(categoryRegisterRequest, "sequence", 1);
         when(categorizationRepository.findById(anyString())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> categoryService.createCategory(categoryRequest))
+        assertThatThrownBy(() -> categoryService.createCategory(categoryRegisterRequest))
                 .isInstanceOf(CategorizationNotFoundException.class);
     }
 
