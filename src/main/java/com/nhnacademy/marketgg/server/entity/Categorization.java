@@ -23,10 +23,10 @@ public class Categorization {
     @Column(name = "categorization_code")
     private String categorizationCode;
 
-    @Column(name = "categorization_name")
-    private String categorizationName;
+    @Column
+    private String name;
 
-    @Column(name = "categorization_mean")
-    private String categorizationMean;
+    @Column
+    private String alias;
 
 }
