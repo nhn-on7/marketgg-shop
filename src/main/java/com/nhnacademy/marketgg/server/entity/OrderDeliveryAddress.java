@@ -1,15 +1,18 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -20,7 +23,10 @@ import java.io.Serializable;
 @Getter
 public class OrderDeliveryAddress implements Serializable {
 
-    @Id
+    @EmbeddedId
+    private OrderDeliveryAddressPk pk;
+
+    @MapsId(value = "orderNo")
     @OneToOne
     @JoinColumn(name = "order_no")
     private Order order;
@@ -40,5 +46,16 @@ public class OrderDeliveryAddress implements Serializable {
 
     @Column(name = "detail_address")
     private String detailAddress;
+
+    @Embeddable
+    @EqualsAndHashCode
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @Getter
+    public static class OrderDeliveryAddressPk implements Serializable {
+
+        @Column(name = "order_no")
+        private Long orderNo;
+
+    }
 
 }
