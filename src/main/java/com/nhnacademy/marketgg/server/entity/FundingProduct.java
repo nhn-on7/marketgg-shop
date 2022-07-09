@@ -9,30 +9,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
 
-@Table(name = "crowdfunding")
+@Table(name = "funding_products")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Crowdfunding {
+public class FundingProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "crowdfunding_no")
-    private Long crowdfundingNo;
+    @Column(name = "funding_product_no")
+    private Long fundingProductNo;
 
-    @Column(name = "current_amount")
-    private Long currentAmount;
+    @ManyToOne
+    @JoinColumn(name = "product_no")
+    private Product product;
 
-    @Column(name = "target_amount")
-    private Long targetAmount;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @ManyToOne
+    @JoinColumn(name = "crowdfunding_no")
+    private Crowdfunding crowdfunding;
 
     @Column
-    private LocalDateTime deadline;
+    private Long amount;
 
 }

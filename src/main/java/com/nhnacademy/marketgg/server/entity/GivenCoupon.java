@@ -9,49 +9,39 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-@Table(name = "delivery_addresses")
+@Table(name = "given_coupons")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class DeliveryAddress {
+public class GivenCoupon {
 
     @EmbeddedId
-    private DeliveryAddressPk pk;
+    private GivenCouponPk pk;
 
-    @MapsId("memberNo")
+    @MapsId(value = "couponNo")
+    @ManyToOne
+    @JoinColumn(name = "coupon_no")
+    private Coupon coupon;
+
+    @MapsId(value = "memberNo")
     @ManyToOne
     @JoinColumn(name = "member_no")
     private Member member;
-
-    @Column(name = "is_default_address")
-    private Boolean isDefaultAddress;
-
-    @Column(name = "zip_code")
-    private Integer zipCode;
-
-    @Column(name = "road_name_address")
-    private String roadNameAddress;
-
-    @Column(name = "detail_address")
-    private String detailAddress;
 
     @Embeddable
     @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class DeliveryAddressPk implements Serializable {
+    public static class GivenCouponPk implements Serializable {
 
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "delivery_address_no")
-        private Long deliveryAddressNo;
+        @Column(name = "coupon_no")
+        private Long couponNo;
 
         @Column(name = "member_no")
         private Long memberNo;

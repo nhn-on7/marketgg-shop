@@ -14,44 +14,41 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
-@Table(name = "customer_service_post")
+@Table(name = "reviews")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class CustomerServicePost {
+public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cs_post_no")
-    private Long csPostNo;
+    @Column(name = "review_no")
+    private Long reviewNo;
 
     @ManyToOne
     @JoinColumn(name = "member_no")
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "category_code")
-    private Category category;
+    @JoinColumn(name = "asset_no")
+    private Asset asset;
 
     @Column
     private String content;
 
     @Column
-    private String code;
+    private Integer rating;
 
-    @Column
-    private String title;
-
-    @Column
-    private String reason;
-
-    @Column
-    private String status;
+    @Column(name = "is_best")
+    private Boolean isBest;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
 }

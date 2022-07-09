@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 
 @Table(name = "orders")
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Order {
 

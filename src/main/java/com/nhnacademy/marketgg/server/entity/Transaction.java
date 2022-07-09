@@ -16,45 +16,49 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
-@Table(name = "delivery_addresses")
+@Table(name = "transactions")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class DeliveryAddress {
+public class Transaction {
 
     @EmbeddedId
-    private DeliveryAddressPk pk;
+    private TransactionPk pk;
 
-    @MapsId("memberNo")
+    @MapsId("paymentNo")
     @ManyToOne
-    @JoinColumn(name = "member_no")
-    private Member member;
+    @JoinColumn(name = "payment_no")
+    private Payment payment;
 
-    @Column(name = "is_default_address")
-    private Boolean isDefaultAddress;
+    @Column(name = "step_type")
+    private String stepType;
 
-    @Column(name = "zip_code")
-    private Integer zipCode;
+    @Column(name = "transaction_amount")
+    private Long transactionAmount;
 
-    @Column(name = "road_name_address")
-    private String roadNameAddress;
+    @Column(name = "discount_amount")
+    private Long discountAmount;
 
-    @Column(name = "detail_address")
-    private String detailAddress;
+    @Column(name = "paid_amount")
+    private Long paidAmount;
+
+    @Column(name = "reg_ts")
+    private LocalDateTime regTs;
 
     @Embeddable
     @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class DeliveryAddressPk implements Serializable {
+    public static class TransactionPk implements Serializable {
 
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "delivery_address_no")
-        private Long deliveryAddressNo;
+        @Column(name = "transaction_no")
+        private Long transactionNo;
 
-        @Column(name = "member_no")
-        private Long memberNo;
+        @Column(name = "payment_no")
+        private Long paymentNo;
 
     }
 

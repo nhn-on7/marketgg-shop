@@ -17,44 +17,36 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-@Table(name = "delivery_addresses")
+@Table(name = "product_labels")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class DeliveryAddress {
+public class ProductLabel {
 
     @EmbeddedId
-    private DeliveryAddressPk pk;
+    private ProductLabelPk pk;
 
-    @MapsId("memberNo")
+    @MapsId(value = "productNo")
     @ManyToOne
-    @JoinColumn(name = "member_no")
-    private Member member;
+    @JoinColumn(name = "product_no")
+    private Product product;
 
-    @Column(name = "is_default_address")
-    private Boolean isDefaultAddress;
-
-    @Column(name = "zip_code")
-    private Integer zipCode;
-
-    @Column(name = "road_name_address")
-    private String roadNameAddress;
-
-    @Column(name = "detail_address")
-    private String detailAddress;
+    @MapsId(value = "labelNo")
+    @ManyToOne
+    @JoinColumn(name = "label_no")
+    private Label label;
 
     @Embeddable
     @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class DeliveryAddressPk implements Serializable {
+    public static class ProductLabelPk implements Serializable {
 
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "delivery_address_no")
-        private Long deliveryAddressNo;
+        @Column(name = "product_no")
+        private Long productNo;
 
-        @Column(name = "member_no")
-        private Long memberNo;
+        @Column(name = "label_no")
+        private Long labelNo;
 
     }
 

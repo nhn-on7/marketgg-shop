@@ -12,27 +12,27 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
-@Table(name = "crowdfunding")
+@Table(name = "coupons")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Crowdfunding {
+public class Coupon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "crowdfunding_no")
-    private Long crowdfundingNo;
-
-    @Column(name = "current_amount")
-    private Long currentAmount;
-
-    @Column(name = "target_amount")
-    private Long targetAmount;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = "coupon_no")
+    private Long couponNo;
 
     @Column
-    private LocalDateTime deadline;
+    private String name;
+
+    @Column
+    private String type;
+
+    @Column(name = "expired_at")
+    private LocalDateTime expiredAt;
+
+    @Column(name = "minimum_money")
+    private Integer minimumMoney;
 
 }

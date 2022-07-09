@@ -9,52 +9,49 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
-@Table(name = "delivery_addresses")
+@Table(name = "carts")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class DeliveryAddress {
+public class Cart {
 
     @EmbeddedId
-    private DeliveryAddressPk pk;
+    private CartPk pk;
 
-    @MapsId("memberNo")
+    @MapsId(value = "memberNo")
     @ManyToOne
     @JoinColumn(name = "member_no")
     private Member member;
 
-    @Column(name = "is_default_address")
-    private Boolean isDefaultAddress;
+    @MapsId(value = "productNo")
+    @ManyToOne
+    @JoinColumn(name = "product_no")
+    private Product product;
 
-    @Column(name = "zip_code")
-    private Integer zipCode;
+    @Column
+    private Integer amount;
 
-    @Column(name = "road_name_address")
-    private String roadNameAddress;
-
-    @Column(name = "detail_address")
-    private String detailAddress;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @Embeddable
     @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class DeliveryAddressPk implements Serializable {
-
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "delivery_address_no")
-        private Long deliveryAddressNo;
+    public static class CartPk implements Serializable {
 
         @Column(name = "member_no")
         private Long memberNo;
+
+        @Column(name = "product_no")
+        private Long productNo;
 
     }
 
