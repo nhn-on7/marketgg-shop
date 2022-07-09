@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,5 +27,11 @@ public class Categorization {
 
     @Column
     private String alias;
+
+    public Categorization(CategorizationCreateRequest categorizationRequest) {
+        this.categorizationCode = categorizationRequest.getCategorizationCode();
+        this.name = categorizationRequest.getName();
+        this.alias = categorizationRequest.getAlias();
+    }
 
 }
