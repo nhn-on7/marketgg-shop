@@ -5,4 +5,5 @@ public class AssetNotFoundException extends IllegalArgumentException {
     public AssetNotFoundException(String ex) {
         super(ex);
     }
+
 }

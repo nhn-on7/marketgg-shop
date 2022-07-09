@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Table(name = "customer_service_post")
 @Entity
@@ -27,5 +28,30 @@ public class CustomerServicePost {
     @ManyToOne
     @JoinColumn(name = "member_no")
     private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "category_code")
+    private Category category;
+
+     @Column
+     private String content;
+
+     @Column
+     private String code;
+
+     @Column
+     private String title;
+
+     @Column
+     private String reason;
+
+     @Column
+     private String status;
+
+     @Column(name = "created_at")
+     private LocalDateTime createdAt;
+
+     @Column(name = "updated_at")
+     private LocalDateTime updatedAt;
 
 }
