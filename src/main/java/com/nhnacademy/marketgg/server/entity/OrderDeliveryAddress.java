@@ -7,15 +7,17 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Table(name = "order_delivery_addresses")
 @Entity
 @NoArgsConstructor
 @Getter
-public class OrderDeliveryAddress {
+public class OrderDeliveryAddress implements Serializable {
 
     @Id
     @OneToOne
@@ -23,12 +25,11 @@ public class OrderDeliveryAddress {
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "delivery_address_no")
+    @JoinColumns({
+            @JoinColumn(name = "delivery_address_no"),
+            @JoinColumn(name = "member_no")
+    })
     private DeliveryAddress deliveryAddress;
-
-    @ManyToOne
-    @JoinColumn(name = "member_no")
-    private Member member;
 
     @Column(name = "zip_code")
     private Integer zipCode;
