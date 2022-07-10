@@ -23,7 +23,7 @@ import java.io.Serializable;
 public class UsedCoupon {
 
     @EmbeddedId
-    private UsedCouponPk pk;
+    private Pk pk;
 
     @MapsId(value = "orderNo")
     @OneToOne
@@ -41,7 +41,7 @@ public class UsedCoupon {
     @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class UsedCouponPk implements Serializable {
+    public static class Pk implements Serializable {
 
         @Column(name = "order_no")
         private Long orderNo;

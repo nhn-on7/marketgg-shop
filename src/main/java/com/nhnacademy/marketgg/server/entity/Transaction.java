@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     @EmbeddedId
-    private TransactionPk pk;
+    private Pk pk;
 
     @MapsId("paymentNo")
     @ManyToOne
@@ -51,7 +51,7 @@ public class Transaction {
     @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class TransactionPk implements Serializable {
+    public static class Pk implements Serializable {
 
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "transaction_no")

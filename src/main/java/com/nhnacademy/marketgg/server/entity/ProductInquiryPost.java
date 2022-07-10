@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 public class ProductInquiryPost {
 
     @EmbeddedId
-    private ProductInquiryPostPk pk;
+    private Pk pk;
 
     @MapsId(value = "productNo")
     @ManyToOne
@@ -55,7 +55,7 @@ public class ProductInquiryPost {
     @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class ProductInquiryPostPk implements Serializable {
+    public static class Pk implements Serializable {
 
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "product_inquiry_no")

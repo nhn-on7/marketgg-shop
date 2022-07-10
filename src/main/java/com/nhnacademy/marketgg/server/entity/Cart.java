@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 public class Cart {
 
     @EmbeddedId
-    private CartPk pk;
+    private Pk pk;
 
     @MapsId(value = "memberNo")
     @ManyToOne
@@ -45,7 +45,7 @@ public class Cart {
     @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class CartPk implements Serializable {
+    public static class Pk implements Serializable {
 
         @Column(name = "member_no")
         private Long memberNo;

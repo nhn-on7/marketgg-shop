@@ -22,7 +22,7 @@ import java.io.Serializable;
 public class OrderProduct {
 
     @EmbeddedId
-    private OrderProductPk pk;
+    private Pk pk;
 
     @MapsId(value = "orderNo")
     @ManyToOne
@@ -47,7 +47,7 @@ public class OrderProduct {
     @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class OrderProductPk implements Serializable {
+    public static class Pk implements Serializable {
 
         @Column(name = "order_no")
         private Long orderNo;

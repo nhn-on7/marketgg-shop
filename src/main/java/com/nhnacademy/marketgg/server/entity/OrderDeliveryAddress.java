@@ -24,7 +24,7 @@ import java.io.Serializable;
 public class OrderDeliveryAddress implements Serializable {
 
     @EmbeddedId
-    private OrderDeliveryAddressPk pk;
+    private Pk pk;
 
     @MapsId(value = "orderNo")
     @OneToOne
@@ -51,7 +51,7 @@ public class OrderDeliveryAddress implements Serializable {
     @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class OrderDeliveryAddressPk implements Serializable {
+    public static class Pk implements Serializable {
 
         @Column(name = "order_no")
         private Long orderNo;

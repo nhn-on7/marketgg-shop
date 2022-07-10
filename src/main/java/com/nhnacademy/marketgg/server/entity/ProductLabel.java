@@ -24,7 +24,7 @@ import java.io.Serializable;
 public class ProductLabel {
 
     @EmbeddedId
-    private ProductLabelPk pk;
+    private Pk pk;
 
     @MapsId(value = "productNo")
     @ManyToOne
@@ -40,7 +40,7 @@ public class ProductLabel {
     @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class ProductLabelPk implements Serializable {
+    public static class Pk implements Serializable {
 
         @Column(name = "product_no")
         private Long productNo;

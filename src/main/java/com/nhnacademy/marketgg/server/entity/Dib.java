@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 public class Dib {
 
     @EmbeddedId
-    private DibPk pk;
+    private Pk pk;
 
     @MapsId(value = "memberNo")
     @ManyToOne
@@ -45,7 +45,7 @@ public class Dib {
     @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class DibPk implements Serializable {
+    public static class Pk implements Serializable {
 
         @Column(name = "member_no")
         private Long memberNo;

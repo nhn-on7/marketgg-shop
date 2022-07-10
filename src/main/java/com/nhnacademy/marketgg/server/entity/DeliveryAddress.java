@@ -24,7 +24,7 @@ import java.io.Serializable;
 public class DeliveryAddress {
 
     @EmbeddedId
-    private DeliveryAddressPk pk;
+    private Pk pk;
 
     @MapsId("memberNo")
     @ManyToOne
@@ -47,7 +47,7 @@ public class DeliveryAddress {
     @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class DeliveryAddressPk implements Serializable {
+    public static class Pk implements Serializable {
 
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "delivery_address_no")

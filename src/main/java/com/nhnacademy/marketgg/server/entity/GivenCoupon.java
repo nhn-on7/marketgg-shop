@@ -22,7 +22,7 @@ import java.io.Serializable;
 public class GivenCoupon {
 
     @EmbeddedId
-    private GivenCouponPk pk;
+    private Pk pk;
 
     @MapsId(value = "couponNo")
     @ManyToOne
@@ -38,7 +38,7 @@ public class GivenCoupon {
     @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class GivenCouponPk implements Serializable {
+    public static class Pk implements Serializable {
 
         @Column(name = "coupon_no")
         private Long couponNo;
