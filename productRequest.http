@@ -2,9 +2,9 @@ POST http://localhost:7080/admin/v1/products
 Content-Type: application/json
 
 {
-  "categoryNo": 1,
-  "name": "맛있는 오렌지",
-  "content": "달콤해요",
+  "asset_no": 1,
+  "category_code": 1,
+  "name": "테스트 상품",
   "totalStock": 500,
   "price": 10000
 }

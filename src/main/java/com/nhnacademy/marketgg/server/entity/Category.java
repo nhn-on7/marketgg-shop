@@ -20,17 +20,17 @@ import javax.persistence.Table;
 public class Category {
 
     @Id
-    @Column(name = "category_code")
+    @Column(name = "category_code", nullable = false)
     private String categoryCode;
 
     @ManyToOne
-    @JoinColumn(name = "categorization_code")
+    @JoinColumn(name = "categorization_code", nullable = false)
     private Categorization categorization;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(nullable = false)
     private Integer sequence;
 
     public Category(final CategoryCreateRequest categoryCreateRequest, final Categorization categorization) {

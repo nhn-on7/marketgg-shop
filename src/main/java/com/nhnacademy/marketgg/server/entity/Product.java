@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import java.time.LocalDate;
@@ -64,6 +65,7 @@ public class Product {
     private String packageType;
 
     @Column(name = "expiration_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate expirationDate;
 
     @Column(name = "allergy_info", nullable = false)
@@ -73,12 +75,15 @@ public class Product {
     private String capacity;
 
     @Column(name = "created_at", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
+    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime deletedAt;
 
     public Product(ProductCreateRequest productRequest, Asset asset, Category category) {

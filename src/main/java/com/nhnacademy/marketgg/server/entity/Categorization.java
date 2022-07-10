@@ -17,13 +17,13 @@ import javax.persistence.Table;
 public class Categorization {
 
     @Id
-    @Column(name = "categorization_code")
+    @Column(name = "categorization_code", nullable = false)
     private String categorizationCode;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(nullable = false)
     private String alias;
 
     public Categorization(CategorizationCreateRequest categorizationRequest) {
