@@ -27,12 +27,12 @@ public class Cart {
 
     @MapsId(value = "memberNo")
     @ManyToOne
-    @JoinColumn(name = "member_no")
+    @JoinColumn
     private Member member;
 
     @MapsId(value = "productNo")
     @ManyToOne
-    @JoinColumn(name = "product_no")
+    @JoinColumn
     private Product product;
 
     @Column

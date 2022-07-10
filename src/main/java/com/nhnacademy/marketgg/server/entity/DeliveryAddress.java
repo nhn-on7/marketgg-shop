@@ -28,7 +28,7 @@ public class DeliveryAddress {
 
     @MapsId("memberNo")
     @ManyToOne
-    @JoinColumn(name = "member_no")
+    @JoinColumn
     private Member member;
 
     @Column(name = "is_default_address")

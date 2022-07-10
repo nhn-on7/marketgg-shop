@@ -29,11 +29,11 @@ public class ProductInquiryPost {
 
     @MapsId(value = "productNo")
     @ManyToOne
-    @JoinColumn(name = "product_no")
+    @JoinColumn
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "member_no")
+    @JoinColumn
     private Member member;
 
     @Column

@@ -29,7 +29,7 @@ public class Transaction {
 
     @MapsId("paymentNo")
     @ManyToOne
-    @JoinColumn(name = "payment_no")
+    @JoinColumn
     private Payment payment;
 
     @Column(name = "step_type")

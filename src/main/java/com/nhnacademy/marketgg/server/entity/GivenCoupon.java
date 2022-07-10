@@ -26,12 +26,12 @@ public class GivenCoupon {
 
     @MapsId(value = "couponNo")
     @ManyToOne
-    @JoinColumn(name = "coupon_no")
+    @JoinColumn
     private Coupon coupon;
 
     @MapsId(value = "memberNo")
     @ManyToOne
-    @JoinColumn(name = "member_no")
+    @JoinColumn
     private Member member;
 
     @Embeddable
