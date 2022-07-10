@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.entity;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,61 +25,61 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_no")
+    @Column(name = "product_no", nullable = false)
     private Long productNo;
 
     @OneToOne
-    @JoinColumn(name = "asset_no")
+    @JoinColumn(name = "asset_no", nullable = false)
     private Asset asset;
 
     @ManyToOne
-    @JoinColumn(name = "category_code")
+    @JoinColumn(name = "category_code", nullable = false)
     private Category category;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(nullable = false)
     private String content;
 
-    @Column(name = "total_stock")
+    @Column(name = "total_stock", nullable = false)
     private Long totalStock;
 
-    @Column
+    @Column(nullable = false)
     private Long price;
 
-    @Column
+    @Column(nullable = false)
     private String description;
 
-    @Column
+    @Column(nullable = false)
     private String unit;
 
-    @Column(name = "delivery_type")
+    @Column(name = "delivery_type", nullable = false)
     private String deliveryType;
 
-    @Column
+    @Column(nullable = false)
     private String origin;
 
-    @Column(name = "package_type")
+    @Column(name = "package_type", nullable = false)
     private String packageType;
 
-    @Column(name = "expiration_date")
+    @Column(name = "expiration_date", nullable = false)
     private LocalDate expirationDate;
 
-    @Column(name = "allergy_info")
+    @Column(name = "allergy_info", nullable = false)
     private String allergyInfo;
 
-    @Column
+    @Column(nullable = false)
     private String capacity;
 
-    @Column(name = "created_at")
-    private LocalDate createdAt;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
-    private LocalDate updatedAt;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
-    private LocalDate deletedAt;
+    private LocalDateTime deletedAt;
 
     public Product(ProductCreateRequest productRequest, Asset asset, Category category) {
         this.asset = asset;
@@ -95,7 +96,8 @@ public class Product {
         this.expirationDate = productRequest.getExpirationDate();
         this.allergyInfo = productRequest.getAllergyInfo();
         this.capacity = productRequest.getCapacity();
-        this.createdAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public void updateProduct(ProductUpdateRequest productRequest, Asset asset, Category category) {
@@ -113,11 +115,11 @@ public class Product {
         this.expirationDate = productRequest.getExpirationDate();
         this.allergyInfo = productRequest.getAllergyInfo();
         this.capacity = productRequest.getCapacity();
-        this.updatedAt = LocalDate.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public void deleteProduct() {
-        this.deletedAt = LocalDate.now();
+        this.deletedAt = LocalDateTime.now();
     }
 
 }
