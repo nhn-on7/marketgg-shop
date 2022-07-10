@@ -7,16 +7,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.nhnacademy.marketgg.server.dto.LabelCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Table(name = "labels")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Getter
 public class Label {
 

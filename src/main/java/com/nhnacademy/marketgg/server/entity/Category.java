@@ -1,9 +1,8 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.CategoryUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.CategoryUpdateRequest;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +15,6 @@ import javax.persistence.Table;
 
 @Table(name = "categories")
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Category {

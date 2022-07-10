@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.LabelCreateRequest;
-import com.nhnacademy.marketgg.server.dto.LabelRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
+import com.nhnacademy.marketgg.server.dto.response.LabelRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.exception.LabelNotFoundException;
 import com.nhnacademy.marketgg.server.repository.LabelRepository;
@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -38,9 +39,11 @@ class DefaultLabelServiceTest {
     @Test
     @DisplayName("라벨 등록")
     void createLabelSuccess() {
-        when(labelRepository.save(any(Label.class))).thenReturn(new Label(1L, "hello"));
+        LabelCreateRequest labelRequest = new LabelCreateRequest();
+        ReflectionTestUtils.setField(labelRequest, "name", "hello");
+        when(labelRepository.save(any(Label.class))).thenReturn(new Label(labelRequest));
 
-        labelService.createLabel(new LabelCreateRequest());
+        labelService.createLabel(labelRequest);
 
         verify(labelRepository, times(1)).save(any(Label.class));
     }

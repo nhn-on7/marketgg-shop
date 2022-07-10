@@ -1,18 +1,16 @@
-package com.nhnacademy.marketgg.server.dto;
+package com.nhnacademy.marketgg.server.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class CategoryCreateRequest {
-
-    private String categoryCode;
+public class CategorizationCreateRequest {
 
     private String categorizationCode;
 
     private String name;
 
-    private Integer sequence;
+    private String alias;
 
 }
