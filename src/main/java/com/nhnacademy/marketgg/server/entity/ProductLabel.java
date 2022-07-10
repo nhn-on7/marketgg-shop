@@ -37,9 +37,9 @@ public class ProductLabel {
     private Label label;
 
     @Embeddable
-    @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
+    @EqualsAndHashCode
     public static class Pk implements Serializable {
 
         @Column(name = "product_no")

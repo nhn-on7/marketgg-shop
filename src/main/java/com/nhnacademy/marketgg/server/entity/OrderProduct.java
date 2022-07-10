@@ -44,9 +44,9 @@ public class OrderProduct {
     private Integer amount;
 
     @Embeddable
-    @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
+    @EqualsAndHashCode
     public static class Pk implements Serializable {
 
         @Column(name = "order_no")

@@ -26,18 +26,18 @@ public class GivenCoupon {
 
     @MapsId(value = "couponNo")
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "coupon_no")
     private Coupon coupon;
 
     @MapsId(value = "memberNo")
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "member_no")
     private Member member;
 
     @Embeddable
-    @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
+    @EqualsAndHashCode
     public static class Pk implements Serializable {
 
         @Column(name = "coupon_no")

@@ -42,9 +42,9 @@ public class Cart {
     private LocalDateTime createdAt;
 
     @Embeddable
-    @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
+    @EqualsAndHashCode
     public static class Pk implements Serializable {
 
         @Column(name = "member_no")

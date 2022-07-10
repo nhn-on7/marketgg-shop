@@ -38,9 +38,9 @@ public class UsedCoupon {
     private GivenCoupon givenCoupon;
 
     @Embeddable
-    @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
+    @EqualsAndHashCode
     public static class Pk implements Serializable {
 
         @Column(name = "order_no")

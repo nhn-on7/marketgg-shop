@@ -48,9 +48,9 @@ public class OrderDeliveryAddress implements Serializable {
     private String detailAddress;
 
     @Embeddable
-    @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
+    @EqualsAndHashCode
     public static class Pk implements Serializable {
 
         @Column(name = "order_no")

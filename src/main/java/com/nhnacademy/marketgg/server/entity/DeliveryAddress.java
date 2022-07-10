@@ -44,9 +44,9 @@ public class DeliveryAddress {
     private String detailAddress;
 
     @Embeddable
-    @EqualsAndHashCode
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
+    @EqualsAndHashCode
     public static class Pk implements Serializable {
 
         @GeneratedValue(strategy = GenerationType.IDENTITY)
