@@ -18,6 +18,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Table(name = "products")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -3,12 +3,15 @@ package com.nhnacademy.marketgg.server.dto.request;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @Getter
 public class ProductCreateRequest {
 
-    private String imageAddress;
     private String categoryCode;
     private String name;
     private String content;

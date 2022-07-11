@@ -15,10 +15,14 @@ import com.nhnacademy.marketgg.server.repository.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
 import com.nhnacademy.marketgg.server.service.ProductService;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -34,10 +38,14 @@ public class DefaultProductService implements ProductService {
 
     @Override
     @Transactional
-    public void createProduct(final ProductCreateRequest productRequest) {
+    public void createProduct(final ProductCreateRequest productRequest, MultipartFile imageFile) throws IOException {
+
+        String originalFileName = imageFile.getOriginalFilename();
+        File dest = new File("/Users/coalong/gh-repos/marketgg/marketgg-server/src/main/resources/static", originalFileName);
+        imageFile.transferTo(dest);
 
         Asset asset = assetRepository.save(Asset.create());
-        Image image = new Image(asset, productRequest.getImageAddress());
+        Image image = new Image(asset, dest.toString());
         imageRepository.save(image);
 
         Category category = categoryRepository

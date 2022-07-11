@@ -3,15 +3,16 @@ package com.nhnacademy.marketgg.server.controller;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
-import com.nhnacademy.marketgg.server.entity.Asset;
-import com.nhnacademy.marketgg.server.service.AssetService;
 import com.nhnacademy.marketgg.server.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -24,9 +25,11 @@ public class ProductController {
 
     private static final String DEFAULT_PRODUCT = "/admin/v1/products";
 
-    @PostMapping
-    public ResponseEntity<Void> createProduct(@RequestBody final ProductCreateRequest productRequest) {
-        productService.createProduct(productRequest);
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Void> createProduct(@RequestPart final ProductCreateRequest productRequest,
+                                              @RequestPart MultipartFile image) throws IOException {
+
+        productService.createProduct(productRequest, image);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_PRODUCT))
