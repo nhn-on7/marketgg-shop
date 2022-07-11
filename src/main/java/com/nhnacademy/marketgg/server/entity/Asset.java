@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,22 +22,25 @@ public class Asset {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "asset_no")
+    @Column(name = "asset_no", nullable = false)
     private Long assetNo;
 
-    @Column(name = "created_at")
-    private LocalDate createAt;
+    @Column(name = "created_at", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+    private LocalDateTime createAt;
 
-    @Column(name = "updated_at")
-    private LocalDate updateAt;
+    @Column(name = "updated_at", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+    private LocalDateTime updateAt;
 
     @Column(name = "deleted_at")
-    private LocalDate deletedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+    private LocalDateTime deletedAt;
 
     public static Asset create() {
         Asset asset = new Asset();
-        asset.createAt = LocalDate.now();
-        asset.updateAt = LocalDate.now();
+        asset.createAt = LocalDateTime.now();
+        asset.updateAt = LocalDateTime.now();
         return asset;
     }
 

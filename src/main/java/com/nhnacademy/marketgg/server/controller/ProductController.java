@@ -47,6 +47,16 @@ public class ProductController {
                              .body(productList);
     }
 
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductResponse> retrieveProducts(@PathVariable Long productId) {
+        ProductResponse productDetails = productService.retrieveProductDetails(productId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(DEFAULT_PRODUCT))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(productDetails);
+    }
+
     @PutMapping("/{productId}")
     public ResponseEntity<Void> updateProduct(@RequestBody final ProductUpdateRequest productRequest,
                                               @PathVariable final Long productId) {

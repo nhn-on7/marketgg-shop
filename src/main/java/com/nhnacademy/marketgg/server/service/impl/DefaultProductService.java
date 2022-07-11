@@ -57,8 +57,12 @@ public class DefaultProductService implements ProductService {
 
     @Override
     public List<ProductResponse> retrieveProducts() {
-        // return productRepository.findAllBy();
-        return null;
+        return productRepository.findAllBy();
+    }
+
+    @Override
+    public ProductResponse retrieveProductDetails(Long productId) {
+        return productRepository.queryByProductNo(productId);
     }
 
     @Override

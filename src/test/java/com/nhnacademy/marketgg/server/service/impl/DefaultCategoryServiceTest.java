@@ -1,8 +1,9 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.CategoryRetrieveResponse;
-import com.nhnacademy.marketgg.server.dto.CategoryUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.request.CategoryUpdateRequest;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.exception.CategorizationNotFoundException;
@@ -10,6 +11,7 @@ import com.nhnacademy.marketgg.server.exception.CategoryNotFoundException;
 import com.nhnacademy.marketgg.server.repository.CategorizationRepository;
 import com.nhnacademy.marketgg.server.repository.CategoryRepository;
 import com.nhnacademy.marketgg.server.service.CategoryService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,16 +45,35 @@ class DefaultCategoryServiceTest {
     @MockBean
     CategorizationRepository categorizationRepository;
 
-    @Test
-    @DisplayName("카테고리 생성 성공")
-    void testCreateCategorySuccess() {
-        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest();
+    private CategoryCreateRequest categoryCreateRequest;
+    private CategoryUpdateRequest categoryUpdateRequest;
+    private CategorizationCreateRequest categorizationCreateRequest;
+
+    @BeforeEach
+    void setUp() {
+        categoryCreateRequest = new CategoryCreateRequest();
+        categoryUpdateRequest = new CategoryUpdateRequest();
+        categorizationCreateRequest = new CategorizationCreateRequest();
+
         ReflectionTestUtils.setField(categoryCreateRequest, "categoryCode", "001");
         ReflectionTestUtils.setField(categoryCreateRequest, "categorizationCode", "001");
         ReflectionTestUtils.setField(categoryCreateRequest, "name", "채소");
         ReflectionTestUtils.setField(categoryCreateRequest, "sequence", 1);
+
+        ReflectionTestUtils.setField(categoryUpdateRequest, "categorizationCode", "001");
+        ReflectionTestUtils.setField(categoryUpdateRequest, "name", "채소");
+        ReflectionTestUtils.setField(categoryUpdateRequest, "sequence", 1);
+
+        ReflectionTestUtils.setField(categorizationCreateRequest, "categorizationCode", "111");
+        ReflectionTestUtils.setField(categorizationCreateRequest, "name", "상품");
+        ReflectionTestUtils.setField(categorizationCreateRequest, "alias", "PRODUCT");
+    }
+
+    @Test
+    @DisplayName("카테고리 생성 성공")
+    void testCreateCategorySuccess() {
         when(categorizationRepository.findById(anyString()))
-                .thenReturn(Optional.of(new Categorization("111", "상품", "product")));
+                .thenReturn(Optional.of(new Categorization(categorizationCreateRequest)));
 
         categoryService.createCategory(categoryCreateRequest);
 
@@ -63,11 +84,6 @@ class DefaultCategoryServiceTest {
     @Test
     @DisplayName("카테고리 생성 실패")
     void testCreateCategoryFail() {
-        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest();
-        ReflectionTestUtils.setField(categoryCreateRequest, "categoryCode", "001");
-        ReflectionTestUtils.setField(categoryCreateRequest, "categorizationCode", "001");
-        ReflectionTestUtils.setField(categoryCreateRequest, "name", "채소");
-        ReflectionTestUtils.setField(categoryCreateRequest, "sequence", 1);
         when(categorizationRepository.findById(anyString()))
                 .thenReturn(Optional.empty());
 
@@ -89,47 +105,35 @@ class DefaultCategoryServiceTest {
     @Test
     @DisplayName("카테고리 수정 성공")
     void testUpdateCategorySuccess() {
-        CategoryUpdateRequest categoryRequest = new CategoryUpdateRequest();
-        ReflectionTestUtils.setField(categoryRequest, "categorizationCode", "001");
-        ReflectionTestUtils.setField(categoryRequest, "name", "채소");
-        ReflectionTestUtils.setField(categoryRequest, "sequence", 1);
         when(categoryRepository.findById(anyString()))
-                .thenReturn(Optional.of(new Category("001", null, "과일", 2)));
+                .thenReturn(Optional.of(new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest))));
         when(categorizationRepository.findById(anyString()))
-                .thenReturn(Optional.of(new Categorization("001", "상품", "product")));
+                .thenReturn(Optional.of(new Categorization(categorizationCreateRequest)));
 
-        categoryService.updateCategory("001", categoryRequest);
+        categoryService.updateCategory("001", categoryUpdateRequest);
     }
 
     @Test
     @DisplayName("카테고리 수정 실패(카테고리 존재 X)")
     void testUpdateCategoryFailWhenNoCategory() {
-        CategoryUpdateRequest categoryRequest = new CategoryUpdateRequest();
-        ReflectionTestUtils.setField(categoryRequest, "categorizationCode", "001");
-        ReflectionTestUtils.setField(categoryRequest, "name", "채소");
-        ReflectionTestUtils.setField(categoryRequest, "sequence", 1);
         when(categoryRepository.findById(anyString()))
                 .thenReturn(Optional.empty());
         when(categorizationRepository.findById(anyString()))
-                .thenReturn(Optional.of(new Categorization("001", "상품", "product")));
+                .thenReturn(Optional.of(new Categorization(categorizationCreateRequest)));
 
-        assertThatThrownBy(() -> categoryService.updateCategory("001", categoryRequest))
+        assertThatThrownBy(() -> categoryService.updateCategory("001", categoryUpdateRequest))
                 .isInstanceOf(CategoryNotFoundException.class);
     }
 
     @Test
     @DisplayName("카테고리 수정 실패(카테고리 분류 존재 X)")
     void testUpdateCategoryFailWhenNoCategorization() {
-        CategoryUpdateRequest categoryRequest = new CategoryUpdateRequest();
-        ReflectionTestUtils.setField(categoryRequest, "categorizationCode", "001");
-        ReflectionTestUtils.setField(categoryRequest, "name", "채소");
-        ReflectionTestUtils.setField(categoryRequest, "sequence", 1);
         when(categoryRepository.findById(anyString()))
-                .thenReturn(Optional.of(new Category("001", null, "과일", 2)));
+                .thenReturn(Optional.of(new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest))));
         when(categorizationRepository.findById(anyString()))
                 .thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> categoryService.updateCategory("001", categoryRequest))
+        assertThatThrownBy(() -> categoryService.updateCategory("001", categoryUpdateRequest))
                 .isInstanceOf(CategorizationNotFoundException.class);
     }
 
@@ -137,7 +141,7 @@ class DefaultCategoryServiceTest {
     @DisplayName("카테고리 삭제 성공")
     void testDeleteCategory() {
         when(categoryRepository.findById(anyString()))
-                .thenReturn(Optional.of(new Category("001001", null, "친환경", 1)));
+                .thenReturn(Optional.of(new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest))));
         doNothing().when(categoryRepository).delete(any(Category.class));
 
         categoryService.deleteCategory("001001");

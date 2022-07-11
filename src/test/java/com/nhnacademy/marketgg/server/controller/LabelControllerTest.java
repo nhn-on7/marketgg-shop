@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import static org.mockito.Mockito.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.LabelCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.service.LabelService;
 import java.util.ArrayList;
 import org.junit.jupiter.api.DisplayName;
@@ -36,21 +36,21 @@ class LabelControllerTest {
     @MockBean
     LabelService labelService;
 
-    // @Test
-    // @DisplayName("라벨 등록")
-    // void createLabel() throws Exception {
-    //     LabelCreateRequest labelCreateRequest = new LabelCreateRequest("hello");
-    //     String requestBody = objectMapper.writeValueAsString(labelCreateRequest);
-    //
-    //     doNothing().when(labelService).createLabel(any(LabelCreateRequest.class));
-    //
-    //     this.mockMvc.perform(post("/admin/v1/labels")
-    //                                  .contentType(MediaType.APPLICATION_JSON)
-    //                                  .content(requestBody))
-    //                 .andExpect(status().isCreated());
-    //
-    //     verify(labelService, times(1)).createLabel(any(labelCreateRequest.getClass()));
-    // }
+     @Test
+     @DisplayName("라벨 등록")
+     void createLabel() throws Exception {
+         LabelCreateRequest labelCreateRequest = new LabelCreateRequest();
+         String requestBody = objectMapper.writeValueAsString(labelCreateRequest);
+
+         doNothing().when(labelService).createLabel(any(LabelCreateRequest.class));
+
+         this.mockMvc.perform(post("/admin/v1/labels")
+                                      .contentType(MediaType.APPLICATION_JSON)
+                                      .content(requestBody))
+                     .andExpect(status().isCreated());
+
+         verify(labelService, times(1)).createLabel(any(labelCreateRequest.getClass()));
+     }
 
     @Test
     @DisplayName("라벨 조회")

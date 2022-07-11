@@ -1,9 +1,12 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://133.186.211.156:3306/nhn_academy_33
-    username: nhn_academy_33
-    password: V@B8Rz-hZdINAwjO
+#    url: jdbc:mysql://133.186.211.156:3306/marketgg_shop
+#    username: on7
+#    password: ?nk9Wa#^Bg)on71!*,^2=d
+    url: jdbc:mysql://127.0.0.1:3306/shop
+    username: root
+    password: 1234
 
   jpa:
     database: mysql
@@ -11,12 +14,11 @@ spring:
     generate-ddl: true
     show-sql: true
 
+server:
+  port: 7080
+
   servlet:
     multipart:
       file-size-threshold: 1MB
       max-file-size: 100MB
       max-request-size: 100MB
-
-server:
-  port: 7080
-

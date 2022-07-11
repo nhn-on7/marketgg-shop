@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,19 +12,24 @@ import javax.persistence.Table;
 
 @Table(name = "categorizations")
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Categorization {
 
     @Id
-    @Column(name = "categorization_code")
+    @Column(name = "categorization_code", nullable = false)
     private String categorizationCode;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(nullable = false)
     private String alias;
+
+    public Categorization(CategorizationCreateRequest categorizationRequest) {
+        this.categorizationCode = categorizationRequest.getCategorizationCode();
+        this.name = categorizationRequest.getName();
+        this.alias = categorizationRequest.getAlias();
+    }
 
 }
