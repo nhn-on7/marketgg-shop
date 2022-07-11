@@ -49,7 +49,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("상품 등록하는 테스트")
     void testCreateProduct() throws Exception {
-        doNothing().when(productService).createProduct(any());
+        doNothing().when(productService).createProduct(any(), any());
         String content = objectMapper.writeValueAsString(productRequest);
 
         headers = new HttpHeaders();
@@ -62,7 +62,7 @@ class ProductControllerTest {
                     .andExpect(status().isCreated())
                     .andExpect(header().string("Location", DEFAULT_PRODUCT));
 
-        verify(productService, times(1)).createProduct(any(productRequest.getClass()));
+        verify(productService, times(1)).createProduct(any(productRequest.getClass()), any());
     }
 
     @Test
