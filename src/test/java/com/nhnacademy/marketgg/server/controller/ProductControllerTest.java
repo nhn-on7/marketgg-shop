@@ -85,7 +85,7 @@ class ProductControllerTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setLocation(URI.create(DEFAULT_PRODUCT));
 
-        doNothing().when(productService).updateProduct(any(), any());
+        doNothing().when(productService).updateProduct(any(), any(), any());
         String content = objectMapper.writeValueAsString(productRequest);
 
         this.mockMvc.perform(put("/admin/v1/products" + "/1")
