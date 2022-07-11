@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class LabelRetrieveResponse {
 
+    private final Long labelNo;
+
     private final String name;
 
 }
