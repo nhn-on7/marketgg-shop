@@ -13,6 +13,8 @@ public interface ProductService {
 
     List<ProductResponse> retrieveProducts();
 
+    ProductResponse retrieveProductDetails(Long productId);
+
     void updateProduct(ProductUpdateRequest productRequest, Long productId);
 
     void deleteProduct(Long productId);
