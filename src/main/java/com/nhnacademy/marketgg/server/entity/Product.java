@@ -2,19 +2,13 @@ package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
-import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Table(name = "products")
 @Entity
@@ -72,13 +66,13 @@ public class Product {
     private String capacity;
 
     @Column(name = "created_at")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
-    private LocalDate deletedAt;
+    private LocalDateTime deletedAt;
 
     public Product(ProductCreateRequest productRequest, Asset asset, Category category) {
         this.asset = asset;
@@ -95,7 +89,7 @@ public class Product {
         this.expirationDate = productRequest.getExpirationDate();
         this.allergyInfo = productRequest.getAllergyInfo();
         this.capacity = productRequest.getCapacity();
-        this.createdAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
     }
 
     public void updateProduct(ProductUpdateRequest productRequest, Asset asset, Category category) {
@@ -113,11 +107,11 @@ public class Product {
         this.expirationDate = productRequest.getExpirationDate();
         this.allergyInfo = productRequest.getAllergyInfo();
         this.capacity = productRequest.getCapacity();
-        this.updatedAt = LocalDate.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public void deleteProduct() {
-        this.deletedAt = LocalDate.now();
+        this.deletedAt = LocalDateTime.now();
     }
 
 }
