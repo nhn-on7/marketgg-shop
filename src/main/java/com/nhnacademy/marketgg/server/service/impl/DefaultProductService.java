@@ -67,16 +67,24 @@ public class DefaultProductService implements ProductService {
 
     @Override
     @Transactional
-    public void updateProduct(final ProductUpdateRequest productRequest, final Long productId) {
+    public void updateProduct(final ProductUpdateRequest productRequest, MultipartFile imageFile, final Long productId)
+        throws IOException {
         Product product = productRepository
-            .findById(productRequest.getProductNo())
+            .findById(productId)
             .orElseThrow(() -> new ProductNotFoundException("해당 상품을 찾을 수 없습니다."));
-        Asset asset = assetRepository
-                .findById(productRequest.getAssetNo())
-                .orElseThrow(() -> new AssetNotFoundException("해당 자산 번호를 찾을 수 없습니다."));
+
+        String originalFileName = imageFile.getOriginalFilename();
+        File dest = new File("/Users/coalong/gh-repos/marketgg/marketgg-server/src/main/resources/static", originalFileName);
+        imageFile.transferTo(dest);
+
+        Asset asset = assetRepository.save(Asset.create());
+        Image image = new Image(asset, dest.toString());
+        imageRepository.save(image);
+
         Category category = categoryRepository
-                .findById(productRequest.getCategoryCode())
-                .orElseThrow(() -> new CategoryNotFoundException("해당 카테고리 번호를 찾을 수 없습니다."));
+            .findById(productRequest.getCategoryCode())
+            .orElseThrow(() -> new CategoryNotFoundException("해당 카테고리 번호를 찾을 수 없습니다."));
+
         product.updateProduct(productRequest, asset, category);
         productRepository.save(product);
     }

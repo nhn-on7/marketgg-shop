@@ -16,7 +16,8 @@ public interface ProductService {
 
     ProductResponse retrieveProductDetails(Long productId);
 
-    void updateProduct(ProductUpdateRequest productRequest, Long productId);
+    void updateProduct(ProductUpdateRequest productRequest, MultipartFile image, Long productId)
+        throws IOException;
 
     void deleteProduct(Long productId);
 

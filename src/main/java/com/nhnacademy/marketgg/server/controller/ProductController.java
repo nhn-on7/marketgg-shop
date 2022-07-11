@@ -58,9 +58,11 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<Void> updateProduct(@RequestBody final ProductUpdateRequest productRequest,
-                                              @PathVariable final Long productId) {
-        productService.updateProduct(productRequest, productId);
+    public ResponseEntity<Void> updateProduct(@RequestPart final ProductUpdateRequest productRequest,
+                                              @RequestPart MultipartFile image,
+                                              @PathVariable final Long productId)
+        throws IOException {
+        productService.updateProduct(productRequest, image, productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT + "/" + productId))
