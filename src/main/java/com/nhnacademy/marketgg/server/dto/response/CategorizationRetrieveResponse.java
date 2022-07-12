@@ -5,16 +5,10 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class CategoryResponse {
+public class CategorizationRetrieveResponse {
 
     private String categorizationCode;
 
-    private String categoryCode;
-
-    private String categorizationName;
-
-    private String categoryName;
-
-    private Integer sequence;
+    private String name;
 
 }

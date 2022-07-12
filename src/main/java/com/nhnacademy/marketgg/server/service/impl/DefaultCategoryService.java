@@ -36,14 +36,19 @@ public class DefaultCategoryService implements CategoryService {
     }
 
     @Override
+    public CategoryRetrieveResponse retrieveCategory(final String id) {
+        return categoryRepository.findByCode(id);
+    }
+
+    @Override
     public List<CategoryRetrieveResponse> retrieveCategories() {
         return categoryRepository.findAllCategories();
     }
 
     @Transactional
     @Override
-    public void updateCategory(final String categoryId, final CategoryUpdateRequest categoryRequest) {
-        Category category = categoryRepository.findById(categoryId)
+    public void updateCategory(final String id, final CategoryUpdateRequest categoryRequest) {
+        Category category = categoryRepository.findById(id)
                                               .orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을 수 없습니다."));
         Categorization categorization =
                 categorizationRepository.findById(categoryRequest.getCategorizationCode())
@@ -56,8 +61,8 @@ public class DefaultCategoryService implements CategoryService {
 
     @Transactional
     @Override
-    public void deleteCategory(final String categoryId) {
-        Category category = categoryRepository.findById(categoryId)
+    public void deleteCategory(final String id) {
+        Category category = categoryRepository.findById(id)
                                               .orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을 수 없습니다."));
 
         categoryRepository.delete(category);

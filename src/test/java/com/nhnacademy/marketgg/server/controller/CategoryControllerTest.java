@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.CategoryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,6 +53,17 @@ class CategoryControllerTest {
                .andExpect(status().isCreated());
 
         verify(categoryService, times(1)).createCategory(any(CategoryCreateRequest.class));
+    }
+
+    @Test
+    @DisplayName("카테고리 단건 조회")
+    void testRetrieveCategory() throws Exception {
+        when(categoryService.retrieveCategory(anyString())).thenReturn(new CategoryRetrieveResponse());
+
+        this.mockMvc.perform(get("/admin/v1/categories/{categoryId}", "011"))
+                .andExpect(status().isOk());
+
+        verify(categoryService, times(1)).retrieveCategory(anyString());
     }
 
     @Test

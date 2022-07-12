@@ -7,12 +7,12 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class CategoryRetrieveResponse {
 
-    private String categorizationCode;
-
     private String categoryCode;
 
     private String categorizationName;
 
     private String categoryName;
+
+    private Integer sequence;
 
 }

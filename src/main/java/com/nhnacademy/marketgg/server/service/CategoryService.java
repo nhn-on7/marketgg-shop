@@ -10,10 +10,12 @@ public interface CategoryService {
 
     void createCategory(final CategoryCreateRequest categoryCreateRequest);
 
+    CategoryRetrieveResponse retrieveCategory(final String id);
+
     List<CategoryRetrieveResponse> retrieveCategories();
 
-    void updateCategory(final String categoryId, final CategoryUpdateRequest categoryRequest);
+    void updateCategory(final String id, final CategoryUpdateRequest categoryRequest);
 
-    void deleteCategory(final String categoryId);
+    void deleteCategory(final String id);
 
 }

@@ -92,6 +92,16 @@ class DefaultCategoryServiceTest {
     }
 
     @Test
+    @DisplayName("카테고리 단건 조회")
+    void testRetrieveCategory() {
+        when(categoryRepository.findByCode(anyString())).thenReturn(new CategoryRetrieveResponse());
+
+        categoryService.retrieveCategory("001");
+
+        verify(categoryRepository, times(1)).findByCode(anyString());
+    }
+
+    @Test
     @DisplayName("카테고리 목록 조회")
     void testRetrieveCategories() {
         when(categoryRepository.findAllCategories())
