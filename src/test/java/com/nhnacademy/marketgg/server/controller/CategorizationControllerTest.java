@@ -31,11 +31,11 @@ class CategorizationControllerTest {
     CategorizationService categorizationService;
 
     @Test
-    @DisplayName("카테고리 분류표 이름 조회")
+    @DisplayName("카테고리 분류표 조회")
     void retrieveCategorization() throws Exception {
-        when(categorizationService.retrieveCategorizations()).thenReturn(List.of(new CategorizationRetrieveResponse()));
+        when(categorizationService.retrieveCategorizations()).thenReturn(List.of());
 
-        this.mockMvc.perform(get("/admin/v1/categorization"))
+        this.mockMvc.perform(get("/admin/v1/categorizations"))
                 .andExpect(status().isOk());
 
         verify(categorizationService, times(1)).retrieveCategorizations();
