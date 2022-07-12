@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.env.Environment;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +30,10 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
+//@ActiveProfiles(profiles = "local")
 class DefaultLabelServiceTest {
+    @Autowired
+    Environment environment;
 
     @Autowired
     LabelService labelService;
@@ -36,6 +41,13 @@ class DefaultLabelServiceTest {
     @MockBean
     LabelRepository labelRepository;
 
+
+    @Test
+    @DisplayName("property-test")
+    public void propertyTest(){
+        String uploadPath = environment.getProperty("uploadPath");
+        System.out.println("uploadPath:" + uploadPath);
+    }
     @Test
     @DisplayName("라벨 등록")
     void createLabelSuccess() {
