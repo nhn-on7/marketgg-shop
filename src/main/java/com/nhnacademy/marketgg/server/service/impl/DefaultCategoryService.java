@@ -50,11 +50,8 @@ public class DefaultCategoryService implements CategoryService {
     public void updateCategory(final String id, final CategoryUpdateRequest categoryRequest) {
         Category category = categoryRepository.findById(id)
                                               .orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을 수 없습니다."));
-        Categorization categorization =
-                categorizationRepository.findById(categoryRequest.getCategorizationCode())
-                                        .orElseThrow(() -> new CategorizationNotFoundException("카테고리 분류를 찾을 수 없습니다."));
 
-        category.updateCategory(categoryRequest, categorization);
+        category.updateCategory(categoryRequest);
 
         categoryRepository.save(category);
     }

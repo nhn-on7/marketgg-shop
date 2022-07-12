@@ -40,8 +40,7 @@ public class Category {
         this.sequence = categoryCreateRequest.getSequence();
     }
 
-    public void updateCategory(CategoryUpdateRequest categoryRequest, Categorization categorization) {
-        this.categorization = categorization;
+    public void updateCategory(CategoryUpdateRequest categoryRequest) {
         this.name = categoryRequest.getName();
         this.sequence = categoryRequest.getSequence();
     }

@@ -137,10 +137,11 @@ class DefaultCategoryServiceTest {
     void testUpdateCategorySuccess() {
         when(categoryRepository.findById(anyString()))
                 .thenReturn(Optional.of(new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest))));
-        when(categorizationRepository.findById(anyString()))
-                .thenReturn(Optional.of(new Categorization(categorizationCreateRequest)));
+        doNothing().when(categoryService).updateCategory("001", any(CategoryUpdateRequest.class));
 
         categoryService.updateCategory("001", categoryUpdateRequest);
+
+        verify(categoryRepository, times(1)).save(any(Category.class));
     }
 
     @Test
