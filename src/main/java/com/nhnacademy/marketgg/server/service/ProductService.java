@@ -21,4 +21,6 @@ public interface ProductService {
 
     void deleteProduct(Long productId);
 
+    List<ProductResponse> searchProductsByName(String keyword);
+
 }
