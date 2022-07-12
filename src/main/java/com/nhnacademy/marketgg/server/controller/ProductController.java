@@ -23,6 +23,7 @@ public class ProductController {
 
     private final ProductService productService;
 
+    //TODO: Develop 브랜치 머지 후 @Value값으로 고치기
     private static final String DEFAULT_PRODUCT = "/admin/v1/products";
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -70,7 +71,7 @@ public class ProductController {
                              .build();
     }
 
-    @DeleteMapping("/{productId}")
+    @PostMapping("/{productId}/deleted")
     public ResponseEntity<Void> deleteProduct(@PathVariable final Long productId) {
         productService.deleteProduct(productId);
 
