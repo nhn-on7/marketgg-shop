@@ -1,3 +1,0 @@
-GET http://localhost:7080/admin/v1/products
-Content-Type: application/json
-
