@@ -3,13 +3,16 @@ package com.nhnacademy.marketgg.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.service.ProductService;
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -33,49 +36,53 @@ class ProductControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    private Environment environment;
+
     @MockBean
-    ProductService productService;
+    private ProductService productService;
 
-    HttpHeaders headers;
-    String DEFAULT_PRODUCT = "/admin/v1/products";
-    // static ProductCreateRequest productRequest;
+    private HttpHeaders headers;
+    private static final String DEFAULT_PRODUCT = "/admin/v1/products";
+    private static ProductCreateRequest productRequest;
+    @Value("${uploadPath}")
+    private String uploadPath;
 
-    // @BeforeAll
-    // static void beforeAll() {
-    //     productRequest = new ProductCreateRequest();
-        // ReflectionTestUtils.setField(productRequest, "categoryCode", "001");
-        // ReflectionTestUtils.setField(productRequest, "name", "자몽");
-        // ReflectionTestUtils.setField(productRequest, "content", "아침에 자몽 쥬스");
-        // ReflectionTestUtils.setField(productRequest, "totalStock", 100L);
-        // ReflectionTestUtils.setField(productRequest, "price", 2000L);
-        // ReflectionTestUtils.setField(productRequest, "description", "자몽주스 설명");
-        // ReflectionTestUtils.setField(productRequest, "unit", "1박스");
-        // ReflectionTestUtils.setField(productRequest, "deliveryType", "샛별배송");
-        // ReflectionTestUtils.setField(productRequest, "origin", "인도네시아");
-        // ReflectionTestUtils.setField(productRequest, "packageType", "냉장");
-        // ReflectionTestUtils.setField(productRequest, "expirationDate", "냉장");
-        // private String categoryCode;
-        // private String name;
-        // private String content;
-        // private Long totalStock;
-        // private Long price;
-        // private String description;
-        // private String unit;
-        // private String deliveryType;
-        // private String origin;
-        // private String packageType;
-        // private LocalDate expirationDate;
-        // private String allergyInfo;
-        // private String capacity;
-    // }
+    @BeforeAll
+    static void beforeAll() {
+        productRequest = new ProductCreateRequest();
+        ReflectionTestUtils.setField(productRequest, "categoryCode", "001");
+        ReflectionTestUtils.setField(productRequest, "name", "자몽");
+        ReflectionTestUtils.setField(productRequest, "content", "아침에 자몽 쥬스");
+        ReflectionTestUtils.setField(productRequest, "totalStock", 100L);
+        ReflectionTestUtils.setField(productRequest, "price", 2000L);
+        ReflectionTestUtils.setField(productRequest, "description", "자몽주스 설명");
+        ReflectionTestUtils.setField(productRequest, "unit", "1박스");
+        ReflectionTestUtils.setField(productRequest, "deliveryType", "샛별배송");
+        ReflectionTestUtils.setField(productRequest, "origin", "인도네시아");
+        ReflectionTestUtils.setField(productRequest, "packageType", "냉장");
+        ReflectionTestUtils.setField(productRequest, "allergyInfo", "새우알러지");
+    }
+
+    @Test
+    @DisplayName("property-test")
+    void testProperty(){
+        String uploadPath = environment.getProperty("uploadPath");
+        System.out.println("uploadPath:" + uploadPath);
+    }
 
     @Test
     @DisplayName("상품 등록하는 테스트")
     void testCreateProduct() throws Exception {
-        ProductCreateRequest productRequest = new ProductCreateRequest();
 
         doNothing().when(productService).createProduct(any(ProductCreateRequest.class), any(MockMultipartFile.class));
         String content = objectMapper.writeValueAsString(productRequest);
+
+        MockMultipartFile file = new MockMultipartFile
+            ("image",
+            "test.png",
+            "image/png",
+            new FileInputStream(uploadPath));
 
         // headers = new HttpHeaders();
         // headers.setContentType(MediaType.APPLICATION_JSON);
