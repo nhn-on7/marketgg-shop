@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -51,6 +52,17 @@ public class Member {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    public Member(MemberCreateRequest memberRequest) {
+        this.memberGrade = memberRequest.getMemberGrade();
+        this.email = memberRequest.getEmail();
+        Gender = memberRequest.getGender();
+        this.birthDate = memberRequest.getBirthDate();
+        this.ggpassUpdatedAt = memberRequest.getGgpassUpdateAt();
+        this.createdAt = memberRequest.getCreatedAt();
+        this.updatedAt = memberRequest.getUpdatedAt();
+        this.deletedAt = memberRequest.getDeletedAt();
+    }
 
     public void passJoin() {
         this.ggpassUpdatedAt = (LocalDateTime.now()).plusMonths(1);

@@ -1,28 +1,5 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
-import com.nhnacademy.marketgg.server.dto.request.CategoryUpdateRequest;
-import com.nhnacademy.marketgg.server.entity.Categorization;
-import com.nhnacademy.marketgg.server.entity.Category;
-import com.nhnacademy.marketgg.server.exception.categorization.CategorizationNotFoundException;
-import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
-import com.nhnacademy.marketgg.server.repository.CategorizationRepository;
-import com.nhnacademy.marketgg.server.repository.CategoryRepository;
-import com.nhnacademy.marketgg.server.service.CategoryService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,17 +9,39 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.CategoryUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
+import com.nhnacademy.marketgg.server.entity.Categorization;
+import com.nhnacademy.marketgg.server.entity.Category;
+import com.nhnacademy.marketgg.server.exception.categorization.CategorizationNotFoundException;
+import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
+import com.nhnacademy.marketgg.server.repository.CategorizationRepository;
+import com.nhnacademy.marketgg.server.repository.CategoryRepository;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.transaction.annotation.Transactional;
+
+@ExtendWith(MockitoExtension.class)
 @Transactional
 class DefaultCategoryServiceTest {
 
-    @Autowired
-    CategoryService categoryService;
+    @InjectMocks
+    DefaultCategoryService categoryService;
 
-    @MockBean
+    @Mock
     CategoryRepository categoryRepository;
 
-    @MockBean
+    @Mock
     CategorizationRepository categorizationRepository;
 
     private CategoryCreateRequest categoryCreateRequest;
@@ -106,7 +105,8 @@ class DefaultCategoryServiceTest {
     @DisplayName("카테고리 수정 성공")
     void testUpdateCategorySuccess() {
         when(categoryRepository.findById(anyString()))
-                .thenReturn(Optional.of(new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest))));
+                .thenReturn(Optional.of(new Category(categoryCreateRequest, new Categorization(
+                        categorizationCreateRequest))));
         when(categorizationRepository.findById(anyString()))
                 .thenReturn(Optional.of(new Categorization(categorizationCreateRequest)));
 
@@ -129,7 +129,8 @@ class DefaultCategoryServiceTest {
     @DisplayName("카테고리 수정 실패(카테고리 분류 존재 X)")
     void testUpdateCategoryFailWhenNoCategorization() {
         when(categoryRepository.findById(anyString()))
-                .thenReturn(Optional.of(new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest))));
+                .thenReturn(Optional.of(new Category(categoryCreateRequest, new Categorization(
+                        categorizationCreateRequest))));
         when(categorizationRepository.findById(anyString()))
                 .thenReturn(Optional.empty());
 
@@ -141,7 +142,8 @@ class DefaultCategoryServiceTest {
     @DisplayName("카테고리 삭제 성공")
     void testDeleteCategory() {
         when(categoryRepository.findById(anyString()))
-                .thenReturn(Optional.of(new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest))));
+                .thenReturn(Optional.of(new Category(categoryCreateRequest, new Categorization(
+                        categorizationCreateRequest))));
         doNothing().when(categoryRepository).delete(any(Category.class));
 
         categoryService.deleteCategory("001001");

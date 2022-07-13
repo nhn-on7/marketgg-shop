@@ -1,22 +1,5 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
-import com.nhnacademy.marketgg.server.dto.response.LabelRetrieveResponse;
-import com.nhnacademy.marketgg.server.entity.Label;
-import com.nhnacademy.marketgg.server.exception.label.LabelNotFoundException;
-import com.nhnacademy.marketgg.server.repository.LabelRepository;
-import com.nhnacademy.marketgg.server.service.LabelService;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,14 +9,30 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
+import com.nhnacademy.marketgg.server.dto.response.LabelRetrieveResponse;
+import com.nhnacademy.marketgg.server.entity.Label;
+import com.nhnacademy.marketgg.server.exception.label.LabelNotFoundException;
+import com.nhnacademy.marketgg.server.repository.LabelRepository;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.transaction.annotation.Transactional;
+
+@ExtendWith(MockitoExtension.class)
 @Transactional
 class DefaultLabelServiceTest {
 
-    @Autowired
-    LabelService labelService;
+    @InjectMocks
+    DefaultLabelService labelService;
 
-    @MockBean
+    @Mock
     LabelRepository labelRepository;
 
     @Test
@@ -51,7 +50,8 @@ class DefaultLabelServiceTest {
     @Test
     @DisplayName("라벨 조회")
     void retrieveLabels() {
-        when(labelRepository.findAllLabels()).thenReturn(List.of(new LabelRetrieveResponse(1L,"hello")));
+        when(labelRepository.findAllLabels()).thenReturn(
+                List.of(new LabelRetrieveResponse(1L, "hello")));
 
         List<LabelRetrieveResponse> response = labelService.retrieveLabels();
 
@@ -61,7 +61,8 @@ class DefaultLabelServiceTest {
     @Test
     @DisplayName("라벨 삭제 성공")
     void deleteLabelSuccess() {
-        when(labelRepository.findById(anyLong())).thenReturn(Optional.of(new Label(new LabelCreateRequest())));
+        when(labelRepository.findById(anyLong())).thenReturn(
+                Optional.of(new Label(new LabelCreateRequest())));
         doNothing().when(labelRepository).delete(any(Label.class));
 
         labelService.deleteLabel(1L);
@@ -72,7 +73,7 @@ class DefaultLabelServiceTest {
     @Test
     @DisplayName("라벨 삭제 실패")
     void deleteLabelFail() {
-        assertThatThrownBy(()->labelService.deleteLabel(1L))
+        assertThatThrownBy(() -> labelService.deleteLabel(1L))
                 .isInstanceOf(LabelNotFoundException.class);
     }
 
