@@ -7,9 +7,12 @@ assignees: ''
 
 ---
 
-1. Issue 설명 1
-2. Issue 설명 1
+## Overview
 
-## TODO
-- [ ] todo1
-- [ ] todo2
+1. Issue 에 대한 설명 1
+2. Issue 에 대한 설명 2
+
+## To-do
+
+- [ ] To-do Item 1
+- [ ] To-do Item 2
