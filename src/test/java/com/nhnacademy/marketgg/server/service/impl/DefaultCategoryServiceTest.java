@@ -59,7 +59,6 @@ class DefaultCategoryServiceTest {
         ReflectionTestUtils.setField(categoryCreateRequest, "name", "채소");
         ReflectionTestUtils.setField(categoryCreateRequest, "sequence", 1);
 
-        ReflectionTestUtils.setField(categoryUpdateRequest, "categorizationCode", "001");
         ReflectionTestUtils.setField(categoryUpdateRequest, "name", "채소");
         ReflectionTestUtils.setField(categoryUpdateRequest, "sequence", 1);
 
@@ -137,8 +136,6 @@ class DefaultCategoryServiceTest {
         when(categoryRepository.findById(anyString()))
                 .thenReturn(Optional.of(new Category(categoryCreateRequest, new Categorization(
                         categorizationCreateRequest))));
-        when(categorizationRepository.findById(anyString()))
-                .thenReturn(Optional.of(new Categorization(categorizationCreateRequest)));
 
         categoryService.updateCategory("001", categoryUpdateRequest);
 
@@ -150,24 +147,9 @@ class DefaultCategoryServiceTest {
     void testUpdateCategoryFailWhenNoCategory() {
         when(categoryRepository.findById(anyString()))
                 .thenReturn(Optional.empty());
-        when(categorizationRepository.findById(anyString()))
-                .thenReturn(Optional.of(new Categorization(categorizationCreateRequest)));
 
         assertThatThrownBy(() -> categoryService.updateCategory("001", categoryUpdateRequest))
                 .isInstanceOf(CategoryNotFoundException.class);
-    }
-
-    @Test
-    @DisplayName("카테고리 수정 실패(카테고리 분류 존재 X)")
-    void testUpdateCategoryFailWhenNoCategorization() {
-        when(categoryRepository.findById(anyString()))
-                .thenReturn(Optional.of(new Category(categoryCreateRequest, new Categorization(
-                        categorizationCreateRequest))));
-        when(categorizationRepository.findById(anyString()))
-                .thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> categoryService.updateCategory("001", categoryUpdateRequest))
-                .isInstanceOf(CategorizationNotFoundException.class);
     }
 
     @Test

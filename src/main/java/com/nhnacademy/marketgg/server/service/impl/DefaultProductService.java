@@ -42,7 +42,7 @@ public class DefaultProductService implements ProductService {
 
         Category category = categoryRepository
                 .findById(productRequest.getCategoryCode())
-                .orElseThrow(() -> new CategoryNotFoundException("해당 카테고리 번호를 찾을 수 없습니다."));
+                .orElseThrow(CategoryNotFoundException::new);
 
         productRepository.save(new Product(productRequest, asset, category));
     }
@@ -64,7 +64,7 @@ public class DefaultProductService implements ProductService {
                 .orElseThrow(() -> new AssetNotFoundException("해당 자산 번호를 찾을 수 없습니다."));
         Category category = categoryRepository
                 .findById(productRequest.getCategoryCode())
-                .orElseThrow(() -> new CategoryNotFoundException("해당 카테고리 번호를 찾을 수 없습니다."));
+                .orElseThrow(CategoryNotFoundException::new);
         product.updateProduct(productRequest, asset, category);
         productRepository.save(product);
     }

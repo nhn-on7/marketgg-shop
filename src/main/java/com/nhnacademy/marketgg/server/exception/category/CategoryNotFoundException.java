@@ -2,8 +2,10 @@ package com.nhnacademy.marketgg.server.exception.category;
 
 public class CategoryNotFoundException extends IllegalArgumentException {
 
-    public CategoryNotFoundException(String msg) {
-        super(msg);
+    private static final String ERROR = "카테고리를 찾을 수 없습니다.";
+
+    public CategoryNotFoundException() {
+        super(ERROR);
     }
 
 }
