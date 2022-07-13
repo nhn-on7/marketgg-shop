@@ -28,7 +28,7 @@ public class DefaultCategoryService implements CategoryService {
     public void createCategory(final CategoryCreateRequest categoryCreateRequest) {
         Categorization categorization =
                 categorizationRepository.findById(categoryCreateRequest.getCategorizationCode())
-                                        .orElseThrow(() -> new CategorizationNotFoundException("카테고리 분류를 찾을 수 없습니다."));
+                                        .orElseThrow(CategorizationNotFoundException::new);
 
         Category category = new Category(categoryCreateRequest, categorization);
 
@@ -49,7 +49,7 @@ public class DefaultCategoryService implements CategoryService {
     @Override
     public void updateCategory(final String id, final CategoryUpdateRequest categoryRequest) {
         Category category = categoryRepository.findById(id)
-                                              .orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을 수 없습니다."));
+                                              .orElseThrow(CategoryNotFoundException::new);
 
         category.updateCategory(categoryRequest);
 
@@ -60,7 +60,7 @@ public class DefaultCategoryService implements CategoryService {
     @Override
     public void deleteCategory(final String id) {
         Category category = categoryRepository.findById(id)
-                                              .orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을 수 없습니다."));
+                                              .orElseThrow(CategoryNotFoundException::new);
 
         categoryRepository.delete(category);
     }
