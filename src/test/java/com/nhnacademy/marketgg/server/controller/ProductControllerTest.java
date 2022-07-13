@@ -82,7 +82,7 @@ class ProductControllerTest {
                    .createProduct(any(ProductCreateRequest.class), any(MockMultipartFile.class));
         String content = objectMapper.writeValueAsString(productRequest);
 
-        //uploadPath는 자신의 로컬 path로 바꿀 것.
+        // uploadPath는 자신의 로컬 path로 바꿀 것.
         MockMultipartFile file = new MockMultipartFile
             ("image", "test.png", "image/png",
                 new FileInputStream(uploadPath + "/logo.png"));
