@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
@@ -16,13 +15,11 @@ import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.entity.Product;
-import com.nhnacademy.marketgg.server.exception.ProductCreationFailedException;
 import com.nhnacademy.marketgg.server.repository.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,12 +30,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.core.env.Environment;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +41,7 @@ class DefaultProductServiceTest {
     @InjectMocks
     DefaultProductService productService;
 
-    //TODO: @Mock 과 @MockBean의 차이는?
+    // TODO: @Mock 과 @MockBean의 차이는?
     @Mock
     private ProductRepository productRepository;
 
@@ -59,7 +51,7 @@ class DefaultProductServiceTest {
     @Mock
     private ImageRepository imageRepository;
 
-    //TODO: @Spy와 @SpyBean의 차이는?
+    // TODO: @Spy와 @SpyBean의 차이는?
     @Spy
     CategoryRepository categoryRepository;
 
@@ -123,7 +115,8 @@ class DefaultProductServiceTest {
         Optional<Product> product = Optional.of(new Product(productRequest, asset, category));
         productService.createProduct(productRequest, file);
 
-        assertThat(productRepository.findById(1L).get().getProductNo()).isEqualTo(product.get().getProductNo());
+        assertThat(productRepository.findById(1L).get().getProductNo()).isEqualTo(
+            product.get().getProductNo());
         verify(productRepository, atLeastOnce()).save(any());
         verify(categoryRepository, atLeastOnce()).findById(any());
         verify(imageRepository, atLeastOnce()).save(any());
@@ -137,8 +130,9 @@ class DefaultProductServiceTest {
         MockMultipartFile file = new MockMultipartFile("image", "test.png", "image/png",
             new FileInputStream(UPLOAD_PATH + "/logo.png"));
 
-        assertThatThrownBy(() -> productService.createProduct(productRequest, file)).hasMessageContaining(
-                "해당 카테고리 번호를 찾을 수 없습니다.");
+        assertThatThrownBy(
+            () -> productService.createProduct(productRequest, file)).hasMessageContaining(
+            "해당 카테고리 번호를 찾을 수 없습니다.");
     }
 
 
