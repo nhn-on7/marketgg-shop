@@ -1,10 +1,21 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.FileInputStream;
-import java.time.LocalDate;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,14 +29,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.net.URI;
-import org.springframework.web.multipart.MultipartFile;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
@@ -66,7 +69,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("property-test")
-    void testProperty(){
+    void testProperty() {
         String uploadPath = environment.getProperty("uploadPath");
         System.out.println("uploadPath:" + uploadPath);
     }
@@ -75,27 +78,30 @@ class ProductControllerTest {
     @DisplayName("상품 등록하는 테스트")
     void testCreateProduct() throws Exception {
 
-        doNothing().when(productService).createProduct(any(ProductCreateRequest.class), any(MockMultipartFile.class));
+        doNothing().when(productService)
+                   .createProduct(any(ProductCreateRequest.class), any(MockMultipartFile.class));
         String content = objectMapper.writeValueAsString(productRequest);
 
+        //uploadPath는 자신의 로컬 path로 바꿀 것.
         MockMultipartFile file = new MockMultipartFile
-            ("image",
-            "test.png",
-            "image/png",
-            new FileInputStream(uploadPath));
+            ("image", "test.png", "image/png",
+                new FileInputStream(uploadPath + "/logo.png"));
 
-        // headers = new HttpHeaders();
-        // headers.setContentType(MediaType.APPLICATION_JSON);
-        // headers.setLocation(URI.create(DEFAULT_PRODUCT));
+        MockMultipartFile dto =
+            new MockMultipartFile("productRequest", "jsondata", "application/json",
+                content.getBytes(StandardCharsets.UTF_8));
 
-        this.mockMvc.perform(post("/admin/v1/products")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(content))
-                    .andExpect(status().isCreated());
-                    // .andExpect(header().string("Location", DEFAULT_PRODUCT));
+        this.mockMvc.perform(multipart("/admin/v1/products")
+                .file(dto)
+                .file(file)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                .characterEncoding(StandardCharsets.UTF_8))
+                    .andExpect(status().isCreated())
+                    .andExpect(header().string("Location", DEFAULT_PRODUCT));
 
-        // verify(productService, times(1)).createProduct(any(ProductCreateRequest.class), any(
-        //     MockMultipartFile.class));
+        verify(productService, times(1)).createProduct(any(ProductCreateRequest.class), any(
+            MockMultipartFile.class));
     }
 
     @Test
