@@ -30,10 +30,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
-//@ActiveProfiles(profiles = "local")
 class DefaultLabelServiceTest {
-    @Autowired
-    Environment environment;
 
     @Autowired
     LabelService labelService;
@@ -41,13 +38,6 @@ class DefaultLabelServiceTest {
     @MockBean
     LabelRepository labelRepository;
 
-
-    @Test
-    @DisplayName("property-test")
-    public void propertyTest(){
-        String uploadPath = environment.getProperty("uploadPath");
-        System.out.println("uploadPath:" + uploadPath);
-    }
     @Test
     @DisplayName("라벨 등록")
     void createLabelSuccess() {
