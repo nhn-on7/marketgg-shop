@@ -1,10 +1,15 @@
 package com.nhnacademy.marketgg.server.dto.response;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+public interface CategoryResponse {
 
-@RequiredArgsConstructor
-@Getter
-public class CategoryResponse {
+    String getCategorizationCode();
+
+    String getCategoryCode();
+
+    String getCategorizationName();
+
+    String getCategoryName();
+
+    Integer getSequence();
 
 }

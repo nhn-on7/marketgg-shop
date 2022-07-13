@@ -28,11 +28,16 @@ public class DefaultCategoryService implements CategoryService {
     public void createCategory(final CategoryCreateRequest categoryCreateRequest) {
         Categorization categorization =
                 categorizationRepository.findById(categoryCreateRequest.getCategorizationCode())
-                                        .orElseThrow(() -> new CategorizationNotFoundException("카테고리 분류를 찾을 수 없습니다."));
+                                        .orElseThrow(CategorizationNotFoundException::new);
 
         Category category = new Category(categoryCreateRequest, categorization);
 
         categoryRepository.save(category);
+    }
+
+    @Override
+    public CategoryRetrieveResponse retrieveCategory(final String id) {
+        return categoryRepository.findByCode(id);
     }
 
     @Override
@@ -42,23 +47,20 @@ public class DefaultCategoryService implements CategoryService {
 
     @Transactional
     @Override
-    public void updateCategory(final String categoryId, final CategoryUpdateRequest categoryRequest) {
-        Category category = categoryRepository.findById(categoryId)
-                                              .orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을 수 없습니다."));
-        Categorization categorization =
-                categorizationRepository.findById(categoryRequest.getCategorizationCode())
-                                        .orElseThrow(() -> new CategorizationNotFoundException("카테고리 분류를 찾을 수 없습니다."));
+    public void updateCategory(final String id, final CategoryUpdateRequest categoryRequest) {
+        Category category = categoryRepository.findById(id)
+                                              .orElseThrow(CategoryNotFoundException::new);
 
-        category.updateCategory(categoryRequest, categorization);
+        category.updateCategory(categoryRequest);
 
         categoryRepository.save(category);
     }
 
     @Transactional
     @Override
-    public void deleteCategory(final String categoryId) {
-        Category category = categoryRepository.findById(categoryId)
-                                              .orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을 수 없습니다."));
+    public void deleteCategory(final String id) {
+        Category category = categoryRepository.findById(id)
+                                              .orElseThrow(CategoryNotFoundException::new);
 
         categoryRepository.delete(category);
     }

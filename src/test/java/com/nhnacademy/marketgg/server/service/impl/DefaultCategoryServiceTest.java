@@ -91,10 +91,40 @@ class DefaultCategoryServiceTest {
     }
 
     @Test
+    @DisplayName("카테고리 단건 조회")
+    void testRetrieveCategory() {
+        when(categoryRepository.findByCode(anyString())).thenReturn(null);
+
+        categoryService.retrieveCategory("001");
+
+        verify(categoryRepository, times(1)).findByCode(anyString());
+    }
+
+    @Test
     @DisplayName("카테고리 목록 조회")
     void testRetrieveCategories() {
         when(categoryRepository.findAllCategories())
-                .thenReturn(List.of(new CategoryRetrieveResponse()));
+                .thenReturn(List.of(new CategoryRetrieveResponse() {
+                    @Override
+                    public String getCategoryCode() {
+                        return "001";
+                    }
+
+                    @Override
+                    public String getCategorizationName() {
+                        return "hello";
+                    }
+
+                    @Override
+                    public String getCategoryName() {
+                        return "hello";
+                    }
+
+                    @Override
+                    public Integer getSequence() {
+                        return 1;
+                    }
+                }));
 
         List<CategoryRetrieveResponse> categoryResponses = categoryService.retrieveCategories();
 
@@ -111,6 +141,8 @@ class DefaultCategoryServiceTest {
                 .thenReturn(Optional.of(new Categorization(categorizationCreateRequest)));
 
         categoryService.updateCategory("001", categoryUpdateRequest);
+
+        verify(categoryRepository, times(1)).save(any(Category.class));
     }
 
     @Test

@@ -9,10 +9,23 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, String> {
 
-    @Query("SELECT cz.categorizationCode as categorizationCode, c.categoryCode as categoryCode, cz.name as categorizationName, c.name as categoryName " +
+    @Query("SELECT c.categoryCode as categoryCode, " +
+            "cz.name as categorizationName, " +
+            "c.name as categoryName, " +
+            "c.sequence as sequence " +
             "FROM Category c " +
             "   INNER JOIN Categorization cz " +
-            "WHERE c.categorization.categorizationCode = cz.categorizationCode")
+            "   ON cz.categorizationCode = c.categorization.categorizationCode " +
+            "WHERE c.categoryCode = :categoryCode")
+    CategoryRetrieveResponse findByCode(final String categoryCode);
+
+    @Query("SELECT c.categoryCode as categoryCode, " +
+            "cz.name as categorizationName, " +
+            "c.name as categoryName, " +
+            "c.sequence as sequence " +
+            "FROM Category c " +
+            "   INNER JOIN Categorization cz " +
+            "   ON c.categorization.categorizationCode = cz.categorizationCode")
     List<CategoryRetrieveResponse> findAllCategories();
 
 }

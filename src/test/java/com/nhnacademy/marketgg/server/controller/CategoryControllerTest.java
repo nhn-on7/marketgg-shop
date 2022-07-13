@@ -55,6 +55,17 @@ class CategoryControllerTest {
     }
 
     @Test
+    @DisplayName("카테고리 단건 조회")
+    void testRetrieveCategory() throws Exception {
+        when(categoryService.retrieveCategory(anyString())).thenReturn(null);
+
+        this.mockMvc.perform(get("/admin/v1/categories/{categoryId}", "011"))
+                .andExpect(status().isOk());
+
+        verify(categoryService, times(1)).retrieveCategory(anyString());
+    }
+
+    @Test
     @DisplayName("카테고리 목록 조회")
     void testRetrieveCategories() throws Exception {
         when(categoryService.retrieveCategories()).thenReturn(List.of());
