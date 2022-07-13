@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,12 +35,6 @@ public class Member {
     private String email;
 
     @Column
-    private String name;
-
-    @Column(name = "phone_number")
-    private String phoneNumber;
-
-    @Column
     private Character Gender;
 
     @Column(name = "birth_date")
@@ -56,5 +51,9 @@ public class Member {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    public void passJoin() {
+        this.ggpassUpdatedAt = (LocalDateTime.now()).plusMonths(1);
+    }
 
 }
