@@ -15,21 +15,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin/v1/labels")
+@RequestMapping("/shop/v1/admin/labels")
 @RequiredArgsConstructor
 public class LabelController {
 
     private final LabelService labelService;
-    private final HttpHeaders headers = buildHeader();
+
+    private static final String DEFAULT_LABEL = "/shop/v1/admin/labels";
 
     @PostMapping
     ResponseEntity<Void> registerLabel(@RequestBody final LabelCreateRequest labelCreateRequest) {
         labelService.createLabel(labelCreateRequest);
 
-        headers.setLocation(URI.create("/admin/v1/labels"));
-
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .headers(headers)
+                             .location(URI.create(DEFAULT_LABEL))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -38,10 +37,8 @@ public class LabelController {
     ResponseEntity<List<LabelRetrieveResponse>> retrieveLabels() {
         List<LabelRetrieveResponse> labelResponse = labelService.retrieveLabels();
 
-        headers.setLocation(URI.create("/admin/v1/labels"));
-
         return ResponseEntity.status(HttpStatus.OK)
-                             .headers(headers)
+                             .location(URI.create(DEFAULT_LABEL))
                              .body(labelResponse);
     }
 
@@ -49,18 +46,9 @@ public class LabelController {
     ResponseEntity<Void> deleteLabel(@PathVariable final Long labelId) {
         labelService.deleteLabel(labelId);
 
-        headers.setLocation(URI.create("/admin/v1/labels/" + labelId));
-
         return ResponseEntity.status(HttpStatus.OK)
-                             .headers(headers)
+                             .location(URI.create(DEFAULT_LABEL + "/" + labelId))
                              .build();
-    }
-
-    private HttpHeaders buildHeader() {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-
-        return httpHeaders;
     }
 
 }
