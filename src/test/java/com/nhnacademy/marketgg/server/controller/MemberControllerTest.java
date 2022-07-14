@@ -37,7 +37,7 @@ class MemberControllerTest {
     void checkPassUpdatedAt() throws Exception {
         when(memberService.checkPassUpdatedAt(anyLong())).thenReturn(true);
 
-        this.mockMvc.perform(get("/shop/v1/members/ggpass/{memberId}", 1L))
+        this.mockMvc.perform(get("/shop/v1/members/{memberId}/ggpass", 1L))
                 .andExpect(status().isOk());
 
         verify(memberService, times(1)).checkPassUpdatedAt(anyLong());
@@ -46,12 +46,12 @@ class MemberControllerTest {
     @Test
     @DisplayName("GG 패스 가입")
     void joinPass() throws Exception {
-        doNothing().when(memberService).joinPass(anyLong());
+        doNothing().when(memberService).subscribePass(anyLong());
 
-        this.mockMvc.perform(post("/shop/v1/members/ggpass/join/{memberId}", 1L))
+        this.mockMvc.perform(post("/shop/v1/members/{memberId}/ggpass/subscribe", 1L))
                 .andExpect(status().isOk());
 
-        verify(memberService, times(1)).joinPass(anyLong());
+        verify(memberService, times(1)).subscribePass(anyLong());
     }
 
     @Test
@@ -59,7 +59,7 @@ class MemberControllerTest {
     void withdrawPass() throws Exception {
         doNothing().when(memberService).withdrawPass(anyLong());
 
-        this.mockMvc.perform(post("/shop/v1/members/ggpass/withdraw/{memberId}", 1L))
+        this.mockMvc.perform(post("/shop/v1/members/{memberId}/ggpass/withdraw", 1L))
                 .andExpect(status().isOk());
 
         verify(memberService, times(1)).withdrawPass(anyLong());

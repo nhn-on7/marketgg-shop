@@ -19,7 +19,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/ggpass/{memberId}")
+    @GetMapping("/{memberId}/ggpass")
     public ResponseEntity<Boolean> checkPassUpdatedAt(@PathVariable final Long memberId) {
         Boolean check = memberService.checkPassUpdatedAt(memberId);
 
@@ -29,22 +29,22 @@ public class MemberController {
                 .body(check);
     }
 
-    @PostMapping("/ggpass/join/{memberId}")
-    public ResponseEntity<Void> joinPass(@PathVariable final Long memberId) {
-        memberService.joinPass(memberId);
+    @PostMapping("/{memberId}/ggpass/subscribe")
+    public ResponseEntity<Void> subscribePass(@PathVariable final Long memberId) {
+        memberService.subscribePass(memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .location(URI.create("/shop/v1/members/ggpass/join/" + memberId))
+                .location(URI.create("/shop/v1/members/" + memberId + "/ggpass/subscribe" ))
                 .contentType(MediaType.APPLICATION_JSON)
                 .build();
     }
 
-    @PostMapping("/ggpass/withdraw/{memberId}")
+    @PostMapping("/{memberId}/ggpass/withdraw")
     public ResponseEntity<Void> withdrawPass(@PathVariable final Long memberId) {
         memberService.withdrawPass(memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .location(URI.create("/shop/v1/members/ggpass/withdraw/" + memberId))
+                .location(URI.create("/shop/v1/members/" +  memberId + "/ggpass/withdraw"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .build();
     }

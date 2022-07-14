@@ -64,7 +64,7 @@ public class Member {
         this.deletedAt = memberRequest.getDeletedAt();
     }
 
-    public void passJoin() {
+    public void passSubscribe() {
         this.ggpassUpdatedAt = (LocalDateTime.now()).plusMonths(1);
     }
 

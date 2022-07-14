@@ -55,7 +55,7 @@ class DefaultMemberServiceTest {
     void joinPass() {
         when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
 
-        memberService.joinPass(1L);
+        memberService.subscribePass(1L);
 
         assertThat(member.getGgpassUpdatedAt()).isAfter(LocalDateTime.now());
     }

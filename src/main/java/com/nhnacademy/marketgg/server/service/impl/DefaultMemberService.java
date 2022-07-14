@@ -23,9 +23,9 @@ public class DefaultMemberService implements MemberService {
 
     @Transactional
     @Override
-    public void joinPass(final Long id) {
+    public void subscribePass(final Long id) {
             Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
-            member.passJoin();
+            member.passSubscribe();
 
             memberRepository.save(member);
     }
