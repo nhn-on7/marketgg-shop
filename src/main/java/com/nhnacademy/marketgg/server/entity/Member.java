@@ -1,7 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
-import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,7 +60,7 @@ public class Member {
      * @since 1.0.0
      */
     @Column
-    private Character Gender;
+    private Character gender;
 
     /**
      * 회원의 생일입니다.입력받지 않을 수 있습니다.
@@ -112,7 +111,7 @@ public class Member {
     public Member(MemberCreateRequest memberRequest) {
         this.memberGrade = memberRequest.getMemberGrade();
         this.email = memberRequest.getEmail();
-        Gender = memberRequest.getGender();
+        gender = memberRequest.getGender();
         this.birthDate = memberRequest.getBirthDate();
         this.ggpassUpdatedAt = memberRequest.getGgpassUpdateAt();
         this.createdAt = memberRequest.getCreatedAt();
