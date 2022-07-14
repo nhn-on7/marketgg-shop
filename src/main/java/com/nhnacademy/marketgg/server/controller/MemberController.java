@@ -41,7 +41,7 @@ public class MemberController {
         Boolean check = memberService.checkPassUpdatedAt(memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .location(URI.create("/shop/v1/members/ggpass/" + memberId))
+                .location(URI.create("/shop/v1/members/" + memberId + "/ggpass"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(check);
     }
