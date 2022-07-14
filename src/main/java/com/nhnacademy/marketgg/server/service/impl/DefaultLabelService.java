@@ -31,7 +31,7 @@ public class DefaultLabelService implements LabelService {
     /**
      * 입력받은 정보로 라벨을 생성하기 위한 메소드입니다.
      *
-     * @param labelCreateRequest 라벨을 생성하기위한 정보를 담은 DTO 입니다.
+     * @param labelCreateRequest - 라벨을 생성하기위한 정보를 담은 DTO 입니다.
      * @since 1.0.0
      */
     @Transactional
@@ -56,7 +56,7 @@ public class DefaultLabelService implements LabelService {
     /**
      * 지정한 라벨을 삭제하기 위한 메소드입니다.
      *
-     * @param id 삭제할 라벨의 식별번호입니다.
+     * @param id - 삭제할 라벨의 식별번호입니다.
      * @since 1.0.0
      */
     @Transactional

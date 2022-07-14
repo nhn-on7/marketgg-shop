@@ -39,7 +39,7 @@ public class CategoryController {
     /**
      * 입력한 정보로 카테고리를 생성하는 Mapping 을 지원합니다.
      *
-     * @param categoryCreateRequest 카테고리를 생성하기 위한 DTO 입니다.
+     * @param categoryCreateRequest - 카테고리를 생성하기 위한 DTO 입니다.
      * @return Mapping Uri 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
@@ -56,7 +56,7 @@ public class CategoryController {
     /**
      * 선택한 카테고리의 정보를 조회하는 Mapping 을 지원합니다.
      *
-     * @param categoryId 조회할 카테고리의 식별 번호입니다.
+     * @param categoryId - 조회할 카테고리의 식별 번호입니다.
      * @return 카테고리 한개의 정보를 담은 객체를 반환합니다.
      * @since 1.0.0
      */
@@ -87,8 +87,8 @@ public class CategoryController {
     /**
      * 입력한 정보로 선택한 카테고리 정보를 수정하는 Mapping 을 지원합니다.
      *
-     * @param categoryId 수정할 카테고리의 식별번호입니다.
-     * @param categoryRequest 카테고리를 수정하기 위한 DTO 입니다.
+     * @param categoryId - 수정할 카테고리의 식별번호입니다.
+     * @param categoryRequest - 카테고리를 수정하기 위한 DTO 입니다.
      * @return Mapping Uri 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
@@ -106,7 +106,7 @@ public class CategoryController {
     /**
      * 선택한 카테고리를 삭제하는 Mapping 을 지원합니다.
      *
-     * @param categoryId 삭제할 카테고리의 식별번호입니다.
+     * @param categoryId - 삭제할 카테고리의 식별번호입니다.
      * @return Mapping Uri 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
