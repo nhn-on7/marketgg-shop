@@ -77,7 +77,8 @@ class DefaultProductServiceTest {
         productUpdateRequest = new ProductUpdateRequest();
         ReflectionTestUtils.setField(productRequest, "categoryCode", "001");
 
-        // REVIEW: Projection Interface 타입으로 받으면 다 Override 해야한다. Interface 타입으로 받으면 유연하게 데이터 받을 수 있고 계층 구조 만들 수 있다.
+        // REVIEW: Projection Interface 타입으로 받으면 다 Override 해야한다.
+        // REVIEW: Interface 타입으로 받으면 유연하게 데이터 받을 수 있고 계층 구조 만들 수 있다.
         // REVIEW: Class or interface 타입 받는 상황에 맞게 선택해야 한다.
         productResponse = new ProductResponse() {
             @Override
@@ -173,23 +174,12 @@ class DefaultProductServiceTest {
 
         asset = Asset.create();
         ReflectionTestUtils.setField(asset, "assetNo", 1L);
-
         CategorizationCreateRequest categorizationRequest = new CategorizationCreateRequest();
-
         ReflectionTestUtils.setField(categorizationRequest, "categorizationCode", "100");
-        ReflectionTestUtils.setField(categorizationRequest, "name", "상품");
-        ReflectionTestUtils.setField(categorizationRequest, "alias", "Products");
-
         categorization = new Categorization(categorizationRequest);
-
         CategoryCreateRequest categoryRequest = new CategoryCreateRequest();
         ReflectionTestUtils.setField(categoryRequest, "categoryCode", "001");
-        ReflectionTestUtils.setField(categoryRequest, "categorizationCode", "100");
-        ReflectionTestUtils.setField(categoryRequest, "name", "채소");
-        ReflectionTestUtils.setField(categoryRequest, "sequence", 1);
-
         category = new Category(categoryRequest, categorization);
-
         imageFile = new MockMultipartFile("image", "test.png", "image/png",
                 new FileInputStream(uploadPath + "/marketGG-로고.png"));
     }
@@ -236,6 +226,7 @@ class DefaultProductServiceTest {
 
         List<ProductResponse> productResponses = productService.retrieveProducts();
         assertThat(productResponses).isNotNull();
+        verify(productRepository, atLeastOnce()).findAllBy();
     }
 
     @Test
@@ -246,7 +237,7 @@ class DefaultProductServiceTest {
 
         ProductResponse productResponse = productService.retrieveProductDetails(anyLong());
         assertThat(productResponse).isNotNull();
-
+        verify(productRepository, atLeastOnce()).queryByProductNo(anyLong());
     }
 
     @Test
@@ -255,12 +246,8 @@ class DefaultProductServiceTest {
         given(productRepository.findById(any())).willReturn(
                 Optional.of(new Product(productRequest, asset, category)));
         given(categoryRepository.findById(any())).willReturn(Optional.ofNullable(category));
-
-
         given(assetRepository.save(any(Asset.class))).willReturn(asset);
-
         productService.updateProduct(productUpdateRequest, imageFile, 1L);
-
         verify(productRepository, atLeastOnce()).save(any());
     }
 
