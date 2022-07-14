@@ -38,3 +38,9 @@
   }
 ]
 ```
+
+## 카테고리 번호로 조회 
+
+-  List<ProductResponse> findByCategory_CategoryCodeAndCategory_Categorization_CategorizationCode(String categoryCode,String categorizationCode);
+
+## 로컬 - 서버 설정 분리 
