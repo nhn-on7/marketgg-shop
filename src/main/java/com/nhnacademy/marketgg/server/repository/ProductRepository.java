@@ -14,4 +14,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<ProductResponse> findByNameContaining(String keyword);
 
+    List<ProductResponse> findByCategory_CategoryCodeAndCategory_Categorization_CategorizationCode(String categorizationCode,String categoryCode);
+
 }

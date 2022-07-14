@@ -14,15 +14,14 @@ import com.nhnacademy.marketgg.server.repository.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
 import com.nhnacademy.marketgg.server.service.ProductService;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +41,7 @@ public class DefaultProductService implements ProductService {
     @Override
     @Transactional
     public void createProduct(final ProductCreateRequest productRequest, MultipartFile imageFile)
-            throws IOException {
+        throws IOException {
 
         String originalFileName = imageFile.getOriginalFilename();
         // 하드코딩된 uploadPath를 설정파일로 분리.
@@ -56,7 +55,7 @@ public class DefaultProductService implements ProductService {
 
         Category category = categoryRepository.findById(productRequest.getCategoryCode())
                                               .orElseThrow(() -> new CategoryNotFoundException(
-                                                      "해당 카테고리 번호를 찾을 수 없습니다."));
+                                                  "해당 카테고리 번호를 찾을 수 없습니다."));
 
         productRepository.save(new Product(productRequest, asset, category));
     }
@@ -77,11 +76,10 @@ public class DefaultProductService implements ProductService {
                               final Long productId) throws IOException {
         Product product = productRepository.findById(productId)
                                            .orElseThrow(() -> new ProductNotFoundException(
-                                                   "해당 상품을 찾을 수 없습니다."));
+                                               "해당 상품을 찾을 수 없습니다."));
 
         String originalFileName = imageFile.getOriginalFilename();
-        File dest =
-                new File(uploadPath, originalFileName);
+        File dest = new File(uploadPath, originalFileName);
         imageFile.transferTo(dest);
 
         Asset asset = assetRepository.save(Asset.create());
@@ -90,7 +88,7 @@ public class DefaultProductService implements ProductService {
 
         Category category = categoryRepository.findById(productRequest.getCategoryCode())
                                               .orElseThrow(() -> new CategoryNotFoundException(
-                                                      "해당 카테고리 번호를 찾을 수 없습니다."));
+                                                  "해당 카테고리 번호를 찾을 수 없습니다."));
 
         product.updateProduct(productRequest, asset, category);
         productRepository.save(product);
@@ -100,7 +98,7 @@ public class DefaultProductService implements ProductService {
     public void deleteProduct(final Long productId) {
         Product product = productRepository.findById(productId)
                                            .orElseThrow(() -> new ProductNotFoundException(
-                                                   "해당 상품을 찾을 수 없습니다."));
+                                               "해당 상품을 찾을 수 없습니다."));
 
         product.deleteProduct();
         productRepository.save(product);
@@ -109,6 +107,13 @@ public class DefaultProductService implements ProductService {
     @Override
     public List<ProductResponse> searchProductsByName(String keyword) {
         return productRepository.findByNameContaining(keyword);
+    }
+
+    @Override
+    public List<ProductResponse> searchProductByCategory(String categorizationCode,
+                                                         String categoryCode) {
+        return productRepository.findByCategory_CategoryCodeAndCategory_Categorization_CategorizationCode(
+            categoryCode, categorizationCode);
     }
 
 }

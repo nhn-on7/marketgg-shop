@@ -23,4 +23,5 @@ public interface ProductService {
 
     List<ProductResponse> searchProductsByName(String keyword);
 
+    List<ProductResponse> searchProductByCategory(String categorizationCode, String categoryCode);
 }
