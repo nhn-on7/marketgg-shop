@@ -3,64 +3,85 @@ package com.nhnacademy.marketgg.server.controller;
 import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.LabelRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.LabelService;
-
 import java.net.URI;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 라벨관리에 관련된 RestController 입니다.
+ *
+ * @version 1.0.0
+ */
 @RestController
 @RequestMapping("/admin/v1/labels")
 @RequiredArgsConstructor
 public class LabelController {
 
+    /**
+     * 라벨 서비스 입니다.
+     *
+     * @since 1.0.0
+     */
     private final LabelService labelService;
-    private final HttpHeaders headers = buildHeader();
 
+    /**
+     * 입력한 정보로 라벨을 등록하는 Mapping 을 지원합니다.
+     *
+     * @param labelCreateRequest 라벨을 생성하기 위한 DTO 입니다.
+     * @return Mapping Uri 를 담은 응답 객체를 반환합니다.
+     * @since 1.0.0
+     */
     @PostMapping
     ResponseEntity<Void> registerLabel(@RequestBody final LabelCreateRequest labelCreateRequest) {
         labelService.createLabel(labelCreateRequest);
 
-        headers.setLocation(URI.create("/admin/v1/labels"));
-
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .headers(headers)
+                             .location(URI.create("/admin/v1/labels"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
 
+    /**
+     * 전체 라벨 목록을 조회하는 Mapping 을 지원합니다.
+     *
+     * @return 전체 라벨 목록을 list 로 반환합니다.
+     * @since 1.0.0
+     */
     @GetMapping
     ResponseEntity<List<LabelRetrieveResponse>> retrieveLabels() {
         List<LabelRetrieveResponse> labelResponse = labelService.retrieveLabels();
 
-        headers.setLocation(URI.create("/admin/v1/labels"));
-
         return ResponseEntity.status(HttpStatus.OK)
-                             .headers(headers)
+                             .location(URI.create("/admin/v1/labels"))
+                             .contentType(MediaType.APPLICATION_JSON)
                              .body(labelResponse);
     }
 
+    /**
+     * 선택한 라벨을 삭제하는 Mapping 을 지원합니다.
+     *
+     * @param labelId 삭제할 라벨의 식별번호입니다.
+     * @return Mapping Uri 를 담은 응답 객체입니다.
+     * @since 1.0.0
+     */
     @DeleteMapping("/{labelId}")
     ResponseEntity<Void> deleteLabel(@PathVariable final Long labelId) {
         labelService.deleteLabel(labelId);
 
-        headers.setLocation(URI.create("/admin/v1/labels/" + labelId));
-
         return ResponseEntity.status(HttpStatus.OK)
-                             .headers(headers)
+                             .location(URI.create("/admin/v1/labels/" + labelId))
+                             .contentType(MediaType.APPLICATION_JSON)
                              .build();
-    }
-
-    private HttpHeaders buildHeader() {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-
-        return httpHeaders;
     }
 
 }

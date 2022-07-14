@@ -11,13 +11,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 카테고리 분류관리에 대한 RestController 입니다.
+ *
+ * @version  1.0.0
+ */
 @RestController
 @RequestMapping("/admin/v1/categorizations")
 @RequiredArgsConstructor
 public class CategorizationController {
 
+    /**
+     * 카테고리 분류 서비스입니다.
+     *
+     * @since 1.0.0
+     */
     private final CategorizationService categorizationService;
 
+    /**
+     * 전체 카테고리 목록을 조회하는 Mapping 을 지원합니다.
+     *
+     * @return 카테고리 분류표의 전체 목록을 List 로 반환합니다.
+     * @since 1.0.0
+     */
     @GetMapping
     public ResponseEntity<List<CategorizationRetrieveResponse>> retrieveCategorization() {
         List<CategorizationRetrieveResponse> categorizationResponses =

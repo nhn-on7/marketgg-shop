@@ -47,7 +47,7 @@ class DefaultMemberServiceTest {
 
         Boolean date = memberService.checkPassUpdatedAt(1L);
 
-        assertThat(date).isTrue();
+        assertThat(date).isFalse();
     }
 
     @Test
