@@ -16,14 +16,14 @@ public class DibRepositoryImpl extends QuerydslRepositorySupport implements DibR
     }
 
     @Override
-    public List<DibRetrieveResponse> findAllDibs(Long memberNo) {
+    public List<DibRetrieveResponse> findAllDibs(Long memberId) {
         QDib dib = QDib.dib;
         QProduct product = QProduct.product;
 
         return from(dib)
-                .innerJoin(dib.member).on(dib.member.memberNo.eq(memberNo))
+                .innerJoin(dib.member).on(dib.member.memberNo.eq(memberId))
                 .innerJoin(dib.product).on(dib.product.productNo.eq(product.productNo))
-                .where(dib.pk.memberNo.eq(memberNo))
+                .where(dib.pk.memberNo.eq(memberId))
                 .select(Projections.bean(DibRetrieveResponse.class,
                                          dib.product.name,
                                          dib.product.price,

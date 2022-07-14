@@ -26,22 +26,24 @@ public class DibController {
 
     private final DibService dibService;
 
+    private static final String DEFAULT_DIB = "/shop/v1/dibs";
+
     @PostMapping
     ResponseEntity<Void> createDib(@RequestBody final DibCreateRequest dibCreateRequest) {
         dibService.createDib(dibCreateRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create("/shop/v1/dibs"))
+                             .location(URI.create(DEFAULT_DIB))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
 
-    @GetMapping
-    ResponseEntity<List<DibRetrieveResponse>> retrieveDibs(@PathVariable Long memberNo) {
-        List<DibRetrieveResponse> dibResponses = dibService.retrieveDibs(memberNo);
+    @GetMapping("{memberId}")
+    ResponseEntity<List<DibRetrieveResponse>> retrieveDibs(@PathVariable Long memberId) {
+        List<DibRetrieveResponse> dibResponses = dibService.retrieveDibs(memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create("/shop/v1/dibs"))
+                             .location(URI.create(DEFAULT_DIB + memberId))
                              .body(dibResponses);
     }
 
@@ -50,7 +52,7 @@ public class DibController {
         dibService.deleteDib(dibDeleteRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .location(URI.create("/shop/v1/dibs"))
+                .location(URI.create(DEFAULT_DIB))
                 .contentType(MediaType.APPLICATION_JSON)
                 .build();
     }

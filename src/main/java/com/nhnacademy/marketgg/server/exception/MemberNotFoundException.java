@@ -2,8 +2,10 @@ package com.nhnacademy.marketgg.server.exception;
 
 public class MemberNotFoundException extends IllegalArgumentException {
 
-    public MemberNotFoundException(String ex) {
-        super(ex);
+    private static final String ERROR = "회원을 찾을 수 없습니다.";
+
+    public MemberNotFoundException() {
+        super(ERROR);
     }
 
 }

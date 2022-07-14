@@ -31,9 +31,9 @@ public class DefaultDibService implements DibService {
     @Override
     public void createDib(DibCreateRequest dibCreateRequest) {
         Member member = memberRepository.findById(dibCreateRequest.getMemberNo())
-                                        .orElseThrow(() -> new MemberNotFoundException("회원을 찾을 수 없습니다."));
+                                        .orElseThrow(MemberNotFoundException::new);
         Product product = productRepository.findById(dibCreateRequest.getProductNo())
-                .orElseThrow(() -> new ProductNotFoundException("상품을 찾을 수 없습니다."));
+                .orElseThrow(ProductNotFoundException::new);
 
         Dib dib = new Dib(dibCreateRequest, member, product);
 
@@ -42,15 +42,15 @@ public class DefaultDibService implements DibService {
 
     @Transactional
     @Override
-    public List<DibRetrieveResponse> retrieveDibs(Long memberNo) {
-        return dibRepository.findAllDibs(memberNo);
+    public List<DibRetrieveResponse> retrieveDibs(Long memberId) {
+        return dibRepository.findAllDibs(memberId);
     }
 
     @Transactional
     @Override
     public void deleteDib(DibDeleteRequest dibDeleteRequest) {
         Dib dib = dibRepository.findById(new Dib.Pk(dibDeleteRequest.getMemberNo(), dibDeleteRequest.getProductNo()))
-                .orElseThrow(() -> new DibNotFoundException("찜을 찾을 수 없습니다."));
+                .orElseThrow(DibNotFoundException::new);
 
         dibRepository.delete(dib);
     }

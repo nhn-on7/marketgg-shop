@@ -75,8 +75,7 @@ public class DefaultProductService implements ProductService {
     public void updateProduct(final ProductUpdateRequest productRequest, MultipartFile imageFile,
                               final Long productId) throws IOException {
         Product product = productRepository.findById(productId)
-                                           .orElseThrow(() -> new ProductNotFoundException(
-                                               "해당 상품을 찾을 수 없습니다."));
+                                           .orElseThrow(ProductNotFoundException::new);
 
         String originalFileName = imageFile.getOriginalFilename();
         File dest =
@@ -99,8 +98,7 @@ public class DefaultProductService implements ProductService {
     @Override
     public void deleteProduct(final Long productId) {
         Product product = productRepository.findById(productId)
-                                           .orElseThrow(() -> new ProductNotFoundException(
-                                               "해당 상품을 찾을 수 없습니다."));
+                                           .orElseThrow(ProductNotFoundException::new);
 
         product.deleteProduct();
         productRepository.save(product);

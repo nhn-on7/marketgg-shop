@@ -1,8 +1,10 @@
 package com.nhnacademy.marketgg.server.exception;
 
 public class ProductNotFoundException extends RuntimeException{
-    public ProductNotFoundException(String message) {
-        super(message);
+    private static final String ERROR = "상품을 찾을 수 없습니다.";
+
+    public ProductNotFoundException() {
+        super(ERROR);
     }
 
 }

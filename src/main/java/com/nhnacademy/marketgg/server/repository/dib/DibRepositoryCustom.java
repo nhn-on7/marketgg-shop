@@ -8,6 +8,6 @@ import java.util.List;
 @NoRepositoryBean
 public interface DibRepositoryCustom {
 
-    List<DibRetrieveResponse> findAllDibs(Long memberNo);
+    List<DibRetrieveResponse> findAllDibs(Long memberId);
 
 }
