@@ -5,6 +5,8 @@ import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.MemberRepository;
 import com.nhnacademy.marketgg.server.service.MemberService;
 import java.time.LocalDateTime;
+import java.util.Objects;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +37,9 @@ public class DefaultMemberService implements MemberService {
     @Override
     public Boolean checkPassUpdatedAt(final Long id) {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
+        if(Objects.isNull(member.getGgpassUpdatedAt())) {
+            return false;
+        }
         return member.getGgpassUpdatedAt().isAfter(LocalDateTime.now());
     }
 
