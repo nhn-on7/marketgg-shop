@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.FileInputStream;
 import java.net.URI;
@@ -35,13 +36,10 @@ class ProductControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
+    
     @Autowired
     ObjectMapper objectMapper;
-
-    @Autowired
-    private Environment environment;
-
+    
     @MockBean
     private ProductService productService;
 
@@ -107,45 +105,57 @@ class ProductControllerTest {
     @Test
     @DisplayName("상품 목록 전체 조회하는 테스트")
     void testRetrieveProducts() throws Exception {
-        headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setLocation(URI.create(DEFAULT_PRODUCT));
+        when(productService.retrieveProducts()).thenReturn(List.of());
 
-        this.mockMvc.perform(get("/admin/v1/products"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(header().string("Location", DEFAULT_PRODUCT));
+        this.mockMvc.perform(get("/admin/v1/products")
+                    .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+        verify(productService, times(1)).retrieveProducts();
     }
 
-    // @Test
-    // @DisplayName("상품 정보 수정하는 테스트")
-    // void testUpdateProduct() throws Exception {
-    //     headers = new HttpHeaders();
-    //     headers.setContentType(MediaType.APPLICATION_JSON);
-    //     headers.setLocation(URI.create(DEFAULT_PRODUCT));
-    //
-    //     doNothing().when(productService).updateProduct(any(), any(), any());
-    //     String content = objectMapper.writeValueAsString(productRequest);
-    //
-    //     this.mockMvc.perform(put("/admin/v1/products" + "/1")
-    //                 .contentType(MediaType.APPLICATION_JSON)
-    //                 .content(content))
-    //                 .andExpect(status().isOk())
-    //                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    //                 .andExpect(header().string("Location", DEFAULT_PRODUCT + "/1"));
-    // }
+    @Test
+    @DisplayName("상품 정보 수정하는 테스트")
+    void testUpdateProduct() throws Exception {
 
-    // @Test
-    // @DisplayName("상품 삭제하는 테스트")
-    // void testDeleteProduct() throws Exception {
-    //     headers = new HttpHeaders();
-    //     headers.setContentType(MediaType.APPLICATION_JSON);
-    //     headers.setLocation(URI.create(DEFAULT_PRODUCT));
-    //
-    //     this.mockMvc.perform(delete("/admin/v1/products" + "/1"))
-    //                 .andExpect(status().isOk())
-    //                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    //                 .andExpect(header().string("Location", DEFAULT_PRODUCT + "/1"));
-    // }
+        doNothing().when(productService)
+                   .updateProduct(any(ProductUpdateRequest.class), any(MockMultipartFile.class), anyLong());
 
+        String content = objectMapper.writeValueAsString(productRequest);
+        MockMultipartFile dto = new MockMultipartFile("productRequest", "jsondata", "application/json",
+                content.getBytes(StandardCharsets.UTF_8));
+
+        MockMultipartFile file = new MockMultipartFile("image", "test.png", "image/png",
+                new FileInputStream(uploadPath + "/marketGG-로고.png"));
+
+        this.mockMvc.perform(multipart("/admin/v1/products/{productId}", 1L)
+                    .file(dto)
+                    .file(file)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
+                    .characterEncoding(StandardCharsets.UTF_8))
+                    .andExpect(status().isOk());
+        verify(productService, times(1)).updateProduct(any(), any(), any());
+    }
+
+    @Test
+    @DisplayName("상품 삭제하는 테스트")
+    void testDeleteProduct() throws Exception {
+        doNothing().when(productService).deleteProduct(anyLong());
+
+        this.mockMvc.perform(post("/admin/v1/products/{productId}/deleted", 1L))
+                    .andExpect(status().isOk());
+        verify(productService, times(1)).deleteProduct(anyLong());
+    }
+
+    @Test
+    @DisplayName("상품 검색하는 테스트")
+    void testSearchProductsByName() throws Exception {
+        when(productService.searchProductsByName(anyString())).thenReturn(List.of());
+
+        this.mockMvc.perform(get("/admin/v1/products/search/{productName}", "오렌지")
+                    .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        verify(productService, times(1)).searchProductsByName(anyString());
+    }
 }

@@ -4,21 +4,16 @@ import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.service.ProductService;
-import java.io.IOException;
-import java.net.URI;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/v1/products")
@@ -63,10 +58,11 @@ public class ProductController {
                              .body(productDetails);
     }
 
-    @PutMapping("/{productId}")
+    @PostMapping("/{productId}")
     public ResponseEntity<Void> updateProduct(
-        @RequestPart final ProductUpdateRequest productRequest, @RequestPart MultipartFile image,
-        @PathVariable final Long productId) throws IOException {
+            @RequestPart final ProductUpdateRequest productRequest,
+            @RequestPart MultipartFile image,
+            @PathVariable final Long productId) throws IOException {
         productService.updateProduct(productRequest, image, productId);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -86,10 +82,9 @@ public class ProductController {
     }
 
     @GetMapping("/search/{productName}")
-    public ResponseEntity<List<ProductResponse>> searchProductsByName(
-        @PathVariable String productName) {
+    public ResponseEntity<List<ProductResponse>> searchProductsByName(@PathVariable String productName) {
         List<ProductResponse> productResponseList =
-            productService.searchProductsByName(productName);
+                productService.searchProductsByName(productName);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT + "/search/" + productName))
