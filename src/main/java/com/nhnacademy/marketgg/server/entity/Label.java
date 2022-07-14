@@ -44,7 +44,7 @@ public class Label {
     /**
      * 라벨을 생성하기 위한 생성자입니다.
      *
-     * @param labelCreateRequest 라벨을 생성하기 위한 DTO 입니다.
+     * @param labelCreateRequest - 라벨을 생성하기 위한 DTO 입니다.
      * @since 1.0.0
      */
     public Label(LabelCreateRequest labelCreateRequest) {

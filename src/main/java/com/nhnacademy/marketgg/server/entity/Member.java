@@ -106,7 +106,7 @@ public class Member {
     /**
      * 회원을 생성하기 위한 생성자입니다.
      *
-     * @param memberRequest 회원을 생성하기 위한 DTO 입니다.
+     * @param memberRequest - 회원을 생성하기 위한 DTO 입니다.
      * @since 1.0.0
      */
     public Member(MemberCreateRequest memberRequest) {

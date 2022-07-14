@@ -38,7 +38,7 @@ public class LabelController {
      * 입력한 정보로 라벨을 등록하는 Mapping 을 지원합니다.
      *
      * @param labelCreateRequest - 라벨을 생성하기 위한 DTO 입니다.
-     * @return Mapping Uri 를 담은 응답 객체를 반환합니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
     @PostMapping
@@ -71,7 +71,7 @@ public class LabelController {
      * 선택한 라벨을 삭제하는 Mapping 을 지원합니다.
      *
      * @param labelId - 삭제할 라벨의 식별번호입니다.
-     * @return Mapping Uri 를 담은 응답 객체입니다.
+     * @return Mapping URI 를 담은 응답 객체입니다.
      * @since 1.0.0
      */
     @DeleteMapping("/{labelId}")

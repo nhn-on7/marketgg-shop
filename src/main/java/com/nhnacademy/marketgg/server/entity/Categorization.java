@@ -49,7 +49,7 @@ public class Categorization {
     /**
      * 카테고리 분류표를 생성하기 위한 생성자입니다.
      *
-     * @param categorizationRequest 카테고리 분류표를 생성하기 위한 DTO 입니다.
+     * @param categorizationRequest - 카테고리 분류표를 생성하기 위한 DTO 입니다.
      * @since 1.0.0
      */
     public Categorization(CategorizationCreateRequest categorizationRequest) {
