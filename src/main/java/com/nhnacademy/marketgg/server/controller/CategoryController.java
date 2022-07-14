@@ -20,18 +20,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/admin/v1/categories")
+@RequestMapping("/shop/v1/admin/categories")
 @RequiredArgsConstructor
 public class CategoryController {
 
     private final CategoryService categoryService;
+
+    private static final String DEFAULT_CATEGORY = "/shop/v1/admin/categories";
 
     @PostMapping
     ResponseEntity<Void> createCategory(@RequestBody final CategoryCreateRequest categoryCreateRequest) {
         categoryService.createCategory(categoryCreateRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create("/admin/v1/categories"))
+                             .location(URI.create(DEFAULT_CATEGORY))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -41,7 +43,7 @@ public class CategoryController {
         CategoryRetrieveResponse categoryResponse = categoryService.retrieveCategory(categoryId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create("/admin/v1/categories/" + categoryId))
+                             .location(URI.create(DEFAULT_CATEGORY + "/" + categoryId))
                              .body(categoryResponse);
     }
 
@@ -50,7 +52,7 @@ public class CategoryController {
         List<CategoryRetrieveResponse> categoryResponses = categoryService.retrieveCategories();
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create("/admin/v1/categories"))
+                             .location(URI.create(DEFAULT_CATEGORY))
                              .body(categoryResponses);
     }
 
@@ -60,7 +62,7 @@ public class CategoryController {
         categoryService.updateCategory(categoryId, categoryRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create("/admin/v1/categories/" + categoryId))
+                             .location(URI.create(DEFAULT_CATEGORY + "/" + categoryId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -70,7 +72,7 @@ public class CategoryController {
         categoryService.deleteCategory(categoryId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create("/admin/v1/categories/" + categoryId))
+                             .location(URI.create(DEFAULT_CATEGORY + "/" + categoryId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

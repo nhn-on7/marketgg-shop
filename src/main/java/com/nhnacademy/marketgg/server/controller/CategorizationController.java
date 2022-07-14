@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/admin/v1/categorizations")
+@RequestMapping("/shop/v1/admin/categorizations")
 @RequiredArgsConstructor
 public class CategorizationController {
 
@@ -24,7 +24,7 @@ public class CategorizationController {
                 categorizationService.retrieveCategorizations();
 
         return ResponseEntity.status(HttpStatus.OK)
-                .location(URI.create("/admin/v1/categorizations"))
+                .location(URI.create("/shop/v1/admin/categorizations"))
                 .body(categorizationResponses);
     }
 
