@@ -15,6 +15,6 @@ public class DibCreateRequest {
 
     private String memo;
 
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
 }
