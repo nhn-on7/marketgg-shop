@@ -98,7 +98,7 @@ public class ProductController {
                              .body(productResponseList);
     }
 
-    @GetMapping("/search/{categorizationCode}/{categoryCode}")
+    @GetMapping("/{categorizationCode}/{categoryCode}")
     public ResponseEntity<List<ProductResponse>> searchProductsByCategory(
         @PathVariable String categorizationCode, @PathVariable String categoryCode) {
 
