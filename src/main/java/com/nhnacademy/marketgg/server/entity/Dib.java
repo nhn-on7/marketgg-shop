@@ -66,7 +66,7 @@ public class Dib {
         this.member = member;
         this.product = product;
         this.memo = dibCreateRequest.getMemo();
-        this.createdAt = dibCreateRequest.getCreateAt();
+        this.createdAt = dibCreateRequest.getCreatedAt();
     }
 
 }
