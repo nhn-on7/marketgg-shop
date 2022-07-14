@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.DibCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.DibDeleteRequest;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -53,6 +54,11 @@ public class Dib {
 
         @Column(name = "product_no")
         private Long productNo;
+
+        public Pk(final Long memberNo, final Long productNo) {
+            this.memberNo = memberNo;
+            this.productNo = productNo;
+        }
 
     }
 

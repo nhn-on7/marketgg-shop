@@ -1,9 +1,11 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.DibCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.DibDeleteRequest;
 import com.nhnacademy.marketgg.server.entity.Dib;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Product;
+import com.nhnacademy.marketgg.server.exception.DibNotFoundException;
 import com.nhnacademy.marketgg.server.exception.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.DibRepository;
@@ -34,4 +36,14 @@ public class DefaultDibService implements DibService {
 
         dibRepository.save(dib);
     }
+
+    @Transactional
+    @Override
+    public void deleteDib(DibDeleteRequest dibDeleteRequest) {
+        Dib dib = dibRepository.findById(new Dib.Pk(dibDeleteRequest.getMemberNo(), dibDeleteRequest.getProductNo()))
+                .orElseThrow(() -> new DibNotFoundException("찜을 찾을 수 없습니다."));
+
+        dibRepository.delete(dib);
+    }
+
 }
