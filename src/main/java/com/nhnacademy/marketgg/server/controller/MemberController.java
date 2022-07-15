@@ -34,7 +34,7 @@ public class MemberController {
      * @since 1.0.0
      */
     @GetMapping("/{memberId}/ggpass")
-    public ResponseEntity<LocalDateTime> checkPassUpdatedAt(@PathVariable final Long memberId) {
+    public ResponseEntity<LocalDateTime> retrievePassUpdatedAt(@PathVariable final Long memberId) {
         LocalDateTime check = memberService.retrievePassUpdatedAt(memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
