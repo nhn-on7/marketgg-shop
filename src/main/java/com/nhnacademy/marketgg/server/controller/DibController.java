@@ -38,12 +38,12 @@ public class DibController {
                              .build();
     }
 
-    @GetMapping("{memberId}")
+    @GetMapping("/{memberId}")
     ResponseEntity<List<DibRetrieveResponse>> retrieveDibs(@PathVariable Long memberId) {
         List<DibRetrieveResponse> dibResponses = dibService.retrieveDibs(memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_DIB + memberId))
+                             .location(URI.create(DEFAULT_DIB + "/" + memberId))
                              .body(dibResponses);
     }
 

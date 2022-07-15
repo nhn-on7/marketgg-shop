@@ -53,17 +53,16 @@ public class DibControllerTest {
         verify(dibService, times(1)).createDib(any(DibCreateRequest.class));
     }
 
-    // @Test
-    // @DisplayName("찜 조회")
-    // void testRetrieveDibs() throws Exception {
-    //     doNothing().when()
-    //     when(dibService.retrieveDibs(anyLong())).thenReturn(List.of());
-    //
-    //     this.mockMvc.perform(get("/shop/v1/dips/" + anyLong()))
-    //             .andExpect(status().isOk());
-    //
-    //     verify(dibService, times(1)).retrieveDibs(anyLong());
-    // }
+    @Test
+    @DisplayName("찜 조회")
+    void testRetrieveDibs() throws Exception {
+        when(dibService.retrieveDibs(1L)).thenReturn(List.of());
+
+        this.mockMvc.perform(get("/shop/v1/dibs/" + 1L))
+                .andExpect(status().isOk());
+
+        verify(dibService, times(1)).retrieveDibs(anyLong());
+    }
 
     @Test
     @DisplayName("찜 삭제")

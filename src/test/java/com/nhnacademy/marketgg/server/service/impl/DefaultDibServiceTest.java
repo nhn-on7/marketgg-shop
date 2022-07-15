@@ -39,7 +39,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -73,8 +72,8 @@ public class DefaultDibServiceTest {
 
         member = new Member(new MemberCreateRequest(), new MemberGrade(new MemberGradeCreateRequest()));
         product = new Product(new ProductCreateRequest(), Asset.create(),
-                                      new Category(new CategoryCreateRequest(),
-                                                   new Categorization(new CategorizationCreateRequest())));
+                              new Category(new CategoryCreateRequest(),
+                                           new Categorization(new CategorizationCreateRequest())));
 
         ReflectionTestUtils.setField(dibCreateRequest, "memberNo", 1L);
         ReflectionTestUtils.setField(dibCreateRequest, "productNo", 1L);
@@ -149,5 +148,5 @@ public class DefaultDibServiceTest {
 
         assertThatThrownBy(() -> dibService.deleteDib(dibDeleteRequest)).isInstanceOf(DibNotFoundException.class);
     }
-    
+
 }
