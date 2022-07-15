@@ -12,8 +12,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
+/**
+ * 자원 엔티티입니다.
+ *
+ * @version 1.0.0
+ */
 @Table(name = "assets")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
