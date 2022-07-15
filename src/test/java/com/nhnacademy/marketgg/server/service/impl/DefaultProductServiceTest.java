@@ -85,7 +85,7 @@ class DefaultProductServiceTest {
         productResponse = new ProductResponse() {
 
             @Override
-            public Long getProductNo() {
+            public Long getId() {
                 return null;
             }
 

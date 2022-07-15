@@ -56,7 +56,7 @@ public class DibController {
      * @since 1.0.0
      */
     @GetMapping("/{memberId}")
-    ResponseEntity<List<DibRetrieveResponse>> retrieveDibs(@PathVariable Long memberId) {
+    ResponseEntity<List<DibRetrieveResponse>> retrieveDibs(@PathVariable final Long memberId) {
         List<DibRetrieveResponse> dibResponses = dibService.retrieveDibs(memberId);
 
         return ResponseEntity.status(HttpStatus.OK)

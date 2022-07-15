@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public interface ProductResponse {
 
-    Long getProductNo();
+    Long getId();
 
     Asset getAsset();
 

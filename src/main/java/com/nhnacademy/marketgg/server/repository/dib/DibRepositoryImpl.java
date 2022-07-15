@@ -21,8 +21,8 @@ public class DibRepositoryImpl extends QuerydslRepositorySupport implements DibR
         QProduct product = QProduct.product;
 
         return from(dib)
-                .innerJoin(dib.member).on(dib.member.memberNo.eq(memberId))
-                .innerJoin(dib.product).on(dib.product.productNo.eq(product.productNo))
+                .innerJoin(dib.member).on(dib.member.id.eq(memberId))
+                .innerJoin(dib.product).on(dib.product.id.eq(product.id))
                 .where(dib.pk.memberNo.eq(memberId))
                 .select(Projections.bean(DibRetrieveResponse.class,
                                          dib.product.name,
