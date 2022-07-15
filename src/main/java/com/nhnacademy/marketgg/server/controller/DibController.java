@@ -61,10 +61,10 @@ public class DibController {
     }
 
     /**
-     * 로그인한 회원의 찜 목록을 조회하는 Mapping 을 지원합니다.
+     * 회원의 찜 목록을 조회하는 Mapping 을 지원합니다.
      *
-     * @param memberId - 로그인한 회원의 회원번호 입니다.
-     * @return 로그인한 회원의 찜 목록을 List 로 반환합니다.
+     * @param memberId - 회원의 회원번호 입니다.
+     * @return 회원의 찜 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
     @GetMapping("/{memberId}")
