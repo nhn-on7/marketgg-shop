@@ -1,20 +1,9 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -33,7 +22,7 @@ public class ProductInquiryPost {
     private Product product;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "member_no")
     private Member member;
 
     @Column
@@ -53,6 +42,7 @@ public class ProductInquiryPost {
 
     @Embeddable
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
     @Getter
     @EqualsAndHashCode
     public static class Pk implements Serializable {
@@ -64,6 +54,16 @@ public class ProductInquiryPost {
         @Column(name = "product_no")
         private Long productNo;
 
+    }
+
+    public ProductInquiryPost(Product product, Member member, ProductInquiryRequest inquiryRequest) {
+        this.pk.productNo = product.getProductNo();
+        this.product = product;
+        this.member = member;
+        this.title = inquiryRequest.getTitle();
+        this.content = inquiryRequest.getContent();
+        this.isSecret = inquiryRequest.getIsSecret();
+        this.createdAt = LocalDateTime.now();
     }
 
 }

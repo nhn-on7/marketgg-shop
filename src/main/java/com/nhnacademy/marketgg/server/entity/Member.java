@@ -34,13 +34,7 @@ public class Member {
     private String email;
 
     @Column
-    private String name;
-
-    @Column(name = "phone_number")
-    private String phoneNumber;
-
-    @Column
-    private Character Gender;
+    private Character gender;
 
     @Column(name = "birth_date")
     private LocalDate birthDate;

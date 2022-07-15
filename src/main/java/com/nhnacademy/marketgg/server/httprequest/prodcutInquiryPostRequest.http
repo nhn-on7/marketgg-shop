@@ -1,0 +1,31 @@
+POST http://localhost:7080/shop/v1/products/1/inquiries HTTP/1.1
+Content-Type: application/json
+
+{
+  "memberId" : 1,
+  "title" : "상품 문의",
+  "content" : "문의 내용",
+  "isSecret" : 0
+}
+
+###
+
+GET http://localhost:7080/shop/v1/products/1/inquiries
+Content-Type: application/json
+
+###
+
+GET http://localhost:7080/shop/v1/mygg/product-inquiries/1
+Content-Type: application/json
+
+###
+
+PUT http://localhost:7080/shop/v1/admin/products/1/inquiries/1
+Content-Type: application/json
+
+###
+
+DELETE http://localhost:7080/shop/v1/admin/products/1/inquiries/1
+Content-Type: application/json
+
+###

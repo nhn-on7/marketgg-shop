@@ -29,11 +29,8 @@ import java.util.List;
 public class DefaultProductService implements ProductService {
 
     private final ProductRepository productRepository;
-
     private final CategoryRepository categoryRepository;
-
     private final AssetRepository assetRepository;
-
     private final ImageRepository imageRepository;
 
     @Value("${uploadPath}")
