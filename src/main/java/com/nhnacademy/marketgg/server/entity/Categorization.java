@@ -10,6 +10,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * 카테고리 분류 Entity 입니다.
+ *
+ * @version 1.0.0
+ */
 @Table(name = "categorizations")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,6 +31,12 @@ public class Categorization {
     @Column(nullable = false)
     private String alias;
 
+    /**
+     * 카테고리 분류표를 생성하기 위한 생성자입니다.
+     *
+     * @param categorizationRequest - 카테고리 분류표를 생성하기 위한 DTO 입니다.
+     * @since 1.0.0
+     */
     public Categorization(CategorizationCreateRequest categorizationRequest) {
         this.categorizationCode = categorizationRequest.getCategorizationCode();
         this.name = categorizationRequest.getName();

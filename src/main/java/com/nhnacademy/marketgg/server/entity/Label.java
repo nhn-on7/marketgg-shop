@@ -12,6 +12,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 라벨 Entity 입니다.
+ *
+ * @version 1.0.0
+ */
 @Table(name = "labels")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,6 +31,12 @@ public class Label {
     @Column
     private String name;
 
+    /**
+     * 라벨을 생성하기 위한 생성자입니다.
+     *
+     * @param labelCreateRequest - 라벨을 생성하기 위한 DTO 입니다.
+     * @since 1.0.0
+     */
     public Label(LabelCreateRequest labelCreateRequest) {
         this.name = labelCreateRequest.getName();
     }

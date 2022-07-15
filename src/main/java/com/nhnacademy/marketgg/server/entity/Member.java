@@ -3,6 +3,10 @@ package com.nhnacademy.marketgg.server.entity;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +19,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 회원 Entity 입니다.
+ *
+ * @version 1.0.0
+ */
 @Table(name = "members")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -51,6 +60,12 @@ public class Member {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    /**
+     * 회원을 생성하기 위한 생성자입니다.
+     *
+     * @param memberRequest - 회원을 생성하기 위한 DTO 입니다.
+     * @since 1.0.0
+     */
     public Member(MemberCreateRequest memberRequest) {
         this.memberGrade = memberRequest.getMemberGrade();
         this.email = memberRequest.getEmail();
@@ -62,7 +77,12 @@ public class Member {
         this.deletedAt = memberRequest.getDeletedAt();
     }
 
-    public void passJoin() {
+    /**
+     * 회원이 GG 패스에 구독하기 위한 메소드입니다.
+     *
+     * @since 1.0.0
+     */
+    public void passSubscribe() {
         this.ggpassUpdatedAt = (LocalDateTime.now()).plusMonths(1);
     }
 

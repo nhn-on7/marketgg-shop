@@ -25,12 +25,12 @@ public class DefaultCategoryService implements CategoryService {
 
     @Transactional
     @Override
-    public void createCategory(final CategoryCreateRequest categoryCreateRequest) {
+    public void createCategory(final CategoryCreateRequest createRequest) {
         Categorization categorization =
-                categorizationRepository.findById(categoryCreateRequest.getCategorizationCode())
+                categorizationRepository.findById(createRequest.getCategorizationCode())
                                         .orElseThrow(CategorizationNotFoundException::new);
 
-        Category category = new Category(categoryCreateRequest, categorization);
+        Category category = new Category(createRequest, categorization);
 
         categoryRepository.save(category);
     }

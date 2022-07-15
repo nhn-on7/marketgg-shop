@@ -30,11 +30,13 @@ class DefaultMemberServiceTest {
     MemberRepository memberRepository;
 
     private Member member;
+    private Member noPassMember;
 
     @BeforeEach
     void setUp() {
         MemberCreateRequest memberRequest = new MemberCreateRequest();
         member = new Member(memberRequest);
+        noPassMember = new Member(memberRequest);
 
         ReflectionTestUtils.setField(member, "ggpassUpdatedAt",
                                      LocalDateTime.of(2019, 3, 11, 7, 10));
@@ -45,9 +47,19 @@ class DefaultMemberServiceTest {
     void checkPassUpdatedAt() {
         when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
 
-        Boolean date = memberService.checkPassUpdatedAt(1L);
+        LocalDateTime date = memberService.retrievePassUpdatedAt(1L);
 
-        assertThat(date).isTrue();
+        assertThat(date.isBefore(LocalDateTime.now())).isTrue();
+    }
+
+    @Test
+    @DisplayName("GG 패스 갱신일 null 일시")
+    void checkPassUpdatedAtIsNull() {
+        when(memberRepository.findById(anyLong())).thenReturn(Optional.of(noPassMember));
+
+        LocalDateTime date = memberService.retrievePassUpdatedAt(1L);
+
+        assertThat(date.getDayOfYear()).isEqualTo(1);
     }
 
     @Test
@@ -55,7 +67,7 @@ class DefaultMemberServiceTest {
     void joinPass() {
         when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
 
-        memberService.joinPass(1L);
+        memberService.subscribePass(1L);
 
         assertThat(member.getGgpassUpdatedAt()).isAfter(LocalDateTime.now());
     }

@@ -34,7 +34,7 @@ public class DefaultLabelService implements LabelService {
     @Transactional
     @Override
     public void deleteLabel(final Long id) {
-        Label label = labelRepository.findById(id).orElseThrow(()->new LabelNotFoundException("라벨을 찾을 수 없습니다."));
+        Label label = labelRepository.findById(id).orElseThrow(LabelNotFoundException::new);
 
         labelRepository.delete(label);
     }
