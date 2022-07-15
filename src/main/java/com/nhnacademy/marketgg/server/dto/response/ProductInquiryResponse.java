@@ -1,10 +1,12 @@
 package com.nhnacademy.marketgg.server.dto.response;
 
+import com.nhnacademy.marketgg.server.entity.Member;
+
 import java.time.LocalDateTime;
 
 public interface ProductInquiryResponse {
 
-    String getMember();
+    Member getMember();
 
     String getTitle();
 

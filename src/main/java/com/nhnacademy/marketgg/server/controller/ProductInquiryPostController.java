@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.nhnacademy.marketgg.server.dto.request.ProductInquiryReply;
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.service.ProductInquiryPostService;
@@ -60,10 +61,11 @@ public class ProductInquiryPostController {
     }
 
     @PutMapping("/admin/products/{productId}/inquiries/{inquiryId}")
-    public ResponseEntity<Void> updateProductInquiryReply(@PathVariable final Long productId,
+    public ResponseEntity<Void> updateProductInquiryReply(@RequestBody final ProductInquiryReply inquiryReply,
+                                                          @PathVariable final Long productId,
                                                           @PathVariable final Long inquiryId) {
 
-        productInquiryPostService.updateProductInquiryReply(inquiryId, productId);
+        productInquiryPostService.updateProductInquiryReply(inquiryReply, inquiryId, productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(defaultInquiryUri +

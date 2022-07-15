@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table
+@Table(name = "member_grades")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter

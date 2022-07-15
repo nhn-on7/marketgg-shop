@@ -1,11 +1,13 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import com.nhnacademy.marketgg.server.dto.request.ProductInquiryReply;
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import com.nhnacademy.marketgg.server.exception.MemberNotFoundException;
+import com.nhnacademy.marketgg.server.exception.ProductInquiryPostNotFoundException;
 import com.nhnacademy.marketgg.server.exception.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.ProductInquiryPostRepository;
@@ -34,24 +36,28 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
         Product product = productRepository.findById(productId)
                                            .orElseThrow(() -> new ProductNotFoundException("해당 상품 번호를 찾을 수 없습니다."));
 
-        productInquiryPostRepository.save(new ProductInquiryPost(product, member, productInquiryRequest));
+        ProductInquiryPost inquiryPost = new ProductInquiryPost(product, member, productInquiryRequest);
+
+        productInquiryPostRepository.save(inquiryPost);
     }
 
     @Override
     public List<ProductInquiryResponse> retrieveProductInquiryByProductId(Long productId) {
-        return productInquiryPostRepository.findByProductProductNo(productId);
+        return productInquiryPostRepository.findALLByProductNo(productId);
     }
 
     @Override
     public List<ProductInquiryResponse> retrieveProductInquiryByMemberId(Long memberId) {
-        return productInquiryPostRepository.findByMember_MemberNo(memberId);
+        return productInquiryPostRepository.findAllByMemberNo(memberId);
     }
 
     @Override
     @Transactional
-    public void updateProductInquiryReply(Long inquiryId, Long productId) {
+    public void updateProductInquiryReply(ProductInquiryReply inquiryReply, Long inquiryId, Long productId) {
+        ProductInquiryPost inquiryPost = productInquiryPostRepository.findById(new ProductInquiryPost.Pk(inquiryId, productId))
+                                                                     .orElseThrow(() -> new ProductInquiryPostNotFoundException("해당 문의 번호를 찾을 수 없습니다."));
 
-        productInquiryPostRepository.findById(new ProductInquiryPost.Pk(inquiryId, productId));
+        inquiryPost.updateInquiry(inquiryReply);
     }
 
     @Override

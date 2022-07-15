@@ -30,59 +30,59 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_no", nullable = false)
+    @Column(name = "product_no")
     private Long productNo;
 
     @OneToOne
-    @JoinColumn(name = "asset_no", nullable = false)
+    @JoinColumn(name = "asset_no")
     private Asset asset;
 
     @ManyToOne
-    @JoinColumn(name = "category_code", nullable = false)
+    @JoinColumn(name = "category_code")
     private Category category;
 
-    @Column(nullable = false)
+    @Column
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String content;
 
-    @Column(name = "total_stock", nullable = false)
+    @Column(name = "total_stock")
     private Long totalStock;
 
-    @Column(nullable = false)
+    @Column
     private Long price;
 
-    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    @Column
     private String description;
 
-    @Column(nullable = false)
+    @Column
     private String unit;
 
-    @Column(name = "delivery_type", nullable = false)
+    @Column(name = "delivery_type")
     private String deliveryType;
 
-    @Column(nullable = false)
+    @Column
     private String origin;
 
-    @Column(name = "package_type", nullable = false)
+    @Column(name = "package_type")
     private String packageType;
 
-    @Column(name = "expiration_date", nullable = false)
+    @Column(name = "expiration_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate expirationDate;
 
-    @Column(name = "allergy_info", nullable = false)
+    @Column(name = "allergy_info")
     private String allergyInfo;
 
-    @Column(nullable = false)
+    @Column
     private String capacity;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime updatedAt;
 

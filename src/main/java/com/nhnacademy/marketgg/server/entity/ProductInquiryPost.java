@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.dto.request.ProductInquiryReply;
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
 import lombok.*;
 
@@ -18,7 +19,7 @@ public class ProductInquiryPost {
 
     @MapsId(value = "productNo")
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "product_no")
     private Product product;
 
     @ManyToOne
@@ -54,16 +55,23 @@ public class ProductInquiryPost {
         @Column(name = "product_no")
         private Long productNo;
 
+        public Pk(Long productNo) {
+            this.productNo = productNo;
+        }
     }
 
     public ProductInquiryPost(Product product, Member member, ProductInquiryRequest inquiryRequest) {
-        this.pk.productNo = product.getProductNo();
+        this.pk = new Pk(product.getProductNo());
         this.product = product;
         this.member = member;
         this.title = inquiryRequest.getTitle();
         this.content = inquiryRequest.getContent();
         this.isSecret = inquiryRequest.getIsSecret();
         this.createdAt = LocalDateTime.now();
+    }
+
+    public void updateInquiry(ProductInquiryReply inquiryReply) {
+        this.adminReply = inquiryReply.getAdminReply();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.service;
 
+import com.nhnacademy.marketgg.server.dto.request.ProductInquiryReply;
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
 
@@ -13,7 +14,7 @@ public interface ProductInquiryPostService {
 
     List<ProductInquiryResponse> retrieveProductInquiryByMemberId(Long memberId);
 
-    void updateProductInquiryReply(Long inquiryId, Long productId);
+    void updateProductInquiryReply(ProductInquiryReply inquiryReply, Long inquiryId, Long productId);
 
     void deleteProductInquiry(Long inquiryId, Long productId);
 }
