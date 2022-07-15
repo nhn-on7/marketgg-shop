@@ -225,8 +225,8 @@ class DefaultProductServiceTest {
         Optional<Product> product = Optional.of(new Product(productRequest, asset, category));
         productService.createProduct(productRequest, file);
 
-        assertThat(productRepository.findById(1L).get().getProductNo()).isEqualTo(
-            product.get().getProductNo());
+        assertThat(productRepository.findById(1L).get().getId()).isEqualTo(
+            product.get().getId());
         verify(productRepository, atLeastOnce()).save(any());
         verify(categoryRepository, atLeastOnce()).findById(any());
         verify(imageRepository, atLeastOnce()).save(any());
@@ -258,11 +258,11 @@ class DefaultProductServiceTest {
     @Test
     @DisplayName("상품 상세 조회 테스트")
     void testRetrieveProductDetails() {
-        when(productRepository.queryByProductNo(anyLong())).thenReturn(productResponse);
+        when(productRepository.queryById(anyLong())).thenReturn(productResponse);
 
         ProductResponse productResponse = productService.retrieveProductDetails(anyLong());
         assertThat(productResponse).isNotNull();
-        verify(productRepository, atLeastOnce()).queryByProductNo(anyLong());
+        verify(productRepository, atLeastOnce()).queryById(anyLong());
     }
 
     // @Test

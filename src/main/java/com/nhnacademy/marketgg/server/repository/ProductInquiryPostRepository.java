@@ -9,10 +9,10 @@ import java.util.List;
 
 public interface ProductInquiryPostRepository extends JpaRepository<ProductInquiryPost, ProductInquiryPost.Pk> {
 
-    @Query("SELECT pir FROM ProductInquiryPost pir WHERE pir.product.productNo = :id")
+    @Query("SELECT pir FROM ProductInquiryPost pir WHERE pir.product.id = :id")
     List<ProductInquiryResponse> findALLByProductNo(Long id);
 
-    @Query("SELECT pir from ProductInquiryPost pir WHERE pir.member.memberNo = :id")
+    @Query("SELECT pir from ProductInquiryPost pir WHERE pir.member.id = :id")
     List<ProductInquiryResponse> findAllByMemberNo(Long id);
 
 }

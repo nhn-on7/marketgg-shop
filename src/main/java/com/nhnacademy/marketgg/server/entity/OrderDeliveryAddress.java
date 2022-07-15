@@ -28,7 +28,7 @@ public class OrderDeliveryAddress implements Serializable {
 
     @MapsId(value = "orderNo")
     @OneToOne
-    @JoinColumn
+    @JoinColumn(name = "order_no")
     private Order order;
 
     @ManyToOne

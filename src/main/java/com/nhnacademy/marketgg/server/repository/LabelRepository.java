@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface LabelRepository extends JpaRepository<Label, Long> {
 
-    @Query("SELECT l.labelNo AS labelNo, " +
+    @Query("SELECT l.id AS labelNo, " +
             "l.name AS name " +
             "FROM Label l")
     List<LabelRetrieveResponse> findAllLabels();

@@ -42,7 +42,7 @@ public class DefaultDibService implements DibService {
      */
     @Transactional
     @Override
-    public void createDib(DibCreateRequest dibCreateRequest) {
+    public void createDib(final DibCreateRequest dibCreateRequest) {
         Member member = memberRepository.findById(dibCreateRequest.getMemberNo())
                                         .orElseThrow(MemberNotFoundException::new);
         Product product = productRepository.findById(dibCreateRequest.getProductNo())
@@ -61,7 +61,7 @@ public class DefaultDibService implements DibService {
      */
     @Transactional
     @Override
-    public List<DibRetrieveResponse> retrieveDibs(Long memberId) {
+    public List<DibRetrieveResponse> retrieveDibs(final Long memberId) {
         return dibRepository.findAllDibs(memberId);
     }
 
@@ -72,7 +72,7 @@ public class DefaultDibService implements DibService {
      */
     @Transactional
     @Override
-    public void deleteDib(DibDeleteRequest dibDeleteRequest) {
+    public void deleteDib(final DibDeleteRequest dibDeleteRequest) {
         Dib dib = dibRepository.findById(new Dib.Pk(dibDeleteRequest.getMemberNo(), dibDeleteRequest.getProductNo()))
                 .orElseThrow(DibNotFoundException::new);
 

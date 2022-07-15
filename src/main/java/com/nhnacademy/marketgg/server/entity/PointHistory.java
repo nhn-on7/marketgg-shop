@@ -23,7 +23,7 @@ public class PointHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "point_no")
-    private Long pointNo;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "member_no")

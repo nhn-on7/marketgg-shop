@@ -25,11 +25,11 @@ import javax.persistence.Table;
 public class Category {
 
     @Id
-    @Column(name = "category_code", nullable = false)
-    private String categoryCode;
+    @Column(name = "category_code")
+    private String id;
 
     @ManyToOne
-    @JoinColumn(name = "categorization_code", nullable = false)
+    @JoinColumn(name = "categorization_code")
     private Categorization categorization;
 
     @Column(nullable = false)
@@ -47,7 +47,7 @@ public class Category {
      * @since 1.0.0
      */
     public Category(final CategoryCreateRequest categoryCreateRequest, final Categorization categorization) {
-        this.categoryCode = categoryCreateRequest.getCategoryCode();
+        this.id = categoryCreateRequest.getCategoryCode();
         this.categorization = categorization;
         this.name = categoryCreateRequest.getName();
         this.sequence = categoryCreateRequest.getSequence();

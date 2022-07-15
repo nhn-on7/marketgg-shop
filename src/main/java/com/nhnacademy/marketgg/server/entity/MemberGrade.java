@@ -20,7 +20,7 @@ public class MemberGrade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_grade_no")
-    private Long memberGradeNo;
+    private Long id;
 
     @Column
     private String grade;

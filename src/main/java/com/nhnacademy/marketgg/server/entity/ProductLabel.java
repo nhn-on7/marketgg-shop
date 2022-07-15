@@ -28,12 +28,12 @@ public class ProductLabel {
 
     @MapsId(value = "productNo")
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "product_no")
     private Product product;
 
     @MapsId(value = "labelNo")
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "label_no")
     private Label label;
 
     @Embeddable

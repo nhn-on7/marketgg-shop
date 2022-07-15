@@ -64,7 +64,7 @@ public class DefaultProductService implements ProductService {
 
     @Override
     public ProductResponse retrieveProductDetails(Long productId) {
-        return productRepository.queryByProductNo(productId);
+        return productRepository.queryById(productId);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class DefaultProductService implements ProductService {
     @Override
     public List<ProductResponse> searchProductByCategory(String categorizationCode,
                                                          String categoryCode) {
-        return productRepository.findByCategory_CategoryCodeAndCategory_Categorization_CategorizationCode(
+        return productRepository.findByCategory_IdAndCategory_Categorization_Id(
             categoryCode, categorizationCode);
     }
 

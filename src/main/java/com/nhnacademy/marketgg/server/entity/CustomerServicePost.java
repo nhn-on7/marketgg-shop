@@ -23,7 +23,7 @@ public class CustomerServicePost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cs_post_no")
-    private Long csPostNo;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "member_no")

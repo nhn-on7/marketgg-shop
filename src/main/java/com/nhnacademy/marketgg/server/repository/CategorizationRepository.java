@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface CategorizationRepository extends JpaRepository<Categorization, String> {
 
-    @Query("SELECT cz.categorizationCode AS categorizationCode, " +
+    @Query("SELECT cz.id AS categorizationCode, " +
             "cz.name AS name " +
             "FROM Categorization cz")
     List<CategorizationRetrieveResponse> findAllCategorization();

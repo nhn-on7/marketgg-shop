@@ -27,7 +27,7 @@ public class UsedCoupon {
 
     @MapsId(value = "orderNo")
     @OneToOne
-    @JoinColumn
+    @JoinColumn(name = "order_no")
     private Order order;
 
     @OneToOne

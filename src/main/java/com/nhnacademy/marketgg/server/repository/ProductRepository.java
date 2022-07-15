@@ -23,11 +23,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     /**
      * DB에서 PK값이 같은 상품을 찾아 반환 합니다.
      *
-     * @param productId - 상품의 PK 값 입니다.
+     * @param id - 상품의 PK 값 입니다.
      * @return 상품DTO를 반환합니다.
      * @since 1.0.0
      */
-    ProductResponse queryByProductNo(Long productId);
+    ProductResponse queryById(final Long id);
 
     /**
      * DB에서 상품 이름 속성에 keyword가 포함된 모든 상품을 찾아 반환합니다.
@@ -36,7 +36,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      * @return - 상품 목록을 반환합니다.
      * @since 1.0.0
      */
-    List<ProductResponse> findByNameContaining(String keyword);
+    List<ProductResponse> findByNameContaining(final String keyword);
 
     /**
      * DB에서 카테고리에 해당하는 모든 상품을 찾아 반환합니다.
@@ -46,7 +46,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      * @param categoryCode - 카테고리 2차 분류입니다. ex) 101 - 채소
      * @return - 상품 목록을 반환합니다.
      */
-    List<ProductResponse> findByCategory_CategoryCodeAndCategory_Categorization_CategorizationCode(
-        String categorizationCode, String categoryCode);
+    List<ProductResponse> findByCategory_IdAndCategory_Categorization_Id(
+            final String categorizationCode, final String categoryCode);
 
 }

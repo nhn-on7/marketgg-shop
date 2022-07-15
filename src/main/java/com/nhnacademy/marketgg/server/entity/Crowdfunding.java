@@ -21,7 +21,7 @@ public class Crowdfunding {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "crowdfunding_no")
-    private Long crowdfundingNo;
+    private Long id;
 
     @Column(name = "current_amount")
     private Long currentAmount;

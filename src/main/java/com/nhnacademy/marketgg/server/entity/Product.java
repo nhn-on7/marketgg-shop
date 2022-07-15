@@ -32,7 +32,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_no")
-    private Long productNo;
+    private Long id;
 
     @OneToOne
     @JoinColumn(name = "asset_no")

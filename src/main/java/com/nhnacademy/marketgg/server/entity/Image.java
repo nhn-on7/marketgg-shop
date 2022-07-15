@@ -27,7 +27,7 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_no")
-    private Long imageNo;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "asset_no")

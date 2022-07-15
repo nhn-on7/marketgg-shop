@@ -22,7 +22,7 @@ public class FundingProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "funding_product_no")
-    private Long fundingProductNo;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "product_no")

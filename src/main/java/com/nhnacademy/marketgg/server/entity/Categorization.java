@@ -22,8 +22,8 @@ import javax.persistence.Table;
 public class Categorization {
 
     @Id
-    @Column(name = "categorization_code", nullable = false)
-    private String categorizationCode;
+    @Column(name = "categorization_code")
+    private String id;
 
     @Column(nullable = false)
     private String name;
@@ -38,7 +38,7 @@ public class Categorization {
      * @since 1.0.0
      */
     public Categorization(CategorizationCreateRequest categorizationRequest) {
-        this.categorizationCode = categorizationRequest.getCategorizationCode();
+        this.id = categorizationRequest.getCategorizationCode();
         this.name = categorizationRequest.getName();
         this.alias = categorizationRequest.getAlias();
     }

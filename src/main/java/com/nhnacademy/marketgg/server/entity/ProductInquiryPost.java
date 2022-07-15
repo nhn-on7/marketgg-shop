@@ -61,7 +61,7 @@ public class ProductInquiryPost {
     }
 
     public ProductInquiryPost(Product product, Member member, ProductInquiryRequest inquiryRequest) {
-        this.pk = new Pk(product.getProductNo());
+        this.pk = new Pk(product.getId());
         this.product = product;
         this.member = member;
         this.title = inquiryRequest.getTitle();

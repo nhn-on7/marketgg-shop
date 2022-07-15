@@ -25,14 +25,14 @@ public class Asset {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "asset_no", nullable = false)
-    private Long assetNo;
+    @Column(name = "asset_no")
+    private Long id;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime createAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime updateAt;
 
