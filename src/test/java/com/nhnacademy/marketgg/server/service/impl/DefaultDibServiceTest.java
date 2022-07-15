@@ -15,6 +15,7 @@ import com.nhnacademy.marketgg.server.entity.Dib;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.entity.Product;
+import com.nhnacademy.marketgg.server.exception.DibNotFoundException;
 import com.nhnacademy.marketgg.server.exception.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.MemberRepository;
@@ -102,7 +103,7 @@ public class DefaultDibServiceTest {
 
     @Test
     @DisplayName("찜 등록 실패(회원 존재 X)")
-    void testCreateDibFailWhenMemberNotFounded() {
+    void testCreateDibFailWhenMemberNotFound() {
         when(memberRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> dibService.createDib(dibCreateRequest)).isInstanceOf(MemberNotFoundException.class);
@@ -110,7 +111,7 @@ public class DefaultDibServiceTest {
 
     @Test
     @DisplayName("찜 등록 실패(상품 존재 X)")
-    void testCreateDibFailWhenProductNotFounded() {
+    void testCreateDibFailWhenProductNotFound() {
         when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
         when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -141,9 +142,12 @@ public class DefaultDibServiceTest {
         verify(dibRepository, times(1)).delete(any(Dib.class));
     }
 
-    // @Test
-    // @DisplayName("찜 삭제 실패(회원 존재 X)")
-    //
-    // @Test
-    // @DisplayName("찜 삭제 성공(상품 존재 X)")
+    @Test
+    @DisplayName("찜 삭제 실패(찜 존재 X)")
+    void testDeleteDibFailWhenMemberNotFound() {
+        when(dibRepository.findById(new Dib.Pk(1L, 1L))).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> dibService.deleteDib(dibDeleteRequest)).isInstanceOf(DibNotFoundException.class);
+    }
+    
 }
