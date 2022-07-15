@@ -19,15 +19,37 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.List;
 
+/**
+ * 찜 관리에 관련된 Rest Controller 입니다.
+ *
+ * @version 1.0.0
+ */
 @RestController
 @RequestMapping("/shop/v1/dibs")
 @RequiredArgsConstructor
 public class DibController {
 
+    /**
+     * 찜 서비스입니다.
+     *
+     * @since 1.0.0
+     */
     private final DibService dibService;
 
+    /**
+     * 이 Rest Controller 에서 사용되는 공통적인 URI 입니다.
+     *
+     * @since 1.0.0
+     */
     private static final String DEFAULT_DIB = "/shop/v1/dibs";
 
+    /**
+     * 입력한 정보로 찜을 등록하는 Mapping 을 지원합니다.
+     *
+     * @param dibCreateRequest - 찜을 등록하기 위한 DTO 입니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     * @since 1.0.0
+     */
     @PostMapping
     ResponseEntity<Void> createDib(@RequestBody final DibCreateRequest dibCreateRequest) {
         dibService.createDib(dibCreateRequest);
@@ -38,6 +60,13 @@ public class DibController {
                              .build();
     }
 
+    /**
+     * 로그인한 회원의 찜 목록을 조회하는 Mapping 을 지원합니다.
+     *
+     * @param memberId - 로그인한 회원의 회원번호 입니다.
+     * @return 로그인한 회원의 찜 목록을 List 로 반환합니다.
+     * @since 1.0.0
+     */
     @GetMapping("/{memberId}")
     ResponseEntity<List<DibRetrieveResponse>> retrieveDibs(@PathVariable Long memberId) {
         List<DibRetrieveResponse> dibResponses = dibService.retrieveDibs(memberId);
@@ -47,6 +76,12 @@ public class DibController {
                              .body(dibResponses);
     }
 
+    /**
+     * 선택한 찜을 삭제하는 Mapping 을 지원합니다.
+     *
+     * @param dibDeleteRequest - 삭제할 찜의 회원번호와 상품번호가 있는 DTO 입니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     */
     @DeleteMapping
     ResponseEntity<Void> deleteDib(@RequestBody final DibDeleteRequest dibDeleteRequest) {
         dibService.deleteDib(dibDeleteRequest);
