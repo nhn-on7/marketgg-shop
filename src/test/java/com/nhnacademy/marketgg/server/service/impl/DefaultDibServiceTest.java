@@ -15,6 +15,7 @@ import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.exception.MemberNotFoundException;
+import com.nhnacademy.marketgg.server.exception.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.dib.DibRepository;
@@ -90,20 +91,24 @@ public class DefaultDibServiceTest {
         verify(dibRepository, times(1)).save(any(Dib.class));
     }
 
-    // @Test
-    // @DisplayName("찜 등록 실패")
-    // void testCreateDibFail() throws Exception {
-    //     Product product = new Product(new ProductCreateRequest(), Asset.create(),
-    //                                   new Category(new CategoryCreateRequest(),
-    //                                                new Categorization(new CategorizationCreateRequest())));
-    //
-    //     ReflectionTestUtils.setField(product, "productNo", 1L);
-    //
-    //     when(memberRepository.findById(anyLong())).thenReturn(Optional.empty());
-    //     when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
-    //
-    //     assertThatThrownBy(() -> dibService.createDib(dibCreateRequest)).isInstanceOf(MemberNotFoundException.class);
-    // }
+    @Test
+    @DisplayName("찜 등록 실패(회원 존재 X)")
+    void testCreateDibFailWhenMemberNotFounded() {
+        when(memberRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> dibService.createDib(dibCreateRequest)).isInstanceOf(MemberNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("찜 등록 실패(상품 존재 X)")
+    void testCreateDibFailWhenProductNotFounded() {
+        Member member = new Member(new MemberCreateRequest(), new MemberGrade(new MemberGradeCreateRequest()));
+        
+        when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
+        when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> dibService.createDib(dibCreateRequest)).isInstanceOf(ProductNotFoundException.class);
+    }
 
     @Test
     @DisplayName("찜 조회 성공")
