@@ -27,11 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LabelController {
 
-    /**
-     * 라벨 서비스 입니다.
-     *
-     * @since 1.0.0
-     */
     private final LabelService labelService;
 
     /**

@@ -12,28 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * 라벨 서비스를 구현한 구현체입니다.
- *
- * @version 1.0.0
- */
 @Service
 @RequiredArgsConstructor
 public class DefaultLabelService implements LabelService {
 
-    /**
-     * 라벨 Repository 입니다.
-     *
-     * @since 1.0.0
-     */
     private final LabelRepository labelRepository;
 
-    /**
-     * 입력받은 정보로 라벨을 생성하기 위한 메소드입니다.
-     *
-     * @param labelCreateRequest - 라벨을 생성하기위한 정보를 담은 DTO 입니다.
-     * @since 1.0.0
-     */
     @Transactional
     @Override
     public void createLabel(final LabelCreateRequest labelCreateRequest) {
@@ -42,23 +26,11 @@ public class DefaultLabelService implements LabelService {
         labelRepository.save(label);
     }
 
-    /**
-     * 전체 라벨 목록을 반환하기 위한 메소드입니다.
-     *
-     * @return 전체 라벨 목록을 List 로 반환합니다.
-     * @since 1.0.0
-     */
     @Override
     public List<LabelRetrieveResponse> retrieveLabels() {
         return labelRepository.findAllLabels();
     }
 
-    /**
-     * 지정한 라벨을 삭제하기 위한 메소드입니다.
-     *
-     * @param id - 삭제할 라벨의 식별번호입니다.
-     * @since 1.0.0
-     */
     @Transactional
     @Override
     public void deleteLabel(final Long id) {

@@ -7,11 +7,6 @@ package com.nhnacademy.marketgg.server.exception.label;
  */
 public class LabelNotFoundException extends IllegalArgumentException {
 
-    /**
-     * 에러 메세지를 지정합니다.
-     *
-     * @since 1.0.0
-     */
     private static final String ERROR = "라벨을 찾을 수 없습니다.";
 
     /**

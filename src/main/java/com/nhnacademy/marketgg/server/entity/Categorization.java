@@ -21,28 +21,13 @@ import javax.persistence.Table;
 @Getter
 public class Categorization {
 
-    /**
-     * 카테고리 분류의 식별코드입니다.
-     *
-     * @since 1.0.0
-     */
     @Id
     @Column(name = "categorization_code")
     private String categorizationCode;
 
-    /**
-     * 카테고리 분류의 이름입니다.
-     *
-     * @since 1.0.0
-     */
     @Column
     private String name;
 
-    /**
-     * 카테고리 분류의 별칭입니다.
-     *
-     * @since 1.0.0
-     */
     @Column
     private String alias;
 

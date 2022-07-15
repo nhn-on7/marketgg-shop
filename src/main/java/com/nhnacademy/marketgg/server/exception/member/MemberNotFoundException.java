@@ -7,11 +7,6 @@ package com.nhnacademy.marketgg.server.exception.member;
  */
 public class MemberNotFoundException extends IllegalArgumentException {
 
-    /**
-     * 에러 메세지를 지정합니다.
-     *
-     * @since 1.0.0
-     */
     private static final String ERROR = "회원을 찾을 수 없습니다.";
 
     /**

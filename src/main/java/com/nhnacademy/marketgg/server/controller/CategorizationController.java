@@ -21,11 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CategorizationController {
 
-    /**
-     * 카테고리 분류 서비스입니다.
-     *
-     * @since 1.0.0
-     */
     private final CategorizationService categorizationService;
 
     /**

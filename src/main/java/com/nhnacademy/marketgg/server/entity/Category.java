@@ -24,37 +24,17 @@ import javax.persistence.Table;
 @Getter
 public class Category {
 
-    /**
-     * 카테고리의 식별코드 입니다.
-     *
-     * @since 1.0.0
-     */
     @Id
     @Column(name = "category_code")
     private String categoryCode;
 
-    /**
-     * 카테고리가 속할 카테고리 분류 입니다.
-     *
-     * @since 1.0.0
-     */
     @ManyToOne
     @JoinColumn(name = "categorization_code")
     private Categorization categorization;
 
-    /**
-     * 카테고리의 이름입니다.
-     *
-     * @since 1.0.0
-     */
     @Column
     private String name;
 
-    /**
-     * 카테고리의 순서위치를 지정받을 순서입니다.
-     *
-     * @since 1.0.0
-     */
     @Column
     private Integer sequence;
 
