@@ -28,25 +28,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DefaultDibService implements DibService {
 
-    /**
-     * 찜 Repository 입니다.
-     *
-     * @since 1.0.0
-     */
     private final DibRepository dibRepository;
 
-    /**
-     * 회원 Repository 입니다.
-     *
-     * @since 1.0.0
-     */
     private final MemberRepository memberRepository;
 
-    /**
-     * 상품 Repository 입니다.
-     *
-     * @since 1.0.0
-     */
     private final ProductRepository productRepository;
 
     /**

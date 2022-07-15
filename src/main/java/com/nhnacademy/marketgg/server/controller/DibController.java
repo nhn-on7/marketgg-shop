@@ -28,19 +28,7 @@ import java.util.List;
 @RequestMapping("/shop/v1/dibs")
 @RequiredArgsConstructor
 public class DibController {
-
-    /**
-     * 찜 서비스입니다.
-     *
-     * @since 1.0.0
-     */
     private final DibService dibService;
-
-    /**
-     * 이 Rest Controller 에서 사용되는 공통적인 URI 입니다.
-     *
-     * @since 1.0.0
-     */
     private static final String DEFAULT_DIB = "/shop/v1/dibs";
 
     /**

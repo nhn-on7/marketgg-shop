@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,5 +57,10 @@ public class Member {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    // TODO: DibService Test 를 위해 임시로 작성한 코드입니다. 추후 수정하거나 삭제해주세요!
+    public Member(final MemberCreateRequest memberCreateRequest, final MemberGrade memberGrade) {
+
+    }
 
 }
