@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.DibCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.DibDeleteRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberGradeCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
@@ -38,6 +39,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -59,28 +61,35 @@ public class DefaultDibServiceTest {
     ProductRepository productRepository;
 
     private static DibCreateRequest dibCreateRequest;
+    private static DibDeleteRequest dibDeleteRequest;
+    private static Member member;
+    private static Product product;
 
     @BeforeAll
     static void beforeAll() {
         dibCreateRequest = new DibCreateRequest();
+        dibDeleteRequest = new DibDeleteRequest();
+
+        member = new Member(new MemberCreateRequest(), new MemberGrade(new MemberGradeCreateRequest()));
+        product = new Product(new ProductCreateRequest(), Asset.create(),
+                                      new Category(new CategoryCreateRequest(),
+                                                   new Categorization(new CategorizationCreateRequest())));
 
         ReflectionTestUtils.setField(dibCreateRequest, "memberNo", 1L);
         ReflectionTestUtils.setField(dibCreateRequest, "productNo", 1L);
         ReflectionTestUtils.setField(dibCreateRequest, "memo", "memoSample");
         ReflectionTestUtils.setField(dibCreateRequest, "createdAt", LocalDateTime.now());
+
+        ReflectionTestUtils.setField(dibDeleteRequest, "memberNo", 1L);
+        ReflectionTestUtils.setField(dibDeleteRequest, "productNo", 1L);
+
+        ReflectionTestUtils.setField(member, "memberNo", 1L);
+        ReflectionTestUtils.setField(product, "productNo", 1L);
     }
 
     @Test
     @DisplayName("찜 등록 성공")
     void testCreateDibSuccess() {
-        Member member = new Member(new MemberCreateRequest(), new MemberGrade(new MemberGradeCreateRequest()));
-        Product product = new Product(new ProductCreateRequest(), Asset.create(),
-                                      new Category(new CategoryCreateRequest(),
-                                                   new Categorization(new CategorizationCreateRequest())));
-
-        ReflectionTestUtils.setField(member, "memberNo", 1L);
-        ReflectionTestUtils.setField(product, "productNo", 1L);
-
         when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
         when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
 
@@ -102,8 +111,6 @@ public class DefaultDibServiceTest {
     @Test
     @DisplayName("찜 등록 실패(상품 존재 X)")
     void testCreateDibFailWhenProductNotFounded() {
-        Member member = new Member(new MemberCreateRequest(), new MemberGrade(new MemberGradeCreateRequest()));
-        
         when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
         when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -112,11 +119,31 @@ public class DefaultDibServiceTest {
 
     @Test
     @DisplayName("찜 조회 성공")
-    void testRetrieveDib() throws Exception {
+    void testRetrieveDib() {
         when(dibRepository.findAllDibs(1L)).thenReturn(List.of());
 
         List<DibRetrieveResponse> dibResponses = dibService.retrieveDibs(1L);
 
         assertThat(dibResponses).isInstanceOf(List.class);
     }
+
+    @Test
+    @DisplayName("찜 삭제 성공")
+    void testDeleteDibSuccess() {
+        Dib dib = new Dib(dibCreateRequest, member, product);
+
+        when(dibRepository.findById(new Dib.Pk(1L, 1L))).thenReturn(Optional.of(dib));
+
+        doNothing().when(dibRepository).delete(any(Dib.class));
+
+        dibService.deleteDib(dibDeleteRequest);
+
+        verify(dibRepository, times(1)).delete(any(Dib.class));
+    }
+
+    // @Test
+    // @DisplayName("찜 삭제 실패(회원 존재 X)")
+    //
+    // @Test
+    // @DisplayName("찜 삭제 성공(상품 존재 X)")
 }
