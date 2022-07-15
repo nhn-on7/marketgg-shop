@@ -45,6 +45,7 @@ public class ProductController {
      */
     private static final String DEFAULT_PRODUCT = "/admin/v1/products";
 
+
     /**
      * 상품 생성을 위한 PostMapping 을 지원합니다.
      *
@@ -91,7 +92,7 @@ public class ProductController {
      * @since 1.0.0
      */
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductResponse> retrieveProductDetails(@PathVariable Long productId) {
+    public ResponseEntity<ProductResponse> retrieveProductDetails(@PathVariable final Long productId) {
         ProductResponse productDetails = productService.retrieveProductDetails(productId);
 
         return ResponseEntity.status(HttpStatus.OK)

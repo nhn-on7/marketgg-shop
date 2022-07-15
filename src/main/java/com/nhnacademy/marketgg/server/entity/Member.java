@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Table
+@Table(name = "members")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -32,12 +32,6 @@ public class Member {
 
     @Column
     private String email;
-
-    @Column
-    private String name;
-
-    @Column(name = "phone_number")
-    private String phoneNumber;
 
     @Column
     private Character gender;
