@@ -2,6 +2,8 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.service.MemberService;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,23 +24,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberController {
 
-    /**
-     * 회원 서비스입니다.
-     *
-     * @since 1.0.0
-     */
     private final MemberService memberService;
 
     /**
-     * 선택한 회원의 GG 패스 갱신일시와 현재일시를 비교하는 Mapping 을 지원합니다.
+     * 선택한 회원의 GG 패스 갱신일시를 반환하는 Mapping 을 지원합니다.
      *
-     * @param memberId - GG 패스 갱신일자를 확인 할 회원의 식별번호입니다.
-     * @return 선택한 회원의 GG 패스 갱신일이 현재시간보다 이후 시간이면 TRUE 를 반환, 아니면 False 를 반환합니다.
+     * @param memberId - GG 패스 갱신일시를 확인 할 회원의 식별번호입니다.
+     * @return 선택한 회원의 GG 패스 갱신일을 반환합니다.
      * @since 1.0.0
      */
     @GetMapping("/{memberId}/ggpass")
-    public ResponseEntity<Boolean> checkPassUpdatedAt(@PathVariable final Long memberId) {
-        Boolean check = memberService.checkPassUpdatedAt(memberId);
+    public ResponseEntity<LocalDateTime> checkPassUpdatedAt(@PathVariable final Long memberId) {
+        LocalDateTime check = memberService.retrievePassUpdatedAt(memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .location(URI.create("/shop/v1/members/" + memberId + "/ggpass"))

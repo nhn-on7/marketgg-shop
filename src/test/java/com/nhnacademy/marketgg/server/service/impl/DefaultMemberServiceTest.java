@@ -47,9 +47,9 @@ class DefaultMemberServiceTest {
     void checkPassUpdatedAt() {
         when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
 
-        Boolean date = memberService.checkPassUpdatedAt(1L);
+        LocalDateTime date = memberService.retrievePassUpdatedAt(1L);
 
-        assertThat(date).isFalse();
+        assertThat(date.isBefore(LocalDateTime.now())).isTrue();
     }
 
     @Test
@@ -57,9 +57,9 @@ class DefaultMemberServiceTest {
     void checkPassUpdatedAtIsNull() {
         when(memberRepository.findById(anyLong())).thenReturn(Optional.of(noPassMember));
 
-        Boolean date = memberService.checkPassUpdatedAt(1L);
+        LocalDateTime date = memberService.retrievePassUpdatedAt(1L);
 
-        assertThat(date).isFalse();
+        assertThat(date.getDayOfYear()).isEqualTo(1);
     }
 
     @Test
