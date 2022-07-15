@@ -71,7 +71,7 @@ class DefaultLabelServiceTest {
     @DisplayName("라벨 삭제 성공")
     void deleteLabelSuccess() {
         when(labelRepository.findById(anyLong())).thenReturn(
-                Optional.of(new Label(new LabelCreateRequest())));
+            Optional.of(new Label(new LabelCreateRequest())));
         doNothing().when(labelRepository).delete(any(Label.class));
 
         labelService.deleteLabel(1L);
@@ -83,7 +83,7 @@ class DefaultLabelServiceTest {
     @DisplayName("라벨 삭제 실패")
     void deleteLabelFail() {
         assertThatThrownBy(() -> labelService.deleteLabel(1L))
-                .isInstanceOf(LabelNotFoundException.class);
+            .isInstanceOf(LabelNotFoundException.class);
     }
 
 }

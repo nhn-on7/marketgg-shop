@@ -13,3 +13,13 @@ spring:
 
 server:
   port: 7080
+
+  servlet:
+    multipart:
+      file-size-threshold: 1MB
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+# Fixme: 경로 수정하기
+uploadPath:
+inquiryPath: /shop/v1

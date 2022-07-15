@@ -1,12 +1,18 @@
 package com.nhnacademy.marketgg.server.dto.response;
 
+import com.nhnacademy.marketgg.server.entity.Asset;
+import com.nhnacademy.marketgg.server.entity.Category;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public interface ProductResponse {
 
     Long getProductNo();
 
-    Long getCategoryNo();
+    Asset getAsset();
+
+    Category getCategory();
 
     String getName();
 
@@ -31,5 +37,11 @@ public interface ProductResponse {
     String getAllergyInfo();
 
     String getCapacity();
+
+    LocalDateTime getCreatedAt();
+
+    LocalDateTime getUpdatedAt();
+
+    LocalDateTime getDeletedAt();
 
 }

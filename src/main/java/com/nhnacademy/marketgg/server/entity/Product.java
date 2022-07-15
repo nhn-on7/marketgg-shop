@@ -1,8 +1,10 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +18,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 상품 엔티티입니다.
+ *
+ * @since 1.0.0
+ */
 @Table(name = "products")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -63,6 +70,7 @@ public class Product {
     private String packageType;
 
     @Column(name = "expiration_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate expirationDate;
 
     @Column(name = "allergy_info")
@@ -72,13 +80,16 @@ public class Product {
     private String capacity;
 
     @Column(name = "created_at")
-    private LocalDate createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private LocalDate updatedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+    private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
-    private LocalDate deletedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+    private LocalDateTime deletedAt;
 
     public Product(ProductCreateRequest productRequest, Asset asset, Category category) {
         this.asset = asset;
@@ -95,7 +106,8 @@ public class Product {
         this.expirationDate = productRequest.getExpirationDate();
         this.allergyInfo = productRequest.getAllergyInfo();
         this.capacity = productRequest.getCapacity();
-        this.createdAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public void updateProduct(ProductUpdateRequest productRequest, Asset asset, Category category) {
@@ -113,11 +125,15 @@ public class Product {
         this.expirationDate = productRequest.getExpirationDate();
         this.allergyInfo = productRequest.getAllergyInfo();
         this.capacity = productRequest.getCapacity();
-        this.updatedAt = LocalDate.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
+    /**
+     * 상품의 소프트 삭제를 위한 메서드입니다.
+     * null 이 아닌 경우 상품이 삭제된 상태입니다.
+     */
     public void deleteProduct() {
-        this.deletedAt = LocalDate.now();
+        this.deletedAt = LocalDateTime.now();
     }
 
 }

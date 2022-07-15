@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ProductUpdateRequest {
 
-    private Long productNo;
     private Long assetNo;
     private String categoryCode;
     private String name;

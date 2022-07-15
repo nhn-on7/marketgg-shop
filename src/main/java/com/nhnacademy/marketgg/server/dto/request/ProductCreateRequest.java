@@ -1,7 +1,6 @@
 package com.nhnacademy.marketgg.server.dto.request;
 
 import java.time.LocalDate;
-import javax.persistence.Column;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ProductCreateRequest {
 
-    private String imageAddress;
     private String categoryCode;
     private String name;
     private String content;
