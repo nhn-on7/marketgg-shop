@@ -86,4 +86,8 @@ public class Member {
         this.ggpassUpdatedAt = (LocalDateTime.now()).plusMonths(1);
     }
 
+    public Member(final MemberCreateRequest memberCreateRequest, final MemberGrade memberGrade) {
+
+    }
+
 }

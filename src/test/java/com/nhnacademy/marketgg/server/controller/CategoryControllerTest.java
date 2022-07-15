@@ -38,6 +38,8 @@ class CategoryControllerTest {
     @MockBean
     CategoryService categoryService;
 
+    private static final String DEFAULT_CATEGORY = "/shop/v1/admin/categories";
+
     @Test
     @DisplayName("카테고리 등록")
     void testCreateCategory() throws Exception {
@@ -46,7 +48,7 @@ class CategoryControllerTest {
 
         doNothing().when(categoryService).createCategory(any(CategoryCreateRequest.class));
 
-        mockMvc.perform(post("/admin/v1/categories")
+        mockMvc.perform(post(DEFAULT_CATEGORY)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(requestBody))
                .andExpect(status().isCreated());
@@ -59,7 +61,7 @@ class CategoryControllerTest {
     void testRetrieveCategory() throws Exception {
         when(categoryService.retrieveCategory(anyString())).thenReturn(null);
 
-        this.mockMvc.perform(get("/admin/v1/categories/{categoryId}", "011"))
+        this.mockMvc.perform(get(DEFAULT_CATEGORY + "/{categoryId}", "011"))
                 .andExpect(status().isOk());
 
         verify(categoryService, times(1)).retrieveCategory(anyString());
@@ -70,7 +72,7 @@ class CategoryControllerTest {
     void testRetrieveCategories() throws Exception {
         when(categoryService.retrieveCategories()).thenReturn(List.of());
 
-        this.mockMvc.perform(get("/admin/v1/categories"))
+        this.mockMvc.perform(get(DEFAULT_CATEGORY))
                     .andExpect(status().isOk());
 
         verify(categoryService, times(1)).retrieveCategories();
@@ -85,7 +87,7 @@ class CategoryControllerTest {
         doNothing().when(categoryService)
                    .updateCategory(anyString(), any(CategoryUpdateRequest.class));
 
-        mockMvc.perform(put("/admin/v1/categories/{categoryId}", "001")
+        mockMvc.perform(put(DEFAULT_CATEGORY + "/{categoryId}", "001")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(requestBody))
                .andExpect(status().isOk());
@@ -99,7 +101,7 @@ class CategoryControllerTest {
     void testDeleteCategory() throws Exception {
         doNothing().when(categoryService).deleteCategory(anyString());
 
-        this.mockMvc.perform(delete("/admin/v1/categories/{categoryId}", "001"))
+        this.mockMvc.perform(delete(DEFAULT_CATEGORY + "/{categoryId}", "001"))
                     .andExpect(status().isOk());
 
         verify(categoryService, times(1)).deleteCategory(anyString());

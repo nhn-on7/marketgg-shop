@@ -7,8 +7,8 @@ import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import com.nhnacademy.marketgg.server.exception.MemberNotFoundException;
-import com.nhnacademy.marketgg.server.exception.ProductInquiryPostNotFoundException;
 import com.nhnacademy.marketgg.server.exception.ProductNotFoundException;
+import com.nhnacademy.marketgg.server.exception.productinquiry.ProductInquiryPostNotFoundException;
 import com.nhnacademy.marketgg.server.repository.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.ProductInquiryPostRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
@@ -31,10 +31,10 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     @Transactional
     public void createProductInquiry(ProductInquiryRequest productInquiryRequest, Long productId) {
         Member member = memberRepository.findById(productInquiryRequest.getMemberId())
-                                        .orElseThrow(() -> new MemberNotFoundException("해당 회원 번호를 찾을 수 없습니다."));
+                                        .orElseThrow(MemberNotFoundException::new);
 
         Product product = productRepository.findById(productId)
-                                           .orElseThrow(() -> new ProductNotFoundException("해당 상품 번호를 찾을 수 없습니다."));
+                                           .orElseThrow(ProductNotFoundException::new);
 
         ProductInquiryPost inquiryPost = new ProductInquiryPost(product, member, productInquiryRequest);
 
@@ -55,7 +55,7 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     @Transactional
     public void updateProductInquiryReply(ProductInquiryReply inquiryReply, Long inquiryId, Long productId) {
         ProductInquiryPost inquiryPost = productInquiryPostRepository.findById(new ProductInquiryPost.Pk(inquiryId, productId))
-                                                                     .orElseThrow(() -> new ProductInquiryPostNotFoundException("해당 문의 번호를 찾을 수 없습니다."));
+                                                                     .orElseThrow(ProductInquiryPostNotFoundException::new);
 
         inquiryPost.updateInquiry(inquiryReply);
     }

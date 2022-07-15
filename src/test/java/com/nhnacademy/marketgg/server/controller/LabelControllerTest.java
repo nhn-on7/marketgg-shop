@@ -36,6 +36,8 @@ class LabelControllerTest {
     @MockBean
     LabelService labelService;
 
+    private static final String DEFAULT_LABEL = "/shop/v1/admin/labels";
+
      @Test
      @DisplayName("라벨 등록")
      void createLabel() throws Exception {
@@ -44,7 +46,7 @@ class LabelControllerTest {
 
          doNothing().when(labelService).createLabel(any(LabelCreateRequest.class));
 
-         this.mockMvc.perform(post("/admin/v1/labels")
+         this.mockMvc.perform(post(DEFAULT_LABEL)
                                       .contentType(MediaType.APPLICATION_JSON)
                                       .content(requestBody))
                      .andExpect(status().isCreated());
@@ -58,7 +60,7 @@ class LabelControllerTest {
 
         when(labelService.retrieveLabels()).thenReturn(new ArrayList<>());
 
-        this.mockMvc.perform(get("/admin/v1/labels"))
+        this.mockMvc.perform(get(DEFAULT_LABEL))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andReturn();
@@ -71,7 +73,7 @@ class LabelControllerTest {
     void deleteLabel() throws Exception {
         doNothing().when(labelService).deleteLabel(anyLong());
 
-        this.mockMvc.perform(delete("/admin/v1/labels/{labelId}", 1L))
+        this.mockMvc.perform(delete(DEFAULT_LABEL + "/{labelId}", 1L))
                     .andExpect(status().isOk());
 
         verify(labelService, times(1)).deleteLabel(1L);
