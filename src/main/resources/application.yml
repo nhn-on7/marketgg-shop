@@ -22,5 +22,5 @@ server:
 
 # Fixme: 경로 수정하기
 #uploadPath: /Users/coalong/gh-repos/marketgg/marketgg-server/src/main/resources/static
-#uploadPath: /Users/johyeonjin/Desktop/temp
+uploadPath: /Users/johyeonjin/Desktop/temp
 inquiryPath: /shop/v1
