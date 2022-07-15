@@ -18,10 +18,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
+/**
+ * 상품 엔티티입니다.
+ *
+ * @since 1.0.0
+ */
 @Table(name = "products")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -127,6 +128,10 @@ public class Product {
         this.updatedAt = LocalDateTime.now();
     }
 
+    /**
+     * 상품의 소프트 삭제를 위한 메서드입니다.
+     * null 이 아닌 경우 상품이 삭제된 상태입니다.
+     */
     public void deleteProduct() {
         this.deletedAt = LocalDateTime.now();
     }
