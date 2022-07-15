@@ -6,6 +6,7 @@ import com.nhnacademy.marketgg.server.dto.request.DibCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberGradeCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
+import com.nhnacademy.marketgg.server.dto.response.DibRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
@@ -13,6 +14,7 @@ import com.nhnacademy.marketgg.server.entity.Dib;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.entity.Product;
+import com.nhnacademy.marketgg.server.exception.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.dib.DibRepository;
@@ -27,10 +29,14 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -84,4 +90,28 @@ public class DefaultDibServiceTest {
         verify(dibRepository, times(1)).save(any(Dib.class));
     }
 
+    // @Test
+    // @DisplayName("찜 등록 실패")
+    // void testCreateDibFail() throws Exception {
+    //     Product product = new Product(new ProductCreateRequest(), Asset.create(),
+    //                                   new Category(new CategoryCreateRequest(),
+    //                                                new Categorization(new CategorizationCreateRequest())));
+    //
+    //     ReflectionTestUtils.setField(product, "productNo", 1L);
+    //
+    //     when(memberRepository.findById(anyLong())).thenReturn(Optional.empty());
+    //     when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
+    //
+    //     assertThatThrownBy(() -> dibService.createDib(dibCreateRequest)).isInstanceOf(MemberNotFoundException.class);
+    // }
+
+    @Test
+    @DisplayName("찜 조회 성공")
+    void testRetrieveDib() throws Exception {
+        when(dibRepository.findAllDibs(1L)).thenReturn(List.of());
+
+        List<DibRetrieveResponse> dibResponses = dibService.retrieveDibs(1L);
+
+        assertThat(dibResponses).isInstanceOf(List.class);
+    }
 }
