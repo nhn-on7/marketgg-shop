@@ -1,16 +1,12 @@
-package com.nhnacademy.marketgg.server.repository;
+package com.nhnacademy.marketgg.server.repository.product;
 
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
-import com.nhnacademy.marketgg.server.entity.Product;
-import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 
-/**
- * 상품 레포지토리 입니다.
- *
- * @version 1.0.0
- */
-public interface ProductRepository extends JpaRepository<Product, Long> {
+import java.util.List;
+
+@NoRepositoryBean
+public interface ProductRepositoryCustom {
 
     /**
      * DB에 들어있는 모든 상품을 ProductResponse타입으로 반환합니다.
@@ -18,7 +14,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      * @return - 상품 리스트를 반환합니다.
      * @since 1.0.0
      */
-    List<ProductResponse> findAllBy();
+    List<ProductResponse> findAllProducts();
 
     /**
      * DB에서 PK값이 같은 상품을 찾아 반환 합니다.
@@ -46,7 +42,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      * @param categoryCode - 카테고리 2차 분류입니다. ex) 101 - 채소
      * @return - 상품 목록을 반환합니다.
      */
-    List<ProductResponse> findByCategory_IdAndCategory_Categorization_Id(
+    List<ProductResponse> findByCategoryAndCategorizationCodes(
             final String categorizationCode, final String categoryCode);
 
 }

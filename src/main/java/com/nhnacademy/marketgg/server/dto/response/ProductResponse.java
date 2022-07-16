@@ -2,46 +2,50 @@ package com.nhnacademy.marketgg.server.dto.response;
 
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public interface ProductResponse {
+@RequiredArgsConstructor
+@Getter
+public class ProductResponse {
 
-    Long getId();
+    private final Long id;
 
-    Asset getAsset();
+    private final Asset asset;
 
-    Category getCategory();
+    private final Category category;
 
-    String getName();
+    private final String name;
 
-    String getContent();
+    private final String content;
 
-    Long getTotalStock();
+    private final Long totalStock;
 
-    Long getPrice();
+    private final Long price;
 
-    String getDescription();
+    private final String description;
 
-    String getUnit();
+    private final String unit;
 
-    String getDeliveryType();
+    private final String deliveryType;
 
-    String getOrigin();
+    private final String origin;
 
-    String getPackageType();
+    private final String packageType;
 
-    LocalDate getExpirationDate();
+    private final LocalDate expirationDate;
 
-    String getAllergyInfo();
+    private final String allergyInfo;
 
-    String getCapacity();
+    private final String capacity;
 
-    LocalDateTime getCreatedAt();
+    private final LocalDateTime createdAt;
 
-    LocalDateTime getUpdatedAt();
+    private final LocalDateTime updatedAt;
 
-    LocalDateTime getDeletedAt();
+    private final LocalDateTime deletedAt;
 
 }

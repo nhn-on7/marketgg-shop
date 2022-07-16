@@ -24,7 +24,7 @@ import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
-import com.nhnacademy.marketgg.server.repository.ProductRepository;
+import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -248,11 +248,11 @@ class DefaultProductServiceTest {
     @Test
     @DisplayName("상품 목록 조회 테스트")
     void testRetrieveProducts() {
-        when(productRepository.findAllBy()).thenReturn(List.of(productResponse));
+        when(productRepository.findAllProducts()).thenReturn(List.of(productResponse));
 
         List<ProductResponse> productResponses = productService.retrieveProducts();
         assertThat(productResponses).isNotNull();
-        verify(productRepository, atLeastOnce()).findAllBy();
+        verify(productRepository, atLeastOnce()).findAllProducts();
     }
 
     @Test

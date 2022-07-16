@@ -12,7 +12,7 @@ import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
-import com.nhnacademy.marketgg.server.repository.ProductRepository;
+import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.File;
 import java.io.IOException;
@@ -59,7 +59,7 @@ public class DefaultProductService implements ProductService {
 
     @Override
     public List<ProductResponse> retrieveProducts() {
-        return productRepository.findAllBy();
+        return productRepository.findAllProducts();
     }
 
     @Override
@@ -107,7 +107,7 @@ public class DefaultProductService implements ProductService {
     @Override
     public List<ProductResponse> searchProductByCategory(String categorizationCode,
                                                          String categoryCode) {
-        return productRepository.findByCategory_IdAndCategory_Categorization_Id(
+        return productRepository.findByCategoryAndCategorizationCodes(
             categoryCode, categorizationCode);
     }
 

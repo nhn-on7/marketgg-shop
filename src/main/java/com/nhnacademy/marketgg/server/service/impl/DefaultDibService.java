@@ -11,7 +11,7 @@ import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.dib.DibRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
-import com.nhnacademy.marketgg.server.repository.ProductRepository;
+import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.service.DibService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
