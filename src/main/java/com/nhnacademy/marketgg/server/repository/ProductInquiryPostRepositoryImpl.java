@@ -19,12 +19,14 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport 
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
         return from(productInquiryPost)
-                .where(productInquiryPost.product.id.eq(id))
-                .select(Projections.bean(ProductInquiryResponse.class,
+                .select(Projections.constructor(ProductInquiryResponse.class,
+                        productInquiryPost.member,
                         productInquiryPost.title,
                         productInquiryPost.content,
                         productInquiryPost.isSecret,
-                        productInquiryPost.adminReply))
+                        productInquiryPost.adminReply,
+                        productInquiryPost.createdAt))
+                .where(productInquiryPost.pk.productNo.eq(id))
                 .fetch();
     }
 
@@ -33,12 +35,14 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport 
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
         return from(productInquiryPost)
-                .where(productInquiryPost.member.id.eq(id))
-                .select(Projections.bean(ProductInquiryResponse.class,
+                .select(Projections.constructor(ProductInquiryResponse.class,
+                        productInquiryPost.member,
                         productInquiryPost.title,
                         productInquiryPost.content,
                         productInquiryPost.isSecret,
-                        productInquiryPost.adminReply))
+                        productInquiryPost.adminReply,
+                        productInquiryPost.createdAt))
+                .where(productInquiryPost.member.id.eq(id))
                 .fetch();
     }
 
