@@ -1,9 +1,14 @@
 package com.nhnacademy.marketgg.server.dto.response;
 
-public interface LabelRetrieveResponse {
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-    Long getLabelNo();
+@RequiredArgsConstructor
+@Getter
+public class LabelRetrieveResponse {
 
-    String getName();
+    private final Long labelNo;
+
+    private final String name;
 
 }

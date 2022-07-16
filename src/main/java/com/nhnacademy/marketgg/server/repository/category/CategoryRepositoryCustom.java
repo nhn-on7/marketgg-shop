@@ -24,5 +24,5 @@ public interface CategoryRepositoryCustom {
      * @since 1.0.0
      */
     List<CategoryRetrieveResponse> findAllCategories();
-    
+
 }
