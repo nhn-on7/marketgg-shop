@@ -11,7 +11,7 @@ import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundExcepti
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.CategoryRepository;
-import com.nhnacademy.marketgg.server.repository.ImageRepository;
+import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.File;

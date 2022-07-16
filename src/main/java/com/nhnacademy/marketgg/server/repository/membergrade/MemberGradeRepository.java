@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.repository;
+package com.nhnacademy.marketgg.server.repository.membergrade;
 
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @version 1.0.0
  */
-public interface MemberGradeRepository extends JpaRepository<MemberGrade, Long> {
+public interface MemberGradeRepository extends JpaRepository<MemberGrade, Long>, MemberGradeRepositoryCustom {
 
 }

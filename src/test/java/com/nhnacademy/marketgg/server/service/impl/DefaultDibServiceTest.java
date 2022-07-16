@@ -15,7 +15,7 @@ import com.nhnacademy.marketgg.server.entity.Dib;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.entity.Product;
-import com.nhnacademy.marketgg.server.repository.MemberRepository;
+import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.dib.DibRepository;
 import org.junit.jupiter.api.BeforeAll;

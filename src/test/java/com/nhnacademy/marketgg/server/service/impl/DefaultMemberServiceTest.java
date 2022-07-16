@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.entity.Member;
-import com.nhnacademy.marketgg.server.repository.MemberRepository;
+import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
