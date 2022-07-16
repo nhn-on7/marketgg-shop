@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.request.ProductInquiryReply;
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -53,7 +52,7 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
 
     @Override
     @Transactional
-    public void updateProductInquiryReply(ProductInquiryReply inquiryReply, Long inquiryId, Long productId) {
+    public void updateProductInquiryReply(ProductInquiryRequest inquiryReply, Long inquiryId, Long productId) {
         ProductInquiryPost inquiryPost = productInquiryPostRepository.findById(new ProductInquiryPost.Pk(inquiryId, productId))
                                                                      .orElseThrow(ProductInquiryPostNotFoundException::new);
 

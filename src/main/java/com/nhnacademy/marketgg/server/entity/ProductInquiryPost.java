@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.ProductInquiryReply;
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
 import lombok.*;
 
@@ -70,7 +69,7 @@ public class ProductInquiryPost {
         this.createdAt = LocalDateTime.now();
     }
 
-    public void updateInquiry(ProductInquiryReply inquiryReply) {
+    public void updateInquiry(ProductInquiryRequest inquiryReply) {
         this.adminReply = inquiryReply.getAdminReply();
     }
 
