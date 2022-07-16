@@ -1,36 +1,15 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.anyLong;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
-import com.nhnacademy.marketgg.server.entity.Asset;
-import com.nhnacademy.marketgg.server.entity.Categorization;
-import com.nhnacademy.marketgg.server.entity.Category;
-import com.nhnacademy.marketgg.server.entity.Image;
-import com.nhnacademy.marketgg.server.entity.Product;
+import com.nhnacademy.marketgg.server.entity.*;
 import com.nhnacademy.marketgg.server.repository.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,6 +21,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -206,12 +198,11 @@ class DefaultProductServiceTest {
     // @Test
     @DisplayName("상품 등록시 의존관계가 있는 asset, image, category repository에서 모든 행위가 이루어지는지 검증 ")
     void testProductCreation() throws IOException {
-
         given(productRepository.findById(any())).willReturn(
-            Optional.of(new Product(productRequest, asset, category)));
+                Optional.of(new Product(productRequest, asset, category)));
 
         MockMultipartFile file = new MockMultipartFile("image", "test.png", "image/png",
-            new FileInputStream(UPLOAD_PATH + "/logo.png"));
+                new FileInputStream(UPLOAD_PATH + "/logo.png"));
 
         given(assetRepository.save(any(Asset.class))).willReturn(asset);
         given(imageRepository.save(any(Image.class))).willReturn(new Image(asset, "test"));
@@ -221,7 +212,7 @@ class DefaultProductServiceTest {
         productService.createProduct(productRequest, file);
 
         assertThat(productRepository.findById(1L).get().getId()).isEqualTo(
-            product.get().getId());
+                product.get().getId());
         verify(productRepository, atLeastOnce()).save(any());
         verify(categoryRepository, atLeastOnce()).findById(any());
         verify(imageRepository, atLeastOnce()).save(any());
@@ -233,11 +224,11 @@ class DefaultProductServiceTest {
     @DisplayName("상품 등록 실패 테스트")
     void testProductCreationFailException() throws IOException {
         MockMultipartFile file = new MockMultipartFile("image", "test.png", "image/png",
-            new FileInputStream(UPLOAD_PATH + "/logo.png"));
+                new FileInputStream(UPLOAD_PATH + "/logo.png"));
 
         assertThatThrownBy(
-            () -> productService.createProduct(productRequest, file)).hasMessageContaining(
-            "해당 카테고리 번호를 찾을 수 없습니다.");
+                () -> productService.createProduct(productRequest, file)).hasMessageContaining(
+                "해당 카테고리 번호를 찾을 수 없습니다.");
     }
 
     @Test
@@ -265,7 +256,7 @@ class DefaultProductServiceTest {
     void testUpdateProductSuccess() throws IOException {
 
         given(productRepository.findById(any())).willReturn(
-            Optional.of(new Product(productRequest, asset, category)));
+                Optional.of(new Product(productRequest, asset, category)));
         given(categoryRepository.findById(any())).willReturn(Optional.ofNullable(category));
         given(assetRepository.save(any(Asset.class))).willReturn(asset);
 
@@ -280,14 +271,14 @@ class DefaultProductServiceTest {
         when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> productService.updateProduct(productUpdateRequest, imageFile,
-            1L)).hasMessageContaining("해당 상품을 찾을 수 없습니다.");
+                1L)).hasMessageContaining("해당 상품을 찾을 수 없습니다.");
     }
 
     @Test
     @DisplayName("상품 삭제 성공 테스트")
     void testDeleteProductSuccess() {
         when(productRepository.findById(anyLong())).thenReturn(
-            Optional.of(new Product(productRequest, asset, category)));
+                Optional.of(new Product(productRequest, asset, category)));
 
         productService.deleteProduct(anyLong());
 
@@ -300,14 +291,14 @@ class DefaultProductServiceTest {
         when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> productService.deleteProduct(1L)).hasMessageContaining(
-            "해당 상품을 찾을 수 없습니다.");
+                "해당 상품을 찾을 수 없습니다.");
     }
 
     @Test
     @DisplayName("상품 이름으로 상품 목록 조회")
     void testSearchProductsByName() {
         when(productRepository.findByNameContaining(anyString())).thenReturn(
-            List.of(productResponse));
+                List.of(productResponse));
 
         List<ProductResponse> productResponses = productService.searchProductsByName(anyString());
         verify(productRepository, times(1)).findByNameContaining(anyString());

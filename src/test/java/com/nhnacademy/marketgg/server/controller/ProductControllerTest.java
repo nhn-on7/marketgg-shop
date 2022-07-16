@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -22,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -94,7 +94,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("상품 목록 전체 조회하는 테스트")
     void testRetrieveProducts() throws Exception {
-        when(productService.retrieveProducts()).thenReturn(List.of());
+        given(productService.retrieveProducts()).willReturn(List.of());
 
         this.mockMvc.perform(get("/admin/v1/products").contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
@@ -104,10 +104,8 @@ class ProductControllerTest {
     // @Test
     @DisplayName("상품 정보 수정하는 테스트")
     void testUpdateProduct() throws Exception {
-
         doNothing().when(productService)
-                   .updateProduct(any(ProductUpdateRequest.class), any(MockMultipartFile.class),
-                           anyLong());
+                   .updateProduct(any(ProductUpdateRequest.class), any(MockMultipartFile.class), anyLong());
 
         String content = objectMapper.writeValueAsString(productRequest);
         MockMultipartFile dto =
@@ -142,7 +140,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("상품 검색하는 테스트")
     void testSearchProductsByName() throws Exception {
-        when(productService.searchProductsByName(anyString())).thenReturn(List.of());
+        given(productService.searchProductsByName(anyString())).willReturn(List.of());
 
         this.mockMvc.perform(get("/admin/v1/products/search/{productName}", "오렌지").contentType(
                     MediaType.APPLICATION_JSON))

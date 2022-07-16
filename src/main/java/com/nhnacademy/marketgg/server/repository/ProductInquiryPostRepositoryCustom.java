@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.repository.productInquiryPost;
+package com.nhnacademy.marketgg.server.repository;
 
 import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
 import org.springframework.data.repository.NoRepositoryBean;

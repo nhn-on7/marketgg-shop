@@ -8,7 +8,7 @@ import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.productinquiry.ProductInquiryPostNotFoundException;
 import com.nhnacademy.marketgg.server.repository.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
-import com.nhnacademy.marketgg.server.repository.productInquiryPost.ProductInquiryPostRepository;
+import com.nhnacademy.marketgg.server.repository.ProductInquiryPostRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +21,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,30 +33,24 @@ class DefaultProductInquiryPostServiceTest {
 
     @Mock
     private ProductInquiryPostRepository productInquiryPostRepository;
-
     @Mock
     private MemberRepository memberRepository;
-
     @Mock
     private ProductRepository productRepository;
-
     @Mock
     private Product product;
-
     @Mock
     private Member member;
-
     @Mock
     private ProductInquiryPost productInquiryPost;
-
     @Mock
     private ProductInquiryRequest productInquiryRequest;
 
     @Test
     @DisplayName("상품 문의 등록 성공 테스트")
     void testCreateProductInquiry() {
-        when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
-        when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
 
         productInquiryPostService.createProductInquiry(productInquiryRequest, 1L);
 
@@ -67,7 +62,7 @@ class DefaultProductInquiryPostServiceTest {
     @Test
     @DisplayName("상품 문의 등록 실패 테스트")
     void testCreateProductInquiryFail() {
-        when(memberRepository.findById(anyLong())).thenReturn(Optional.empty());
+        given(memberRepository.findById(anyLong())).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> productInquiryPostService.createProductInquiry(productInquiryRequest, 1L))
                 .isInstanceOf(MemberNotFoundException.class);
@@ -92,8 +87,8 @@ class DefaultProductInquiryPostServiceTest {
     @Test
     @DisplayName("상품 문의에 대한 답글 등록 성공 테스트")
     void testUpdateProductInquiryReply() {
-        when(productInquiryPostRepository.findById(new ProductInquiryPost.Pk(1L, 1L)))
-                .thenReturn(Optional.of(productInquiryPost));
+        given(productInquiryPostRepository.findById(new ProductInquiryPost.Pk(1L, 1L)))
+                .willReturn(Optional.of(productInquiryPost));
 
         productInquiryPostService.updateProductInquiryReply(productInquiryRequest, 1L, 1L);
 
@@ -104,8 +99,8 @@ class DefaultProductInquiryPostServiceTest {
     @Test
     @DisplayName("상품 문의에 대한 답글 등록 실패 테스트")
     void testUpdateProductInquiryReplyFail() {
-        when(productInquiryPostRepository.findById(new ProductInquiryPost.Pk(1L, 1L)))
-                .thenReturn(Optional.empty());
+        given(productInquiryPostRepository.findById(new ProductInquiryPost.Pk(1L, 1L)))
+                .willReturn(Optional.empty());
         assertThatThrownBy(() -> productInquiryPostService.updateProductInquiryReply(productInquiryRequest, 1L, 1L))
                 .isInstanceOf(ProductInquiryPostNotFoundException.class);
     }

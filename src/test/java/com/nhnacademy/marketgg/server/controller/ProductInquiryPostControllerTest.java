@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -53,7 +54,7 @@ class ProductInquiryPostControllerTest {
     @Test
     @DisplayName("상품에 대한 전체 문의 조회 테스트")
     void testRetrieveProductInquiryByProductId() throws Exception {
-        when(productInquiryPostService.retrieveProductInquiryByProductId(anyLong())).thenReturn(List.of());
+        given(productInquiryPostService.retrieveProductInquiryByProductId(anyLong())).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_INQUIRY + "/products/" + 1L + "/inquiries")
                     .contentType(MediaType.APPLICATION_JSON))
@@ -64,7 +65,7 @@ class ProductInquiryPostControllerTest {
     @Test
     @DisplayName("회원이 작성한 전체 상품 문의 조회 테스트")
     void testRetrieveProductInquiryByMemberId() throws Exception {
-        when(productInquiryPostService.retrieveProductInquiryByMemberId(anyLong())).thenReturn(List.of());
+        given(productInquiryPostService.retrieveProductInquiryByMemberId(anyLong())).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_INQUIRY + "/mygg/product-inquiries/" + 1L)
                     .contentType(MediaType.APPLICATION_JSON))
