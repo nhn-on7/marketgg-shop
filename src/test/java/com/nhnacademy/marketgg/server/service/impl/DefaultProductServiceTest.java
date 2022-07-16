@@ -53,7 +53,6 @@ class DefaultProductServiceTest {
     @InjectMocks
     DefaultProductService productService;
 
-    // TODO: @Mock 과 @MockBean의 차이는?
     @Mock
     private ProductRepository productRepository;
 
@@ -63,7 +62,6 @@ class DefaultProductServiceTest {
     @Mock
     private ImageRepository imageRepository;
 
-    // TODO: @Spy와 @SpyBean의 차이는?
     @Spy
     CategoryRepository categoryRepository;
 
@@ -268,11 +266,14 @@ class DefaultProductServiceTest {
     // @Test
     @DisplayName("상품 정보 수정 성공 테스트")
     void testUpdateProductSuccess() throws IOException {
+
         given(productRepository.findById(any())).willReturn(
             Optional.of(new Product(productRequest, asset, category)));
         given(categoryRepository.findById(any())).willReturn(Optional.ofNullable(category));
         given(assetRepository.save(any(Asset.class))).willReturn(asset);
+
         productService.updateProduct(productUpdateRequest, imageFile, 1L);
+
         verify(productRepository, atLeastOnce()).save(any());
     }
 

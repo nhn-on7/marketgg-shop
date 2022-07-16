@@ -44,15 +44,13 @@ class ProductControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @Autowired
-    Environment environment;
-
     @MockBean
-    private ProductService productService;
+    ProductService productService;
 
     private HttpHeaders headers;
     private static final String DEFAULT_PRODUCT = "/admin/v1/products";
     private static ProductCreateRequest productRequest;
+
     @Value("${uploadPath}")
     private String uploadPath;
 
@@ -70,13 +68,6 @@ class ProductControllerTest {
         ReflectionTestUtils.setField(productRequest, "origin", "인도네시아");
         ReflectionTestUtils.setField(productRequest, "packageType", "냉장");
         ReflectionTestUtils.setField(productRequest, "allergyInfo", "새우알러지");
-    }
-
-    @Test
-    @DisplayName("property-test")
-    void testProperty() {
-        String uploadPath = environment.getProperty("uploadPath");
-        System.out.println("uploadPath:" + uploadPath);
     }
 
     // @Test
@@ -167,6 +158,7 @@ class ProductControllerTest {
                 MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
         verify(productService, times(1)).searchProductsByName(anyString());
     }
 }

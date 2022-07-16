@@ -25,10 +25,10 @@ public class Categorization {
     @Column(name = "categorization_code")
     private String id;
 
-    @Column(nullable = false)
+    @Column
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String alias;
 
     /**
