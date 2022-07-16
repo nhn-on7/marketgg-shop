@@ -10,7 +10,7 @@ import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.exception.productinquiry.ProductInquiryPostNotFoundException;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
-import com.nhnacademy.marketgg.server.repository.ProductInquiryPostRepository;
+import com.nhnacademy.marketgg.server.repository.productinquirypost.ProductInquiryPostRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
 import com.nhnacademy.marketgg.server.service.ProductInquiryPostService;
 import lombok.RequiredArgsConstructor;
