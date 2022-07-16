@@ -18,7 +18,7 @@ import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.exception.categorization.CategorizationNotFoundException;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
 import com.nhnacademy.marketgg.server.repository.categorization.CategorizationRepository;
-import com.nhnacademy.marketgg.server.repository.CategoryRepository;
+import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;

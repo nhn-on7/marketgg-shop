@@ -24,5 +24,5 @@ public class CategorizationRepositoryImpl extends QuerydslRepositorySupport impl
                                          categorization.name))
                 .fetch();
     }
-    
+
 }

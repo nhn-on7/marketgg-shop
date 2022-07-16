@@ -15,4 +15,5 @@ public interface CategorizationRepositoryCustom {
      * @since 1.0.0
      */
     List<CategorizationRetrieveResponse> findAllCategorization();
+
 }
