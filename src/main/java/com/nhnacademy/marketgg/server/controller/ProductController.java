@@ -47,10 +47,11 @@ public class ProductController {
      */
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<Void> createProduct(@RequestPart ProductCreateRequest productRequest,
-                                              @RequestPart MultipartFile image) throws IOException {
+    public ResponseEntity<Void> createProduct(
+        @RequestPart final ProductCreateRequest productRequest, @RequestPart MultipartFile image)
+        throws IOException {
 
-        productService.createProduct(productRequest, image);
+        this.productService.createProduct(productRequest, image);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_PRODUCT))
@@ -66,7 +67,7 @@ public class ProductController {
      */
     @GetMapping
     public ResponseEntity<List<ProductResponse>> retrieveProducts() {
-        List<ProductResponse> productList = productService.retrieveProducts();
+        List<ProductResponse> productList = this.productService.retrieveProducts();
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT))
@@ -82,8 +83,9 @@ public class ProductController {
      * @since 1.0.0
      */
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductResponse> retrieveProductDetails(@PathVariable final Long productId) {
-        ProductResponse productDetails = productService.retrieveProductDetails(productId);
+    public ResponseEntity<ProductResponse> retrieveProductDetails(
+        @PathVariable final Long productId) {
+        ProductResponse productDetails = this.productService.retrieveProductDetails(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT))
@@ -105,7 +107,7 @@ public class ProductController {
     public ResponseEntity<Void> updateProduct(
         @RequestPart final ProductUpdateRequest productRequest, @RequestPart MultipartFile image,
         @PathVariable final Long productId) throws IOException {
-        productService.updateProduct(productRequest, image, productId);
+        this.productService.updateProduct(productRequest, image, productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT + "/" + productId))
@@ -123,7 +125,7 @@ public class ProductController {
      */
     @PostMapping("/{productId}/deleted")
     public ResponseEntity<Void> deleteProduct(@PathVariable final Long productId) {
-        productService.deleteProduct(productId);
+        this.productService.deleteProduct(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT + "/" + productId))
@@ -141,9 +143,9 @@ public class ProductController {
      */
     @GetMapping("/search/{productName}")
     public ResponseEntity<List<ProductResponse>> searchProductsByName(
-        @PathVariable String productName) {
+        @PathVariable final String productName) {
         List<ProductResponse> productResponseList =
-            productService.searchProductsByName(productName);
+            this.productService.searchProductsByName(productName);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT + "/search/" + productName))
@@ -162,10 +164,10 @@ public class ProductController {
      */
     @GetMapping("/{categorizationCode}/{categoryCode}")
     public ResponseEntity<List<ProductResponse>> searchProductsByCategory(
-        @PathVariable String categorizationCode, @PathVariable String categoryCode) {
+        @PathVariable final String categorizationCode, @PathVariable final String categoryCode) {
 
         List<ProductResponse> productResponseList =
-            productService.searchProductByCategory(categorizationCode, categoryCode);
+            this.productService.searchProductByCategory(categorizationCode, categoryCode);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
