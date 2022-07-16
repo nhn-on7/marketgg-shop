@@ -9,7 +9,7 @@ import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
-import com.nhnacademy.marketgg.server.repository.AssetRepository;
+import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
