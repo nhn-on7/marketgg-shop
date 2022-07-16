@@ -27,9 +27,11 @@ import com.nhnacademy.marketgg.server.repository.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -69,7 +71,6 @@ class DefaultProductServiceTest {
     private static Category category;
     private static Categorization categorization;
     private static MockMultipartFile imageFile;
-    private static final String UPLOAD_PATH = "/Users/johyeonjin/Desktop/temp";
 
     @BeforeAll
     static void beforeAll() throws IOException {
@@ -184,7 +185,7 @@ class DefaultProductServiceTest {
         ReflectionTestUtils.setField(productRequest, "allergyInfo", "새우알러지");
 
         asset = Asset.create();
-        ReflectionTestUtils.setField(asset, "assetNo", 1L);
+        ReflectionTestUtils.setField(asset, "id", 1L);
 
         CategorizationCreateRequest categorizationRequest = new CategorizationCreateRequest();
 
@@ -203,15 +204,18 @@ class DefaultProductServiceTest {
         category = new Category(categoryRequest, categorization);
     }
 
-    // @Test
+    @Test
     @DisplayName("상품 등록시 의존관계가 있는 asset, image, category repository에서 모든 행위가 이루어지는지 검증 ")
     void testProductCreation() throws IOException {
+
+        URL url = getClass().getClassLoader().getResource("lee.png");
+        String filePath = Objects.requireNonNull(url).getPath();
 
         given(productRepository.findById(any())).willReturn(
             Optional.of(new Product(productRequest, asset, category)));
 
-        MockMultipartFile file = new MockMultipartFile("image", "test.png", "image/png",
-            new FileInputStream(UPLOAD_PATH + "/logo.png"));
+        MockMultipartFile file =
+            new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));
 
         given(assetRepository.save(any(Asset.class))).willReturn(asset);
         given(imageRepository.save(any(Image.class))).willReturn(new Image(asset, "test"));
@@ -220,8 +224,7 @@ class DefaultProductServiceTest {
         Optional<Product> product = Optional.of(new Product(productRequest, asset, category));
         productService.createProduct(productRequest, file);
 
-        assertThat(productRepository.findById(1L).get().getId()).isEqualTo(
-            product.get().getId());
+        assertThat(productRepository.findById(1L).get().getId()).isEqualTo(product.get().getId());
         verify(productRepository, atLeastOnce()).save(any());
         verify(categoryRepository, atLeastOnce()).findById(any());
         verify(imageRepository, atLeastOnce()).save(any());
@@ -229,18 +232,21 @@ class DefaultProductServiceTest {
 
     }
 
-    // @Test
+    @Test
     @DisplayName("상품 등록 실패 테스트")
     void testProductCreationFailException() throws IOException {
-        MockMultipartFile file = new MockMultipartFile("image", "test.png", "image/png",
-            new FileInputStream(UPLOAD_PATH + "/logo.png"));
 
-        assertThatThrownBy(
-            () -> productService.createProduct(productRequest, file)).hasMessageContaining(
-            "해당 카테고리 번호를 찾을 수 없습니다.");
+        URL url = getClass().getClassLoader().getResource("lee.png");
+        String filePath = Objects.requireNonNull(url).getPath();
+
+        MockMultipartFile file =
+            new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));
+
+        assertThatThrownBy(() -> productService.createProduct(productRequest, file)).hasMessageContaining(
+            "카테고리를 찾을 수 없습니다.");
     }
 
-    // @Test
+    @Test
     @DisplayName("상품 목록 조회 테스트")
     void testRetrieveProducts() {
         when(productRepository.findAllBy()).thenReturn(List.of(productResponse));
@@ -250,7 +256,7 @@ class DefaultProductServiceTest {
         verify(productRepository, atLeastOnce()).findAllBy();
     }
 
-    // @Test
+    @Test
     @DisplayName("상품 상세 조회 테스트")
     void testRetrieveProductDetails() {
         when(productRepository.queryById(anyLong())).thenReturn(productResponse);
@@ -274,16 +280,17 @@ class DefaultProductServiceTest {
         verify(productRepository, atLeastOnce()).save(any());
     }
 
-    // @Test
+    @Test
     @DisplayName("상품 정보 수정 실패 테스트")
     void testUpdateProductFail() {
         when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> productService.updateProduct(productUpdateRequest, imageFile,
-            1L)).hasMessageContaining("해당 상품을 찾을 수 없습니다.");
+        assertThatThrownBy(
+            () -> productService.updateProduct(productUpdateRequest, imageFile, 1L)).hasMessageContaining(
+            "상품을 찾을 수 없습니다.");
     }
 
-    // @Test
+    @Test
     @DisplayName("상품 삭제 성공 테스트")
     void testDeleteProductSuccess() {
         when(productRepository.findById(anyLong())).thenReturn(
@@ -294,23 +301,21 @@ class DefaultProductServiceTest {
         verify(productRepository, times(1)).save(any(Product.class));
     }
 
-    // @Test
+    @Test
     @DisplayName("상품 삭제 실패 테스트")
     void testDeleteProductFail() {
         when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> productService.deleteProduct(1L)).hasMessageContaining(
-            "해당 상품을 찾을 수 없습니다.");
+        assertThatThrownBy(() -> productService.deleteProduct(1L)).hasMessageContaining("상품을 찾을 수 없습니다.");
     }
 
-    // @Test
+    @Test
     @DisplayName("상품 이름으로 상품 목록 조회")
     void testSearchProductsByName() {
-        when(productRepository.findByNameContaining(anyString())).thenReturn(
-            List.of(productResponse));
+        when(productRepository.findByNameContaining(anyString())).thenReturn(List.of(productResponse));
 
         List<ProductResponse> productResponses = productService.searchProductsByName(anyString());
         verify(productRepository, times(1)).findByNameContaining(anyString());
     }
-}
 
+}
