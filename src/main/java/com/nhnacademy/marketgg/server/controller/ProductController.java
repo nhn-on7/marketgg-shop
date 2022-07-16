@@ -30,19 +30,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class ProductController {
 
-    /**
-     * 상품 관리 Service 입니다.
-     *
-     * @since 1.0.0
-     */
     private final ProductService productService;
 
     // TODO: Develop 브랜치 머지 후 @Value값으로 고치기
-    /**
-     * 상품 관리 기본 uri 입니다.
-     *
-     * @since 1.0.0
-     */
     private static final String DEFAULT_PRODUCT = "/admin/v1/products";
 
 
