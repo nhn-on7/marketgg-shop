@@ -50,17 +50,7 @@ class DefaultLabelServiceTest {
     @Test
     @DisplayName("라벨 조회")
     void retrieveLabels() {
-        when(labelRepository.findAllLabels()).thenReturn(List.of(new LabelRetrieveResponse() {
-            @Override
-            public Long getLabelNo() {
-                return 1L;
-            }
-
-            @Override
-            public String getName() {
-                return "hello";
-            }
-        }));
+        when(labelRepository.findAllLabels()).thenReturn(List.of(new LabelRetrieveResponse(1L, "hello")));
 
         List<LabelRetrieveResponse> response = labelService.retrieveLabels();
 

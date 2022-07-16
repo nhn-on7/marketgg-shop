@@ -15,6 +15,9 @@ import com.nhnacademy.marketgg.server.entity.Dib;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.entity.Product;
+import com.nhnacademy.marketgg.server.exception.dib.DibNotFoundException;
+import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
+import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.dib.DibRepository;
@@ -80,8 +83,8 @@ public class DefaultDibServiceTest {
         ReflectionTestUtils.setField(dibDeleteRequest, "memberNo", 1L);
         ReflectionTestUtils.setField(dibDeleteRequest, "productNo", 1L);
 
-        ReflectionTestUtils.setField(member, "memberNo", 1L);
-        ReflectionTestUtils.setField(product, "productNo", 1L);
+        ReflectionTestUtils.setField(member, "id", 1L);
+        ReflectionTestUtils.setField(product, "id", 1L);
     }
 
     @Test
