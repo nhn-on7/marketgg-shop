@@ -44,9 +44,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(MockitoExtension.class)
-// InjectMock 안쓰고 주입받기 위해서 권장 방식!? TODO: 더 알아보기
-// @Import(DefaultProductService.class)
-
 @Transactional
 class DefaultProductServiceTest {
 

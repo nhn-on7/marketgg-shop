@@ -9,7 +9,7 @@ import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.exception.productinquiry.ProductInquiryPostNotFoundException;
 import com.nhnacademy.marketgg.server.repository.MemberRepository;
-import com.nhnacademy.marketgg.server.repository.ProductInquiryPostRepository;
+import com.nhnacademy.marketgg.server.repository.productInquiryPost.ProductInquiryPostRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
 import com.nhnacademy.marketgg.server.service.ProductInquiryPostService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
 
     @Override
     @Transactional
-    public void createProductInquiry(ProductInquiryRequest productInquiryRequest, Long productId) {
+    public void createProductInquiry(final ProductInquiryRequest productInquiryRequest, final Long productId) {
         Member member = memberRepository.findById(productInquiryRequest.getMemberId())
                                         .orElseThrow(MemberNotFoundException::new);
 
@@ -41,27 +41,30 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     }
 
     @Override
-    public List<ProductInquiryResponse> retrieveProductInquiryByProductId(Long productId) {
+    public List<ProductInquiryResponse> retrieveProductInquiryByProductId(final Long productId) {
         return productInquiryPostRepository.findALLByProductNo(productId);
     }
 
     @Override
-    public List<ProductInquiryResponse> retrieveProductInquiryByMemberId(Long memberId) {
+    public List<ProductInquiryResponse> retrieveProductInquiryByMemberId(final Long memberId) {
         return productInquiryPostRepository.findAllByMemberNo(memberId);
     }
 
     @Override
     @Transactional
-    public void updateProductInquiryReply(ProductInquiryRequest inquiryReply, Long inquiryId, Long productId) {
+    public void updateProductInquiryReply(final ProductInquiryRequest inquiryReply,
+                                          final Long inquiryId,
+                                          final Long productId) {
         ProductInquiryPost inquiryPost = productInquiryPostRepository.findById(new ProductInquiryPost.Pk(inquiryId, productId))
                                                                      .orElseThrow(ProductInquiryPostNotFoundException::new);
 
         inquiryPost.updateInquiry(inquiryReply);
+        productInquiryPostRepository.save(inquiryPost);
     }
 
     @Override
     @Transactional
-    public void deleteProductInquiry(Long inquiryId, Long productId) {
+    public void deleteProductInquiry(final Long inquiryId, final Long productId) {
         productInquiryPostRepository.deleteById(new ProductInquiryPost.Pk(inquiryId, productId));
     }
 

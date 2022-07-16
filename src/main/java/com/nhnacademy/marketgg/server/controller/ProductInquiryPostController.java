@@ -44,7 +44,7 @@ public class ProductInquiryPostController {
         productInquiryPostService.createProductInquiry(inquiryRequest, productId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create(defaultInquiryUri + "/products/" + productId + "/inquiries"))
+                             .location(URI.create("/shop/v1/products/" + productId + "/inquiries"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -63,7 +63,7 @@ public class ProductInquiryPostController {
                 .retrieveProductInquiryByProductId(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(defaultInquiryUri + "/products" + productId + "/inquiries"))
+                             .location(URI.create(defaultInquiryUri + "/products/" + productId + "/inquiries"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productInquiryResponses);
     }
