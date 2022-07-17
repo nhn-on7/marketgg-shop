@@ -75,14 +75,14 @@ public class ProductInquiryPostController {
      * @return - List<ProductInquiryResponse> 를 담은 응답 객체를 반환 합니다.
      * @since 1.0.0
      */
-    @GetMapping("/mygg/product-inquiries/{memberId}")
+    @GetMapping("/members/{memberId}/product-inquiries")
     public ResponseEntity<List<ProductInquiryResponse>> retrieveProductInquiryByMemberId(@PathVariable final Long memberId) {
 
         List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService
                 .retrieveProductInquiryByMemberId(memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(defaultInquiryUri + "/mygg/product-inquiries/" + memberId))
+                             .location(URI.create(defaultInquiryUri + "/members/" + memberId + "/product-inquiries"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productInquiryResponses);
     }
