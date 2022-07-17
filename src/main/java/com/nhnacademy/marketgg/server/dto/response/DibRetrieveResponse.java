@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Getter
 public class DibRetrieveResponse {
 
+    private final Long productNo;
+
     private final String productName;
 
     private final Long productPrice;

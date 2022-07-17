@@ -27,6 +27,7 @@ public class DibRepositoryImpl extends QuerydslRepositorySupport implements DibR
                 .innerJoin(product).on(dib.pk.productNo.eq(product.id))
                 .where(dib.pk.memberNo.eq(memberId))
                 .select(Projections.constructor(DibRetrieveResponse.class,
+                                         dib.product.id,
                                          dib.product.name,
                                          dib.product.price,
                                          dib.createdAt))
