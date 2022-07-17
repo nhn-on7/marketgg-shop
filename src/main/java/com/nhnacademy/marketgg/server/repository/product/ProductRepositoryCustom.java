@@ -38,11 +38,9 @@ public interface ProductRepositoryCustom {
      * DB에서 카테고리에 해당하는 모든 상품을 찾아 반환합니다.
      * ex) 100/101 -> 상품 - 채소에 해당하는 모든 상품을 반환
      *
-     * @param categorizationCode - 카테고리 1차 분류입니다. ex) 100 - 상품
      * @param categoryCode - 카테고리 2차 분류입니다. ex) 101 - 채소
      * @return - 상품 목록을 반환합니다.
      */
-    List<ProductResponse> findByCategoryAndCategorizationCodes(
-            final String categorizationCode, final String categoryCode);
+    List<ProductResponse> findByCategoryAndCategorizationCodes(final String categoryCode);
 
 }

@@ -19,7 +19,7 @@ public class LabelRepositoryImpl extends QuerydslRepositorySupport implements La
         QLabel label = QLabel.label;
 
         return from(label)
-                .select(Projections.bean(LabelRetrieveResponse.class,
+                .select(Projections.constructor(LabelRetrieveResponse.class,
                                          label.id,
                                          label.name))
                 .fetch();

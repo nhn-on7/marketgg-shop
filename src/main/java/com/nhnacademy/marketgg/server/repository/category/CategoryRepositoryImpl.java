@@ -21,9 +21,9 @@ public class CategoryRepositoryImpl extends QuerydslRepositorySupport implements
         QCategorization categorization = QCategorization.categorization;
 
         return from(category)
-                .innerJoin(category.categorization).on(category.categorization.id.eq(categorization.id))
+                .innerJoin(categorization).on(category.categorization.id.eq(categorization.id))
                 .where(category.id.eq(id))
-                .select(Projections.bean(CategoryRetrieveResponse.class,
+                .select(Projections.constructor(CategoryRetrieveResponse.class,
                                          category.id,
                                          categorization.name,
                                          category.name,
@@ -37,8 +37,8 @@ public class CategoryRepositoryImpl extends QuerydslRepositorySupport implements
         QCategorization categorization = QCategorization.categorization;
 
         return from(category)
-                .innerJoin(category.categorization).on(category.categorization.id.eq(categorization.id))
-                .select(Projections.bean(CategoryRetrieveResponse.class,
+                .innerJoin(categorization).on(category.categorization.id.eq(categorization.id))
+                .select(Projections.constructor(CategoryRetrieveResponse.class,
                                          category.id,
                                          categorization.name,
                                          category.name,

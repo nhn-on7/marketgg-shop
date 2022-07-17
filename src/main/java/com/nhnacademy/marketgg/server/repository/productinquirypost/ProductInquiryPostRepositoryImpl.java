@@ -19,7 +19,7 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport 
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
         return from(productInquiryPost)
-                .select(Projections.bean(ProductInquiryResponse.class,
+                .select(Projections.constructor(ProductInquiryResponse.class,
                                          productInquiryPost.member,
                                          productInquiryPost.title,
                                          productInquiryPost.content,
@@ -36,7 +36,7 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport 
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
         return from(productInquiryPost)
-                .select(Projections.bean(ProductInquiryResponse.class,
+                .select(Projections.constructor(ProductInquiryResponse.class,
                                          productInquiryPost.member,
                                          productInquiryPost.title,
                                          productInquiryPost.content,

@@ -41,9 +41,6 @@ public class Dib {
     @JoinColumn(name = "product_no")
     private Product product;
 
-    @Column
-    private String memo;
-
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -78,7 +75,6 @@ public class Dib {
     public Dib(final DibCreateRequest dibCreateRequest, final Member member, final Product product) {
         this.member = member;
         this.product = product;
-        this.memo = dibCreateRequest.getMemo();
         this.createdAt = dibCreateRequest.getCreatedAt();
     }
 

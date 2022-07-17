@@ -13,8 +13,6 @@ public class DibRetrieveResponse {
 
     private final Long productPrice;
 
-    private final String memo;
-
     private final LocalDateTime createdAt;
 
 }

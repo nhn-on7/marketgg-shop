@@ -3,8 +3,8 @@ package com.nhnacademy.marketgg.server.repository.product;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.QProduct;
+import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.QBean;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
@@ -45,38 +45,37 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     }
 
     @Override
-    public List<ProductResponse> findByCategoryAndCategorizationCodes(String categorizationCode, String categoryCode) {
+    public List<ProductResponse> findByCategoryAndCategorizationCodes(String categoryCode) {
         QProduct product = QProduct.product;
 
         return from(product)
                 .select(selectAllProductColumns())
-                .where(product.category.categorization.id.eq(categorizationCode))
                 .where(product.category.id.eq(categoryCode))
                 .fetch();
     }
 
-    private QBean<ProductResponse> selectAllProductColumns() {
+    private ConstructorExpression<ProductResponse> selectAllProductColumns() {
         QProduct product = QProduct.product;
 
-        return Projections.bean(ProductResponse.class,
-                                product.id,
-                                product.asset,
-                                product.category,
-                                product.name,
-                                product.content,
-                                product.totalStock,
-                                product.price,
-                                product.description,
-                                product.unit,
-                                product.deliveryType,
-                                product.origin,
-                                product.packageType,
-                                product.expirationDate,
-                                product.allergyInfo,
-                                product.capacity,
-                                product.createdAt,
-                                product.updatedAt,
-                                product.deletedAt);
+        return Projections.constructor(ProductResponse.class,
+                                       product.id,
+                                       product.asset,
+                                       product.category,
+                                       product.name,
+                                       product.content,
+                                       product.totalStock,
+                                       product.price,
+                                       product.description,
+                                       product.unit,
+                                       product.deliveryType,
+                                       product.origin,
+                                       product.packageType,
+                                       product.expirationDate,
+                                       product.allergyInfo,
+                                       product.capacity,
+                                       product.createdAt,
+                                       product.updatedAt,
+                                       product.deletedAt);
     }
 
 }

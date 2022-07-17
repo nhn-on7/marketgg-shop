@@ -13,8 +13,6 @@ public class DibCreateRequest {
 
     private Long productNo;
 
-    private String memo;
-
     private LocalDateTime createdAt;
 
 }
