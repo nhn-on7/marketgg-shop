@@ -2,8 +2,6 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.DibCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.DibDeleteRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberGradeCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
@@ -60,28 +58,15 @@ public class DefaultDibServiceTest {
     @Mock
     ProductRepository productRepository;
 
-    private static DibCreateRequest dibCreateRequest;
-    private static DibDeleteRequest dibDeleteRequest;
     private static Member member;
     private static Product product;
 
     @BeforeAll
     static void beforeAll() {
-        dibCreateRequest = new DibCreateRequest();
-        dibDeleteRequest = new DibDeleteRequest();
-
         member = new Member(new MemberCreateRequest(), new MemberGrade(new MemberGradeCreateRequest()));
         product = new Product(new ProductCreateRequest(), Asset.create(),
                               new Category(new CategoryCreateRequest(),
                                            new Categorization(new CategorizationCreateRequest())));
-
-        ReflectionTestUtils.setField(dibCreateRequest, "memberNo", 1L);
-        ReflectionTestUtils.setField(dibCreateRequest, "productNo", 1L);
-        ReflectionTestUtils.setField(dibCreateRequest, "memo", "memoSample");
-        ReflectionTestUtils.setField(dibCreateRequest, "createdAt", LocalDateTime.now());
-
-        ReflectionTestUtils.setField(dibDeleteRequest, "memberNo", 1L);
-        ReflectionTestUtils.setField(dibDeleteRequest, "productNo", 1L);
 
         ReflectionTestUtils.setField(member, "id", 1L);
         ReflectionTestUtils.setField(product, "id", 1L);
@@ -93,7 +78,7 @@ public class DefaultDibServiceTest {
         when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
         when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
 
-        dibService.createDib(dibCreateRequest);
+        dibService.createDib(1L, 1L);
 
         verify(memberRepository, times(1)).findById(anyLong());
         verify(productRepository, times(1)).findById(anyLong());
@@ -105,7 +90,7 @@ public class DefaultDibServiceTest {
     void testCreateDibFailWhenMemberNotFound() {
         when(memberRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> dibService.createDib(dibCreateRequest)).isInstanceOf(MemberNotFoundException.class);
+        assertThatThrownBy(() -> dibService.createDib(1L, 1L)).isInstanceOf(MemberNotFoundException.class);
     }
 
     @Test
@@ -114,7 +99,7 @@ public class DefaultDibServiceTest {
         when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
         when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> dibService.createDib(dibCreateRequest)).isInstanceOf(ProductNotFoundException.class);
+        assertThatThrownBy(() -> dibService.createDib(1L, 1L)).isInstanceOf(ProductNotFoundException.class);
     }
 
     @Test
@@ -130,13 +115,13 @@ public class DefaultDibServiceTest {
     @Test
     @DisplayName("찜 삭제 성공")
     void testDeleteDibSuccess() {
-        Dib dib = new Dib(dibCreateRequest, member, product);
+        Dib dib = new Dib(member, product);
 
         when(dibRepository.findById(new Dib.Pk(1L, 1L))).thenReturn(Optional.of(dib));
 
         doNothing().when(dibRepository).delete(any(Dib.class));
 
-        dibService.deleteDib(dibDeleteRequest);
+        dibService.deleteDib(1L, 1L);
 
         verify(dibRepository, times(1)).delete(any(Dib.class));
     }
@@ -146,7 +131,7 @@ public class DefaultDibServiceTest {
     void testDeleteDibFailWhenMemberNotFound() {
         when(dibRepository.findById(new Dib.Pk(1L, 1L))).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> dibService.deleteDib(dibDeleteRequest)).isInstanceOf(DibNotFoundException.class);
+        assertThatThrownBy(() -> dibService.deleteDib(1L, 1L)).isInstanceOf(DibNotFoundException.class);
     }
 
 }

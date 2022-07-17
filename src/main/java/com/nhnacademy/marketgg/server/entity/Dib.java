@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.DibCreateRequest;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -66,16 +65,15 @@ public class Dib {
     /**
      * 찜을 등록하기 위한 생성자입니다.
      *
-     * @param dibCreateRequest - 찜을 등록하기 위한 DTO 입니다.
      * @param member - 찜을 등록하는 회원입니다.
      * @param product - 찜의 대상이 되는 상품입니다.
      *
      * @since 1.0.0
      */
-    public Dib(final DibCreateRequest dibCreateRequest, final Member member, final Product product) {
+    public Dib(final Member member, final Product product) {
         this.member = member;
         this.product = product;
-        this.createdAt = dibCreateRequest.getCreatedAt();
+        this.createdAt = LocalDateTime.now();
     }
 
 }
