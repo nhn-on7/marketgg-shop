@@ -115,7 +115,8 @@ public class DefaultDibServiceTest {
     @Test
     @DisplayName("찜 삭제 성공")
     void testDeleteDibSuccess() {
-        Dib dib = new Dib(member, product);
+        Dib.Pk pk = new Dib.Pk(member.getId(), product.getId());
+        Dib dib = new Dib(pk, member, product);
 
         when(dibRepository.findById(new Dib.Pk(1L, 1L))).thenReturn(Optional.of(dib));
 

@@ -35,7 +35,9 @@ public class DefaultDibService implements DibService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
-        Dib dib = new Dib(member, product);
+        Dib.Pk pk = new Dib.Pk(memberId, productId);
+
+        Dib dib = new Dib(pk, member, product);
 
         dibRepository.save(dib);
     }

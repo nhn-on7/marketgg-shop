@@ -70,7 +70,8 @@ public class Dib {
      *
      * @since 1.0.0
      */
-    public Dib(final Member member, final Product product) {
+    public Dib(final Pk pk, final Member member, final Product product) {
+        this.pk = pk;
         this.member = member;
         this.product = product;
         this.createdAt = LocalDateTime.now();

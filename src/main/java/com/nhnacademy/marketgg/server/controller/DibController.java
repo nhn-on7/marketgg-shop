@@ -32,6 +32,7 @@ public class DibController {
     @PostMapping("/{memberId}/dibs/{productId}")
     ResponseEntity<Void> createDib(@PathVariable final Long memberId,
                                    @PathVariable final Long productId) {
+
         dibService.createDib(memberId, productId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
