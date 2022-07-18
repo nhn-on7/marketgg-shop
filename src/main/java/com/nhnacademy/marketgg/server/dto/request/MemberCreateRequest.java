@@ -12,7 +12,7 @@ public class MemberCreateRequest {
 
     private MemberGrade memberGrade;
 
-    private String email;
+    private String uuid;
 
     private Character gender;
 
