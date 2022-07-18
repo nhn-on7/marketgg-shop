@@ -65,9 +65,9 @@ public class DefaultPointService implements PointService {
 
     private void checkMemberGrade(final String grade, final PointHistoryRequest pointRequest) {
         if ((grade.compareTo("VIP") == 0) && pointRequest.getPoint() > 0) {
-            pointRequest.isVip();
+            pointRequest.vipBenefit();
         } else if ((grade.compareTo("G-VIP") == 0) && pointRequest.getPoint() > 0) {
-            pointRequest.isGVip();
+            pointRequest.gVipBenefit();
         }
     }
 

@@ -14,11 +14,11 @@ public class PointHistoryRequest {
 
     private String content;
 
-    public void isVip() {
+    public void vipBenefit() {
         this.point = point * VIP;
     }
 
-    public void isGVip() {
+    public void gVipBenefit() {
         this.point = point * GVIP;
     }
 
