@@ -55,18 +55,20 @@ public class DefaultPointService implements PointService {
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
         Integer totalPoint = pointRepository.findLastTotalPoint(memberId);
 
-        if ((member.getMemberGrade().getGrade().compareTo("VIP") == 0) &&
-                pointRequest.getPoint() > 0) {
-            pointRequest.isVip();
-        } else if ((member.getMemberGrade().getGrade().compareTo("G-VIP") == 0) &&
-                pointRequest.getPoint() > 0) {
-            pointRequest.isGVip();
-        }
+        this.checkMemberGrade(member.getMemberGrade().getGrade(), pointRequest);
 
         PointHistory pointHistory =
                 new PointHistory(member, order, totalPoint + pointRequest.getPoint(), pointRequest);
 
         pointRepository.save(pointHistory);
+    }
+
+    private void checkMemberGrade(final String grade, final PointHistoryRequest pointRequest) {
+        if ((grade.compareTo("VIP") == 0) && pointRequest.getPoint() > 0) {
+            pointRequest.isVip();
+        } else if ((grade.compareTo("G-VIP") == 0) && pointRequest.getPoint() > 0) {
+            pointRequest.isGVip();
+        }
     }
 
 }
