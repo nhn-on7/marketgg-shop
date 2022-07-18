@@ -7,8 +7,10 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
-public class CouponCreateRequest {
+public class CouponRequest {
 
+    private Long id;
+    
     private String name;
 
     private String type;
