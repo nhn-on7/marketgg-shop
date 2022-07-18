@@ -8,7 +8,7 @@ import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.productinquiry.ProductInquiryPostNotFoundException;
 import com.nhnacademy.marketgg.server.repository.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
-import com.nhnacademy.marketgg.server.repository.ProductInquiryPostRepository;
+import com.nhnacademy.marketgg.server.repository.productInquiryPost.ProductInquiryPostRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

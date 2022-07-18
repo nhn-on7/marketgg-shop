@@ -38,8 +38,8 @@ public class ProductInquiryPostController {
      * @since 1.0.0
      */
     @PostMapping("/products/{productId}/inquiries")
-    public ResponseEntity<Void> createProductInquiry(@RequestBody final ProductInquiryRequest inquiryRequest,
-                                                     @PathVariable final Long productId) {
+    public ResponseEntity<Void> createProductInquiry(@PathVariable final Long productId,
+                                                     @RequestBody final ProductInquiryRequest inquiryRequest) {
 
         productInquiryPostService.createProductInquiry(inquiryRequest, productId);
 
@@ -58,9 +58,7 @@ public class ProductInquiryPostController {
      */
     @GetMapping("/products/{productId}/inquiries")
     public ResponseEntity<List<ProductInquiryResponse>> retrieveProductInquiryByProductId(@PathVariable final Long productId) {
-
-        List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService
-                .retrieveProductInquiryByProductId(productId);
+        List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService.retrieveProductInquiryByProductId(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(defaultInquiryUri + "/products/" + productId + "/inquiries"))
@@ -77,37 +75,12 @@ public class ProductInquiryPostController {
      */
     @GetMapping("/members/{memberId}/product-inquiries")
     public ResponseEntity<List<ProductInquiryResponse>> retrieveProductInquiryByMemberId(@PathVariable final Long memberId) {
-
-        List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService
-                .retrieveProductInquiryByMemberId(memberId);
+        List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService.retrieveProductInquiryByMemberId(memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(defaultInquiryUri + "/members/" + memberId + "/product-inquiries"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productInquiryResponses);
-    }
-
-    /**
-     * 상품 문의에 대한 관리자의 답글을 등록하기 위한 PutMapping 을 지원합니다.
-     *
-     * @param inquiryReply - 상품 문의에 대한 관리자의 답글을 담은 DTO 입니다.
-     * @param productId    - 상품의 PK 입니다.
-     * @param inquiryId    - 업데이트할 상품 문의 글의 PK 입니다.
-     * @return - Mapping URI 를 담은 응답 객체를 반환합니다.
-     * @since 1.0.0
-     */
-    @PutMapping("/admin/products/{productId}/inquiries/{inquiryId}")
-    public ResponseEntity<Void> updateProductInquiryReply(@RequestBody final ProductInquiryRequest inquiryReply,
-                                                          @PathVariable final Long productId,
-                                                          @PathVariable final Long inquiryId) {
-
-        productInquiryPostService.updateProductInquiryReply(inquiryReply, inquiryId, productId);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(defaultInquiryUri +
-                                     "/admin/products/" + productId + "/inquiries/" + inquiryId))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .build();
     }
 
     /**

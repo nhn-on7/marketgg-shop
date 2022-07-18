@@ -1,8 +1,9 @@
-package com.nhnacademy.marketgg.server.repository;
+package com.nhnacademy.marketgg.server.repository.productInquiryPost;
 
 import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import com.nhnacademy.marketgg.server.entity.QProductInquiryPost;
+import com.nhnacademy.marketgg.server.repository.productInquiryPost.ProductInquiryPostRepositoryCustom;
 import com.querydsl.core.types.Projections;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
@@ -15,7 +16,7 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport 
     }
 
     @Override
-    public List<ProductInquiryResponse> findALLByProductNo(Long id) {
+    public List<ProductInquiryResponse> findALLByProductNo(final Long id) {
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
         return from(productInquiryPost)
@@ -31,7 +32,7 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport 
     }
 
     @Override
-    public List<ProductInquiryResponse> findAllByMemberNo(Long id) {
+    public List<ProductInquiryResponse> findAllByMemberNo(final Long id) {
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
         return from(productInquiryPost)

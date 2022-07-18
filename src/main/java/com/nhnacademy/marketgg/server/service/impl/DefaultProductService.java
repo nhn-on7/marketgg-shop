@@ -41,8 +41,6 @@ public class DefaultProductService implements ProductService {
         throws IOException {
 
         String originalFileName = imageFile.getOriginalFilename();
-        // 하드코딩된 uploadPath를 설정파일로 분리.
-        // Local 환경에서는 자신의 개인 경로를 사용하고, 서버 배포시 따로 경로를 설정할 것
         File dest = new File(uploadPath, originalFileName);
         imageFile.transferTo(dest);
 

@@ -74,6 +74,7 @@ class ProductInquiryPostControllerTest {
     }
 
     @Test
+    @DisplayName("상품 문의 답글 등록 테스트")
     void testUpdateProductInquiryReply() throws Exception {
         ProductInquiryRequest productInquiryRequest = new ProductInquiryRequest();
         doNothing().when(productInquiryPostService)
@@ -89,6 +90,7 @@ class ProductInquiryPostControllerTest {
     }
 
     @Test
+    @DisplayName("상품 문의 삭제 테스트")
     void testDeleteProductInquiry() throws Exception {
         doNothing().when(productInquiryPostService)
                    .deleteProductInquiry(anyLong(), anyLong());

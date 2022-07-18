@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.repository;
+package com.nhnacademy.marketgg.server.repository.productInquiryPost;
 
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import org.springframework.data.jpa.repository.JpaRepository;
