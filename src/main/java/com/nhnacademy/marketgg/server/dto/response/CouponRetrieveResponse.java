@@ -3,8 +3,6 @@ package com.nhnacademy.marketgg.server.dto.response;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @RequiredArgsConstructor
 @Getter
 public class CouponRetrieveResponse {
@@ -15,8 +13,10 @@ public class CouponRetrieveResponse {
 
     private final String type;
 
-    private final LocalDateTime expiredAt;
+    private final Integer expiredDate;
 
     private final Integer minimumMoney;
+
+    private final Double disCountAmount;
 
 }

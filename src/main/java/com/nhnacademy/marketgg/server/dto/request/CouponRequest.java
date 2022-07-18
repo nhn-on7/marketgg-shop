@@ -3,8 +3,6 @@ package com.nhnacademy.marketgg.server.dto.request;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @NoArgsConstructor
 @Getter
 public class CouponRequest {
@@ -13,8 +11,10 @@ public class CouponRequest {
 
     private String type;
 
-    private LocalDateTime expiredAt;
+    private Integer expiredDate;
 
     private Integer minimumMoney;
+
+    private Double discountAmount;
 
 }

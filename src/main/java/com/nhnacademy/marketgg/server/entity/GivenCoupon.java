@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Table(name = "given_coupons")
 @Entity
@@ -33,6 +34,9 @@ public class GivenCoupon {
     @ManyToOne
     @JoinColumn(name = "member_no")
     private Member member;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @Embeddable
     @NoArgsConstructor(access = AccessLevel.PROTECTED)

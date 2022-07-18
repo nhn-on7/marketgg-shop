@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
 
 @Table(name = "coupons")
 @Entity
@@ -30,23 +29,26 @@ public class Coupon {
     @Column
     private String type;
 
-    @Column(name = "expired_at")
-    private LocalDateTime expiredAt;
+    @Column(name = "expired_date")
+    private Integer expiredDate;
 
     @Column(name = "minimum_money")
     private Integer minimumMoney;
 
+    @Column(name = "discount_amount")
+    private Double discountAmount;
+
     public Coupon(final CouponRequest couponRequest) {
         this.name = couponRequest.getName();
-        this.type= couponRequest.getType();
-        this.expiredAt = couponRequest.getExpiredAt();
+        this.type = couponRequest.getType();
+        this.expiredDate = couponRequest.getExpiredDate();
         this.minimumMoney = couponRequest.getMinimumMoney();
     }
 
     public void updateCoupon(final CouponRequest couponRequest) {
         this.name = couponRequest.getName();
-        this.type= couponRequest.getType();
-        this.expiredAt = couponRequest.getExpiredAt();
+        this.type = couponRequest.getType();
+        this.expiredDate = couponRequest.getExpiredDate();
         this.minimumMoney = couponRequest.getMinimumMoney();
     }
 
