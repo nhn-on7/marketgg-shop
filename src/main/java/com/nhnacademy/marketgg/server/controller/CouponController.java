@@ -19,6 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.List;
 
+/**
+ * 쿠폰 관련 Rest Controller 입니다.
+ *
+ * @since 1.0.0
+ */
 @RestController
 @RequestMapping("/shop/v1/admin/coupons")
 @RequiredArgsConstructor
@@ -28,6 +33,14 @@ public class CouponController {
 
     private static final String DEFAULT_COUPON = "/shop/v1/admin/coupons";
 
+    /**
+     * 입력한 정보로 쿠폰을 등록하는 PostMapping 을 지원합니다.
+     *
+     * @param couponRequest - 쿠폰을 등록하기 위한 정보를 담고 있는 DTO 입니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     *
+     * @since 1.0.0
+     */
     @PostMapping
     ResponseEntity<Void> createCoupon(@RequestBody final CouponRequest couponRequest) {
         couponService.createCoupon(couponRequest);
@@ -38,6 +51,13 @@ public class CouponController {
                              .build();
     }
 
+    /**
+     * 전체 쿠폰 목록을 조회하는 GetMapping 을 지원합니다.
+     *
+     * @return 전체 쿠폰 목록 DTO 를 List 로 반환합니다.
+     *
+     * @since 1.0.0
+     */
     @GetMapping
     ResponseEntity<List<CouponRetrieveResponse>> retrieveCoupons() {
         List<CouponRetrieveResponse> couponResponses = couponService.retrieveCoupons();
@@ -47,6 +67,15 @@ public class CouponController {
                              .body(couponResponses);
     }
 
+    /**
+     * 선택한 쿠폰을 수정하는 PutMapping 을 지원합니다.
+     *
+     * @param couponId - 수정할 쿠폰의 식별번호입니다.
+     * @param couponRequest - 수정할 정보를 담은 DTO 입니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     *
+     * @since 1.0.0
+     */
     @PutMapping("/{couponId}")
     ResponseEntity<Void> updateCoupon(@PathVariable final Long couponId,
                                       @RequestBody final CouponRequest couponRequest) {
@@ -59,6 +88,14 @@ public class CouponController {
                              .build();
     }
 
+    /**
+     * 선택한 쿠폰을 삭제하는 DeleteMapping 을 지원합니다.
+     *
+     * @param couponId - 삭제할 쿠폰의 식별번호입니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     *
+     * @since 1.0.0
+     */
     @DeleteMapping("/{couponId}")
     ResponseEntity<Void> deleteCoupon(@PathVariable final Long couponId) {
         couponService.deleteCoupon(couponId);
