@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class CouponRequest {
 
     private Long id;
-    
+
     private String name;
 
     private String type;
