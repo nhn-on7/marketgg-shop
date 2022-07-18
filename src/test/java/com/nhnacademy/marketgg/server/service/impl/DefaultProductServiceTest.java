@@ -74,10 +74,6 @@ class DefaultProductServiceTest {
 
     @BeforeAll
     static void beforeAll() throws IOException {
-
-        // REVIEW: Projection Interface 타입으로 받으면 다 Override 해야한다.
-        // REVIEW: Interface 타입으로 받으면 유연하게 데이터 받을 수 있고 계층 구조 만들 수 있다.
-        // REVIEW: Class or interface 타입 받는 상황에 맞게 선택해야 한다.
         productResponse = new ProductResponse() {
 
             @Override
@@ -211,9 +207,6 @@ class DefaultProductServiceTest {
         URL url = getClass().getClassLoader().getResource("lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
 
-        given(productRepository.findById(any())).willReturn(
-            Optional.of(new Product(productRequest, asset, category)));
-
         MockMultipartFile file =
             new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));
 
@@ -223,6 +216,7 @@ class DefaultProductServiceTest {
 
         Optional<Product> product = Optional.of(new Product(productRequest, asset, category));
         productService.createProduct(productRequest, file);
+
 
         assertThat(productRepository.findById(1L).get().getId()).isEqualTo(product.get().getId());
         verify(productRepository, atLeastOnce()).save(any());

@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.ProductInquiryReply;
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
 import lombok.*;
 
@@ -60,17 +59,17 @@ public class ProductInquiryPost {
         }
     }
 
-    public ProductInquiryPost(Product product, Member member, ProductInquiryRequest inquiryRequest) {
+    public ProductInquiryPost(Product product, Member member, ProductInquiryRequest productInquiryRequest) {
         this.pk = new Pk(product.getId());
         this.product = product;
         this.member = member;
-        this.title = inquiryRequest.getTitle();
-        this.content = inquiryRequest.getContent();
-        this.isSecret = inquiryRequest.getIsSecret();
+        this.title = productInquiryRequest.getTitle();
+        this.content = productInquiryRequest.getContent();
+        this.isSecret = productInquiryRequest.getIsSecret();
         this.createdAt = LocalDateTime.now();
     }
 
-    public void updateInquiry(ProductInquiryReply inquiryReply) {
+    public void updateInquiry(ProductInquiryRequest inquiryReply) {
         this.adminReply = inquiryReply.getAdminReply();
     }
 

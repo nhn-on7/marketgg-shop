@@ -20,7 +20,7 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:7080/shop/v1/admin/products/3/inquiries/1
+PUT http://localhost:7080/shop/v1/admin/products/3/inquiries/6
 Content-Type: application/json
 
 {
@@ -29,6 +29,6 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:7080/shop/v1/products/3/inquiries/1 HTTP/1.1
+DELETE http://localhost:7080/shop/v1/products/3/inquiries/7 HTTP/1.1
 
 ###

@@ -1,3 +1,26 @@
 spring:
-  profiles:
-    active: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://133.186.211.156:3306/marketgg_shop
+    username: on7
+    password: ?nk9Wa#^Bg)on71!*,^2=d
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: false
+    show-sql: true
+
+server:
+  port: 7080
+
+  servlet:
+    multipart:
+      file-size-threshold: 1MB
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+# Fixme: 경로 수정하기
+# uploadPath: /Users/coalong/gh-repos/marketgg/marketgg-server/src/main/resources/static
+uploadPath: /Users/johyeonjin/Desktop/temp
+inquiryPath: /shop/v1

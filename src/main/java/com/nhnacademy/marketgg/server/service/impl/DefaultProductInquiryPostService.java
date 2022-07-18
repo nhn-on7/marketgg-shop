@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.request.ProductInquiryReply;
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -10,7 +9,7 @@ import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.exception.productinquiry.ProductInquiryPostNotFoundException;
 import com.nhnacademy.marketgg.server.repository.MemberRepository;
-import com.nhnacademy.marketgg.server.repository.ProductInquiryPostRepository;
+import com.nhnacademy.marketgg.server.repository.productInquiryPost.ProductInquiryPostRepository;
 import com.nhnacademy.marketgg.server.repository.ProductRepository;
 import com.nhnacademy.marketgg.server.service.ProductInquiryPostService;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +28,11 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
 
     @Override
     @Transactional
-    public void createProductInquiry(ProductInquiryRequest productInquiryRequest, Long productId) {
+    public void createProductInquiry(final ProductInquiryRequest productInquiryRequest, final Long id) {
         Member member = memberRepository.findById(productInquiryRequest.getMemberId())
                                         .orElseThrow(MemberNotFoundException::new);
 
-        Product product = productRepository.findById(productId)
+        Product product = productRepository.findById(id)
                                            .orElseThrow(ProductNotFoundException::new);
 
         ProductInquiryPost inquiryPost = new ProductInquiryPost(product, member, productInquiryRequest);
@@ -42,27 +41,30 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     }
 
     @Override
-    public List<ProductInquiryResponse> retrieveProductInquiryByProductId(Long productId) {
-        return productInquiryPostRepository.findALLByProductNo(productId);
+    public List<ProductInquiryResponse> retrieveProductInquiryByProductId(final Long id) {
+        return productInquiryPostRepository.findALLByProductNo(id);
     }
 
     @Override
-    public List<ProductInquiryResponse> retrieveProductInquiryByMemberId(Long memberId) {
-        return productInquiryPostRepository.findAllByMemberNo(memberId);
+    public List<ProductInquiryResponse> retrieveProductInquiryByMemberId(final Long id) {
+        return productInquiryPostRepository.findAllByMemberNo(id);
     }
 
     @Override
     @Transactional
-    public void updateProductInquiryReply(ProductInquiryReply inquiryReply, Long inquiryId, Long productId) {
+    public void updateProductInquiryReply(final ProductInquiryRequest inquiryReply,
+                                          final Long inquiryId,
+                                          final Long productId) {
         ProductInquiryPost inquiryPost = productInquiryPostRepository.findById(new ProductInquiryPost.Pk(inquiryId, productId))
                                                                      .orElseThrow(ProductInquiryPostNotFoundException::new);
 
         inquiryPost.updateInquiry(inquiryReply);
+        productInquiryPostRepository.save(inquiryPost);
     }
 
     @Override
     @Transactional
-    public void deleteProductInquiry(Long inquiryId, Long productId) {
+    public void deleteProductInquiry(final Long inquiryId, final Long productId) {
         productInquiryPostRepository.deleteById(new ProductInquiryPost.Pk(inquiryId, productId));
     }
 

@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -29,7 +30,6 @@ import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
@@ -48,7 +48,6 @@ class ProductControllerTest {
     @MockBean
     ProductService productService;
 
-    private HttpHeaders headers;
     private static final String DEFAULT_PRODUCT = "/admin/v1/products";
     private static ProductCreateRequest productRequest;
 
@@ -87,7 +86,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("상품 목록 전체 조회하는 테스트")
     void testRetrieveProducts() throws Exception {
-        when(this.productService.retrieveProducts()).thenReturn(List.of());
+        given(productService.retrieveProducts()).willReturn(List.of());
 
         this.mockMvc.perform(get("/admin/v1/products").contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
@@ -97,7 +96,6 @@ class ProductControllerTest {
     @Test
     @DisplayName("상품 정보 수정하는 테스트")
     void testUpdateProduct() throws Exception {
-
         String content = this.objectMapper.writeValueAsString(productRequest);
         MockMultipartFile dto = new MockMultipartFile("productRequest", "jsondata", "application/json",
             content.getBytes(StandardCharsets.UTF_8));
@@ -138,5 +136,6 @@ class ProductControllerTest {
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         verify(this.productService, times(1)).searchProductsByName(anyString());
+
     }
 }
