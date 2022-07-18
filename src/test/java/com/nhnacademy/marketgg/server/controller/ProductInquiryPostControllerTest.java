@@ -67,26 +67,10 @@ class ProductInquiryPostControllerTest {
     void testRetrieveProductInquiryByMemberId() throws Exception {
         given(productInquiryPostService.retrieveProductInquiryByMemberId(anyLong())).willReturn(List.of());
 
-        this.mockMvc.perform(get(DEFAULT_INQUIRY + "/mygg/product-inquiries/" + 1L)
+        this.mockMvc.perform(get(DEFAULT_INQUIRY + "/members/" + 1L + "/product-inquiries")
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
         verify(productInquiryPostService, times(1)).retrieveProductInquiryByMemberId(anyLong());
-    }
-
-    @Test
-    @DisplayName("상품 문의 답글 등록 테스트")
-    void testUpdateProductInquiryReply() throws Exception {
-        ProductInquiryRequest productInquiryRequest = new ProductInquiryRequest();
-        doNothing().when(productInquiryPostService)
-                   .updateProductInquiryReply(any(ProductInquiryRequest.class), anyLong(), anyLong());
-        String content = objectMapper.writeValueAsString(productInquiryRequest);
-
-        this.mockMvc.perform(put(DEFAULT_INQUIRY + "/admin/products/" + 1L + "/inquiries/" + 1L)
-                    .content(content)
-                    .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk());
-        verify(productInquiryPostService, times(1))
-                .updateProductInquiryReply(any(ProductInquiryRequest.class), anyLong(), anyLong());
     }
 
     @Test
@@ -100,4 +84,5 @@ class ProductInquiryPostControllerTest {
                     .andExpect(status().isOk());
         verify(productInquiryPostService, times(1)).deleteProductInquiry(anyLong(), anyLong());
     }
+
 }
