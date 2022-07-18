@@ -2,7 +2,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
-import com.nhnacademy.marketgg.server.repository.MemberRepository;
+import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.MemberService;
 import java.time.LocalDateTime;
 import java.util.Objects;

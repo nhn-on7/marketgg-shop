@@ -76,9 +76,8 @@ public interface ProductService {
     /**
      * 카테고리로 상품 목록을 조회합니다.
      *
-     * @param categorizationCode - 카테고리 1차 분류입니다.
      * @param categoryCode       - 카테고리 2차 분류입니다.
      * @return - 해당하는 카테고리의 상품 리스트를 반환합니다.
      */
-    List<ProductResponse> searchProductByCategory(String categorizationCode, String categoryCode);
+    List<ProductResponse> searchProductByCategory(String categoryCode);
 }

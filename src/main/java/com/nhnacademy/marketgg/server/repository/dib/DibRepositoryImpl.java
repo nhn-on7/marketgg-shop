@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.repository.dib;
 import com.nhnacademy.marketgg.server.dto.response.DibRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Dib;
 import com.nhnacademy.marketgg.server.entity.QDib;
+import com.nhnacademy.marketgg.server.entity.QMember;
 import com.nhnacademy.marketgg.server.entity.QProduct;
 import com.querydsl.core.types.Projections;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -19,15 +20,16 @@ public class DibRepositoryImpl extends QuerydslRepositorySupport implements DibR
     public List<DibRetrieveResponse> findAllDibs(Long memberId) {
         QDib dib = QDib.dib;
         QProduct product = QProduct.product;
+        QMember member = QMember.member;
 
         return from(dib)
-                .innerJoin(dib.member).on(dib.member.id.eq(memberId))
-                .innerJoin(dib.product).on(dib.product.id.eq(product.id))
+                .innerJoin(member).on(dib.pk.memberNo.eq(memberId))
+                .innerJoin(product).on(dib.pk.productNo.eq(product.id))
                 .where(dib.pk.memberNo.eq(memberId))
-                .select(Projections.bean(DibRetrieveResponse.class,
+                .select(Projections.constructor(DibRetrieveResponse.class,
+                                         dib.product.id,
                                          dib.product.name,
                                          dib.product.price,
-                                         dib.memo,
                                          dib.createdAt))
                 .fetch();
     }

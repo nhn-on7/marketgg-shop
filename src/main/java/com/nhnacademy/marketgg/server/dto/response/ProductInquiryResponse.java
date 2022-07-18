@@ -1,21 +1,25 @@
 package com.nhnacademy.marketgg.server.dto.response;
 
 import com.nhnacademy.marketgg.server.entity.Member;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
-public interface ProductInquiryResponse {
+@RequiredArgsConstructor
+@Getter
+public class ProductInquiryResponse {
 
-    Member getMember();
+    private final Member member;
 
-    String getTitle();
+    private final String title;
 
-    String getContent();
+    private final String content;
 
-    Boolean getIsSecret();
+    private final Boolean isSecret;
 
-    String getAdminReply();
+    private final String adminReply;
 
-    LocalDateTime getCreatedAt();
+    private final LocalDateTime createdAt;
 
 }

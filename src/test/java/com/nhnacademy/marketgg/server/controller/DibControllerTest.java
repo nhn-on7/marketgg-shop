@@ -1,15 +1,12 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.request.DibCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.DibDeleteRequest;
 import com.nhnacademy.marketgg.server.service.DibService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -40,17 +37,12 @@ public class DibControllerTest {
     @Test
     @DisplayName("찜 등록")
     void testCreateDib() throws Exception {
-        DibCreateRequest dibCreateRequest = new DibCreateRequest();
-        String requestBody = objectMapper.writeValueAsString(dibCreateRequest);
+        doNothing().when(dibService).createDib(anyLong(), anyLong());
 
-        doNothing().when(dibService).createDib(any(DibCreateRequest.class));
-
-        mockMvc.perform(post("/shop/v1/dibs")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(requestBody))
+        mockMvc.perform(post("/shop/v1/members/1/dibs/1"))
                .andExpect(status().isCreated());
 
-        verify(dibService, times(1)).createDib(any(DibCreateRequest.class));
+        verify(dibService, times(1)).createDib(anyLong(), anyLong());
     }
 
     @Test
@@ -58,8 +50,8 @@ public class DibControllerTest {
     void testRetrieveDibs() throws Exception {
         when(dibService.retrieveDibs(1L)).thenReturn(List.of());
 
-        this.mockMvc.perform(get("/shop/v1/dibs/" + 1L))
-                .andExpect(status().isOk());
+        this.mockMvc.perform(get("/shop/v1/members/1/dibs"))
+                    .andExpect(status().isOk());
 
         verify(dibService, times(1)).retrieveDibs(anyLong());
     }
@@ -67,17 +59,12 @@ public class DibControllerTest {
     @Test
     @DisplayName("찜 삭제")
     void testDeleteDib() throws Exception {
-        DibDeleteRequest dibDeleteRequest = new DibDeleteRequest();
-        String requestBody = objectMapper.writeValueAsString(dibDeleteRequest);
+        doNothing().when(dibService).deleteDib(anyLong(), anyLong());
 
-        doNothing().when(dibService).deleteDib(any(DibDeleteRequest.class));
-
-        mockMvc.perform(delete("/shop/v1/dibs")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(requestBody))
+        mockMvc.perform(delete("/shop/v1/members/1/dibs/1"))
                .andExpect(status().isOk());
 
-        verify(dibService, times(1)).deleteDib(any(DibDeleteRequest.class));
+        verify(dibService, times(1)).deleteDib(anyLong(), anyLong());
     }
 
 }

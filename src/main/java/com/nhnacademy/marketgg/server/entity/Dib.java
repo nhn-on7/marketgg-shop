@@ -1,7 +1,5 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.DibCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.DibDeleteRequest;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,6 +16,11 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * 찜 Entity 입니다.
+ *
+ * @version 1.0.0
+ */
 @Table(name = "dibs")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -36,9 +39,6 @@ public class Dib {
     @ManyToOne
     @JoinColumn(name = "product_no")
     private Product product;
-
-    @Column
-    private String memo;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -62,11 +62,19 @@ public class Dib {
 
     }
 
-    public Dib(final DibCreateRequest dibCreateRequest, final Member member, final Product product) {
+    /**
+     * 찜을 등록하기 위한 생성자입니다.
+     *
+     * @param member - 찜을 등록하는 회원입니다.
+     * @param product - 찜의 대상이 되는 상품입니다.
+     *
+     * @since 1.0.0
+     */
+    public Dib(final Pk pk, final Member member, final Product product) {
+        this.pk = pk;
         this.member = member;
         this.product = product;
-        this.memo = dibCreateRequest.getMemo();
-        this.createdAt = dibCreateRequest.getCreatedAt();
+        this.createdAt = LocalDateTime.now();
     }
 
 }

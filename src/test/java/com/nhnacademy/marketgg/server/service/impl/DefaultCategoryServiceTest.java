@@ -17,8 +17,8 @@ import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.exception.categorization.CategorizationNotFoundException;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
-import com.nhnacademy.marketgg.server.repository.CategorizationRepository;
-import com.nhnacademy.marketgg.server.repository.CategoryRepository;
+import com.nhnacademy.marketgg.server.repository.categorization.CategorizationRepository;
+import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -103,27 +103,7 @@ class DefaultCategoryServiceTest {
     @DisplayName("카테고리 목록 조회")
     void testRetrieveCategories() {
         when(categoryRepository.findAllCategories())
-                .thenReturn(List.of(new CategoryRetrieveResponse() {
-                    @Override
-                    public String getCategoryCode() {
-                        return "001";
-                    }
-
-                    @Override
-                    public String getCategorizationName() {
-                        return "hello";
-                    }
-
-                    @Override
-                    public String getCategoryName() {
-                        return "hello";
-                    }
-
-                    @Override
-                    public Integer getSequence() {
-                        return 1;
-                    }
-                }));
+                .thenReturn(List.of(new CategoryRetrieveResponse("001", "categorization", "categoryName", 1)));
 
         List<CategoryRetrieveResponse> categoryResponses = categoryService.retrieveCategories();
 

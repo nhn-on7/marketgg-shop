@@ -13,7 +13,7 @@ import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.LabelRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.exception.label.LabelNotFoundException;
-import com.nhnacademy.marketgg.server.repository.LabelRepository;
+import com.nhnacademy.marketgg.server.repository.label.LabelRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -50,17 +50,7 @@ class DefaultLabelServiceTest {
     @Test
     @DisplayName("라벨 조회")
     void retrieveLabels() {
-        when(labelRepository.findAllLabels()).thenReturn(List.of(new LabelRetrieveResponse() {
-            @Override
-            public Long getLabelNo() {
-                return 1L;
-            }
-
-            @Override
-            public String getName() {
-                return "hello";
-            }
-        }));
+        when(labelRepository.findAllLabels()).thenReturn(List.of(new LabelRetrieveResponse(1L, "hello")));
 
         List<LabelRetrieveResponse> response = labelService.retrieveLabels();
 

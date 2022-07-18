@@ -1,7 +1,5 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.request.DibCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.DibDeleteRequest;
 import com.nhnacademy.marketgg.server.dto.response.DibRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Dib;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -10,8 +8,8 @@ import com.nhnacademy.marketgg.server.exception.dib.DibNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.dib.DibRepository;
-import com.nhnacademy.marketgg.server.repository.MemberRepository;
-import com.nhnacademy.marketgg.server.repository.ProductRepository;
+import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
+import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.service.DibService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,11 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * 찜 서비스를 구현한 구현체입니다.
- *
- * @version 1.0.0
- */
 @Service
 @RequiredArgsConstructor
 public class DefaultDibService implements DibService {
@@ -34,46 +27,31 @@ public class DefaultDibService implements DibService {
 
     private final ProductRepository productRepository;
 
-    /**
-     * 찜을 등록하기 위한 메소드입니다.
-     *
-     * @param dibCreateRequest - 찜을 등록하기 위한 DTO 입니다.
-     * @since 1.0.0
-     */
     @Transactional
     @Override
-    public void createDib(final DibCreateRequest dibCreateRequest) {
-        Member member = memberRepository.findById(dibCreateRequest.getMemberNo())
+    public void createDib(final Long memberId, final Long productId) {
+        Member member = memberRepository.findById(memberId)
                                         .orElseThrow(MemberNotFoundException::new);
-        Product product = productRepository.findById(dibCreateRequest.getProductNo())
+        Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
-        Dib dib = new Dib(dibCreateRequest, member, product);
+        Dib.Pk pk = new Dib.Pk(memberId, productId);
+
+        Dib dib = new Dib(pk, member, product);
 
         dibRepository.save(dib);
     }
 
-    /**
-     * 회원의 찜 목록을 조회하기 위한 메소드입니다.
-     *
-     * @param memberId - 찜 목록을 조회할 회원의 고유 번호입니다.
-     * @return 회원의 찜 목록을 List 로 반환합니다.
-     */
     @Transactional
     @Override
     public List<DibRetrieveResponse> retrieveDibs(final Long memberId) {
         return dibRepository.findAllDibs(memberId);
     }
 
-    /**
-     * 찜 목록에서 찜 하나를 삭제하기 위한 메소드입니다.
-     *
-     * @param dibDeleteRequest - 삭제할 찜의 회원번호와 상품번호가 있는 DTO 입니다.
-     */
     @Transactional
     @Override
-    public void deleteDib(final DibDeleteRequest dibDeleteRequest) {
-        Dib dib = dibRepository.findById(new Dib.Pk(dibDeleteRequest.getMemberNo(), dibDeleteRequest.getProductNo()))
+    public void deleteDib(final Long memberId, final Long productId) {
+        Dib dib = dibRepository.findById(new Dib.Pk(memberId, productId))
                 .orElseThrow(DibNotFoundException::new);
 
         dibRepository.delete(dib);
