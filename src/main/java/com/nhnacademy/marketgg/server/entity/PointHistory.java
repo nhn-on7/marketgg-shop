@@ -46,6 +46,14 @@ public class PointHistory {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    /**
+     * 포인트 내역을 생성할 수 있는 생성자입니다.
+     *
+     * @param member - 지정한 회원 Entity 입니다.
+     * @param order - 지정한 주문 Entity 입니다.
+     * @param totalPoint - 최종 포인트 입니다.
+     * @param pointRequest - 포인트 내역의 생성을 위한 정보를 담은 DTO 입니다.
+     */
     public PointHistory(final Member member, final Order order, final Integer totalPoint, final PointHistoryRequest pointRequest) {
         this.member = member;
         this.order = order;
