@@ -29,10 +29,13 @@ public class Coupon {
     @Column
     private String type;
 
-    @Column(name = "expired_at")
-    private LocalDateTime expiredAt;
+    @Column(name = "expired_date")
+    private Integer expiredDate;
 
     @Column(name = "minimum_money")
     private Integer minimumMoney;
+
+    @Column(name = "discount_amount")
+    private Double discountAmount;
 
 }
