@@ -55,7 +55,7 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport implem
     }
 
     @Override
-    public Integer findLastTotalPoint(Long id) {
+    public Integer findLastTotalPoint(final Long id) {
         QPointHistory pointHistory = QPointHistory.pointHistory;
 
         return from(pointHistory)

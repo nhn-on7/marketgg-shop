@@ -52,7 +52,7 @@ public class PointHistory {
         this.point = pointRequest.getPoint();
         this.totalPoint = totalPoint;
         this.content = pointRequest.getContent();
-        this.updatedAt = pointRequest.getUpdatedAt();
+        this.updatedAt = LocalDateTime.now();
     }
 
 }
