@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.CouponRequest;
+import com.nhnacademy.marketgg.server.dto.response.CouponRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
@@ -8,6 +9,8 @@ import com.nhnacademy.marketgg.server.service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,5 +27,9 @@ public class DefaultCouponService implements CouponService {
         couponRepository.save(coupon);
     }
 
-    
+    @Override
+    public List<CouponRetrieveResponse> retrieveCoupons() {
+        return couponRepository.findAllCoupons();
+    }
+
 }
