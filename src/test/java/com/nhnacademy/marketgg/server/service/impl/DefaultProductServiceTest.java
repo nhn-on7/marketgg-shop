@@ -217,8 +217,6 @@ class DefaultProductServiceTest {
         Optional<Product> product = Optional.of(new Product(productRequest, asset, category));
         productService.createProduct(productRequest, file);
 
-
-        assertThat(productRepository.findById(1L).get().getId()).isEqualTo(product.get().getId());
         verify(productRepository, atLeastOnce()).save(any());
         verify(categoryRepository, atLeastOnce()).findById(any());
         verify(imageRepository, atLeastOnce()).save(any());
