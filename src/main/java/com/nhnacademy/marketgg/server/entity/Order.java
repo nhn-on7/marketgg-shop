@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.dto.request.OrderCreateRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,5 +45,14 @@ public class Order {
 
     @Column(name = "used_point")
     private Integer usedPoint;
+
+    public Order(Member member, Crowdfunding crowdfunding, OrderCreateRequest orderRequest) {
+        this.member = member;
+        this.crowdfunding = crowdfunding;
+        this.orderDate = LocalDateTime.now();
+        this.totalAmount = orderRequest.getTotalAmount();
+        this.orderStatus = orderRequest.getOrderStatus();
+        this.usedPoint = orderRequest.getUsedPoint();
+    }
 
 }

@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class PointRetrieveResponse {
 
-    private final String memberId;
+    private final Long memberId;
 
     private final Long orderNo;
 

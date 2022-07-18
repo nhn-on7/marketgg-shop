@@ -42,5 +42,4 @@ public class PointController {
                 .body(responses);
     }
 
-
 }

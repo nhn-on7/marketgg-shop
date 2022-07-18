@@ -5,8 +5,12 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class MemberGradeCreateRequest {
+public class OrderCreateRequest {
 
-    private String grade;
+    private Long totalAmount;
+
+    private String orderStatus;
+
+    private Integer usedPoint;
 
 }
