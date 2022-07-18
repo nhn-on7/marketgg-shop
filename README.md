@@ -1,1 +1,1 @@
-# Market GG Server
+# Market GG Shop Server
