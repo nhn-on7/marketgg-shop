@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 @Getter
 public class CouponRequest {
 
-    private Long id;
-
     private String name;
 
     private String type;
@@ -18,4 +16,5 @@ public class CouponRequest {
     private LocalDateTime expiredAt;
 
     private Integer minimumMoney;
+
 }

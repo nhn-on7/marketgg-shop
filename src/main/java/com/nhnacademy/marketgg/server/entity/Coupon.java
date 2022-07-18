@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.dto.request.CouponRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,5 +35,19 @@ public class Coupon {
 
     @Column(name = "minimum_money")
     private Integer minimumMoney;
+
+    public Coupon(final CouponRequest couponRequest) {
+        this.name = couponRequest.getName();
+        this.type= couponRequest.getType();
+        this.expiredAt = couponRequest.getExpiredAt();
+        this.minimumMoney = couponRequest.getMinimumMoney();
+    }
+
+    public void updateCoupon(final CouponRequest couponRequest) {
+        this.name = couponRequest.getName();
+        this.type= couponRequest.getType();
+        this.expiredAt = couponRequest.getExpiredAt();
+        this.minimumMoney = couponRequest.getMinimumMoney();
+    }
 
 }

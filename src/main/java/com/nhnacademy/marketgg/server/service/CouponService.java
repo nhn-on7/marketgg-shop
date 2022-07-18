@@ -11,6 +11,7 @@ public interface CouponService {
 
     List<CouponRetrieveResponse> retrieveCoupons();
 
-    void deleteCoupon(Long couponId);
+    void updateCoupon(Long couponId, CouponRequest couponRequest);
 
+    void deleteCoupon(Long couponId);
 }
