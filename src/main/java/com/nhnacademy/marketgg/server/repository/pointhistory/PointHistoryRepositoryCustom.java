@@ -11,4 +11,6 @@ public interface PointHistoryRepositoryCustom {
 
     List<PointRetrieveResponse> findAllForAdmin();
 
+    Integer findLastTotalPoint(final Long id);
+
 }

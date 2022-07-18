@@ -8,12 +8,21 @@ import lombok.NoArgsConstructor;
 @Getter
 public class PointHistoryRequest {
 
-    private Integer point;
+    private static final Integer VIP = 3;
+    private static final Integer GVIP = 5;
 
-    private Integer totalPoint;
+    private Integer point;
 
     private String content;
 
     private LocalDateTime updatedAt;
+
+    public void isVip() {
+        this.point = point * VIP;
+    }
+
+    public void isGVip() {
+        this.point = point * GVIP;
+    }
 
 }

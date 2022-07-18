@@ -27,4 +27,5 @@ public class MemberGrade {
 
     public MemberGrade(MemberGradeCreateRequest memberRequest) {
     }
+
 }

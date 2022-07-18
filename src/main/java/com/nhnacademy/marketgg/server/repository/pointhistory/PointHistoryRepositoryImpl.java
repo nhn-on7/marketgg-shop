@@ -54,4 +54,13 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport implem
                 .fetch();
     }
 
+    @Override
+    public Integer findLastTotalPoint(Long id) {
+        QPointHistory pointHistory = QPointHistory.pointHistory;
+
+        return from(pointHistory)
+                .where(pointHistory.member.id.eq(id))
+                .fetchOne().getTotalPoint();
+    }
+
 }

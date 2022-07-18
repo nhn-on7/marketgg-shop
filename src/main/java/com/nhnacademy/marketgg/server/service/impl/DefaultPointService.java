@@ -12,6 +12,7 @@ import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
 import com.nhnacademy.marketgg.server.service.PointService;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,17 +39,30 @@ public class DefaultPointService implements PointService {
     @Override
     public void createPointHistory(final Long id, final PointHistoryRequest pointRequest) {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
-        PointHistory pointHistory = new PointHistory(member, null, pointRequest);
+        Integer totalPoint = pointRepository.findLastTotalPoint(id);
+        PointHistory pointHistory = new PointHistory(member, null, totalPoint + pointRequest.getPoint(), pointRequest);
 
         pointRepository.save(pointHistory);
     }
 
     @Transactional
     @Override
-    public void createPointHistoryForOrder(final Long memberId, final Long orderId, final PointHistoryRequest pointRequest) {
+    public void createPointHistoryForOrder(final Long memberId, final Long orderId,
+                                           final PointHistoryRequest pointRequest) {
+
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
-        PointHistory pointHistory = new PointHistory(member, order, pointRequest);
+        Integer totalPoint = pointRepository.findLastTotalPoint(memberId);
+
+        if (Objects.equals(member.getMemberGrade().getGrade(), "VIP") &&
+                pointRequest.getPoint() > 0) {
+            pointRequest.isVip();
+        } else if (Objects.equals(member.getMemberGrade().getGrade(), "G-VIP") &&
+                pointRequest.getPoint() > 0) {
+            pointRequest.isGVip();
+        }
+
+        PointHistory pointHistory = new PointHistory(member, order, totalPoint + pointRequest.getPoint(), pointRequest);
 
         pointRepository.save(pointHistory);
     }
