@@ -11,4 +11,6 @@ public interface CouponService {
 
     List<CouponRetrieveResponse> retrieveCoupons();
 
+    void deleteCoupon(Long couponId);
+
 }

@@ -21,8 +21,7 @@ public class DefaultCouponService implements CouponService {
     @Transactional
     @Override
     public void createCoupon(CouponRequest couponRequest) {
-        Coupon coupon = couponRepository.findById(couponRequest.getId())
-                                        .orElseThrow(CouponNotFoundException::new);
+        Coupon coupon = couponRepository.findById(couponRequest.getId()).orElseThrow(CouponNotFoundException::new);
 
         couponRepository.save(coupon);
     }
@@ -30,6 +29,14 @@ public class DefaultCouponService implements CouponService {
     @Override
     public List<CouponRetrieveResponse> retrieveCoupons() {
         return couponRepository.findAllCoupons();
+    }
+
+    @Transactional
+    @Override
+    public void deleteCoupon(Long couponId) {
+        Coupon coupon = couponRepository.findById(couponId).orElseThrow(CouponNotFoundException::new);
+
+        couponRepository.delete(coupon);
     }
 
 }
