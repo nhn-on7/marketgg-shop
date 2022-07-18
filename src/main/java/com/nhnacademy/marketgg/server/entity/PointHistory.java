@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,5 +45,14 @@ public class PointHistory {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public PointHistory(final Member member, final Order order, final PointHistoryRequest pointRequest) {
+        this.member = member;
+        this.order = order;
+        this.point = pointRequest.getPoint();
+        this.totalPoint = pointRequest.getTotalPoint();
+        this.content = pointRequest.getContent();
+        this.updatedAt = pointRequest.getUpdatedAt();
+    }
 
 }
