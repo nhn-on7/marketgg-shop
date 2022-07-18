@@ -35,9 +35,9 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(ProductController.class)
+@WebMvcTest(ProductAdminController.class)
 @ActiveProfiles("local")
-class ProductControllerTest {
+class ProductAdminControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -48,7 +48,7 @@ class ProductControllerTest {
     @MockBean
     ProductService productService;
 
-    private static final String DEFAULT_PRODUCT = "/admin/v1/products";
+    private static final String DEFAULT_PRODUCT = "/shop/v1/admin/products";
     private static ProductCreateRequest productRequest;
 
     @BeforeAll
@@ -71,7 +71,7 @@ class ProductControllerTest {
         MockMultipartFile dto = new MockMultipartFile("productRequest", "jsondata", "application/json",
             content.getBytes(StandardCharsets.UTF_8));
 
-        this.mockMvc.perform(multipart("/admin/v1/products").file(dto)
+        this.mockMvc.perform(multipart(DEFAULT_PRODUCT).file(dto)
                                                             .file(file)
                                                             .contentType(MediaType.APPLICATION_JSON_VALUE)
                                                             .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -88,7 +88,7 @@ class ProductControllerTest {
     void testRetrieveProducts() throws Exception {
         given(productService.retrieveProducts()).willReturn(List.of());
 
-        this.mockMvc.perform(get("/admin/v1/products").contentType(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(get(DEFAULT_PRODUCT).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
         verify(this.productService, times(1)).retrieveProducts();
     }
@@ -105,7 +105,7 @@ class ProductControllerTest {
         MockMultipartFile file =
             new MockMultipartFile("image", "lee.png", "image/png", new FileInputStream(filePath));
 
-        this.mockMvc.perform(multipart("/admin/v1/products/{productId}", 1L).file(dto)
+        this.mockMvc.perform(multipart(DEFAULT_PRODUCT + "/{productId}", 1L).file(dto)
                                                                             .file(file)
                                                                             .contentType(
                                                                                 MediaType.APPLICATION_JSON)
@@ -121,7 +121,7 @@ class ProductControllerTest {
     void testDeleteProduct() throws Exception {
         doNothing().when(this.productService).deleteProduct(anyLong());
 
-        this.mockMvc.perform(post("/admin/v1/products/{productId}/deleted", 1L)).andExpect(status().isOk());
+        this.mockMvc.perform(post(DEFAULT_PRODUCT + "/{productId}/delete", 1L)).andExpect(status().isOk());
         verify(this.productService, times(1)).deleteProduct(anyLong());
     }
 
@@ -131,7 +131,7 @@ class ProductControllerTest {
         when(this.productService.searchProductsByName(anyString())).thenReturn(List.of());
 
         this.mockMvc.perform(
-                get("/admin/v1/products/search/{productName}", "오렌지").contentType(MediaType.APPLICATION_JSON))
+                get(DEFAULT_PRODUCT + "/search/{productName}", "오렌지").contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 

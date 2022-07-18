@@ -26,14 +26,14 @@ import org.springframework.web.multipart.MultipartFile;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/admin/v1/products")
+@RequestMapping("/shop/v1/admin/products")
 @RequiredArgsConstructor
-public class ProductController {
+public class ProductAdminController {
 
     private final ProductService productService;
 
     // TODO: Develop 브랜치 머지 후 @Value값으로 고치기
-    private static final String DEFAULT_PRODUCT = "/admin/v1/products";
+    private static final String DEFAULT_PRODUCT = "/shop/v1/admin/products";
 
 
     /**
@@ -123,7 +123,7 @@ public class ProductController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @PostMapping("/{productId}/deleted")
+    @PostMapping("/{productId}/delete")
     public ResponseEntity<Void> deleteProduct(@PathVariable final Long productId) {
         this.productService.deleteProduct(productId);
 
@@ -149,30 +149,6 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT + "/search/" + productName))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .body(productResponseList);
-    }
-
-    /**
-     * 상품 검색을 위한 GetMapping을 지원합니다.
-     * 카테고리 코드, 카테고리분류코드 코드를 동시에 받아 조건에 맞는 상품 리스트를 반환합니다.
-     *
-     * @param categorizationCode - 1차 분류입니다. ex) 100 - 상품
-     * @param categoryCode       - 2차 분류입니다. ex) 101 - 채소, 102 -  두부, 고구마
-     * @return - List<ProductResponse> 를 담은 응답 객체를 반환합니다.
-     * @since 1.0.0
-     */
-    @GetMapping("/{categorizationCode}/{categoryCode}")
-    public ResponseEntity<List<ProductResponse>> searchProductsByCategory(
-        @PathVariable final String categorizationCode, @PathVariable final String categoryCode) {
-
-        List<ProductResponse> productResponseList =
-            this.productService.searchProductByCategory(categorizationCode, categoryCode);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(
-                                 DEFAULT_PRODUCT + "/search/" + categorizationCode + "/" +
-                                     categoryCode))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productResponseList);
     }
