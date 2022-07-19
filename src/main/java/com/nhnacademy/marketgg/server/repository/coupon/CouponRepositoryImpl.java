@@ -23,7 +23,7 @@ public class CouponRepositoryImpl extends QuerydslRepositorySupport implements C
                                                 coupon.id,
                                                 coupon.name,
                                                 coupon.type,
-                                                coupon.expiredAt,
+                                                coupon.expiredDate,
                                                 coupon.minimumMoney))
                 .fetch();
     }

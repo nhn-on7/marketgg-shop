@@ -1,18 +1,19 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
+import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
+import com.nhnacademy.marketgg.server.service.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.MemberService;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 회원관리에 관련된 RestController 입니다.
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
+    private final GivenCouponService givenCouponService;
 
     /**
      * 선택한 회원의 GG 패스 갱신일시를 반환하는 Mapping 을 지원합니다.
@@ -75,6 +77,28 @@ public class MemberController {
                 .location(URI.create("/shop/v1/members/" +  memberId + "/ggpass/withdraw"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .build();
+    }
+
+    @PostMapping("/{memberId}/coupons")
+    public ResponseEntity<Void> createGivenCoupons(@PathVariable final Long memberId,
+                                                   @RequestBody final GivenCouponRequest givenCouponRequest) {
+
+        givenCouponService.createGivenCoupons(memberId, givenCouponRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .location(URI.create("/shop/v1/members/" + memberId + "/coupons"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .build();
+    }
+
+    @GetMapping("/{memberId}/coupons")
+    public ResponseEntity<List<GivenCouponResponse>> retrieveGivenCoupons(@PathVariable final Long memberId) {
+        List<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(memberId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .location(URI.create("/shop/v1/members/" + memberId + "/coupons"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(givenCouponResponses);
     }
 
 }

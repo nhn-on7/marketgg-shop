@@ -1,18 +1,9 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -40,6 +31,7 @@ public class GivenCoupon {
 
     @Embeddable
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
     @Getter
     @EqualsAndHashCode
     public static class Pk implements Serializable {
@@ -50,6 +42,14 @@ public class GivenCoupon {
         @Column(name = "member_no")
         private Long memberNo;
 
+    }
+
+    public GivenCoupon(final Coupon coupon, final Member member,
+                       final Long memberId, final GivenCouponRequest givenCouponRequest) {
+        this.pk = new Pk(givenCouponRequest.getCouponNo(), memberId);
+        this.coupon = coupon;
+        this.member = member;
+        this.createdAt = LocalDateTime.now();
     }
 
 }
