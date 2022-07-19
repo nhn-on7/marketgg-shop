@@ -2,6 +2,8 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.CouponRequest;
+import com.nhnacademy.marketgg.server.dto.response.CouponRetrieveResponse;
+import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.service.CouponService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,6 +53,17 @@ public class CouponControllerTest {
                 .andExpect(status().isCreated());
 
         then(couponService).should().createCoupon(any(CouponRequest.class));
+    }
+
+    @Test
+    @DisplayName("쿠폰 단건 조회")
+    void testRetrieveCoupon() throws Exception {
+        given(couponService.retrieveCoupon(anyLong())).willReturn(null);
+
+        this.mockMvc.perform(get(DEFAULT_COUPON + "/" + 1L))
+                .andExpect(status().isOk());
+
+        then(couponService).should().retrieveCoupon(anyLong());
     }
 
     @Test
