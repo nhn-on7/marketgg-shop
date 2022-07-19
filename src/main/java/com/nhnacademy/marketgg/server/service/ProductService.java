@@ -22,7 +22,7 @@ public interface ProductService {
      * @throws IOException
      * @since 1.0.0
      */
-    void createProduct(ProductCreateRequest productRequest, MultipartFile image) throws IOException;
+    void createProduct(final ProductCreateRequest productRequest, MultipartFile image) throws IOException;
 
     /**
      * 모든 상품을 조회합니다.
@@ -39,7 +39,7 @@ public interface ProductService {
      * @return - PK에 해당하는 상품을 반환합니다.
      * @since 1.0.0
      */
-    ProductResponse retrieveProductDetails(Long productId);
+    ProductResponse retrieveProductDetails(final Long productId);
 
     /**
      * 상품 id를 인자로 받아 해당 상품이 존재할 경우 수정합니다.
@@ -51,7 +51,7 @@ public interface ProductService {
      * @throws IOException
      * @since 1.0.0
      */
-    void updateProduct(ProductUpdateRequest productRequest, MultipartFile image, Long productId)
+    void updateProduct(final ProductUpdateRequest productRequest, MultipartFile image, final Long productId)
         throws IOException;
 
     /**
@@ -62,7 +62,7 @@ public interface ProductService {
      * @param productId - 상품의 PK 값 입니다.
      * @since 1.0.0
      */
-    void deleteProduct(Long productId);
+    void deleteProduct(final Long productId);
 
     /**
      * keyword에 해당하는 값이 상품 이름에 존재하면 해당 상품을 반환합니다.
@@ -71,7 +71,7 @@ public interface ProductService {
      * @return - 상품 리스트를 반환합니다.
      * @since 1.0.0
      */
-    List<ProductResponse> searchProductsByName(String keyword);
+    List<ProductResponse> searchProductsByName(final String keyword);
 
     /**
      * 카테고리로 상품 목록을 조회합니다.
@@ -79,5 +79,7 @@ public interface ProductService {
      * @param categoryCode       - 카테고리 2차 분류입니다.
      * @return - 해당하는 카테고리의 상품 리스트를 반환합니다.
      */
-    List<ProductResponse> searchProductByCategory(String categoryCode);
+
+    List<ProductResponse> searchProductByCategory(final String categoryCode);
+
 }

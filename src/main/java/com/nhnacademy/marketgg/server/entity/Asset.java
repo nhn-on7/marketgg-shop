@@ -30,11 +30,11 @@ public class Asset {
 
     @Column(name = "created_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
@@ -42,8 +42,8 @@ public class Asset {
 
     public static Asset create() {
         Asset asset = new Asset();
-        asset.createAt = LocalDateTime.now();
-        asset.updateAt = LocalDateTime.now();
+        asset.createdAt = LocalDateTime.now();
+        asset.updatedAt = LocalDateTime.now();
         return asset;
     }
 

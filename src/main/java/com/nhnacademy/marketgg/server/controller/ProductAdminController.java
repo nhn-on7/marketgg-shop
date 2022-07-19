@@ -26,24 +26,14 @@ import org.springframework.web.multipart.MultipartFile;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/admin/v1/products")
+@RequestMapping("/shop/v1/admin/products")
 @RequiredArgsConstructor
-public class ProductController {
+public class ProductAdminController {
 
-    /**
-     * 상품 관리 Service 입니다.
-     *
-     * @since 1.0.0
-     */
     private final ProductService productService;
 
     // TODO: Develop 브랜치 머지 후 @Value값으로 고치기
-    /**
-     * 상품 관리 기본 uri 입니다.
-     *
-     * @since 1.0.0
-     */
-    private static final String DEFAULT_PRODUCT = "/admin/v1/products";
+    private static final String DEFAULT_PRODUCT = "/shop/v1/admin/products";
 
 
     /**
@@ -57,10 +47,11 @@ public class ProductController {
      */
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<Void> createProduct(@RequestPart ProductCreateRequest productRequest,
-                                              @RequestPart MultipartFile image) throws IOException {
+    public ResponseEntity<Void> createProduct(
+        @RequestPart final ProductCreateRequest productRequest, @RequestPart MultipartFile image)
+        throws IOException {
 
-        productService.createProduct(productRequest, image);
+        this.productService.createProduct(productRequest, image);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_PRODUCT))
@@ -76,7 +67,7 @@ public class ProductController {
      */
     @GetMapping
     public ResponseEntity<List<ProductResponse>> retrieveProducts() {
-        List<ProductResponse> productList = productService.retrieveProducts();
+        List<ProductResponse> productList = this.productService.retrieveProducts();
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT))
@@ -92,8 +83,9 @@ public class ProductController {
      * @since 1.0.0
      */
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductResponse> retrieveProductDetails(@PathVariable final Long productId) {
-        ProductResponse productDetails = productService.retrieveProductDetails(productId);
+    public ResponseEntity<ProductResponse> retrieveProductDetails(
+        @PathVariable final Long productId) {
+        ProductResponse productDetails = this.productService.retrieveProductDetails(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT))
@@ -115,7 +107,7 @@ public class ProductController {
     public ResponseEntity<Void> updateProduct(
         @RequestPart final ProductUpdateRequest productRequest, @RequestPart MultipartFile image,
         @PathVariable final Long productId) throws IOException {
-        productService.updateProduct(productRequest, image, productId);
+        this.productService.updateProduct(productRequest, image, productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT + "/" + productId))
@@ -131,9 +123,9 @@ public class ProductController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @PostMapping("/{productId}/deleted")
+    @PostMapping("/{productId}/delete")
     public ResponseEntity<Void> deleteProduct(@PathVariable final Long productId) {
-        productService.deleteProduct(productId);
+        this.productService.deleteProduct(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT + "/" + productId))
@@ -151,35 +143,12 @@ public class ProductController {
      */
     @GetMapping("/search/{productName}")
     public ResponseEntity<List<ProductResponse>> searchProductsByName(
-        @PathVariable String productName) {
+        @PathVariable final String productName) {
         List<ProductResponse> productResponseList =
-            productService.searchProductsByName(productName);
+            this.productService.searchProductsByName(productName);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT + "/search/" + productName))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .body(productResponseList);
-    }
-
-    /**
-     * 상품 검색을 위한 GetMapping을 지원합니다.
-     * 카테고리 코드, 카테고리분류코드 코드를 동시에 받아 조건에 맞는 상품 리스트를 반환합니다.
-     *
-     * @param categoryCode       - 2차 분류입니다. ex) 101 - 채소, 102 -  두부, 고구마
-     * @return - List<ProductResponse> 를 담은 응답 객체를 반환합니다.
-     * @since 1.0.0
-     */
-    @GetMapping("/categories/{categoryCode}")
-    public ResponseEntity<List<ProductResponse>> searchProductsByCategory(
-         @PathVariable String categoryCode) {
-
-        List<ProductResponse> productResponseList =
-            productService.searchProductByCategory(categoryCode);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(
-                                 DEFAULT_PRODUCT + "/search/" +
-                                     categoryCode))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productResponseList);
     }

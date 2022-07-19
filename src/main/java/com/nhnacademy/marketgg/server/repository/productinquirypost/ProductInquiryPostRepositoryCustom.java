@@ -7,9 +7,7 @@ import java.util.List;
 
 @NoRepositoryBean
 public interface ProductInquiryPostRepositoryCustom {
+    List<ProductInquiryResponse> findALLByProductNo(final Long id);
 
-    List<ProductInquiryResponse> findALLByProductNo(Long id);
-
-    List<ProductInquiryResponse> findAllByMemberNo(Long id);
-
+    List<ProductInquiryResponse> findAllByMemberNo(final Long id);
 }

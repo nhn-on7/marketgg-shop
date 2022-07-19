@@ -32,10 +32,10 @@ public class Category {
     @JoinColumn(name = "categorization_code")
     private Categorization categorization;
 
-    @Column(nullable = false)
+    @Column
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private Integer sequence;
 
     /**

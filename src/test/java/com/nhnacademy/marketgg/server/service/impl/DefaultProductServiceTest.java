@@ -1,5 +1,16 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
@@ -14,6 +25,12 @@ import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,33 +43,13 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.anyLong;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
-// InjectMock 안쓰고 주입받기 위해서 권장 방식!? TODO: 더 알아보기
-// @Import(DefaultProductService.class)
-
 @Transactional
 class DefaultProductServiceTest {
 
     @InjectMocks
     DefaultProductService productService;
 
-    // TODO: @Mock 과 @MockBean의 차이는?
     @Mock
     private ProductRepository productRepository;
 
@@ -62,7 +59,6 @@ class DefaultProductServiceTest {
     @Mock
     private ImageRepository imageRepository;
 
-    // TODO: @Spy와 @SpyBean의 차이는?
     @Spy
     CategoryRepository categoryRepository;
 
@@ -73,18 +69,13 @@ class DefaultProductServiceTest {
     private static Category category;
     private static Categorization categorization;
     private static MockMultipartFile imageFile;
-    private static final String UPLOAD_PATH = "/Users/johyeonjin/Desktop/temp";
 
     @BeforeAll
     static void beforeAll() {
-
-        // REVIEW: Projection Interface 타입으로 받으면 다 Override 해야한다.
-        // REVIEW: Interface 타입으로 받으면 유연하게 데이터 받을 수 있고 계층 구조 만들 수 있다.
-        // REVIEW: Class or interface 타입 받는 상황에 맞게 선택해야 한다.
         productResponse = new ProductResponse(null, null, null, null, null,
-                                              null, null, null, null, null,
-                                              null, null, null, null, null,
-                                              null, null, null);
+            null, null, null, null, null,
+            null, null, null, null, null,
+            null, null, null);
 
         productRequest = new ProductCreateRequest();
         ReflectionTestUtils.setField(productRequest, "categoryCode", "001");
@@ -119,15 +110,14 @@ class DefaultProductServiceTest {
         category = new Category(categoryRequest, categorization);
     }
 
-    // @Test
+    @Test
     @DisplayName("상품 등록시 의존관계가 있는 asset, image, category repository에서 모든 행위가 이루어지는지 검증 ")
     void testProductCreation() throws IOException {
+        URL url = getClass().getClassLoader().getResource("lee.png");
+        String filePath = Objects.requireNonNull(url).getPath();
 
-        given(productRepository.findById(any())).willReturn(
-                Optional.of(new Product(productRequest, asset, category)));
-
-        MockMultipartFile file = new MockMultipartFile("image", "test.png", "image/png",
-                                                       new FileInputStream(UPLOAD_PATH + "/logo.png"));
+        MockMultipartFile file =
+            new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));
 
         given(assetRepository.save(any(Asset.class))).willReturn(asset);
         given(imageRepository.save(any(Image.class))).willReturn(new Image(asset, "test"));
@@ -136,8 +126,6 @@ class DefaultProductServiceTest {
         Optional<Product> product = Optional.of(new Product(productRequest, asset, category));
         productService.createProduct(productRequest, file);
 
-        assertThat(productRepository.findById(1L).get().getId()).isEqualTo(
-                product.get().getId());
         verify(productRepository, atLeastOnce()).save(any());
         verify(categoryRepository, atLeastOnce()).findById(any());
         verify(imageRepository, atLeastOnce()).save(any());
@@ -145,15 +133,18 @@ class DefaultProductServiceTest {
 
     }
 
-    // @Test
+    @Test
     @DisplayName("상품 등록 실패 테스트")
     void testProductCreationFailException() throws IOException {
-        MockMultipartFile file = new MockMultipartFile("image", "test.png", "image/png",
-                                                       new FileInputStream(UPLOAD_PATH + "/logo.png"));
 
-        assertThatThrownBy(
-                () -> productService.createProduct(productRequest, file)).hasMessageContaining(
-                "해당 카테고리 번호를 찾을 수 없습니다.");
+        URL url = getClass().getClassLoader().getResource("lee.png");
+        String filePath = Objects.requireNonNull(url).getPath();
+
+        MockMultipartFile file =
+            new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));
+
+        assertThatThrownBy(() -> productService.createProduct(productRequest, file)).hasMessageContaining(
+            "카테고리를 찾을 수 없습니다.");
     }
 
     @Test
@@ -179,51 +170,53 @@ class DefaultProductServiceTest {
     // @Test
     @DisplayName("상품 정보 수정 성공 테스트")
     void testUpdateProductSuccess() throws IOException {
+
         given(productRepository.findById(any())).willReturn(
-                Optional.of(new Product(productRequest, asset, category)));
+            Optional.of(new Product(productRequest, asset, category)));
         given(categoryRepository.findById(any())).willReturn(Optional.ofNullable(category));
         given(assetRepository.save(any(Asset.class))).willReturn(asset);
+
         productService.updateProduct(productUpdateRequest, imageFile, 1L);
+
         verify(productRepository, atLeastOnce()).save(any());
     }
 
-    // @Test
+    @Test
     @DisplayName("상품 정보 수정 실패 테스트")
     void testUpdateProductFail() {
         when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> productService.updateProduct(productUpdateRequest, imageFile,
-                                                              1L)).hasMessageContaining("해당 상품을 찾을 수 없습니다.");
+        assertThatThrownBy(
+            () -> productService.updateProduct(productUpdateRequest, imageFile, 1L)).hasMessageContaining(
+            "상품을 찾을 수 없습니다.");
     }
 
     @Test
     @DisplayName("상품 삭제 성공 테스트")
     void testDeleteProductSuccess() {
         when(productRepository.findById(anyLong())).thenReturn(
-                Optional.of(new Product(productRequest, asset, category)));
+            Optional.of(new Product(productRequest, asset, category)));
 
         productService.deleteProduct(anyLong());
 
         verify(productRepository, times(1)).save(any(Product.class));
     }
 
-    // @Test
+    @Test
     @DisplayName("상품 삭제 실패 테스트")
     void testDeleteProductFail() {
         when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> productService.deleteProduct(1L)).hasMessageContaining(
-                "해당 상품을 찾을 수 없습니다.");
+        assertThatThrownBy(() -> productService.deleteProduct(1L)).hasMessageContaining("상품을 찾을 수 없습니다.");
     }
 
     @Test
     @DisplayName("상품 이름으로 상품 목록 조회")
     void testSearchProductsByName() {
-        when(productRepository.findByNameContaining(anyString())).thenReturn(
-                List.of(productResponse));
+        when(productRepository.findByNameContaining(anyString())).thenReturn(List.of(productResponse));
 
         List<ProductResponse> productResponses = productService.searchProductsByName(anyString());
         verify(productRepository, times(1)).findByNameContaining(anyString());
     }
-}
 
+}

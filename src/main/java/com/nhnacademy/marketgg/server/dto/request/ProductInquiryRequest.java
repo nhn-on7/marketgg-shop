@@ -11,5 +11,6 @@ public class ProductInquiryRequest {
     private String title;
     private String content;
     private Boolean isSecret;
+    private String adminReply;
 
 }

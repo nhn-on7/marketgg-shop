@@ -41,20 +41,17 @@ public class DefaultProductService implements ProductService {
         throws IOException {
 
         String originalFileName = imageFile.getOriginalFilename();
-        // 하드코딩된 uploadPath를 설정파일로 분리.
-        // Local 환경에서는 자신의 개인 경로를 사용하고, 서버 배포시 따로 경로를 설정할 것
         File dest = new File(uploadPath, originalFileName);
         imageFile.transferTo(dest);
 
-        Asset asset = assetRepository.save(Asset.create());
+        Asset asset = this.assetRepository.save(Asset.create());
         Image image = new Image(asset, dest.toString());
-        imageRepository.save(image);
+        this.imageRepository.save(image);
 
-        Category category = categoryRepository
-            .findById(productRequest.getCategoryCode())
-            .orElseThrow(CategoryNotFoundException::new);
+        Category category = this.categoryRepository.findById(productRequest.getCategoryCode())
+                                                   .orElseThrow(CategoryNotFoundException::new);
 
-        productRepository.save(new Product(productRequest, asset, category));
+        this.productRepository.save(new Product(productRequest, asset, category));
     }
 
     @Override
@@ -63,50 +60,50 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public ProductResponse retrieveProductDetails(Long productId) {
-        return productRepository.queryById(productId);
+    public ProductResponse retrieveProductDetails(final Long productId) {
+        return this.productRepository.queryById(productId);
     }
 
     @Override
     @Transactional
     public void updateProduct(final ProductUpdateRequest productRequest, MultipartFile imageFile,
                               final Long productId) throws IOException {
-        Product product = productRepository.findById(productId)
-                                           .orElseThrow(ProductNotFoundException::new);
+        Product product =
+            this.productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
 
         String originalFileName = imageFile.getOriginalFilename();
         File dest = new File(uploadPath, originalFileName);
         imageFile.transferTo(dest);
 
-        Asset asset = assetRepository.save(Asset.create());
+        Asset asset = this.assetRepository.save(Asset.create());
         Image image = new Image(asset, dest.toString());
-        imageRepository.save(image);
+        this.imageRepository.save(image);
 
-        Category category = categoryRepository
-            .findById(productRequest.getCategoryCode())
-            .orElseThrow(CategoryNotFoundException::new);
+        Category category = this.categoryRepository.findById(productRequest.getCategoryCode())
+                                                   .orElseThrow(CategoryNotFoundException::new);
 
         product.updateProduct(productRequest, asset, category);
-        productRepository.save(product);
+        this.productRepository.save(product);
     }
 
     @Override
     public void deleteProduct(final Long productId) {
-        Product product = productRepository.findById(productId)
-                                           .orElseThrow(ProductNotFoundException::new);
+        Product product =
+            this.productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
 
         product.deleteProduct();
-        productRepository.save(product);
+        this.productRepository.save(product);
     }
 
     @Override
-    public List<ProductResponse> searchProductsByName(String keyword) {
-        return productRepository.findByNameContaining(keyword);
+    public List<ProductResponse> searchProductsByName(final String keyword) {
+        return this.productRepository.findByNameContaining(keyword);
     }
 
     @Override
-    public List<ProductResponse> searchProductByCategory(String categoryCode) {
+    public List<ProductResponse> searchProductByCategory(final String categoryCode) {
         return productRepository.findByCategoryAndCategorizationCodes(categoryCode);
+
     }
 
 }
