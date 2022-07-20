@@ -4,6 +4,7 @@ import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.QCategorization;
 import com.nhnacademy.marketgg.server.entity.QCategory;
+import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
@@ -23,12 +24,20 @@ public class CategoryRepositoryImpl extends QuerydslRepositorySupport implements
         return from(category)
                 .innerJoin(categorization).on(category.categorization.id.eq(categorization.id))
                 .where(category.id.eq(id))
-                .select(Projections.constructor(CategoryRetrieveResponse.class,
-                                         category.id,
-                                         categorization.name,
-                                         category.name,
-                                         category.sequence))
+                .select(selectAllCategoryColumns(category, categorization))
                 .fetchOne();
+    }
+
+    @Override
+    public List<CategoryRetrieveResponse> findByCategorizationCode(String categorizationId) {
+        QCategory category = QCategory.category;
+        QCategorization categorization = QCategorization.categorization;
+
+        return from(category)
+                .innerJoin(categorization).on(category.categorization.id.eq(categorization.id))
+                .where(categorization.id.eq(categorizationId))
+                .select(selectAllCategoryColumns(category, categorization))
+                .fetch();
     }
 
     @Override
@@ -38,12 +47,16 @@ public class CategoryRepositoryImpl extends QuerydslRepositorySupport implements
 
         return from(category)
                 .innerJoin(categorization).on(category.categorization.id.eq(categorization.id))
-                .select(Projections.constructor(CategoryRetrieveResponse.class,
-                                         category.id,
-                                         categorization.name,
-                                         category.name,
-                                         category.sequence))
+                .select(selectAllCategoryColumns(category, categorization))
                 .fetch();
+    }
+
+    private ConstructorExpression<CategoryRetrieveResponse> selectAllCategoryColumns(QCategory category, QCategorization categorization) {
+        return Projections.constructor(CategoryRetrieveResponse.class,
+                                       category.id,
+                                       categorization.name,
+                                       category.name,
+                                       category.sequence);
     }
 
 }

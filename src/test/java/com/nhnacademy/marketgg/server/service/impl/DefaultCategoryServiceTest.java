@@ -1,14 +1,5 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryUpdateRequest;
@@ -19,8 +10,6 @@ import com.nhnacademy.marketgg.server.exception.categorization.CategorizationNot
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
 import com.nhnacademy.marketgg.server.repository.categorization.CategorizationRepository;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,6 +19,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -97,6 +99,17 @@ class DefaultCategoryServiceTest {
         categoryService.retrieveCategory("001");
 
         verify(categoryRepository, times(1)).findByCode(anyString());
+    }
+
+    @Test
+    @DisplayName("카테고리 분류표별 카테고리 목록 조회")
+    void testRetrieveCategoriesByCategorization() {
+        given(categoryService.retrieveCategoriesByCategorization(anyString()))
+                .willReturn(List.of(new CategoryRetrieveResponse("101", "categroziationName", "categoryName", 1)));
+
+        List<CategoryRetrieveResponse> categoryResponses = categoryService.retrieveCategoriesByCategorization("100");
+
+        assertThat(categoryResponses).hasSize(1);
     }
 
     @Test
