@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.dto.response;
 
+import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -11,16 +12,29 @@ public class GivenCouponResponse {
 
     private final Long memberId;
 
+    private final Long couponNo;
+
     private final String couponName;
 
     private final String couponType;
-
-    private final Integer couponExpiredDate;
 
     private final Integer couponMinimumMoney;
 
     private final Double couponDiscountAmount;
 
-    private final LocalDateTime createdAt;
+    private final LocalDateTime expirationPeriod;
+
+    private final CouponState couponState;
+
+    public GivenCouponResponse(GivenCoupon givenCoupon, CouponState state, LocalDateTime expirationPeriod) {
+        this.memberId = givenCoupon.getMember().getId();
+        this.couponNo = givenCoupon.getPk().getCouponNo();
+        this.couponName = givenCoupon.getCoupon().getName();
+        this.couponType = givenCoupon.getCoupon().getType();
+        this.couponMinimumMoney = givenCoupon.getCoupon().getMinimumMoney();
+        this.couponDiscountAmount = givenCoupon.getCoupon().getDiscountAmount();
+        this.expirationPeriod = expirationPeriod;
+        this.couponState = state;
+    }
 
 }

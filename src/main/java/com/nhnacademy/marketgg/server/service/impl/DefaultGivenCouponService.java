@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
+import com.nhnacademy.marketgg.server.dto.response.CouponState;
 import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
@@ -10,11 +11,16 @@ import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
+import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.GivenCouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.nhnacademy.marketgg.server.dto.response.CouponState.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,30 +28,54 @@ public class DefaultGivenCouponService implements GivenCouponService {
 
     private final GivenCouponRepository givenCouponRepository;
     private final CouponRepository couponRepository;
+    private final UsedCouponRepository usedCouponRepository;
     private final MemberRepository memberRepository;
 
     @Override
-
     public void createGivenCoupons(final Long memberId,
                                    final GivenCouponRequest givenCouponRequest) {
 
         Member member = memberRepository.findById(memberId)
                                         .orElseThrow(MemberNotFoundException::new);
-
         Coupon coupon = couponRepository.findById(givenCouponRequest.getCouponNo())
                                         .orElseThrow(CouponNotFoundException::new);
 
         GivenCoupon givenCoupon = new GivenCoupon(coupon, member, memberId, givenCouponRequest);
-
         givenCouponRepository.save(givenCoupon);
     }
 
     @Override
     public List<GivenCouponResponse> retrieveGivenCoupons(final Long memberId) {
-        List<GivenCouponResponse> givenCoupons = givenCouponRepository.findAllByMemberNo(memberId);
-
-
-
-        return null;
+        List<GivenCoupon> givenCoupons = givenCouponRepository.findAllByMember_Id(memberId);
+        List<GivenCouponResponse> couponResponseList = new ArrayList<>();
+        for (GivenCoupon coupon : givenCoupons) {
+            couponResponseList.add(this.checkAvailability(coupon));
+        }
+        return couponResponseList;
     }
+
+    private GivenCouponResponse checkAvailability(GivenCoupon givenCoupons) {
+        CouponState state;
+        LocalDateTime expirationPeriod = givenCoupons.getCreatedAt()
+                                                     .plusDays(givenCoupons.getCoupon().getExpiredDate());
+
+        // if (!givenCouponRepository.findByPkCouponNoAndPkMemberNo(givenCoupons.getPk()
+        //                                                                      .getCouponNo(), givenCoupons.getPk()
+        //                                                                                                  .getMemberNo())
+        //                           .isEmpty()) {
+        Long couponNo = givenCoupons.getPk().getCouponNo();
+        Long memberNo = givenCoupons.getPk().getMemberNo();
+        if (!usedCouponRepository.findAllBy().isEmpty()) {
+        // if (!usedCouponRepository.findByPkCouponNo(givenCoupons.getPk()
+        //                                                                                                 .getMemberNo())
+        //                          .isEmpty()) {
+            state = USED;
+        } else if (expirationPeriod.isAfter(LocalDateTime.now())) {
+            state = EXPIRED;
+        } else {
+            state = VALID;
+        }
+        return new GivenCouponResponse(givenCoupons, state, expirationPeriod);
+    }
+
 }

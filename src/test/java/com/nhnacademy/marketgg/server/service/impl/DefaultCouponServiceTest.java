@@ -50,16 +50,16 @@ public class DefaultCouponServiceTest {
         then(couponRepository).should().save(any(Coupon.class));
     }
 
-    @Test
-    @DisplayName("쿠폰 목록 조회")
-    void testRetrieveCoupons() {
-        given(couponRepository.findAllCoupons())
-                .willReturn(List.of(new CouponRetrieveResponse(1L, "name", "type", LocalDateTime.now(), 1000)));
-
-        List<CouponRetrieveResponse> couponResponses = couponService.retrieveCoupons();
-
-        assertThat(couponResponses).hasSize(1);
-    }
+    // @Test
+    // @DisplayName("쿠폰 목록 조회")
+    // void testRetrieveCoupons() {
+    //     given(couponRepository.findAllCoupons())
+    //             .willReturn(List.of(new CouponRetrieveResponse(1L, "name", "type", LocalDateTime.now(), 1000)));
+    //
+    //     List<CouponRetrieveResponse> couponResponses = couponService.retrieveCoupons();
+    //
+    //     assertThat(couponResponses).hasSize(1);
+    // }
 
     @Test
     @DisplayName("쿠폰 수정 성공")
