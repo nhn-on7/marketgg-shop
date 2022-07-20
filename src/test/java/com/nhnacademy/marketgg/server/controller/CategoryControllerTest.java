@@ -16,6 +16,8 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -62,9 +64,20 @@ class CategoryControllerTest {
         when(categoryService.retrieveCategory(anyString())).thenReturn(null);
 
         this.mockMvc.perform(get(DEFAULT_CATEGORY + "/{categoryId}", "011"))
-                .andExpect(status().isOk());
+                    .andExpect(status().isOk());
 
         verify(categoryService, times(1)).retrieveCategory(anyString());
+    }
+
+    @Test
+    @DisplayName("카테고리 분류표별 카테고리 목록 조회")
+    void testRetrieveCategoriesByCategorization() throws Exception {
+        given(categoryService.retrieveCategoriesByCategorization(anyString())).willReturn(List.of());
+
+        this.mockMvc.perform(get(DEFAULT_CATEGORY + "/categorizations/{categorizationId}", "100"))
+                    .andExpect(status().isOk());
+
+        then(categoryService).should().retrieveCategoriesByCategorization(anyString());
     }
 
     @Test

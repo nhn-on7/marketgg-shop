@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.request.CategoryUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.exception.categorization.CategorizationNotFoundException;
@@ -38,6 +38,11 @@ public class DefaultCategoryService implements CategoryService {
     @Override
     public CategoryRetrieveResponse retrieveCategory(final String id) {
         return categoryRepository.findByCode(id);
+    }
+
+    @Override
+    public List<CategoryRetrieveResponse> retrieveCategoriesByCategorization(String categorizationId) {
+        return categoryRepository.findByCategorizationCode(categorizationId);
     }
 
     @Override
