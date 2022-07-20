@@ -79,6 +79,14 @@ public class MemberController {
                 .build();
     }
 
+    /**
+     * 선택한 회원에게 쿠폰을 지급하는 PostMapping 을 지원합니다.
+     *
+     * @param memberId - 쿠폰을 등록할 회원의 식별번호입니다.
+     * @param givenCouponRequest - 등록할 쿠폰 번호 정보를 가진 요청 객체입니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     * @since 1.0.0
+     */
     @PostMapping("/{memberId}/coupons")
     public ResponseEntity<Void> createGivenCoupons(@PathVariable final Long memberId,
                                                    @RequestBody final GivenCouponRequest givenCouponRequest) {
@@ -91,6 +99,13 @@ public class MemberController {
                 .build();
     }
 
+    /**
+     * 선택한 회원에게 지급된 쿠폰 목록을 조회하는 GetMapping 을 지원합니다.
+     *
+     * @param memberId - 쿠폰을 조회할 회원의 식별번호입니다.
+     * @return 회원에게 지급된 쿠폰 목록을 가진 DTO 객체를 반환합니다.
+     * @since 1.0.0
+     */
     @GetMapping("/{memberId}/coupons")
     public ResponseEntity<List<GivenCouponResponse>> retrieveGivenCoupons(@PathVariable final Long memberId) {
         List<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(memberId);

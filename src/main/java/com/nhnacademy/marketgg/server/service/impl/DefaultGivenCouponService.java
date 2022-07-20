@@ -46,7 +46,7 @@ public class DefaultGivenCouponService implements GivenCouponService {
 
     @Override
     public List<GivenCouponResponse> retrieveGivenCoupons(final Long memberId) {
-        List<GivenCoupon> givenCoupons = givenCouponRepository.findAllByMember_Id(memberId);
+        List<GivenCoupon> givenCoupons = givenCouponRepository.findAllByMemberId(memberId);
         List<GivenCouponResponse> couponResponseList = new ArrayList<>();
         for (GivenCoupon coupon : givenCoupons) {
             couponResponseList.add(this.checkAvailability(coupon));
