@@ -5,15 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Table(name = "used_coupons")
@@ -32,8 +24,8 @@ public class UsedCoupon {
 
     @OneToOne
     @JoinColumns({
-            @JoinColumn(referencedColumnName = "coupon_no"),
-            @JoinColumn(referencedColumnName = "member_no")
+            @JoinColumn(name = "coupon_no", referencedColumnName = "coupon_no", updatable = false, insertable = false),
+            @JoinColumn(name = "member_no", referencedColumnName = "member_no", updatable = false, insertable = false)
     })
     private GivenCoupon givenCoupon;
 
