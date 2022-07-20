@@ -55,22 +55,14 @@ public class DefaultGivenCouponService implements GivenCouponService {
     }
 
     private GivenCouponResponse checkAvailability(GivenCoupon givenCoupons) {
-        CouponState state;
-        LocalDateTime expirationPeriod = givenCoupons.getCreatedAt()
-                                                     .plusDays(givenCoupons.getCoupon().getExpiredDate());
 
-        // if (!givenCouponRepository.findByPkCouponNoAndPkMemberNo(givenCoupons.getPk()
-        //                                                                      .getCouponNo(), givenCoupons.getPk()
-        //                                                                                                  .getMemberNo())
-        //                           .isEmpty()) {
-        Long couponNo = givenCoupons.getPk().getCouponNo();
-        Long memberNo = givenCoupons.getPk().getMemberNo();
-        if (!usedCouponRepository.findAllBy().isEmpty()) {
-        // if (!usedCouponRepository.findByPkCouponNo(givenCoupons.getPk()
-        //                                                                                                 .getMemberNo())
-        //                          .isEmpty()) {
+        CouponState state;
+        Integer expiredDate = givenCoupons.getCoupon().getExpiredDate();
+        LocalDateTime expirationPeriod = givenCoupons.getCreatedAt().plusDays(expiredDate);
+
+        if (!usedCouponRepository.findAllByGivenCoupon(givenCoupons).isEmpty()) {
             state = USED;
-        } else if (expirationPeriod.isAfter(LocalDateTime.now())) {
+        } else if (expirationPeriod.isBefore(LocalDateTime.now())) {
             state = EXPIRED;
         } else {
             state = VALID;
