@@ -19,7 +19,6 @@ public class CategorizationCreateRequest {
     private String name;
 
     @NotBlank
-
     private String alias;
 
 }
