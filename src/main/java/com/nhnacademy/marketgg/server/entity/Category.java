@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -35,6 +36,7 @@ public class Category {
 
     @ManyToOne
     @JoinColumn(name = "categorization_code")
+    @Valid
     private Categorization categorization;
 
     @Column
@@ -50,8 +52,7 @@ public class Category {
      * 카테고리를 생성하기 위한 생성자입니다.
      *
      * @param categoryCreateRequest - 카테고리를 생성하기위한 DTO 입니다.
-     * @param categorization - 카테고리가 속할 카테고리 분류입니다.
-     *
+     * @param categorization        - 카테고리가 속할 카테고리 분류입니다.
      * @since 1.0.0
      */
     public Category(final CategoryCreateRequest categoryCreateRequest, final Categorization categorization) {
