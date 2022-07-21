@@ -1,7 +1,10 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -31,7 +34,6 @@ public class GivenCoupon {
 
     @Embeddable
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @AllArgsConstructor
     @Getter
     @EqualsAndHashCode
     public static class Pk implements Serializable {
@@ -41,6 +43,11 @@ public class GivenCoupon {
 
         @Column(name = "member_no")
         private Long memberNo;
+
+        public Pk(Long couponNo, Long memberNo) {
+            this.couponNo = couponNo;
+            this.memberNo = memberNo;
+        }
 
     }
 
