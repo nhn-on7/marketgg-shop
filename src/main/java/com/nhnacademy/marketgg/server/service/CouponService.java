@@ -22,9 +22,19 @@ public interface CouponService {
     void createCoupon(CouponRequest couponRequest);
 
     /**
+     * couponId 에 해당하는 쿠폰을 조회합니다.
+     *
+     * @param couponId - 조회할 쿠폰의 식별번호 입니다.
+     * @return 조회한 쿠폰의 정보를 담은 DTO 를 반환합니다.
+     *
+     * @since 1.0.0
+     */
+    CouponRetrieveResponse retrieveCoupon(Long couponId);
+
+    /**
      * 전체 쿠폰 목록을 조회합니다.
      *
-     * @return - 전체 카티고리 목록을 List 로 반환합니다.
+     * @return - 전체 쿠폰 목록을 List 로 반환합니다.
      *
      * @since 1.0.0
      */
@@ -48,4 +58,5 @@ public interface CouponService {
      * @since 1.0.0
      */
     void deleteCoupon(Long couponId);
+
 }

@@ -27,6 +27,11 @@ public class DefaultCouponService implements CouponService {
     }
 
     @Override
+    public CouponRetrieveResponse retrieveCoupon(Long couponId) {
+        return couponRepository.findByCouponId(couponId);
+    }
+
+    @Override
     public List<CouponRetrieveResponse> retrieveCoupons() {
         return couponRepository.findAllCoupons();
     }

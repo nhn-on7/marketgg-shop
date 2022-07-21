@@ -43,6 +43,7 @@ public class Coupon {
         this.type = couponRequest.getType();
         this.expiredDate = couponRequest.getExpiredDate();
         this.minimumMoney = couponRequest.getMinimumMoney();
+        this.discountAmount = couponRequest.getDiscountAmount();
     }
 
     public void updateCoupon(final CouponRequest couponRequest) {
@@ -50,6 +51,7 @@ public class Coupon {
         this.type = couponRequest.getType();
         this.expiredDate = couponRequest.getExpiredDate();
         this.minimumMoney = couponRequest.getMinimumMoney();
+        this.discountAmount = couponRequest.getDiscountAmount();
     }
 
 }

@@ -17,6 +17,6 @@ public class CouponRetrieveResponse {
 
     private final Integer minimumMoney;
 
-    private final Double disCountAmount;
+    private final Double discountAmount;
 
 }
