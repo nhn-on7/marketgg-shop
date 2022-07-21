@@ -102,7 +102,7 @@ public class DefaultProductService implements ProductService {
 
     @Override
     public List<ProductResponse> searchProductByCategory(final String categoryCode) {
-        return productRepository.findByCategoryAndCategorizationCodes(categoryCode);
+        return productRepository.findByCategoryCode(categoryCode);
 
     }
 

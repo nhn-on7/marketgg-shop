@@ -45,7 +45,7 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     }
 
     @Override
-    public List<ProductResponse> findByCategoryAndCategorizationCodes(String categoryCode) {
+    public List<ProductResponse> findByCategoryCode(String categoryCode) {
         QProduct product = QProduct.product;
 
         return from(product)
