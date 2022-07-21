@@ -44,9 +44,8 @@ public class GivenCoupon {
 
     }
 
-    public GivenCoupon(final Coupon coupon, final Member member,
-                       final Long memberId, final GivenCouponRequest givenCouponRequest) {
-        this.pk = new Pk(givenCouponRequest.getCouponNo(), memberId);
+    public GivenCoupon(final Coupon coupon, final Member member, final GivenCouponRequest givenCouponRequest) {
+        this.pk = new Pk(givenCouponRequest.getCouponNo(), member.getId());
         this.coupon = coupon;
         this.member = member;
         this.createdAt = LocalDateTime.now();
