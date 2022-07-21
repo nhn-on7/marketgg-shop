@@ -28,7 +28,15 @@ public class DibController {
     private final DibService dibService;
     private static final String DEFAULT_DIB = "/shop/v1/members";
 
-//here
+    /**
+     * 찜을 등록하는 POST Mapping 을 지원합니다.
+     *
+     * @param memberId - 찜을 등록할 회원의 식별번호입니다.
+     * @param productId - 찜으로 등록될 상품의 식별번호입니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     *
+     * @since 1.0.0
+     */
     @PostMapping("/{memberId}/dibs/{productId}")
     ResponseEntity<Void> createDib(@PathVariable final Long memberId,
                                    @PathVariable final Long productId) {
@@ -42,10 +50,11 @@ public class DibController {
     }
 
     /**
-     * 회원의 찜 목록을 조회하는 Mapping 을 지원합니다.
+     * 회원의 찜 목록을 조회하는 GET Mapping 을 지원합니다.
      *
-     * @param memberId - 회원의 회원번호 입니다.
+     * @param memberId - 찜 목록을 조회하는 회원의 식별번호입니다.
      * @return 회원의 찜 목록을 List 로 반환합니다.
+     *
      * @since 1.0.0
      */
     @GetMapping("/{memberId}/dibs")
@@ -57,7 +66,15 @@ public class DibController {
                              .body(dibResponses);
     }
 
-    //here
+    /**
+     * 찜을 삭제하는 DELETE Mapping 을 지원합니다.
+     *
+     * @param memberId - 찜을 삭제하는 회원의 식별번호입니다.
+     * @param productId - 찜 목록에서 삭제될 상품의 식별번호입니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     *
+     * @since 1.0.0
+     */
     @DeleteMapping("/{memberId}/dibs/{productId}")
     ResponseEntity<Void> deleteDib(@PathVariable final Long memberId,
                                    @PathVariable final Long productId) {

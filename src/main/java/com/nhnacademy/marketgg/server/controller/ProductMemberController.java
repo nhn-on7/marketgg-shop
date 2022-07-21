@@ -22,7 +22,7 @@ public class ProductMemberController {
     private static final String DEFAULT_URI = "shop/v1/products";
 
     /**
-     * 상품 검색을 위한 GetMapping을 지원합니다.
+     * 상품 검색을 위한 GET Mapping을 지원합니다.
      * 카테고리 코드, 카테고리분류코드 코드를 동시에 받아 조건에 맞는 상품 리스트를 반환합니다.
      *
      * @param categoryCode       - 2차 분류입니다. ex) 101 - 채소, 102 -  두부, 고구마

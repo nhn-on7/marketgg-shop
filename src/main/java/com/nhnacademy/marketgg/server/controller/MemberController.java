@@ -33,7 +33,7 @@ public class MemberController {
     private final PointService pointService;
 
     /**
-     * 선택한 회원의 GG 패스 갱신일시를 반환하는 Mapping 을 지원합니다.
+     * 선택한 회원의 GG 패스 갱신일시를 반환하는 GET Mapping 을 지원합니다.
      *
      * @param memberId - GG 패스 갱신일시를 확인 할 회원의 식별번호입니다.
      * @return 선택한 회원의 GG 패스 갱신일을 반환합니다.
@@ -50,7 +50,7 @@ public class MemberController {
     }
 
     /**
-     * 선택한 회원을 GG 패스에 구독시키는 Mapping 을 지원합니다.
+     * 선택한 회원을 GG 패스에 구독시키는 POST Mapping 을 지원합니다.
      *
      * @param memberId - GG 패스를 구독할 회원의 식별번호입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
@@ -67,7 +67,7 @@ public class MemberController {
     }
 
     /**
-     * 선택한 회원을 GG 패스에 구독해지시키는 Mapping 을 지원합니다.
+     * 선택한 회원을 GG 패스에 구독해지시키는 POST Mapping 을 지원합니다.
      *
      * @param memberId - GG 패스를 구독해지할 회원의 식별번호입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.

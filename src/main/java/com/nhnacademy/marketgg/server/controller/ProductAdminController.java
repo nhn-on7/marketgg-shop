@@ -37,7 +37,7 @@ public class ProductAdminController {
 
 
     /**
-     * 상품 생성을 위한 PostMapping 을 지원합니다.
+     * 상품 생성을 위한 POST Mapping 을 지원합니다.
      *
      * @param productRequest - 상품 생성을 위한 DTO 입니다.
      * @param image          - 상품 등록시 필요한 image 입니다. MultipartFile 타입 입니다.
@@ -60,7 +60,7 @@ public class ProductAdminController {
     }
 
     /**
-     * 전체 상품 목록 조회를 위한 GetMapping 을 지원합니다.
+     * 전체 상품 목록 조회를 위한 GET Mapping 을 지원합니다.
      *
      * @return - List<ProductResponse> 를 담은 응답 객체를 반환 합니다.
      * @since 1.0.0
@@ -76,7 +76,7 @@ public class ProductAdminController {
     }
 
     /**
-     * 상품 상세 정보 조회를 위한 GetMapping 을 지원합니다.
+     * 상품 상세 정보 조회를 위한 GET Mapping 을 지원합니다.
      *
      * @param productId - 상품의 PK로 조회합니다.
      * @return - ProductResponse 를 담은 응답 객체를 반환 합니다.
@@ -94,7 +94,7 @@ public class ProductAdminController {
     }
 
     /**
-     * 상품 수정을 위한 PutMapping 을 지원합니다.
+     * 상품 수정을 위한 PUT Mapping 을 지원합니다.
      *
      * @param productRequest - 상품 수정을 위한 DTO 입니다.
      * @param image          - 상품 수정을 위한 MultipartFile 입니다.
@@ -116,7 +116,7 @@ public class ProductAdminController {
     }
 
     /**
-     * 상품 소프트 삭제를 위한 PostMapping를 지원합니다.
+     * 상품 소프트 삭제를 위한 POST Mapping를 지원합니다.
      * Delete Query가 날아가는 것이 아닌, 상품의 상태 값을 '삭제'로 변경 합니다.
      *
      * @param productId - 상품 삭제를 위한 PK 입니다.
@@ -134,7 +134,7 @@ public class ProductAdminController {
     }
 
     /**
-     * 상품 검색을 위한 GetMapping을 지원합니다.
+     * 상품 검색을 위한 GET Mapping을 지원합니다.
      * 상품의 이름을 인자로 받아 해당 이름을 포함한 상품 엔티티를 검색합니다.
      *
      * @param productName - 상품 검색을 위한 String 타입 파라미터입니다.

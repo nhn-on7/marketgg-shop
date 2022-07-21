@@ -24,7 +24,7 @@ public class CategorizationController {
     private final CategorizationService categorizationService;
 
     /**
-     * 전체 카테고리 목록을 조회하는 Mapping 을 지원합니다.
+     * 전체 카테고리 목록을 조회하는 GET Mapping 을 지원합니다.
      *
      * @return 카테고리 분류표의 전체 목록을 List 로 반환합니다.
      * @since 1.0.0
