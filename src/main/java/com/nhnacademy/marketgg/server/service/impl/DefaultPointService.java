@@ -14,6 +14,7 @@ import com.nhnacademy.marketgg.server.service.PointService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -34,7 +35,7 @@ public class DefaultPointService implements PointService {
         return pointRepository.findAllForAdmin();
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void createPointHistory(final Long id, final PointHistoryRequest pointRequest) {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
@@ -45,7 +46,7 @@ public class DefaultPointService implements PointService {
         pointRepository.save(pointHistory);
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void createPointHistoryForOrder(final Long memberId, final Long orderId,
                                            final PointHistoryRequest pointRequest) {
