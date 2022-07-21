@@ -37,7 +37,7 @@ public class Member {
     private MemberGrade memberGrade;
 
     @Column
-    private String email;
+    private String uuid;
 
     @Column
     private Character gender;
@@ -65,7 +65,7 @@ public class Member {
      */
     public Member(MemberCreateRequest memberRequest) {
         this.memberGrade = memberRequest.getMemberGrade();
-        this.email = memberRequest.getEmail();
+        this.uuid = memberRequest.getUuid();
         this.gender = memberRequest.getGender();
         this.birthDate = memberRequest.getBirthDate();
         this.ggpassUpdatedAt = memberRequest.getGgpassUpdateAt();

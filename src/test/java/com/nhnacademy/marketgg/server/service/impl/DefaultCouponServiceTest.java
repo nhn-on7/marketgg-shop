@@ -26,7 +26,7 @@ import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
-public class DefaultCouponServiceTest {
+class DefaultCouponServiceTest {
 
     @InjectMocks
     DefaultCouponService couponService;

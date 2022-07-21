@@ -1,0 +1,13 @@
+POST http://localhost:7080/shop/v1/members/5/coupons HTTP/1.1
+Content-Type: application/json
+
+{
+  "couponNo" : 1
+}
+
+###
+
+GET http://localhost:7080/shop/v1/members/5/coupons
+Content-Type: application/json
+
+###

@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "mysql.secret-url",
+      "type": "java.lang.String",
+      "description": "Description for mysql.secret-url."
+    }
+  ]
+}
