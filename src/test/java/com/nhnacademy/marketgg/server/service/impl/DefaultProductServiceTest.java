@@ -178,8 +178,8 @@ class DefaultProductServiceTest {
         MockMultipartFile file =
             new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));
 
-        ProductUpdateRequest productUPdateRequest = new ProductUpdateRequest();
-        ReflectionTestUtils.setField(productUPdateRequest, "categoryCode", "001");
+        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest();
+        ReflectionTestUtils.setField(productUpdateRequest, "categoryCode", "001");
 
         given(assetRepository.save(any(Asset.class))).willReturn(asset);
         given(imageRepository.save(any(Image.class))).willReturn(new Image(asset, "test"));
@@ -187,7 +187,7 @@ class DefaultProductServiceTest {
         given(productRepository.findById(anyLong())).willReturn(
             Optional.of(new Product(productRequest, asset, category)));
 
-        productService.updateProduct(productUPdateRequest, file, 1L);
+        productService.updateProduct(productUpdateRequest, file, 1L);
 
         verify(productRepository, atLeastOnce()).save(any());
         verify(categoryRepository, atLeastOnce()).findById(any());

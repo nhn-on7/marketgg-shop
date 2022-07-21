@@ -48,8 +48,7 @@ public class DefaultProductService implements ProductService {
         Image image = new Image(asset, dest.toString());
         this.imageRepository.save(image);
 
-        Category category = this.categoryRepository.findById(productRequest.getCategoryCode())
-                                                   .orElseThrow(CategoryNotFoundException::new);
+        Category category = this.categoryRepository.findById(productRequest.getCategoryCode()).orElseThrow(CategoryNotFoundException::new);
 
         this.productRepository.save(new Product(productRequest, asset, category));
     }

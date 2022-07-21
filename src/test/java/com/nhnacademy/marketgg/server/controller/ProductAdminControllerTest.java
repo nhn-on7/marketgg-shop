@@ -17,13 +17,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -32,11 +34,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(ProductAdminController.class)
-@ActiveProfiles("local")
 class ProductAdminControllerTest {
 
     @Autowired
@@ -49,17 +50,22 @@ class ProductAdminControllerTest {
     ProductService productService;
 
     private static final String DEFAULT_PRODUCT = "/shop/v1/admin/products";
-    private static ProductCreateRequest productRequest;
+    private ProductCreateRequest productRequest;
+    private ProductResponse productResponse;
 
-    @BeforeAll
-    static void beforeAll() {
+
+    @BeforeEach
+    void setUp() {
         productRequest = new ProductCreateRequest();
+        ReflectionTestUtils.setField(productRequest, "categoryCode", "001");
+        productResponse =
+            new ProductResponse(null, null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null, null, null, null, null, null);
     }
 
     @Test
     @DisplayName("상품 등록하는 테스트")
     void testCreateProduct() throws Exception {
-
         String content = this.objectMapper.writeValueAsString(productRequest);
 
         URL url = getClass().getClassLoader().getResource("lee.png");
@@ -72,10 +78,10 @@ class ProductAdminControllerTest {
             content.getBytes(StandardCharsets.UTF_8));
 
         this.mockMvc.perform(multipart(DEFAULT_PRODUCT).file(dto)
-                                                            .file(file)
-                                                            .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                                            .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                                                            .characterEncoding(StandardCharsets.UTF_8))
+                                                       .file(file)
+                                                       .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                                       .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                                                       .characterEncoding(StandardCharsets.UTF_8))
                     .andExpect(status().isCreated())
                     .andExpect(header().string("Location", DEFAULT_PRODUCT));
 
@@ -94,9 +100,23 @@ class ProductAdminControllerTest {
     }
 
     @Test
+    @DisplayName("상품 상세 조회 테스트")
+    void testRetrieveProductDetails() throws Exception {
+        given(productService.retrieveProductDetails(anyLong())).willReturn(productResponse);
+
+        this.mockMvc.perform(get(DEFAULT_PRODUCT + "/1").contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+
+        verify(productService, BDDMockito.atLeastOnce()).retrieveProductDetails(anyLong());
+    }
+
+    @Test
     @DisplayName("상품 정보 수정하는 테스트")
     void testUpdateProduct() throws Exception {
-        String content = this.objectMapper.writeValueAsString(productRequest);
+        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest();
+        ReflectionTestUtils.setField(productUpdateRequest, "categoryCode", "001");
+
+        String content = this.objectMapper.writeValueAsString(productUpdateRequest);
         MockMultipartFile dto = new MockMultipartFile("productRequest", "jsondata", "application/json",
             content.getBytes(StandardCharsets.UTF_8));
 
@@ -114,6 +134,7 @@ class ProductAdminControllerTest {
                                                                             .characterEncoding(
                                                                                 StandardCharsets.UTF_8))
                     .andExpect(status().isOk());
+
     }
 
     @Test
@@ -131,7 +152,7 @@ class ProductAdminControllerTest {
         when(this.productService.searchProductsByName(anyString())).thenReturn(List.of());
 
         this.mockMvc.perform(
-                get(DEFAULT_PRODUCT + "/search/{productName}", "오렌지").contentType(MediaType.APPLICATION_JSON))
+                get(DEFAULT_PRODUCT + "/search/{productName}", "오렌지"))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
