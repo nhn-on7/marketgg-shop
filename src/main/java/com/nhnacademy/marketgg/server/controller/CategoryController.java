@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.net.URI;
 import java.util.List;
 
@@ -28,6 +31,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/shop/v1/admin/categories")
 @RequiredArgsConstructor
+@Validated
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -42,7 +46,7 @@ public class CategoryController {
      * @since 1.0.0
      */
     @PostMapping
-    ResponseEntity<Void> createCategory(@RequestBody final CategoryCreateRequest categoryCreateRequest) {
+    ResponseEntity<Void> createCategory(@Validated @RequestBody final CategoryCreateRequest categoryCreateRequest) {
         categoryService.createCategory(categoryCreateRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -59,7 +63,7 @@ public class CategoryController {
      * @since 1.0.0
      */
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategoryRetrieveResponse> retrieveCategory(@PathVariable final String categoryId) {
+    public ResponseEntity<CategoryRetrieveResponse> retrieveCategory(@PathVariable @NotBlank @Size(max = 6) final String categoryId) {
         CategoryRetrieveResponse categoryResponse = categoryService.retrieveCategory(categoryId);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -75,7 +79,7 @@ public class CategoryController {
      * @since 1.0.0
      */
     @GetMapping("/categorizations/{categorizationId}")
-    public ResponseEntity<List<CategoryRetrieveResponse>> retrieveCategoriesByCategorization(@PathVariable final String categorizationId) {
+    public ResponseEntity<List<CategoryRetrieveResponse>> retrieveCategoriesByCategorization(@PathVariable @NotBlank @Size(max = 6) final String categorizationId) {
         List<CategoryRetrieveResponse> categoryResponses = categoryService.retrieveCategoriesByCategorization(
                 categorizationId);
 
@@ -108,8 +112,8 @@ public class CategoryController {
      * @since 1.0.0
      */
     @PutMapping("/{categoryId}")
-    public ResponseEntity<Void> updateCategory(@PathVariable final String categoryId,
-                                               @RequestBody final CategoryUpdateRequest categoryRequest) {
+    public ResponseEntity<Void> updateCategory(@PathVariable @NotBlank @Size(max = 6) final String categoryId,
+                                               @Validated @RequestBody final CategoryUpdateRequest categoryRequest) {
         categoryService.updateCategory(categoryId, categoryRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -126,7 +130,7 @@ public class CategoryController {
      * @since 1.0.0
      */
     @DeleteMapping("/{categoryId}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable final String categoryId) {
+    public ResponseEntity<Void> deleteCategory(@PathVariable @NotBlank @Size(max = 6) final String categoryId) {
         categoryService.deleteCategory(categoryId);
 
         return ResponseEntity.status(HttpStatus.OK)

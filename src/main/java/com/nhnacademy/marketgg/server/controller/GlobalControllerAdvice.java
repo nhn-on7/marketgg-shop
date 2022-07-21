@@ -21,7 +21,7 @@ public class GlobalControllerAdvice {
      */
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public String handleException(Exception ex) {
+    public String handleException(final Exception ex) {
 
         return "Error:" + ex.getMessage();
     }

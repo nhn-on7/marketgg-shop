@@ -12,6 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * 카테고리 Entity 입니다.
@@ -26,6 +29,8 @@ public class Category {
 
     @Id
     @Column(name = "category_code")
+    @NotBlank
+    @Size(max = 6)
     private String id;
 
     @ManyToOne
@@ -33,9 +38,12 @@ public class Category {
     private Categorization categorization;
 
     @Column
+    @NotBlank
+    @Size(max = 20)
     private String name;
 
     @Column
+    @NotNull
     private Integer sequence;
 
     /**
