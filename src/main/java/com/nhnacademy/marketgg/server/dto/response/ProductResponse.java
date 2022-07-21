@@ -18,6 +18,10 @@ public class ProductResponse {
 
     private final Category category;
 
+    private final String categoryCode;
+
+    private final String categoryName;
+
     private final String name;
 
     private final String content;
