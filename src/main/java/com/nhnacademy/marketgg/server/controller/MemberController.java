@@ -1,12 +1,18 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignupRequest;
+import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignupResponse;
+import com.nhnacademy.marketgg.server.entity.PointHistory;
 import com.nhnacademy.marketgg.server.service.MemberService;
 
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
+import com.nhnacademy.marketgg.server.service.PointService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
+    private final PointService pointService;
 
     /**
      * 선택한 회원의 GG 패스 갱신일시를 반환하는 Mapping 을 지원합니다.
@@ -85,7 +92,14 @@ public class MemberController {
      */
     @PostMapping("/signup")
     public ResponseEntity<Void> doSignup(@RequestBody final ShopMemberSignupRequest shopMemberSignupRequest) {
-        memberService.signup(shopMemberSignupRequest);
+        ShopMemberSignupResponse signup = memberService.signup(shopMemberSignupRequest);
+
+        if (Objects.nonNull(signup.getReferrerMemberId())) {
+            pointService.createPointHistory(signup.getReferrerMemberId(),new PointHistoryRequest(5000,"추천인 이벤트"));
+        }
+
+        pointService.createPointHistory(signup.getSignupMemberId(), new PointHistoryRequest(5000, "회원 가입"));
+
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create("/shop/v1/members/signup"))
                              .contentType(MediaType.APPLICATION_JSON)

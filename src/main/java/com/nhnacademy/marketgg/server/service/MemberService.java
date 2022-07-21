@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.service;
 
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignupRequest;
+import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignupResponse;
 
 import java.time.LocalDateTime;
 
@@ -43,5 +44,5 @@ public interface MemberService {
      * @param shopMemberSignupRequest
      * @since 1.0.0
      */
-    void signup(final ShopMemberSignupRequest shopMemberSignupRequest);
+    ShopMemberSignupResponse signup(final ShopMemberSignupRequest shopMemberSignupRequest);
 }

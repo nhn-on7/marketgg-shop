@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignupRequest;
+import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignupResponse;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.entity.PointHistory;
@@ -24,8 +25,6 @@ public class DefaultMemberService implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberGradeRepository memberGradeRepository;
-
-    private final PointHistoryRepository pointHistoryRepository;
 
     @Override
     public LocalDateTime retrievePassUpdatedAt(final Long id) {
@@ -58,35 +57,25 @@ public class DefaultMemberService implements MemberService {
 
     @Transactional
     @Override
-    public void signup(final ShopMemberSignupRequest shopMemberSignupRequest) {
-
-        final Integer earnPoint = 5000;
-
+    public ShopMemberSignupResponse signup(final ShopMemberSignupRequest shopMemberSignupRequest) {
         if (getReferrerUuid(shopMemberSignupRequest) != null) {
 
             Member referrerMember = memberRepository.findByUuid(getReferrerUuid(shopMemberSignupRequest))
                                                     .orElseThrow(MemberNotFoundException::new);
-
-            PointHistory beforeReferrerPointHistory = pointHistoryRepository.findByMember(referrerMember)
-                                                                            .orElseThrow(PointHistoryNotFoundException::new);
-
-
-            PointHistory.earnReferrer(beforeReferrerPointHistory, referrerMember, earnPoint);
 
             MemberGrade signupMemberGrade = memberGradeRepository.findByGrade("Member")
                                                                  .orElseThrow(MemberGradeNotFoundException::new);
 
             Member signupMember = memberRepository.save(new Member(shopMemberSignupRequest, signupMemberGrade));
 
-            PointHistory signupMemberPointHistory = pointHistoryRepository.save(new PointHistory(signupMember, 0, 0, "회원가입", LocalDateTime.now()));
-            PointHistory.earnReferrer(signupMemberPointHistory, signupMember, earnPoint);
+            return new ShopMemberSignupResponse(signupMember.getId(),referrerMember.getId());
         }
-
         MemberGrade signupMemberGrade = memberGradeRepository.findByGrade("Member")
                                                              .orElseThrow(MemberGradeNotFoundException::new);
 
-        memberRepository.save(new Member(shopMemberSignupRequest, signupMemberGrade));
+        Member signupMember = memberRepository.save(new Member(shopMemberSignupRequest, signupMemberGrade));
 
+        return new ShopMemberSignupResponse(signupMember.getId(), null);
     }
 
     private String getReferrerUuid(ShopMemberSignupRequest shopMemberSignupRequest) {
