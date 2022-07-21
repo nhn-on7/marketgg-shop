@@ -24,7 +24,7 @@ public class AdminProductInquiryPostController {
     private final ProductInquiryPostService productInquiryPostService;
 
     /**
-     * 상품 문의에 대한 관리자의 답글을 등록하기 위한 PutMapping 을 지원합니다.
+     * 상품 문의에 대한 관리자의 답글을 등록하기 위한 PUT Mapping 을 지원합니다.
      *
      * @param inquiryReply - 상품 문의에 대한 관리자의 답글을 담은 DTO 입니다.
      * @param productId    - 상품의 PK 입니다.

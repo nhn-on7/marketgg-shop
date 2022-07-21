@@ -29,7 +29,7 @@ public class DibController {
     private static final String DEFAULT_DIB = "/shop/v1/members";
 
     /**
-     * 찜을 등록하는 PostMapping 을 지원합니다.
+     * 찜을 등록하는 POST Mapping 을 지원합니다.
      *
      * @param memberId - 찜을 등록할 회원의 식별번호입니다.
      * @param productId - 찜으로 등록될 상품의 식별번호입니다.
@@ -50,7 +50,7 @@ public class DibController {
     }
 
     /**
-     * 회원의 찜 목록을 조회하는 GetMapping 을 지원합니다.
+     * 회원의 찜 목록을 조회하는 GET Mapping 을 지원합니다.
      *
      * @param memberId - 찜 목록을 조회하는 회원의 식별번호입니다.
      * @return 회원의 찜 목록을 List 로 반환합니다.
@@ -67,7 +67,7 @@ public class DibController {
     }
 
     /**
-     * 찜을 삭제하는 DeleteMapping 을 지원합니다.
+     * 찜을 삭제하는 DELETE Mapping 을 지원합니다.
      *
      * @param memberId - 찜을 삭제하는 회원의 식별번호입니다.
      * @param productId - 찜 목록에서 삭제될 상품의 식별번호입니다.

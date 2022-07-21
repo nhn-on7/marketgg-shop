@@ -30,7 +30,7 @@ public class ProductInquiryPostController {
     private String defaultInquiryUri;
 
     /**
-     * 상품 문의 등록을 위한 PostMapping 을 지원합니다.
+     * 상품 문의 등록을 위한 POST Mapping 을 지원합니다.
      *
      * @param inquiryRequest - 상품 문의 등록을 위한 DTO 입니다.
      * @param productId      - 상품 문의 등록시 등록하는 상품의 PK 입니다.
@@ -50,7 +50,7 @@ public class ProductInquiryPostController {
     }
 
     /**
-     * 한 상품에 대한 전체 상품 문의 글을 조회하는 GetMapping 을 지원합니다.
+     * 한 상품에 대한 전체 상품 문의 글을 조회하는 GET Mapping 을 지원합니다.
      *
      * @param productId - 상품 문의 글을 조회하는 상품의 PK 입니다.
      * @return - List<ProductInquiryResponse> 를 담은 응답 객체를 반환 합니다.
@@ -67,7 +67,7 @@ public class ProductInquiryPostController {
     }
 
     /**
-     * 한 회원이 상품에 대해 문의한 전체 상품 문의 글을 조회하는 GetMapping 을 지원합니다.
+     * 한 회원이 상품에 대해 문의한 전체 상품 문의 글을 조회하는 GET Mapping 을 지원합니다.
      *
      * @param memberId - 회원의 PK 로 조회합니다.
      * @return - List<ProductInquiryResponse> 를 담은 응답 객체를 반환 합니다.
@@ -84,7 +84,7 @@ public class ProductInquiryPostController {
     }
 
     /**
-     * 상품 문의 글 삭제를 위한 DeleteMapping 을 지원합니다.
+     * 상품 문의 글 삭제를 위한 DELETE Mapping 을 지원합니다.
      *
      * @param productId - 상품의 PK 입니다.
      * @param inquiryId - 삭제할 상품 문의 글의 PK 입니다.

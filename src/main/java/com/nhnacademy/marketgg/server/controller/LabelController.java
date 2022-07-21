@@ -32,7 +32,7 @@ public class LabelController {
     private static final String DEFAULT_LABEL = "/shop/v1/admin/labels";
 
     /**
-     * 입력한 정보로 라벨을 등록하는 Mapping 을 지원합니다.
+     * 입력한 정보로 라벨을 등록하는 POST Mapping 을 지원합니다.
      *
      * @param labelCreateRequest - 라벨을 생성하기 위한 DTO 입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
@@ -49,7 +49,7 @@ public class LabelController {
     }
 
     /**
-     * 전체 라벨 목록을 조회하는 Mapping 을 지원합니다.
+     * 전체 라벨 목록을 조회하는 GET Mapping 을 지원합니다.
      *
      * @return 전체 라벨 목록을 list 로 반환합니다.
      * @since 1.0.0
@@ -64,7 +64,7 @@ public class LabelController {
     }
 
     /**
-     * 선택한 라벨을 삭제하는 Mapping 을 지원합니다.
+     * 선택한 라벨을 삭제하는 DELETE Mapping 을 지원합니다.
      *
      * @param labelId - 삭제할 라벨의 식별번호입니다.
      * @return Mapping URI 를 담은 응답 객체입니다.

@@ -35,7 +35,7 @@ public class CategoryController {
     private static final String DEFAULT_CATEGORY = "/shop/v1/admin/categories";
 
     /**
-     * 입력한 정보로 카테고리를 생성하는 Mapping 을 지원합니다.
+     * 입력한 정보로 카테고리를 생성하는 POST Mapping 을 지원합니다.
      *
      * @param categoryCreateRequest - 카테고리를 생성하기 위한 DTO 입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
@@ -52,7 +52,7 @@ public class CategoryController {
     }
 
     /**
-     * 선택한 카테고리의 정보를 조회하는 Mapping 을 지원합니다.
+     * 선택한 카테고리의 정보를 조회하는 GET Mapping 을 지원합니다.
      *
      * @param categoryId - 조회할 카테고리의 식별번호입니다.
      * @return 카테고리 한개의 정보를 담은 객체를 반환합니다.
@@ -68,7 +68,7 @@ public class CategoryController {
     }
 
     /**
-     * 카레고리 분류표에 따라 카테고리를 조회하는 Mapping 을 지원합니다.
+     * 카레고리 분류표에 따라 카테고리를 조회하는 GET Mapping 을 지원합니다.
      *
      * @param categorizationId - 카테고리 분류표 식별번호입니다.
      * @return 해당하는 카테고리 분류표에 따른 카테고리들을 List 로 반환합니다.
@@ -85,7 +85,7 @@ public class CategoryController {
     }
 
     /**
-     * 전체 카테고리 목록을 조회하는 Mapping 을 지원합니다.
+     * 전체 카테고리 목록을 조회하는 GET Mapping 을 지원합니다.
      *
      * @return 카테고리 전체 목록을 List 로 반환합니다.
      * @since 1.0.0
@@ -100,7 +100,7 @@ public class CategoryController {
     }
 
     /**
-     * 입력한 정보로 선택한 카테고리 정보를 수정하는 Mapping 을 지원합니다.
+     * 입력한 정보로 선택한 카테고리 정보를 수정하는 PUT Mapping 을 지원합니다.
      *
      * @param categoryId      - 수정할 카테고리의 식별번호입니다.
      * @param categoryRequest - 카테고리를 수정하기 위한 DTO 입니다.
@@ -119,7 +119,7 @@ public class CategoryController {
     }
 
     /**
-     * 선택한 카테고리를 삭제하는 Mapping 을 지원합니다.
+     * 선택한 카테고리를 삭제하는 DELETE Mapping 을 지원합니다.
      *
      * @param categoryId - 삭제할 카테고리의 식별번호입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
