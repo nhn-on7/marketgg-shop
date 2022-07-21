@@ -9,6 +9,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * 카테고리 분류 Entity 입니다.
@@ -23,12 +25,18 @@ public class Categorization {
 
     @Id
     @Column(name = "categorization_code")
+    @NotBlank
+    @Size(max = 3)
     private String id;
 
     @Column
+    @NotBlank
+    @Size(max = 20)
     private String name;
 
     @Column
+    @NotBlank
+    @Size(max = 20)
     private String alias;
 
     /**

@@ -1,15 +1,18 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryUpdateRequest;
 import com.nhnacademy.marketgg.server.service.CategoryService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -42,10 +45,33 @@ class CategoryControllerTest {
 
     private static final String DEFAULT_CATEGORY = "/shop/v1/admin/categories";
 
+    private CategoryCreateRequest categoryCreateRequest;
+    private CategoryUpdateRequest categoryUpdateRequest;
+    private CategorizationCreateRequest categorizationCreateRequest;
+
+    @BeforeEach
+    void setUp() {
+        categoryCreateRequest = new CategoryCreateRequest();
+        categoryUpdateRequest = new CategoryUpdateRequest();
+        categorizationCreateRequest = new CategorizationCreateRequest();
+
+        ReflectionTestUtils.setField(categoryCreateRequest, "categoryCode", "101");
+        ReflectionTestUtils.setField(categoryCreateRequest, "categorizationCode", "100");
+        ReflectionTestUtils.setField(categoryCreateRequest, "name", "채소");
+        ReflectionTestUtils.setField(categoryCreateRequest, "sequence", 1);
+
+        ReflectionTestUtils.setField(categoryUpdateRequest, "categoryCode", "101");
+        ReflectionTestUtils.setField(categoryUpdateRequest, "name", "채소");
+        ReflectionTestUtils.setField(categoryUpdateRequest, "sequence", 1);
+
+        ReflectionTestUtils.setField(categorizationCreateRequest, "categorizationCode", "100");
+        ReflectionTestUtils.setField(categorizationCreateRequest, "name", "상품");
+        ReflectionTestUtils.setField(categorizationCreateRequest, "alias", "PRODUCT");
+    }
+
     @Test
     @DisplayName("카테고리 등록")
     void testCreateCategory() throws Exception {
-        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest();
         String requestBody = objectMapper.writeValueAsString(categoryCreateRequest);
 
         doNothing().when(categoryService).createCategory(any(CategoryCreateRequest.class));
@@ -95,7 +121,7 @@ class CategoryControllerTest {
     @Test
     @DisplayName("카테고리 수정")
     void testUpdateCategory() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(new CategoryUpdateRequest());
+        String requestBody = objectMapper.writeValueAsString(categoryUpdateRequest);
 
         doNothing().when(categoryService)
                    .updateCategory(anyString(), any(CategoryUpdateRequest.class));
