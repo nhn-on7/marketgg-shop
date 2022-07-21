@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.service;
 
+import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignupRequest;
+
 import java.time.LocalDateTime;
 
 /**
@@ -34,4 +36,12 @@ public interface MemberService {
      */
     void withdrawPass(final Long id);
 
+    /**
+     * Client 에서 입력폼에 입력한 정보로 회원가입을 합니다.
+     * (Auth 서버에 들어가는 정보랑 다름)
+     *
+     * @param shopMemberSignupRequest
+     * @since 1.0.0
+     */
+    void signup(final ShopMemberSignupRequest shopMemberSignupRequest);
 }

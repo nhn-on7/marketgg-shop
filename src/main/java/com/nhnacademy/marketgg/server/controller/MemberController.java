@@ -1,18 +1,17 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignupRequest;
 import com.nhnacademy.marketgg.server.service.MemberService;
+
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 회원관리에 관련된 RestController 입니다.
@@ -38,9 +37,9 @@ public class MemberController {
         LocalDateTime check = memberService.retrievePassUpdatedAt(memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .location(URI.create("/shop/v1/members/" + memberId + "/ggpass"))
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(check);
+                             .location(URI.create("/shop/v1/members/" + memberId + "/ggpass"))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(check);
     }
 
     /**
@@ -55,9 +54,9 @@ public class MemberController {
         memberService.subscribePass(memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .location(URI.create("/shop/v1/members/" + memberId + "/ggpass/subscribe" ))
-                .contentType(MediaType.APPLICATION_JSON)
-                .build();
+                             .location(URI.create("/shop/v1/members/" + memberId + "/ggpass/subscribe"))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
     }
 
     /**
@@ -72,9 +71,25 @@ public class MemberController {
         memberService.withdrawPass(memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .location(URI.create("/shop/v1/members/" +  memberId + "/ggpass/withdraw"))
-                .contentType(MediaType.APPLICATION_JSON)
-                .build();
+                             .location(URI.create("/shop/v1/members/" + memberId + "/ggpass/withdraw"))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
+    }
+
+    /**
+     * Client 에서 받은 회원가입 Form 에서 입력한 정보로 회원가입을 하는 로직입니다.
+     *
+     * @param shopMemberSignupRequest - shop
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     * @since 1.0.0
+     */
+    @PostMapping("/signup")
+    public ResponseEntity<Void> doSignup(@RequestBody final ShopMemberSignupRequest shopMemberSignupRequest) {
+        memberService.signup(shopMemberSignupRequest);
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create("/shop/v1/members/signup"))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
     }
 
 }

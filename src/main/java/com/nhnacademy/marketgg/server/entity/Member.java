@@ -1,20 +1,14 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignupRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * 회원 Entity 입니다.
@@ -36,7 +30,7 @@ public class Member {
     @JoinColumn(name = "member_grade_no")
     private MemberGrade memberGrade;
 
-    @Column
+    @Column(unique = true)
     private String uuid;
 
     @Column
@@ -72,6 +66,22 @@ public class Member {
         this.createdAt = memberRequest.getCreatedAt();
         this.updatedAt = memberRequest.getUpdatedAt();
         this.deletedAt = memberRequest.getDeletedAt();
+    }
+
+    /**
+     * 회원가입 처리를 위한 생성자 입니다.
+     *
+     * @param shopMemberSignupRequest - 클라이언트 폼에서 가입한 회원의 정보를 담은 DTO 입니다.
+     * @param signupMemberGrade       - 회원가입시 부여될 등급을 담은 객체입니다.
+     * @since 1.0.0
+     */
+    public Member(ShopMemberSignupRequest shopMemberSignupRequest, MemberGrade signupMemberGrade) {
+        this.memberGrade = signupMemberGrade;
+        this.uuid = shopMemberSignupRequest.getUuid();
+        this.gender = shopMemberSignupRequest.getGender();
+        this.birthDate = shopMemberSignupRequest.getBirthDate();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     /**
