@@ -12,6 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.service.MemberService;
 import java.time.LocalDateTime;
+
+import com.nhnacademy.marketgg.server.service.PointService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ class MemberControllerTest {
 
     @MockBean
     MemberService memberService;
+
+    @MockBean
+    PointService pointService;
 
     @Test
     @DisplayName("GG 패스 갱신일자 확인")
