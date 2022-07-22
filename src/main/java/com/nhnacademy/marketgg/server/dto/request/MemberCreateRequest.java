@@ -25,4 +25,5 @@ public class MemberCreateRequest {
     private LocalDateTime updatedAt;
 
     private LocalDateTime deletedAt;
+
 }

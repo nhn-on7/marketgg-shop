@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class LabelCreateRequest {
 
-    private String labelNo;
+    private Long labelNo;
 
     private String name;
 
