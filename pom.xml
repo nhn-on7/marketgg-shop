@@ -15,8 +15,8 @@
     <artifactId>server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>server</name>
-    <description>Market GG server project for Spring Boot</description>
+    <name>marketgg-shop</name>
+    <description>Market GG shop server project for Spring Boot</description>
 
     <properties>
         <java.version>11</java.version>
