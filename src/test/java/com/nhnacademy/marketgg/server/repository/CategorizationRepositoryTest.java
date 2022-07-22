@@ -1,6 +1,8 @@
 package com.nhnacademy.marketgg.server.repository;
 
+import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.CategorizationRetrieveResponse;
+import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.repository.categorization.CategorizationRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +20,7 @@ public class CategorizationRepositoryTest {
     private CategorizationRepository categorizationRepository;
 
     @Test
-    @DisplayName("카테고리 분류표 조회")
+    @DisplayName("모든 카테고리 분류표 목록 조회")
     void testRetrieveCategorization() {
         List<CategorizationRetrieveResponse> result = categorizationRepository.findAllCategorization();
 
