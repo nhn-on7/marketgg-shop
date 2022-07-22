@@ -38,7 +38,7 @@ public class LabelRepositoryTest {
 
         labelRepository.save(label);
 
-        List< LabelRetrieveResponse> results = labelRepository.findAllLabels();
+        List<LabelRetrieveResponse> results = labelRepository.findAllLabels();
 
         assertThat(results).hasSize(1);
     }

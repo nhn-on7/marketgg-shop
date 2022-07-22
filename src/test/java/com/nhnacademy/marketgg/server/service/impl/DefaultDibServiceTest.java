@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -70,7 +71,7 @@ public class DefaultDibServiceTest {
         ReflectionTestUtils.setField(product, "id", 1L);
     }
 
-    // @Test
+    @Test
     @DisplayName("찜 등록 성공")
     void testCreateDibSuccess() {
         when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
@@ -83,7 +84,7 @@ public class DefaultDibServiceTest {
         verify(dibRepository, times(1)).save(any(Dib.class));
     }
 
-    // @Test
+    @Test
     @DisplayName("찜 등록 실패(회원 존재 X)")
     void testCreateDibFailWhenMemberNotFound() {
         when(memberRepository.findById(anyLong())).thenReturn(Optional.empty());
@@ -91,7 +92,7 @@ public class DefaultDibServiceTest {
         assertThatThrownBy(() -> dibService.createDib(1L, 1L)).isInstanceOf(MemberNotFoundException.class);
     }
 
-    // @Test
+    @Test
     @DisplayName("찜 등록 실패(상품 존재 X)")
     void testCreateDibFailWhenProductNotFound() {
         when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
@@ -100,7 +101,7 @@ public class DefaultDibServiceTest {
         assertThatThrownBy(() -> dibService.createDib(1L, 1L)).isInstanceOf(ProductNotFoundException.class);
     }
 
-    // @Test
+    @Test
     @DisplayName("찜 조회 성공")
     void testRetrieveDib() {
         when(dibRepository.findAllDibs(1L)).thenReturn(List.of());
@@ -110,7 +111,7 @@ public class DefaultDibServiceTest {
         assertThat(dibResponses).isInstanceOf(List.class);
     }
 
-    // @Test
+    @Test
     @DisplayName("찜 삭제 성공")
     void testDeleteDibSuccess() {
         Dib.Pk pk = new Dib.Pk(member.getId(), product.getId());
@@ -125,7 +126,7 @@ public class DefaultDibServiceTest {
         verify(dibRepository, times(1)).delete(any(Dib.class));
     }
 
-    // @Test
+    @Test
     @DisplayName("찜 삭제 실패(찜 존재 X)")
     void testDeleteDibFailWhenMemberNotFound() {
         when(dibRepository.findById(new Dib.Pk(1L, 1L))).thenReturn(Optional.empty());

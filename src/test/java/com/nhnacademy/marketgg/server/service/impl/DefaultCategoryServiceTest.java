@@ -11,7 +11,6 @@ import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundExcepti
 import com.nhnacademy.marketgg.server.repository.categorization.CategorizationRepository;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

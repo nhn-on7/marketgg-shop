@@ -1,21 +1,10 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.LabelRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.exception.label.LabelNotFoundException;
 import com.nhnacademy.marketgg.server.repository.label.LabelRepository;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +13,18 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -73,7 +74,7 @@ class DefaultLabelServiceTest {
     @DisplayName("라벨 삭제 실패")
     void deleteLabelFail() {
         assertThatThrownBy(() -> labelService.deleteLabel(1L))
-            .isInstanceOf(LabelNotFoundException.class);
+                .isInstanceOf(LabelNotFoundException.class);
     }
 
 }
