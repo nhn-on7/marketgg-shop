@@ -54,29 +54,27 @@ public class RoleCheckAspect {
         MethodSignature signature = (MethodSignature) jp.getSignature();
 
         String header = request.getHeader("WWW-Authentication");
-        if (Objects.equals(roleCheck.accessLevel(), Role.LOGIN)) {
-            isLogin(header, signature.getMethod());
-            return;
+
+        if (Objects.isNull(header)) {
+            if (Objects.equals(roleCheck.accessLevel(), Role.LOGIN)) {
+                throw new UnAuthenticException(signature.getName());
+            }
+            throw new UnAuthorizationException(signature.getName(), "Empty");
         }
 
+        // 권한 목록은 Gateway 에서 JSON List 타입으로 매핑해서 Http Header 로 전달함.
         List<String> roles = mapper.readValue(header, List.class);
         log.info("roles = {}", roles.toString());
 
         if (Objects.equals(roleCheck.accessLevel(), Role.ROLE_USER)) {
-            isUser(signature.getMethod(), roles);
+            this.isUser(signature.getMethod(), roles);
             return;
         }
 
         if (Objects.equals(roleCheck.accessLevel(), Role.ROLE_ADMIN)) {
-            isAdmin(signature.getMethod(), roles);
+            this.isAdmin(signature.getMethod(), roles);
         }
 
-    }
-
-    private void isLogin(String header, Method method) throws UnAuthenticException {
-        if (Objects.isNull(header)) {
-            throw new UnAuthenticException(method.getName());
-        }
     }
 
     private void isUser(Method method, List<String> roles) throws UnAuthorizationException {
