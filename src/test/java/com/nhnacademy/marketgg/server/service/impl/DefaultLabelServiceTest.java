@@ -60,8 +60,8 @@ class DefaultLabelServiceTest {
     @Test
     @DisplayName("라벨 삭제 성공")
     void deleteLabelSuccess() {
-        when(labelRepository.findById(anyLong())).thenReturn(
-            Optional.of(new Label(new LabelCreateRequest())));
+        when(labelRepository.findById(anyLong())).thenReturn(Optional.of(new Label(new LabelCreateRequest())));
+
         doNothing().when(labelRepository).delete(any(Label.class));
 
         labelService.deleteLabel(1L);
