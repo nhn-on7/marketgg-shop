@@ -10,6 +10,7 @@ import com.nhnacademy.marketgg.server.exception.categorization.CategorizationNot
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
 import com.nhnacademy.marketgg.server.repository.categorization.CategorizationRepository;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,12 +47,12 @@ class DefaultCategoryServiceTest {
     @Mock
     CategorizationRepository categorizationRepository;
 
-    private CategoryCreateRequest categoryCreateRequest;
-    private CategoryUpdateRequest categoryUpdateRequest;
-    private CategorizationCreateRequest categorizationCreateRequest;
+    private static CategoryCreateRequest categoryCreateRequest;
+    private static CategoryUpdateRequest categoryUpdateRequest;
+    private static CategorizationCreateRequest categorizationCreateRequest;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void beforeAll() {
         categoryCreateRequest = new CategoryCreateRequest();
         categoryUpdateRequest = new CategoryUpdateRequest();
         categorizationCreateRequest = new CategorizationCreateRequest();
