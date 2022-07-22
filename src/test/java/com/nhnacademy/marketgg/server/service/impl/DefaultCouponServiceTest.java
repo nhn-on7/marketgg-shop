@@ -1,9 +1,9 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.request.CouponRequest;
-import com.nhnacademy.marketgg.server.dto.response.CouponRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.request.CouponDto;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
+import com.nhnacademy.marketgg.server.mapper.CouponMapper;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -34,19 +34,23 @@ class DefaultCouponServiceTest {
     @Mock
     CouponRepository couponRepository;
 
-    private static CouponRequest couponRequest;
+    @Mock
+    CouponMapper couponMapper;
+
+    private static CouponDto couponDto;
 
     @BeforeAll
     static void beforeAll() {
-        couponRequest = new CouponRequest();
+        couponDto = new CouponDto(1L, "name", "type", 10, 1000, 0.5);
     }
 
     @Test
     @DisplayName("쿠폰 등록 성공")
     void testCreateCouponSuccess() {
-        couponService.createCoupon(couponRequest);
+        couponService.createCoupon(couponDto);
 
-        then(couponRepository).should().save(any(Coupon.class));
+        then(couponMapper).should().toEntity(any(CouponDto.class));
+        then(couponRepository).should().save(any());
     }
 
     @Test
@@ -63,19 +67,20 @@ class DefaultCouponServiceTest {
     @DisplayName("쿠폰 목록 조회")
     void testRetrieveCoupons() {
         given(couponRepository.findAllCoupons())
-                .willReturn(List.of(new CouponRetrieveResponse(1L, "name", "type", 10, 1000, 0.5)));
+                .willReturn(List.of());
 
-        List<CouponRetrieveResponse> couponResponses = couponService.retrieveCoupons();
+        List<CouponDto> couponResponses = couponService.retrieveCoupons();
 
-        assertThat(couponResponses).hasSize(1);
+        then(couponRepository).should().findAllCoupons();
+        assertThat(couponResponses).isNotNull();
     }
 
     @Test
     @DisplayName("쿠폰 수정 성공")
     void testUpdateCouponSuccess() {
-        given(couponRepository.findById(anyLong())).willReturn(Optional.of(new Coupon(couponRequest)));
+        given(couponRepository.findById(anyLong())).willReturn(Optional.of(new Coupon(1L, "name", "type", 10, 1000, 0.5)));
 
-        couponService.updateCoupon(1L, couponRequest);
+        couponService.updateCoupon(1L, couponDto);
 
         then(couponRepository).should().findById(anyLong());
         then(couponRepository).should().save(any(Coupon.class));
@@ -86,14 +91,14 @@ class DefaultCouponServiceTest {
     void testUpdateCouponFailWhenCouponNotFound() {
         given(couponRepository.findById(anyLong())).willReturn(Optional.empty());
 
-        assertThatThrownBy(() -> couponService.updateCoupon(1L, couponRequest))
+        assertThatThrownBy(() -> couponService.updateCoupon(1L, couponDto))
                 .isInstanceOf(CouponNotFoundException.class);
     }
 
     @Test
     @DisplayName("쿠폰 삭제 성공")
     void testDeleteCouponSuccess() {
-        given(couponRepository.findById(anyLong())).willReturn(Optional.of(new Coupon(couponRequest)));
+        given(couponRepository.findById(anyLong())).willReturn(Optional.of(new Coupon(1L, "name", "type", 10, 1000, 0.5)));
 
         couponService.deleteCoupon(1L);
 

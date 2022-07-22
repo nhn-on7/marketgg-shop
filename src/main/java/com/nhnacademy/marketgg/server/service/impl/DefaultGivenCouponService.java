@@ -13,7 +13,6 @@ import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponReposito
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.GivenCouponService;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.nhnacademy.marketgg.server.dto.response.CouponState.*;
 
@@ -50,27 +50,25 @@ public class DefaultGivenCouponService implements GivenCouponService {
     @Override
     public List<GivenCouponResponse> retrieveGivenCoupons(final Long memberId) {
         List<GivenCoupon> givenCoupons = givenCouponRepository.findAllByMemberId(memberId);
-        List<GivenCouponResponse> couponResponseList = new ArrayList<>();
-        for (GivenCoupon coupon : givenCoupons) {
-            couponResponseList.add(this.checkAvailability(coupon));
-        }
-        return couponResponseList;
+        return givenCoupons.stream()
+                .map(this::checkAvailability)
+                .collect(Collectors.toUnmodifiableList());
     }
 
-    private GivenCouponResponse checkAvailability(GivenCoupon givenCoupon) {
+    private GivenCouponResponse checkAvailability(GivenCoupon givenCoupons) {
 
         CouponState state;
-        Integer expiredDate = givenCoupon.getCoupon().getExpiredDate();
-        LocalDateTime expirationPeriod = givenCoupon.getCreatedAt().plusDays(expiredDate);
+        Integer expiredDate = givenCoupons.getCoupon().getExpiredDate();
+        LocalDateTime expirationPeriod = givenCoupons.getCreatedAt().plusDays(expiredDate);
 
-        if (!usedCouponRepository.findAllByGivenCoupon(givenCoupon).isEmpty()) {
+        if (!usedCouponRepository.findAllByGivenCoupon(givenCoupons).isEmpty()) {
             state = USED;
         } else if (expirationPeriod.isBefore(LocalDateTime.now())) {
             state = EXPIRED;
         } else {
             state = VALID;
         }
-        return new GivenCouponResponse(givenCoupon, state, expirationPeriod);
+        return new GivenCouponResponse(givenCoupons, state, expirationPeriod);
     }
 
 }

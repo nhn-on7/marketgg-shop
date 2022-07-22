@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.repository.coupon;
 
-import com.nhnacademy.marketgg.server.dto.response.CouponRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.QCoupon;
 import com.querydsl.core.types.ConstructorExpression;
@@ -16,17 +15,16 @@ public class CouponRepositoryImpl extends QuerydslRepositorySupport implements C
     }
 
     @Override
-    public CouponRetrieveResponse findByCouponId(Long couponId) {
+    public Coupon findByCouponId(Long couponId) {
         QCoupon coupon = QCoupon.coupon;
 
         return from(coupon)
                 .select(selectAllCouponColumns())
-                .where(coupon.id.eq(couponId))
                 .fetchOne();
     }
 
     @Override
-    public List<CouponRetrieveResponse> findAllCoupons() {
+    public List<Coupon> findAllCoupons() {
         QCoupon coupon = QCoupon.coupon;
 
         return from(coupon)
@@ -34,16 +32,16 @@ public class CouponRepositoryImpl extends QuerydslRepositorySupport implements C
                 .fetch();
     }
 
-    private ConstructorExpression<CouponRetrieveResponse> selectAllCouponColumns() {
+    private ConstructorExpression<Coupon> selectAllCouponColumns() {
         QCoupon coupon = QCoupon.coupon;
 
-        return Projections.constructor(CouponRetrieveResponse.class,
-                                       coupon.id,
-                                       coupon.name,
-                                       coupon.type,
-                                       coupon.expiredDate,
-                                       coupon.minimumMoney,
-                                       coupon.discountAmount);
+        return Projections.constructor(Coupon.class,
+                coupon.id,
+                coupon.name,
+                coupon.type,
+                coupon.expiredDate,
+                coupon.minimumMoney,
+                coupon.discountAmount);
     }
 
 }
