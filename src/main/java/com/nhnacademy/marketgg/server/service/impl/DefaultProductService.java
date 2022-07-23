@@ -35,9 +35,6 @@ public class DefaultProductService implements ProductService {
     private final AssetRepository assetRepository;
     private final ImageRepository imageRepository;
 
-    @Value("${uploadPath}")
-    private String uploadPath;
-
     @Override
     @Transactional
     public void createProduct(final ProductCreateRequest productRequest, MultipartFile imageFile)
