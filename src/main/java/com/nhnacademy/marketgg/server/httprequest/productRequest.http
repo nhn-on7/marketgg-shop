@@ -1,4 +1,4 @@
-GET http://localhost:7080/admin/v1/products
+GET http://localhost:7080/shop/v1/admin/products
 Content-Type: application/json
 
 ###

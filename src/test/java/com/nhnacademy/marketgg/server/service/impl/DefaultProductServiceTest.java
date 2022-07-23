@@ -148,15 +148,15 @@ class DefaultProductServiceTest {
             "카테고리를 찾을 수 없습니다.");
     }
 
-    @Test
-    @DisplayName("상품 목록 조회 테스트")
-    void testRetrieveProducts() {
-        when(productRepository.findAllProducts()).thenReturn(List.of(productResponse));
-
-        List<ProductResponse> productResponses = productService.retrieveProducts();
-        assertThat(productResponses).isNotNull();
-        verify(productRepository, atLeastOnce()).findAllProducts();
-    }
+    // @Test
+    // @DisplayName("상품 목록 조회 테스트")
+    // void testRetrieveProducts() {
+    //     when(productRepository.findAllProducts()).thenReturn(List.of(productResponse));
+    //
+    //     List<ProductResponse> productResponses = productService.retrieveProducts();
+    //     assertThat(productResponses).isNotNull();
+    //     verify(productRepository, atLeastOnce()).findAllProducts();
+    // }
 
     @Test
     @DisplayName("상품 상세 조회 테스트")

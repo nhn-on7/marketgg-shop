@@ -83,17 +83,17 @@ class ProductRepositoryImplTest {
         categoryRepository.save(category);
     }
 
-    @Test
-    void findAllProducts() {
-        IntStream.rangeClosed(1, 10)
-                 .forEach(i -> {
-                     product = new Product(productRequest, asset, category);
-                     productRepository.save(product);
-                 });
-
-        assertThat(productRepository.findAllProducts()).hasSize(10);
-
-    }
+    // @Test
+    // void findAllProducts() {
+    //     IntStream.rangeClosed(1, 10)
+    //              .forEach(i -> {
+    //                  product = new Product(productRequest, asset, category);
+    //                  productRepository.save(product);
+    //              });
+    //
+    //     assertThat(productRepository.findAllProducts()).hasSize(10);
+    //
+    // }
 
     @Test
     void queryById() {
