@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import com.nhnacademy.marketgg.server.dto.request.EsProductSearchRequest;
 import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
@@ -18,6 +19,7 @@ import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.service.ProductService;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -25,6 +27,7 @@ import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,10 +45,10 @@ public class DefaultProductService implements ProductService {
     @Value("${uploadPath}")
     private String uploadPath;
 
-    @Override
     @Transactional
+    @Override
     public void createProduct(final ProductCreateRequest productRequest, MultipartFile imageFile)
-        throws IOException {
+            throws IOException {
 
         String originalFileName = imageFile.getOriginalFilename();
         File dest = new File(uploadPath, originalFileName);
@@ -75,12 +78,12 @@ public class DefaultProductService implements ProductService {
         return this.productRepository.queryById(productId);
     }
 
-    @Override
     @Transactional
+    @Override
     public void updateProduct(final ProductUpdateRequest productRequest, MultipartFile imageFile,
                               final Long productId) throws IOException {
         Product product =
-            this.productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+                this.productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
 
         String originalFileName = imageFile.getOriginalFilename();
         File dest = new File(uploadPath, originalFileName);
@@ -100,14 +103,15 @@ public class DefaultProductService implements ProductService {
         esProductRepository.save(new EsProduct(updateProduct, new Label(new LabelCreateRequest()), image));
     }
 
+    @Transactional
     @Override
     public void deleteProduct(final Long productId) {
         Product product =
-            this.productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+                this.productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
 
         product.deleteProduct();
         this.productRepository.save(product);
-        esProductRepository.deleteById(productId);
+        this.esProductRepository.deleteById(productId);
     }
 
     @Override
@@ -119,6 +123,12 @@ public class DefaultProductService implements ProductService {
     public List<ProductResponse> searchProductByCategory(final String categoryCode) {
         return productRepository.findByCategoryAndCategorizationCodes(categoryCode);
 
+    }
+
+    @Override
+    public List<EsProduct> searchProductWithKeyword(final EsProductSearchRequest searchRequest) {
+        return esProductRepository.searchEsProductByContentAndProductName(searchRequest.getKeyword(),
+                                                                          searchRequest.getPageable()).getContent();
     }
 
 }
