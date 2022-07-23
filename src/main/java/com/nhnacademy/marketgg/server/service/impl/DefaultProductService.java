@@ -17,10 +17,9 @@ import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,21 +34,17 @@ public class DefaultProductService implements ProductService {
     private final AssetRepository assetRepository;
     private final ImageRepository imageRepository;
 
+    private static final String dir = System.getProperty("user.home");
+
     @Override
     @Transactional
     public void createProduct(final ProductCreateRequest productRequest, MultipartFile imageFile)
         throws IOException {
 
-        String dir = System.getProperty("user.home");
-        String originalFileName = imageFile.getOriginalFilename();
-        File dest = new File(dir, originalFileName);
-        imageFile.transferTo(dest);
+        Asset asset = fileUpload(imageFile);
 
-        Asset asset = this.assetRepository.save(Asset.create());
-        Image image = new Image(asset, dest.toString());
-        this.imageRepository.save(image);
-
-        Category category = this.categoryRepository.findById(productRequest.getCategoryCode()).orElseThrow(CategoryNotFoundException::new);
+        Category category = this.categoryRepository.findById(productRequest.getCategoryCode())
+                                                   .orElseThrow(CategoryNotFoundException::new);
 
         this.productRepository.save(new Product(productRequest, asset, category));
     }
@@ -71,13 +66,7 @@ public class DefaultProductService implements ProductService {
         Product product =
             this.productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
 
-        String originalFileName = imageFile.getOriginalFilename();
-        File dest = new File(uploadPath, originalFileName);
-        imageFile.transferTo(dest);
-
-        Asset asset = this.assetRepository.save(Asset.create());
-        Image image = new Image(asset, dest.toString());
-        this.imageRepository.save(image);
+        Asset asset = fileUpload(imageFile);
 
         Category category = this.categoryRepository.findById(productRequest.getCategoryCode())
                                                    .orElseThrow(CategoryNotFoundException::new);
@@ -104,6 +93,17 @@ public class DefaultProductService implements ProductService {
     public Page<ProductResponse> searchProductByCategory(final String categoryCode, final Pageable pageable) {
         return productRepository.findByCategoryCode(categoryCode, pageable);
 
+    }
+
+    private Asset fileUpload(MultipartFile imageFile) throws IOException {
+        File dest = new File(dir, Objects.requireNonNull(imageFile.getOriginalFilename()));
+        imageFile.transferTo(dest);
+
+        Asset asset = this.assetRepository.save(Asset.create());
+        Image image = new Image(asset, dest.toString());
+        this.imageRepository.save(image);
+
+        return asset;
     }
 
 }
