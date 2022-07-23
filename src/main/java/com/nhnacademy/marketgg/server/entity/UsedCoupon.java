@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.dto.request.UsedCouponDto;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class UsedCoupon {
     @EmbeddedId
     private Pk pk;
 
-    @MapsId(value = "orderNo")
+    @MapsId(value = "orderId")
     @OneToOne
     @JoinColumn(name = "order_no")
     private Order order;
@@ -36,14 +37,26 @@ public class UsedCoupon {
     public static class Pk implements Serializable {
 
         @Column(name = "order_no")
-        private Long orderNo;
+        private Long orderId;
 
         @Column(name = "coupon_no")
-        private Long couponNo;
+        private Long couponId;
 
         @Column(name = "member_no")
-        private Long memberNo;
+        private Long memberId;
 
+        public Pk(Long orderId, Long couponId, Long memberId) {
+            this.orderId = orderId;
+            this.couponId = couponId;
+            this.memberId = memberId;
+        }
+
+    }
+
+    public UsedCoupon(UsedCouponDto usedCouponDto, Order order, GivenCoupon givenCoupon) {
+        this.pk = new Pk(usedCouponDto.getOrderId(), usedCouponDto.getCouponId(), usedCouponDto.getMemberId());
+        this.order = order;
+        this.givenCoupon = givenCoupon;
     }
 
 }

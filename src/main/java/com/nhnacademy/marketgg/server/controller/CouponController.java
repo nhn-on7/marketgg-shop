@@ -33,7 +33,7 @@ public class CouponController {
      * @since 1.0.0
      */
     @PostMapping
-    ResponseEntity<Void> createCoupon(@RequestBody final CouponDto couponDto) {
+    public ResponseEntity<Void> createCoupon(@RequestBody final CouponDto couponDto) {
         couponService.createCoupon(couponDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -65,7 +65,7 @@ public class CouponController {
      * @since 1.0.0
      */
     @GetMapping
-    ResponseEntity<List<CouponDto>> retrieveCoupons() {
+    public ResponseEntity<List<CouponDto>> retrieveCoupons() {
         List<CouponDto> couponResponses = couponService.retrieveCoupons();
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -82,7 +82,7 @@ public class CouponController {
      * @since 1.0.0
      */
     @PutMapping("/{couponId}")
-    ResponseEntity<Void> updateCoupon(@PathVariable final Long couponId,
+    public ResponseEntity<Void> updateCoupon(@PathVariable final Long couponId,
                                       @RequestBody final CouponDto couponDto) {
 
         couponService.updateCoupon(couponId, couponDto);
@@ -101,7 +101,7 @@ public class CouponController {
      * @since 1.0.0
      */
     @DeleteMapping("/{couponId}")
-    ResponseEntity<Void> deleteCoupon(@PathVariable final Long couponId) {
+    public ResponseEntity<Void> deleteCoupon(@PathVariable final Long couponId) {
         couponService.deleteCoupon(couponId);
 
         return ResponseEntity.status(HttpStatus.OK)

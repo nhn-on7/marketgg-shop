@@ -3,7 +3,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 import com.nhnacademy.marketgg.server.dto.request.CouponDto;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
-import com.nhnacademy.marketgg.server.mapper.CouponMapper;
+import com.nhnacademy.marketgg.server.mapper.impl.CouponMapper;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import com.nhnacademy.marketgg.server.service.CouponService;
 import lombok.RequiredArgsConstructor;

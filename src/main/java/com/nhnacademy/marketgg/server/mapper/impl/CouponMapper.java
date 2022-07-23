@@ -1,7 +1,8 @@
-package com.nhnacademy.marketgg.server.mapper;
+package com.nhnacademy.marketgg.server.mapper.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.CouponDto;
 import com.nhnacademy.marketgg.server.entity.Coupon;
+import com.nhnacademy.marketgg.server.mapper.EntityMapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

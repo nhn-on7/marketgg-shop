@@ -5,8 +5,12 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class GivenCouponRequest {
+public class UsedCouponDto {
+
+    private Long orderId;
 
     private Long couponId;
+
+    private Long memberId;
 
 }
