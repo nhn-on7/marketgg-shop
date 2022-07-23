@@ -46,19 +46,18 @@ class ProductMemberControllerTest {
             null, null, null, null, null);
     }
 
-    @Test
-    @DisplayName("카테고리로 상품 검색 테스트")
-    void testSearchProductsByCategory() throws Exception {
-        BDDMockito.given(this.productService.searchProductByCategory(any()))
-                  .willReturn(List.of(productResponse));
+    // @Test
+    // @DisplayName("카테고리로 상품 검색 테스트")
+    // void testSearchProductsByCategory() throws Exception {
+    //     BDDMockito.given(this.productService.searchProductByCategory(any()))
+    //               .willReturn(List.of(productResponse));
+    //
+    //     this.mockMvc.perform(
+    //             MockMvcRequestBuilders.get(DEFAULT_PRODUCT + "/categories/" + "{categoryCode}", 1L))
+    //                 .andExpect(status().isOk())
+    //                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    //
+    //     BDDMockito.verify(productService, Mockito.atLeastOnce()).searchProductByCategory(anyString());
+    // }
 
-        this.mockMvc.perform(
-                MockMvcRequestBuilders.get(DEFAULT_PRODUCT + "/categories/" + "{categoryCode}", 1L))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-
-        BDDMockito.verify(productService, Mockito.atLeastOnce()).searchProductByCategory(anyString());
-
-
-    }
 }

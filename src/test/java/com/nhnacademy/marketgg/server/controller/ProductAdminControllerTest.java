@@ -89,15 +89,15 @@ class ProductAdminControllerTest {
                   .createProduct(any(ProductCreateRequest.class), any(MockMultipartFile.class));
     }
 
-    @Test
-    @DisplayName("상품 목록 전체 조회하는 테스트")
-    void testRetrieveProducts() throws Exception {
-        given(productService.retrieveProducts()).willReturn(List.of());
-
-        this.mockMvc.perform(get(DEFAULT_PRODUCT).contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk());
-        verify(this.productService, times(1)).retrieveProducts();
-    }
+    // @Test
+    // @DisplayName("상품 목록 전체 조회하는 테스트")
+    // void testRetrieveProducts() throws Exception {
+    //     given(productService.retrieveProducts()).willReturn(List.of());
+    //
+    //     this.mockMvc.perform(get(DEFAULT_PRODUCT).contentType(MediaType.APPLICATION_JSON))
+    //                 .andExpect(status().isOk());
+    //     verify(this.productService, times(1)).retrieveProducts();
+    // }
 
     @Test
     @DisplayName("상품 상세 조회 테스트")

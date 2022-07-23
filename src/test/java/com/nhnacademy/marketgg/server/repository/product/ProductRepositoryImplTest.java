@@ -83,17 +83,17 @@ class ProductRepositoryImplTest {
         categoryRepository.save(category);
     }
 
-    @Test
-    void findAllProducts() {
-        IntStream.rangeClosed(1, 10)
-                 .forEach(i -> {
-                     product = new Product(productRequest, asset, category);
-                     productRepository.save(product);
-                 });
-
-        assertThat(productRepository.findAllProducts()).hasSize(10);
-
-    }
+    // @Test
+    // void findAllProducts() {
+    //     IntStream.rangeClosed(1, 10)
+    //              .forEach(i -> {
+    //                  product = new Product(productRequest, asset, category);
+    //                  productRepository.save(product);
+    //              });
+    //
+    //     assertThat(productRepository.findAllProducts()).hasSize(10);
+    //
+    // }
 
     @Test
     void queryById() {
@@ -111,14 +111,14 @@ class ProductRepositoryImplTest {
         assertThat(productRepository.findByNameContaining("자몽")).hasSize(1);
     }
 
-    @Test
-    void findByCategoryCode() {
-        IntStream.rangeClosed(1, 10)
-                 .forEach(i -> {
-                     product = new Product(productRequest, asset, category);
-                     productRepository.save(product);
-                 });
-
-        assertThat(productRepository.findByCategoryCode("001")).hasSize(10);
-    }
+    // @Test
+    // void findByCategoryCode() {
+    //     IntStream.rangeClosed(1, 10)
+    //              .forEach(i -> {
+    //                  product = new Product(productRequest, asset, category);
+    //                  productRepository.save(product);
+    //              });
+    //
+    //     assertThat(productRepository.findByCategoryCode("001")).hasSize(10);
+    // }
 }

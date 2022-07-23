@@ -5,6 +5,8 @@ import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import java.io.IOException;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -30,7 +32,7 @@ public interface ProductService {
      * @return - 상품 리스트를 반환합니다.
      * @since 1.0.0
      */
-    List<ProductResponse> retrieveProducts();
+    Page<ProductResponse> retrieveProducts(Pageable pageable);
 
     /**
      * 상품 Id를 통해 상세 정보를 조회합니다.
@@ -80,6 +82,6 @@ public interface ProductService {
      * @return - 해당하는 카테고리의 상품 리스트를 반환합니다.
      */
 
-    List<ProductResponse> searchProductByCategory(final String categoryCode);
+    Page<ProductResponse> searchProductByCategory(final String categoryCode, final Pageable pageable);
 
 }

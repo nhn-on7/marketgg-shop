@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -66,8 +68,9 @@ public class ProductAdminController {
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> retrieveProducts() {
-        List<ProductResponse> productList = this.productService.retrieveProducts();
+    public ResponseEntity<Page<ProductResponse>> retrieveProducts() {
+        PageRequest pageRequest = PageRequest.of(0,10);
+        Page<ProductResponse> productList = this.productService.retrieveProducts(pageRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT))
