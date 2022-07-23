@@ -43,8 +43,9 @@ public class DefaultProductService implements ProductService {
     public void createProduct(final ProductCreateRequest productRequest, MultipartFile imageFile)
         throws IOException {
 
+        String dir = System.getProperty("user.home");
         String originalFileName = imageFile.getOriginalFilename();
-        File dest = new File(uploadPath, originalFileName);
+        File dest = new File(dir, originalFileName);
         imageFile.transferTo(dest);
 
         Asset asset = this.assetRepository.save(Asset.create());
