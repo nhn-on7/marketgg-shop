@@ -24,7 +24,7 @@ import java.net.URI;
 public class UsedCouponController {
 
     private final UsedCouponService usedCouponService;
-    private static final String DEFAULT_PRODUCT = "/shop/v1/system/used-coupons";
+    private static final String DEFAULT_USED_COUPONS = "/shop/v1/system/used-coupons";
 
     /**
      * 주문번호, 회원번호, 쿠폰번호를 DTO 에 담아서 오면 사용 쿠폰을 생성하는 PostMapping 을 지원합니다.
@@ -38,7 +38,7 @@ public class UsedCouponController {
         usedCouponService.createUsedCoupons(usedCouponDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create(DEFAULT_PRODUCT))
+                             .location(URI.create(DEFAULT_USED_COUPONS))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -55,7 +55,7 @@ public class UsedCouponController {
         usedCouponService.deleteUsedCoupons(usedCouponDto);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_PRODUCT))
+                             .location(URI.create(DEFAULT_USED_COUPONS))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

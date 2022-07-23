@@ -20,8 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class DefaultUsedCouponService implements UsedCouponService {
 
     private final UsedCouponRepository usedCouponRepository;
-    private final GivenCouponRepository givenCouponRepository;
     private final OrderRepository orderRepository;
+    private final GivenCouponRepository givenCouponRepository;
 
     @Override
     @Transactional

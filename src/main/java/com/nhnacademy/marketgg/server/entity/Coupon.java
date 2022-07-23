@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 // MEMO 1: Builder 로 Entity 에서 Dto 로 변환하는 생성자 MapStruct 가 만들어준다
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor()
 @Builder
 @Getter
 // MEMO 1: Update entity 할 때 Setter 사용

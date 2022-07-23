@@ -58,4 +58,8 @@ public class GivenCoupon {
         this.createdAt = LocalDateTime.now();
     }
 
+    public static GivenCoupon test() {
+        return new GivenCoupon();
+    }
+
 }
