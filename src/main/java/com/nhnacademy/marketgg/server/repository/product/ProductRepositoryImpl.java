@@ -3,16 +3,9 @@ package com.nhnacademy.marketgg.server.repository.product;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.QProduct;
-import com.querydsl.core.QueryFactory;
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import java.util.Objects;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -28,13 +21,13 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     public Page<ProductResponse> findAllProducts(Pageable pageable) {
         QProduct product = QProduct.product;
 
-        QueryResults<ProductResponse> result = from(product)
+        List<ProductResponse> result = from(product)
             .select(selectAllProductColumns())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
-            .fetchResults();
+            .fetch();
 
-        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
+        return new PageImpl<>(result, pageable, result.size());
     }
 
     @Override
@@ -58,13 +51,17 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     }
 
     @Override
-    public List<ProductResponse> findByCategoryCode(String categoryCode) {
+    public Page<ProductResponse> findByCategoryCode(String categoryCode, Pageable pageable) {
         QProduct product = QProduct.product;
 
-        return from(product)
+        List<ProductResponse> result = from(product)
             .select(selectAllProductColumns())
             .where(product.category.id.eq(categoryCode))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
             .fetch();
+
+        return new PageImpl<>(result, pageable, result.size());
     }
 
     private ConstructorExpression<ProductResponse> selectAllProductColumns() {

@@ -233,15 +233,15 @@ class DefaultProductServiceTest {
         verify(productRepository, times(1)).findByNameContaining(anyString());
     }
 
-    @Test
-    @DisplayName("카테고리 코드로 상품 목록 조회 테스트")
-    void testSearchProductsByCategoryCode() {
-        BDDMockito.given(productRepository.findByCategoryCode(anyString()))
-                  .willReturn(List.of(productResponse));
-
-        productService.searchProductByCategory("101");
-
-        verify(productRepository, atLeastOnce()).findByCategoryCode(anyString());
-    }
+    // @Test
+    // @DisplayName("카테고리 코드로 상품 목록 조회 테스트")
+    // void testSearchProductsByCategoryCode() {
+    //     BDDMockito.given(productRepository.findByCategoryCode(anyString()))
+    //               .willReturn(List.of(productResponse));
+    //
+    //     productService.searchProductByCategory("101");
+    //
+    //     verify(productRepository, atLeastOnce()).findByCategoryCode(anyString());
+    // }
 
 }

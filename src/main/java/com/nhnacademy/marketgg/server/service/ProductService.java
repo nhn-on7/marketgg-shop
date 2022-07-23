@@ -82,6 +82,6 @@ public interface ProductService {
      * @return - 해당하는 카테고리의 상품 리스트를 반환합니다.
      */
 
-    List<ProductResponse> searchProductByCategory(final String categoryCode);
+    Page<ProductResponse> searchProductByCategory(final String categoryCode, final Pageable pageable);
 
 }
