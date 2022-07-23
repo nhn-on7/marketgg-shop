@@ -1,12 +1,16 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
+import com.nhnacademy.marketgg.server.elasticrepository.EsProductRepository;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Image;
+import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.entity.Product;
+import com.nhnacademy.marketgg.server.entity.elastic.EsProduct;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
@@ -17,6 +21,8 @@ import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class DefaultProductService implements ProductService {
 
     private final ProductRepository productRepository;
+    private final EsProductRepository esProductRepository;
     private final CategoryRepository categoryRepository;
     private final AssetRepository assetRepository;
     private final ImageRepository imageRepository;
@@ -51,7 +58,11 @@ public class DefaultProductService implements ProductService {
         Category category = this.categoryRepository.findById(productRequest.getCategoryCode())
                                                    .orElseThrow(CategoryNotFoundException::new);
 
-        this.productRepository.save(new Product(productRequest, asset, category));
+        Product product = this.productRepository.save(new Product(productRequest, asset, category));
+
+        // FIXME: 상품 등록 수정 시 매개변수 Label 보완 필요 (CoPark)
+        esProductRepository.save(new EsProduct(product, new Label(new LabelCreateRequest()), image));
+
     }
 
     @Override
@@ -83,7 +94,10 @@ public class DefaultProductService implements ProductService {
                                                    .orElseThrow(CategoryNotFoundException::new);
 
         product.updateProduct(productRequest, asset, category);
-        this.productRepository.save(product);
+        Product updateProduct = this.productRepository.save(product);
+
+        // FIXME: 상품 정보 변경 수정 시 매개변수 Label 보완 필요 (CoPark)
+        esProductRepository.save(new EsProduct(updateProduct, new Label(new LabelCreateRequest()), image));
     }
 
     @Override
@@ -93,6 +107,7 @@ public class DefaultProductService implements ProductService {
 
         product.deleteProduct();
         this.productRepository.save(product);
+        esProductRepository.deleteById(productId);
     }
 
     @Override
