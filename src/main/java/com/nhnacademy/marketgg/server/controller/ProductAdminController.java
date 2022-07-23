@@ -68,7 +68,8 @@ public class ProductAdminController {
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<Page<ProductResponse>> retrieveProducts(PageRequest pageRequest) {
+    public ResponseEntity<Page<ProductResponse>> retrieveProducts() {
+        PageRequest pageRequest = PageRequest.of(0,10);
         Page<ProductResponse> productList = this.productService.retrieveProducts(pageRequest);
 
         return ResponseEntity.status(HttpStatus.OK)

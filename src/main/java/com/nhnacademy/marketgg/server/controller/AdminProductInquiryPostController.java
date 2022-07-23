@@ -19,7 +19,8 @@ import java.net.URI;
 @RestController
 @RequestMapping("/shop/v1/admin/products")
 @RequiredArgsConstructor
-public class AdminProductInquiryPostController {
+public class
+AdminProductInquiryPostController {
 
     private final ProductInquiryPostService productInquiryPostService;
 

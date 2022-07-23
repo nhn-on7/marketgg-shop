@@ -4,10 +4,13 @@ import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.QProduct;
 import com.querydsl.core.QueryFactory;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,15 +28,13 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     public Page<ProductResponse> findAllProducts(Pageable pageable) {
         QProduct product = QProduct.product;
 
-        List<ProductResponse> result = from(product)
+        QueryResults<ProductResponse> result = from(product)
             .select(selectAllProductColumns())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
-            .fetch();
+            .fetchResults();
 
-        QueryFa
-
-        return new PageImpl<>(result, pageable, result.size());
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 
     @Override
