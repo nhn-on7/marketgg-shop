@@ -70,6 +70,7 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
         return Projections.constructor(ProductResponse.class,
             product.id,
             product.asset,
+            product.asset.id,
             product.category,
             product.category.id,
             product.category.name,

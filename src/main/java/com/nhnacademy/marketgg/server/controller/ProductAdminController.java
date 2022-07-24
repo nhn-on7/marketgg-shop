@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.service.ProductService;
@@ -67,7 +68,7 @@ public class ProductAdminController {
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<ListResponse<ProductResponse>> retrieveProducts() {
+    public ResponseEntity<? extends CommonResponse> retrieveProducts() {
         PageRequest pageRequest = PageRequest.of(0, 3);
         ListResponse<ProductResponse> productList = this.productService.retrieveProducts(pageRequest);
 
