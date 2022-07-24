@@ -37,14 +37,14 @@ public class DeliveryAddress {
 
     public DeliveryAddress(final Pk pk
             , final Member signUpMember
-            , final ShopMemberSignUpRequest shopMemberSignupRequest) {
+            , final ShopMemberSignUpRequest shopMemberSignUpRequest) {
 
         this.pk = pk;
         this.member = signUpMember;
         this.isDefaultAddress = Boolean.TRUE;
-        this.zipCode = shopMemberSignupRequest.getZipcode();
-        this.address = shopMemberSignupRequest.getAddress();
-        this.detailAddress = shopMemberSignupRequest.getDetailAddress();
+        this.zipCode = shopMemberSignUpRequest.getZipcode();
+        this.address = shopMemberSignUpRequest.getAddress();
+        this.detailAddress = shopMemberSignUpRequest.getDetailAddress();
     }
 
     @Embeddable

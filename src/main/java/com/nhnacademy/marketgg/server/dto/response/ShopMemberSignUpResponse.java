@@ -9,4 +9,5 @@ public class ShopMemberSignUpResponse {
 
     private final Long signUpMemberId;
     private final Long referrerMemberId;
+
 }

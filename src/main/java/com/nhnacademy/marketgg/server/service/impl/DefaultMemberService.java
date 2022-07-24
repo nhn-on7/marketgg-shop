@@ -85,29 +85,29 @@ public class DefaultMemberService implements MemberService {
     /**
      * 추천인이 있을 경우의 추천하는 회원의 회원가입 메소드입니다.
      *
-     * @param shopMemberSignupRequest - 회원가입시 입력한 정보를 담고있는 객체입니다.
+     * @param shopMemberSignUpRequest - 회원가입시 입력한 정보를 담고있는 객체입니다.
      * @param referrerMember - 추천을 받은 회원 입니다.
-     * @param signupMemberGrade - 회원가입을 하는 회원이 부여 받게되는 등급입니다.
+     * @param signUpMemberGrade - 회원가입을 하는 회원이 부여 받게되는 등급입니다.
      * @return ShopMemberSignUp - 회원가입을 하는 회원과 추천을 받게되는 회원의 uuid 를 담은 객체 입니다.
      */
-    private ShopMemberSignUpResponse signUp(final ShopMemberSignUpRequest shopMemberSignupRequest
+    private ShopMemberSignUpResponse signUp(final ShopMemberSignUpRequest shopMemberSignUpRequest
             , final Member referrerMember
-            , final MemberGrade signupMemberGrade) {
+            , final MemberGrade signUpMemberGrade) {
 
-        Member signupMember = memberRepository.save(new Member(shopMemberSignupRequest, signupMemberGrade));
-        DeliveryAddress.Pk pk = new DeliveryAddress.Pk(signupMember.getId());
-        deliveryAddressRepository.save(new DeliveryAddress(pk, signupMember, shopMemberSignupRequest));
-        return new ShopMemberSignUpResponse(signupMember.getId(), referrerMember.getId());
+        Member signUpMember = memberRepository.save(new Member(shopMemberSignUpRequest, signUpMemberGrade));
+        DeliveryAddress.Pk pk = new DeliveryAddress.Pk(signUpMember.getId());
+        deliveryAddressRepository.save(new DeliveryAddress(pk, signUpMember, shopMemberSignUpRequest));
+        return new ShopMemberSignUpResponse(signUpMember.getId(), referrerMember.getId());
     }
 
     /**
      * 추천인 여부를 체크하는 메소드 입니다.
      *
-     * @param shopMemberSignupRequest - 회원가입시 입력한 정보를 담고있는 객체입니다.
+     * @param shopMemberSignUpRequest - 회원가입시 입력한 정보를 담고있는 객체입니다.
      * @return 추천인의 uuid 를 담고있는 메소드를 반환합니다.
      */
-    private String referrerCheck(final ShopMemberSignUpRequest shopMemberSignupRequest) {
-        return shopMemberSignupRequest.getReferrerUuid();
+    private String referrerCheck(final ShopMemberSignUpRequest shopMemberSignUpRequest) {
+        return shopMemberSignUpRequest.getReferrerUuid();
     }
 
 }
