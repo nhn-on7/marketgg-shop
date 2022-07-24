@@ -1,9 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.request.CouponRequest;
-import com.nhnacademy.marketgg.server.dto.response.CouponRetrieveResponse;
-import com.nhnacademy.marketgg.server.entity.Coupon;
+import com.nhnacademy.marketgg.server.dto.request.CouponDto;
 import com.nhnacademy.marketgg.server.service.CouponService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,16 +41,16 @@ public class CouponControllerTest {
     @Test
     @DisplayName("쿠폰 등록")
     void testCreateCoupon() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(new CouponRequest());
+        String requestBody = objectMapper.writeValueAsString(new CouponDto(1L, "name", "type", 10, 1000, 0.5));
 
-        willDoNothing().given(couponService).createCoupon(any(CouponRequest.class));
+        willDoNothing().given(couponService).createCoupon(any(CouponDto.class));
 
         this.mockMvc.perform(post(DEFAULT_COUPON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(requestBody))
                 .andExpect(status().isCreated());
 
-        then(couponService).should().createCoupon(any(CouponRequest.class));
+        then(couponService).should().createCoupon(any(CouponDto.class));
     }
 
     @Test
@@ -80,16 +78,16 @@ public class CouponControllerTest {
     @Test
     @DisplayName("쿠폰 수정")
     void testUpdateCoupon() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(new CouponRequest());
+        String requestBody = objectMapper.writeValueAsString(new CouponDto(1L, "name", "type", 10, 1000, 0.5));
 
-        willDoNothing().given(couponService).updateCoupon(anyLong(), any(CouponRequest.class));
+        willDoNothing().given(couponService).updateCoupon(anyLong(), any(CouponDto.class));
 
         this.mockMvc.perform(put(DEFAULT_COUPON + "/" + 1L)
                                      .contentType(MediaType.APPLICATION_JSON)
                                      .content(requestBody))
                 .andExpect(status().isOk());
 
-        then(couponService).should().updateCoupon(anyLong(), any(CouponRequest.class));
+        then(couponService).should().updateCoupon(anyLong(), any(CouponDto.class));
     }
     
     @Test

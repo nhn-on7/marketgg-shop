@@ -12,7 +12,7 @@ public class GivenCouponResponse {
 
     private final Long memberId;
 
-    private final Long couponNo;
+    private final Long couponId;
 
     private final String couponName;
 
@@ -28,7 +28,7 @@ public class GivenCouponResponse {
 
     public GivenCouponResponse(GivenCoupon givenCoupon, CouponState state, LocalDateTime expirationPeriod) {
         this.memberId = givenCoupon.getMember().getId();
-        this.couponNo = givenCoupon.getPk().getCouponNo();
+        this.couponId = givenCoupon.getPk().getCouponId();
         this.couponName = givenCoupon.getCoupon().getName();
         this.couponType = givenCoupon.getCoupon().getType();
         this.couponMinimumMoney = givenCoupon.getCoupon().getMinimumMoney();
