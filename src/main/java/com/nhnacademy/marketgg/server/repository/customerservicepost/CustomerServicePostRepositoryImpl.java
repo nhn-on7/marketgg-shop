@@ -20,6 +20,15 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
+    public CustomerServicePost findOtoInquiry(String categoryId, Long inquiryId) {
+        return from(customerServicePost)
+                .where(customerServicePost.category.id.eq(categoryId))
+                .where(customerServicePost.id.eq(inquiryId))
+                .select(customerServicePost)
+                .fetchOne();
+    }
+
+    @Override
     public Page<CustomerServicePost> findAllOtoInquires(Pageable pageable, String categoryId) {
         List<CustomerServicePost> result = from(customerServicePost)
                 .where(customerServicePost.category.id.eq(categoryId))

@@ -7,6 +7,8 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface CustomerServicePostRepositoryCustom {
-    Page<CustomerServicePost> findAllOtoInquires(Pageable pageable, String categoryId);
 
+    CustomerServicePost findOtoInquiry(String categoryId, Long inquiryId);
+
+    Page<CustomerServicePost> findAllOtoInquires(Pageable pageable, String categoryId);
 }

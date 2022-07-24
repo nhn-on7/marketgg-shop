@@ -29,8 +29,9 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
     public CustomerServicePostDto retrieveOtoInquiry(Long inquiryId) {
         String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY).orElseThrow(
                 CategoryNotFoundException::new);
-        return null;
-        // memo categoryId + inquiryId 로 1:1 문의 단건 조회하고 있던 중
+        CustomerServicePost otoInquiry = customerServicePostRepository.findOtoInquiry(categoryId, inquiryId);
+
+        return customerServicePostMapper.toDto(otoInquiry);
     }
 
     @Override
