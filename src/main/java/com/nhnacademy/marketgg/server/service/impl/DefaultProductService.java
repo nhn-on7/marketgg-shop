@@ -6,13 +6,18 @@ import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Image;
+import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.entity.Product;
+import com.nhnacademy.marketgg.server.entity.ProductLabel;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
+import com.nhnacademy.marketgg.server.exception.label.LabelNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
+import com.nhnacademy.marketgg.server.repository.label.LabelRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
+import com.nhnacademy.marketgg.server.repository.productlabel.ProductLabelRepository;
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +38,8 @@ public class DefaultProductService implements ProductService {
     private final CategoryRepository categoryRepository;
     private final AssetRepository assetRepository;
     private final ImageRepository imageRepository;
+    private final ProductLabelRepository productLabelRepository;
+    private final LabelRepository labelRepository;
 
     private static final String dir = System.getProperty("user.home");
 
@@ -46,7 +53,12 @@ public class DefaultProductService implements ProductService {
         Category category = this.categoryRepository.findById(productRequest.getCategoryCode())
                                                    .orElseThrow(CategoryNotFoundException::new);
 
-        this.productRepository.save(new Product(productRequest, asset, category));
+        Product product = this.productRepository.save(new Product(productRequest, asset, category));
+
+        ProductLabel.Pk pk = new ProductLabel.Pk(product.getId(), productRequest.getLabelNo());
+        Label label = labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);
+
+        this.productLabelRepository.save(new ProductLabel(pk, product, label));
     }
 
     @Override

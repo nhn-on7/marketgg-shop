@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class ProductCreateRequest {
 
     private String categoryCode;
+    private Long labelNo;
     private String name;
     private String content;
     private Long totalStock;
@@ -21,5 +22,6 @@ public class ProductCreateRequest {
     private LocalDate expirationDate;
     private String allergyInfo;
     private String capacity;
+
 
 }
