@@ -1,6 +1,8 @@
 package com.nhnacademy.marketgg.server.repository.givencoupon;
 
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -20,6 +22,6 @@ public interface GivenCouponRepository extends JpaRepository<GivenCoupon, GivenC
      * @return - 조회된 지급 쿠폰 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    List<GivenCoupon> findAllByMemberId(Long id);
+    Page<GivenCoupon> findAllByMemberId(Long id, Pageable pageable);
 
 }

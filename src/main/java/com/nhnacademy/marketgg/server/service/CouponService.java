@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.service;
 
 import com.nhnacademy.marketgg.server.dto.request.CouponDto;
 import com.nhnacademy.marketgg.server.entity.Coupon;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public interface CouponService {
      * @return - 전체 쿠폰 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    List<CouponDto> retrieveCoupons();
+    List<CouponDto> retrieveCoupons(Pageable pageable);
 
     /**
      * 입력받은 정보로 쿠폰을 수정합니다.

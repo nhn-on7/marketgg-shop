@@ -2,16 +2,20 @@ POST http://localhost:7080/shop/v1/admin/coupons HTTP/1.1
 Content-Type: application/json
 
 {
-  "name" : "젤리젤리해데이",
+  "name" : "개업 10주년 특별 할인",
   "type" : "정률할인",
   "expiredDate" : 10,
   "minimumMoney" : 20000,
-  "discountAmount" : 0.5
+  "discountAmount" : 0.05
 }
 
 ###
 
-GET http://localhost:7080/shop/v1/admin/coupons/9
+GET http://localhost:7080/shop/v1/admin/coupons/23
+
+###
+
+GET http://localhost:7080/shop/v1/admin/coupons
 
 ###
 

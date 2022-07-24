@@ -1,6 +1,8 @@
 package com.nhnacademy.marketgg.server.repository.coupon;
 
 import com.nhnacademy.marketgg.server.entity.Coupon;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;
@@ -15,7 +17,6 @@ public interface CouponRepositoryCustom {
      * @return 조회한 쿠폰을 DTO 로 반환합니다.
      * @since 1.0.0
      */
-    // CouponRetrieveResponse findByCouponId(Long couponId);
     Coupon findByCouponId(Long couponId);
 
     /**
@@ -24,6 +25,6 @@ public interface CouponRepositoryCustom {
      * @return 전체 쿠폰 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    List<Coupon> findAllCoupons();
+    Page<Coupon> findAllCoupons(Pageable pageable);
 
 }

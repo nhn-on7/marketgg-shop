@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -107,8 +108,9 @@ public class MemberController {
      * @since 1.0.0
      */
     @GetMapping("/{memberId}/coupons")
-    public ResponseEntity<List<GivenCouponResponse>> retrieveGivenCoupons(@PathVariable final Long memberId) {
-        List<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(memberId);
+    public ResponseEntity<List<GivenCouponResponse>> retrieveGivenCoupons(@PathVariable final Long memberId,
+                                                                          Pageable pageable) {
+        List<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(memberId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .location(URI.create("/shop/v1/members/" + memberId + "/coupons"))

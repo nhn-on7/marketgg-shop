@@ -7,6 +7,7 @@ import com.nhnacademy.marketgg.server.mapper.impl.CouponMapper;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import com.nhnacademy.marketgg.server.service.CouponService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,20 +25,20 @@ public class DefaultCouponService implements CouponService {
     // MEMO 7: Mapstruct 사용 (toEntity, toDto)
     @Transactional
     @Override
-    public void createCoupon(CouponDto couponDto) {
+    public void createCoupon(final CouponDto couponDto) {
         Coupon coupon = couponMapper.toEntity(couponDto);
         couponRepository.save(coupon);
     }
 
     @Override
-    public CouponDto retrieveCoupon(Long couponId) {
+    public CouponDto retrieveCoupon(final Long couponId) {
         Coupon coupon = couponRepository.findByCouponId(couponId);
         return couponMapper.toDto(coupon);
     }
 
     @Override
-    public List<CouponDto> retrieveCoupons() {
-        List<Coupon> couponList = couponRepository.findAllCoupons();
+    public List<CouponDto> retrieveCoupons(final Pageable pageable) {
+        List<Coupon> couponList = couponRepository.findAllCoupons(pageable).getContent();
 
         return couponList.stream()
                          .map(couponMapper::toDto)
@@ -46,7 +47,7 @@ public class DefaultCouponService implements CouponService {
 
     @Transactional
     @Override
-    public void updateCoupon(Long couponId, CouponDto couponDto) {
+    public void updateCoupon(final Long couponId, final CouponDto couponDto) {
         Coupon coupon = couponRepository.findById(couponId).orElseThrow(CouponNotFoundException::new);
 
         // MEMO 8: Update method Dto -> Entity 로 null 아닌 컬럼만 업데이트
@@ -57,7 +58,7 @@ public class DefaultCouponService implements CouponService {
 
     @Transactional
     @Override
-    public void deleteCoupon(Long couponId) {
+    public void deleteCoupon(final Long couponId) {
         Coupon coupon = couponRepository.findById(couponId).orElseThrow(CouponNotFoundException::new);
 
         couponRepository.delete(coupon);

@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.controller;
 import com.nhnacademy.marketgg.server.dto.request.CouponDto;
 import com.nhnacademy.marketgg.server.service.CouponService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,7 @@ public class CouponController {
      * @since 1.0.0
      */
     @GetMapping("/{couponId}")
-    public ResponseEntity<CouponDto> retrieveCoupon(@PathVariable Long couponId) {
+    public ResponseEntity<CouponDto> retrieveCoupon(@PathVariable final Long couponId) {
         CouponDto couponResponse = couponService.retrieveCoupon(couponId);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -65,8 +66,8 @@ public class CouponController {
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<List<CouponDto>> retrieveCoupons() {
-        List<CouponDto> couponResponses = couponService.retrieveCoupons();
+    public ResponseEntity<List<CouponDto>> retrieveCoupons(Pageable pageable) {
+        List<CouponDto> couponResponses = couponService.retrieveCoupons(pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_COUPON))

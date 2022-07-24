@@ -14,6 +14,7 @@ import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.GivenCouponService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,8 +48,8 @@ public class DefaultGivenCouponService implements GivenCouponService {
     }
 
     @Override
-    public List<GivenCouponResponse> retrieveGivenCoupons(final Long memberId) {
-        List<GivenCoupon> givenCoupons = givenCouponRepository.findAllByMemberId(memberId);
+    public List<GivenCouponResponse> retrieveGivenCoupons(final Long memberId, Pageable pageable) {
+        List<GivenCoupon> givenCoupons = givenCouponRepository.findAllByMemberId(memberId, pageable).getContent();
         return givenCoupons.stream()
                 .map(this::checkAvailability)
                 .collect(Collectors.toUnmodifiableList());
