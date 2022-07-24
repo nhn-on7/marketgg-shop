@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface CustomerServicePostService {
 
+    CustomerServicePostDto retrieveOtoInquiry(Long inquiryId);
+
     List<CustomerServicePostDto> retrieveOtoInquiries(final Pageable pageable);
 
 }

@@ -17,9 +17,9 @@ public class CustomerServicePostDto {
 
     private Long id;
 
-    private Member member;
+    private Long memberId;
 
-    private Category category;
+    private String categoryId;
 
     private String content;
 
