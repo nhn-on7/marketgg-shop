@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -54,23 +55,23 @@ class ProductInquiryPostControllerTest {
     @Test
     @DisplayName("상품에 대한 전체 문의 조회 테스트")
     void testRetrieveProductInquiryByProductId() throws Exception {
-        given(productInquiryPostService.retrieveProductInquiryByProductId(anyLong())).willReturn(List.of());
+        given(productInquiryPostService.retrieveProductInquiryByProductId(anyLong(), any(PageRequest.class))).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_INQUIRY + "/products/" + 1L + "/inquiries")
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
-        verify(productInquiryPostService, times(1)).retrieveProductInquiryByProductId(anyLong());
+        verify(productInquiryPostService, times(1)).retrieveProductInquiryByProductId(anyLong(), any(PageRequest.class));
     }
 
     @Test
     @DisplayName("회원이 작성한 전체 상품 문의 조회 테스트")
     void testRetrieveProductInquiryByMemberId() throws Exception {
-        given(productInquiryPostService.retrieveProductInquiryByMemberId(anyLong())).willReturn(List.of());
+        given(productInquiryPostService.retrieveProductInquiryByMemberId(anyLong(), any(PageRequest.class))).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_INQUIRY + "/members/" + 1L + "/product-inquiries")
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
-        verify(productInquiryPostService, times(1)).retrieveProductInquiryByMemberId(anyLong());
+        verify(productInquiryPostService, times(1)).retrieveProductInquiryByMemberId(anyLong(), any(PageRequest.class));
     }
 
     @Test
