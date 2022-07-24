@@ -22,7 +22,10 @@ import com.nhnacademy.marketgg.server.repository.productlabel.ProductLabelReposi
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -63,14 +66,15 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public Page<ProductResponse> retrieveProducts(Pageable pageable) {
-        return productRepository.findAllProducts(pageable);
-    }
-
-    @Override
-    public <T> ListResponse<T> testRetrieveProducts(Pageable pageable) {
+    public <T> ListResponse<T> retrieveProducts(Pageable pageable) {
         Page<ProductResponse> products = productRepository.findAllProducts(pageable);
-        return new ListResponse(products.getContent());
+
+        Map<String, Integer> pageInfo = new HashMap<>();
+        pageInfo.put("pageNum", products.getNumber());
+        pageInfo.put("pageSize", products.getSize());
+        pageInfo.put("totalPages", products.getTotalPages());
+
+        return new ListResponse(products.getContent(), pageInfo);
     }
 
     @Override

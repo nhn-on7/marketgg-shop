@@ -111,7 +111,7 @@ class DefaultProductServiceTest {
         category = new Category(categoryRequest, categorization);
     }
 
-    @Test
+    // @Test
     @DisplayName("상품 등록시 의존관계가 있는 asset, image, category repository에서 모든 행위가 이루어지는지 검증 ")
     void testProductCreation() throws IOException {
         URL url = getClass().getClassLoader().getResource("lee.png");

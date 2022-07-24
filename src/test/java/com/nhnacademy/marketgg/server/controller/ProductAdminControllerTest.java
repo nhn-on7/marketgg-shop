@@ -8,6 +8,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -142,7 +143,7 @@ class ProductAdminControllerTest {
     void testDeleteProduct() throws Exception {
         doNothing().when(this.productService).deleteProduct(anyLong());
 
-        this.mockMvc.perform(post(DEFAULT_PRODUCT + "/{productId}/delete", 1L)).andExpect(status().isOk());
+        this.mockMvc.perform(delete(DEFAULT_PRODUCT + "/{productId}", 1L)).andExpect(status().isOk());
         verify(this.productService, times(1)).deleteProduct(anyLong());
     }
 

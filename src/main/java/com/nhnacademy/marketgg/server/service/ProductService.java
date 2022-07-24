@@ -33,9 +33,8 @@ public interface ProductService {
      * @return - 상품 리스트를 반환합니다.
      * @since 1.0.0
      */
-    Page<ProductResponse> retrieveProducts(Pageable pageable);
 
-    <T> ListResponse<T> testRetrieveProducts(Pageable pageable);
+    <T> ListResponse<T> retrieveProducts(Pageable pageable);
 
     /**
      * 상품 Id를 통해 상세 정보를 조회합니다.
