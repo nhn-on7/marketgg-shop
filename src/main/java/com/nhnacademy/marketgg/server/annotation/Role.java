@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.aop.annotation;
+package com.nhnacademy.marketgg.server.annotation;
 
 
 public enum Role {

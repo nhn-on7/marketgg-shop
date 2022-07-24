@@ -1,14 +1,11 @@
-package com.nhnacademy.marketgg.server.aop.annotation;
+package com.nhnacademy.marketgg.server.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ ElementType.METHOD, ElementType.TYPE })
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RoleCheck {
-
-    Role accessLevel() default Role.LOGIN;
-
+public @interface Auth {
 }

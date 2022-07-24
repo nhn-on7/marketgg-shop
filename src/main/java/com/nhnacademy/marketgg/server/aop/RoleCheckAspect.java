@@ -1,8 +1,9 @@
 package com.nhnacademy.marketgg.server.aop;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.aop.annotation.Role;
-import com.nhnacademy.marketgg.server.aop.annotation.RoleCheck;
+import com.nhnacademy.marketgg.server.annotation.Role;
+import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.exception.auth.UnAuthenticException;
 import com.nhnacademy.marketgg.server.exception.auth.UnAuthorizationException;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -45,7 +47,7 @@ public class RoleCheckAspect {
     public void checkRole(JoinPoint jp, RoleCheck roleCheck)
         throws IOException, IllegalAccessException {
 
-        log.info("AOP");
+        log.info("Role Check AOP");
 
         ServletRequestAttributes requestAttributes =
             (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -63,7 +65,7 @@ public class RoleCheckAspect {
         }
 
         // 권한 목록은 Gateway 에서 JSON List 타입으로 매핑해서 Http Header 로 전달함.
-        List<String> roles = mapper.readValue(header, List.class);
+        List<String> roles = mapper.readValue(header, new TypeReference<>(){});
         log.info("roles = {}", roles.toString());
 
         if (Objects.equals(roleCheck.accessLevel(), Role.ROLE_USER)) {
