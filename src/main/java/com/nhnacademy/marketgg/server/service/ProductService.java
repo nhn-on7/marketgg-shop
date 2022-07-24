@@ -66,6 +66,8 @@ public interface ProductService {
      */
     void deleteProduct(final Long productId);
 
+    void restoreProduct(final Long id);
+
     /**
      * keyword에 해당하는 값이 상품 이름에 존재하면 해당 상품을 반환합니다.
      *

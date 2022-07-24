@@ -48,11 +48,9 @@ public class ProductAdminController {
      * @throws IOException
      * @since 1.0.0
      */
-    @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE,
-        MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<Void> createProduct(
-        @RequestPart final ProductCreateRequest productRequest, @RequestPart MultipartFile image)
-        throws IOException {
+    @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<Void> createProduct(@RequestPart final ProductCreateRequest productRequest,
+                                              @RequestPart MultipartFile image) throws IOException {
 
         this.productService.createProduct(productRequest, image);
 
@@ -87,8 +85,7 @@ public class ProductAdminController {
      * @since 1.0.0
      */
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductResponse> retrieveProductDetails(
-        @PathVariable final Long productId) {
+    public ResponseEntity<ProductResponse> retrieveProductDetails(@PathVariable final Long productId) {
         ProductResponse productDetails = this.productService.retrieveProductDetails(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -108,9 +105,9 @@ public class ProductAdminController {
      * @since 1.0.0
      */
     @PutMapping("/{productId}")
-    public ResponseEntity<Void> updateProduct(
-        @RequestPart final ProductUpdateRequest productRequest, @RequestPart MultipartFile image,
-        @PathVariable final Long productId) throws IOException {
+    public ResponseEntity<Void> updateProduct(@RequestPart final ProductUpdateRequest productRequest,
+                                              @RequestPart MultipartFile image,
+                                              @PathVariable final Long productId) throws IOException {
         this.productService.updateProduct(productRequest, image, productId);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -137,6 +134,16 @@ public class ProductAdminController {
                              .build();
     }
 
+    @PostMapping("/{productId}/restore")
+    public ResponseEntity<Void> restoreProduct(@PathVariable final Long productId) {
+        this.productService.restoreProduct(productId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(DEFAULT_PRODUCT + "/" + productId))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
+    }
+
     /**
      * 상품 검색을 위한 GetMapping을 지원합니다.
      * 상품의 이름을 인자로 받아 해당 이름을 포함한 상품 엔티티를 검색합니다.
@@ -148,8 +155,7 @@ public class ProductAdminController {
     @GetMapping("/search/{productName}")
     public ResponseEntity<List<ProductResponse>> searchProductsByName(
         @PathVariable final String productName) {
-        List<ProductResponse> productResponseList =
-            this.productService.searchProductsByName(productName);
+        List<ProductResponse> productResponseList = this.productService.searchProductsByName(productName);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT + "/search/" + productName))

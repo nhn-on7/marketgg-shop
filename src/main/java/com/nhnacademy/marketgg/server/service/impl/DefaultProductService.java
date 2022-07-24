@@ -77,11 +77,18 @@ public class DefaultProductService implements ProductService {
 
     @Override
     @Transactional
-    public void deleteProduct(final Long productId) {
-        Product product =
-            this.productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+    public void deleteProduct(final Long id) {
+        Product product = this.productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
 
         product.deleteProduct();
+        this.productRepository.save(product);
+    }
+
+    @Override
+    public void restoreProduct(final Long id) {
+        Product product = this.productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+
+        product.restoreProduct();
         this.productRepository.save(product);
     }
 
