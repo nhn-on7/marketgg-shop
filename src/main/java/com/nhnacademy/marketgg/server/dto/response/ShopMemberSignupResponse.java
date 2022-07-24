@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class ShopMemberSignupResponse {
+public class ShopMemberSignUpResponse {
 
-    private final Long signupMemberId;
+    private final Long signUpMemberId;
     private final Long referrerMemberId;
 }

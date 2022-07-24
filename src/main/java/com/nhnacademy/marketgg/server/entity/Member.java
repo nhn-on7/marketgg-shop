@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignupRequest;
+import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -75,7 +75,9 @@ public class Member {
      * @param signupMemberGrade       - 회원가입시 부여될 등급을 담은 객체입니다.
      * @since 1.0.0
      */
-    public Member(ShopMemberSignupRequest shopMemberSignupRequest, MemberGrade signupMemberGrade) {
+    public Member(final ShopMemberSignUpRequest shopMemberSignupRequest
+            , final MemberGrade signupMemberGrade) {
+
         this.memberGrade = signupMemberGrade;
         this.uuid = shopMemberSignupRequest.getUuid();
         this.gender = shopMemberSignupRequest.getGender();

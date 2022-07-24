@@ -1,20 +1,12 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Table(name = "delivery_addresses")
@@ -37,11 +29,23 @@ public class DeliveryAddress {
     @Column(name = "zip_code")
     private Integer zipCode;
 
-    @Column(name = "road_name_address")
-    private String roadNameAddress;
+    @Column
+    private String address;
 
     @Column(name = "detail_address")
     private String detailAddress;
+
+    public DeliveryAddress(final Pk pk
+            , final Member signUpMember
+            , final ShopMemberSignUpRequest shopMemberSignupRequest) {
+
+        this.pk = pk;
+        this.member = signUpMember;
+        this.isDefaultAddress = Boolean.TRUE;
+        this.zipCode = shopMemberSignupRequest.getZipcode();
+        this.address = shopMemberSignupRequest.getAddress();
+        this.detailAddress = shopMemberSignupRequest.getDetailAddress();
+    }
 
     @Embeddable
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -56,6 +60,9 @@ public class DeliveryAddress {
         @Column(name = "member_no")
         private Long memberNo;
 
+        public Pk(Long memberNo) {
+            this.memberNo = memberNo;
+        }
     }
 
 }
