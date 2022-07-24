@@ -76,6 +76,7 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
+    @Transactional
     public void deleteProduct(final Long productId) {
         Product product =
             this.productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
