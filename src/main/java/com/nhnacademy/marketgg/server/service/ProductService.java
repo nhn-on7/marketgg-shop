@@ -86,6 +86,4 @@ public interface ProductService {
 
     List<ProductResponse> searchProductByCategory(final String categoryCode);
 
-    List<EsProduct> searchProductWithKeyword(final EsProductSearchRequest searchRequest);
-
 }

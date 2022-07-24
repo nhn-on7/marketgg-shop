@@ -50,12 +50,4 @@ public class ProductMemberController {
                              .body(productResponseList);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<EsProduct>> searchProductWithKeyword(@RequestBody EsProductSearchRequest searchRequest) {
-        return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_URI + "/search"))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .body(productService.searchProductWithKeyword(searchRequest));
-    }
-
 }

@@ -7,6 +7,4 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
 public interface EsProductRepository extends ElasticsearchRepository<EsProduct, Long> {
 
-    Page<EsProduct> searchEsProductByContentAndProductName(final String keyword, final Pageable pageable);
-
 }

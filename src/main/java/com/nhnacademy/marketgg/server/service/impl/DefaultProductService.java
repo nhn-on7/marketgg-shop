@@ -125,10 +125,4 @@ public class DefaultProductService implements ProductService {
 
     }
 
-    @Override
-    public List<EsProduct> searchProductWithKeyword(final EsProductSearchRequest searchRequest) {
-        return esProductRepository.searchEsProductByContentAndProductName(searchRequest.getKeyword(),
-                                                                          searchRequest.getPageable()).getContent();
-    }
-
 }
