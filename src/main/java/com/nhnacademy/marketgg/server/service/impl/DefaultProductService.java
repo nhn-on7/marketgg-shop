@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
@@ -64,6 +65,12 @@ public class DefaultProductService implements ProductService {
     @Override
     public Page<ProductResponse> retrieveProducts(Pageable pageable) {
         return productRepository.findAllProducts(pageable);
+    }
+
+    @Override
+    public <T> ListResponse<T> testRetrieveProducts(Pageable pageable) {
+        Page<ProductResponse> products = productRepository.findAllProducts(pageable);
+        return new ListResponse(products.getContent());
     }
 
     @Override

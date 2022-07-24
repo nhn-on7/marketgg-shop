@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.service;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import java.io.IOException;
 import java.util.List;
@@ -33,6 +34,8 @@ public interface ProductService {
      * @since 1.0.0
      */
     Page<ProductResponse> retrieveProducts(Pageable pageable);
+
+    <T> ListResponse<T> testRetrieveProducts(Pageable pageable);
 
     /**
      * 상품 Id를 통해 상세 정보를 조회합니다.

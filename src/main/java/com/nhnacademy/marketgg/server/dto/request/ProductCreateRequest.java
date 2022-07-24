@@ -23,5 +23,4 @@ public class ProductCreateRequest {
     private String allergyInfo;
     private String capacity;
 
-
 }
