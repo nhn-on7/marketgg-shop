@@ -4,6 +4,7 @@ import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;
+import java.util.Optional;
 
 @NoRepositoryBean
 public interface CategoryRepositoryCustom {
@@ -16,6 +17,9 @@ public interface CategoryRepositoryCustom {
      * @since 1.0.0
      */
     CategoryRetrieveResponse findByCode(final String id);
+
+    // memo javadoc
+    Optional<String> retrieveCategoryIdByName(final String name);
 
     /**
      * 전체 카테고리 목록을 반환하는 메소드입니다.

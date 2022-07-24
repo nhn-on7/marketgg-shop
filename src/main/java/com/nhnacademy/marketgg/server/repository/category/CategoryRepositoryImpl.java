@@ -9,6 +9,7 @@ import com.querydsl.core.types.Projections;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
+import java.util.Optional;
 
 public class CategoryRepositoryImpl extends QuerydslRepositorySupport implements CategoryRepositoryCustom {
 
@@ -26,6 +27,16 @@ public class CategoryRepositoryImpl extends QuerydslRepositorySupport implements
                 .where(category.id.eq(id))
                 .select(selectAllCategoryColumns(category, categorization))
                 .fetchOne();
+    }
+
+    @Override
+    public Optional<String> retrieveCategoryIdByName(String name) {
+        QCategory category = QCategory.category;
+
+        return Optional.ofNullable(from(category)
+                                           .where(category.name.eq(name))
+                                           .select(category.id)
+                                           .fetchOne());
     }
 
     @Override

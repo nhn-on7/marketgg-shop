@@ -1,8 +1,11 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +20,10 @@ import java.time.LocalDateTime;
 @Table(name = "customer_service_post")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Getter
+@Setter
 public class CustomerServicePost {
 
     @Id
