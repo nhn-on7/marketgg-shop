@@ -10,7 +10,11 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     generate-ddl: false
     show-sql: true
-
+    properties:
+      decorator:
+        datasource:
+          p6spy:
+            enable-logging: true
 server:
   port: 7080
 

@@ -147,4 +147,27 @@ public class ProductAdminController {
                              .body(productResponseList);
     }
 
+    /**
+     * 상품 검색을 위한 GetMapping을 지원합니다.
+     * 카테고리 코드, 카테고리분류코드 코드를 동시에 받아 조건에 맞는 상품 리스트를 반환합니다.
+     *
+     * @param categoryCode - 2차 분류입니다. ex) 101 - 채소, 102 -  두부, 고구마
+     * @return - List<ProductResponse> 를 담은 응답 객체를 반환합니다.
+     * @since 1.0.0
+     */
+    @GetMapping("/categories/{categoryCode}")
+    public ResponseEntity<List<ProductResponse>> searchProductsByCategory(
+        @PathVariable String categoryCode) {
+
+        List<ProductResponse> productResponseList =
+            productService.searchProductByCategory(categoryCode);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(
+                                 DEFAULT_PRODUCT + "/search/" +
+                                     categoryCode))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(productResponseList);
+    }
+
 }
