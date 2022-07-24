@@ -12,6 +12,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+/**
+ * ES Server 의 "products" 인덱스의 필드의 설정입니다.
+ * 에노테이션 @Document 를 통해 인덱스의 이름을 명명해줄 수 있습니다.
+ *
+ * @version 1.0.0
+ */
 @Document(indexName = "products")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,7 +47,7 @@ public class EsProduct {
     @Column
     private String content;
 
-    public EsProduct(final Product product, Label label, Image image) {
+    public EsProduct(final Product product, final Label label, final Image image) {
         this.id = product.getId();
         this.productName = product.getName();
         this.categoryCode = product.getCategory().getId();
