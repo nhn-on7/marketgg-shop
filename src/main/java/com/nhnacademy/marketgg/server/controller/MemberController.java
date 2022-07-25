@@ -82,7 +82,7 @@ public class MemberController {
 
     /**
      * Client 에서 받은 회원가입 Form 에서 입력한 정보로 회원가입을 하는 로직입니다.
-     * 회원가입시 추천인을 입력했다면
+     * 회원가입시 추천인을 입력했고, 해당 회원이 존재하면 추천인과 추천인을 입력한 회원은 적립금을 받습니다.
      *
      * @param shopMemberSignUpRequest - shop
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
