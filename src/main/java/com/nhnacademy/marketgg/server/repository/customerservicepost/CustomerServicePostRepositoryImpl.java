@@ -46,7 +46,6 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
                                        customerServicePost.member,
                                        customerServicePost.category,
                                        customerServicePost.content,
-                                       customerServicePost.code,
                                        customerServicePost.title,
                                        customerServicePost.reason,
                                        customerServicePost.status,

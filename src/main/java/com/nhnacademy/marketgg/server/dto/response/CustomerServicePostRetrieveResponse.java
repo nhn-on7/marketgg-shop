@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.dto.request;
+package com.nhnacademy.marketgg.server.dto.response;
 
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -13,17 +13,15 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @NoArgsConstructor
-public class CustomerServicePostDto {
+public class CustomerServicePostRetrieveResponse {
 
     private Long id;
 
-    private Long memberId;
+    private Member member;
 
-    private String categoryId;
+    private Category category;
 
     private String content;
-
-    private String code;
 
     private String title;
 
