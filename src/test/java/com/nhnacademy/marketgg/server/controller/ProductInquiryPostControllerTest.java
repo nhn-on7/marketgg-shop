@@ -68,7 +68,7 @@ class ProductInquiryPostControllerTest {
     void testRetrieveProductInquiryByMemberId() throws Exception {
         given(productInquiryPostService.retrieveProductInquiryByMemberId(anyLong(), any(PageRequest.class))).willReturn(List.of());
 
-        this.mockMvc.perform(get(DEFAULT_INQUIRY + "/members/" + 1L + "/product-inquiries")
+        this.mockMvc.perform(get(DEFAULT_INQUIRY + "/members/{memberId}/product-inquiries", 1L)
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
         verify(productInquiryPostService, times(1)).retrieveProductInquiryByMemberId(anyLong(), any(PageRequest.class));
