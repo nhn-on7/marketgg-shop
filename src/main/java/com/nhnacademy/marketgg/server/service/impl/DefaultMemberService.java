@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
 import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
 import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignUpResponse;
@@ -85,6 +86,20 @@ public class DefaultMemberService implements MemberService {
         }
         return new ShopMemberSignUpResponse(memberRepository.save(new Member(signUpRequest, registerGrade()))
                                                             .getId(), null);
+    }
+
+    /**
+     * 회원탈퇴시 SoftDelete 를 위한 메소드입니다.
+     *
+     * @param uuid - 탈퇴를 신청한 회원의 uuid 입니다.
+     * @param memberWithdrawRequest - 탈퇴 신청 시간을 담은 객체입니다.
+     */
+    @Transactional
+    @Override
+    public void withdraw(final String uuid, final MemberWithdrawRequest memberWithdrawRequest) {
+        Member member = memberRepository.findByUuid(uuid)
+                                        .orElseThrow(MemberNotFoundException::new);
+        member.withdraw(memberWithdrawRequest);
     }
 
     /**

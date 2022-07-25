@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.service;
 
+import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
 import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
 import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignUpResponse;
@@ -50,9 +51,10 @@ public interface MemberService {
      * Client 에서 입력폼에 입력한 정보로 회원가입을 합니다.
      * (Auth 서버에 들어가는 정보랑 다름)
      *
-     * @param shopMemberSignupRequest
+     * @param shopMemberSignupRequest - 회원가입 정보를 담은 객체입니다.
      * @since 1.0.0
      */
     ShopMemberSignUpResponse signUp(final ShopMemberSignUpRequest shopMemberSignupRequest);
 
+    void withdraw(final String uuid, final MemberWithdrawRequest memberWithdrawRequest);
 }
