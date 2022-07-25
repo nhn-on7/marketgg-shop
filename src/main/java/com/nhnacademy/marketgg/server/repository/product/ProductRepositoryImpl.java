@@ -5,9 +5,11 @@ import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.QProduct;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class ProductRepositoryImpl extends QuerydslRepositorySupport implements ProductRepositoryCustom {
 
@@ -16,66 +18,77 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     }
 
     @Override
-    public List<ProductResponse> findAllProducts() {
+    public Page<ProductResponse> findAllProducts(final Pageable pageable) {
         QProduct product = QProduct.product;
 
-        return from(product)
-                .select(selectAllProductColumns())
-                .fetch();
+        List<ProductResponse> result = from(product)
+            .select(selectAllProductColumns())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+
+        return new PageImpl<>(result, pageable, result.size());
     }
 
     @Override
-    public ProductResponse queryById(Long id) {
+    public ProductResponse queryById(final Long id) {
         QProduct product = QProduct.product;
 
         return from(product)
-                .select(selectAllProductColumns())
-                .where(product.id.eq(id))
-                .fetchOne();
+            .select(selectAllProductColumns())
+            .where(product.id.eq(id))
+            .fetchOne();
     }
 
     @Override
-    public List<ProductResponse> findByNameContaining(String keyword) {
+    public List<ProductResponse> findByNameContaining(final String keyword) {
         QProduct product = QProduct.product;
 
         return from(product)
-                .select(selectAllProductColumns())
-                .where(product.name.contains(keyword))
-                .fetch();
+            .select(selectAllProductColumns())
+            .where(product.name.contains(keyword))
+            .fetch();
     }
 
     @Override
-    public List<ProductResponse> findByCategoryAndCategorizationCodes(String categoryCode) {
+    public Page<ProductResponse> findByCategoryCode(final String categoryCode, final Pageable pageable) {
         QProduct product = QProduct.product;
 
-        return from(product)
-                .select(selectAllProductColumns())
-                .where(product.category.id.eq(categoryCode))
-                .fetch();
+        List<ProductResponse> result = from(product)
+            .select(selectAllProductColumns())
+            .where(product.category.id.eq(categoryCode))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+
+        return new PageImpl<>(result, pageable, result.size());
     }
 
     private ConstructorExpression<ProductResponse> selectAllProductColumns() {
         QProduct product = QProduct.product;
 
         return Projections.constructor(ProductResponse.class,
-                                       product.id,
-                                       product.asset,
-                                       product.category,
-                                       product.name,
-                                       product.content,
-                                       product.totalStock,
-                                       product.price,
-                                       product.description,
-                                       product.unit,
-                                       product.deliveryType,
-                                       product.origin,
-                                       product.packageType,
-                                       product.expirationDate,
-                                       product.allergyInfo,
-                                       product.capacity,
-                                       product.createdAt,
-                                       product.updatedAt,
-                                       product.deletedAt);
+            product.id,
+            product.asset,
+            product.asset.id,
+            product.category,
+            product.category.id,
+            product.category.name,
+            product.name,
+            product.content,
+            product.totalStock,
+            product.price,
+            product.description,
+            product.unit,
+            product.deliveryType,
+            product.origin,
+            product.packageType,
+            product.expirationDate,
+            product.allergyInfo,
+            product.capacity,
+            product.createdAt,
+            product.updatedAt,
+            product.deletedAt);
     }
 
 }
