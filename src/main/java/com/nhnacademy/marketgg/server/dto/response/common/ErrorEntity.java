@@ -9,4 +9,9 @@ public class ErrorEntity extends CommonResponse {
 
     private String message;
 
+    public ErrorEntity(String message) {
+        super(false);
+        this.message = message;
+    }
+
 }

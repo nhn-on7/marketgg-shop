@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.service;
 
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignupRequest;
+import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
 import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignupResponse;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,14 @@ public interface MemberService {
     void subscribePass(final Long id);
 
     /**
+     * UUID 를 통해 사용자 정보를 요청합니다.
+     *
+     * @param uuid - 사용자를 식별할 수 있는 UUID
+     * @return - 사용자 정보를 반환합니다.
+     */
+    MemberResponse retrieveMember(final String uuid);
+
+    /**
      * 지정한 회원을 GG 패스에 구독해지 처리합니다.
      *
      * @param id - GG 패스를 구독해지할 회원의 식별번호입니다.
@@ -45,4 +54,5 @@ public interface MemberService {
      * @since 1.0.0
      */
     ShopMemberSignupResponse signup(final ShopMemberSignupRequest shopMemberSignupRequest);
+
 }
