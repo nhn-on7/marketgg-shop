@@ -17,7 +17,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -29,6 +29,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 @Slf4j
 @Aspect
+@Order(10)
 @Component
 @RequiredArgsConstructor
 public class RoleCheckAspect {
@@ -55,9 +56,10 @@ public class RoleCheckAspect {
 
         MethodSignature signature = (MethodSignature) jp.getSignature();
 
-        String header = request.getHeader("WWW-Authentication");
+        String roleHeader = request.getHeader("WWW-Authentication");
+        String uuid = request.getHeader("AUTH-ID");
 
-        if (Objects.isNull(header)) {
+        if (Objects.isNull(roleHeader) && Objects.isNull(uuid)) {
             if (Objects.equals(roleCheck.accessLevel(), Role.LOGIN)) {
                 throw new UnAuthenticException(signature.getName());
             }
@@ -65,7 +67,8 @@ public class RoleCheckAspect {
         }
 
         // 권한 목록은 Gateway 에서 JSON List 타입으로 매핑해서 Http Header 로 전달함.
-        List<String> roles = mapper.readValue(header, new TypeReference<>(){});
+        List<String> roles = mapper.readValue(roleHeader, new TypeReference<>() {
+        });
         log.info("roles = {}", roles.toString());
 
         if (Objects.equals(roleCheck.accessLevel(), Role.ROLE_USER)) {

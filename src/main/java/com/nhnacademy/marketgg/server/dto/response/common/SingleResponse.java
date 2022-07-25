@@ -11,4 +11,9 @@ public class SingleResponse<T> extends CommonResponse {
 
     private T data;
 
+    public SingleResponse(T data) {
+        super(true);
+        this.data = data;
+    }
+
 }

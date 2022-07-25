@@ -2,8 +2,8 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.comsun.PageListResponse;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.comsun.PageListResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Image;
@@ -46,8 +46,8 @@ public class DefaultProductService implements ProductService {
 
     private static final String dir = System.getProperty("user.home");
 
-    @Override
     @Transactional
+    @Override
     public void createProduct(final ProductCreateRequest productRequest, MultipartFile imageFile)
         throws IOException {
 
@@ -81,8 +81,8 @@ public class DefaultProductService implements ProductService {
         return this.productRepository.queryById(productId);
     }
 
-    @Override
     @Transactional
+    @Override
     public void updateProduct(final ProductUpdateRequest productRequest, MultipartFile imageFile,
                               final Long productId) throws IOException {
         Product product =
@@ -94,11 +94,13 @@ public class DefaultProductService implements ProductService {
                                                    .orElseThrow(CategoryNotFoundException::new);
 
         product.updateProduct(productRequest, asset, category);
-        this.productRepository.save(product);
+        Product updateProduct = this.productRepository.save(product);
+
+        // FIXME: 상품 정보 변경 수정 시 매개변수 Label 보완 필요 (CoPark)
     }
 
-    @Override
     @Transactional
+    @Override
     public void deleteProduct(final Long id) {
         Product product = this.productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
 

@@ -20,6 +20,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -29,8 +30,14 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+/**
+ * Controller 클래스에서 Auth Server 의 회원 요청 시 파라미터로 쉽게 전달받을 수 있는 AOP.
+ *
+ * @version 1.0.0
+ */
 @Slf4j
 @Aspect
+@Order(20)
 @Component
 @RequiredArgsConstructor
 public class AuthInjectAspect {
@@ -41,6 +48,13 @@ public class AuthInjectAspect {
     private final RestTemplate restTemplate;
     private final ObjectMapper mapper;
 
+    /**
+     * 회원 정보를 요청하는 Aspect.
+     *
+     * @param pjp - 메서드 원본의 정보를 가지고있는 객체입니다.
+     * @return 메서드 정보
+     * @throws Throwable 메서드를 실행시킬 때 발생할 수 있는 예외입니다.
+     */
     @Around("execution(* com.nhnacademy.marketgg.server.controller.*.*(.., @com.nhnacademy.marketgg.server.annotation.Auth (*), ..))")
     public Object authInject(ProceedingJoinPoint pjp) throws Throwable {
         log.info("Method: {}", pjp.getSignature().getName());
@@ -49,11 +63,8 @@ public class AuthInjectAspect {
             (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
 
-        // String jwt = request.getHeader(AUTHORIZATION);
-        String jwt =
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTdmZGVkYi1mYjdiLTQ1NGItYWMzMC0yMWU2YjMxOTIzOTAiLCJBVVRIT1JJVElFUyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjU4NjcyMjY1LCJleHAiOjE2NTg2NzQwNjV9.BYqN5OxzJq7lzjnzT2o2KYvv_NGqT8AUPjrm2fCM4Z0";
-        // String uuid = request.getHeader("WWW-Authentication");
-        String uuid = "1234";
+        String jwt = request.getHeader(AUTHORIZATION);
+        String uuid = request.getHeader("WWW-Authentication");
 
         if (Objects.isNull(jwt) || Objects.isNull(uuid)) {
             throw new IllegalArgumentException();
@@ -85,7 +96,6 @@ public class AuthInjectAspect {
     private AuthInfo validCheck(ResponseEntity<String> response)
         throws JsonProcessingException {
 
-        System.out.println("response.getBody() = " + response.getBody());
         log.info("http status: {}", response.getStatusCode());
         if (response.getStatusCode().is4xxClientError()) {
             ErrorEntity error =

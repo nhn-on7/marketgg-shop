@@ -1,20 +1,31 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import static org.springframework.http.HttpStatus.OK;
+
+import com.nhnacademy.marketgg.server.annotation.Role;
+import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
+import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
 import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignUpResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.MemberService;
 import com.nhnacademy.marketgg.server.service.PointService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
-import static org.springframework.http.HttpStatus.OK;
+import javax.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 회원관리에 관련된 RestController 입니다.
@@ -76,8 +87,26 @@ public class MemberController {
 
         return ResponseEntity.status(OK)
                              .location(URI.create("/shop/v1/members/" + memberId + "/ggpass/withdraw"))
+
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
+    }
+
+    /**
+     * 사용자 정보를 반환합니다.
+     *
+     * @param request - 요청 정보
+     * @return - 사용자 정보를 반환합니다.
+     */
+    @RoleCheck(accessLevel = Role.ROLE_USER)
+    @GetMapping
+    public ResponseEntity<? extends CommonResponse> retrieveMember(HttpServletRequest request) {
+        String uuid = request.getHeader("AUTH-ID");
+        MemberResponse memberResponse = memberService.retrieveMember(uuid);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(new SingleResponse<>(memberResponse));
     }
 
     /**
@@ -89,14 +118,17 @@ public class MemberController {
      * @since 1.0.0
      */
     @PostMapping("/signup")
+
     public ResponseEntity<Void> doSignUp(@RequestBody final ShopMemberSignUpRequest shopMemberSignUpRequest) {
         ShopMemberSignUpResponse signUp = memberService.signUp(shopMemberSignUpRequest);
 
         if (Objects.nonNull(signUp.getReferrerMemberId())) {
-            pointService.createPointHistory(signUp.getReferrerMemberId(), new PointHistoryRequest(5000, "추천인 이벤트"));
+            pointService.createPointHistory(signUp.getReferrerMemberId(),
+                new PointHistoryRequest(5000, "추천인 이벤트"));
         }
 
-        pointService.createPointHistory(signUp.getSignUpMemberId(), new PointHistoryRequest(5000, "회원 가입 추천인 이벤트"));
+        pointService.createPointHistory(signUp.getSignUpMemberId(),
+            new PointHistoryRequest(5000, "회원 가입 추천인 이벤트"));
 
         return ResponseEntity.status(OK)
                              .location(URI.create("/shop/v1/members/signup"))

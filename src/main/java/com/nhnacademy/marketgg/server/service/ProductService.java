@@ -2,8 +2,8 @@ package com.nhnacademy.marketgg.server.service;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.comsun.PageListResponse;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.comsun.PageListResponse;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -82,7 +82,7 @@ public interface ProductService {
     /**
      * 카테고리로 상품 목록을 조회합니다.
      *
-     * @param categoryCode       - 카테고리 2차 분류입니다.
+     * @param categoryCode - 카테고리 2차 분류입니다.
      * @return - 해당하는 카테고리의 상품 리스트를 반환합니다.
      */
 
