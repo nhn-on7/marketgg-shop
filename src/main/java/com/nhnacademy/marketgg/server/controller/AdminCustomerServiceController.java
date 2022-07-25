@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostDto;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +26,8 @@ public class AdminCustomerServiceController {
     private static final String DEFAULT_ADMIN_CUSTOMER_SERVICE = "/shop/v1/admin/customer-services";
 
     @GetMapping("/oto-inquiries/{inquiryId}")
-    public ResponseEntity<CustomerServicePostRetrieveResponse> retrieveOtoInquiry(@PathVariable final Long inquiryId) {
-        CustomerServicePostRetrieveResponse inquiryResponse = customerServicePostService.retrieveOtoInquiry(inquiryId);
+    public ResponseEntity<CustomerServicePostDto> retrieveOtoInquiry(@PathVariable final Long inquiryId) {
+        CustomerServicePostDto inquiryResponse = customerServicePostService.retrieveOtoInquiry(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
@@ -35,8 +35,8 @@ public class AdminCustomerServiceController {
     }
 
     @GetMapping("/oto-inquiries")
-    public ResponseEntity<List<CustomerServicePostRetrieveResponse>> retrieveOtoInquiries(final Pageable pageable) {
-        List<CustomerServicePostRetrieveResponse> inquiryResponses = customerServicePostService.retrieveOtoInquiries(
+    public ResponseEntity<List<CustomerServicePostDto>> retrieveOtoInquiries(final Pageable pageable) {
+        List<CustomerServicePostDto> inquiryResponses = customerServicePostService.retrieveOtoInquiries(
                 pageable);
 
         return ResponseEntity.status(HttpStatus.OK)

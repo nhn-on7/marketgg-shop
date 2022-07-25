@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @NoArgsConstructor
-public class CustomerServicePostRetrieveResponse {
+public class CustomerServicePostDto {
 
     private Long id;
 
