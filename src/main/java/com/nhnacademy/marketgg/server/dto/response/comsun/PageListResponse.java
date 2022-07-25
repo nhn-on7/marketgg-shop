@@ -1,5 +1,6 @@
-package com.nhnacademy.marketgg.server.dto.response;
+package com.nhnacademy.marketgg.server.dto.response.comsun;
 
+import com.nhnacademy.marketgg.server.dto.response.comsun.CommonResponse;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;

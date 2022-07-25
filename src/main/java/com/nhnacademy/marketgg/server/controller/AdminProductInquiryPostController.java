@@ -3,13 +3,16 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.service.ProductInquiryPostService;
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 관리자 상품 문의 답글 등록을 위한 RestController 입니다.
@@ -19,8 +22,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("/shop/v1/admin/products")
 @RequiredArgsConstructor
-public class
-AdminProductInquiryPostController {
+public class AdminProductInquiryPostController {
 
     private final ProductInquiryPostService productInquiryPostService;
 
@@ -35,13 +37,14 @@ AdminProductInquiryPostController {
      */
     @PutMapping("/{productId}/inquiries/{inquiryId}")
     public ResponseEntity<Void> updateProductInquiryReply(@PathVariable final Long productId,
-                                                          @PathVariable final Long inquiryId,
-                                                          @RequestBody final ProductInquiryRequest inquiryReply) {
+                                                          @PathVariable final Long inquiryId, @RequestBody
+                                                          final ProductInquiryRequest inquiryReply) {
 
         productInquiryPostService.updateProductInquiryReply(inquiryReply, inquiryId, productId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create("/shop/v1/admin/products/" + productId + "/inquiries/" + inquiryId))
+                             .location(URI.create(
+                                 "/shop/v1/admin/products/" + productId + "/inquiries/" + inquiryId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

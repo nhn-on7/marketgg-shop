@@ -2,8 +2,8 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.PageListResponse;
+import com.nhnacademy.marketgg.server.dto.response.comsun.CommonResponse;
+import com.nhnacademy.marketgg.server.dto.response.comsun.PageListResponse;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.IOException;
@@ -51,7 +51,7 @@ public class ProductAdminController {
      */
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<Void> createProduct(@RequestPart final ProductCreateRequest productRequest,
-                                              @RequestPart MultipartFile image) throws IOException {
+                                              @RequestPart final MultipartFile image) throws IOException {
 
         this.productService.createProduct(productRequest, image);
 
@@ -107,7 +107,7 @@ public class ProductAdminController {
      */
     @PutMapping("/{productId}")
     public ResponseEntity<Void> updateProduct(@RequestPart final ProductUpdateRequest productRequest,
-                                              @RequestPart MultipartFile image,
+                                              @RequestPart final MultipartFile image,
                                               @PathVariable final Long productId) throws IOException {
         this.productService.updateProduct(productRequest, image, productId);
 

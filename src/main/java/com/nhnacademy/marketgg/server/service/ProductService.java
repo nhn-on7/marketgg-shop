@@ -2,7 +2,7 @@ package com.nhnacademy.marketgg.server.service;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.PageListResponse;
+import com.nhnacademy.marketgg.server.dto.response.comsun.PageListResponse;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import java.io.IOException;
 import java.util.List;

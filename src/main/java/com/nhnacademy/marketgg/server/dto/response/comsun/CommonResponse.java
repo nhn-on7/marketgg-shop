@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.dto.response;
+package com.nhnacademy.marketgg.server.dto.response.comsun;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

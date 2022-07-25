@@ -18,7 +18,7 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     }
 
     @Override
-    public Page<ProductResponse> findAllProducts(Pageable pageable) {
+    public Page<ProductResponse> findAllProducts(final Pageable pageable) {
         QProduct product = QProduct.product;
 
         List<ProductResponse> result = from(product)
@@ -31,7 +31,7 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     }
 
     @Override
-    public ProductResponse queryById(Long id) {
+    public ProductResponse queryById(final Long id) {
         QProduct product = QProduct.product;
 
         return from(product)
@@ -41,7 +41,7 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     }
 
     @Override
-    public List<ProductResponse> findByNameContaining(String keyword) {
+    public List<ProductResponse> findByNameContaining(final String keyword) {
         QProduct product = QProduct.product;
 
         return from(product)
@@ -51,7 +51,7 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     }
 
     @Override
-    public Page<ProductResponse> findByCategoryCode(String categoryCode, Pageable pageable) {
+    public Page<ProductResponse> findByCategoryCode(final String categoryCode, final Pageable pageable) {
         QProduct product = QProduct.product;
 
         List<ProductResponse> result = from(product)
