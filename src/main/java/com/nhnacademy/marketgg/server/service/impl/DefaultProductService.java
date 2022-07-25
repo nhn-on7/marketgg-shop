@@ -2,7 +2,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.ListResponse;
+import com.nhnacademy.marketgg.server.dto.response.PageListResponse;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
@@ -22,7 +22,6 @@ import com.nhnacademy.marketgg.server.repository.productlabel.ProductLabelReposi
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +65,7 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public <T> ListResponse<T> retrieveProducts(Pageable pageable) {
+    public <T> PageListResponse<T> retrieveProducts(Pageable pageable) {
         Page<ProductResponse> products = productRepository.findAllProducts(pageable);
 
         Map<String, Integer> pageInfo = new HashMap<>();
@@ -74,7 +73,7 @@ public class DefaultProductService implements ProductService {
         pageInfo.put("pageSize", products.getSize());
         pageInfo.put("totalPages", products.getTotalPages());
 
-        return new ListResponse(products.getContent(), pageInfo);
+        return new PageListResponse(products.getContent(), pageInfo);
     }
 
     @Override
