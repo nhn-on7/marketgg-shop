@@ -10,4 +10,9 @@ public class ListResponse<T> extends CommonResponse {
 
     private List<T> data;
 
+    public ListResponse(List<T> data) {
+        super(true);
+        this.data = data;
+    }
+
 }

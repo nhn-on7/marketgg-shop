@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
+import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
 import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignUpResponse;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -47,6 +48,19 @@ public class DefaultMemberService implements MemberService {
     }
 
     @Override
+    public MemberResponse retrieveMember(String uuid) {
+        Member member = memberRepository.findByUuid(uuid)
+                                        .orElseThrow(MemberNotFoundException::new);
+
+        return MemberResponse.builder()
+                             .memberGrade(member.getMemberGrade())
+                             .gender(member.getGender())
+                             .birthDay(member.getBirthDate())
+                             .ggpassUpdatedAt(member.getGgpassUpdatedAt())
+                             .build();
+    }
+
+    @Override
     public void withdrawPass(final Long id) {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
 
@@ -69,7 +83,8 @@ public class DefaultMemberService implements MemberService {
                                                     .orElseThrow(MemberNotFoundException::new);
             return signUp(signUpRequest, referrerMember, registerGrade());
         }
-        return new ShopMemberSignUpResponse(memberRepository.save(new Member(signUpRequest, registerGrade())).getId(), null);
+        return new ShopMemberSignUpResponse(memberRepository.save(new Member(signUpRequest, registerGrade()))
+                                                            .getId(), null);
     }
 
     /**
@@ -86,8 +101,8 @@ public class DefaultMemberService implements MemberService {
      * 추천인이 있을 경우의 추천하는 회원의 회원가입 메소드입니다.
      *
      * @param shopMemberSignUpRequest - 회원가입시 입력한 정보를 담고있는 객체입니다.
-     * @param referrerMember - 추천을 받은 회원 입니다.
-     * @param signUpMemberGrade - 회원가입을 하는 회원이 부여 받게되는 등급입니다.
+     * @param referrerMember          - 추천을 받은 회원 입니다.
+     * @param signUpMemberGrade       - 회원가입을 하는 회원이 부여 받게되는 등급입니다.
      * @return ShopMemberSignUp - 회원가입을 하는 회원과 추천을 받게되는 회원의 uuid 를 담은 객체 입니다.
      */
     private ShopMemberSignUpResponse signUp(final ShopMemberSignUpRequest shopMemberSignUpRequest
