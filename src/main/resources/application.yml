@@ -41,3 +41,4 @@ logging:
 
 gateway:
   origin: http://localhost:6060
+  
