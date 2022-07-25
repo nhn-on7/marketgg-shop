@@ -1,16 +1,15 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignupRequest;
-import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignupResponse;
+import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
+import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignUpResponse;
+import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
-import com.nhnacademy.marketgg.server.entity.PointHistory;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.membergrade.MemberGradeNotFoundException;
-import com.nhnacademy.marketgg.server.exception.pointhistory.PointHistoryNotFoundException;
+import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.membergrade.MemberGradeRepository;
-import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
 import com.nhnacademy.marketgg.server.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +24,7 @@ public class DefaultMemberService implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberGradeRepository memberGradeRepository;
+    private final DeliveryAddressRepository deliveryAddressRepository;
 
     @Override
     public LocalDateTime retrievePassUpdatedAt(final Long id) {
@@ -55,31 +55,59 @@ public class DefaultMemberService implements MemberService {
         memberRepository.save(member);
     }
 
+    /**
+     * 회원가입시 회원정보를 DB 에 추가하는 메소드입니다.
+     *
+     * @param signUpRequest - 회원가입시 입력한 정보를 담고있는 객체입니다.
+     * @return ShopMemberSignUpResponse - 회원가입을 하는 회원과 추천을 받게되는 회원의 uuid 를 담은 객체 입니다.
+     */
     @Transactional
     @Override
-    public ShopMemberSignupResponse signup(final ShopMemberSignupRequest shopMemberSignupRequest) {
-        if (getReferrerUuid(shopMemberSignupRequest) != null) {
-
-            Member referrerMember = memberRepository.findByUuid(getReferrerUuid(shopMemberSignupRequest))
+    public ShopMemberSignUpResponse signUp(final ShopMemberSignUpRequest signUpRequest) {
+        if (referrerCheck(signUpRequest) != null) {
+            Member referrerMember = memberRepository.findByUuid(referrerCheck(signUpRequest))
                                                     .orElseThrow(MemberNotFoundException::new);
-
-            MemberGrade signupMemberGrade = memberGradeRepository.findByGrade("Member")
-                                                                 .orElseThrow(MemberGradeNotFoundException::new);
-
-            Member signupMember = memberRepository.save(new Member(shopMemberSignupRequest, signupMemberGrade));
-
-            return new ShopMemberSignupResponse(signupMember.getId(),referrerMember.getId());
+            return signUp(signUpRequest, referrerMember, registerGrade());
         }
-        MemberGrade signupMemberGrade = memberGradeRepository.findByGrade("Member")
-                                                             .orElseThrow(MemberGradeNotFoundException::new);
-
-        Member signupMember = memberRepository.save(new Member(shopMemberSignupRequest, signupMemberGrade));
-
-        return new ShopMemberSignupResponse(signupMember.getId(), null);
+        return new ShopMemberSignUpResponse(memberRepository.save(new Member(signUpRequest, registerGrade())).getId(), null);
     }
 
-    private String getReferrerUuid(ShopMemberSignupRequest shopMemberSignupRequest) {
-        return shopMemberSignupRequest.getReferrerUuid();
+    /**
+     * 회원가입시 회원에게 부여되는 등급 추가 메소드 입니다.
+     *
+     * @return MemberGrade - 부여되는 등급 엔티티입니다.
+     */
+    private MemberGrade registerGrade() {
+        return memberGradeRepository.findByGrade("Member")
+                                    .orElseThrow(MemberGradeNotFoundException::new);
+    }
+
+    /**
+     * 추천인이 있을 경우의 추천하는 회원의 회원가입 메소드입니다.
+     *
+     * @param shopMemberSignUpRequest - 회원가입시 입력한 정보를 담고있는 객체입니다.
+     * @param referrerMember - 추천을 받은 회원 입니다.
+     * @param signUpMemberGrade - 회원가입을 하는 회원이 부여 받게되는 등급입니다.
+     * @return ShopMemberSignUp - 회원가입을 하는 회원과 추천을 받게되는 회원의 uuid 를 담은 객체 입니다.
+     */
+    private ShopMemberSignUpResponse signUp(final ShopMemberSignUpRequest shopMemberSignUpRequest
+            , final Member referrerMember
+            , final MemberGrade signUpMemberGrade) {
+
+        Member signUpMember = memberRepository.save(new Member(shopMemberSignUpRequest, signUpMemberGrade));
+        DeliveryAddress.Pk pk = new DeliveryAddress.Pk(signUpMember.getId());
+        deliveryAddressRepository.save(new DeliveryAddress(pk, signUpMember, shopMemberSignUpRequest));
+        return new ShopMemberSignUpResponse(signUpMember.getId(), referrerMember.getId());
+    }
+
+    /**
+     * 추천인 여부를 체크하는 메소드 입니다.
+     *
+     * @param shopMemberSignUpRequest - 회원가입시 입력한 정보를 담고있는 객체입니다.
+     * @return 추천인의 uuid 를 담고있는 메소드를 반환합니다.
+     */
+    private String referrerCheck(final ShopMemberSignUpRequest shopMemberSignUpRequest) {
+        return shopMemberSignUpRequest.getReferrerUuid();
     }
 
 }
