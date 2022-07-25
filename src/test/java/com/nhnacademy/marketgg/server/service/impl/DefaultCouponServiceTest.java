@@ -12,6 +12,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -38,6 +42,9 @@ class DefaultCouponServiceTest {
     CouponMapper couponMapper;
 
     private static CouponDto couponDto;
+
+    Pageable pageable = PageRequest.of(0, 20);
+    Page<Coupon> inquiryPosts = new PageImpl<>(List.of(), pageable, 0);
 
     @BeforeAll
     static void beforeAll() {
@@ -66,12 +73,12 @@ class DefaultCouponServiceTest {
     @Test
     @DisplayName("쿠폰 목록 조회")
     void testRetrieveCoupons() {
-        given(couponRepository.findAllCoupons())
-                .willReturn(List.of());
+        given(couponRepository.findAllCoupons(pageable))
+                .willReturn(inquiryPosts);
 
-        List<CouponDto> couponResponses = couponService.retrieveCoupons();
+        List<CouponDto> couponResponses = couponService.retrieveCoupons(pageable);
 
-        then(couponRepository).should().findAllCoupons();
+        then(couponRepository).should().findAllCoupons(pageable);
         assertThat(couponResponses).isNotNull();
     }
 

@@ -2,6 +2,8 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
+import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
+import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import com.nhnacademy.marketgg.server.service.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -38,6 +44,9 @@ class MemberControllerTest {
 
     @MockBean
     GivenCouponService givenCouponService;
+
+    Pageable pageable = PageRequest.of(0, 20);
+    Page<GivenCoupon> inquiryPosts = new PageImpl<>(List.of(), pageable, 0);
 
     @Test
     @DisplayName("GG 패스 갱신일자 확인")
@@ -89,12 +98,12 @@ class MemberControllerTest {
     @Test
     @DisplayName("회원에게 지급된 쿠폰 전체 조회")
     void testRetrieveGivenCoupons() throws Exception {
-        when(givenCouponService.retrieveGivenCoupons(anyLong())).thenReturn(List.of());
+        when(givenCouponService.retrieveGivenCoupons(anyLong(), any(Pageable.class))).thenReturn(List.of());
 
         this.mockMvc.perform(get("/shop/v1/members/{memberId}/coupons", 1L))
                     .andExpect(status().isOk());
 
-        verify(givenCouponService, times(1)).retrieveGivenCoupons(anyLong());
+        verify(givenCouponService, times(1)).retrieveGivenCoupons(anyLong(), any(Pageable.class));
     }
 
 }

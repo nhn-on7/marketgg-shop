@@ -2,12 +2,17 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.CouponDto;
+import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import com.nhnacademy.marketgg.server.service.CouponService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -38,6 +43,9 @@ public class CouponControllerTest {
 
     private static final String DEFAULT_COUPON = "/shop/v1/admin/coupons";
 
+    Pageable pageable = PageRequest.of(0, 20);
+    Page<GivenCoupon> inquiryPosts = new PageImpl<>(List.of(), pageable, 0);
+
     @Test
     @DisplayName("쿠폰 등록")
     void testCreateCoupon() throws Exception {
@@ -67,12 +75,12 @@ public class CouponControllerTest {
     @Test
     @DisplayName("쿠폰 목록 조회")
     void testRetrieveCoupons() throws Exception {
-        given(couponService.retrieveCoupons()).willReturn(List.of());
+        given(couponService.retrieveCoupons(pageable)).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_COUPON))
                 .andExpect(status().isOk());
 
-        then(couponService).should().retrieveCoupons();
+        then(couponService).should().retrieveCoupons(pageable);
     }
 
     @Test

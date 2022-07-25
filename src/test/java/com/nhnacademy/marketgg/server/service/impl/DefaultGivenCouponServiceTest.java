@@ -18,6 +18,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,6 +62,9 @@ class DefaultGivenCouponServiceTest {
     private static CouponDto couponDto;
     private static GivenCoupon givenCoupon;
 
+    Pageable pageable = PageRequest.of(0, 20);
+    Page<GivenCoupon> inquiryPosts = new PageImpl<>(List.of(), pageable, 0);
+
     @BeforeEach
     void beforeEach() {
         givenCouponRequest = new GivenCouponRequest();
@@ -82,11 +89,11 @@ class DefaultGivenCouponServiceTest {
     @Test
     @DisplayName("지급 쿠폰 목록 전체 조회")
     void testRetrieveGivenCoupons() {
-        given(givenCouponRepository.findAllByMemberId(any())).willReturn(List.of());
+        given(givenCouponRepository.findAllByMemberId(anyLong(), any(Pageable.class))).willReturn(inquiryPosts);
 
-        givenCouponService.retrieveGivenCoupons(anyLong());
+        givenCouponService.retrieveGivenCoupons(1L, pageable);
 
-        verify(givenCouponRepository, atLeastOnce()).findAllByMemberId(any());
+        verify(givenCouponRepository, atLeastOnce()).findAllByMemberId(any(), any(Pageable.class));
     }
 
     @Test
