@@ -17,4 +17,6 @@ public interface CustomerServicePostService {
 
     CustomerServicePostRetrieveResponse retrieveOwnOtoInquiry(Long inquiryId, Long memberId);
 
+    void deleteOwnOtoInquiry(Long inquiryId, Long memberId);
+
 }

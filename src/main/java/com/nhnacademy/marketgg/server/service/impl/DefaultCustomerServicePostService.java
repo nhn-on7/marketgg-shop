@@ -11,6 +11,7 @@ import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +28,9 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
 
     @Override
     public CustomerServicePostRetrieveResponse retrieveOtoInquiry(Long inquiryId) {
-        CustomerServicePost otoInquiry = customerServicePostRepository.findOtoInquiry(inquiryId);
+        CustomerServicePost otoInquiry = customerServicePostRepository.findById(inquiryId)
+                                                                      .orElseThrow(
+                                                                              CustomerServicePostNotFoundException::new);
 
         return customerServicePostMapper.toDto(otoInquiry);
     }
@@ -44,6 +47,7 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
                            .collect(Collectors.toUnmodifiableList());
     }
 
+    @Transactional
     @Override
     public void deleteOtoInquiry(Long inquiryId) {
         CustomerServicePost otoInquiry = customerServicePostRepository.findById(inquiryId).orElseThrow(
@@ -74,4 +78,11 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
         return customerServicePostMapper.toDto(ownOtoInquiry);
     }
 
+    @Transactional
+    @Override
+    public void deleteOwnOtoInquiry(Long inquiryId, Long memberId) {
+        CustomerServicePost ownOtoInquiry = customerServicePostRepository.findOwnOtoInquiry(inquiryId, memberId);
+
+        customerServicePostRepository.delete(ownOtoInquiry);
+    }
 }
