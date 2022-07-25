@@ -1,10 +1,14 @@
 package com.nhnacademy.marketgg.server.service;
 
+import com.nhnacademy.marketgg.server.dto.request.EsProductSearchRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import java.io.IOException;
 import java.util.List;
+
+import com.nhnacademy.marketgg.server.entity.elastic.EsProduct;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

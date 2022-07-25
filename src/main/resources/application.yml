@@ -29,5 +29,15 @@ server:
 uploadPath: /Users/johyeonjin/Desktop/temp
 inquiryPath: /shop/v1
 
+# Fixme: Data 서버 연결 완료 시 지우기
+elasticsearch:
+  host: 127.0.0.1
+  port: 9200
+
+logging:
+  level:
+    root: info
+    org.springframework.data.elasticsearch.client.WIRE: trace
+
 gateway:
   origin: http://localhost:6060
