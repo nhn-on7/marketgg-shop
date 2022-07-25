@@ -7,12 +7,15 @@ import java.time.LocalDate;
 
 @NoArgsConstructor
 @Getter
-public class ShopMemberSignupRequest {
+public class ShopMemberSignUpRequest {
 
     private Character gender;
     private Boolean isAdmin;
     private LocalDate birthDate;
     private String uuid;
     private String referrerUuid;
+    private Integer zipcode;
+    private String address;
+    private String detailAddress;
 
 }
