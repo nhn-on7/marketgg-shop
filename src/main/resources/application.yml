@@ -31,3 +31,4 @@ inquiryPath: /shop/v1
 
 gateway:
   origin: http://localhost:6060
+  
