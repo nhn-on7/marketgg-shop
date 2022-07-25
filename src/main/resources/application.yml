@@ -28,7 +28,7 @@ inquiryPath: /shop/v1
 
 # Fixme: Data 서버 연결 완료 시 지우기
 elasticsearch:
-  host: 127.0.0.1
+  host: 192.168.71.36
   port: 9200
 
 logging:
