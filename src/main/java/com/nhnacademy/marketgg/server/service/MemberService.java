@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.service;
 
-import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignupRequest;
+import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
 import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
-import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignupResponse;
+import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignUpResponse;
 
 import java.time.LocalDateTime;
 
