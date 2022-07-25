@@ -1,9 +1,11 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -37,11 +39,23 @@ public class DeliveryAddress {
     @Column(name = "zip_code")
     private Integer zipCode;
 
-    @Column(name = "road_name_address")
-    private String roadNameAddress;
+    @Column
+    private String address;
 
     @Column(name = "detail_address")
     private String detailAddress;
+
+    public DeliveryAddress(final Pk pk
+            , final Member signUpMember
+            , final ShopMemberSignUpRequest shopMemberSignUpRequest) {
+
+        this.pk = pk;
+        this.member = signUpMember;
+        this.isDefaultAddress = Boolean.TRUE;
+        this.zipCode = shopMemberSignUpRequest.getZipcode();
+        this.address = shopMemberSignUpRequest.getAddress();
+        this.detailAddress = shopMemberSignUpRequest.getDetailAddress();
+    }
 
     @Embeddable
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -56,6 +70,9 @@ public class DeliveryAddress {
         @Column(name = "member_no")
         private Long memberNo;
 
+        public Pk(Long memberNo) {
+            this.memberNo = memberNo;
+        }
     }
 
 }

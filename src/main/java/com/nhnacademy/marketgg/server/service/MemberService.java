@@ -53,6 +53,6 @@ public interface MemberService {
      * @param shopMemberSignupRequest
      * @since 1.0.0
      */
-    ShopMemberSignupResponse signup(final ShopMemberSignupRequest shopMemberSignupRequest);
+    ShopMemberSignUpResponse signUp(final ShopMemberSignUpRequest shopMemberSignupRequest);
 
 }
