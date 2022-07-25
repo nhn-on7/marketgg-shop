@@ -12,10 +12,12 @@ import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.productinquirypost.ProductInquiryPostRepository;
 import com.nhnacademy.marketgg.server.service.ProductInquiryPostService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,13 +42,13 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     }
 
     @Override
-    public List<ProductInquiryResponse> retrieveProductInquiryByProductId(Long id) {
-        return null;
+    public List<ProductInquiryResponse> retrieveProductInquiryByProductId(final Long id, Pageable pageable) {
+        return productInquiryPostRepository.findALLByProductNo(id, pageable).getContent();
     }
 
     @Override
-    public List<ProductInquiryResponse> retrieveProductInquiryByMemberId(final Long id) {
-        return productInquiryPostRepository.findAllByMemberNo(id);
+    public List<ProductInquiryResponse> retrieveProductInquiryByMemberId(final Long id, Pageable pageable) {
+        return productInquiryPostRepository.findAllByMemberNo(id, pageable).getContent();
     }
 
     @Override
@@ -55,8 +57,8 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
                                           final Long inquiryId,
                                           final Long productId) {
         ProductInquiryPost inquiryPost =
-            productInquiryPostRepository.findById(new ProductInquiryPost.Pk(inquiryId, productId))
-                                        .orElseThrow(ProductInquiryPostNotFoundException::new);
+                productInquiryPostRepository.findById(new ProductInquiryPost.Pk(inquiryId, productId))
+                                            .orElseThrow(ProductInquiryPostNotFoundException::new);
 
         inquiryPost.updateInquiry(inquiryReply);
         productInquiryPostRepository.save(inquiryPost);
