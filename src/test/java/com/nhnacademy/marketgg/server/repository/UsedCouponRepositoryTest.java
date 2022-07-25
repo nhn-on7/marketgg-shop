@@ -9,4 +9,5 @@ class UsedCouponRepositoryTest {
     @Test
     void findAllByGivenCoupon() {
     }
+
 }
