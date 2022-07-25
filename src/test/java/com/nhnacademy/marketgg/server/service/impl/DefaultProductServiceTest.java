@@ -76,7 +76,7 @@ class DefaultProductServiceTest {
         productResponse = new ProductResponse(null, null, null, null, null,
             null, null, null, null, null,
             null, null, null, null, null,
-            null, null, null, null, null);
+            null, null,null, null, null, null);
 
         productRequest = new ProductCreateRequest();
         ReflectionTestUtils.setField(productRequest, "categoryCode", "001");

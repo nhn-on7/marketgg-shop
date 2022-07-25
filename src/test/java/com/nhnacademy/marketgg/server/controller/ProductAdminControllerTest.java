@@ -61,7 +61,7 @@ class ProductAdminControllerTest {
         ReflectionTestUtils.setField(productRequest, "categoryCode", "001");
         productResponse =
             new ProductResponse(null, null, null, null, null, null, null, null, null, null, null, null, null,
-                null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null);
     }
 
     @Test
