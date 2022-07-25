@@ -29,10 +29,23 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Page<CustomerServicePost> findAllOtoInquires(Pageable pageable, String categoryId) {
+    public Page<CustomerServicePost> findAllOtoInquiries(Pageable pageable, String categoryId) {
         List<CustomerServicePost> result = from(customerServicePost)
                 .where(customerServicePost.category.id.eq(categoryId))
                 .select(selectAllCustomerServicePostColumns())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(result, pageable, result.size());
+    }
+
+    @Override
+    public Page<CustomerServicePost> findAllOwnOtoInquiries(Pageable pageable, String categoryId, Long memberId) {
+        List<CustomerServicePost> result = from(customerServicePost)
+                .where(customerServicePost.category.id.eq(categoryId))
+                .where(customerServicePost.member.id.eq(memberId))
+                .select(customerServicePost)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

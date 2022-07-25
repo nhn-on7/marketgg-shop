@@ -38,7 +38,7 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
     public List<CustomerServicePostRetrieveResponse> retrieveOtoInquiries(final Pageable pageable) {
         String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY).orElseThrow(
                 CategoryNotFoundException::new);
-        List<CustomerServicePost> otoInquiries = customerServicePostRepository.findAllOtoInquires(pageable, categoryId)
+        List<CustomerServicePost> otoInquiries = customerServicePostRepository.findAllOtoInquiries(pageable, categoryId)
                                                                               .getContent();
 
         return otoInquiries.stream()
@@ -52,5 +52,20 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
                 CustomerServicePostNotFoundException::new);
 
         customerServicePostRepository.delete(otoInquiry);
+    }
+
+    @Override
+    public List<CustomerServicePostRetrieveResponse> retrieveOwnOtoInquiries(Pageable pageable, Long memberId) {
+        String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY)
+                                              .orElseThrow(CategoryNotFoundException::new);
+
+        List<CustomerServicePost> ownOtoInquiries = customerServicePostRepository.findAllOwnOtoInquiries(pageable,
+                                                                                                         categoryId,
+                                                                                                         memberId)
+                                                                                 .getContent();
+
+        return ownOtoInquiries.stream()
+                              .map(customerServicePostMapper::toDto)
+                              .collect(Collectors.toUnmodifiableList());
     }
 }

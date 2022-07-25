@@ -10,5 +10,8 @@ public interface CustomerServicePostRepositoryCustom {
 
     CustomerServicePost findOtoInquiry(String categoryId, Long inquiryId);
 
-    Page<CustomerServicePost> findAllOtoInquires(Pageable pageable, String categoryId);
+    Page<CustomerServicePost> findAllOtoInquiries(Pageable pageable, String categoryId);
+
+    Page<CustomerServicePost> findAllOwnOtoInquiries(Pageable pageable, String categoryId, Long memberId);
+
 }

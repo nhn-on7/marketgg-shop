@@ -49,9 +49,9 @@ public class AdminCustomerServiceController {
         customerServicePostService.deleteOtoInquiry(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries" + inquiryId))
-                .contentType(MediaType.APPLICATION_JSON)
-                .build();
+                             .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries" + inquiryId))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
     }
 
 }
