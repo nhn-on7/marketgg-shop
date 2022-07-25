@@ -16,7 +16,13 @@ public class ProductResponse {
 
     private final Asset asset;
 
+    private final Long assetNo;
+
     private final Category category;
+
+    private final String categoryCode;
+
+    private final String categoryName;
 
     private final String name;
 

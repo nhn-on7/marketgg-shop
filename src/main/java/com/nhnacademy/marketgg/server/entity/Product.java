@@ -136,4 +136,8 @@ public class Product {
         this.deletedAt = LocalDateTime.now();
     }
 
+    public void restoreProduct() {
+        this.deletedAt = null;
+    }
+
 }

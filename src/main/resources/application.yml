@@ -24,9 +24,6 @@ server:
       max-file-size: 100MB
       max-request-size: 100MB
 
-# Fixme: 경로 수정하기
-# uploadPath: /Users/coalong/gh-repos/marketgg/marketgg-server/src/main/resources/static
-uploadPath: /Users/johyeonjin/Desktop/temp
 inquiryPath: /shop/v1
 
 # Fixme: Data 서버 연결 완료 시 지우기

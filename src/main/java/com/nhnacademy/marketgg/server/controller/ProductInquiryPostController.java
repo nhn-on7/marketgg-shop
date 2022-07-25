@@ -5,6 +5,7 @@ import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.service.ProductInquiryPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -57,8 +58,9 @@ public class ProductInquiryPostController {
      * @since 1.0.0
      */
     @GetMapping("/products/{productId}/inquiries")
-    public ResponseEntity<List<ProductInquiryResponse>> retrieveProductInquiryByProductId(@PathVariable final Long productId) {
-        List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService.retrieveProductInquiryByProductId(productId);
+    public ResponseEntity<List<ProductInquiryResponse>> retrieveProductInquiryByProductId(@PathVariable final Long productId,
+                                                                                          Pageable pageable) {
+        List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(defaultInquiryUri + "/products/" + productId + "/inquiries"))
@@ -74,8 +76,9 @@ public class ProductInquiryPostController {
      * @since 1.0.0
      */
     @GetMapping("/members/{memberId}/product-inquiries")
-    public ResponseEntity<List<ProductInquiryResponse>> retrieveProductInquiryByMemberId(@PathVariable final Long memberId) {
-        List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService.retrieveProductInquiryByMemberId(memberId);
+    public ResponseEntity<List<ProductInquiryResponse>> retrieveProductInquiryByMemberId(@PathVariable final Long memberId,
+                                                                                         Pageable pageable) {
+        List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService.retrieveProductInquiryByMemberId(memberId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(defaultInquiryUri + "/members/" + memberId + "/product-inquiries"))
