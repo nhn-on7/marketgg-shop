@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
+import com.nhnacademy.marketgg.server.exception.customerservicepost.CustomerServicePostNotFoundException;
 import com.nhnacademy.marketgg.server.mapper.impl.CustomerServicePostMapper;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
@@ -45,4 +46,11 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
                            .collect(Collectors.toUnmodifiableList());
     }
 
+    @Override
+    public void deleteOtoInquiry(Long inquiryId) {
+        CustomerServicePost otoInquiry = customerServicePostRepository.findById(inquiryId).orElseThrow(
+                CustomerServicePostNotFoundException::new);
+
+        customerServicePostRepository.delete(otoInquiry);
+    }
 }

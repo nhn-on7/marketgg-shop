@@ -11,4 +11,6 @@ public interface CustomerServicePostService {
 
     List<CustomerServicePostRetrieveResponse> retrieveOtoInquiries(final Pageable pageable);
 
+    void deleteOtoInquiry(Long inquiryId);
+
 }
