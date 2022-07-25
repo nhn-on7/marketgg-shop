@@ -11,12 +11,11 @@ import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddress
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.membergrade.MemberGradeRepository;
 import com.nhnacademy.marketgg.server.service.MemberService;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +43,19 @@ public class DefaultMemberService implements MemberService {
         // TODO : GG PASS 자동결제 로직 필요
 
         memberRepository.save(member);
+    }
+
+    @Override
+    public MemberResponse retrieveMember(String uuid) {
+        Member member = memberRepository.findByUuid(uuid)
+                                        .orElseThrow(MemberNotFoundException::new);
+
+        return MemberResponse.builder()
+                             .memberGrade(member.getMemberGrade())
+                             .gender(member.getGender())
+                             .birthDay(member.getBirthDate())
+                             .ggpassUpdatedAt(member.getGgpassUpdatedAt())
+                             .build();
     }
 
     @Override

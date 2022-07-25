@@ -1,9 +1,15 @@
-package com.nhnacademy.marketgg.server.controller;
+package com.nhnacademy.marketgg.server.controller.advice;
 
+import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
+import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
@@ -11,6 +17,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  *
  * @version 1.0.0
  */
+@Slf4j
+@Order
 @RestControllerAdvice
 public class GlobalControllerAdvice {
 
@@ -22,10 +30,11 @@ public class GlobalControllerAdvice {
      * @since 1.0.0
      */
     @ExceptionHandler(Exception.class)
-    @ResponseBody
-    private String handleException(final Exception ex) {
-
-        return "Error: " + ex.getMessage();
+    private ResponseEntity<ErrorEntity> handleException(final Exception ex) {
+        log.error("", ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(new ErrorEntity(ex.getMessage()));
     }
 
     /**
@@ -36,15 +45,17 @@ public class GlobalControllerAdvice {
      * @since 1.0.0
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseBody
-    private String handleNotValidException(final MethodArgumentNotValidException ex) {
+    private ResponseEntity<ErrorEntity> handleNotValidException(
+        final MethodArgumentNotValidException ex) {
+
+        log.error("", ex);
         BindingResult bindingResult = ex.getBindingResult();
 
         StringBuilder builder = new StringBuilder();
+        builder.append("[Valid Error]\n");
 
         if (bindingResult.hasErrors()) {
-            builder.append("[Valid Error]\n")
-                   .append("Reason: ")
+            builder.append("Reason: ")
                    .append(bindingResult.getFieldError().getDefaultMessage())
                    .append("\n")
                    .append("At: ")
@@ -58,7 +69,9 @@ public class GlobalControllerAdvice {
                    .append("\n");
         }
 
-        return builder.toString();
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(new ErrorEntity(builder.toString()));
     }
 
 }

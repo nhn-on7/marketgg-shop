@@ -12,6 +12,12 @@ import java.util.Optional;
  */
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 
-    Optional<Member> findByUuid(String referrerUuid);
+    /**
+     * UUID 로 사용자를 조회합니다.
+     *
+     * @param uuid - 조회하려는 사용자의 UUID
+     * @return - 사용자 엔티티 반환
+     */
+    Optional<Member> findByUuid(String uuid);
 
 }
