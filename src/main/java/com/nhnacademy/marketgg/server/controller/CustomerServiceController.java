@@ -23,8 +23,18 @@ public class CustomerServiceController {
 
     private static final String DEFAULT_CUSTOMER_SERVICE = "/shop/v1/admin/customer-services";
 
+    @GetMapping("/oto-inquiries/{inquiryId}/members/{memberId}")
+    public ResponseEntity<CustomerServicePostRetrieveResponse> retrieveOwnOtoInquiry(@PathVariable final Long inquiryId,
+                                                                                     @PathVariable final Long memberId) {
+        CustomerServicePostRetrieveResponse inquiryResponse = customerServicePostService.retrieveOwnOtoInquiry(inquiryId, memberId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .location(URI.create(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId + "/members/" + memberId))
+                .body(inquiryResponse);
+    }
+
     @GetMapping("/oto-inquiries/members/{memberId}")
-    public ResponseEntity<List<CustomerServicePostRetrieveResponse>> retrieveOwnCustomerServicePost(@PathVariable final Long memberId,
+    public ResponseEntity<List<CustomerServicePostRetrieveResponse>> retrieveOwnOtoInquiries(@PathVariable final Long memberId,
                                                                                                     final Pageable pageable) {
         List<CustomerServicePostRetrieveResponse> inquiryResponses = customerServicePostService.retrieveOwnOtoInquiries(pageable, memberId);
 

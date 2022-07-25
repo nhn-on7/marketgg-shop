@@ -27,9 +27,7 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
 
     @Override
     public CustomerServicePostRetrieveResponse retrieveOtoInquiry(Long inquiryId) {
-        String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY).orElseThrow(
-                CategoryNotFoundException::new);
-        CustomerServicePost otoInquiry = customerServicePostRepository.findOtoInquiry(categoryId, inquiryId);
+        CustomerServicePost otoInquiry = customerServicePostRepository.findOtoInquiry(inquiryId);
 
         return customerServicePostMapper.toDto(otoInquiry);
     }
@@ -68,4 +66,12 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
                               .map(customerServicePostMapper::toDto)
                               .collect(Collectors.toUnmodifiableList());
     }
+
+    @Override
+    public CustomerServicePostRetrieveResponse retrieveOwnOtoInquiry(Long inquiryId, Long memberId) {
+        CustomerServicePost ownOtoInquiry = customerServicePostRepository.findOwnOtoInquiry(inquiryId, memberId);
+
+        return customerServicePostMapper.toDto(ownOtoInquiry);
+    }
+
 }

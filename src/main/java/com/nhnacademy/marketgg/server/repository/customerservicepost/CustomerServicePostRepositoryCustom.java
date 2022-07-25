@@ -8,10 +8,12 @@ import org.springframework.data.repository.NoRepositoryBean;
 @NoRepositoryBean
 public interface CustomerServicePostRepositoryCustom {
 
-    CustomerServicePost findOtoInquiry(String categoryId, Long inquiryId);
+    CustomerServicePost findOtoInquiry(Long inquiryId);
 
     Page<CustomerServicePost> findAllOtoInquiries(Pageable pageable, String categoryId);
 
     Page<CustomerServicePost> findAllOwnOtoInquiries(Pageable pageable, String categoryId, Long memberId);
+
+    CustomerServicePost findOwnOtoInquiry(Long inquiryId, Long memberId);
 
 }

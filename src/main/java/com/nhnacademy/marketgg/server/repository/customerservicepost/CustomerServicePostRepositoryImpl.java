@@ -20,9 +20,8 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public CustomerServicePost findOtoInquiry(String categoryId, Long inquiryId) {
+    public CustomerServicePost findOtoInquiry(Long inquiryId) {
         return from(customerServicePost)
-                .where(customerServicePost.category.id.eq(categoryId))
                 .where(customerServicePost.id.eq(inquiryId))
                 .select(customerServicePost)
                 .fetchOne();
@@ -51,6 +50,15 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
                 .fetch();
 
         return new PageImpl<>(result, pageable, result.size());
+    }
+
+    @Override
+    public CustomerServicePost findOwnOtoInquiry(Long inquiryId, Long memberId) {
+        return from(customerServicePost)
+                .where(customerServicePost.id.eq(inquiryId))
+                .where(customerServicePost.member.id.eq(memberId))
+                .select(selectAllCustomerServicePostColumns())
+                .fetchOne();
     }
 
     private ConstructorExpression<CustomerServicePost> selectAllCustomerServicePostColumns() {

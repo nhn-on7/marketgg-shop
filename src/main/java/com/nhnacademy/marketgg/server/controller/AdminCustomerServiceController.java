@@ -30,7 +30,7 @@ public class AdminCustomerServiceController {
         CustomerServicePostRetrieveResponse inquiryResponse = customerServicePostService.retrieveOtoInquiry(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries" + inquiryId))
+                             .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
                              .body(inquiryResponse);
     }
 
@@ -40,7 +40,7 @@ public class AdminCustomerServiceController {
                 pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "oto-inquiries"))
+                             .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries"))
                              .body(inquiryResponses);
     }
 
@@ -49,7 +49,7 @@ public class AdminCustomerServiceController {
         customerServicePostService.deleteOtoInquiry(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries" + inquiryId))
+                             .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

@@ -15,4 +15,6 @@ public interface CustomerServicePostService {
 
     List<CustomerServicePostRetrieveResponse> retrieveOwnOtoInquiries(Pageable pageable, Long memberId);
 
+    CustomerServicePostRetrieveResponse retrieveOwnOtoInquiry(Long inquiryId, Long memberId);
+
 }
