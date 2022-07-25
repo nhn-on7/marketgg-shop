@@ -24,6 +24,3 @@ server:
 #uploadPath: /Users/coalong/gh-repos/marketgg/marketgg-server/src/main/resources/static
 uploadPath: /Users/johyeonjin/Desktop/temp
 inquiryPath: /shop/v1
-
-mysql:
-  secret-url: https://api-keymanager.cloud.toast.com/keymanager/v1.0/appkey/mcXcTmrnbRezlila/secrets/e2a74e64b4644e4a8180f431a5b8ad89
