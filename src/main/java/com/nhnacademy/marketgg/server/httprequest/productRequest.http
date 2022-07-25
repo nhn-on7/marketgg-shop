@@ -15,3 +15,7 @@ Content-Type: application/json
 
 GET http://localhost:7080/admin/v1/products/100/001
 Content-Type: application/json
+
+###
+
+DELETE http://localhost:7080/shop/v1/admin/products/8

@@ -1,28 +1,8 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.service.ProductService;
-import java.io.FileInputStream;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Objects;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,6 +14,18 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.io.FileInputStream;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Objects;
+
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProductAdminController.class)
 @ActiveProfiles("local")
@@ -66,16 +58,16 @@ class ProductAdminControllerTest {
         String filePath = Objects.requireNonNull(url).getPath();
 
         MockMultipartFile file =
-            new MockMultipartFile("image", "lee.png", "image/png", new FileInputStream(filePath));
+                new MockMultipartFile("image", "lee.png", "image/png", new FileInputStream(filePath));
 
         MockMultipartFile dto = new MockMultipartFile("productRequest", "jsondata", "application/json",
-            content.getBytes(StandardCharsets.UTF_8));
+                content.getBytes(StandardCharsets.UTF_8));
 
         this.mockMvc.perform(multipart(DEFAULT_PRODUCT).file(dto)
-                                                            .file(file)
-                                                            .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                                            .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                                                            .characterEncoding(StandardCharsets.UTF_8))
+                                                       .file(file)
+                                                       .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                                       .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                                                       .characterEncoding(StandardCharsets.UTF_8))
                     .andExpect(status().isCreated())
                     .andExpect(header().string("Location", DEFAULT_PRODUCT));
 
@@ -98,21 +90,21 @@ class ProductAdminControllerTest {
     void testUpdateProduct() throws Exception {
         String content = this.objectMapper.writeValueAsString(productRequest);
         MockMultipartFile dto = new MockMultipartFile("productRequest", "jsondata", "application/json",
-            content.getBytes(StandardCharsets.UTF_8));
+                content.getBytes(StandardCharsets.UTF_8));
 
         URL url = getClass().getClassLoader().getResource("lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile file =
-            new MockMultipartFile("image", "lee.png", "image/png", new FileInputStream(filePath));
+                new MockMultipartFile("image", "lee.png", "image/png", new FileInputStream(filePath));
 
         this.mockMvc.perform(multipart(DEFAULT_PRODUCT + "/{productId}", 1L).file(dto)
                                                                             .file(file)
                                                                             .contentType(
-                                                                                MediaType.APPLICATION_JSON)
+                                                                                    MediaType.APPLICATION_JSON)
                                                                             .contentType(
-                                                                                MediaType.MULTIPART_FORM_DATA)
+                                                                                    MediaType.MULTIPART_FORM_DATA)
                                                                             .characterEncoding(
-                                                                                StandardCharsets.UTF_8))
+                                                                                    StandardCharsets.UTF_8))
                     .andExpect(status().isOk());
     }
 
@@ -121,7 +113,7 @@ class ProductAdminControllerTest {
     void testDeleteProduct() throws Exception {
         doNothing().when(this.productService).deleteProduct(anyLong());
 
-        this.mockMvc.perform(post(DEFAULT_PRODUCT + "/{productId}/delete", 1L)).andExpect(status().isOk());
+        this.mockMvc.perform(delete(DEFAULT_PRODUCT + "/{productId}", 1L)).andExpect(status().isOk());
         verify(this.productService, times(1)).deleteProduct(anyLong());
     }
 
@@ -131,7 +123,7 @@ class ProductAdminControllerTest {
         when(this.productService.searchProductsByName(anyString())).thenReturn(List.of());
 
         this.mockMvc.perform(
-                get(DEFAULT_PRODUCT + "/search/{productName}", "오렌지").contentType(MediaType.APPLICATION_JSON))
+                    get(DEFAULT_PRODUCT + "/search/{productName}", "오렌지").contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
