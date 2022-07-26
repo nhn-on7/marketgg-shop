@@ -1,10 +1,9 @@
 package com.nhnacademy.marketgg.server.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
-import com.nhnacademy.marketgg.server.dto.response.temp.PageListResponse;
+import com.nhnacademy.marketgg.server.dto.response.temp.PageResponse;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -35,7 +34,7 @@ public interface ProductService {
      * @since 1.0.0
      */
 
-    PageListResponse<ProductResponse> retrieveProducts(Pageable pageable);
+    PageResponse<ProductResponse> retrieveProducts(Pageable pageable);
 
     /**
      * 상품 Id를 통해 상세 정보를 조회합니다.

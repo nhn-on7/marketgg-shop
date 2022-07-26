@@ -1,16 +1,16 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.temp.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.temp.PageListResponse;
+import com.nhnacademy.marketgg.server.dto.response.temp.PageResponse;
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -68,9 +68,8 @@ public class ProductAdminController {
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<? extends CommonResponse> retrieveProducts() {
-        PageRequest pageRequest = PageRequest.of(0, 3);
-        PageListResponse<ProductResponse> productList = this.productService.retrieveProducts(pageRequest);
+    public ResponseEntity<? extends CommonResponse> retrieveProducts(DefaultPageRequest pageRequest) {
+        PageResponse<ProductResponse> productList = this.productService.retrieveProducts(pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT))

@@ -1,13 +1,9 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
-import com.nhnacademy.marketgg.server.dto.response.temp.PageListResponse;
+import com.nhnacademy.marketgg.server.dto.response.temp.PageResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Image;
@@ -26,9 +22,7 @@ import com.nhnacademy.marketgg.server.repository.productlabel.ProductLabelReposi
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -47,7 +41,6 @@ public class DefaultProductService implements ProductService {
     private final ImageRepository imageRepository;
     private final ProductLabelRepository productLabelRepository;
     private final LabelRepository labelRepository;
-    private final ObjectMapper objectMapper;
 
     private static final String dir = System.getProperty("user.home");
 
@@ -65,17 +58,15 @@ public class DefaultProductService implements ProductService {
 
         ProductLabel.Pk pk = new ProductLabel.Pk(product.getId(), productRequest.getLabelNo());
         Label label = labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);
-        ;
 
         this.productLabelRepository.save(new ProductLabel(pk, product, label));
-
     }
 
     @Override
-    public PageListResponse<ProductResponse> retrieveProducts(final Pageable pageable) {
+    public PageResponse<ProductResponse> retrieveProducts(final Pageable pageable) {
         Page<ProductResponse> products = productRepository.findAllProducts(pageable);
 
-        return new PageListResponse<>(products.getContent(), products.getNumber(), products.getSize(), products.getTotalElements());
+        return new PageResponse<>(products.getContent(), products.getNumber(), products.getSize(), products.getTotalElements());
     }
 
     @Override
