@@ -43,6 +43,6 @@ public interface ProductRepositoryCustom {
      * @param categoryCode - 카테고리 2차 분류입니다. ex) 101 - 채소
      * @return - 상품 목록을 반환합니다.
      */
-    Page<ProductResponse> findByCategoryCode(final String categoryCode, Pageable pageable);
+    List<ProductResponse> findByCategoryCode(final String categoryCode);
 
 }

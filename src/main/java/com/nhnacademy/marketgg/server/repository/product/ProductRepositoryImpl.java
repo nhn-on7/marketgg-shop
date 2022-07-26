@@ -22,11 +22,10 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     public Page<ProductResponse> findAllProducts(final Pageable pageable) {
         QProduct product = QProduct.product;
 
-        QueryResults<ProductResponse> result = from(product)
-            .select(selectAllProductColumns())
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetchResults();
+        QueryResults<ProductResponse> result = from(product).select(selectAllProductColumns())
+                                                            .offset(pageable.getOffset())
+                                                            .limit(pageable.getPageSize())
+                                                            .fetchResults();
 
         return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
@@ -35,61 +34,34 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     public ProductResponse queryById(final Long id) {
         QProduct product = QProduct.product;
 
-        return from(product)
-            .select(selectAllProductColumns())
-            .where(product.id.eq(id))
-            .fetchOne();
+        return from(product).select(selectAllProductColumns()).where(product.id.eq(id)).fetchOne();
     }
 
     @Override
     public List<ProductResponse> findByNameContaining(final String keyword) {
         QProduct product = QProduct.product;
 
-        return from(product)
-            .select(selectAllProductColumns())
-            .where(product.name.contains(keyword))
-            .fetch();
+        return from(product).select(selectAllProductColumns()).where(product.name.contains(keyword)).fetch();
     }
 
     @Override
-    public Page<ProductResponse> findByCategoryCode(final String categoryCode, final Pageable pageable) {
+    public List<ProductResponse> findByCategoryCode(final String categoryCode) {
         QProduct product = QProduct.product;
 
-        List<ProductResponse> result = from(product)
-            .select(selectAllProductColumns())
-            .where(product.category.id.eq(categoryCode))
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetch();
 
-        return new PageImpl<>(result, pageable, result.size());
+        return from(product).select(selectAllProductColumns())
+                            .where(product.category.id.eq(categoryCode))
+                            .fetch();
     }
 
     private ConstructorExpression<ProductResponse> selectAllProductColumns() {
         QProduct product = QProduct.product;
 
-        return Projections.constructor(ProductResponse.class,
-            product.id,
-            product.asset,
-            product.asset.id,
-            product.category,
-            product.category.id,
-            product.category.name,
-            product.name,
-            product.content,
-            product.totalStock,
-            product.price,
-            product.description,
-            product.unit,
-            product.deliveryType,
-            product.origin,
-            product.packageType,
-            product.expirationDate,
-            product.allergyInfo,
-            product.capacity,
-            product.createdAt,
-            product.updatedAt,
-            product.deletedAt);
+        return Projections.constructor(ProductResponse.class, product.id, product.asset, product.asset.id,
+            product.category, product.category.id, product.category.name, product.name, product.content,
+            product.totalStock, product.price, product.description, product.unit, product.deliveryType,
+            product.origin, product.packageType, product.expirationDate, product.allergyInfo,
+            product.capacity, product.createdAt, product.updatedAt, product.deletedAt);
     }
 
 }

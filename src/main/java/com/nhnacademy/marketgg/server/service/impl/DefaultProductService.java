@@ -115,8 +115,8 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public Page<ProductResponse> searchProductByCategory(final String categoryCode, final Pageable pageable) {
-        return productRepository.findByCategoryCode(categoryCode, pageable);
+    public List<ProductResponse> searchProductByCategory(final String categoryCode) {
+        return productRepository.findByCategoryCode(categoryCode);
 
     }
 
