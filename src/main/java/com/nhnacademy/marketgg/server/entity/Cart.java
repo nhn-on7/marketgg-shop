@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,7 +42,15 @@ public class Cart {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    public Cart(Member member, Product product, Integer amount) {
+        this.pk= new Pk(member.getId(), product.getId());
+        this.member = member;
+        this.product = product;
+        this.amount = amount;
+    }
+
     @Embeddable
+    @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
     @EqualsAndHashCode
