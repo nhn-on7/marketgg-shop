@@ -33,12 +33,18 @@ public class Dummy {
         return memberCreateRequest;
     }
 
-    public static Member getDummyMember() {
-        return new Member(getDummyMemberCreateRequest(""));
+    public static Member getDummyMember(Long id) {
+        Member member = new Member(getDummyMemberCreateRequest(""));
+        ReflectionTestUtils.setField(member, "id", id);
+
+        return member;
     }
 
-    public static Member getDummyMember(String uuid) {
-        return new Member(getDummyMemberCreateRequest(uuid));
+    public static Member getDummyMember(String uuid, Long id) {
+        Member member = new Member(getDummyMemberCreateRequest(uuid));
+        ReflectionTestUtils.setField(member, "id", id);
+
+        return member;
     }
 
     public static ProductCreateRequest getDummyProductCreateRequest() {
@@ -93,8 +99,10 @@ public class Dummy {
     }
 
     public static Product getDummyProduct(Long productId) {
-        Product product =new Product(getDummyProductCreateRequest(), getDummyAsset(), getDummyCategory());
+        Product product =
+            new Product(getDummyProductCreateRequest(), getDummyAsset(), getDummyCategory());
         ReflectionTestUtils.setField(product, "id", productId);
+
         return product;
     }
 

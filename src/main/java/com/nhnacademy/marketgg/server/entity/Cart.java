@@ -49,6 +49,10 @@ public class Cart {
         this.amount = amount;
     }
 
+    public void updateAmount(Integer amount) {
+        this.amount = amount;
+    }
+
     @Embeddable
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)

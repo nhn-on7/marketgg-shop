@@ -1,8 +1,10 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -11,6 +13,7 @@ import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Product;
+import com.nhnacademy.marketgg.server.exception.cart.CartNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.cart.CartRepository;
@@ -50,7 +53,7 @@ class DefaultCartServiceTest {
         ProductToCartRequest productAddRequest = Dummy.getDummyProductToCartRequest(productId);
 
         Product product = Dummy.getDummyProduct(productId);
-        Member member = Dummy.getDummyMember(uuid);
+        Member member = Dummy.getDummyMember(uuid, 1L);
 
         given(productRepository.findById(productId)).willReturn(Optional.of(product));
         given(memberRepository.findByUuid(uuid)).willReturn(Optional.of(member));
@@ -88,6 +91,50 @@ class DefaultCartServiceTest {
         assertThatThrownBy(() -> cartService.addProduct(uuid, productAddRequest))
             .isInstanceOf(MemberNotFoundException.class);
         verify(memberRepository, times(1)).findByUuid(uuid);
+    }
+
+    @Test
+    @DisplayName("장바구니에 담긴 상품 수량 변경")
+    void testUpdateAmount() {
+        ProductToCartRequest productUpdateRequest = Dummy.getDummyProductToCartRequest(productId);
+
+        Product product = Dummy.getDummyProduct(productId);
+        Member member = Dummy.getDummyMember(uuid, 1L);
+        Cart.Pk cartPk = new Cart.Pk(productId, member.getId());
+        Cart cart = spy(new Cart(member, product, 1));
+
+        given(productRepository.findById(productId)).willReturn(Optional.of(product));
+        given(memberRepository.findByUuid(uuid)).willReturn(Optional.of(member));
+        given(cartRepository.findById(cartPk)).willReturn(Optional.of(cart));
+
+        cartService.updateAmount(uuid, productUpdateRequest);
+
+        verify(productRepository, times(1)).findById(productId);
+        verify(memberRepository, times(1)).findByUuid(uuid);
+        verify(cartRepository, times(1)).findById(cartPk);
+        verify(cart, times(1)).updateAmount(productUpdateRequest.getAmount());
+        assertThat(cart.getAmount()).isEqualTo(productUpdateRequest.getAmount());
+    }
+
+    @Test
+    @DisplayName("장바구니에 없는 상품 수량 변경")
+    void testUpdateAmountFail() {
+        ProductToCartRequest productUpdateRequest = Dummy.getDummyProductToCartRequest(productId);
+
+        Product product = Dummy.getDummyProduct(productId);
+        Member member = Dummy.getDummyMember(uuid, 1L);
+        Cart.Pk cartPk = new Cart.Pk(productId, member.getId());
+
+        given(productRepository.findById(productId)).willReturn(Optional.of(product));
+        given(memberRepository.findByUuid(uuid)).willReturn(Optional.of(member));
+        given(cartRepository.findById(cartPk)).willReturn(Optional.empty());
+
+        assertThatThrownBy(() -> cartService.updateAmount(uuid, productUpdateRequest))
+            .isInstanceOf(CartNotFoundException.class);
+
+        verify(productRepository, times(1)).findById(productId);
+        verify(memberRepository, times(1)).findByUuid(uuid);
+        verify(cartRepository, times(1)).findById(cartPk);
     }
 
 }
