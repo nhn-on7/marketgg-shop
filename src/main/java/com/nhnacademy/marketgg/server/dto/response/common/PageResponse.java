@@ -1,5 +1,6 @@
-package com.nhnacademy.marketgg.server.dto.response.temp;
+package com.nhnacademy.marketgg.server.dto.response.common;
 
+import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -4,8 +4,9 @@ import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
-import com.nhnacademy.marketgg.server.dto.response.temp.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.temp.PageResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.PageResponse;
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.IOException;
 import java.net.URI;
@@ -69,7 +70,8 @@ public class ProductAdminController {
      */
     @GetMapping
     public ResponseEntity<? extends CommonResponse> retrieveProducts(DefaultPageRequest pageRequest) {
-        PageResponse<ProductResponse> productList = this.productService.retrieveProducts(pageRequest.getPageable());
+        PageResponse<ProductResponse> productList =
+            this.productService.retrieveProducts(pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT))
@@ -85,13 +87,15 @@ public class ProductAdminController {
      * @since 1.0.0
      */
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductResponse> retrieveProductDetails(@PathVariable final Long productId) {
-        ProductResponse productDetails = this.productService.retrieveProductDetails(productId);
+    public ResponseEntity<? extends CommonResponse> retrieveProductDetails(
+        @PathVariable final Long productId) {
+
+        SingleResponse<ProductResponse> response = this.productService.retrieveProductDetails(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(productDetails);
+                             .body(response);
     }
 
     /**

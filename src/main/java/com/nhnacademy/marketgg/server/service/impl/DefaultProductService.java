@@ -3,7 +3,8 @@ package com.nhnacademy.marketgg.server.service.impl;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
-import com.nhnacademy.marketgg.server.dto.response.temp.PageResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.PageResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Image;
@@ -70,8 +71,9 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public ProductResponse retrieveProductDetails(final Long productId) {
-        return this.productRepository.queryById(productId);
+    public SingleResponse<ProductResponse> retrieveProductDetails(final Long productId) {
+
+        return new SingleResponse<>(this.productRepository.queryById(productId));
     }
 
     @Transactional

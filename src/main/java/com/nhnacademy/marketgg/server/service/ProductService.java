@@ -3,7 +3,8 @@ package com.nhnacademy.marketgg.server.service;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
-import com.nhnacademy.marketgg.server.dto.response.temp.PageResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.PageResponse;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -43,7 +44,7 @@ public interface ProductService {
      * @return - PK에 해당하는 상품을 반환합니다.
      * @since 1.0.0
      */
-    ProductResponse retrieveProductDetails(final Long productId);
+    SingleResponse<ProductResponse> retrieveProductDetails(final Long productId);
 
     /**
      * 상품 id를 인자로 받아 해당 상품이 존재할 경우 수정합니다.
