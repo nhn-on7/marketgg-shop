@@ -33,7 +33,7 @@ public class CustomerServiceComment {
 
     @ManyToOne
     @JoinColumn(name = "cs_post_no")
-    private CustomerServicePost csPostId;
+    private CustomerServicePost customerServicePost;
 
     @ManyToOne
     @JoinColumn(name = "member_no")

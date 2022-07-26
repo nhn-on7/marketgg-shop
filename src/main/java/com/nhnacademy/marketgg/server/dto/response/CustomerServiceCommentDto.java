@@ -17,7 +17,7 @@ public class CustomerServiceCommentDto {
 
     private Long id;
 
-    private CustomerServicePost csPost;
+    private CustomerServicePost customerServicePost;
 
     private Member member;
 
