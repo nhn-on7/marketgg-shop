@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.atLeastOnce;
@@ -16,6 +17,8 @@ import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.PageResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
@@ -35,11 +38,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,10 +77,9 @@ class DefaultProductServiceTest {
 
     @BeforeAll
     static void beforeAll() {
-        productResponse = new ProductResponse(null, null, null, null, null,
-            null, null, null, null, null,
-            null, null, null, null, null,
-            null, null,null, null, null, null);
+        productResponse =
+            new ProductResponse(null, null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null, null, null, null, null, null, null);
 
         productRequest = new ProductCreateRequest();
         ReflectionTestUtils.setField(productRequest, "categoryCode", "001");
@@ -148,25 +151,30 @@ class DefaultProductServiceTest {
             "카테고리를 찾을 수 없습니다.");
     }
 
-    // @Test
-    // @DisplayName("상품 목록 조회 테스트")
-    // void testRetrieveProducts() {
-    //     when(productRepository.findAllProducts()).thenReturn(List.of(productResponse));
-    //
-    //     List<ProductResponse> productResponses = productService.retrieveProducts();
-    //     assertThat(productResponses).isNotNull();
-    //     verify(productRepository, atLeastOnce()).findAllProducts();
-    // }
+    @Test
+    @DisplayName("상품 목록 조회 테스트")
+    void testRetrieveProducts() {
+        List<ProductResponse> list = List.of(productResponse);
+        given(productRepository.findAllProducts(PageRequest.of(0, 1))).willReturn(
+            new PageImpl<>(list, PageRequest.of(0, 1), 1));
 
-    // @Test
-    // @DisplayName("상품 상세 조회 테스트")
-    // void testRetrieveProductDetails() {
-    //     when(productRepository.queryById(anyLong())).thenReturn(productResponse);
-    //
-    //     ProductResponse productResponse = productService.retrieveProductDetails(anyLong());
-    //     assertThat(productResponse).isNotNull();
-    //     verify(productRepository, atLeastOnce()).queryById(anyLong());
-    // }
+        PageResponse<ProductResponse> productResponses =
+            productService.retrieveProducts(PageRequest.of(0, 1));
+
+        assertThat(productResponses).isNotNull();
+        then(productRepository).should().findAllProducts(any(PageRequest.class));
+    }
+
+    @Test
+    @DisplayName("상품 상세 조회 테스트")
+    void testRetrieveProductDetails() {
+        given(productRepository.queryById(anyLong())).willReturn(productResponse);
+
+        SingleResponse<ProductResponse> productResponse = productService.retrieveProductDetails(anyLong());
+
+        assertThat(productResponse).isNotNull();
+        verify(productRepository, atLeastOnce()).queryById(anyLong());
+    }
 
     @Test
     @DisplayName("상품 정보 수정 성공 테스트")
@@ -233,15 +241,15 @@ class DefaultProductServiceTest {
         verify(productRepository, times(1)).findByNameContaining(anyString());
     }
 
-    // @Test
-    // @DisplayName("카테고리 코드로 상품 목록 조회 테스트")
-    // void testSearchProductsByCategoryCode() {
-    //     BDDMockito.given(productRepository.findByCategoryCode(anyString()))
-    //               .willReturn(List.of(productResponse));
-    //
-    //     productService.searchProductByCategory("101");
-    //
-    //     verify(productRepository, atLeastOnce()).findByCategoryCode(anyString());
-    // }
+    @Test
+    @DisplayName("카테고리 코드로 상품 목록 조회 테스트")
+    void testSearchProductsByCategoryCode() {
+        given(productRepository.findByCategoryCode(anyString()))
+            .willReturn(List.of(productResponse));
+
+        productService.searchProductByCategory("101");
+
+        verify(productRepository, atLeastOnce()).findByCategoryCode(anyString());
+    }
 
 }
