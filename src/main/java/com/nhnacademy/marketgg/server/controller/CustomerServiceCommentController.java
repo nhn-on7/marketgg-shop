@@ -45,7 +45,7 @@ public class CustomerServiceCommentController {
                                               @RequestBody final CustomerServiceCommentDto customerServiceCommentDto) {
         customerServiceCommentService.createComment(inquiryId, memberId, customerServiceCommentDto);
 
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_CS_COMMENT + "/" + inquiryId + "/members/" + memberId + "/comments"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();

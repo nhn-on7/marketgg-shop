@@ -72,7 +72,7 @@ public class AdminCustomerServicePostController {
      * @return Mapping URI 를 담은 응답객체를 반환합니다.
      * @since 1.0.0
      */
-    @DeleteMapping("oto-inquiries/{inquiryId}")
+    @DeleteMapping("/oto-inquiries/{inquiryId}")
     public ResponseEntity<Void> deleteOtoInquiries(@PathVariable final Long inquiryId) {
         customerServicePostService.deleteCustomerServicePost(inquiryId);
 
