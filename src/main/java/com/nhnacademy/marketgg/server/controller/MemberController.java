@@ -4,6 +4,8 @@ import static org.springframework.http.HttpStatus.OK;
 
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
+import com.nhnacademy.marketgg.server.annotation.UUID;
+import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
 import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -85,11 +88,9 @@ public class MemberController {
     public ResponseEntity<Void> withdrawPass(@PathVariable final Long memberId) {
         memberService.withdrawPass(memberId);
 
-        return ResponseEntity.status(OK)
-                             .location(URI.create("/shop/v1/members/" + memberId + "/ggpass/withdraw"))
+        return ResponseEntity.status(OK).location(URI.create("/shop/v1/members/" + memberId + "/ggpass/withdraw"))
 
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .contentType(MediaType.APPLICATION_JSON).build();
     }
 
     /**
@@ -118,7 +119,6 @@ public class MemberController {
      * @since 1.0.0
      */
     @PostMapping("/signup")
-
     public ResponseEntity<Void> doSignUp(@RequestBody final ShopMemberSignUpRequest shopMemberSignUpRequest) {
         ShopMemberSignUpResponse signUp = memberService.signUp(shopMemberSignUpRequest);
 
@@ -132,6 +132,22 @@ public class MemberController {
 
         return ResponseEntity.status(OK)
                              .location(URI.create("/shop/v1/members/signup"))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
+    }
+
+    /**
+     * Shop-Server 회원 Soft 삭제를 위한 메소드 입니다.
+     *
+     * @param uuid - 회원탈퇴를 신청한 회원입니다.
+     * @param memberWithdrawRequest - 회원탈퇴 시점을 가지고 있는 객체 입니다.
+     * @return - 상태코드를 반환합니다.
+     */
+    @DeleteMapping
+    public ResponseEntity<Void> withdraw(@UUID String uuid, final MemberWithdrawRequest memberWithdrawRequest) {
+        memberService.withdraw(uuid, memberWithdrawRequest);
+        return ResponseEntity.status(OK)
+                             .location(URI.create("/shop/v1/members"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
