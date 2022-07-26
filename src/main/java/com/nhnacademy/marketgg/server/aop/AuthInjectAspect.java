@@ -7,9 +7,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.AuthInfo;
-import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.util.JwtUtils;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
@@ -42,7 +42,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @RequiredArgsConstructor
 public class AuthInjectAspect {
 
-    @Value("${gateway.origin}")
+    @Value("${gg.gateway.origin}")
     private String gateway;
 
     private final RestTemplate restTemplate;
@@ -59,12 +59,10 @@ public class AuthInjectAspect {
     public Object authInject(ProceedingJoinPoint pjp) throws Throwable {
         log.info("Method: {}", pjp.getSignature().getName());
 
-        ServletRequestAttributes requestAttributes =
-            (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = requestAttributes.getRequest();
+        HttpServletRequest request = AspectUtils.getRequest();
 
         String jwt = request.getHeader(AUTHORIZATION);
-        String uuid = request.getHeader("WWW-Authentication");
+        String uuid = request.getHeader(JwtUtils.AUTH_ID);
 
         if (Objects.isNull(jwt) || Objects.isNull(uuid)) {
             throw new IllegalArgumentException();

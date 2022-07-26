@@ -26,6 +26,8 @@ server:
 
 inquiryPath: /shop/v1
 
-gateway:
-  origin: http://localhost:6060
+gg:
+  gateway:
+    origin: http://localhost:6060
+
   

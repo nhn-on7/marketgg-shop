@@ -6,6 +6,7 @@ import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.exception.auth.UnAuthenticException;
 import com.nhnacademy.marketgg.server.exception.auth.UnAuthorizationException;
+import com.nhnacademy.marketgg.server.util.JwtUtils;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -50,14 +51,12 @@ public class RoleCheckAspect {
 
         log.info("Role Check AOP");
 
-        ServletRequestAttributes requestAttributes =
-            (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = requestAttributes.getRequest();
+        HttpServletRequest request = AspectUtils.getRequest();
 
         MethodSignature signature = (MethodSignature) jp.getSignature();
 
-        String roleHeader = request.getHeader("WWW-Authentication");
-        String uuid = request.getHeader("AUTH-ID");
+        String roleHeader = request.getHeader(JwtUtils.WWW_AUTHENTICATION);
+        String uuid = request.getHeader(JwtUtils.AUTH_ID);
 
         if (Objects.isNull(roleHeader) && Objects.isNull(uuid)) {
             if (Objects.equals(roleCheck.accessLevel(), Role.LOGIN)) {

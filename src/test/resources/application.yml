@@ -13,3 +13,7 @@ spring:
       ddl-auto: update
 
     generate-ddl: true
+
+gg:
+  gateway:
+    origin: http://localhost:6060
