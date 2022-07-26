@@ -7,11 +7,26 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface CustomerServicePostRepositoryCustom {
-    
-    Page<CustomerServicePost> findAllOtoInquiries(Pageable pageable, String categoryId);
 
-    Page<CustomerServicePost> findAllOwnOtoInquiries(Pageable pageable, String categoryId, Long memberId);
+    /**
+     * 카테고리 번호에 따라 고객센터 게시글(공지사항, 1:1문의, FAQ) 목록을 조회하는 메소드입니다.
+     *
+     * @param pageable - 페이징 처리를 위한 객체입니다.
+     * @param categoryId - 조회할 게시글 목록의 카테고리 식별번호입니다.
+     * @return 카테고리 번호에 따른 게시글 목록을 Page 로 반환합니다.
+     * @since 1.0.0
+     */
+    Page<CustomerServicePost> findPostByCategoryId(Pageable pageable, String categoryId);
 
-    CustomerServicePost findOwnOtoInquiry(Long inquiryId, Long memberId);
+    /**
+     * 카테고리 번호와 회원 번호에 따라 고객센터 게시글 목록을 조회하는 메소드입니다.
+     *
+     * @param pageable - 페이징 처리를 위한 객체입니다.
+     * @param categoryId - 조회할 게시글 목록의 카테고리 식별번호입니다.
+     * @param memberId - 조회할 게시글 목록의 작성자인 회원의 식별번호입니다.
+     * @return 카테고리 번호와 회원 번호에 따른 게시글 목록을 Page 로 반환합니다.
+     * @since 1.0.0
+     */
+    Page<CustomerServicePost> findPostByCategoryAndMember(Pageable pageable, String categoryId, Long memberId);
 
 }

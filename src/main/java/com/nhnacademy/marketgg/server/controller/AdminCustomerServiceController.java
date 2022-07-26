@@ -39,7 +39,7 @@ public class AdminCustomerServiceController {
      */
     @GetMapping("/oto-inquiries/{inquiryId}")
     public ResponseEntity<CustomerServicePostDto> retrieveOtoInquiry(@PathVariable final Long inquiryId) {
-        CustomerServicePostDto inquiryResponse = customerServicePostService.retrieveOtoInquiry(inquiryId);
+        CustomerServicePostDto inquiryResponse = customerServicePostService.retrieveCustomerServicePost(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
@@ -72,7 +72,7 @@ public class AdminCustomerServiceController {
      */
     @DeleteMapping("oto-inquiries/{inquiryId}")
     public ResponseEntity<Void> deleteOtoInquiries(@PathVariable final Long inquiryId) {
-        customerServicePostService.deleteOtoInquiry(inquiryId);
+        customerServicePostService.deleteCustomerServicePost(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))

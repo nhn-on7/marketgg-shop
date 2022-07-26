@@ -20,7 +20,7 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Page<CustomerServicePost> findAllOtoInquiries(Pageable pageable, String categoryId) {
+    public Page<CustomerServicePost> findPostByCategoryId(Pageable pageable, String categoryId) {
         List<CustomerServicePost> result = from(customerServicePost)
                 .where(customerServicePost.category.id.eq(categoryId))
                 .select(selectAllCustomerServicePostColumns())
@@ -32,7 +32,7 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Page<CustomerServicePost> findAllOwnOtoInquiries(Pageable pageable, String categoryId, Long memberId) {
+    public Page<CustomerServicePost> findPostByCategoryAndMember(Pageable pageable, String categoryId, Long memberId) {
         List<CustomerServicePost> result = from(customerServicePost)
                 .where(customerServicePost.category.id.eq(categoryId))
                 .where(customerServicePost.member.id.eq(memberId))
@@ -42,15 +42,6 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
                 .fetch();
 
         return new PageImpl<>(result, pageable, result.size());
-    }
-
-    @Override
-    public CustomerServicePost findOwnOtoInquiry(Long inquiryId, Long memberId) {
-        return from(customerServicePost)
-                .where(customerServicePost.id.eq(inquiryId))
-                .where(customerServicePost.member.id.eq(memberId))
-                .select(selectAllCustomerServicePostColumns())
-                .fetchOne();
     }
 
     private ConstructorExpression<CustomerServicePost> selectAllCustomerServicePostColumns() {

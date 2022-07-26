@@ -14,13 +14,13 @@ import java.util.List;
 public interface CustomerServicePostService {
 
     /**
-     * 1:1 문의 단건을 조회하는 메소드입니다.
+     * 고객센터 게시글 단건을 조회하는 메소드입니다.
      *
-     * @param inquiryId - 1:1 문의의 식별번호입니다.
-     * @return 조회한 1:1 문의의 정보를 담은 DTO 객체를 반환합니다.
+     * @param csPostId - 고객센터 게시글의 식별번호입니다.
+     * @return 조회한 게시글의 정보를 담은 DTO 객체를 반환합니다.
      * @since 1.0.0
      */
-    CustomerServicePostDto retrieveOtoInquiry(Long inquiryId);
+    CustomerServicePostDto retrieveCustomerServicePost(Long csPostId);
 
     /**
      * 1:1 문의 전체 목록을 조회하는 메소드입니다.
@@ -30,14 +30,6 @@ public interface CustomerServicePostService {
      * @since 1.0.0
      */
     List<CustomerServicePostDto> retrieveOtoInquiries(final Pageable pageable);
-
-    /**
-     * 1:1 문의를 삭제하는 메소드입니다.
-     *
-     * @param inquiryId - 삭제할 1:1 문의의 식별번호입니다.
-     * @since 1.0.0
-     */
-    void deleteOtoInquiry(Long inquiryId);
 
     /**
      * 회원 본인의 1:1 전체 목록을 조회하는 메소드입니다.
@@ -50,30 +42,19 @@ public interface CustomerServicePostService {
     List<CustomerServicePostDto> retrieveOwnOtoInquiries(Pageable pageable, Long memberId);
 
     /**
-     * 회원 본인의 1:1 문의 단건을 조회하는 메소드입니다.
-     *
-     * @param inquiryId - 조회할 1:1 문의의 식별번호입니다.
-     * @param memberId - 조회하는 회원의 식별번호입니다.
-     * @return 1:1 문의 단건의 정보가 담긴 DTO 객체를 반환합니다.
-     * @since 1.0.0
-     */
-    CustomerServicePostDto retrieveOwnOtoInquiry(Long inquiryId, Long memberId);
-
-    /**
-     * 회원 본인의 1:1 문의 단건을 삭제하는 메소드입니다.
-     *
-     * @param inquiryId - 삭제할 1:1 문의의 식별번호입니다.
-     * @param memberId - 삭제하는 회원의 식별번호입니다.
-     * @since 1.0.0
-     */
-    void deleteOwnOtoInquiry(Long inquiryId, Long memberId);
-
-    /**
      * 1:1 문의를 등록하는 메소드입니다.
      *
      * @param memberId - 등록하는 회원의 식별번호입니다.
      * @param customerServicePostDto - 1:1 문의를 등록하기 위한 DTO 객체입니다.
      */
     void createOtoInquiry(Long memberId, CustomerServicePostDto customerServicePostDto);
+
+    /**
+     * 고객센터 게시글을 삭제하는 메소드입니다.
+     *
+     * @param csPostId - 삭제할 고객센터 게시글의 식별번호입니다.
+     * @since 1.0.0
+     */
+    void deleteCustomerServicePost(Long csPostId);
 
 }

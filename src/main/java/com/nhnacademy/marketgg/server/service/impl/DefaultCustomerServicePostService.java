@@ -52,8 +52,8 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
     }
 
     @Override
-    public CustomerServicePostDto retrieveOtoInquiry(Long inquiryId) {
-        CustomerServicePost otoInquiry = customerServicePostRepository.findById(inquiryId)
+    public CustomerServicePostDto retrieveCustomerServicePost(Long csPostId) {
+        CustomerServicePost otoInquiry = customerServicePostRepository.findById(csPostId)
                                                                       .orElseThrow(
                                                                               CustomerServicePostNotFoundException::new);
 
@@ -64,7 +64,7 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
     public List<CustomerServicePostDto> retrieveOtoInquiries(final Pageable pageable) {
         String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY).orElseThrow(
                 CategoryNotFoundException::new);
-        List<CustomerServicePost> otoInquiries = customerServicePostRepository.findAllOtoInquiries(pageable, categoryId)
+        List<CustomerServicePost> otoInquiries = customerServicePostRepository.findPostByCategoryId(pageable, categoryId)
                                                                               .getContent();
 
         return otoInquiries.stream()
@@ -72,23 +72,14 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
                            .collect(Collectors.toUnmodifiableList());
     }
 
-    @Transactional
-    @Override
-    public void deleteOtoInquiry(Long inquiryId) {
-        CustomerServicePost otoInquiry = customerServicePostRepository.findById(inquiryId).orElseThrow(
-                CustomerServicePostNotFoundException::new);
-
-        customerServicePostRepository.delete(otoInquiry);
-    }
-
     @Override
     public List<CustomerServicePostDto> retrieveOwnOtoInquiries(Pageable pageable, Long memberId) {
         String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY)
                                               .orElseThrow(CategoryNotFoundException::new);
 
-        List<CustomerServicePost> ownOtoInquiries = customerServicePostRepository.findAllOwnOtoInquiries(pageable,
-                                                                                                         categoryId,
-                                                                                                         memberId)
+        List<CustomerServicePost> ownOtoInquiries = customerServicePostRepository.findPostByCategoryAndMember(pageable,
+                                                                                                              categoryId,
+                                                                                                              memberId)
                                                                                  .getContent();
 
         return ownOtoInquiries.stream()
@@ -96,18 +87,13 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
                               .collect(Collectors.toUnmodifiableList());
     }
 
-    @Override
-    public CustomerServicePostDto retrieveOwnOtoInquiry(Long inquiryId, Long memberId) {
-        CustomerServicePost ownOtoInquiry = customerServicePostRepository.findOwnOtoInquiry(inquiryId, memberId);
-
-        return customerServicePostMapper.toDto(ownOtoInquiry);
-    }
-
     @Transactional
     @Override
-    public void deleteOwnOtoInquiry(Long inquiryId, Long memberId) {
-        CustomerServicePost ownOtoInquiry = customerServicePostRepository.findOwnOtoInquiry(inquiryId, memberId);
+    public void deleteCustomerServicePost(Long csPostId) {
+        CustomerServicePost otoInquiry = customerServicePostRepository.findById(csPostId).orElseThrow(
+                CustomerServicePostNotFoundException::new);
 
-        customerServicePostRepository.delete(ownOtoInquiry);
+        customerServicePostRepository.delete(otoInquiry);
     }
+
 }

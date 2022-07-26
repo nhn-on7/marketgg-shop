@@ -53,21 +53,19 @@ public class CustomerServiceController {
     }
 
     /**
-     * 선택한 본인의 1:1 문의를 조회하는 GET Mapping 을 지원합니다.
+     * 선택한 1:1 문의를 조회하는 GET Mapping 을 지원합니다.
      *
      * @param inquiryId - 선택한 1:1 문의의 식별번호입니다.
-     * @param memberId - 1:1 문의를 조회하는 회원의 식별번호입니다.
      * @return 조회한 1:1 문의 단건의 정보를 담은 객체를 반환합니다.
-     * @since 1.0.0
+     * @since 1.0.
      */
-    @GetMapping("/oto-inquiries/{inquiryId}/members/{memberId}")
-    public ResponseEntity<CustomerServicePostDto> retrieveOwnOtoInquiry(@PathVariable final Long inquiryId,
-                                                                        @PathVariable final Long memberId) {
-        CustomerServicePostDto inquiryResponse = customerServicePostService.retrieveOwnOtoInquiry(inquiryId, memberId);
+    @GetMapping("/oto-inquiries/{inquiryId}")
+    public ResponseEntity<CustomerServicePostDto> retrieveOwnOtoInquiry(@PathVariable final Long inquiryId) {
+        CustomerServicePostDto inquiryResponse = customerServicePostService.retrieveCustomerServicePost(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId + "/members/" + memberId))
+                                     DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
                              .body(inquiryResponse);
     }
 
@@ -94,18 +92,16 @@ public class CustomerServiceController {
      * 선택한 1:1 문의를 삭제하는 DELETE Mapping 을 지원합니다.
      *
      * @param inquiryId - 선택한 1:1 문의의 식별번호입니다.
-     * @param memberId - 회원의 식별번호입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @DeleteMapping("/oto-inquiries/{inquiryId}/members/{memberId}")
-    public ResponseEntity<Void> deleteOwnOtoInquiry(@PathVariable final Long inquiryId,
-                                                    @PathVariable final Long memberId) {
-        customerServicePostService.deleteOwnOtoInquiry(inquiryId, memberId);
+    @DeleteMapping("/oto-inquiries/{inquiryId}")
+    public ResponseEntity<Void> deleteOtoInquiry(@PathVariable final Long inquiryId) {
+        customerServicePostService.deleteCustomerServicePost(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId + "/members/" + memberId))
+                                     DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
