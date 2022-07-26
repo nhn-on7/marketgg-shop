@@ -1,10 +1,8 @@
 package com.nhnacademy.marketgg.server.config;
 
-import com.nhnacademy.marketgg.server.elastic.repository.EsBoardRepository;
-import com.nhnacademy.marketgg.server.elastic.repository.EsProductRepository;
-import com.nhnacademy.marketgg.server.elastic.repository.EsRepository;
+import com.nhnacademy.marketgg.server.elastic.repository.ElasticRepositoryMarker;
 import com.nhnacademy.marketgg.server.repository.JpaRepositoryMarker;
-import com.nhnacademy.marketgg.server.repository.dib.DibRepository;
+
 import java.time.Duration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -23,12 +21,12 @@ import org.springframework.web.client.RestTemplate;
 
 @EnableJpaRepositories(excludeFilters = @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE,
-        classes = { EsRepository.class }),
+        classes = { ElasticRepositoryMarker.class }),
                        basePackageClasses = { JpaRepositoryMarker.class })
 @EnableElasticsearchRepositories(excludeFilters = @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE,
         classes = { JpaRepositoryMarker.class }),
-                       basePackageClasses = { EsRepository.class })
+                       basePackageClasses = { ElasticRepositoryMarker.class })
 @Configuration
 public class WebConfig {
 

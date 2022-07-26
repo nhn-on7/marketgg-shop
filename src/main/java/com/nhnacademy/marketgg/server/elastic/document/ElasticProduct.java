@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.elastic.document;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,7 +12,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class EsProduct {
+public class ElasticProduct {
 
     @Id
     @Field
