@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
+/**
+ * 1:1 문의의 댓글에 관련된 Rest Controller 입니다.
+ *
+ * @version 1.0.0
+ */
 @RestController
 @RequestMapping("/shop/v1/customer-services/oto-inquiries")
 @RequiredArgsConstructor
@@ -23,6 +28,15 @@ public class CustomerServiceCommentController {
 
     private static final String DEFAULT_CS_COMMENT = "/shop/v1/customer-services/oto-inquiries";
 
+    /**
+     * 한 1:1 문의에 대해 댓글을 등록하는 POST Mapping 을 지원합니다.
+     *
+     * @param inquiryId - 댓글을 등록할 1:1 문의의 식별번호입니다.
+     * @param memberId - 댓글을 등록하는 회원의 식별번호입니다.
+     * @param customerServiceCommentDto - 댓글을 등록하기 위한 DTO 객체입니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     * @since 1.0.0
+     */
     @PostMapping("/{inquiryId}/members/{memberId}/comments")
     public ResponseEntity<Void> createComment(@PathVariable final Long inquiryId,
                                               @PathVariable final Long memberId,
