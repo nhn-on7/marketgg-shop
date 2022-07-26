@@ -1,11 +1,17 @@
 package com.nhnacademy.marketgg.server.dto.response.temp;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Getter
 public abstract class CommonResponse {
 
-    protected final boolean success;
+    protected boolean success;
+
+    protected CommonResponse(boolean success) {
+        this.success = success;
+    }
+
 }

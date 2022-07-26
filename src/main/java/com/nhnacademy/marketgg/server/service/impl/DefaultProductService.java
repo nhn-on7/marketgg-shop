@@ -1,8 +1,12 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.temp.PageListResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
@@ -43,6 +47,7 @@ public class DefaultProductService implements ProductService {
     private final ImageRepository imageRepository;
     private final ProductLabelRepository productLabelRepository;
     private final LabelRepository labelRepository;
+    private final ObjectMapper objectMapper;
 
     private static final String dir = System.getProperty("user.home");
 
@@ -59,22 +64,18 @@ public class DefaultProductService implements ProductService {
         Product product = this.productRepository.save(new Product(productRequest, asset, category));
 
         ProductLabel.Pk pk = new ProductLabel.Pk(product.getId(), productRequest.getLabelNo());
-        Label label = labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);;
+        Label label = labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);
+        ;
 
         this.productLabelRepository.save(new ProductLabel(pk, product, label));
 
     }
 
     @Override
-    public <T> PageListResponse<T> retrieveProducts(Pageable pageable) {
+    public PageListResponse<ProductResponse> retrieveProducts(final Pageable pageable) {
         Page<ProductResponse> products = productRepository.findAllProducts(pageable);
 
-        Map<String, Integer> pageInfo = new HashMap<>();
-        pageInfo.put("pageNum", products.getNumber());
-        pageInfo.put("pageSize", products.getSize());
-        pageInfo.put("totalPages", products.getTotalPages());
-
-        return new PageListResponse(products.getContent(), pageInfo);
+        return new PageListResponse<>(products.getContent(), products.getNumber(), products.getSize(), products.getTotalElements());
     }
 
     @Override
@@ -96,7 +97,6 @@ public class DefaultProductService implements ProductService {
 
         product.updateProduct(productRequest, asset, category);
         Product updateProduct = this.productRepository.save(product);
-
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
@@ -34,7 +35,7 @@ public interface ProductService {
      * @since 1.0.0
      */
 
-    <T> PageListResponse<T> retrieveProducts(Pageable pageable);
+    PageListResponse<ProductResponse> retrieveProducts(Pageable pageable);
 
     /**
      * 상품 Id를 통해 상세 정보를 조회합니다.

@@ -11,6 +11,9 @@ Content-Type: application/json
 GET http://localhost:7080/admin/v1/products/search/이
 Content-Type: application/json
 
+
+
+
 ###
 
 GET http://localhost:7080/shop/v1/products/categories/101
