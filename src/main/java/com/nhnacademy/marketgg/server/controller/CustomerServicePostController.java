@@ -27,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/shop/v1/customer-services")
 @RequiredArgsConstructor
-public class CustomerServiceController {
+public class CustomerServicePostController {
 
     private final CustomerServicePostService customerServicePostService;
 

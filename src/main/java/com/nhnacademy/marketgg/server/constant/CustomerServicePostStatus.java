@@ -1,5 +1,10 @@
 package com.nhnacademy.marketgg.server.constant;
 
+/**
+ * 고객센터 게시글의 상태 Enum 클래스입니다.
+ *
+ * @version 1.0.0
+ */
 public enum CustomerServicePostStatus {
 
     UNANSWERED("미답변"),

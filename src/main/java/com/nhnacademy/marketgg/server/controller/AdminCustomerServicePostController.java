@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.nhnacademy.marketgg.server.constant.CustomerServicePostReason;
 import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostDto;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 관리자의 고객센터 관리에 관련된 Rest Controller 입니다.
@@ -24,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/shop/v1/admin/customer-services")
 @RequiredArgsConstructor
-public class AdminCustomerServiceController {
+public class AdminCustomerServicePostController {
 
     private final CustomerServicePostService customerServicePostService;
 
@@ -55,8 +58,7 @@ public class AdminCustomerServiceController {
      */
     @GetMapping("/oto-inquiries")
     public ResponseEntity<List<CustomerServicePostDto>> retrieveOtoInquiries(final Pageable pageable) {
-        List<CustomerServicePostDto> inquiryResponses = customerServicePostService.retrieveOtoInquiries(
-                pageable);
+        List<CustomerServicePostDto> inquiryResponses = customerServicePostService.retrieveOtoInquiries(pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries"))
@@ -78,6 +80,17 @@ public class AdminCustomerServiceController {
                              .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
+    }
+
+    @GetMapping("/reasons")
+    public ResponseEntity<List<String>> retrieveAllReasonValues() {
+        List<String> reasons = Arrays.stream(CustomerServicePostReason.values())
+                                     .map(CustomerServicePostReason::reason)
+                                     .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/reasons"))
+                             .body(reasons);
     }
 
 }
