@@ -4,14 +4,12 @@ import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.comsun.PageListResponse;
-import com.nhnacademy.marketgg.server.elasticrepository.EsProductRepository;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.ProductLabel;
-import com.nhnacademy.marketgg.server.entity.elastic.EsProduct;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
 import com.nhnacademy.marketgg.server.exception.label.LabelNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
@@ -40,7 +38,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class DefaultProductService implements ProductService {
 
     private final ProductRepository productRepository;
-    private final EsProductRepository esProductRepository;
     private final CategoryRepository categoryRepository;
     private final AssetRepository assetRepository;
     private final ImageRepository imageRepository;
@@ -61,16 +58,10 @@ public class DefaultProductService implements ProductService {
 
         Product product = this.productRepository.save(new Product(productRequest, asset, category));
 
-        // FIXME: 상품 등록 수정 시 매개변수 Label 보완 필요 (CoPark)
         ProductLabel.Pk pk = new ProductLabel.Pk(product.getId(), productRequest.getLabelNo());
-
-        // FIXME: 겹치는 부분 추후 리펙토링 필요
-        Label label = labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);
-        File dest = new File(dir, Objects.requireNonNull(imageFile.getOriginalFilename()));
-        Image image = new Image(asset, dest.toString());
+        Label label = labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);;
 
         this.productLabelRepository.save(new ProductLabel(pk, product, label));
-        this.esProductRepository.save(new EsProduct(product, label, image));
 
     }
 
@@ -106,11 +97,6 @@ public class DefaultProductService implements ProductService {
         product.updateProduct(productRequest, asset, category);
         Product updateProduct = this.productRepository.save(product);
 
-        Label label = labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);
-        File dest = new File(dir, Objects.requireNonNull(imageFile.getOriginalFilename()));
-        Image image = new Image(asset, dest.toString());
-        // FIXME: 상품 정보 변경 수정 시 매개변수 Label 보완 필요 (CoPark)
-        esProductRepository.save(new EsProduct(updateProduct, label, image));
     }
 
     @Transactional
@@ -120,7 +106,6 @@ public class DefaultProductService implements ProductService {
 
         product.deleteProduct();
         this.productRepository.save(product);
-        this.esProductRepository.deleteById(id);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import static org.springframework.http.HttpStatus.OK;
+
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
@@ -10,6 +12,10 @@ import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.MemberService;
 import com.nhnacademy.marketgg.server.service.PointService;
+import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,13 +26,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.Objects;
-
-import static org.springframework.http.HttpStatus.OK;
 
 /**
  * 회원관리에 관련된 RestController 입니다.
@@ -124,10 +123,12 @@ public class MemberController {
         ShopMemberSignUpResponse signUp = memberService.signUp(shopMemberSignUpRequest);
 
         if (Objects.nonNull(signUp.getReferrerMemberId())) {
-            pointService.createPointHistory(signUp.getReferrerMemberId(), new PointHistoryRequest(5000, "추천인 이벤트"));
+            pointService.createPointHistory(signUp.getReferrerMemberId(),
+                new PointHistoryRequest(5000, "추천인 이벤트"));
         }
 
-        pointService.createPointHistory(signUp.getSignUpMemberId(), new PointHistoryRequest(5000, "회원 가입 추천인 이벤트"));
+        pointService.createPointHistory(signUp.getSignUpMemberId(),
+            new PointHistoryRequest(5000, "회원 가입 추천인 이벤트"));
 
         return ResponseEntity.status(OK)
                              .location(URI.create("/shop/v1/members/signup"))

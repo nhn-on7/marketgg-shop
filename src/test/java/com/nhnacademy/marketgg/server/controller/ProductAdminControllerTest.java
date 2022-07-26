@@ -33,9 +33,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 @WebMvcTest(ProductAdminController.class)
 class ProductAdminControllerTest {
@@ -125,15 +129,21 @@ class ProductAdminControllerTest {
         MockMultipartFile file =
             new MockMultipartFile("image", "lee.png", "image/png", new FileInputStream(filePath));
 
-        this.mockMvc.perform(multipart(DEFAULT_PRODUCT + "/{productId}", 1L).file(dto)
-                                                                            .file(file)
-                                                                            .contentType(
-                                                                                MediaType.APPLICATION_JSON)
-                                                                            .contentType(
-                                                                                MediaType.MULTIPART_FORM_DATA)
-                                                                            .characterEncoding(
-                                                                                StandardCharsets.UTF_8))
-                    .andExpect(status().isOk());
+        MockMultipartHttpServletRequestBuilder builder =
+            MockMvcRequestBuilders.multipart(DEFAULT_PRODUCT + "/{product}", 1L);
+        builder.with(new RequestPostProcessor() {
+            @Override
+            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
+                request.setMethod("PUT");
+                return request;
+            }
+        });
+
+        this.mockMvc.perform(builder.file(dto)
+                                    .file(file)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .contentType(MediaType.MULTIPART_FORM_DATA)
+                                    .characterEncoding(StandardCharsets.UTF_8)).andExpect(status().isOk());
 
     }
 
@@ -151,8 +161,8 @@ class ProductAdminControllerTest {
     void testSearchProductsByName() throws Exception {
         when(this.productService.searchProductsByName(anyString())).thenReturn(List.of());
 
-        this.mockMvc.perform(
-                get(DEFAULT_PRODUCT + "/search/{productName}", "오렌지"))
+
+        this.mockMvc.perform(get(DEFAULT_PRODUCT + "/search/{productName}", "오렌지"))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 

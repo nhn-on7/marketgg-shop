@@ -27,8 +27,7 @@ public class ProductInquiryPostController {
 
     private final ProductInquiryPostService productInquiryPostService;
 
-    @Value("${inquiryPath}")
-    private String defaultInquiryUri;
+    private static final String DEFAULT_INQUIRY = "/shop/v1";
 
     /**
      * 상품 문의 등록을 위한 POST Mapping 을 지원합니다.
@@ -63,7 +62,7 @@ public class ProductInquiryPostController {
         List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(defaultInquiryUri + "/products/" + productId + "/inquiries"))
+                             .location(URI.create(DEFAULT_INQUIRY + "/products/" + productId + "/inquiries"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productInquiryResponses);
     }
@@ -81,7 +80,7 @@ public class ProductInquiryPostController {
         List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService.retrieveProductInquiryByMemberId(memberId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(defaultInquiryUri + "/members/" + memberId + "/product-inquiries"))
+                             .location(URI.create(DEFAULT_INQUIRY + "/members/" + memberId + "/product-inquiries"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productInquiryResponses);
     }
@@ -101,7 +100,7 @@ public class ProductInquiryPostController {
         productInquiryPostService.deleteProductInquiry(inquiryId, productId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(defaultInquiryUri + "/products/" + productId + "/inquiries"))
+                             .location(URI.create(DEFAULT_INQUIRY + "/products/" + productId + "/inquiries"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
