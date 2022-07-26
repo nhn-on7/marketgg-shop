@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import static java.util.stream.Collectors.toList;
+
 import com.nhnacademy.marketgg.server.dto.request.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -11,6 +13,7 @@ import com.nhnacademy.marketgg.server.repository.cart.CartRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.service.CartService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +53,22 @@ public class DefaultCartService implements CartService {
                                   .orElseThrow(CartNotFoundException::new);
 
         cart.updateAmount(productUpdateRequest.getAmount());
+    }
+
+    @Transactional
+    @Override
+    public void deleteProducts(String uuid, List<Long> products) {
+        Member member = memberRepository.findByUuid(uuid)
+                                        .orElseThrow(MemberNotFoundException::new);
+
+        List<Cart> carts =
+            products.stream()
+                    .map(
+                        productId -> cartRepository.findById(new Cart.Pk(member.getId(), productId))
+                                                   .orElseThrow(CartNotFoundException::new))
+                    .collect(toList());
+
+        cartRepository.deleteAll(carts);
     }
 
 }

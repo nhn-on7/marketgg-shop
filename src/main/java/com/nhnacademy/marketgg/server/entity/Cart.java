@@ -24,14 +24,14 @@ import java.time.LocalDateTime;
 public class Cart {
 
     @EmbeddedId
-    private Pk pk;
+    private Pk id;
 
-    @MapsId(value = "memberNo")
+    @MapsId(value = "memberId")
     @ManyToOne
     @JoinColumn(name = "member_no")
     private Member member;
 
-    @MapsId(value = "productNo")
+    @MapsId(value = "productId")
     @ManyToOne
     @JoinColumn(name = "product_no")
     private Product product;
@@ -43,7 +43,7 @@ public class Cart {
     private LocalDateTime createdAt;
 
     public Cart(Member member, Product product, Integer amount) {
-        this.pk= new Pk(member.getId(), product.getId());
+        this.id = new Pk(member.getId(), product.getId());
         this.member = member;
         this.product = product;
         this.amount = amount;
@@ -61,10 +61,10 @@ public class Cart {
     public static class Pk implements Serializable {
 
         @Column(name = "member_no")
-        private Long memberNo;
+        private Long memberId;
 
         @Column(name = "product_no")
-        private Long productNo;
+        private Long productId;
 
     }
 
