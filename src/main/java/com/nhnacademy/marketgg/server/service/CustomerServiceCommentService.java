@@ -2,6 +2,8 @@ package com.nhnacademy.marketgg.server.service;
 
 import com.nhnacademy.marketgg.server.dto.response.CustomerServiceCommentDto;
 
+import java.util.List;
+
 /**
  * 고객센터(1:1 문의)의 댓글 서비스입니다.
  *
@@ -18,5 +20,9 @@ public interface CustomerServiceCommentService {
      * @since 1.0.0
      */
     void createComment(Long inquiryId, Long memberId, CustomerServiceCommentDto customerServiceCommentDto);
+
+    CustomerServiceCommentDto retrieveComment(Long commentId);
+
+    List<CustomerServiceCommentDto> retrieveCommentsByInquiry(Long inquiryId);
 
 }

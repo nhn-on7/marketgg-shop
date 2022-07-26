@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 import com.nhnacademy.marketgg.server.constant.CustomerServicePostStatus;
 import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostDto;
 import com.nhnacademy.marketgg.server.entity.Category;
+import com.nhnacademy.marketgg.server.entity.CustomerServiceComment;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
@@ -10,6 +11,7 @@ import com.nhnacademy.marketgg.server.exception.customerservicepost.CustomerServ
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.mapper.impl.CustomerServicePostMapper;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
+import com.nhnacademy.marketgg.server.repository.customerservicecomment.CustomerServiceCommentRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
@@ -30,6 +32,7 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
     private final CustomerServicePostRepository customerServicePostRepository;
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
+    private final CustomerServiceCommentRepository customerServiceCommentRepository;
 
     private static String OTO_INQUIRY = "1:1문의";
 
@@ -92,7 +95,7 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
     public void deleteCustomerServicePost(Long csPostId) {
         CustomerServicePost otoInquiry = customerServicePostRepository.findById(csPostId).orElseThrow(
                 CustomerServicePostNotFoundException::new);
-
+        
         customerServicePostRepository.delete(otoInquiry);
     }
 

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
 
 /**
  * 1:1 문의의 댓글에 관련된 Rest Controller 입니다.
@@ -47,6 +49,24 @@ public class CustomerServiceCommentController {
                              .location(URI.create(DEFAULT_CS_COMMENT + "/" + inquiryId + "/members/" + memberId + "/comments"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
+    }
+
+    @GetMapping("/comments/{commentId}")
+    public ResponseEntity<CustomerServiceCommentDto> retrieveComment(@PathVariable final Long commentId) {
+        CustomerServiceCommentDto commentResponse = customerServiceCommentService.retrieveComment(commentId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .location(URI.create(DEFAULT_CS_COMMENT + "/comments/" + commentId))
+                .body(commentResponse);
+    }
+
+    @GetMapping("/{inquiryId}/comments")
+    public ResponseEntity<List<CustomerServiceCommentDto>> retrieveInquiryComments(@PathVariable final Long inquiryId) {
+        List<CustomerServiceCommentDto> commentResponses = customerServiceCommentService.retrieveCommentsByInquiry(inquiryId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .location(URI.create(DEFAULT_CS_COMMENT + "/" + inquiryId + "/comments"))
+                .body(commentResponses);
     }
 
 }

@@ -4,6 +4,7 @@ import com.nhnacademy.marketgg.server.dto.response.CustomerServiceCommentDto;
 import com.nhnacademy.marketgg.server.entity.CustomerServiceComment;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
+import com.nhnacademy.marketgg.server.exception.customerservicecomment.CustomerServiceCommentNotFoundException;
 import com.nhnacademy.marketgg.server.exception.customerservicepost.CustomerServicePostNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.mapper.impl.CustomerServiceCommentMapper;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +32,8 @@ public class DefaultCustomerServiceCommentService implements CustomerServiceComm
     @Transactional
     @Override
     public void createComment(Long inquiryId, Long memberId, CustomerServiceCommentDto customerServiceCommentDto) {
-        CustomerServiceComment customerServiceComment = customerServiceCommentMapper.toEntity(customerServiceCommentDto);
+        CustomerServiceComment customerServiceComment = customerServiceCommentMapper.toEntity(
+                customerServiceCommentDto);
         CustomerServicePost customerServicePost = customerServicePostRepository.findById(inquiryId).orElseThrow(
                 CustomerServicePostNotFoundException::new);
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
@@ -39,6 +43,23 @@ public class DefaultCustomerServiceCommentService implements CustomerServiceComm
         customerServiceComment.setCreatedAt(LocalDateTime.now());
 
         customerServiceCommentRepository.save(customerServiceComment);
+    }
+
+    @Override
+    public CustomerServiceCommentDto retrieveComment(Long commentId) {
+        CustomerServiceComment comment = customerServiceCommentRepository.findById(commentId).orElseThrow(
+                CustomerServiceCommentNotFoundException::new);
+
+        return customerServiceCommentMapper.toDto(comment);
+    }
+
+    @Override
+    public List<CustomerServiceCommentDto> retrieveCommentsByInquiry(Long inquiryId) {
+        List<CustomerServiceComment> comments = customerServiceCommentRepository.findByInquiry(inquiryId);
+
+        return comments.stream()
+                       .map(customerServiceCommentMapper::toDto)
+                       .collect(Collectors.toUnmodifiableList());
     }
 
 }

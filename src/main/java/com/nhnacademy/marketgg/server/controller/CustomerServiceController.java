@@ -64,8 +64,7 @@ public class CustomerServiceController {
         CustomerServicePostDto inquiryResponse = customerServicePostService.retrieveCustomerServicePost(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(
-                                     DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
+                             .location(URI.create(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
                              .body(inquiryResponse);
     }
 
