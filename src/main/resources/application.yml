@@ -15,6 +15,11 @@ spring:
         datasource:
           p6spy:
             enable-logging: true
+
+  elasticsearch:
+    uris: 133.186.153.181:9200
+    connection-timeout: 30
+
 server:
   port: 7080
 
