@@ -91,7 +91,7 @@ class DefaultCartServiceTest {
     void testAddProductFail2() {
         ProductToCartRequest productAddRequest = Dummy.getDummyProductToCartRequest(productId);
 
-        Product product = Dummy.getDummyProduct();
+        Product product = Dummy.getDummyProduct(1L);
 
         given(productRepository.findById(productId)).willReturn(Optional.of(product));
         given(memberRepository.findByUuid(uuid)).willThrow(MemberNotFoundException.class);
@@ -124,18 +124,17 @@ class DefaultCartServiceTest {
 
         Product product = Dummy.getDummyProduct(productId);
         Member member = Dummy.getDummyMember(uuid, 1L);
-        Cart.Pk cartPk = new Cart.Pk(productId, member.getId());
         Cart cart = spy(new Cart(member, product, 1));
 
         given(productRepository.findById(productId)).willReturn(Optional.of(product));
         given(memberRepository.findByUuid(uuid)).willReturn(Optional.of(member));
-        given(cartRepository.findById(cartPk)).willReturn(Optional.of(cart));
+        given(cartRepository.findById(any(Cart.Pk.class))).willReturn(Optional.of(cart));
 
         cartService.updateAmount(uuid, productUpdateRequest);
 
         then(productRepository).should(times(1)).findById(productId);
         then(memberRepository).should(times(1)).findByUuid(uuid);
-        then(cartRepository).should(times(1)).findById(cartPk);
+        then(cartRepository).should(times(1)).findById(any(Cart.Pk.class));
         then(cart).should(times(1)).updateAmount(productUpdateRequest.getAmount());
 
         assertThat(cart.getAmount()).isEqualTo(productUpdateRequest.getAmount());
@@ -148,17 +147,16 @@ class DefaultCartServiceTest {
 
         Product product = Dummy.getDummyProduct(productId);
         Member member = Dummy.getDummyMember(uuid, 1L);
-        Cart.Pk cartPk = new Cart.Pk(productId, member.getId());
 
         given(productRepository.findById(productId)).willReturn(Optional.of(product));
         given(memberRepository.findByUuid(uuid)).willReturn(Optional.of(member));
-        given(cartRepository.findById(cartPk)).willReturn(Optional.empty());
+        given(cartRepository.findById(any(Cart.Pk.class))).willReturn(Optional.ofNullable(any(Cart.class)));
 
         assertThatThrownBy(() -> cartService.updateAmount(uuid, productUpdateRequest))
             .isInstanceOf(CartNotFoundException.class);
 
         then(productRepository).should(times(1)).findById(productId);
-        then(cartRepository).should(times(1)).findById(cartPk);
+        then(cartRepository).should(times(1)).findById(any(Cart.Pk.class));
         then(memberRepository).should(times(1)).findByUuid(uuid);
     }
 

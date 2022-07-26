@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
-import com.nhnacademy.marketgg.server.util.JwtUtils;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
@@ -27,8 +26,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * Controller 클래스에서 Auth Server 의 회원 요청 시 파라미터로 쉽게 전달받을 수 있는 AOP.
@@ -37,7 +34,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 @Slf4j
 @Aspect
-@Order(20)
+@Order(30)
 @Component
 @RequiredArgsConstructor
 public class AuthInjectAspect {
@@ -62,7 +59,7 @@ public class AuthInjectAspect {
         HttpServletRequest request = AspectUtils.getRequest();
 
         String jwt = request.getHeader(AUTHORIZATION);
-        String uuid = request.getHeader(JwtUtils.AUTH_ID);
+        String uuid = request.getHeader(AspectUtils.AUTH_ID);
 
         if (Objects.isNull(jwt) || Objects.isNull(uuid)) {
             throw new IllegalArgumentException();

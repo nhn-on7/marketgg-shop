@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.nhnacademy.marketgg.server.dto.response.CartResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
+import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Product;
@@ -44,20 +45,18 @@ public class CartRepositoryTest {
     @Test
     @DisplayName("회원의 장바구니 목록 조회")
     void testFindCartByMemberId() {
-        String uuid = "UUID";
-        Long memberId = 1L;
-        Member member = Dummy.getDummyMember(uuid, memberId);
+        Member member = Dummy.getDummyMember();
 
-        memberRepository.save(member);
-        assetRepository.save(Dummy.getDummyAsset());
+        Member savedMember = memberRepository.save(member);
         categorizationRepository.save(Dummy.getDummyCategorization());
         categoryRepository.save(Dummy.getDummyCategory());
 
         List<Product> productList = new ArrayList<>();
         for (int i = 1; i <= 10; i++) {
-            productList.add(Dummy.getDummyProduct((long) i));
+            Asset savedAsset = assetRepository.save(Dummy.getDummyAsset());
+            Product savedProduct = productRepository.save(Dummy.getDummyProduct((long) i, savedAsset.getId()));
+            productList.add(savedProduct);
         }
-        productRepository.saveAll(productList);
 
         List<Cart> cartList = new ArrayList<>();
         for (int i = 0; i < 10; i += 2) {
@@ -65,7 +64,7 @@ public class CartRepositoryTest {
         }
         cartRepository.saveAll(cartList);
 
-        List<CartResponse> productsInCart = cartRepository.findCartByMemberId(memberId);
+        List<CartResponse> productsInCart = cartRepository.findCartByMemberId(savedMember.getId());
 
         assertThat(productsInCart).hasSize(5);
     }

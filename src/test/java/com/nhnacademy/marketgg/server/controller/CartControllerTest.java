@@ -1,12 +1,19 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import static com.nhnacademy.marketgg.server.util.JwtUtils.AUTH_ID;
-import static com.nhnacademy.marketgg.server.util.JwtUtils.WWW_AUTHENTICATION;
+import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
+import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATION;
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -21,7 +28,10 @@ import com.nhnacademy.marketgg.server.dto.request.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.service.CartService;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.LongStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,7 +52,6 @@ import org.springframework.web.context.WebApplicationContext;
 })
 class CartControllerTest {
 
-    // @Autowired
     MockMvc mockMvc;
 
     @Autowired
@@ -103,6 +112,80 @@ class CartControllerTest {
                    .content(jsonRequest))
                .andExpect(status().isNotFound())
                .andExpect(jsonPath("$.success", equalTo(false)));
+    }
+
+    @Test
+    @DisplayName("장바구니 조회")
+    void testRetrieveCart() throws Exception {
+        String roles = mapper.writeValueAsString(Collections.singletonList(Role.ROLE_USER));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(AUTH_ID, uuid);
+        headers.set(WWW_AUTHENTICATION, roles);
+
+        given(cartService.retrieveCarts(uuid)).willReturn(new ArrayList<>());
+
+        mockMvc.perform(get(baseUri).headers(headers))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.success", equalTo(true)));
+    }
+
+    @Test
+    @DisplayName("잘못된 회원의 장바구니 조회")
+    void testRetrieveCartFail() throws Exception {
+
+        given(cartService.retrieveCarts(uuid)).willReturn(new ArrayList<>());
+
+        mockMvc.perform(get(baseUri))
+               .andExpect(status().isUnauthorized())
+               .andExpect(jsonPath("$.success", equalTo(false)));
+    }
+
+    @Test
+    @DisplayName("장바구니 상품 수량 변경")
+    void testUpdateProductInCartAmount() throws Exception {
+        String roles = mapper.writeValueAsString(Collections.singletonList(Role.ROLE_USER));
+
+        ProductToCartRequest request = Dummy.getDummyProductToCartRequest(productId);
+        String jsonRequest = mapper.writeValueAsString(request);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(AUTH_ID, uuid);
+        headers.set(WWW_AUTHENTICATION, roles);
+
+        willDoNothing().given(cartService).updateAmount(anyString(), any(request.getClass()));
+
+        mockMvc.perform(patch(baseUri)
+                   .headers(headers)
+                   .contentType(APPLICATION_JSON)
+                   .content(jsonRequest))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.success", equalTo(true)));
+    }
+
+    @Test
+    @DisplayName("장바구니 품목 삭제")
+    void testDeleteProducts() throws Exception {
+        String roles = mapper.writeValueAsString(Collections.singletonList(Role.ROLE_USER));
+
+        List<Long> productIds = LongStream.rangeClosed(1, 10)
+                                          .boxed()
+                                          .collect(toList());
+        String jsonRequest = mapper.writeValueAsString(productIds);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(AUTH_ID, uuid);
+        headers.set(WWW_AUTHENTICATION, roles);
+
+
+        willDoNothing().given(cartService).deleteProducts(anyString(), anyList());
+
+        mockMvc.perform(delete(baseUri)
+                   .headers(headers)
+                   .contentType(APPLICATION_JSON)
+                   .content(jsonRequest))
+               .andExpect(status().isNoContent())
+               .andExpect(jsonPath("$.success", equalTo(true)));
     }
 
 }

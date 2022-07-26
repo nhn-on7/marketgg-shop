@@ -1,11 +1,10 @@
 package com.nhnacademy.marketgg.server.aop;
 
+import javax.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AspectUtils {
@@ -15,7 +14,7 @@ public class AspectUtils {
 
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes requestAttributes =
-                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+            (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         return requestAttributes.getRequest();
     }
 

@@ -6,7 +6,6 @@ import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.exception.auth.UnAuthenticException;
 import com.nhnacademy.marketgg.server.exception.auth.UnAuthorizationException;
-import com.nhnacademy.marketgg.server.util.JwtUtils;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -20,8 +19,6 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * Annotation 으로 권한 처리하는 클래스
@@ -45,7 +42,7 @@ public class RoleCheckAspect {
      * @throws IOException            - JSON 역 직렬화 시 발생할 수 있는 예외입니다.
      * @throws IllegalAccessException - 권한이 불충분할 시 발생할 수 있는 예외입니다.
      */
-    @Before(value = "@annotation(roleCheck)")
+    @Before(value = "@annotation(roleCheck) || @within(roleCheck)")
     public void checkRole(JoinPoint jp, RoleCheck roleCheck)
         throws IOException, IllegalAccessException {
 
@@ -55,14 +52,11 @@ public class RoleCheckAspect {
 
         MethodSignature signature = (MethodSignature) jp.getSignature();
 
-        String roleHeader = request.getHeader(JwtUtils.WWW_AUTHENTICATION);
-        String uuid = request.getHeader(JwtUtils.AUTH_ID);
+        String roleHeader = request.getHeader(AspectUtils.WWW_AUTHENTICATION);
+        String uuid = request.getHeader(AspectUtils.AUTH_ID);
 
         if (Objects.isNull(roleHeader) && Objects.isNull(uuid)) {
-            if (Objects.equals(roleCheck.accessLevel(), Role.LOGIN)) {
-                throw new UnAuthenticException(signature.getName());
-            }
-            throw new UnAuthorizationException(signature.getName(), "Empty");
+            throw new UnAuthenticException(signature.getName());
         }
 
         // 권한 목록은 Gateway 에서 JSON List 타입으로 매핑해서 Http Header 로 전달함.

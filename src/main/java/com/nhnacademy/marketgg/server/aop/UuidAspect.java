@@ -1,6 +1,9 @@
 package com.nhnacademy.marketgg.server.aop;
 
 import com.nhnacademy.marketgg.server.annotation.UUID;
+import java.lang.reflect.Parameter;
+import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -8,10 +11,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Parameter;
-import java.util.Objects;
 
 /**
  * 컨트롤러에서 사용자의 UUID 를 전달받을 수 있다.

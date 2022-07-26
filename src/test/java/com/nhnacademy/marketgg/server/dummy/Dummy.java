@@ -33,9 +33,8 @@ public class Dummy {
         return memberCreateRequest;
     }
 
-    public static Member getDummyMember(Long id) {
+    public static Member getDummyMember() {
         Member member = new Member(getDummyMemberCreateRequest(""));
-        ReflectionTestUtils.setField(member, "id", id);
 
         return member;
     }
@@ -64,10 +63,14 @@ public class Dummy {
         return productRequest;
     }
 
-    public static Asset getDummyAsset() {
+    public static Asset getDummyAsset(Long id) {
         Asset asset = Asset.create();
-        ReflectionTestUtils.setField(asset, "id", 1L);
+        ReflectionTestUtils.setField(asset, "id", id);
         return asset;
+    }
+
+    public static Asset getDummyAsset() {
+        return Asset.create();
     }
 
     public static CategorizationCreateRequest getDummyCategorizationCreateRequest() {
@@ -94,13 +97,13 @@ public class Dummy {
         return new Category(categoryRequest, getDummyCategorization());
     }
 
-    public static Product getDummyProduct() {
-        return new Product(getDummyProductCreateRequest(), getDummyAsset(), getDummyCategory());
+    public static Product getDummyProduct(Long assetId) {
+        return new Product(getDummyProductCreateRequest(), getDummyAsset(assetId), getDummyCategory());
     }
 
-    public static Product getDummyProduct(Long productId) {
+    public static Product getDummyProduct(Long productId, Long assetId) {
         Product product =
-            new Product(getDummyProductCreateRequest(), getDummyAsset(), getDummyCategory());
+            new Product(getDummyProductCreateRequest(), getDummyAsset(assetId), getDummyCategory());
         ReflectionTestUtils.setField(product, "id", productId);
 
         return product;
