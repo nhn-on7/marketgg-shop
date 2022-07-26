@@ -56,11 +56,11 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
 
     @Override
     public CustomerServicePostDto retrieveCustomerServicePost(Long csPostId) {
-        CustomerServicePost otoInquiry = customerServicePostRepository.findById(csPostId)
+        CustomerServicePost csPost = customerServicePostRepository.findById(csPostId)
                                                                       .orElseThrow(
                                                                               CustomerServicePostNotFoundException::new);
 
-        return customerServicePostMapper.toDto(otoInquiry);
+        return customerServicePostMapper.toDto(csPost);
     }
 
     @Override
