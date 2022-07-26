@@ -22,7 +22,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.nhnacademy.marketgg.server.dto.response.CouponState.*;
+import static com.nhnacademy.marketgg.server.dto.response.CouponState.EXPIRED;
+import static com.nhnacademy.marketgg.server.dto.response.CouponState.USED;
+import static com.nhnacademy.marketgg.server.dto.response.CouponState.VALID;
 
 @Service
 @RequiredArgsConstructor
@@ -51,8 +53,8 @@ public class DefaultGivenCouponService implements GivenCouponService {
     public List<GivenCouponResponse> retrieveGivenCoupons(final Long memberId, Pageable pageable) {
         List<GivenCoupon> givenCoupons = givenCouponRepository.findAllByMemberId(memberId, pageable).getContent();
         return givenCoupons.stream()
-                .map(this::checkAvailability)
-                .collect(Collectors.toUnmodifiableList());
+                           .map(this::checkAvailability)
+                           .collect(Collectors.toUnmodifiableList());
     }
 
     private GivenCouponResponse checkAvailability(GivenCoupon givenCoupons) {

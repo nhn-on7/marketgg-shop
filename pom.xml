@@ -77,6 +77,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
         <!--  MEMO 0: MapStruct 동작할 때 Lombok 에 영향을 많이 받아서 의존성 선업하는 순서에 따라서도 다르게 동작한다. -->
         <dependency>
             <groupId>org.mapstruct</groupId>
