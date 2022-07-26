@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 import static java.util.stream.Collectors.toList;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductToCartRequest;
+import com.nhnacademy.marketgg.server.dto.response.CartResponse;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Product;
@@ -37,6 +38,14 @@ public class DefaultCartService implements CartService {
 
         Cart cart = new Cart(member, product, productAddRequest.getAmount());
         cartRepository.save(cart);
+    }
+
+    @Override
+    public List<CartResponse> retrieveCarts(String uuid) {
+        Member member = memberRepository.findByUuid(uuid)
+                                        .orElseThrow(MemberNotFoundException::new);
+
+        return cartRepository.findCartByMemberId(member.getId());
     }
 
     @Transactional

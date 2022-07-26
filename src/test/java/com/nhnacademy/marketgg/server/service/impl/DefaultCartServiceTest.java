@@ -10,9 +10,9 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductToCartRequest;
+import com.nhnacademy.marketgg.server.dto.response.CartResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -23,6 +23,7 @@ import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException
 import com.nhnacademy.marketgg.server.repository.cart.CartRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.LongStream;
@@ -51,6 +52,7 @@ class DefaultCartServiceTest {
     ProductRepository productRepository;
 
     String uuid = "UUID";
+    Long memberId = 1L;
     Long productId = 1L;
 
     @Test
@@ -66,9 +68,9 @@ class DefaultCartServiceTest {
 
         cartService.addProduct(uuid, productAddRequest);
 
-        verify(productRepository, times(1)).findById(productId);
-        verify(memberRepository, times(1)).findByUuid(uuid);
-        verify(cartRepository, times(1)).save(any(Cart.class));
+        then(productRepository).should(times(1)).findById(productId);
+        then(memberRepository).should(times(1)).findByUuid(uuid);
+        then(cartRepository).should(times(1)).save(any(Cart.class));
     }
 
     @Test
@@ -80,8 +82,8 @@ class DefaultCartServiceTest {
 
         assertThatThrownBy(() -> cartService.addProduct(uuid, productAddRequest))
             .isInstanceOf(ProductNotFoundException.class);
-        verify(productRepository, times(1)).findById(productId);
 
+        then(productRepository).should(times(1)).findById(productId);
     }
 
     @Test
@@ -96,7 +98,23 @@ class DefaultCartServiceTest {
 
         assertThatThrownBy(() -> cartService.addProduct(uuid, productAddRequest))
             .isInstanceOf(MemberNotFoundException.class);
-        verify(memberRepository, times(1)).findByUuid(uuid);
+        then(memberRepository).should(times(1)).findByUuid(uuid);
+    }
+
+    @Test
+    @DisplayName("장바구니 조회")
+    void testRetrieveCarts() {
+        Member member = Dummy.getDummyMember(uuid, memberId);
+
+        given(memberRepository.findByUuid(uuid)).willReturn(Optional.of(member));
+        given(cartRepository.findCartByMemberId(member.getId())).willReturn(new ArrayList<>());
+
+        List<CartResponse> cartResponses = cartService.retrieveCarts(member.getUuid());
+
+        then(memberRepository).should(times(1)).findByUuid(member.getUuid());
+        then(cartRepository).should(times(1)).findCartByMemberId(member.getId());
+
+        assertThat(cartResponses).isNotNull();
     }
 
     @Test
@@ -115,10 +133,11 @@ class DefaultCartServiceTest {
 
         cartService.updateAmount(uuid, productUpdateRequest);
 
-        verify(productRepository, times(1)).findById(productId);
-        verify(memberRepository, times(1)).findByUuid(uuid);
-        verify(cartRepository, times(1)).findById(cartPk);
-        verify(cart, times(1)).updateAmount(productUpdateRequest.getAmount());
+        then(productRepository).should(times(1)).findById(productId);
+        then(memberRepository).should(times(1)).findByUuid(uuid);
+        then(cartRepository).should(times(1)).findById(cartPk);
+        then(cart).should(times(1)).updateAmount(productUpdateRequest.getAmount());
+
         assertThat(cart.getAmount()).isEqualTo(productUpdateRequest.getAmount());
     }
 
@@ -149,6 +168,7 @@ class DefaultCartServiceTest {
         List<Long> productIds = LongStream.rangeClosed(1, 10)
                                           .boxed()
                                           .collect(toList());
+
         Member member = Dummy.getDummyMember(uuid, 1L);
         Product product = Dummy.getDummyProduct(1L);
         Cart cart = new Cart(member, product, 0);
@@ -158,9 +178,10 @@ class DefaultCartServiceTest {
         willDoNothing().given(cartRepository).deleteAll(anyList());
 
         cartService.deleteProducts(uuid, productIds);
-        then(memberRepository).should().findByUuid(uuid);
+
+        then(memberRepository).should(times(1)).findByUuid(member.getUuid());
         then(cartRepository).should(times(productIds.size())).findById(any(Cart.Pk.class));
-        then(cartRepository).should().deleteAll(anyList());
+        then(cartRepository).should(times(1)).deleteAll(anyList());
     }
 
 }
