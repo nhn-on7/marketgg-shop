@@ -95,8 +95,19 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
     public void deleteCustomerServicePost(Long csPostId) {
         CustomerServicePost otoInquiry = customerServicePostRepository.findById(csPostId).orElseThrow(
                 CustomerServicePostNotFoundException::new);
-        
+
+        this.deleteOwnComments(csPostId);
+
         customerServicePostRepository.delete(otoInquiry);
+    }
+
+    @Transactional
+    public void deleteOwnComments(Long csPostId) {
+        List<CustomerServiceComment> comments = customerServiceCommentRepository.findByInquiry(csPostId);
+
+        if (!comments.isEmpty()) {
+            customerServiceCommentRepository.deleteAll(comments);
+        }
     }
 
 }
