@@ -3,8 +3,8 @@ package com.nhnacademy.marketgg.server.controller;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
-import com.nhnacademy.marketgg.server.dto.response.comsun.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.comsun.PageListResponse;
+import com.nhnacademy.marketgg.server.dto.response.temp.CommonResponse;
+import com.nhnacademy.marketgg.server.dto.response.temp.PageListResponse;
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.IOException;
 import java.net.URI;
@@ -37,7 +37,7 @@ public class ProductAdminController {
     private final ProductService productService;
 
     // TODO: Develop 브랜치 머지 후 @Value값으로 고치기
-    private static final String DEFAULT_PRODUCT = "/shop/v1/admin/products";
+    private static final String DEFAULT_ADMIN_PRODUCT = "/shop/v1/admin/products";
 
 
     /**
@@ -56,7 +56,7 @@ public class ProductAdminController {
         this.productService.createProduct(productRequest, image);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create(DEFAULT_PRODUCT))
+                             .location(URI.create(DEFAULT_ADMIN_PRODUCT))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -73,7 +73,7 @@ public class ProductAdminController {
         PageListResponse<ProductResponse> productList = this.productService.retrieveProducts(pageRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_PRODUCT))
+                             .location(URI.create(DEFAULT_ADMIN_PRODUCT))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productList);
     }
@@ -90,7 +90,7 @@ public class ProductAdminController {
         ProductResponse productDetails = this.productService.retrieveProductDetails(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_PRODUCT))
+                             .location(URI.create(DEFAULT_ADMIN_PRODUCT))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productDetails);
     }
@@ -112,7 +112,7 @@ public class ProductAdminController {
         this.productService.updateProduct(productRequest, image, productId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_PRODUCT + "/" + productId))
+                             .location(URI.create(DEFAULT_ADMIN_PRODUCT + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -130,7 +130,7 @@ public class ProductAdminController {
         this.productService.deleteProduct(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_PRODUCT + "/" + productId))
+                             .location(URI.create(DEFAULT_ADMIN_PRODUCT + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -140,7 +140,7 @@ public class ProductAdminController {
         this.productService.restoreProduct(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_PRODUCT + "/" + productId))
+                             .location(URI.create(DEFAULT_ADMIN_PRODUCT + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -159,7 +159,7 @@ public class ProductAdminController {
         List<ProductResponse> productResponseList = this.productService.searchProductsByName(productName);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_PRODUCT + "/search/" + productName))
+                             .location(URI.create(DEFAULT_ADMIN_PRODUCT + "/search/" + productName))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productResponseList);
     }

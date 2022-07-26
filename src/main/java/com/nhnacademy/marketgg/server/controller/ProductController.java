@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("shop/v1/products")
 @RequiredArgsConstructor
-public class ProductMemberController {
+public class ProductController {
     private final ProductService productService;
 
-    private static final String DEFAULT_URI = "shop/v1/products";
+    private static final String DEFAULT_PRODUCT_URI = "shop/v1/products";
 
     /**
      * 상품 검색을 위한 GET Mapping을 지원합니다.
@@ -39,7 +39,7 @@ public class ProductMemberController {
             productService.searchProductByCategory(categoryCode, pageRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_URI + "/search/" + categoryCode))
+                             .location(URI.create(DEFAULT_PRODUCT_URI + "/search/" + categoryCode))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productResponseList);
     }
