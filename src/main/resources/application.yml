@@ -20,6 +20,9 @@ spring:
     uris: 133.186.153.181:9200
     connection-timeout: 30
 
+  main:
+    allow-bean-definition-overriding: true
+
 server:
   port: 7080
 

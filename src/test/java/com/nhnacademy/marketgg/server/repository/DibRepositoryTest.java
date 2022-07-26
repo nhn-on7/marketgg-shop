@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
@@ -12,18 +14,14 @@ import com.nhnacademy.marketgg.server.entity.Dib;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.repository.dib.DibRepository;
-import org.junit.jupiter.api.BeforeAll;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 @DataJpaTest
-public class DibRepositoryTest {
+class DibRepositoryTest {
 
     @Autowired
     private DibRepository dibRepository;

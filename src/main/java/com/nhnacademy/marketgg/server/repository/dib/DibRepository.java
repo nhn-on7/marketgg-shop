@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @version 1.0.0
  */
+
 public interface DibRepository extends JpaRepository<Dib, Dib.Pk>, DibRepositoryCustom {
 
 }

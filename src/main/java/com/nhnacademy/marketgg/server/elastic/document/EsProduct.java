@@ -1,12 +1,12 @@
 package com.nhnacademy.marketgg.server.elastic.document;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
 
 @Document(indexName = "products")
 @Entity
@@ -15,31 +15,31 @@ import org.springframework.data.elasticsearch.annotations.Document;
 public class EsProduct {
 
     @Id
-    @Column
+    @Field
     private Long id;
 
-    @Column
+    @Field
     private String productName;
 
-    @Column
+    @Field
     private String categoryCode;
 
-    @Column
+    @Field
     private String labelName;
 
-    @Column
+    @Field
     private String imageAddress;
 
-    @Column
+    @Field
     private String price;
 
-    @Column
+    @Field
     private String amount;
 
-    @Column
+    @Field
     private String content;
 
-    @Column
+    @Field
     private String description;
 
 }

@@ -1,13 +1,13 @@
 package com.nhnacademy.marketgg.server.elastic.document;
 
 import java.time.LocalDateTime;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
 
 @Document(indexName = "boards")
 @Entity
@@ -16,22 +16,22 @@ import org.springframework.data.elasticsearch.annotations.Document;
 public class EsBoard {
 
     @Id
-    @Column
+    @Field
     private Long id;
 
-    @Column
+    @Field
     private String title;
 
-    @Column
+    @Field
     private String categoryCode;
 
-    @Column
+    @Field
     private String status;
 
-    @Column
+    @Field
     private String reason;
 
-    @Column
+    @Field
     private LocalDateTime createdAt;
 
 }
