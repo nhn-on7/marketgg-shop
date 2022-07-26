@@ -101,6 +101,12 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
         customerServicePostRepository.delete(otoInquiry);
     }
 
+    /**
+     * 게시글 삭제 시, 댓글도 삭제하도록 하는 메소드입니다.
+     *
+     * @param csPostId - 게시글의 식별번호입니다.
+     * @since 1.0.0
+     */
     @Transactional
     public void deleteOwnComments(Long csPostId) {
         List<CustomerServiceComment> comments = customerServiceCommentRepository.findByInquiry(csPostId);

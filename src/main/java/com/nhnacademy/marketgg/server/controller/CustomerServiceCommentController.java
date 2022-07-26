@@ -51,6 +51,13 @@ public class CustomerServiceCommentController {
                              .build();
     }
 
+    /**
+     * 댓글 단건을 조회하는 GET Mapping 을 지원합니다.
+     *
+     * @param commentId - 조회할 댓글의 식별번호입니다.
+     * @return 조회한 댓글의 정보를 담은 객체를 반환합니다.
+     * @since 1.0.0
+     */
     @GetMapping("/comments/{commentId}")
     public ResponseEntity<CustomerServiceCommentDto> retrieveComment(@PathVariable final Long commentId) {
         CustomerServiceCommentDto commentResponse = customerServiceCommentService.retrieveComment(commentId);
@@ -60,6 +67,13 @@ public class CustomerServiceCommentController {
                 .body(commentResponse);
     }
 
+    /**
+     * 한 고객센터 게시글의 댓글 목록을 조회하는 GET Mapping 을 지원합니다.
+     *
+     * @param inquiryId -게시글의 식별번호입니다.
+     * @return 게시글의 댓글 목록을 List 로 반환합니다.
+     * @since 1.0.0
+     */
     @GetMapping("/{inquiryId}/comments")
     public ResponseEntity<List<CustomerServiceCommentDto>> retrieveInquiryComments(@PathVariable final Long inquiryId) {
         List<CustomerServiceCommentDto> commentResponses = customerServiceCommentService.retrieveCommentsByInquiry(inquiryId);

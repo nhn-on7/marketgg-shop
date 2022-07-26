@@ -21,8 +21,22 @@ public interface CustomerServiceCommentService {
      */
     void createComment(Long inquiryId, Long memberId, CustomerServiceCommentDto customerServiceCommentDto);
 
+    /**
+     * 댓글 단건을 조회하는 메소드입니다.
+     *
+     * @param commentId - 조회할 댓글의 식별번호입니다.
+     * @return 조회한 댓글의 정보가 담긴 DTO 객체를 반환합니다.
+     * @since 1.0.0
+     */
     CustomerServiceCommentDto retrieveComment(Long commentId);
 
+    /**
+     * 게시글에 등록된 댓글 목록을 조회하는 메소드입니다.
+     *
+     * @param inquiryId - 댓글이 등록된 게시글의 식별번호입니다.
+     * @return 조회한 댓글 목록을 List 로 반환합니다.
+     * @since 1.0.0
+     */
     List<CustomerServiceCommentDto> retrieveCommentsByInquiry(Long inquiryId);
 
 }
