@@ -26,15 +26,13 @@ public class DefaultCustomerServiceCommentService implements CustomerServiceComm
     private final CustomerServicePostRepository customerServicePostRepository;
     private final MemberRepository memberRepository;
 
-    private static final Long ADMIN_NUMBER = 1L;
-
     @Transactional
     @Override
-    public void createComment(Long inquiryId, CustomerServiceCommentDto customerServiceCommentDto) {
+    public void createComment(Long inquiryId, Long memberId, CustomerServiceCommentDto customerServiceCommentDto) {
         CustomerServiceComment customerServiceComment = customerServiceCommentMapper.toEntity(customerServiceCommentDto);
         CustomerServicePost customerServicePost = customerServicePostRepository.findById(inquiryId).orElseThrow(
                 CustomerServicePostNotFoundException::new);
-        Member member = memberRepository.findById(ADMIN_NUMBER).orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
 
         customerServiceComment.setMember(member);
         customerServiceComment.setCustomerServicePost(customerServicePost);

@@ -15,24 +15,24 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/shop/v1/admin/customer-services/oto-inquiries")
+@RequestMapping("/shop/v1/customer-services/oto-inquiries")
 @RequiredArgsConstructor
-public class AdminCustomerServiceCommentController {
+public class CustomerServiceCommentController {
 
     private final CustomerServiceCommentService customerServiceCommentService;
 
-    private static final String DEFAULT_ADMIN_CS_COMMENT = "/shop/v1/admin/customer-services/oto-inquiries";
+    private static final String DEFAULT_CS_COMMENT = "/shop/v1/customer-services/oto-inquiries";
 
-    @PostMapping("/{inquiryId}/comments")
+    @PostMapping("/{inquiryId}/members/{memberId}/comments")
     public ResponseEntity<Void> createComment(@PathVariable final Long inquiryId,
+                                              @PathVariable final Long memberId,
                                               @RequestBody final CustomerServiceCommentDto customerServiceCommentDto) {
-        customerServiceCommentService.createComment(inquiryId, customerServiceCommentDto);
+        customerServiceCommentService.createComment(inquiryId, memberId, customerServiceCommentDto);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_CS_COMMENT + "/" + inquiryId + "/comments"))
+                             .location(URI.create(DEFAULT_CS_COMMENT + "/" + inquiryId + "/members/" + memberId + "/comments"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
-
     }
 
 }
