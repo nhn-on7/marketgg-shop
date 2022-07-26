@@ -26,4 +26,5 @@ class CategorizationRepositoryTest {
 
         assertThat(result).isEmpty();
     }
+
 }

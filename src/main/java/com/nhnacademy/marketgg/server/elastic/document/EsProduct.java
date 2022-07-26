@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.elastic.document;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -10,6 +11,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 
 @Document(indexName = "products")
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class EsProduct {
