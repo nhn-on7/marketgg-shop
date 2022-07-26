@@ -26,7 +26,10 @@ public class GivenCouponResponse {
 
     private final CouponState couponState;
 
-    public GivenCouponResponse(GivenCoupon givenCoupon, CouponState state, LocalDateTime expirationPeriod) {
+    public GivenCouponResponse(final GivenCoupon givenCoupon,
+                               final CouponState state,
+                               final LocalDateTime expirationPeriod) {
+
         this.memberId = givenCoupon.getMember().getId();
         this.couponId = givenCoupon.getPk().getCouponId();
         this.couponName = givenCoupon.getCoupon().getName();

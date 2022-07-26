@@ -15,7 +15,7 @@ public class CouponDto {
 
     private Long id;
 
-    private  String name;
+    private String name;
 
     private String type;
 

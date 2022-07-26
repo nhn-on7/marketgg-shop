@@ -5,13 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
 /**
  * 지급 쿠폰 레포지토리입니다.
  *
  * @version 1.0.0
- *
  */
 public interface GivenCouponRepository extends JpaRepository<GivenCoupon, GivenCoupon.Pk>, GivenCouponRepositoryCustom {
 

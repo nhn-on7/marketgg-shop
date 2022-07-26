@@ -6,7 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
@@ -16,7 +20,6 @@ import java.net.URI;
  * 회원이 주문을 취소하면 사용 쿠폰이 삭제됩니다.
  *
  * @version 1.0.0
- *
  */
 @RestController
 @RequestMapping("/shop/v1/system/used-coupons")

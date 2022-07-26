@@ -12,7 +12,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring")
 public interface CouponMapper extends EntityMapper<CouponDto, Coupon> {
 
-    //MEMO 8: Update Entity -> 변경된 필드 값을 가진 Dto 를 Entity 에 업데이트하는 메소드
+    // MEMO 8: Update Entity -> 변경된 필드 값을 가진 Dto 를 Entity 에 업데이트하는 메소드
     // NullValuePropertyMappingStrategy.IGNORE -> Dto 의 null 값 체크해서 변경된 값만 Entity 에 반영
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateCouponFromCouponDto(CouponDto couponDto, @MappingTarget Coupon coupon);

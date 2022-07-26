@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.UsedCouponDto;
 import com.nhnacademy.marketgg.server.service.UsedCouponService;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ class UsedCouponControllerTest {
 
     String DEFAULT_USED_COUPONS = "/shop/v1/system/used-coupons";
 
-    private  static UsedCouponDto usedCouponDto;
+    private static UsedCouponDto usedCouponDto;
 
     @BeforeAll
     static void beforeEach() {
