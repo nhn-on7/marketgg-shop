@@ -42,7 +42,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @RequiredArgsConstructor
 public class AuthInjectAspect {
 
-    @Value("${gateway.origin}")
+    @Value("${gg.gateway.origin}")
     private String gateway;
 
     private final RestTemplate restTemplate;
