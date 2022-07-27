@@ -84,7 +84,7 @@ public class DefaultCustomerServicePostServiceTest {
     void testCreateOtoInquiry() {
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(categoryRepository.findById(anyString())).willReturn(Optional.of(category));
-        given(categoryRepository.retrieveCategoryIdByName(anyString())).willReturn(Optional.of("702"));
+        given(categoryRepository.retrieveCategoryIdByName(anyString())).willReturn("702");
         given(postMapper.toEntity(any(CustomerServicePostDto.class))).willReturn(post);
 
         postService.createOtoInquiry(1L, postDto);
@@ -106,7 +106,7 @@ public class DefaultCustomerServicePostServiceTest {
     @Test
     @DisplayName("1:1 문의 목록 조회")
     void testRetrieveOtoInquiries() {
-        given(categoryRepository.retrieveCategoryIdByName(anyString())).willReturn(Optional.of("702"));
+        given(categoryRepository.retrieveCategoryIdByName(anyString())).willReturn("702");
         given(postRepository.findPostsByCategoryId(any(Pageable.class), anyString()))
                 .willReturn(Page.empty());
 
@@ -118,7 +118,7 @@ public class DefaultCustomerServicePostServiceTest {
     @Test
     @DisplayName("특정 회원의 1:1 문의 목록 조회")
     void testRetrieveOwnOtoInquiries() {
-        given(categoryRepository.retrieveCategoryIdByName(anyString())).willReturn(Optional.of("702"));
+        given(categoryRepository.retrieveCategoryIdByName(anyString())).willReturn("702");
         given(postRepository.findPostByCategoryAndMember(any(Pageable.class), anyString(), anyLong()))
                 .willReturn(Page.empty());
 

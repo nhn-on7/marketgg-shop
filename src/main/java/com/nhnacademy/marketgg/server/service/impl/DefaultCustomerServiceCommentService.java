@@ -31,9 +31,8 @@ public class DefaultCustomerServiceCommentService implements CustomerServiceComm
 
     @Transactional
     @Override
-    public void createComment(Long inquiryId, Long memberId, CustomerServiceCommentDto customerServiceCommentDto) {
-        CustomerServiceComment customerServiceComment = customerServiceCommentMapper.toEntity(
-                customerServiceCommentDto);
+    public void createComment(final Long inquiryId, final Long memberId, final CustomerServiceCommentDto csCommentDto) {
+        CustomerServiceComment customerServiceComment = customerServiceCommentMapper.toEntity(csCommentDto);
         CustomerServicePost customerServicePost = customerServicePostRepository.findById(inquiryId).orElseThrow(
                 CustomerServicePostNotFoundException::new);
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
@@ -46,7 +45,7 @@ public class DefaultCustomerServiceCommentService implements CustomerServiceComm
     }
 
     @Override
-    public CustomerServiceCommentDto retrieveComment(Long commentId) {
+    public CustomerServiceCommentDto retrieveComment(final Long commentId) {
         CustomerServiceComment comment = customerServiceCommentRepository.findById(commentId).orElseThrow(
                 CustomerServiceCommentNotFoundException::new);
 
@@ -54,7 +53,7 @@ public class DefaultCustomerServiceCommentService implements CustomerServiceComm
     }
 
     @Override
-    public List<CustomerServiceCommentDto> retrieveCommentsByInquiry(Long inquiryId) {
+    public List<CustomerServiceCommentDto> retrieveCommentsByInquiry(final Long inquiryId) {
         List<CustomerServiceComment> comments = customerServiceCommentRepository.findByInquiry(inquiryId);
 
         return comments.stream()

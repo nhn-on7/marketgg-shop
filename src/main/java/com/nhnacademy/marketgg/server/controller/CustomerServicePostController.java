@@ -35,16 +35,18 @@ public class CustomerServicePostController {
 
     /**
      * 1:1 문의를 등록하는 POST Mapping 을 지원합니다.
+     * 1:1 문의 = one-to-one inquiry
+     * one-to-one 을 축약하여 oto 으로 표현하였습니다.
      *
-     * @param memberId - 1:1 문의를 등록하는 회원의 식별번호입니다.
-     * @param customerServicePostDto - 1:1 문의를 등록하기 위한 DTO 객체입니다.
+     * @param memberId  - 1:1 문의를 등록하는 회원의 식별번호입니다.
+     * @param csPostDto - 1:1 문의를 등록하기 위한 CustomerServicePostDto 객체입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
     @PostMapping("/oto-inquiries/members/{memberId}")
     public ResponseEntity<Void> createOtoInquiry(@PathVariable final Long memberId,
-                                                 @Valid @RequestBody final CustomerServicePostDto customerServicePostDto) {
-        customerServicePostService.createOtoInquiry(memberId, customerServicePostDto);
+                                                 @Valid @RequestBody final CustomerServicePostDto csPostDto) {
+        customerServicePostService.createOtoInquiry(memberId, csPostDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/members/" + memberId))

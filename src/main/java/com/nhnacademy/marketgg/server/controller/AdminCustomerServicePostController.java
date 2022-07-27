@@ -82,6 +82,12 @@ public class AdminCustomerServicePostController {
                              .build();
     }
 
+    /**
+     * 고객센터 게시글의 사유 목록을 불러오는 GET Mapping 을 지원합니다.
+     *
+     * @return 사유 목록을 반환합니다.
+     * @since 1.0.0
+     */
     @GetMapping("/reasons")
     public ResponseEntity<List<String>> retrieveAllReasonValues() {
         List<String> reasons = Arrays.stream(CustomerServicePostReason.values())

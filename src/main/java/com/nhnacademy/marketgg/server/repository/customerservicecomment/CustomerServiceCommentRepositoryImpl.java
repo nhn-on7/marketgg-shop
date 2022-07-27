@@ -14,7 +14,7 @@ public class CustomerServiceCommentRepositoryImpl extends QuerydslRepositorySupp
     }
 
     @Override
-    public List<CustomerServiceComment> findByInquiry(Long inquiryId) {
+    public List<CustomerServiceComment> findByInquiry(final Long inquiryId) {
         QCustomerServiceComment customerServiceComment = QCustomerServiceComment.customerServiceComment;
 
         return from(customerServiceComment)

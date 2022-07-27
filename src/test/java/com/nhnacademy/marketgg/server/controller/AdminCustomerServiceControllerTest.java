@@ -38,7 +38,7 @@ public class AdminCustomerServiceControllerTest {
     void testRetrieveOtoInquiry() throws Exception {
         given(customerServicePostService.retrieveCustomerServicePost(anyLong())).willReturn(null);
 
-        this.mockMvc.perform(get(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/" + 1L))
+        this.mockMvc.perform(get(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/{inquiryId}",1L))
                     .andExpect(status().isOk());
 
         then(customerServicePostService).should().retrieveCustomerServicePost(anyLong());
@@ -60,7 +60,7 @@ public class AdminCustomerServiceControllerTest {
     void testDeleteOtoInquiries() throws Exception {
         willDoNothing().given(customerServicePostService).deleteCustomerServicePost(anyLong());
 
-        this.mockMvc.perform(delete(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/" + 1L))
+        this.mockMvc.perform(delete(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/{inquiryId}", 1L))
                     .andExpect(status().isOk());
 
         then(customerServicePostService).should().deleteCustomerServicePost(anyLong());

@@ -2,14 +2,13 @@ package com.nhnacademy.marketgg.server.repository.customerservicepost;
 
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.QCustomerServicePost;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-
-import java.util.List;
 
 public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport implements CustomerServicePostRepositoryCustom {
 
@@ -20,28 +19,28 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Page<CustomerServicePost> findPostsByCategoryId(Pageable pageable, String categoryId) {
-        List<CustomerServicePost> result = from(customerServicePost)
+    public Page<CustomerServicePost> findPostsByCategoryId(final Pageable pageable, final String categoryId) {
+        QueryResults<CustomerServicePost> result = from(customerServicePost)
                 .where(customerServicePost.category.id.eq(categoryId))
                 .select(selectAllCustomerServicePostColumns())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetch();
+                .fetchResults();
 
-        return new PageImpl<>(result, pageable, result.size());
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 
     @Override
-    public Page<CustomerServicePost> findPostByCategoryAndMember(Pageable pageable, String categoryId, Long memberId) {
-        List<CustomerServicePost> result = from(customerServicePost)
+    public Page<CustomerServicePost> findPostByCategoryAndMember(final Pageable pageable, final String categoryId, final Long memberId) {
+        QueryResults<CustomerServicePost> result = from(customerServicePost)
                 .where(customerServicePost.category.id.eq(categoryId))
                 .where(customerServicePost.member.id.eq(memberId))
                 .select(customerServicePost)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetch();
+                .fetchResults();
 
-        return new PageImpl<>(result, pageable, result.size());
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 
     private ConstructorExpression<CustomerServicePost> selectAllCustomerServicePostColumns() {

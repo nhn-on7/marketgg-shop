@@ -44,7 +44,7 @@ public class CustomerServiceCommentControllerTest {
         willDoNothing().given(customerServiceCommentService)
                        .createComment(anyLong(), anyLong(), any(CustomerServiceCommentDto.class));
 
-        this.mockMvc.perform(post(DEFAULT_CS_COMMENT + "/" + 1L + "/members/" + 1L + "/comments")
+        this.mockMvc.perform(post(DEFAULT_CS_COMMENT + "/{inquiryId}/members/{memberId}/comments",1L, 1L)
                                      .contentType(MediaType.APPLICATION_JSON)
                                      .content(requestBody))
                     .andExpect(status().isCreated());
@@ -58,7 +58,7 @@ public class CustomerServiceCommentControllerTest {
     void testRetrieveComment() throws Exception {
         given(customerServiceCommentService.retrieveComment(anyLong())).willReturn(null);
 
-        this.mockMvc.perform(get(DEFAULT_CS_COMMENT + "/comments/" + 1L))
+        this.mockMvc.perform(get(DEFAULT_CS_COMMENT + "/comments/{commentId}", 1L))
                     .andExpect(status().isOk());
 
         then(customerServiceCommentService).should().retrieveComment(anyLong());
@@ -69,7 +69,7 @@ public class CustomerServiceCommentControllerTest {
     void testRetrieveInquiryComment() throws Exception {
         given(customerServiceCommentService.retrieveCommentsByInquiry(anyLong())).willReturn(List.of());
 
-        this.mockMvc.perform(get(DEFAULT_CS_COMMENT + "/" + 1L + "/comments"))
+        this.mockMvc.perform(get(DEFAULT_CS_COMMENT + "/{inquiryId}/comments", 1L))
                     .andExpect(status().isOk());
 
         then(customerServiceCommentService).should().retrieveCommentsByInquiry(anyLong());

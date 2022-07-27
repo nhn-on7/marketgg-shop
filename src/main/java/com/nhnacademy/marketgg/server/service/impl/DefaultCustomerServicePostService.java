@@ -34,16 +34,14 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
     private final MemberRepository memberRepository;
     private final CustomerServiceCommentRepository customerServiceCommentRepository;
 
-    private static String OTO_INQUIRY = "1:1문의";
+    private static final String OTO_INQUIRY = "1:1문의";
 
     @Transactional
     @Override
-    public void createOtoInquiry(Long memberId, CustomerServicePostDto customerServicePostDto) {
-        CustomerServicePost customerServicePost = customerServicePostMapper.toEntity(customerServicePostDto);
-        Member member = memberRepository.findById(memberId)
-                                        .orElseThrow(MemberNotFoundException::new);
-        String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY)
-                                              .orElseThrow(CategoryNotFoundException::new);
+    public void createOtoInquiry(final Long memberId, final CustomerServicePostDto csPostDto) {
+        CustomerServicePost customerServicePost = customerServicePostMapper.toEntity(csPostDto);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY);
         Category category = categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
         customerServicePost.setMember(member);
         customerServicePost.setCategory(category);
@@ -55,65 +53,46 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
     }
 
     @Override
-    public CustomerServicePostDto retrieveCustomerServicePost(Long csPostId) {
+    public CustomerServicePostDto retrieveCustomerServicePost(final Long csPostId) {
         CustomerServicePost csPost = customerServicePostRepository.findById(csPostId)
-                                                                      .orElseThrow(
-                                                                              CustomerServicePostNotFoundException::new);
+                                                                  .orElseThrow(
+                                                                          CustomerServicePostNotFoundException::new);
 
         return customerServicePostMapper.toDto(csPost);
     }
 
     @Override
     public List<CustomerServicePostDto> retrieveOtoInquiries(final Pageable pageable) {
-        String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY).orElseThrow(
-                CategoryNotFoundException::new);
-        List<CustomerServicePost> otoInquiries = customerServicePostRepository.findPostsByCategoryId(pageable, categoryId)
+        String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY);
+        List<CustomerServicePost> otoInquiries = customerServicePostRepository.findPostsByCategoryId(pageable,
+                                                                                                     categoryId)
                                                                               .getContent();
 
-        return otoInquiries.stream()
-                           .map(customerServicePostMapper::toDto)
-                           .collect(Collectors.toUnmodifiableList());
+        return otoInquiries.stream().map(customerServicePostMapper::toDto).collect(Collectors.toUnmodifiableList());
     }
 
     @Override
-    public List<CustomerServicePostDto> retrieveOwnOtoInquiries(Pageable pageable, Long memberId) {
-        String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY)
-                                              .orElseThrow(CategoryNotFoundException::new);
+    public List<CustomerServicePostDto> retrieveOwnOtoInquiries(final Pageable pageable, final Long memberId) {
+        String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY);
 
         List<CustomerServicePost> ownOtoInquiries = customerServicePostRepository.findPostByCategoryAndMember(pageable,
                                                                                                               categoryId,
                                                                                                               memberId)
                                                                                  .getContent();
 
-        return ownOtoInquiries.stream()
-                              .map(customerServicePostMapper::toDto)
-                              .collect(Collectors.toUnmodifiableList());
+        return ownOtoInquiries.stream().map(customerServicePostMapper::toDto).collect(Collectors.toUnmodifiableList());
     }
 
     @Transactional
     @Override
-    public void deleteCustomerServicePost(Long csPostId) {
-        CustomerServicePost otoInquiry = customerServicePostRepository.findById(csPostId).orElseThrow(
-                CustomerServicePostNotFoundException::new);
-
-        this.deleteOwnComments(csPostId);
-
-        customerServicePostRepository.delete(otoInquiry);
-    }
-
-    /**
-     * 게시글 삭제 시, 댓글도 삭제하도록 하는 메소드입니다.
-     *
-     * @param csPostId - 게시글의 식별번호입니다.
-     * @since 1.0.0
-     */
-    @Transactional
-    public void deleteOwnComments(Long csPostId) {
+    public void deleteCustomerServicePost(final Long csPostId) {
+        CustomerServicePost otoInquiry = customerServicePostRepository.findById(csPostId)
+                                                                      .orElseThrow(
+                                                                              CustomerServicePostNotFoundException::new);
         List<CustomerServiceComment> comments = customerServiceCommentRepository.findByInquiry(csPostId);
 
-        if (!comments.isEmpty()) {
-            customerServiceCommentRepository.deleteAll(comments);
-        }
+        customerServiceCommentRepository.deleteAll(comments);
+        customerServicePostRepository.delete(otoInquiry);
     }
 
 }

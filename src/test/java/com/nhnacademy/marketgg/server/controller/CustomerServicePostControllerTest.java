@@ -46,7 +46,7 @@ public class CustomerServicePostControllerTest {
         willDoNothing().given(customerServicePostService)
                        .createOtoInquiry(anyLong(), any(CustomerServicePostDto.class));
 
-        this.mockMvc.perform(post(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/members/" + 1L)
+        this.mockMvc.perform(post(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/members/{memberId}", 1L)
                                      .contentType(MediaType.APPLICATION_JSON)
                                      .content(requestBody))
                     .andExpect(status().isCreated());
@@ -59,7 +59,7 @@ public class CustomerServicePostControllerTest {
     void testRetrieveOtoInquiry() throws Exception {
         given(customerServicePostService.retrieveCustomerServicePost(anyLong())).willReturn(null);
 
-        this.mockMvc.perform(get(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/" + 1L))
+        this.mockMvc.perform(get(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/{inquiryId}", 1L))
                     .andExpect(status().isOk());
 
         then(customerServicePostService).should().retrieveCustomerServicePost(anyLong());
@@ -70,7 +70,7 @@ public class CustomerServicePostControllerTest {
     void testRetrieveOwnOtoInquiries() throws Exception {
         given(customerServicePostService.retrieveOwnOtoInquiries(any(Pageable.class), anyLong())).willReturn(List.of());
 
-        this.mockMvc.perform(get(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/members/" + 1L))
+        this.mockMvc.perform(get(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/members/{memberId}", 1L))
                     .andExpect(status().isOk());
 
         then(customerServicePostService).should().retrieveOwnOtoInquiries(any(Pageable.class), anyLong());
@@ -81,7 +81,7 @@ public class CustomerServicePostControllerTest {
     void testDeleteOtoInquiries() throws Exception {
         willDoNothing().given(customerServicePostService).deleteCustomerServicePost(anyLong());
 
-        this.mockMvc.perform(delete(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/" + 1L))
+        this.mockMvc.perform(delete(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/{inquiryId}", 1L))
                     .andExpect(status().isOk());
 
         then(customerServicePostService).should().deleteCustomerServicePost(anyLong());

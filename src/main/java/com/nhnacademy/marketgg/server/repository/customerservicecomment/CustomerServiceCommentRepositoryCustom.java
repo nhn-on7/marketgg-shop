@@ -15,6 +15,6 @@ public interface CustomerServiceCommentRepositoryCustom {
      * @return 조회한 댓글 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    List<CustomerServiceComment> findByInquiry(Long inquiryId);
+    List<CustomerServiceComment> findByInquiry(final Long inquiryId);
 
 }

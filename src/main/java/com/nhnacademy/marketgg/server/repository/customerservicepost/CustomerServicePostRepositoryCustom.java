@@ -11,22 +11,22 @@ public interface CustomerServicePostRepositoryCustom {
     /**
      * 카테고리 번호에 따라 고객센터 게시글(공지사항, 1:1문의, FAQ) 목록을 조회하는 메소드입니다.
      *
-     * @param pageable - 페이징 처리를 위한 객체입니다.
+     * @param pageable   - 페이징 처리를 위한 객체입니다.
      * @param categoryId - 조회할 게시글 목록의 카테고리 식별번호입니다.
      * @return 카테고리 번호에 따른 게시글 목록을 Page 로 반환합니다.
      * @since 1.0.0
      */
-    Page<CustomerServicePost> findPostsByCategoryId(Pageable pageable, String categoryId);
+    Page<CustomerServicePost> findPostsByCategoryId(final Pageable pageable, final String categoryId);
 
     /**
      * 카테고리 번호와 회원 번호에 따라 고객센터 게시글 목록을 조회하는 메소드입니다.
      *
-     * @param pageable - 페이징 처리를 위한 객체입니다.
+     * @param pageable   - 페이징 처리를 위한 객체입니다.
      * @param categoryId - 조회할 게시글 목록의 카테고리 식별번호입니다.
-     * @param memberId - 조회할 게시글 목록의 작성자인 회원의 식별번호입니다.
+     * @param memberId   - 조회할 게시글 목록의 작성자인 회원의 식별번호입니다.
      * @return 카테고리 번호와 회원 번호에 따른 게시글 목록을 Page 로 반환합니다.
      * @since 1.0.0
      */
-    Page<CustomerServicePost> findPostByCategoryAndMember(Pageable pageable, String categoryId, Long memberId);
+    Page<CustomerServicePost> findPostByCategoryAndMember(final Pageable pageable, final String categoryId, final Long memberId);
 
 }
