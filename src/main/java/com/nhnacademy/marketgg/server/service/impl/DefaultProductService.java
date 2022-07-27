@@ -4,7 +4,6 @@ import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.PageResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Image;
@@ -64,10 +63,11 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public PageResponse<ProductResponse> retrieveProducts(final Pageable pageable) {
-        Page<ProductResponse> products = productRepository.findAllProducts(pageable);
+    public SingleResponse<Page> retrieveProducts(final Pageable pageable) {
+        Page<ProductResponse> response = productRepository.findAllProducts(pageable);
+        SingleResponse<Page> products = new SingleResponse<>(response);
 
-        return new PageResponse<>(products.getContent(), products.getNumber(), products.getSize(), products.getTotalElements());
+        return products;
     }
 
     @Override
@@ -89,7 +89,7 @@ public class DefaultProductService implements ProductService {
                                                    .orElseThrow(CategoryNotFoundException::new);
 
         product.updateProduct(productRequest, asset, category);
-        Product updateProduct = this.productRepository.save(product);
+        this.productRepository.save(product);
     }
 
     @Transactional

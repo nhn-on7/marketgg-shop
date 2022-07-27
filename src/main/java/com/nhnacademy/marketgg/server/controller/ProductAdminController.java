@@ -6,12 +6,12 @@ import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.PageResponse;
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,14 +40,13 @@ public class ProductAdminController {
     // TODO: Develop 브랜치 머지 후 @Value값으로 고치기
     private static final String DEFAULT_ADMIN_PRODUCT = "/shop/v1/admin/products";
 
-
     /**
      * 상품 생성을 위한 POST Mapping 을 지원합니다.
      *
      * @param productRequest - 상품 생성을 위한 DTO 입니다.
      * @param image          - 상품 등록시 필요한 image 입니다. MultipartFile 타입 입니다.
      * @return - Mapping URI 를 담은 응답 객체를 반환합니다.
-     * @throws IOException
+     * @throws IOException - IOException을 던집니다.
      * @since 1.0.0
      */
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -70,8 +69,7 @@ public class ProductAdminController {
      */
     @GetMapping
     public ResponseEntity<? extends CommonResponse> retrieveProducts(DefaultPageRequest pageRequest) {
-        PageResponse<ProductResponse> productList =
-            this.productService.retrieveProducts(pageRequest.getPageable());
+        SingleResponse<Page> productList = this.productService.retrieveProducts(pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT))
