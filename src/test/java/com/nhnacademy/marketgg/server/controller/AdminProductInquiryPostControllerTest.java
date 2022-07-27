@@ -38,7 +38,7 @@ class AdminProductInquiryPostControllerTest {
         doNothing().when(productInquiryPostService)
                    .updateProductInquiryReply(any(ProductInquiryRequest.class), anyLong(), anyLong());
 
-        this.mockMvc.perform(put("/shop/v1/admin/products/" + 1L + "/inquiries/" + 1L)
+        this.mockMvc.perform(put("/admin/products/" + 1L + "/inquiries/" + 1L)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(content))
                     .andExpect(status().isOk());

@@ -22,7 +22,7 @@ class AdminPointControllerTest {
     @MockBean
     PointService pointService;
 
-    private static final String DEFAULT_ADMIN = "/shop/v1/admin";
+    private static final String DEFAULT_ADMIN = "/admin";
 
     @Test
     @DisplayName("관리자의 사용자 전체 포인트 내역 조회")

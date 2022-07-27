@@ -22,12 +22,12 @@ import java.net.URI;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/shop/v1/system/used-coupons")
+@RequestMapping("/system/used-coupons")
 @RequiredArgsConstructor
 public class UsedCouponController {
 
     private final UsedCouponService usedCouponService;
-    private static final String DEFAULT_USED_COUPONS = "/shop/v1/system/used-coupons";
+    private static final String DEFAULT_USED_COUPONS = "/system/used-coupons";
 
     /**
      * 주문번호, 회원번호, 쿠폰번호를 DTO 에 담아서 오면 사용 쿠폰을 생성하는 PostMapping 을 지원합니다.

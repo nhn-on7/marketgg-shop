@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/shop/v1/admin/products")
+@RequestMapping("/admin/products")
 @RequiredArgsConstructor
 public class AdminProductInquiryPostController {
 
@@ -44,7 +44,7 @@ public class AdminProductInquiryPostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                 "/shop/v1/admin/products/" + productId + "/inquiries/" + inquiryId))
+                                 "/admin/products/" + productId + "/inquiries/" + inquiryId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

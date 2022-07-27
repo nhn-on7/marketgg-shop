@@ -27,13 +27,13 @@ import java.util.List;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/shop/v1/admin/categories")
+@RequestMapping("/admin/categories")
 @RequiredArgsConstructor
 public class CategoryController {
 
     private final CategoryService categoryService;
 
-    private static final String DEFAULT_CATEGORY = "/shop/v1/admin/categories";
+    private static final String DEFAULT_CATEGORY = "/admin/categories";
 
     /**
      * 입력한 정보로 카테고리를 생성하는 POST Mapping 을 지원합니다.

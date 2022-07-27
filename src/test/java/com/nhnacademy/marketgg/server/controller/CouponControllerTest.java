@@ -41,7 +41,7 @@ public class CouponControllerTest {
     @MockBean
     CouponService couponService;
 
-    private static final String DEFAULT_COUPON = "/shop/v1/admin/coupons";
+    private static final String DEFAULT_COUPON = "/admin/coupons";
 
     Pageable pageable = PageRequest.of(0, 20);
     Page<GivenCoupon> inquiryPosts = new PageImpl<>(List.of(), pageable, 0);

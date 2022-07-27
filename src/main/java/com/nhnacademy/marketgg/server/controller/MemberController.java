@@ -42,7 +42,7 @@ import static org.springframework.http.HttpStatus.OK;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/shop/v1/members")
+@RequestMapping("/members")
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -62,7 +62,7 @@ public class MemberController {
         LocalDateTime check = memberService.retrievePassUpdatedAt(memberId);
 
         return ResponseEntity.status(OK)
-                             .location(URI.create("/shop/v1/members/" + memberId + "/ggpass"))
+                             .location(URI.create("/members/" + memberId + "/ggpass"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(check);
     }
@@ -79,7 +79,7 @@ public class MemberController {
         memberService.subscribePass(memberId);
 
         return ResponseEntity.status(OK)
-                             .location(URI.create("/shop/v1/members/" + memberId + "/ggpass/subscribe"))
+                             .location(URI.create("/members/" + memberId + "/ggpass/subscribe"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -95,7 +95,7 @@ public class MemberController {
     public ResponseEntity<Void> withdrawPass(@PathVariable final Long memberId) {
         memberService.withdrawPass(memberId);
 
-        return ResponseEntity.status(OK).location(URI.create("/shop/v1/members/" + memberId + "/ggpass/withdraw"))
+        return ResponseEntity.status(OK).location(URI.create("/members/" + memberId + "/ggpass/withdraw"))
 
                              .contentType(MediaType.APPLICATION_JSON).build();
     }
@@ -138,7 +138,7 @@ public class MemberController {
                 new PointHistoryRequest(5000, "회원 가입 추천인 이벤트"));
 
         return ResponseEntity.status(OK)
-                             .location(URI.create("/shop/v1/members/signup"))
+                             .location(URI.create("/members/signup"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -154,7 +154,7 @@ public class MemberController {
     public ResponseEntity<Void> withdraw(@UUID String uuid, final MemberWithdrawRequest memberWithdrawRequest) {
         memberService.withdraw(uuid, memberWithdrawRequest);
         return ResponseEntity.status(OK)
-                             .location(URI.create("/shop/v1/members"))
+                             .location(URI.create("/members"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -174,7 +174,7 @@ public class MemberController {
         givenCouponService.createGivenCoupons(memberId, givenCouponRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create("/shop/v1/members/" + memberId + "/coupons"))
+                             .location(URI.create("/members/" + memberId + "/coupons"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -192,7 +192,7 @@ public class MemberController {
         List<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(memberId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create("/shop/v1/members/" + memberId + "/coupons"))
+                             .location(URI.create("/members/" + memberId + "/coupons"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(givenCouponResponses);
     }

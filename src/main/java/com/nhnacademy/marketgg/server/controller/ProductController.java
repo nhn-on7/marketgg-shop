@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("shop/v1/products")
+@RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
 
-    private static final String DEFAULT_PRODUCT_URI = "shop/v1/products";
+    private static final String DEFAULT_PRODUCT_URI = "products";
 
     /**
      * 상품 검색을 위한 GET Mapping을 지원합니다.

@@ -35,7 +35,7 @@ class CategorizationControllerTest {
     void retrieveCategorization() throws Exception {
         when(categorizationService.retrieveCategorizations()).thenReturn(List.of());
 
-        this.mockMvc.perform(get("/shop/v1/admin/categorizations"))
+        this.mockMvc.perform(get("/admin/categorizations"))
                 .andExpect(status().isOk());
 
         verify(categorizationService, times(1)).retrieveCategorizations();

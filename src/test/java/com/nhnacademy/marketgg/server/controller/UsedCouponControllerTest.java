@@ -30,7 +30,7 @@ class UsedCouponControllerTest {
     @MockBean
     UsedCouponService usedCouponService;
 
-    String DEFAULT_USED_COUPONS = "/shop/v1/system/used-coupons";
+    String DEFAULT_USED_COUPONS = "/system/used-coupons";
 
     private static UsedCouponDto usedCouponDto;
 

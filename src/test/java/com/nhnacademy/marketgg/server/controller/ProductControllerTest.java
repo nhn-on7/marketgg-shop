@@ -33,7 +33,8 @@ class ProductControllerTest {
     ProductService productService;
 
     private ProductResponse productResponse;
-    private static final String DEFAULT_PRODUCT = "/shop/v1/products";
+
+    private static final String DEFAULT_PRODUCT = "/products";
 
     @Test
     @DisplayName("카테고리로 상품 검색 테스트")

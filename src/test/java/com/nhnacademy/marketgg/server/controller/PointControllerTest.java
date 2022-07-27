@@ -24,7 +24,7 @@ class PointControllerTest {
     @MockBean
     PointService pointService;
 
-    private static final String DEFAULT_MEMBER = "/shop/v1/members";
+    private static final String DEFAULT_MEMBER = "/members";
 
     @Test
     @DisplayName("회원의 포인트 내역 목록 조회")

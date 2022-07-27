@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/shop/v1/admin/points")
+@RequestMapping("/admin/points")
 @RequiredArgsConstructor
 public class AdminPointController {
 
     private final PointService pointService;
 
-    private static final String DEFAULT_ADMIN = "/shop/v1/admin";
+    private static final String DEFAULT_ADMIN = "/admin";
 
     /**
      * 전체 회원의 포인트 내역을 반환합니다.

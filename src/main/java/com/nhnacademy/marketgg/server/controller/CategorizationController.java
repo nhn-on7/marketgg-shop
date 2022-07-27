@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/shop/v1/admin/categorizations")
+@RequestMapping("/admin/categorizations")
 @RequiredArgsConstructor
 public class CategorizationController {
 
@@ -35,7 +35,7 @@ public class CategorizationController {
                 categorizationService.retrieveCategorizations();
 
         return ResponseEntity.status(HttpStatus.OK)
-                .location(URI.create("/shop/v1/admin/categorizations"))
+                .location(URI.create("/admin/categorizations"))
                 .body(categorizationResponses);
     }
 
