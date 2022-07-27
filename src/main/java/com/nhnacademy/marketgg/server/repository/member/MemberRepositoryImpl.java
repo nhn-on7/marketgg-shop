@@ -18,9 +18,10 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
         QMember member = QMember.member;
 
         MemberInfo memberInfo = from(member)
+            .innerJoin(member.cart)
+            .where(member.uuid.eq(uuid))
             .select(Projections.constructor(MemberInfo.class,
                 member.id, member.cart, member.memberGrade, member.gender, member.birthDate, member.ggpassUpdatedAt))
-            .where(member.uuid.eq(uuid))
             .fetchOne();
 
         return Optional.ofNullable(memberInfo);

@@ -42,6 +42,18 @@ public class CartProduct {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    public CartProduct(Cart cart, Product product, Integer amount) {
+        this.pk = new Pk(cart.getId(), product.getId());
+        this.cart = cart;
+        this.product = product;
+        this.amount = amount;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public void updateAmount(Integer amount) {
+        this.amount = amount;
+    }
+
     @Embeddable
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
