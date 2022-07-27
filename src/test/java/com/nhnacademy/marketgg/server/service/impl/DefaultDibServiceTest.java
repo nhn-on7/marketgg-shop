@@ -61,6 +61,7 @@ public class DefaultDibServiceTest {
 
     @BeforeAll
     static void beforeAll() {
+        // TODO: 아래 생성자는 해당 테스트에서만 쓰임 확인 필요.
         member = new Member(new MemberCreateRequest(), new MemberGrade(new MemberGradeCreateRequest()));
 
         product = new Product(new ProductCreateRequest(), Asset.create(),

@@ -4,12 +4,14 @@ import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostDto;
+import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.CustomerServiceComment;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.mapper.impl.CustomerServicePostMapper;
+import com.nhnacademy.marketgg.server.repository.cart.CartRepository;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicecomment.CustomerServiceCommentRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
@@ -59,19 +61,23 @@ public class DefaultCustomerServicePostServiceTest {
     @Mock
     CustomerServicePostMapper postMapper;
 
+    @Mock
+    CartRepository cartRepository;
+
     private static CustomerServicePost post;
     private static Category category;
     private static Member member;
+    private static Cart cart;
     private static CustomerServicePostDto postDto;
 
     @BeforeAll
-    static void beforeAll() {
+    void beforeAll() {
         postDto = new CustomerServicePostDto();
         MemberCreateRequest memberRequest = new MemberCreateRequest();
         CategoryCreateRequest categoryRequest = new CategoryCreateRequest();
         CategorizationCreateRequest categorizationRequest = new CategorizationCreateRequest();
-
-        member = new Member(memberRequest);
+        cart = cartRepository.save(new Cart());
+        member = new Member(memberRequest, cart);
         Categorization categorization = new Categorization(categorizationRequest);
         category = new Category(categoryRequest, categorization);
         post = new CustomerServicePost(1L, member, category,

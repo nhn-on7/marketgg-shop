@@ -19,7 +19,7 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
 
         MemberInfo memberInfo = from(member)
             .select(Projections.constructor(MemberInfo.class,
-                member.id, member.memberGrade, member.gender, member.birthDate, member.ggpassUpdatedAt))
+                member.id, member.cart, member.memberGrade, member.gender, member.birthDate, member.ggpassUpdatedAt))
             .where(member.uuid.eq(uuid))
             .fetchOne();
 

@@ -3,6 +3,8 @@ package com.nhnacademy.marketgg.server.entity;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +40,10 @@ public class Member {
     @JoinColumn(name = "member_grade_no")
     private MemberGrade memberGrade;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_no")
+    private Cart cart;
+
     @Column(unique = true)
     private String uuid;
 
@@ -65,8 +71,9 @@ public class Member {
      * @param memberRequest - 회원을 생성하기 위한 DTO 입니다.
      * @since 1.0.0
      */
-    public Member(MemberCreateRequest memberRequest) {
+    public Member(MemberCreateRequest memberRequest, Cart cart) {
         this.memberGrade = memberRequest.getMemberGrade();
+        this.cart = cart;
         this.uuid = memberRequest.getUuid();
         this.gender = memberRequest.getGender();
         this.birthDate = memberRequest.getBirthDate();
@@ -84,9 +91,10 @@ public class Member {
      * @since 1.0.0
      */
     public Member(final ShopMemberSignUpRequest shopMemberSignupRequest
-            , final MemberGrade signUpMemberGrade) {
+            , final MemberGrade signUpMemberGrade, Cart cart) {
 
         this.memberGrade = signUpMemberGrade;
+        this.cart = cart;
         this.uuid = shopMemberSignupRequest.getUuid();
         this.gender = shopMemberSignupRequest.getGender();
         this.birthDate = shopMemberSignupRequest.getBirthDate();
@@ -110,4 +118,5 @@ public class Member {
     public void withdraw(final MemberWithdrawRequest memberWithdrawRequest) {
         this.deletedAt = memberWithdrawRequest.getDeletedAt();
     }
+
 }
