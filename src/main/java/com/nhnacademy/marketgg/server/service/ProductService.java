@@ -3,7 +3,7 @@ package com.nhnacademy.marketgg.server.service;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
-import com.nhnacademy.marketgg.server.dto.response.temp.PageListResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -34,7 +34,7 @@ public interface ProductService {
      * @since 1.0.0
      */
 
-    <T> PageListResponse<T> retrieveProducts(Pageable pageable);
+    SingleResponse<Page> retrieveProducts(Pageable pageable);
 
     /**
      * 상품 Id를 통해 상세 정보를 조회합니다.
@@ -43,7 +43,7 @@ public interface ProductService {
      * @return - PK에 해당하는 상품을 반환합니다.
      * @since 1.0.0
      */
-    ProductResponse retrieveProductDetails(final Long productId);
+    SingleResponse<ProductResponse> retrieveProductDetails(final Long productId);
 
     /**
      * 상품 id를 인자로 받아 해당 상품이 존재할 경우 수정합니다.
@@ -86,6 +86,6 @@ public interface ProductService {
      * @return - 해당하는 카테고리의 상품 리스트를 반환합니다.
      */
 
-    Page<ProductResponse> searchProductByCategory(final String categoryCode, final Pageable pageable);
+    List<ProductResponse> searchProductByCategory(final String categoryCode);
 
 }

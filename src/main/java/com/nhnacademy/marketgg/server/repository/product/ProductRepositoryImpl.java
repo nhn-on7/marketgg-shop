@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.repository.product;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.QProduct;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
 import java.util.List;
@@ -21,13 +22,13 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     public Page<ProductResponse> findAllProducts(final Pageable pageable) {
         QProduct product = QProduct.product;
 
-        List<ProductResponse> result = from(product)
+        QueryResults<ProductResponse> result = from(product)
             .select(selectAllProductColumns())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
-            .fetch();
+            .fetchResults();
 
-        return new PageImpl<>(result, pageable, result.size());
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 
     @Override
@@ -51,17 +52,13 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     }
 
     @Override
-    public Page<ProductResponse> findByCategoryCode(final String categoryCode, final Pageable pageable) {
+    public List<ProductResponse> findByCategoryCode(final String categoryCode) {
         QProduct product = QProduct.product;
 
-        List<ProductResponse> result = from(product)
+        return from(product)
             .select(selectAllProductColumns())
             .where(product.category.id.eq(categoryCode))
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
             .fetch();
-
-        return new PageImpl<>(result, pageable, result.size());
     }
 
     private ConstructorExpression<ProductResponse> selectAllProductColumns() {

@@ -3,7 +3,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
-import com.nhnacademy.marketgg.server.dto.response.temp.PageListResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Image;
@@ -22,9 +22,7 @@ import com.nhnacademy.marketgg.server.repository.productlabel.ProductLabelReposi
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -59,27 +57,23 @@ public class DefaultProductService implements ProductService {
         Product product = this.productRepository.save(new Product(productRequest, asset, category));
 
         ProductLabel.Pk pk = new ProductLabel.Pk(product.getId(), productRequest.getLabelNo());
-        Label label = labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);;
+        Label label = labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);
 
         this.productLabelRepository.save(new ProductLabel(pk, product, label));
-
     }
 
     @Override
-    public <T> PageListResponse<T> retrieveProducts(Pageable pageable) {
-        Page<ProductResponse> products = productRepository.findAllProducts(pageable);
+    public SingleResponse<Page> retrieveProducts(final Pageable pageable) {
+        Page<ProductResponse> response = productRepository.findAllProducts(pageable);
+        SingleResponse<Page> products = new SingleResponse<>(response);
 
-        Map<String, Integer> pageInfo = new HashMap<>();
-        pageInfo.put("pageNum", products.getNumber());
-        pageInfo.put("pageSize", products.getSize());
-        pageInfo.put("totalPages", products.getTotalPages());
-
-        return new PageListResponse(products.getContent(), pageInfo);
+        return products;
     }
 
     @Override
-    public ProductResponse retrieveProductDetails(final Long productId) {
-        return this.productRepository.queryById(productId);
+    public SingleResponse<ProductResponse> retrieveProductDetails(final Long productId) {
+
+        return new SingleResponse<>(this.productRepository.queryById(productId));
     }
 
     @Transactional
@@ -95,8 +89,7 @@ public class DefaultProductService implements ProductService {
                                                    .orElseThrow(CategoryNotFoundException::new);
 
         product.updateProduct(productRequest, asset, category);
-        Product updateProduct = this.productRepository.save(product);
-
+        this.productRepository.save(product);
     }
 
     @Transactional
@@ -122,8 +115,8 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public Page<ProductResponse> searchProductByCategory(final String categoryCode, final Pageable pageable) {
-        return productRepository.findByCategoryCode(categoryCode, pageable);
+    public List<ProductResponse> searchProductByCategory(final String categoryCode) {
+        return productRepository.findByCategoryCode(categoryCode);
 
     }
 
