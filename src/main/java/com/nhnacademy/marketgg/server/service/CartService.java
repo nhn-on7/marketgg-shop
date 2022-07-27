@@ -17,7 +17,7 @@ public interface CartService {
      * @param uuid              - 회원의 고유 번호
      * @param productAddRequest - 장바구니에 담으려는 상품 정보
      */
-    void addProduct(String uuid, ProductToCartRequest productAddRequest);
+    void addProduct(final String uuid, final ProductToCartRequest productAddRequest);
 
     /**
      * 회원이 장바구니에 담은 상품을 조회합니다.
@@ -25,7 +25,7 @@ public interface CartService {
      * @param uuid - 회원의 고유번호
      * @return - 장바구니 목록
      */
-    List<CartResponse> retrieveCarts(String uuid);
+    List<CartResponse> retrieveCarts(final String uuid);
 
     /**
      * 장바구니에 담긴 상품 수량을 변경합니다.
@@ -33,7 +33,7 @@ public interface CartService {
      * @param uuid                 - 회원의 고유번호
      * @param productUpdateRequest - 수량을 변경하려는 상품 정보
      */
-    void updateAmount(String uuid, ProductToCartRequest productUpdateRequest);
+    void updateAmount(final String uuid, final ProductToCartRequest productUpdateRequest);
 
     /**
      * 장바구니에 담긴 상품을 삭제합니다.
@@ -41,6 +41,6 @@ public interface CartService {
      * @param uuid     - 회원의 고유번호
      * @param products - 삭제하려는 상품 목록
      */
-    void deleteProducts(String uuid, List<Long> products);
+    void deleteProducts(final String uuid, final List<Long> products);
 
 }

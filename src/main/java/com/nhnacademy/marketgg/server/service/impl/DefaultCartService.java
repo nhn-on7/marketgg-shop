@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 장바구니 로직을 처리하려는 구현체입니다.
- *
+ * <p>
  * {@link com.nhnacademy.marketgg.server.service.CartService}
  */
 @Service
@@ -34,7 +34,7 @@ public class DefaultCartService implements CartService {
 
     @Transactional
     @Override
-    public void addProduct(String uuid, ProductToCartRequest productAddRequest) {
+    public void addProduct(final String uuid, final ProductToCartRequest productAddRequest) {
         Product product = productRepository.findById(productAddRequest.getId())
                                            .orElseThrow(ProductNotFoundException::new);
 
@@ -46,7 +46,7 @@ public class DefaultCartService implements CartService {
     }
 
     @Override
-    public List<CartResponse> retrieveCarts(String uuid) {
+    public List<CartResponse> retrieveCarts(final String uuid) {
         Member member = memberRepository.findByUuid(uuid)
                                         .orElseThrow(MemberNotFoundException::new);
 
@@ -55,7 +55,7 @@ public class DefaultCartService implements CartService {
 
     @Transactional
     @Override
-    public void updateAmount(String uuid, ProductToCartRequest productUpdateRequest) {
+    public void updateAmount(final String uuid, final ProductToCartRequest productUpdateRequest) {
         Product product = productRepository.findById(productUpdateRequest.getId())
                                            .orElseThrow(ProductNotFoundException::new);
 
@@ -71,7 +71,7 @@ public class DefaultCartService implements CartService {
 
     @Transactional
     @Override
-    public void deleteProducts(String uuid, List<Long> products) {
+    public void deleteProducts(final String uuid, final List<Long> products) {
         Member member = memberRepository.findByUuid(uuid)
                                         .orElseThrow(MemberNotFoundException::new);
 

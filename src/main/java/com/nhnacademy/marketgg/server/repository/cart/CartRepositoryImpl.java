@@ -19,7 +19,7 @@ public class CartRepositoryImpl extends QuerydslRepositorySupport implements Car
     }
 
     @Override
-    public List<CartResponse> findCartByMemberId(Long memberId) {
+    public List<CartResponse> findCartByMemberId(final Long memberId) {
         QCart cart = QCart.cart;
 
         return from(cart)

@@ -17,6 +17,6 @@ public interface CartRepositoryCustom {
      * @param memberId - 사용자 번호
      * @return - 장바구니 목록을 반환합니다.
      */
-    List<CartResponse> findCartByMemberId(Long memberId);
+    List<CartResponse> findCartByMemberId(final Long memberId);
 
 }
