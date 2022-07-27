@@ -7,6 +7,11 @@ import com.querydsl.core.types.Projections;
 import java.util.List;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+/**
+ * 장바구니 정보를 처리하는 QueryDsl 구현체입니다.
+ *
+ * {@link com.nhnacademy.marketgg.server.repository.cart.CartRepositoryCustom}
+ */
 public class CartRepositoryImpl extends QuerydslRepositorySupport implements CartRepositoryCustom {
 
     public CartRepositoryImpl() {
@@ -25,4 +30,5 @@ public class CartRepositoryImpl extends QuerydslRepositorySupport implements Car
                 cart.product.id, cart.product.name, cart.amount, cart.product.price))
             .fetch();
     }
+
 }

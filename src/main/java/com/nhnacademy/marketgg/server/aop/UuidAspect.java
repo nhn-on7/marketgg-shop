@@ -13,7 +13,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
- * 컨트롤러에서 사용자의 UUID 를 전달받을 수 있다.
+ * 컨트롤러에서 사용자의 UUID 를 전달받을 수 있습니다.
  *
  * @version 1.0.0
  */
@@ -22,6 +22,14 @@ import org.springframework.stereotype.Component;
 @Order(20)
 @Component
 public class UuidAspect {
+
+    /**
+     * 컨트롤러 클래스에 UUID 를 전달합니다.
+     *
+     * @param pjp - 메서드 원본 실행시킬 수 있는 객체입니다.
+     * @return 메서드를 실행시킵니다.
+     * @throws Throwable 메서드를 실행시킬 때 발생할 수 있는 예외입니다.
+     */
 
     @Around("execution(* com.nhnacademy.marketgg.server.controller.*.*(.., @com.nhnacademy.marketgg.server.annotation.UUID (*) ,..))")
     public Object getUuid(ProceedingJoinPoint pjp) throws Throwable {

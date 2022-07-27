@@ -22,6 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 장바구니 관련 요청을 처리합니다.
+ *
+ * @version 1.0.0
+ */
 @RoleCheck(accessLevel = Role.ROLE_USER)
 @RestController
 @RequestMapping("/shop/v1/cart")
@@ -30,17 +35,30 @@ public class CartController {
 
     private final CartService cartService;
 
+    /**
+     * 장바구니 등록 요청을 처리합니다.
+     *
+     * @param uuid              - 사용자 고유 번호
+     * @param productAddRequest - 장바구니에 추가하려는 상품 정보
+     * @return - 성공여부 반환
+     */
     @PostMapping
     public ResponseEntity<CommonResponse> addProductToCart(@UUID String uuid,
-                                                           @RequestBody ProductToCartRequest request) {
+                                                           @RequestBody ProductToCartRequest productAddRequest) {
 
-        cartService.addProduct(uuid, request);
+        cartService.addProduct(uuid, productAddRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(new SingleResponse<>("Add Success"));
     }
 
+    /**
+     * 장바구니 조회 요청을 처리합니다.
+     *
+     * @param uuid - 사용자 고유 번호
+     * @return - 성공여부 반환
+     */
     @GetMapping
     public ResponseEntity<CommonResponse> retrieveCart(@UUID String uuid) {
         List<CartResponse> cartResponses = cartService.retrieveCarts(uuid);
@@ -50,6 +68,13 @@ public class CartController {
                              .body(new ListResponse<>(cartResponses));
     }
 
+    /**
+     * 장바구니 등록 상품 수량 변경 요청을 처리합니다.
+     *
+     * @param uuid                 - 사용자 고유 번호
+     * @param productUpdateRequest - 변경하려는 상품 정보
+     * @return - 성공여부 반환
+     */
     @PatchMapping
     public ResponseEntity<CommonResponse> updateProductAmountInCart(@UUID String uuid,
                                                                     @RequestBody
@@ -62,6 +87,12 @@ public class CartController {
                              .body(new SingleResponse<>("Update Success"));
     }
 
+    /**
+     * 장바구니 삭제 요청을 처리합니다.
+     *
+     * @param uuid - 사용자 고유 번호
+     * @return - 성공여부 반환
+     */
     @DeleteMapping
     public ResponseEntity<CommonResponse> deleteProducts(@UUID String uuid,
                                                          @RequestBody List<Long> products) {

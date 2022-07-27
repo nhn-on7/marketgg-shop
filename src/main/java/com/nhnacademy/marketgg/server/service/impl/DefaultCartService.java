@@ -19,6 +19,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 장바구니 로직을 처리하려는 구현체입니다.
+ *
+ * {@link com.nhnacademy.marketgg.server.service.CartService}
+ */
 @Service
 @RequiredArgsConstructor
 public class DefaultCartService implements CartService {
