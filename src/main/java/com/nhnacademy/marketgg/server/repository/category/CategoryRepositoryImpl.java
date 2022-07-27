@@ -29,6 +29,16 @@ public class CategoryRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     @Override
+    public String retrieveCategoryIdByName(String name) {
+        QCategory category = QCategory.category;
+
+        return from(category)
+                .where(category.name.eq(name))
+                .select(category.id)
+                .fetchOne();
+    }
+
+    @Override
     public List<CategoryRetrieveResponse> findByCategorizationCode(String categorizationId) {
         QCategory category = QCategory.category;
         QCategorization categorization = QCategorization.categorization;
