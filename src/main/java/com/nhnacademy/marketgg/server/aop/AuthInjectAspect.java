@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.AuthInfo;
-import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import java.util.Arrays;
@@ -37,7 +36,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 @Slf4j
 @Aspect
-@Order(20)
+@Order(40)
 @Component
 @RequiredArgsConstructor
 public class AuthInjectAspect {
