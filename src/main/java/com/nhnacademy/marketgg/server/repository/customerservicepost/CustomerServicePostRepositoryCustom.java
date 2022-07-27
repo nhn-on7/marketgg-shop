@@ -16,7 +16,7 @@ public interface CustomerServicePostRepositoryCustom {
      * @return 카테고리 번호에 따른 게시글 목록을 Page 로 반환합니다.
      * @since 1.0.0
      */
-    Page<CustomerServicePost> findPostByCategoryId(Pageable pageable, String categoryId);
+    Page<CustomerServicePost> findPostsByCategoryId(Pageable pageable, String categoryId);
 
     /**
      * 카테고리 번호와 회원 번호에 따라 고객센터 게시글 목록을 조회하는 메소드입니다.

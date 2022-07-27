@@ -67,7 +67,7 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
     public List<CustomerServicePostDto> retrieveOtoInquiries(final Pageable pageable) {
         String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY).orElseThrow(
                 CategoryNotFoundException::new);
-        List<CustomerServicePost> otoInquiries = customerServicePostRepository.findPostByCategoryId(pageable, categoryId)
+        List<CustomerServicePost> otoInquiries = customerServicePostRepository.findPostsByCategoryId(pageable, categoryId)
                                                                               .getContent();
 
         return otoInquiries.stream()

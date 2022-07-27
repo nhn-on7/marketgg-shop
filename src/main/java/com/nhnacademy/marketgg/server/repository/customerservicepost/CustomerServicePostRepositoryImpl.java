@@ -20,7 +20,7 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Page<CustomerServicePost> findPostByCategoryId(Pageable pageable, String categoryId) {
+    public Page<CustomerServicePost> findPostsByCategoryId(Pageable pageable, String categoryId) {
         List<CustomerServicePost> result = from(customerServicePost)
                 .where(customerServicePost.category.id.eq(categoryId))
                 .select(selectAllCustomerServicePostColumns())

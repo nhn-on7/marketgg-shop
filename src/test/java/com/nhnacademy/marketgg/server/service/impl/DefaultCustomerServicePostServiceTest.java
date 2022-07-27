@@ -107,12 +107,12 @@ public class DefaultCustomerServicePostServiceTest {
     @DisplayName("1:1 문의 목록 조회")
     void testRetrieveOtoInquiries() {
         given(categoryRepository.retrieveCategoryIdByName(anyString())).willReturn(Optional.of("702"));
-        given(postRepository.findPostByCategoryId(any(Pageable.class), anyString()))
+        given(postRepository.findPostsByCategoryId(any(Pageable.class), anyString()))
                 .willReturn(Page.empty());
 
         postService.retrieveOtoInquiries(PageRequest.of(0, 10));
 
-        then(postRepository).should().findPostByCategoryId(any(Pageable.class), anyString());
+        then(postRepository).should().findPostsByCategoryId(any(Pageable.class), anyString());
     }
 
     @Test
