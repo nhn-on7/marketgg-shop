@@ -33,7 +33,7 @@ class ProductInquiryPostControllerTest {
     @MockBean
     ProductInquiryPostService productInquiryPostService;
 
-    private static final String DEFAULT_INQUIRY = "/shop/v1";
+    private static final String DEFAULT_INQUIRY = "";
 
     @Test
     @DisplayName("상품 문의 등록 테스트")

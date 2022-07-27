@@ -56,7 +56,7 @@ class ProductAdminControllerTest {
     @MockBean
     ProductService productService;
 
-    private static final String DEFAULT_PRODUCT = "/shop/v1/admin/products";
+    private static final String DEFAULT_PRODUCT = "/admin/products";
     private ProductCreateRequest productRequest;
     private ProductResponse productResponse;
 

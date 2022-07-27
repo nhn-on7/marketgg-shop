@@ -23,13 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/shop/v1/admin/labels")
+@RequestMapping("/admin/labels")
 @RequiredArgsConstructor
 public class LabelController {
 
     private final LabelService labelService;
 
-    private static final String DEFAULT_LABEL = "/shop/v1/admin/labels";
+    private static final String DEFAULT_LABEL = "/admin/labels";
 
     /**
      * 입력한 정보로 라벨을 등록하는 POST Mapping 을 지원합니다.

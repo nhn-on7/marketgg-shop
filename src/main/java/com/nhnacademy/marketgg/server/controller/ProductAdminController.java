@@ -31,14 +31,14 @@ import org.springframework.web.multipart.MultipartFile;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/shop/v1/admin/products")
+@RequestMapping("/admin/products")
 @RequiredArgsConstructor
 public class ProductAdminController {
 
     private final ProductService productService;
 
     // TODO: Develop 브랜치 머지 후 @Value값으로 고치기
-    private static final String DEFAULT_ADMIN_PRODUCT = "/shop/v1/admin/products";
+    private static final String DEFAULT_ADMIN_PRODUCT = "/admin/products";
 
     /**
      * 상품 생성을 위한 POST Mapping 을 지원합니다.

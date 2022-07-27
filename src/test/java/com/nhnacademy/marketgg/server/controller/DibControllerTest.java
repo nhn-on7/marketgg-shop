@@ -39,7 +39,7 @@ public class DibControllerTest {
     void testCreateDib() throws Exception {
         doNothing().when(dibService).createDib(anyLong(), anyLong());
 
-        mockMvc.perform(post("/shop/v1/members/1/dibs/1"))
+        mockMvc.perform(post("/members/1/dibs/1"))
                .andExpect(status().isCreated());
 
         verify(dibService, times(1)).createDib(anyLong(), anyLong());
@@ -50,7 +50,7 @@ public class DibControllerTest {
     void testRetrieveDibs() throws Exception {
         when(dibService.retrieveDibs(1L)).thenReturn(List.of());
 
-        this.mockMvc.perform(get("/shop/v1/members/1/dibs"))
+        this.mockMvc.perform(get("/members/1/dibs"))
                     .andExpect(status().isOk());
 
         verify(dibService, times(1)).retrieveDibs(anyLong());
@@ -61,7 +61,7 @@ public class DibControllerTest {
     void testDeleteDib() throws Exception {
         doNothing().when(dibService).deleteDib(anyLong(), anyLong());
 
-        mockMvc.perform(delete("/shop/v1/members/1/dibs/1"))
+        mockMvc.perform(delete("/members/1/dibs/1"))
                .andExpect(status().isOk());
 
         verify(dibService, times(1)).deleteDib(anyLong(), anyLong());

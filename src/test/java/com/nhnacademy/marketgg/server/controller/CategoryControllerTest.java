@@ -48,7 +48,7 @@ class CategoryControllerTest {
     // @MockBean
     // CategorizationRepository categorizationRepository;
 
-    private static final String DEFAULT_CATEGORY = "/shop/v1/admin/categories";
+    private static final String DEFAULT_CATEGORY = "/admin/categories";
 
     private CategoryCreateRequest categoryCreateRequest;
     private CategoryUpdateRequest categoryUpdateRequest;

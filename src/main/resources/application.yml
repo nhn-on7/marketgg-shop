@@ -1,20 +1,39 @@
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://133.186.211.156:3306/marketgg_shop
-    username: on7
-    password: ?nk9Wa#^Bg)on71!*,^2=d
+gg:
+  gateway:
+    origin: http://127.0.0.1:6060
 
-  jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    generate-ddl: false
-    show-sql: true
-    properties:
-      decorator:
-        datasource:
-          p6spy:
-            enable-logging: true
+  keystore:
+    type: PKCS12
+    path: "/clientCertificate.p12"
+    password: "market99!@#"
+
+  protocol: TLS
+
+server:
+  port: 7080
+
+spring:
+  application:
+    name: marketgg-shop
+
+  profiles:
+    group:
+      "local": "common, testdb"
+      "dev": "common, devdb"
+      "prod": "common, proddb"
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "common"
+
+  servlet:
+    multipart:
+      file-size-threshold: 1MB
+      max-file-size: 100MB
+      max-request-size: 100MB
 
   elasticsearch:
     uris: 133.186.153.181:9200
@@ -23,17 +42,46 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
-server:
-  port: 7080
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
-  servlet:
-    multipart:
-      file-size-threshold: 1MB
-      max-file-size: 100MB
-      max-request-size: 100MB
+---
 
-inquiryPath: /shop/v1
+spring:
+  config:
+    activate:
+      on-profile: "testdb"
 
-gateway:
-  origin: http://localhost:6060
-  
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    hikari:
+      jdbc-url: jdbc:h2:mem:~/h2/testdb;MODE=MYSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "devdb"
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://133.186.211.156:3306/marketgg_shop
+    username: on7
+    password: ?nk9Wa#^Bg)on71!*,^2=d
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false

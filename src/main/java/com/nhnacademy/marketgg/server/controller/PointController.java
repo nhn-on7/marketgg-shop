@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/shop/v1/members/{memberId}/points")
+@RequestMapping("/members/{memberId}/points")
 @RequiredArgsConstructor
 public class PointController {
 
     private final PointService pointService;
 
-    private static final String DEFAULT_MEMBER = "/shop/v1/members";
+    private static final String DEFAULT_MEMBER = "/members";
 
     /**
      * 지정한 회원의 포인트 내역을 반환합니다.

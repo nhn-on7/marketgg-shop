@@ -21,13 +21,13 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/shop/v1")
+@RequestMapping("")
 @RequiredArgsConstructor
 public class ProductInquiryPostController {
 
     private final ProductInquiryPostService productInquiryPostService;
 
-    private static final String DEFAULT_INQUIRY = "/shop/v1";
+    private static final String DEFAULT_INQUIRY = "";
 
     /**
      * 상품 문의 등록을 위한 POST Mapping 을 지원합니다.
@@ -44,7 +44,7 @@ public class ProductInquiryPostController {
         productInquiryPostService.createProductInquiry(inquiryRequest, productId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create("/shop/v1/products/" + productId + "/inquiries"))
+                             .location(URI.create("/products/" + productId + "/inquiries"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

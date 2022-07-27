@@ -66,7 +66,7 @@ public class MemberControllerTest {
     void testCheckPassUpdatedAt() throws Exception {
         when(memberService.retrievePassUpdatedAt(anyLong())).thenReturn(LocalDateTime.now());
 
-        this.mockMvc.perform(get("/shop/v1/members/{memberId}/ggpass", 1L))
+        this.mockMvc.perform(get("/members/{memberId}/ggpass", 1L))
                     .andExpect(status().isOk());
 
         verify(memberService, times(1)).retrievePassUpdatedAt(anyLong());
@@ -77,7 +77,7 @@ public class MemberControllerTest {
     void testJoinPass() throws Exception {
         doNothing().when(memberService).subscribePass(anyLong());
 
-        this.mockMvc.perform(post("/shop/v1/members/{memberId}/ggpass/subscribe", 1L))
+        this.mockMvc.perform(post("/members/{memberId}/ggpass/subscribe", 1L))
                     .andExpect(status().isOk());
 
         verify(memberService, times(1)).subscribePass(anyLong());
@@ -88,7 +88,7 @@ public class MemberControllerTest {
     void testWithdrawPass() throws Exception {
         doNothing().when(memberService).withdrawPass(anyLong());
 
-        this.mockMvc.perform(post("/shop/v1/members/{memberId}/ggpass/withdraw", 1L))
+        this.mockMvc.perform(post("/members/{memberId}/ggpass/withdraw", 1L))
                     .andExpect(status().isOk());
 
         verify(memberService, times(1)).withdrawPass(anyLong());
@@ -110,7 +110,7 @@ public class MemberControllerTest {
 
         given(memberService.retrieveMember(uuid)).willReturn(memberResponse);
 
-        this.mockMvc.perform(get("/shop/v1/members")
+        this.mockMvc.perform(get("/members")
                     .header("AUTH-ID", uuid)
                     .header("WWW-Authentication", roles)
                     .accept(MediaType.APPLICATION_JSON))
@@ -126,7 +126,7 @@ public class MemberControllerTest {
         String roles = objectMapper.writeValueAsString(Collections.singleton(ROLE_USER));
         given(memberService.retrieveMember(uuid)).willThrow(MemberNotFoundException.class);
 
-        this.mockMvc.perform(get("/shop/v1/members")
+        this.mockMvc.perform(get("/members")
                     .header("AUTH-ID", uuid)
                     .header("WWW-Authentication", roles)
                     .accept(MediaType.APPLICATION_JSON))
@@ -140,7 +140,7 @@ public class MemberControllerTest {
         doNothing().when(givenCouponService).createGivenCoupons(anyLong(), any(GivenCouponRequest.class));
         String content = objectMapper.writeValueAsString(new GivenCouponRequest());
 
-        this.mockMvc.perform(post("/shop/v1/members/{memberId}/coupons", 1L)
+        this.mockMvc.perform(post("/members/{memberId}/coupons", 1L)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(content))
                     .andExpect(status().isCreated());
@@ -153,7 +153,7 @@ public class MemberControllerTest {
     void testRetrieveGivenCoupons() throws Exception {
         when(givenCouponService.retrieveGivenCoupons(anyLong(), any(Pageable.class))).thenReturn(List.of());
 
-        this.mockMvc.perform(get("/shop/v1/members/{memberId}/coupons", 1L))
+        this.mockMvc.perform(get("/members/{memberId}/coupons", 1L))
                     .andExpect(status().isOk());
 
         verify(givenCouponService, times(1)).retrieveGivenCoupons(anyLong(), any(Pageable.class));

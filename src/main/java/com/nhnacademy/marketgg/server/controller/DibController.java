@@ -22,11 +22,11 @@ import java.util.List;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/shop/v1/members")
+@RequestMapping("/members")
 @RequiredArgsConstructor
 public class DibController {
     private final DibService dibService;
-    private static final String DEFAULT_DIB = "/shop/v1/members";
+    private static final String DEFAULT_DIB = "/members";
 
     /**
      * 찜을 등록하는 POST Mapping 을 지원합니다.

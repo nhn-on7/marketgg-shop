@@ -25,13 +25,13 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping("/shop/v1/admin/coupons")
+@RequestMapping("/admin/coupons")
 @RequiredArgsConstructor
 public class CouponController {
 
     private final CouponService couponService;
 
-    private static final String DEFAULT_COUPON = "/shop/v1/admin/coupons";
+    private static final String DEFAULT_COUPON = "/admin/coupons";
 
     /**
      * 입력한 정보로 쿠폰을 등록하는 PostMapping 을 지원합니다.
