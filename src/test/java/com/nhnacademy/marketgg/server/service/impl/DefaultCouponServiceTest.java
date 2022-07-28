@@ -61,16 +61,6 @@ class DefaultCouponServiceTest {
     }
 
     @Test
-    @DisplayName("쿠폰 단건 조회")
-    void testRetrieveCoupon() {
-        given(couponRepository.findByCouponId(anyLong())).willReturn(null);
-
-        couponRepository.findByCouponId(1L);
-
-        then(couponRepository).should().findByCouponId(anyLong());
-    }
-
-    @Test
     @DisplayName("쿠폰 목록 조회")
     void testRetrieveCoupons() {
         given(couponRepository.findAllCoupons(pageable))
