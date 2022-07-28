@@ -10,10 +10,8 @@ import com.nhnacademy.marketgg.server.dto.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.exception.auth.UnAuthenticException;
-import com.nhnacademy.marketgg.server.exception.auth.UnAuthorizationException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,7 +61,7 @@ public class AuthInjectAspect {
         String jwt = request.getHeader(AUTHORIZATION);
         String uuid = request.getHeader(AspectUtils.AUTH_ID);
 
-        if (jwt.isBlank() || uuid.isBlank()) {
+        if (isInvalidAuth(jwt, uuid)) {
             throw new UnAuthenticException();
         }
 
@@ -88,6 +86,10 @@ public class AuthInjectAspect {
                               }).toArray();
 
         return pjp.proceed(args);
+    }
+
+    private boolean isInvalidAuth(String jwt, String uuid) {
+        return jwt.isBlank() || uuid.isBlank();
     }
 
     private AuthInfo validCheck(ResponseEntity<String> response)
