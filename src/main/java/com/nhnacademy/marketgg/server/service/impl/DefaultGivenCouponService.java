@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
-import com.nhnacademy.marketgg.server.dto.response.CouponState;
+import com.nhnacademy.marketgg.server.constant.CouponState;
 import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
@@ -22,9 +22,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.nhnacademy.marketgg.server.dto.response.CouponState.EXPIRED;
-import static com.nhnacademy.marketgg.server.dto.response.CouponState.USED;
-import static com.nhnacademy.marketgg.server.dto.response.CouponState.VALID;
+import static com.nhnacademy.marketgg.server.constant.CouponState.EXPIRED;
+import static com.nhnacademy.marketgg.server.constant.CouponState.USED;
+import static com.nhnacademy.marketgg.server.constant.CouponState.VALID;
 
 @Service
 @RequiredArgsConstructor
@@ -70,7 +70,7 @@ public class DefaultGivenCouponService implements GivenCouponService {
         } else {
             state = VALID;
         }
-        return new GivenCouponResponse(givenCoupons, state, expirationPeriod);
+        return new GivenCouponResponse(givenCoupons, state.state(), expirationPeriod);
     }
 
 }
