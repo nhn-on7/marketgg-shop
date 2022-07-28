@@ -44,7 +44,6 @@ class DefaultCartProductServiceTest {
     @Mock
     CartProductRepository cartProductRepository;
 
-
     @Mock
     ProductRepository productRepository;
 
@@ -103,7 +102,6 @@ class DefaultCartProductServiceTest {
     void testUpdateAmount() {
         ProductToCartRequest productUpdateRequest = Dummy.getDummyProductToCartRequest(productId);
 
-        Product product = Dummy.getDummyProduct(productId);
         CartProduct cartProduct = spy(Dummy.getCartProduct(cartId, productId, 1));
         Cart cart = Dummy.getDummyCart(cartId);
         MemberInfo member = Dummy.getDummyMemberInfo(memberId, cart);

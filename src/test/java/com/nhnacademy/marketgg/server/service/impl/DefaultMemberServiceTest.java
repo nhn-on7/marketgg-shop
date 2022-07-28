@@ -38,21 +38,14 @@ class DefaultMemberServiceTest {
     @Mock
     MemberRepository memberRepository;
 
-    @Mock
-    CartRepository cartRepository;
-
     private Member member;
     private Member noPassMember;
-    private Cart cart1;
-    private Cart cart2;
 
     @BeforeEach
     void setUp() {
         MemberCreateRequest memberRequest = new MemberCreateRequest();
-        cart1 = cartRepository.save(new Cart());
-        cart2 = cartRepository.save(new Cart());
-        member = new Member(memberRequest, cart1);
-        noPassMember = new Member(memberRequest, cart2);
+        member = new Member(memberRequest, new Cart());
+        noPassMember = new Member(memberRequest, new Cart());
 
         ReflectionTestUtils.setField(member, "ggpassUpdatedAt",
             LocalDateTime.of(2019, 3, 11, 7, 10));
