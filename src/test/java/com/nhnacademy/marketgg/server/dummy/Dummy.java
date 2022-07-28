@@ -42,6 +42,12 @@ public class Dummy {
         return member;
     }
 
+    public static Member getDummyMember(String uuid, Cart cart) {
+        Member member = new Member(getDummyMemberCreateRequest(uuid), cart);
+
+        return member;
+    }
+
     public static Member getDummyMember(String uuid, Long id, Cart cart) {
         Member member = new Member(getDummyMemberCreateRequest(uuid), cart);
         ReflectionTestUtils.setField(member, "id", id);
@@ -116,6 +122,14 @@ public class Dummy {
         ProductToCartRequest request = new ProductToCartRequest();
         ReflectionTestUtils.setField(request, "id", productId);
         ReflectionTestUtils.setField(request, "amount", 3);
+
+        return request;
+    }
+
+    public static ProductToCartRequest getDummyProductToCartRequest(Long productId, Integer amount) {
+        ProductToCartRequest request = new ProductToCartRequest();
+        ReflectionTestUtils.setField(request, "id", productId);
+        ReflectionTestUtils.setField(request, "amount", amount);
 
         return request;
     }

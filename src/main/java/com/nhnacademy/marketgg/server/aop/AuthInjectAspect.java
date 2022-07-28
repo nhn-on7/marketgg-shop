@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.exception.auth.UnAuthenticException;
+import com.nhnacademy.marketgg.server.exception.auth.UnAuthorizationException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
@@ -26,8 +28,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * Controller 클래스에서 Auth Server 의 회원 요청 시 파라미터로 쉽게 전달받을 수 있는 AOP.
@@ -58,15 +58,13 @@ public class AuthInjectAspect {
     public Object authInject(ProceedingJoinPoint pjp) throws Throwable {
         log.info("Method: {}", pjp.getSignature().getName());
 
-        ServletRequestAttributes requestAttributes =
-            (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = requestAttributes.getRequest();
+        HttpServletRequest request = AspectUtils.getRequest();
 
         String jwt = request.getHeader(AUTHORIZATION);
-        String uuid = request.getHeader("WWW-Authentication");
+        String uuid = request.getHeader(AspectUtils.AUTH_ID);
 
-        if (Objects.isNull(jwt) || Objects.isNull(uuid)) {
-            throw new IllegalArgumentException();
+        if (jwt.isBlank() || uuid.isBlank()) {
+            throw new UnAuthenticException();
         }
 
         HttpHeaders headers = new HttpHeaders();

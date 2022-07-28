@@ -1,11 +1,13 @@
 package com.nhnacademy.marketgg.server.exception.dib;
 
+import com.nhnacademy.marketgg.server.exception.NotFoundException;
+
 /**
  * 찜을 찾을 수 없을 때 예외처리입니다.
  *
  * @version 1.0.0
  */
-public class DibNotFoundException extends IllegalArgumentException {
+public class DibNotFoundException extends NotFoundException {
 
     private static final String ERROR = "찜을 찾을 수 없습니다.";
 

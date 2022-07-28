@@ -1,11 +1,13 @@
 package com.nhnacademy.marketgg.server.exception.pointhistory;
 
+import com.nhnacademy.marketgg.server.exception.NotFoundException;
+
 /**
  * 포인트내역을 찾을 수 없을 때 예외처리입니다.
  *
  * @version 1.0.0
  */
-public class PointHistoryNotFoundException extends IllegalArgumentException {
+public class PointHistoryNotFoundException extends NotFoundException {
 
     private static final String ERROR = "포인트 내역을 찾을 수 없습니다.";
 

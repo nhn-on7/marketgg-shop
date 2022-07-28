@@ -3,22 +3,22 @@ package com.nhnacademy.marketgg.server.entity;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * 회원 Entity 입니다.
@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@ToString
 public class Member {
 
     @Id
@@ -71,7 +72,7 @@ public class Member {
      * @param memberRequest - 회원을 생성하기 위한 DTO 입니다.
      * @since 1.0.0
      */
-    public Member(MemberCreateRequest memberRequest, Cart cart) {
+    public Member(final MemberCreateRequest memberRequest, final Cart cart) {
         this.memberGrade = memberRequest.getMemberGrade();
         this.cart = cart;
         this.uuid = memberRequest.getUuid();
@@ -90,8 +91,8 @@ public class Member {
      * @param signUpMemberGrade       - 회원가입시 부여될 등급을 담은 객체입니다.
      * @since 1.0.0
      */
-    public Member(final ShopMemberSignUpRequest shopMemberSignupRequest
-            , final MemberGrade signUpMemberGrade, Cart cart) {
+    public Member(final ShopMemberSignUpRequest shopMemberSignupRequest, final MemberGrade signUpMemberGrade,
+                  final Cart cart) {
 
         this.memberGrade = signUpMemberGrade;
         this.cart = cart;

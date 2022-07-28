@@ -1,11 +1,13 @@
 package com.nhnacademy.marketgg.server.exception.orderdeliveryaddress;
 
+import com.nhnacademy.marketgg.server.exception.NotFoundException;
+
 /**
  * 주문 배달 주소지를 찾을 수 없을 때 예외처리입니다.
  *
  * @version 1.0.0
  */
-public class OrderDeliveryAddressNotFoundException extends IllegalArgumentException {
+public class OrderDeliveryAddressNotFoundException extends NotFoundException {
 
     private static final String ERROR = "주문 배달 주소지를 찾을 수 없습니다.";
 

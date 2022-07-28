@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.advice;
 
 import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
+import com.nhnacademy.marketgg.server.exception.auth.UnAuthenticException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
@@ -20,12 +21,23 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class MemberControllerAdvice {
 
+
     @ExceptionHandler({
         MemberNotFoundException.class
     })
     public ResponseEntity<ErrorEntity> memberExceptionHandler(MemberNotFoundException e) {
-        log.error("", e);
+        log.error(e.toString());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(new ErrorEntity(e.getMessage()));
+    }
+
+    @ExceptionHandler({
+        UnAuthenticException.class
+    })
+    public ResponseEntity<ErrorEntity> memberExceptionHandler(Exception e) {
+        log.error(e.toString());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED )
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(new ErrorEntity(e.getMessage()));
     }

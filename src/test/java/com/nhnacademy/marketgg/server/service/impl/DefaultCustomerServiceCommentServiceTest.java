@@ -47,15 +47,13 @@ public class DefaultCustomerServiceCommentServiceTest {
     @Mock
     MemberRepository memberRepository;
 
-     CustomerServiceComment comment;
-     CustomerServicePost post;
-     Member member;
-     Cart cart;
+     private static CustomerServiceComment comment;
+     private static CustomerServicePost post;
+     private static Member member;
 
     @BeforeAll
-    void beforeAll() {
-        cart = new Cart();
-        member = new Member(new MemberCreateRequest(), cart);
+    static void beforeAll() {
+        member = new Member(new MemberCreateRequest(), new Cart());
         post = new CustomerServicePost(1L, member, null, "c", "t", "r", "s", LocalDateTime.now(), LocalDateTime.now());
         comment = new CustomerServiceComment(1L, null, member, null, LocalDateTime.now());
     }
@@ -91,4 +89,5 @@ public class DefaultCustomerServiceCommentServiceTest {
 
         then(commentRepository).should().findByInquiry(anyLong());
     }
+
 }

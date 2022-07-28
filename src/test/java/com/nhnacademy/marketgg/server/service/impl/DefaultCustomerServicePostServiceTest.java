@@ -61,23 +61,18 @@ public class DefaultCustomerServicePostServiceTest {
     @Mock
     CustomerServicePostMapper postMapper;
 
-    @Mock
-    CartRepository cartRepository;
-
     private static CustomerServicePost post;
     private static Category category;
     private static Member member;
-    private static Cart cart;
     private static CustomerServicePostDto postDto;
 
     @BeforeAll
-    void beforeAll() {
+    static void beforeAll() {
         postDto = new CustomerServicePostDto();
         MemberCreateRequest memberRequest = new MemberCreateRequest();
         CategoryCreateRequest categoryRequest = new CategoryCreateRequest();
         CategorizationCreateRequest categorizationRequest = new CategorizationCreateRequest();
-        cart = cartRepository.save(new Cart());
-        member = new Member(memberRequest, cart);
+        member = new Member(memberRequest, new Cart());
         Categorization categorization = new Categorization(categorizationRequest);
         category = new Category(categoryRequest, categorization);
         post = new CustomerServicePost(1L, member, category,

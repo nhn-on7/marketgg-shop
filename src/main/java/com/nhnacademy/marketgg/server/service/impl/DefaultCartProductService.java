@@ -8,7 +8,7 @@ import com.nhnacademy.marketgg.server.dto.response.CartProductResponse;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.CartProduct;
 import com.nhnacademy.marketgg.server.entity.Product;
-import com.nhnacademy.marketgg.server.exception.ProductInCartNotFoundException;
+import com.nhnacademy.marketgg.server.exception.cart.CartNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.cart.CartProductRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
@@ -50,7 +50,7 @@ public class DefaultCartProductService implements CartProductService {
     public void updateAmount(MemberInfo member, ProductToCartRequest productUpdateRequest) {
         CartProduct cartProduct =
             cartProductRepository.findById(new CartProduct.Pk(member.getCart().getId(), productUpdateRequest.getId()))
-                                 .orElseThrow(ProductInCartNotFoundException::new);
+                                 .orElseThrow(CartNotFoundException.ProductInCartNotFoundException::new);
 
         cartProduct.updateAmount(productUpdateRequest.getAmount());
     }

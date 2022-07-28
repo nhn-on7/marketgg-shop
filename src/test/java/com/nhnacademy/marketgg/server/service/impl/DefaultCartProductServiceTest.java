@@ -18,7 +18,7 @@ import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.CartProduct;
 import com.nhnacademy.marketgg.server.entity.Product;
-import com.nhnacademy.marketgg.server.exception.ProductInCartNotFoundException;
+import com.nhnacademy.marketgg.server.exception.cart.CartNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.cart.CartProductRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
@@ -130,7 +130,7 @@ class DefaultCartProductServiceTest {
             .willReturn(Optional.ofNullable(any(CartProduct.class)));
 
         assertThatThrownBy(() -> cartProductService.updateAmount(member, productUpdateRequest))
-            .isInstanceOf(ProductInCartNotFoundException.class);
+            .isInstanceOf(CartNotFoundException.ProductInCartNotFoundException.class);
 
         then(cartProductRepository).should(times(1)).findById(any(CartProduct.Pk.class));
     }

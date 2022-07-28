@@ -1,11 +1,13 @@
 package com.nhnacademy.marketgg.server.exception.membergrade;
 
+import com.nhnacademy.marketgg.server.exception.NotFoundException;
+
 /**
  * 회원 등급을 찾을 수 없을 때 예외처리입니다.
  *
  * @version 1.0.0
  */
-public class MemberGradeNotFoundException extends IllegalArgumentException {
+public class MemberGradeNotFoundException extends NotFoundException {
 
     private static final String ERROR = "회원 등급을 찾을 수 없습니다.";
 
