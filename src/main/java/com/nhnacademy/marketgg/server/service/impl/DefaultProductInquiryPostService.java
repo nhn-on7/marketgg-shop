@@ -16,8 +16,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +32,11 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
 
     @Override
     @Transactional
-    public void createProductInquiry(final ProductInquiryRequest productInquiryRequest, final Long id) {
-        Member member = memberRepository.findById(productInquiryRequest.getMemberId())
+    public void createProductInquiry(final String uuid,
+                                     @Valid final ProductInquiryRequest productInquiryRequest,
+                                     final Long id) {
+
+        Member member = memberRepository.findByUuid(uuid)
                                         .orElseThrow(MemberNotFoundException::new);
 
         Product product = productRepository.findById(id)
@@ -42,13 +48,13 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     }
 
     @Override
-    public List<ProductInquiryResponse> retrieveProductInquiryByProductId(final Long id, Pageable pageable) {
+    public List<ProductInquiryResponse> retrieveProductInquiryByProductId(final Long id, final Pageable pageable) {
         return productInquiryPostRepository.findALLByProductNo(id, pageable).getContent();
     }
 
     @Override
-    public List<ProductInquiryResponse> retrieveProductInquiryByMemberId(final Long id, Pageable pageable) {
-        return productInquiryPostRepository.findAllByMemberNo(id, pageable).getContent();
+    public List<ProductInquiryResponse> retrieveProductInquiryByMemberId(final String uuid, final Pageable pageable) {
+        return productInquiryPostRepository.findAllByMemberNo(uuid, pageable).getContent();
     }
 
     @Override

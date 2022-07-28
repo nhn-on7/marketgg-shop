@@ -21,7 +21,7 @@ public interface ProductInquiryPostService {
      * @param id                    - 상품 문의 글을 남길 상품의 PK 입니다.
      * @since 1.0.0
      */
-    void createProductInquiry(ProductInquiryRequest productInquiryRequest, Long id);
+    void createProductInquiry(String uuid, ProductInquiryRequest productInquiryRequest, Long id);
 
     /**
      * 상품에 대한 모든 상품 문의 글을 조회합니다.
@@ -34,10 +34,10 @@ public interface ProductInquiryPostService {
     /**
      * 회원이 남긴 모든 상품 문의 글을 조회합니다.
      *
-     * @param id - 조회할 회원의 PK 입니다.
+     * @param uuid - 조회할 회원의 uuid 입니다.
      * @return - 상품 문의 글을 List 로 반환합니다.
      */
-    List<ProductInquiryResponse> retrieveProductInquiryByMemberId(Long id, Pageable pageable);
+    List<ProductInquiryResponse> retrieveProductInquiryByMemberId(String uuid, Pageable pageable);
 
     /**
      * 상품 문의 글에 대한 관리자의 답글을 상품 문의 글에 업데이트합니다.

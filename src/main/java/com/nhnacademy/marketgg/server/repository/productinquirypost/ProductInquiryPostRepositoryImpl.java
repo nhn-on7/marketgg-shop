@@ -19,7 +19,7 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Page<ProductInquiryResponse> findALLByProductNo(final Long id, Pageable pageable) {
+    public Page<ProductInquiryResponse> findALLByProductNo(final Long id, final Pageable pageable) {
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
         List<ProductInquiryResponse> result = from(productInquiryPost)
@@ -39,7 +39,7 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Page<ProductInquiryResponse> findAllByMemberNo(final Long id, Pageable pageable) {
+    public Page<ProductInquiryResponse> findAllByMemberNo(final String uuid, final Pageable pageable) {
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
         List<ProductInquiryResponse> result = from(productInquiryPost)
@@ -50,7 +50,7 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
                         productInquiryPost.isSecret,
                         productInquiryPost.adminReply,
                         productInquiryPost.createdAt))
-                .where(productInquiryPost.member.id.eq(id))
+                .where(productInquiryPost.member.uuid.eq(uuid))
                 .fetch();
 
         return new PageImpl<>(result, pageable, result.size());

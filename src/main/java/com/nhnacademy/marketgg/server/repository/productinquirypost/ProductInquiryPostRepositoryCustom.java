@@ -9,5 +9,5 @@ import org.springframework.data.repository.NoRepositoryBean;
 public interface ProductInquiryPostRepositoryCustom {
     Page<ProductInquiryResponse> findALLByProductNo(final Long id, Pageable pageable);
 
-    Page<ProductInquiryResponse> findAllByMemberNo(final Long id, Pageable pageable);
+    Page<ProductInquiryResponse> findAllByMemberNo(final String uuid, Pageable pageable);
 }
