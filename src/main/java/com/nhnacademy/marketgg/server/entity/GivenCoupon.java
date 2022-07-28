@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,6 +30,7 @@ public class GivenCoupon {
     @JoinColumn(name = "member_no")
     private Member member;
 
+    @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

@@ -11,6 +11,7 @@ import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
 import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignUpResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.MemberService;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -162,39 +164,39 @@ public class MemberController {
     /**
      * 선택한 회원에게 쿠폰을 지급하는 PostMapping 을 지원합니다.
      *
-     * @param memberId           - 쿠폰을 등록할 회원의 식별번호입니다.
+     * @param uuid               - 쿠폰을 등록할 회원의 uuid 입니다.
      * @param givenCouponRequest - 등록할 쿠폰 번호 정보를 가진 요청 객체입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @PostMapping("/{memberId}/coupons")
-    public ResponseEntity<Void> createGivenCoupons(@PathVariable final Long memberId,
-                                                   @RequestBody final GivenCouponCreateRequest givenCouponRequest) {
+    @RoleCheck(accessLevel = Role.ROLE_USER)
+    @PostMapping("/coupons")
+    public ResponseEntity<CommonResponse> createGivenCoupons(@UUID final String uuid,
+                                                             @Valid @RequestBody final GivenCouponCreateRequest givenCouponRequest) {
 
-        givenCouponService.createGivenCoupons(memberId, givenCouponRequest);
+        givenCouponService.createGivenCoupons(uuid, givenCouponRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create("/members/" + memberId + "/coupons"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(new SingleResponse<>("201 success"));
     }
 
     /**
      * 선택한 회원에게 지급된 쿠폰 목록을 조회하는 GetMapping 을 지원합니다.
      *
-     * @param memberId - 쿠폰을 조회할 회원의 식별번호입니다.
+     * @param uuid - 쿠폰을 조회할 회원의 uuid 입니다.
      * @return 회원에게 지급된 쿠폰 목록을 가진 DTO 객체를 반환합니다.
      * @since 1.0.0
      */
-    @GetMapping("/{memberId}/coupons")
-    public ResponseEntity<List<GivenCouponResponse>> retrieveGivenCoupons(@PathVariable final Long memberId,
-                                                                          Pageable pageable) {
-        List<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(memberId, pageable);
+    @RoleCheck(accessLevel = Role.ROLE_USER)
+    @GetMapping("/coupons")
+    public ResponseEntity<CommonResponse> retrieveGivenCoupons(@UUID final String uuid,
+                                                               final Pageable pageable) {
+        List<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(uuid, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create("/members/" + memberId + "/coupons"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(givenCouponResponses);
+                             .body(new ListResponse<>(givenCouponResponses));
     }
 
 }

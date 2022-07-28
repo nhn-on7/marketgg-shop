@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
+
 @Service
 @RequiredArgsConstructor
 public class DefaultUsedCouponService implements UsedCouponService {
@@ -25,7 +27,7 @@ public class DefaultUsedCouponService implements UsedCouponService {
 
     @Override
     @Transactional
-    public void createUsedCoupons(final UsedCouponDto usedCouponDto) {
+    public void createUsedCoupons(@Valid final UsedCouponDto usedCouponDto) {
         Order order = orderRepository.findById(usedCouponDto.getOrderId()).orElseThrow(OrderNotFoundException::new);
         GivenCoupon givenCoupon = givenCouponRepository.findById(new GivenCoupon.Pk(usedCouponDto.getCouponId(), usedCouponDto.getMemberId()))
                                                        .orElseThrow(GivenCouponNotFoundException::new);
@@ -36,7 +38,7 @@ public class DefaultUsedCouponService implements UsedCouponService {
 
     @Override
     @Transactional
-    public void deleteUsedCoupons(final UsedCouponDto usedCouponDto) {
+    public void deleteUsedCoupons(@Valid final UsedCouponDto usedCouponDto) {
         UsedCoupon usedCoupon = usedCouponRepository.findById(new UsedCoupon.Pk(usedCouponDto.getOrderId(),
                                                             usedCouponDto.getCouponId(), usedCouponDto.getMemberId()))
                                                     .orElseThrow(UsedCouponNotFoundException::new);

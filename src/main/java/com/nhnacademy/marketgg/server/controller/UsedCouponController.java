@@ -1,6 +1,8 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.dto.request.UsedCouponDto;
+import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.UsedCouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
+import javax.validation.Valid;
 
 /**
  * 사용 쿠폰에 관련된 RestController 입니다.
@@ -37,13 +39,12 @@ public class UsedCouponController {
      * @since 1.0.0
      */
     @PostMapping
-    public ResponseEntity<Void> createUsedCoupons(@RequestBody final UsedCouponDto usedCouponDto) {
+    public ResponseEntity<CommonResponse> createUsedCoupons(@Valid @RequestBody final UsedCouponDto usedCouponDto) {
         usedCouponService.createUsedCoupons(usedCouponDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create(DEFAULT_USED_COUPONS))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(new SingleResponse<>("201 success"));
     }
 
     /**
@@ -54,13 +55,12 @@ public class UsedCouponController {
      * @since 1.0.0
      */
     @DeleteMapping
-    public ResponseEntity<Void> deleteUsedCoupons(@RequestBody final UsedCouponDto usedCouponDto) {
+    public ResponseEntity<CommonResponse> deleteUsedCoupons(@Valid @RequestBody final UsedCouponDto usedCouponDto) {
         usedCouponService.deleteUsedCoupons(usedCouponDto);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_USED_COUPONS))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(new SingleResponse<>("201 success"));
     }
 
 }
