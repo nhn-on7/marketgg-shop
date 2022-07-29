@@ -3,6 +3,8 @@ package com.nhnacademy.marketgg.server.service.impl;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
+import com.nhnacademy.marketgg.server.elastic.repository.ElasticBoardRepository;
+import com.nhnacademy.marketgg.server.elastic.repository.ElasticProductRepository;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.exception.categorization.CategorizationNotFoundException;
@@ -22,6 +24,8 @@ public class DefaultCategoryService implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategorizationRepository categorizationRepository;
+    private final ElasticProductRepository elasticProductRepository;
+    private final ElasticBoardRepository elasticBoardRepository;
 
     @Transactional
     @Override
@@ -68,6 +72,8 @@ public class DefaultCategoryService implements CategoryService {
                                               .orElseThrow(CategoryNotFoundException::new);
 
         categoryRepository.delete(category);
+        elasticProductRepository.deleteAllByCategoryCode(id);
+        elasticBoardRepository.deleteAllByCategoryCode(id);
     }
 
 }
