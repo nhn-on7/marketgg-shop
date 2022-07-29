@@ -22,13 +22,13 @@ import java.util.List;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/shop/v1/customer-services/oto-inquiries")
+@RequestMapping("/customer-services/oto-inquiries")
 @RequiredArgsConstructor
 public class CustomerServiceCommentController {
 
     private final CustomerServiceCommentService customerServiceCommentService;
 
-    private static final String DEFAULT_CS_COMMENT = "/shop/v1/customer-services/oto-inquiries";
+    private static final String DEFAULT_CS_COMMENT = "/customer-services/oto-inquiries";
 
     /**
      * 한 1:1 문의에 대해 댓글을 등록하는 POST Mapping 을 지원합니다.

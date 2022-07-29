@@ -25,13 +25,13 @@ import java.util.stream.Collectors;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/shop/v1/admin/customer-services")
+@RequestMapping("/admin/customer-services")
 @RequiredArgsConstructor
 public class AdminCustomerServicePostController {
 
     private final CustomerServicePostService customerServicePostService;
 
-    private static final String DEFAULT_ADMIN_CUSTOMER_SERVICE = "/shop/v1/admin/customer-services";
+    private static final String DEFAULT_ADMIN_CUSTOMER_SERVICE = "/admin/customer-services";
 
     /**
      * 선택한 1:1 문의 단건을 조회하는 GET Mapping 을 지원합니다.
