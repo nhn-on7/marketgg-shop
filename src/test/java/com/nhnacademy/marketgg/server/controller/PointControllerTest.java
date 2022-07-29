@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -31,7 +30,7 @@ class PointControllerTest {
     void retrievePointHistory() throws Exception {
         given(pointService.retrievePointHistories(anyLong())).willReturn(List.of());
         mockMvc.perform(get(DEFAULT_MEMBER + "/{memberId}/points", 1L))
-                .andExpect(status().isOk());
+               .andExpect(status().isOk());
     }
 
 }

@@ -23,10 +23,6 @@ public class Order {
     @JoinColumn(name = "member_no")
     private Member member;
 
-    @OneToOne
-    @JoinColumn(name = "crowdfunding_no")
-    private Crowdfunding crowdfunding;
-
     @Column(name = "order_date")
     private LocalDateTime orderDate;
 
@@ -39,9 +35,8 @@ public class Order {
     @Column(name = "used_point")
     private Integer usedPoint;
 
-    public Order(Member member, Crowdfunding crowdfunding, OrderCreateRequest orderRequest) {
+    public Order(Member member, OrderCreateRequest orderRequest) {
         this.member = member;
-        this.crowdfunding = crowdfunding;
         this.orderDate = LocalDateTime.now();
         this.totalAmount = orderRequest.getTotalAmount();
         this.orderStatus = orderRequest.getOrderStatus();
