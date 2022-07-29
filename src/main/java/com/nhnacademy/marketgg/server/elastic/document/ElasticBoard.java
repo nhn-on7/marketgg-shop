@@ -20,16 +20,16 @@ public class ElasticBoard {
     private Long id;
 
     @Field
-    private String title;
-
-    @Field
     private String categoryCode;
 
     @Field
-    private String status;
+    private String title;
 
     @Field
     private String reason;
+
+    @Field
+    private String status;
 
     @Field
     private LocalDateTime createdAt;

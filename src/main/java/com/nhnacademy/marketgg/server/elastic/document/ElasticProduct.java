@@ -19,10 +19,16 @@ public class ElasticProduct {
     private Long id;
 
     @Field
+    private String categoryCode;
+
+    @Field
     private String productName;
 
     @Field
-    private String categoryCode;
+    private String content;
+
+    @Field
+    private String description;
 
     @Field
     private String labelName;
@@ -35,11 +41,5 @@ public class ElasticProduct {
 
     @Field
     private String amount;
-
-    @Field
-    private String content;
-
-    @Field
-    private String description;
 
 }
