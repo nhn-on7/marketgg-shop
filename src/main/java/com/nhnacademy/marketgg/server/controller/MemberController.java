@@ -188,7 +188,7 @@ public class MemberController {
      */
     @GetMapping("/{memberId}/coupons")
     public ResponseEntity<List<GivenCouponResponse>> retrieveGivenCoupons(@PathVariable final Long memberId,
-                                                                          Pageable pageable) {
+                                                                          final Pageable pageable) {
         List<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(memberId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)

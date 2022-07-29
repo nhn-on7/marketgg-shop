@@ -1,9 +1,12 @@
 package com.nhnacademy.marketgg.server.controller;
 
 
+import com.nhnacademy.marketgg.server.annotation.Role;
+import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
+import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.ProductInquiryPostService;
-import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
 
 /**
  * 관리자 상품 문의 답글 등록을 위한 RestController 입니다.
@@ -35,18 +40,17 @@ public class AdminProductInquiryPostController {
      * @return - Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
+    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @PutMapping("/{productId}/inquiries/{inquiryId}")
-    public ResponseEntity<Void> updateProductInquiryReply(@PathVariable final Long productId,
-                                                          @PathVariable final Long inquiryId, @RequestBody
-                                                          final ProductInquiryRequest inquiryReply) {
+    public ResponseEntity<CommonResponse> updateProductInquiryReply(@PathVariable final Long productId,
+                                                                    @PathVariable final Long inquiryId,
+                                                                    @RequestBody final ProductInquiryRequest inquiryReply) {
 
         productInquiryPostService.updateProductInquiryReply(inquiryReply, inquiryId, productId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(
-                                 "/admin/products/" + productId + "/inquiries/" + inquiryId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(new SingleResponse<>("200 success"));
     }
 
 }

@@ -2,8 +2,11 @@ package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -25,18 +28,24 @@ public class ProductInquiryPost {
     @JoinColumn(name = "member_no")
     private Member member;
 
+    @NotNull(message = "제목은 필수 입력값입니다.")
+    @Length(max = 50)
     @Column
     private String title;
 
+    @NotNull(message = "내용은 필수 입력값입니다.")
+    @Length(max = 200)
     @Column
     private String content;
 
+    @NotNull
     @Column(name = "is_secret")
     private Boolean isSecret;
 
     @Column(name = "admin_reply")
     private String adminReply;
 
+    @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
