@@ -52,7 +52,7 @@ public class AuthInjectAspect {
      * @return 메서드 정보
      * @throws Throwable 메서드를 실행시킬 때 발생할 수 있는 예외입니다.
      */
-    @Around("execution(* com.nhnacademy.marketgg.server.controller.*.*(.., @com.nhnacademy.marketgg.server.annotation.Auth (*), ..))")
+    @Around("execution(* com.nhnacademy.marketgg.server.controller.*.*(.., com.nhnacademy.marketgg.server.dto.AuthInfo, ..))")
     public Object authInject(ProceedingJoinPoint pjp) throws Throwable {
         log.info("Method: {}", pjp.getSignature().getName());
 
@@ -75,7 +75,6 @@ public class AuthInjectAspect {
             restTemplate.exchange(gateway + "/auth/info", GET, httpEntity, String.class);
 
         AuthInfo authInfo = validCheck(exchange);
-        authInfo.setUuid(uuid);
 
         Object[] args = Arrays.stream(pjp.getArgs())
                               .map(arg -> {

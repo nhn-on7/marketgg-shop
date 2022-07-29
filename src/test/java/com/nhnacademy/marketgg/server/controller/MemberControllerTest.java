@@ -5,6 +5,7 @@ import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
 import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
 import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
+import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.MemberService;
 import com.nhnacademy.marketgg.server.service.PointService;
@@ -28,6 +29,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -55,6 +57,9 @@ public class MemberControllerTest {
 
     @MockBean
     PointService pointService;
+
+    @MockBean
+    MemberRepository memberRepository;
 
     @MockBean
     GivenCouponService givenCouponService;
@@ -108,30 +113,12 @@ public class MemberControllerTest {
                                                       .gender('M')
                                                       .build();
 
-        given(memberService.retrieveMember(uuid)).willReturn(memberResponse);
-
         this.mockMvc.perform(get("/members")
                     .header("AUTH-ID", uuid)
                     .header("WWW-Authentication", roles)
                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.success", equalTo(true)))
-                    .andDo(print());
-    }
-
-    @Test
-    @DisplayName("사용자 조회 실패")
-    void testRetrieveMemberFail() throws Exception {
-        String uuid = "UUID";
-        String roles = objectMapper.writeValueAsString(Collections.singleton(ROLE_USER));
-        given(memberService.retrieveMember(uuid)).willThrow(MemberNotFoundException.class);
-
-        this.mockMvc.perform(get("/members")
-                    .header("AUTH-ID", uuid)
-                    .header("WWW-Authentication", roles)
-                    .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isNotFound())
-                    .andExpect(jsonPath("$.success", equalTo(false)))
                     .andDo(print());
     }
 
