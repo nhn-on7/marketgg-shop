@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.customerservicepost;
 
+import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,5 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @version 1.0.0
  */
 public interface CustomerServicePostRepository extends JpaRepository<CustomerServicePost, Long>, CustomerServicePostRepositoryCustom {
+
+    Boolean existsByCategory(final Category category);
 
 }

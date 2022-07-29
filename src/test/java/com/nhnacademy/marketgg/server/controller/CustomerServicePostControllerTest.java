@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CustomerServicePostController.class)
-public class CustomerServicePostControllerTest {
+class CustomerServicePostControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
@@ -36,7 +36,7 @@ public class CustomerServicePostControllerTest {
     @MockBean
     CustomerServicePostService customerServicePostService;
 
-    private static final String DEFAULT_CUSTOMER_SERVICE = "/shop/v1/customer-services";
+    private static final String DEFAULT_CUSTOMER_SERVICE = "/customer-services";
 
     @Test
     @DisplayName("1:1 문의 등록")

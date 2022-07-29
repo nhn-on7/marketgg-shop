@@ -1,10 +1,11 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
+import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +31,11 @@ public class ProductController {
      * @since 1.0.0
      */
     @GetMapping("/categories/{categoryCode}")
-    public ResponseEntity<List<ProductResponse>> searchProductsByCategory(@PathVariable String categoryCode) {
-        List<ProductResponse> productResponseList = productService.searchProductByCategory(categoryCode);
+    public ResponseEntity<List<ElasticProduct>> searchProductsByCategory(
+            @PathVariable final String categoryCode, final Pageable pageable) {
+
+        List<ElasticProduct> productResponseList =
+                productService.searchProductByCategory(pageable, categoryCode);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI + "/search/" + categoryCode))

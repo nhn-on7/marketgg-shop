@@ -5,4 +5,6 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
 public interface ElasticBoardRepository extends ElasticsearchRepository<ElasticBoard, Long> {
 
+    void deleteAllByCategoryCode(final String categoryCode);
+
 }

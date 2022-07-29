@@ -42,7 +42,6 @@ public class DefaultCartProductService implements CartProductService {
 
     @Override
     public List<CartProductResponse> retrieveCarts(MemberInfo member) {
-
         return cartProductRepository.findCartProductsByCartId(member.getCart().getId());
     }
 
