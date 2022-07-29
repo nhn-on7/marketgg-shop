@@ -2,7 +2,9 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.withMarginOf;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -32,6 +34,7 @@ import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
+import com.nhnacademy.marketgg.server.repository.label.LabelRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -50,6 +53,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,6 +72,8 @@ class DefaultProductServiceTest {
     @Mock
     private ImageRepository imageRepository;
     @Mock
+    private LabelRepository labelRepository;
+    @Mock
     private ElasticProductRepository elasticProductRepository;
 
     @Spy
@@ -76,8 +82,10 @@ class DefaultProductServiceTest {
     private static ProductCreateRequest productRequest;
     private static ProductUpdateRequest productUpdateRequest;
     private static ProductResponse productResponse;
+    private static LabelCreateRequest labelCreateRequest;
     private static Asset asset;
     private static Category category;
+    private static Label label;
     private static MockMultipartFile imageFile;
     private static ElasticProduct elasticProduct;
 
@@ -121,8 +129,11 @@ class DefaultProductServiceTest {
         category = new Category(categoryRequest, categorization);
         Image image = new Image(asset, null);
 
-        elasticProduct = new ElasticProduct(new Product(productRequest, asset, category),
-                                            new Label(new LabelCreateRequest()), image);
+        labelCreateRequest = new LabelCreateRequest();
+        ReflectionTestUtils.setField(labelCreateRequest, "name", "안녕");
+
+        label = new Label(labelCreateRequest);
+        elasticProduct = new ElasticProduct(new Product(productRequest, asset, category), label, image);
     }
 
     // @Test
@@ -195,8 +206,13 @@ class DefaultProductServiceTest {
     @DisplayName("상품 정보 수정 성공 테스트")
     void testUpdateProductSuccess() throws IOException {
 
+        Product product = new Product(productRequest, asset, category);
+
+        ReflectionTestUtils.setField(product, "id", 1L);
+
         URL url = getClass().getClassLoader().getResource("lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
+
 
         MockMultipartFile file =
                 new MockMultipartFile("image", "test.png", "image/png",
@@ -206,17 +222,17 @@ class DefaultProductServiceTest {
         ReflectionTestUtils.setField(productUpdateRequest, "categoryCode", "001");
 
         given(assetRepository.save(any(Asset.class))).willReturn(asset);
-        given(imageRepository.save(any(Image.class))).willReturn(new Image(asset, "test"));
+        given(labelRepository.findById(anyLong())).willReturn(Optional.of(label));
+        given(imageRepository.findByAssetIdAndImageSequence(anyLong(), anyInt())).willReturn(Optional.of(new Image(asset, "test")));
         given(categoryRepository.findById(any())).willReturn(Optional.ofNullable(category));
-        given(productRepository.findById(anyLong())).willReturn(
-                Optional.of(new Product(productRequest, asset, category)));
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
 
         productService.updateProduct(productUpdateRequest, file, 1L);
 
-        verify(productRepository, atLeastOnce()).save(any());
-        verify(categoryRepository, atLeastOnce()).findById(any());
-        verify(imageRepository, atLeastOnce()).save(any());
-        verify(assetRepository, atLeastOnce()).save(any());
+        then(productRepository).should().save(any());
+        then(categoryRepository).should().findById(any());
+        then(imageRepository).should().save(any());
+        then(assetRepository).should().save(any());
         then(elasticProductRepository).should().save(any(ElasticProduct.class));
     }
 
@@ -256,12 +272,12 @@ class DefaultProductServiceTest {
     @Test
     @DisplayName("카테고리 코드로 상품 목록 조회 테스트")
     void testSearchProductsByCategoryCode() {
-        given(elasticProductRepository.findAllByCategoryCode(PageRequest.of(0, 1), anyString()))
+        given(elasticProductRepository.findAllByCategoryCode(any(PageRequest.class), anyString()))
                 .willReturn(new PageImpl<>(List.of(elasticProduct)));
 
         productService.searchProductByCategory(PageRequest.of(0, 1), "101");
 
-        then(elasticProductRepository).should().findAllByCategoryCode(PageRequest.of(0, 1), anyString());
+        then(elasticProductRepository).should().findAllByCategoryCode(any(PageRequest.class), anyString());
     }
 
 }

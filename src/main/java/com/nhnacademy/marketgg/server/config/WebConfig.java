@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
  *
  * @version 1.0.0
  */
+
 @Configuration
 public class WebConfig {
 
