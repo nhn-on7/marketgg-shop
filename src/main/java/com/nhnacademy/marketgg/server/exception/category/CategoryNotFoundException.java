@@ -1,11 +1,13 @@
 package com.nhnacademy.marketgg.server.exception.category;
 
+import com.nhnacademy.marketgg.server.exception.NotFoundException;
+
 /**
  * 카테고리를 찾을 수 없을 때 예외처리입니다.
  *
  * @version 1.0.0
  */
-public class CategoryNotFoundException extends IllegalArgumentException {
+public class CategoryNotFoundException extends NotFoundException {
 
     private static final String ERROR = "카테고리를 찾을 수 없습니다.";
 

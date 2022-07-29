@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.CustomerServiceCommentDto;
+import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.CustomerServiceComment;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -46,13 +47,13 @@ public class DefaultCustomerServiceCommentServiceTest {
     @Mock
     MemberRepository memberRepository;
 
-    private static CustomerServiceComment comment;
-    private static CustomerServicePost post;
-    private static Member member;
+     private static CustomerServiceComment comment;
+     private static CustomerServicePost post;
+     private static Member member;
 
     @BeforeAll
     static void beforeAll() {
-        member = new Member(new MemberCreateRequest());
+        member = new Member(new MemberCreateRequest(), new Cart());
         post = new CustomerServicePost(1L, member, null, "c", "t", "r", "s", LocalDateTime.now(), LocalDateTime.now());
         comment = new CustomerServiceComment(1L, null, member, null, LocalDateTime.now());
     }
@@ -88,4 +89,5 @@ public class DefaultCustomerServiceCommentServiceTest {
 
         then(commentRepository).should().findByInquiry(anyLong());
     }
+
 }

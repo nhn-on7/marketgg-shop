@@ -10,8 +10,10 @@ import static org.mockito.Mockito.when;
 
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
+import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
+import com.nhnacademy.marketgg.server.repository.cart.CartRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import java.lang.reflect.Constructor;
 import java.time.LocalDateTime;
@@ -42,8 +44,8 @@ class DefaultMemberServiceTest {
     @BeforeEach
     void setUp() {
         MemberCreateRequest memberRequest = new MemberCreateRequest();
-        member = new Member(memberRequest);
-        noPassMember = new Member(memberRequest);
+        member = new Member(memberRequest, new Cart());
+        noPassMember = new Member(memberRequest, new Cart());
 
         ReflectionTestUtils.setField(member, "ggpassUpdatedAt",
             LocalDateTime.of(2019, 3, 11, 7, 10));

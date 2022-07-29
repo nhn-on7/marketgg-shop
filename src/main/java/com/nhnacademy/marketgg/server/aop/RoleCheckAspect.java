@@ -39,31 +39,23 @@ public class RoleCheckAspect {
     /**
      * 메서드 진입 시 필요한 권한을 체크합니다.
      *
-     * @param jp        - 메서드의 상태정보를 가지고있습니다.
      * @param roleCheck - Custom Annotation 으로 필요한 권한 정보를 가지고있습니다.
      * @throws IOException            - JSON 역 직렬화 시 발생할 수 있는 예외입니다.
      * @throws IllegalAccessException - 권한이 불충분할 시 발생할 수 있는 예외입니다.
      */
-    @Before(value = "@annotation(roleCheck)")
-    public void checkRole(JoinPoint jp, RoleCheck roleCheck)
+    @Before(value = "@annotation(roleCheck) || @within(roleCheck)")
+    public void checkRole(RoleCheck roleCheck)
         throws IOException, IllegalAccessException {
 
         log.info("Role Check AOP");
 
-        ServletRequestAttributes requestAttributes =
-            (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = requestAttributes.getRequest();
+        HttpServletRequest request = AspectUtils.getRequest();
 
-        MethodSignature signature = (MethodSignature) jp.getSignature();
+        String roleHeader = request.getHeader(AspectUtils.WWW_AUTHENTICATION);
+        String uuid = request.getHeader(AspectUtils.AUTH_ID);
 
-        String roleHeader = request.getHeader("WWW-Authentication");
-        String uuid = request.getHeader("AUTH-ID");
-
-        if (Objects.isNull(roleHeader) && Objects.isNull(uuid)) {
-            if (Objects.equals(roleCheck.accessLevel(), Role.LOGIN)) {
-                throw new UnAuthenticException(signature.getName());
-            }
-            throw new UnAuthorizationException(signature.getName(), "Empty");
+        if (isInvalidHeader(roleHeader, uuid)) {
+            throw new UnAuthenticException();
         }
 
         // 권한 목록은 Gateway 에서 JSON List 타입으로 매핑해서 Http Header 로 전달함.
@@ -72,25 +64,30 @@ public class RoleCheckAspect {
         log.info("roles = {}", roles.toString());
 
         if (Objects.equals(roleCheck.accessLevel(), Role.ROLE_USER)) {
-            this.isUser(signature.getMethod(), roles);
+            this.isUser(roles);
             return;
         }
 
         if (Objects.equals(roleCheck.accessLevel(), Role.ROLE_ADMIN)) {
-            this.isAdmin(signature.getMethod(), roles);
+            this.isAdmin(roles);
         }
 
     }
 
-    private void isUser(Method method, List<String> roles) throws UnAuthorizationException {
+    private boolean isInvalidHeader(String roleHeader, String uuid) {
+        return (Objects.isNull(roleHeader) || Objects.isNull(uuid))
+            || (roleHeader.isBlank() || uuid.isBlank());
+    }
+
+    private void isUser(List<String> roles) throws UnAuthorizationException {
         if (!(roles.contains(Role.ROLE_USER.name()) || roles.contains(Role.ROLE_ADMIN.name()))) {
-            throw new UnAuthorizationException(method.getName(), roles.toString());
+            throw new UnAuthorizationException();
         }
     }
 
-    private void isAdmin(Method method, List<String> roles) throws UnAuthorizationException {
+    private void isAdmin(List<String> roles) throws UnAuthorizationException {
         if (!roles.contains(Role.ROLE_ADMIN.name())) {
-            throw new UnAuthorizationException(method.getName(), roles.toString());
+            throw new UnAuthorizationException();
         }
     }
 
