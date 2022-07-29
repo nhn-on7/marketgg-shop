@@ -54,7 +54,7 @@ class DefaultMemberServiceTest {
     @Test
     @DisplayName("GG 패스 갱신일 확인")
     void checkPassUpdatedAt() {
-        when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
         LocalDateTime date = memberService.retrievePassUpdatedAt(1L);
 
@@ -64,7 +64,7 @@ class DefaultMemberServiceTest {
     @Test
     @DisplayName("GG 패스 갱신일 null 일시")
     void checkPassUpdatedAtIsNull() {
-        when(memberRepository.findById(anyLong())).thenReturn(Optional.of(noPassMember));
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(noPassMember));
 
         LocalDateTime date = memberService.retrievePassUpdatedAt(1L);
 
@@ -74,7 +74,7 @@ class DefaultMemberServiceTest {
     @Test
     @DisplayName("GG 패스 가입")
     void joinPass() {
-        when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
         memberService.subscribePass(1L);
 
@@ -84,9 +84,11 @@ class DefaultMemberServiceTest {
     @Test
     @DisplayName("GG 패스 해지")
     void withdrawPass() {
-        when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
         memberService.withdrawPass(1L);
+
+        assertThat(member.getGgpassUpdatedAt()).isBefore(LocalDateTime.now());
     }
 
     @Test

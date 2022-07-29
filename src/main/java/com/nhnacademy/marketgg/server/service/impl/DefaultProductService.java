@@ -130,7 +130,7 @@ public class DefaultProductService implements ProductService {
     @Override
     public List<ElasticProduct> searchProductByCategory(final Pageable pageable,
                                                         final String categoryCode) {
-        return this.elasticProductRepository.findAllByCategoryCode(pageable, categoryCode);
+        return this.elasticProductRepository.findAllByCategoryCode(pageable, categoryCode).getContent();
 
     }
 

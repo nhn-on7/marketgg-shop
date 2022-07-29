@@ -257,7 +257,7 @@ class DefaultProductServiceTest {
     @DisplayName("카테고리 코드로 상품 목록 조회 테스트")
     void testSearchProductsByCategoryCode() {
         given(elasticProductRepository.findAllByCategoryCode(PageRequest.of(0, 1), anyString()))
-                .willReturn(List.of(elasticProduct));
+                .willReturn(new PageImpl<>(List.of(elasticProduct)));
 
         productService.searchProductByCategory(PageRequest.of(0, 1), "101");
 

@@ -9,10 +9,19 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 
+import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.LabelRetrieveResponse;
+import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticProductRepository;
+import com.nhnacademy.marketgg.server.entity.Asset;
+import com.nhnacademy.marketgg.server.entity.Categorization;
+import com.nhnacademy.marketgg.server.entity.Category;
+import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.entity.Label;
+import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.exception.label.LabelNotFoundException;
 import com.nhnacademy.marketgg.server.repository.label.LabelRepository;
 import java.util.List;
@@ -64,9 +73,22 @@ class DefaultLabelServiceTest {
     @Test
     @DisplayName("라벨 삭제 성공")
     void deleteLabelSuccess() {
+        ProductCreateRequest pr = new ProductCreateRequest();
+        CategoryCreateRequest cr = new CategoryCreateRequest();
+        CategorizationCreateRequest czr = new CategorizationCreateRequest();
+        LabelCreateRequest lc = new LabelCreateRequest();
+        ReflectionTestUtils.setField(lc, "name", "1");
+
+        Asset asset = Asset.create();
+        Categorization cz = new Categorization(czr);
+        Category category = new Category(cr, cz);
+        Label label = new Label(lc);
+        Image image = new Image(asset, null);
+
+        List<ElasticProduct> list = List.of(new ElasticProduct(new Product(pr, asset, category), label, image));
         given(labelRepository.findById(anyLong())).willReturn(
-                Optional.of(new Label(new LabelCreateRequest())));
-        given(elasticProductRepository.findAllByLabelName(anyString())).willReturn(null);
+                Optional.of(new Label(lc)));
+        given(elasticProductRepository.findAllByLabelName(anyString())).willReturn(list);
         willDoNothing().given(labelRepository).delete(any(Label.class));
 
         labelService.deleteLabel(1L);

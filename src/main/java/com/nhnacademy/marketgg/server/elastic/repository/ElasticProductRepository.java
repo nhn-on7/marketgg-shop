@@ -10,11 +10,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 public interface ElasticProductRepository extends ElasticsearchRepository<ElasticProduct, Long> {
 
     void deleteAllByCategoryCode(final String categoryCode);
-
     List<ElasticProduct> findAllByLabelName(final String name);
-
-    Page<ElasticProduct> findAllBy(final Pageable pageable);
-
-    List<ElasticProduct> findAllByCategoryCode(final Pageable pageable, final String categoryCode);
+    Page<ElasticProduct> findAllByCategoryCode(final Pageable pageable, final String categoryCode);
 
 }
