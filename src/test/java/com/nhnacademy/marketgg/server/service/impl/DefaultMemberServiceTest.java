@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
+import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
@@ -98,7 +99,7 @@ class DefaultMemberServiceTest {
         Constructor<?> constructor = memberClass.getDeclaredConstructor();
         constructor.setAccessible(true);
 
-        Member member = (Member) constructor.newInstance();
+        Member member = Dummy.getDummyMember(uuid, new Cart());
         given(memberRepository.findByUuid(uuid)).willReturn(Optional.of(member));
 
         MemberResponse memberResponse = memberService.retrieveMember(uuid);

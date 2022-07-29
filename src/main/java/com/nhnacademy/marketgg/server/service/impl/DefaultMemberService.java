@@ -56,7 +56,7 @@ public class DefaultMemberService implements MemberService {
                                         .orElseThrow(MemberNotFoundException::new);
 
         return MemberResponse.builder()
-                             .memberGrade(member.getMemberGrade())
+                             .memberGrade(member.getMemberGrade().getGrade())
                              .gender(member.getGender())
                              .birthDay(member.getBirthDate())
                              .ggpassUpdatedAt(member.getGgpassUpdatedAt())

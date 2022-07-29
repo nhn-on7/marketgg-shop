@@ -12,6 +12,7 @@ import com.nhnacademy.marketgg.server.entity.CartProduct;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Member;
+import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.entity.Product;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -44,7 +45,7 @@ public class Dummy {
 
     public static Member getDummyMember(String uuid, Cart cart) {
         Member member = new Member(getDummyMemberCreateRequest(uuid), cart);
-
+        ReflectionTestUtils.setField(member, "memberGrade", new MemberGrade(null));
         return member;
     }
 

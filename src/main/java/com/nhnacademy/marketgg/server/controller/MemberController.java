@@ -1,8 +1,12 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import static org.springframework.http.HttpStatus.OK;
+
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.annotation.UUID;
+import com.nhnacademy.marketgg.server.dto.AuthInfo;
+import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
@@ -15,6 +19,10 @@ import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.MemberService;
 import com.nhnacademy.marketgg.server.service.PointService;
+import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -27,14 +35,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-
-import static org.springframework.http.HttpStatus.OK;
 
 /**
  * 회원관리에 관련된 RestController 입니다.
@@ -103,14 +103,14 @@ public class MemberController {
     /**
      * 사용자 정보를 반환합니다.
      *
-     * @param request - 요청 정보
+     * @param authInfo - Auth Server 의 사용자 정보
+     * @param memberInfo - Shop Server 의 사용자 정보
      * @return - 사용자 정보를 반환합니다.
      */
     @RoleCheck(accessLevel = Role.ROLE_USER)
     @GetMapping
-    public ResponseEntity<CommonResponse> retrieveMember(HttpServletRequest request) {
-        String uuid = request.getHeader("AUTH-ID");
-        MemberResponse memberResponse = memberService.retrieveMember(uuid);
+    public ResponseEntity<CommonResponse> retrieveMember(final AuthInfo authInfo, final MemberInfo memberInfo) {
+        MemberResponse memberResponse = new MemberResponse(authInfo, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -131,11 +131,11 @@ public class MemberController {
 
         if (Objects.nonNull(signUp.getReferrerMemberId())) {
             pointService.createPointHistory(signUp.getReferrerMemberId(),
-                    new PointHistoryRequest(5000, "추천인 이벤트"));
+                new PointHistoryRequest(5000, "추천인 이벤트"));
         }
 
         pointService.createPointHistory(signUp.getSignUpMemberId(),
-                new PointHistoryRequest(5000, "회원 가입 추천인 이벤트"));
+            new PointHistoryRequest(5000, "회원 가입 추천인 이벤트"));
 
         return ResponseEntity.status(OK)
                              .location(URI.create("/members/signup"))
