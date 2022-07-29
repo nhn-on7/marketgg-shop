@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.elastic.document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import java.time.LocalDateTime;
 import javax.persistence.Id;
 import lombok.AccessLevel;
@@ -37,5 +38,14 @@ public class ElasticBoard {
     @Field
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     private LocalDateTime createdAt;
+
+    public ElasticBoard(final CustomerServicePost servicePost) {
+        this.id = servicePost.getId();
+        this.categoryCode = servicePost.getCategory().getId();
+        this.title = servicePost.getTitle();
+        this.reason = servicePost.getReason();
+        this.status = servicePost.getStatus();
+        this.createdAt = servicePost.getCreatedAt();
+    }
 
 }

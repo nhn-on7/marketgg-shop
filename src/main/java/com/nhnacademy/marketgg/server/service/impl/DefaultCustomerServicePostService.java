@@ -2,6 +2,8 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.constant.CustomerServicePostStatus;
 import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostDto;
+import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
+import com.nhnacademy.marketgg.server.elastic.repository.ElasticBoardRepository;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.CustomerServiceComment;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
@@ -33,6 +35,7 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
     private final CustomerServiceCommentRepository customerServiceCommentRepository;
+    private final ElasticBoardRepository elasticBoardRepository;
 
     private static final String OTO_INQUIRY = "1:1문의";
 
@@ -50,6 +53,7 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
         customerServicePost.setUpdatedAt(LocalDateTime.now());
 
         customerServicePostRepository.save(customerServicePost);
+        elasticBoardRepository.save(new ElasticBoard(customerServicePost));
     }
 
     @Override
@@ -93,6 +97,8 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
 
         customerServiceCommentRepository.deleteAll(comments);
         customerServicePostRepository.delete(otoInquiry);
+
+        elasticBoardRepository.deleteById(csPostId);
     }
 
 }

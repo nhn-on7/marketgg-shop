@@ -2,11 +2,13 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 
 import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
@@ -20,6 +22,8 @@ import com.nhnacademy.marketgg.server.exception.categorization.CategorizationNot
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
 import com.nhnacademy.marketgg.server.repository.categorization.CategorizationRepository;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
+import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
+import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
@@ -47,6 +51,10 @@ class DefaultCategoryServiceTest {
     ElasticProductRepository elasticProductRepository;
     @Mock
     ElasticBoardRepository elasticBoardRepository;
+    @Mock
+    ProductRepository productRepository;
+    @Mock
+    CustomerServicePostRepository customerServicePostRepository;
 
     private static CategoryCreateRequest categoryCreateRequest;
     private static CategoryUpdateRequest categoryUpdateRequest;
@@ -157,12 +165,28 @@ class DefaultCategoryServiceTest {
         doNothing().when(categoryRepository).delete(any(Category.class));
         doNothing().when(elasticBoardRepository).deleteAllByCategoryCode(anyString());
         doNothing().when(elasticProductRepository).deleteAllByCategoryCode(anyString());
+        given(productRepository.existsByCategory(any(Category.class))).willReturn(Boolean.FALSE);
+        given(customerServicePostRepository.existsByCategory(any(Category.class))).willReturn(Boolean.FALSE);
 
         categoryService.deleteCategory("001001");
 
         then(categoryRepository).should().delete(any(Category.class));
         then(elasticBoardRepository).should().deleteAllByCategoryCode(anyString());
         then(elasticProductRepository).should().deleteAllByCategoryCode(anyString());
+    }
+
+    @Test
+    @DisplayName("카테고리 연관 존재 시 삭제 실패")
+    void testDeleteCategoryFailByExist() {
+        given(categoryRepository.findById(anyString()))
+                .willReturn(Optional.of(new Category(categoryCreateRequest, new Categorization(
+                        categorizationCreateRequest))));
+        given(productRepository.existsByCategory(any(Category.class))).willReturn(Boolean.TRUE);
+
+        categoryService.deleteCategory("001001");
+
+        then(categoryRepository).should().findById(anyString());
+        then(productRepository).should().existsByCategory(any(Category.class));
     }
 
     @Test
