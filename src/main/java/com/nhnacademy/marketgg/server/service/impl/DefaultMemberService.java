@@ -63,6 +63,7 @@ public class DefaultMemberService implements MemberService {
                              .build();
     }
 
+    @Transactional
     @Override
     public void withdrawPass(final Long id) {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
