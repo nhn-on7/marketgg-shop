@@ -97,7 +97,7 @@ class DefaultPointServiceTest {
         ReflectionTestUtils.setField(memberGradeCreateRequest, "grade", "Member");
         MemberGrade memberGrade = new MemberGrade(memberGradeCreateRequest);
         Member member = new Member(memberCreateRequest);
-        Order order = new Order(member, null, orderCreateRequest);
+        Order order = new Order(member, orderCreateRequest);
 
         ReflectionTestUtils.setField(pointHistoryRequest, "point", 1000);
         ReflectionTestUtils.setField(member, "memberGrade", memberGrade);
@@ -117,7 +117,7 @@ class DefaultPointServiceTest {
         ReflectionTestUtils.setField(memberGradeCreateRequest, "grade", "VIP");
         MemberGrade memberGrade = new MemberGrade(memberGradeCreateRequest);
         Member member = new Member(memberCreateRequest);
-        Order order = new Order(member, null, orderCreateRequest);
+        Order order = new Order(member, orderCreateRequest);
 
         ReflectionTestUtils.setField(pointHistoryRequest, "point", 1000);
         ReflectionTestUtils.setField(member, "memberGrade", memberGrade);
@@ -137,7 +137,7 @@ class DefaultPointServiceTest {
         ReflectionTestUtils.setField(memberGradeCreateRequest, "grade", "G-VIP");
         MemberGrade memberGrade = new MemberGrade(memberGradeCreateRequest);
         Member member = new Member(memberCreateRequest);
-        Order order = new Order(member, null, orderCreateRequest);
+        Order order = new Order(member, orderCreateRequest);
 
         ReflectionTestUtils.setField(pointHistoryRequest, "point", 1000);
         ReflectionTestUtils.setField(member, "memberGrade", memberGrade);
@@ -157,7 +157,7 @@ class DefaultPointServiceTest {
         ReflectionTestUtils.setField(memberGradeCreateRequest, "grade", "G-VIP");
         MemberGrade memberGrade = new MemberGrade(memberGradeCreateRequest);
         Member member = new Member(memberCreateRequest);
-        Order order = new Order(member, null, orderCreateRequest);
+        Order order = new Order(member, orderCreateRequest);
 
         ReflectionTestUtils.setField(pointHistoryRequest, "point", -1000);
         ReflectionTestUtils.setField(member, "memberGrade", memberGrade);
