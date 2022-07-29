@@ -25,13 +25,13 @@ import java.util.List;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/shop/v1/customer-services")
+@RequestMapping("/customer-services")
 @RequiredArgsConstructor
 public class CustomerServicePostController {
 
     private final CustomerServicePostService customerServicePostService;
 
-    private static final String DEFAULT_CUSTOMER_SERVICE = "/shop/v1/customer-services";
+    private static final String DEFAULT_CUSTOMER_SERVICE = "/customer-services";
 
     /**
      * 1:1 문의를 등록하는 POST Mapping 을 지원합니다.
