@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.customerservicepost;
 
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.QCustomerServicePost;
 import com.querydsl.core.QueryResults;
@@ -12,17 +13,33 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport implements CustomerServicePostRepositoryCustom {
 
-    QCustomerServicePost customerServicePost = QCustomerServicePost.customerServicePost;
+    QCustomerServicePost csPost = QCustomerServicePost.customerServicePost;
 
     public CustomerServicePostRepositoryImpl() {
         super(CustomerServicePost.class);
     }
 
     @Override
+    public PostResponseForOtoInquiry findOtoInquiryById(Long inquiryId) {
+        return from(csPost)
+                .where(csPost.id.eq(inquiryId))
+                .select(Projections.constructor(PostResponseForOtoInquiry.class,
+                                                csPost.id,
+                                                csPost.title,
+                                                csPost.content,
+                                                csPost.reason,
+                                                csPost.status,
+                                                csPost.createdAt,
+                                                csPost.updatedAt
+                                                ))
+                .fetchOne();
+    }
+
+    @Override
     public Page<CustomerServicePost> findPostsByCategoryId(final Pageable pageable, final String categoryId) {
-        QueryResults<CustomerServicePost> result = from(customerServicePost)
-                .where(customerServicePost.category.id.eq(categoryId))
-                .select(selectAllCustomerServicePostColumns())
+        QueryResults<CustomerServicePost> result = from(csPost)
+                .where(csPost.category.id.eq(categoryId))
+                .select(selectAllCsPostColumns())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
@@ -32,10 +49,10 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
 
     @Override
     public Page<CustomerServicePost> findPostByCategoryAndMember(final Pageable pageable, final String categoryId, final Long memberId) {
-        QueryResults<CustomerServicePost> result = from(customerServicePost)
-                .where(customerServicePost.category.id.eq(categoryId))
-                .where(customerServicePost.member.id.eq(memberId))
-                .select(customerServicePost)
+        QueryResults<CustomerServicePost> result = from(csPost)
+                .where(csPost.category.id.eq(categoryId))
+                .where(csPost.member.id.eq(memberId))
+                .select(csPost)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
@@ -43,16 +60,16 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
         return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 
-    private ConstructorExpression<CustomerServicePost> selectAllCustomerServicePostColumns() {
+    private ConstructorExpression<CustomerServicePost> selectAllCsPostColumns() {
         return Projections.constructor(CustomerServicePost.class,
-                                       customerServicePost.id,
-                                       customerServicePost.member,
-                                       customerServicePost.category,
-                                       customerServicePost.content,
-                                       customerServicePost.title,
-                                       customerServicePost.reason,
-                                       customerServicePost.status,
-                                       customerServicePost.createdAt,
-                                       customerServicePost.updatedAt);
+                                       csPost.id,
+                                       csPost.member,
+                                       csPost.category,
+                                       csPost.content,
+                                       csPost.title,
+                                       csPost.reason,
+                                       csPost.status,
+                                       csPost.createdAt,
+                                       csPost.updatedAt);
     }
 }

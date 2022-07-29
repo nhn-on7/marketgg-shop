@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.nhnacademy.marketgg.server.dto.request.CommentRequest;
+import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
 import com.nhnacademy.marketgg.server.dto.response.CustomerServiceCommentDto;
 import com.nhnacademy.marketgg.server.service.CustomerServiceCommentService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import java.util.List;
  *
  * @version 1.0.0
  */
+// @RoleCheck(accessLevel = Role.ROLE_USER)
 @RestController
 @RequestMapping("/customer-services/oto-inquiries")
 @RequiredArgsConstructor
@@ -35,15 +38,15 @@ public class CustomerServiceCommentController {
      *
      * @param inquiryId    - 댓글을 등록할 1:1 문의의 식별번호입니다.
      * @param memberId     - 댓글을 등록하는 회원의 식별번호입니다.
-     * @param csCommentDto - 댓글을 등록하기 위한 CustomerServiceCommentDto 객체입니다.
+     * @param commentRequest - 댓글을 등록하기 위한 DTO 객체입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
     @PostMapping("/{inquiryId}/members/{memberId}/comments")
     public ResponseEntity<Void> createComment(@PathVariable final Long inquiryId,
                                               @PathVariable final Long memberId,
-                                              @RequestBody final CustomerServiceCommentDto csCommentDto) {
-        customerServiceCommentService.createComment(inquiryId, memberId, csCommentDto);
+                                              @RequestBody final CommentRequest commentRequest) {
+        customerServiceCommentService.createComment(inquiryId, memberId, commentRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(
@@ -60,8 +63,8 @@ public class CustomerServiceCommentController {
      * @since 1.0.0
      */
     @GetMapping("/comments/{commentId}")
-    public ResponseEntity<CustomerServiceCommentDto> retrieveComment(@PathVariable final Long commentId) {
-        CustomerServiceCommentDto commentResponse = customerServiceCommentService.retrieveComment(commentId);
+    public ResponseEntity<CommentResponse> retrieveComment(@PathVariable final Long commentId) {
+        CommentResponse commentResponse = customerServiceCommentService.retrieveComment(commentId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_CS_COMMENT + "/comments/" + commentId))
@@ -76,9 +79,8 @@ public class CustomerServiceCommentController {
      * @since 1.0.0
      */
     @GetMapping("/{inquiryId}/comments")
-    public ResponseEntity<List<CustomerServiceCommentDto>> retrieveInquiryComments(@PathVariable final Long inquiryId) {
-        List<CustomerServiceCommentDto> commentResponses = customerServiceCommentService.retrieveCommentsByInquiry(
-                inquiryId);
+    public ResponseEntity<List<CommentResponse>> retrieveInquiryComments(@PathVariable final Long inquiryId) {
+        List<CommentResponse> commentResponses = customerServiceCommentService.retrieveCommentsByInquiry(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_CS_COMMENT + "/" + inquiryId + "/comments"))

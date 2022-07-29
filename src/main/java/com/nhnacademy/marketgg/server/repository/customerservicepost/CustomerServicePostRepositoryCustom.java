@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.customerservicepost;
 
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +9,8 @@ import org.springframework.data.repository.NoRepositoryBean;
 @NoRepositoryBean
 public interface CustomerServicePostRepositoryCustom {
 
+
+    PostResponseForOtoInquiry findOtoInquiryById(final Long inquiryId);
     /**
      * 카테고리 번호에 따라 고객센터 게시글(공지사항, 1:1문의, FAQ) 목록을 조회하는 메소드입니다.
      *

@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
  *
  * @version 1.0.0
  */
+// @RoleCheck(accessLevel = Role.ROLE_ADMIN)
 @RestController
 @RequestMapping("/admin/customer-services")
 @RequiredArgsConstructor
@@ -63,6 +65,16 @@ public class AdminCustomerServicePostController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries"))
                              .body(inquiryResponses);
+    }
+
+    @PatchMapping("/oto-inquiries/{inquiryId}")
+    public ResponseEntity<CustomerServicePostDto> updateInquiryStatus(@PathVariable final Long inquiryId) {
+        customerServicePostService.updateInquiryStatus(inquiryId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
     }
 
     /**

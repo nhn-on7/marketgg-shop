@@ -29,7 +29,7 @@ import lombok.ToString;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@ToString
+// @ToString
 public class Member {
 
     @Id

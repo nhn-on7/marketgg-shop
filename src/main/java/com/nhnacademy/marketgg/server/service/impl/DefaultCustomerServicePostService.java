@@ -1,15 +1,15 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.constant.CustomerServicePostStatus;
+import com.nhnacademy.marketgg.server.dto.request.PostRequest;
+import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
 import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostDto;
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.entity.Category;
-import com.nhnacademy.marketgg.server.entity.CustomerServiceComment;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
 import com.nhnacademy.marketgg.server.exception.customerservicepost.CustomerServicePostNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
-import com.nhnacademy.marketgg.server.mapper.impl.CustomerServicePostMapper;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicecomment.CustomerServiceCommentRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
@@ -20,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +27,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DefaultCustomerServicePostService implements CustomerServicePostService {
 
-    private final CustomerServicePostMapper customerServicePostMapper;
     private final CustomerServicePostRepository customerServicePostRepository;
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
@@ -38,27 +36,26 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
 
     @Transactional
     @Override
-    public void createOtoInquiry(final Long memberId, final CustomerServicePostDto csPostDto) {
-        CustomerServicePost customerServicePost = customerServicePostMapper.toEntity(csPostDto);
+    public void createOtoInquiry(final Long memberId, final PostRequest postRequest) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY);
         Category category = categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
-        customerServicePost.setMember(member);
-        customerServicePost.setCategory(category);
-        customerServicePost.setStatus(CustomerServicePostStatus.UNANSWERED.status());
-        customerServicePost.setCreatedAt(LocalDateTime.now());
-        customerServicePost.setUpdatedAt(LocalDateTime.now());
 
-        customerServicePostRepository.save(customerServicePost);
+        CustomerServicePost csPost = new CustomerServicePost(member, category, postRequest);
+
+        customerServicePostRepository.save(csPost);
     }
 
     @Override
-    public CustomerServicePostDto retrieveCustomerServicePost(final Long csPostId) {
-        CustomerServicePost csPost = customerServicePostRepository.findById(csPostId)
-                                                                  .orElseThrow(
-                                                                          CustomerServicePostNotFoundException::new);
+    public PostResponseForOtoInquiry retrieveCustomerServicePost(final Long inquiryId) {
+        PostResponseForOtoInquiry otoInquiry = customerServicePostRepository.findOtoInquiryById(inquiryId);
+        List<CommentResponse> commentList = customerServiceCommentRepository.findByInquiryId(inquiryId);
+        PostResponseForOtoInquiry result = PostResponseForOtoInquiry.builder()
+                                                                    .otoInquiry(otoInquiry)
+                                                                    .commentList(commentList)
+                                                                    .build();
 
-        return customerServicePostMapper.toDto(csPost);
+        return result;
     }
 
     @Override
@@ -83,15 +80,27 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
         return ownOtoInquiries.stream().map(customerServicePostMapper::toDto).collect(Collectors.toUnmodifiableList());
     }
 
+    @Override
+    public void updateInquiryStatus(Long inquiryId) {
+        CustomerServicePost inquiry = customerServicePostRepository.findById(inquiryId)
+                                                                   .orElseThrow(
+                                                                           CustomerServicePostNotFoundException::new);
+
+
+    }
+
     @Transactional
     @Override
     public void deleteCustomerServicePost(final Long csPostId) {
         CustomerServicePost otoInquiry = customerServicePostRepository.findById(csPostId)
                                                                       .orElseThrow(
                                                                               CustomerServicePostNotFoundException::new);
-        List<CustomerServiceComment> comments = customerServiceCommentRepository.findByInquiry(csPostId);
+        List<Long> commentIds = customerServiceCommentRepository.findByInquiryId(csPostId)
+                                                                .stream()
+                                                                .map(CommentResponse::getId)
+                                                                .collect(Collectors.toList());
 
-        customerServiceCommentRepository.deleteAll(comments);
+        customerServiceCommentRepository.deleteAllById(commentIds);
         customerServicePostRepository.delete(otoInquiry);
     }
 

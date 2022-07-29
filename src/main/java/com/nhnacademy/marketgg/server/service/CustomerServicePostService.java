@@ -1,6 +1,8 @@
 package com.nhnacademy.marketgg.server.service;
 
+import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostDto;
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -20,7 +22,7 @@ public interface CustomerServicePostService {
      * @return 조회한 게시글의 정보를 담은 DTO 객체를 반환합니다.
      * @since 1.0.0
      */
-    CustomerServicePostDto retrieveCustomerServicePost(final Long csPostId);
+    PostResponseForOtoInquiry retrieveCustomerServicePost(final Long csPostId);
 
     /**
      * 1:1 문의 전체 목록을 조회하는 메소드입니다.
@@ -45,9 +47,9 @@ public interface CustomerServicePostService {
      * 1:1 문의를 등록하는 메소드입니다.
      *
      * @param memberId               - 등록하는 회원의 식별번호입니다.
-     * @param customerServicePostDto - 1:1 문의를 등록하기 위한 DTO 객체입니다.
+     * @param postRequest - 1:1 문의를 등록하기 위한 DTO 객체입니다.
      */
-    void createOtoInquiry(final Long memberId, final CustomerServicePostDto customerServicePostDto);
+    void createOtoInquiry(final Long memberId, final PostRequest postRequest);
 
     /**
      * 고객센터 게시글을 삭제하는 메소드입니다.
@@ -56,5 +58,7 @@ public interface CustomerServicePostService {
      * @since 1.0.0
      */
     void deleteCustomerServicePost(Long csPostId);
+
+    void updateInquiryStatus(Long inquiryId);
 
 }
