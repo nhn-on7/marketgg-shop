@@ -31,8 +31,11 @@ public class ProductController {
      * @since 1.0.0
      */
     @GetMapping("/categories/{categoryCode}")
-    public ResponseEntity<List<ElasticProduct>> searchProductsByCategory(Pageable pageable, @PathVariable String categoryCode) {
-        List<ElasticProduct> productResponseList = productService.searchProductByCategory(pageable, categoryCode);
+    public ResponseEntity<List<ElasticProduct>> searchProductsByCategory(
+            @PathVariable final String categoryCode, final Pageable pageable) {
+
+        List<ElasticProduct> productResponseList =
+                productService.searchProductByCategory(pageable, categoryCode);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI + "/search/" + categoryCode))

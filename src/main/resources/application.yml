@@ -70,26 +70,27 @@ spring:
 
 ---
 
-spring:
-  config:
-    activate:
-      on-profile: "devdb"
-
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://133.186.211.156:3306/marketgg_shop
-    username: on7
-    password: ?nk9Wa#^Bg)on71!*,^2=d
-
-decorator:
-  datasource:
-    p6spy:
-      enable-logging: false
-
-
 #spring:
-#  application:
-#    name: marketgg-shop
-#
 #  config:
-#    import: "optional:configserver:http://133.186.209.70:8888"
+#    activate:
+#      on-profile: "devdb"
+#
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://133.186.211.156:3306/marketgg_shop
+#    username: on7
+#    password: ?nk9Wa#^Bg)on71!*,^2=d
+#
+#decorator:
+#  datasource:
+#    p6spy:
+#      enable-logging: false
+
+
+
+spring:
+  application:
+    name: marketgg-shop
+
+  config:
+    import: "optional:configserver:http://133.186.209.70:8888"
