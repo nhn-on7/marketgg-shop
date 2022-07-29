@@ -4,6 +4,7 @@ import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -71,21 +72,12 @@ public interface ProductService {
     void restoreProduct(final Long id);
 
     /**
-     * keyword에 해당하는 값이 상품 이름에 존재하면 해당 상품을 반환합니다.
-     *
-     * @param keyword - String 타입입니다.
-     * @return - 상품 리스트를 반환합니다.
-     * @since 1.0.0
-     */
-    List<ProductResponse> searchProductsByName(final String keyword);
-
-    /**
      * 카테고리로 상품 목록을 조회합니다.
      *
      * @param categoryCode - 카테고리 2차 분류입니다.
      * @return - 해당하는 카테고리의 상품 리스트를 반환합니다.
      */
 
-    List<ProductResponse> searchProductByCategory(final String categoryCode);
+    List<ElasticProduct> searchProductByCategory(final Pageable pageable, final String categoryCode);
 
 }

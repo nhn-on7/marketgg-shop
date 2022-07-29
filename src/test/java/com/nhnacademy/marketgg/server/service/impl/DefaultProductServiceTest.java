@@ -244,10 +244,10 @@ class DefaultProductServiceTest {
     @Test
     @DisplayName("카테고리 코드로 상품 목록 조회 테스트")
     void testSearchProductsByCategoryCode() {
-        given(productRepository.findByCategoryCode(anyString()))
+        given(productRepository.findByCategoryCode(any() ,anyString()))
             .willReturn(List.of(productResponse));
 
-        productService.searchProductByCategory("101");
+        productService.searchProductByCategory(PageRequest.of(1, 0),"101");
 
         verify(productRepository, atLeastOnce()).findByCategoryCode(anyString());
     }
