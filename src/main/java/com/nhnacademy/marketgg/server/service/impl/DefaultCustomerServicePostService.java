@@ -48,7 +48,7 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
         CustomerServicePost csPost = new CustomerServicePost(member, category, postRequest);
 
         postRepository.save(csPost);
-        elasticBoardRepository.save(new ElasticBoard(customerServicePost));
+        elasticBoardRepository.save(new ElasticBoard(csPost));
     }
 
     @Override

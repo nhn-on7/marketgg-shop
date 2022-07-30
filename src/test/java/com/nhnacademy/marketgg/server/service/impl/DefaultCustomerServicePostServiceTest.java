@@ -4,7 +4,10 @@ import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
+import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
+import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
+import com.nhnacademy.marketgg.server.elastic.repository.ElasticBoardRepository;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
@@ -24,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -44,6 +48,9 @@ public class DefaultCustomerServicePostServiceTest {
     DefaultCustomerServicePostService postService;
 
     @Mock
+    ElasticBoardRepository elasticBoardRepository;
+
+    @Mock
     CustomerServicePostRepository postRepository;
 
     @Mock
@@ -55,7 +62,6 @@ public class DefaultCustomerServicePostServiceTest {
     @Mock
     CategoryRepository categoryRepository;
 
-    private static CustomerServicePost post;
     private static Category category;
     private static Member member;
 
@@ -67,7 +73,6 @@ public class DefaultCustomerServicePostServiceTest {
         member = new Member(memberRequest, new Cart());
         Categorization categorization = new Categorization(categorizationRequest);
         category = new Category(categoryRequest, categorization);
-        post = new CustomerServicePost(member, category, new PostRequest());
     }
 
     @Test
@@ -80,12 +85,16 @@ public class DefaultCustomerServicePostServiceTest {
         postService.createOtoInquiry(1L, new PostRequest());
 
         then(postRepository).should().save(any(CustomerServicePost.class));
+        then(elasticBoardRepository).should().save(any(ElasticBoard.class));
     }
 
     @Test
     @DisplayName("1:1 문의 단건 조회")
     void testRetrieveCustomerServicePost() {
-        given(postRepository.findOtoInquiryById(anyLong())).willReturn(new PostResponseForOtoInquiry());
+        PostResponseForOtoInquiry otoInquiry = new PostResponseForOtoInquiry();
+        ReflectionTestUtils.setField(otoInquiry, "id", 1L);
+
+        given(postRepository.findOtoInquiryById(anyLong())).willReturn(otoInquiry);
         given(commentRepository.findByInquiryId(anyLong())).willReturn(List.of());
 
         postService.retrieveCustomerServicePost(1L);
@@ -122,11 +131,15 @@ public class DefaultCustomerServicePostServiceTest {
     @Test
     @DisplayName("1:1 문의 삭제(댓글이 없을 경우)")
     void testDeleteCustomerServicePostNotExistsComments() {
-        given(postRepository.findById(anyLong())).willReturn(Optional.ofNullable(post));
+        CustomerServicePost csPost = new CustomerServicePost(member, category, new PostRequest());
+
+        given(postRepository.findById(anyLong())).willReturn(Optional.of(csPost));
         given(commentRepository.findByInquiryId(anyLong())).willReturn(List.of());
 
+        willDoNothing().given(elasticBoardRepository).deleteById(anyLong());
         willDoNothing().given(postRepository).delete(any(CustomerServicePost.class));
 
+        postRepository.save(csPost);
         postService.deleteCustomerServicePost(1L);
 
         then(postRepository).should().findById(anyLong());
@@ -134,19 +147,4 @@ public class DefaultCustomerServicePostServiceTest {
         then(commentRepository).should().findByInquiryId(anyLong());
     }
 
-    // @Test
-    // @DisplayName("1:1 문의 삭제(댓글이 있을 경우)")
-    // void testDeleteCustomerServicePostExistsComments() {
-    //     given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
-    //     given(commentRepository.findByInquiryId(anyLong())).willReturn(List.of());
-    //
-    //     willDoNothing().given(postRepository).delete(any(CustomerServicePost.class));
-    //     willDoNothing().given(commentRepository).deleteAllById(List.of(anyLong()));
-    //
-    //     postService.deleteCustomerServicePost(1L);
-    //
-    //     then(postRepository).should().findById(anyLong());
-    //     then(postRepository).should().delete(any(CustomerServicePost.class));
-    //     then(commentRepository).should().findByInquiryId(anyLong());
-    // }
 }

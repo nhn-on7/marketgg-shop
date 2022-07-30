@@ -53,25 +53,4 @@ public class CustomerServiceCommentControllerTest {
                                            .createComment(anyLong(), anyLong(), any(CommentRequest.class));
     }
 
-    @Test
-    @DisplayName("댓글 단건 조회")
-    void testRetrieveComment() throws Exception {
-        given(customerServiceCommentService.retrieveComment(anyLong())).willReturn(null);
-
-        this.mockMvc.perform(get(DEFAULT_CS_COMMENT + "/comments/{commentId}", 1L))
-                    .andExpect(status().isOk());
-
-        then(customerServiceCommentService).should().retrieveComment(anyLong());
-    }
-
-    @Test
-    @DisplayName("고객센터 게시글의 댓글 목록 조회")
-    void testRetrieveInquiryComment() throws Exception {
-        given(customerServiceCommentService.retrieveCommentsByInquiry(anyLong())).willReturn(List.of());
-
-        this.mockMvc.perform(get(DEFAULT_CS_COMMENT + "/{inquiryId}/comments", 1L))
-                    .andExpect(status().isOk());
-
-        then(customerServiceCommentService).should().retrieveCommentsByInquiry(anyLong());
-    }
 }
