@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.response.CustomerServiceCommentDto;
+import com.nhnacademy.marketgg.server.dto.request.CommentRequest;
 import com.nhnacademy.marketgg.server.service.CustomerServiceCommentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,15 +34,15 @@ public class CustomerServiceCommentControllerTest {
     @MockBean
     CustomerServiceCommentService customerServiceCommentService;
 
-    private static final String DEFAULT_CS_COMMENT = "/shop/v1/customer-services/oto-inquiries";
+    private static final String DEFAULT_CS_COMMENT = "/customer-services/oto-inquiries";
 
     @Test
     @DisplayName("고객센터 게시글에 댓글 등록")
     void testCreateComment() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(new CustomerServiceCommentDto());
+        String requestBody = objectMapper.writeValueAsString(new CommentRequest());
 
         willDoNothing().given(customerServiceCommentService)
-                       .createComment(anyLong(), anyLong(), any(CustomerServiceCommentDto.class));
+                       .createComment(anyLong(), anyLong(), any(CommentRequest.class));
 
         this.mockMvc.perform(post(DEFAULT_CS_COMMENT + "/{inquiryId}/members/{memberId}/comments",1L, 1L)
                                      .contentType(MediaType.APPLICATION_JSON)
@@ -50,7 +50,7 @@ public class CustomerServiceCommentControllerTest {
                     .andExpect(status().isCreated());
 
         then(customerServiceCommentService).should()
-                                           .createComment(anyLong(), anyLong(), any(CustomerServiceCommentDto.class));
+                                           .createComment(anyLong(), anyLong(), any(CommentRequest.class));
     }
 
     @Test

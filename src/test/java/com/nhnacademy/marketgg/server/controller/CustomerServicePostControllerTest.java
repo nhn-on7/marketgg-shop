@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostDto;
+import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,17 +41,17 @@ class CustomerServicePostControllerTest {
     @Test
     @DisplayName("1:1 문의 등록")
     void testCreateOtoInquiry() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(new CustomerServicePostDto());
+        String requestBody = objectMapper.writeValueAsString(new PostRequest());
 
         willDoNothing().given(customerServicePostService)
-                       .createOtoInquiry(anyLong(), any(CustomerServicePostDto.class));
+                       .createOtoInquiry(anyLong(), any(PostRequest.class));
 
         this.mockMvc.perform(post(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/members/{memberId}", 1L)
                                      .contentType(MediaType.APPLICATION_JSON)
                                      .content(requestBody))
                     .andExpect(status().isCreated());
 
-        then(customerServicePostService).should().createOtoInquiry(anyLong(), any(CustomerServicePostDto.class));
+        then(customerServicePostService).should().createOtoInquiry(anyLong(), any(PostRequest.class));
     }
 
     @Test

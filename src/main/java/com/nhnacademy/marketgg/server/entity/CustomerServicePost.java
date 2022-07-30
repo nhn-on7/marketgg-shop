@@ -1,10 +1,11 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.constant.CustomerServicePostStatus;
+import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,9 +20,7 @@ import java.time.LocalDateTime;
 @Table(name = "cs_posts")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Getter
-@Setter
 public class CustomerServicePost {
 
     @Id
@@ -54,5 +53,21 @@ public class CustomerServicePost {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public CustomerServicePost(Member member, Category category, PostRequest postRequest) {
+        this.member = member;
+        this.category = category;
+        this.content = postRequest.getContent();
+        this.title = postRequest.getTitle();
+        this.reason = postRequest.getReason();
+        this.status = CustomerServicePostStatus.UNANSWERED.status();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updatePostStatus(String status) {
+        this.status = status;
+        this.updatedAt = LocalDateTime.now();
+    }
 
 }

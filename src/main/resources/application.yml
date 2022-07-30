@@ -68,8 +68,8 @@ spring:
     properties:
       hibernate.format_sql: true
 
----
-
+#---
+#
 #spring:
 #  config:
 #    activate:
@@ -86,6 +86,7 @@ spring:
 #    p6spy:
 #      enable-logging: false
 
+---
 
 
 spring:
