@@ -24,6 +24,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,8 +49,8 @@ public class DefaultCustomerServiceCommentServiceTest {
     @Mock
     MemberRepository memberRepository;
 
-     private static CustomerServicePost post;
-     private static Member member;
+    private static CustomerServicePost post;
+    private static Member member;
 
     @BeforeAll
     static void beforeAll() {
@@ -74,7 +75,8 @@ public class DefaultCustomerServiceCommentServiceTest {
     @Test
     @DisplayName("댓글 단건 조회")
     void testRetrieveComment() {
-        given(commentRepository.findCommentById(anyLong())).willReturn(new CommentResponse(1L, 1L, 1L));
+        given(commentRepository.findCommentById(anyLong())).willReturn(
+                new CommentResponse(1L, 1L, 1L, "content", LocalDateTime.now()));
 
         commentService.retrieveComment(1L);
 

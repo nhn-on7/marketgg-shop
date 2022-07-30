@@ -66,7 +66,7 @@ public class AdminCustomerServiceControllerTest {
     @Test
     @DisplayName("1:1 문의 상태 변경 - 관리자")
     void testUpdatePostStatus() throws Exception {
-        String requestBody = objectMapper.writeValueAsString("답변중");
+        String requestBody = objectMapper.writeValueAsString(new PostStatusUpdateRequest());
 
         willDoNothing().given(customerServicePostService).updateInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
 
