@@ -31,7 +31,7 @@ public interface CustomerServicePostService {
      * @return 1:1 문의 전체 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    List<CustomerServicePostDto> retrieveOtoInquiries(final Pageable pageable);
+    List<PostResponseForOtoInquiry> retrieveOtoInquiries(final Pageable pageable);
 
     /**
      * 회원 본인의 1:1 전체 목록을 조회하는 메소드입니다.
@@ -41,7 +41,7 @@ public interface CustomerServicePostService {
      * @return 회원의 1:1 문의 전체 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    List<CustomerServicePostDto> retrieveOwnOtoInquiries(final Pageable pageable, final Long memberId);
+    List<PostResponseForOtoInquiry> retrieveOwnOtoInquiries(final Pageable pageable, final Long memberId);
 
     /**
      * 1:1 문의를 등록하는 메소드입니다.
@@ -59,6 +59,6 @@ public interface CustomerServicePostService {
      */
     void deleteCustomerServicePost(Long csPostId);
 
-    void updateInquiryStatus(Long inquiryId);
+    void updateInquiryStatus(Long inquiryId, String status);
 
 }

@@ -64,4 +64,8 @@ public class CustomerServicePost {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public void updatePostStatus(String status) {
+        this.status = status;
+    }
+
 }

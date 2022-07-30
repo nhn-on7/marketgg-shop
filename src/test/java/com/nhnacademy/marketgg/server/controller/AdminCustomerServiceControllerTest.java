@@ -31,7 +31,7 @@ public class AdminCustomerServiceControllerTest {
     @MockBean
     CustomerServicePostService customerServicePostService;
 
-    private static final String DEFAULT_ADMIN_CUSTOMER_SERVICE = "/shop/v1/admin/customer-services";
+    private static final String DEFAULT_ADMIN_CUSTOMER_SERVICE = "/admin/customer-services";
 
     @Test
     @DisplayName("1:1 문의 단건 조회 - 관리자")

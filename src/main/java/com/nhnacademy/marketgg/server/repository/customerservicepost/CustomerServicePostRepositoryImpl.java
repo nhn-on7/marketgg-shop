@@ -23,21 +23,13 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
     public PostResponseForOtoInquiry findOtoInquiryById(Long inquiryId) {
         return from(csPost)
                 .where(csPost.id.eq(inquiryId))
-                .select(Projections.constructor(PostResponseForOtoInquiry.class,
-                                                csPost.id,
-                                                csPost.title,
-                                                csPost.content,
-                                                csPost.reason,
-                                                csPost.status,
-                                                csPost.createdAt,
-                                                csPost.updatedAt
-                                                ))
+                .select(selectAllCsPostColumns())
                 .fetchOne();
     }
 
     @Override
-    public Page<CustomerServicePost> findPostsByCategoryId(final Pageable pageable, final String categoryId) {
-        QueryResults<CustomerServicePost> result = from(csPost)
+    public Page<PostResponseForOtoInquiry> findPostsByCategoryId(final Pageable pageable, final String categoryId) {
+        QueryResults<PostResponseForOtoInquiry> result = from(csPost)
                 .where(csPost.category.id.eq(categoryId))
                 .select(selectAllCsPostColumns())
                 .offset(pageable.getOffset())
@@ -48,11 +40,11 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Page<CustomerServicePost> findPostByCategoryAndMember(final Pageable pageable, final String categoryId, final Long memberId) {
-        QueryResults<CustomerServicePost> result = from(csPost)
+    public Page<PostResponseForOtoInquiry> findPostByCategoryAndMember(final Pageable pageable, final String categoryId, final Long memberId) {
+        QueryResults<PostResponseForOtoInquiry> result = from(csPost)
                 .where(csPost.category.id.eq(categoryId))
                 .where(csPost.member.id.eq(memberId))
-                .select(csPost)
+                .select(selectAllCsPostColumns())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
@@ -60,16 +52,15 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
         return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 
-    private ConstructorExpression<CustomerServicePost> selectAllCsPostColumns() {
-        return Projections.constructor(CustomerServicePost.class,
+    private ConstructorExpression<PostResponseForOtoInquiry> selectAllCsPostColumns() {
+        return Projections.constructor(PostResponseForOtoInquiry.class,
                                        csPost.id,
-                                       csPost.member,
-                                       csPost.category,
-                                       csPost.content,
                                        csPost.title,
+                                       csPost.content,
                                        csPost.reason,
                                        csPost.status,
                                        csPost.createdAt,
-                                       csPost.updatedAt);
+                                       csPost.updatedAt
+        );
     }
 }

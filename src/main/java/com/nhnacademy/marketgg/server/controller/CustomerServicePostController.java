@@ -1,10 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
-import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
-import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostDto;
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,7 +41,7 @@ public class CustomerServicePostController {
      * 1:1 문의 = one-to-one inquiry
      * one-to-one 을 축약하여 oto 으로 표현하였습니다.
      *
-     * @param memberId  - 1:1 문의를 등록하는 회원의 식별번호입니다.
+     * @param memberId    - 1:1 문의를 등록하는 회원의 식별번호입니다.
      * @param postRequest - 1:1 문의를 등록하기 위한 CustomerServicePostDto 객체입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
@@ -67,8 +65,8 @@ public class CustomerServicePostController {
      * @since 1.0.
      */
     @GetMapping("/oto-inquiries/{inquiryId}")
-    public ResponseEntity<CustomerServicePostDto> retrieveOwnOtoInquiry(@PathVariable final Long inquiryId) {
-        CustomerServicePostDto inquiryResponse = customerServicePostService.retrieveCustomerServicePost(inquiryId);
+    public ResponseEntity<PostResponseForOtoInquiry> retrieveOwnOtoInquiry(@PathVariable final Long inquiryId) {
+        PostResponseForOtoInquiry inquiryResponse = customerServicePostService.retrieveCustomerServicePost(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
@@ -84,10 +82,10 @@ public class CustomerServicePostController {
      * @since 1.0.0
      */
     @GetMapping("/oto-inquiries/members/{memberId}")
-    public ResponseEntity<List<CustomerServicePostDto>> retrieveOwnOtoInquiries(@PathVariable final Long memberId,
-                                                                                final Pageable pageable) {
-        List<CustomerServicePostDto> inquiryResponses = customerServicePostService.retrieveOwnOtoInquiries(pageable,
-                                                                                                           memberId);
+    public ResponseEntity<List<PostResponseForOtoInquiry>> retrieveOwnOtoInquiries(@PathVariable final Long memberId,
+                                                                                   final Pageable pageable) {
+        List<PostResponseForOtoInquiry> inquiryResponses = customerServicePostService.retrieveOwnOtoInquiries(pageable,
+                                                                                                              memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/members/" + memberId))

@@ -59,34 +59,35 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
     }
 
     @Override
-    public List<CustomerServicePostDto> retrieveOtoInquiries(final Pageable pageable) {
+    public List<PostResponseForOtoInquiry> retrieveOtoInquiries(final Pageable pageable) {
         String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY);
-        List<CustomerServicePost> otoInquiries = customerServicePostRepository.findPostsByCategoryId(pageable,
-                                                                                                     categoryId)
-                                                                              .getContent();
+        List<PostResponseForOtoInquiry> otoInquiries = customerServicePostRepository.findPostsByCategoryId(pageable,
+                                                                                                           categoryId)
+                                                                                    .getContent();
 
-        return otoInquiries.stream().map(customerServicePostMapper::toDto).collect(Collectors.toUnmodifiableList());
+        return otoInquiries;
     }
 
     @Override
-    public List<CustomerServicePostDto> retrieveOwnOtoInquiries(final Pageable pageable, final Long memberId) {
+    public List<PostResponseForOtoInquiry> retrieveOwnOtoInquiries(final Pageable pageable, final Long memberId) {
         String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY);
 
-        List<CustomerServicePost> ownOtoInquiries = customerServicePostRepository.findPostByCategoryAndMember(pageable,
+        List<PostResponseForOtoInquiry> ownOtoInquiries = customerServicePostRepository.findPostByCategoryAndMember(pageable,
                                                                                                               categoryId,
                                                                                                               memberId)
                                                                                  .getContent();
 
-        return ownOtoInquiries.stream().map(customerServicePostMapper::toDto).collect(Collectors.toUnmodifiableList());
+        return ownOtoInquiries;
     }
 
     @Override
-    public void updateInquiryStatus(Long inquiryId) {
+    public void updateInquiryStatus(Long inquiryId, String status) {
         CustomerServicePost inquiry = customerServicePostRepository.findById(inquiryId)
                                                                    .orElseThrow(
                                                                            CustomerServicePostNotFoundException::new);
 
-
+        inquiry.updatePostStatus(status);
+        customerServicePostRepository.save(inquiry);
     }
 
     @Transactional

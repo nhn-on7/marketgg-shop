@@ -19,7 +19,7 @@ public interface CustomerServicePostRepositoryCustom {
      * @return 카테고리 번호에 따른 게시글 목록을 Page 로 반환합니다.
      * @since 1.0.0
      */
-    Page<CustomerServicePost> findPostsByCategoryId(final Pageable pageable, final String categoryId);
+    Page<PostResponseForOtoInquiry> findPostsByCategoryId(final Pageable pageable, final String categoryId);
 
     /**
      * 카테고리 번호와 회원 번호에 따라 고객센터 게시글 목록을 조회하는 메소드입니다.
@@ -30,6 +30,6 @@ public interface CustomerServicePostRepositoryCustom {
      * @return 카테고리 번호와 회원 번호에 따른 게시글 목록을 Page 로 반환합니다.
      * @since 1.0.0
      */
-    Page<CustomerServicePost> findPostByCategoryAndMember(final Pageable pageable, final String categoryId, final Long memberId);
+    Page<PostResponseForOtoInquiry> findPostByCategoryAndMember(final Pageable pageable, final String categoryId, final Long memberId);
 
 }

@@ -1,8 +1,15 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.CommentRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.PostRequest;
+import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
 import com.nhnacademy.marketgg.server.dto.response.CustomerServiceCommentDto;
 import com.nhnacademy.marketgg.server.entity.Cart;
+import com.nhnacademy.marketgg.server.entity.Categorization;
+import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.CustomerServiceComment;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -35,9 +42,6 @@ public class DefaultCustomerServiceCommentServiceTest {
     DefaultCustomerServiceCommentService commentService;
 
     @Mock
-    CustomerServiceCommentMapper commentMapper;
-
-    @Mock
     CustomerServiceCommentRepository commentRepository;
 
     @Mock
@@ -46,25 +50,25 @@ public class DefaultCustomerServiceCommentServiceTest {
     @Mock
     MemberRepository memberRepository;
 
-     private static CustomerServiceComment comment;
      private static CustomerServicePost post;
      private static Member member;
 
     @BeforeAll
     static void beforeAll() {
+        Categorization categorization = new Categorization(new CategorizationCreateRequest());
+        Category category = new Category(new CategoryCreateRequest(), categorization);
         member = new Member(new MemberCreateRequest(), new Cart());
-        post = new CustomerServicePost(1L, member, null, "c", "t", "r", "s", LocalDateTime.now(), LocalDateTime.now());
-        comment = new CustomerServiceComment(1L, null, member, null, LocalDateTime.now());
+
+        post = new CustomerServicePost(member, category, new PostRequest());
     }
 
     @Test
     @DisplayName("댓글 등록")
     void testCreateComment() {
-        given(commentMapper.toEntity(any(CustomerServiceCommentDto.class))).willReturn(comment);
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
-        commentService.createComment(1L, 1L, new CustomerServiceCommentDto());
+        commentService.createComment(1L, 1L, new CommentRequest());
 
         then(commentRepository).should().save(any(CustomerServiceComment.class));
     }
@@ -72,21 +76,21 @@ public class DefaultCustomerServiceCommentServiceTest {
     @Test
     @DisplayName("댓글 단건 조회")
     void testRetrieveComment() {
-        given(commentRepository.findById(anyLong())).willReturn(Optional.of(comment));
+        given(commentRepository.findCommentById(anyLong())).willReturn(new CommentResponse(1L, 1L, 1L));
 
         commentService.retrieveComment(1L);
 
-        then(commentRepository).should().findById(anyLong());
+        then(commentRepository).should().findCommentById(anyLong());
     }
 
     @Test
     @DisplayName("게시글의 댓글 목록 조회")
     void testRetrieveCommentsByInquiry() {
-        given(commentRepository.findByInquiry(anyLong())).willReturn(List.of());
+        given(commentRepository.findByInquiryId(anyLong())).willReturn(List.of());
 
         commentService.retrieveCommentsByInquiry(1L);
 
-        then(commentRepository).should().findByInquiry(anyLong());
+        then(commentRepository).should().findByInquiryId(anyLong());
     }
 
 }
