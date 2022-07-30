@@ -57,11 +57,4 @@ public interface ReviewService {
      */
     void deleteReview(final Long id);
 
-    /**
-     * 관리자가 후기를 승인합니다.
-     *
-     * @param id - 승인하려는 후기의 기본키입니다.
-     */
-    boolean approveReview(final Long id);
-
 }
