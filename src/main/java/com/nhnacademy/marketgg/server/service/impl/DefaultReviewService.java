@@ -76,7 +76,7 @@ public class DefaultReviewService implements ReviewService {
     public void updateReview(final ReviewUpdateRequest reviewRequest, final Long id) {
         Review review = reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new);
         Asset asset = assetRepository.findById(reviewRequest.getAssetId())
-                                          .orElseThrow(AssetNotFoundException::new);
+                                     .orElseThrow(AssetNotFoundException::new);
 
         review.updateReview(reviewRequest, asset);
 
@@ -87,6 +87,19 @@ public class DefaultReviewService implements ReviewService {
     @Override
     public void deleteReview(final Long id) {
         reviewRepository.delete(reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new));
+    }
+
+    @Override
+    public SingleResponse<Boolean> makeBestReview(final Long id) {
+        Review review = reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new);
+        review.makeBestReview();
+
+        if (Boolean.TRUE.equals(review.getIsBest())) {
+            reviewRepository.save(review);
+            return new SingleResponse<>(true);
+        }
+
+        return new SingleResponse<>(false);
     }
 
 }

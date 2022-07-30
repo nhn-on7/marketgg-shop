@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.service;
 
+import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ReviewResponse;
@@ -56,5 +57,7 @@ public interface ReviewService {
      * @param id - 삭제하려는 후기의 기본키입니다.
      */
     void deleteReview(final Long id);
+
+    SingleResponse<Boolean> makeBestReview(final Long id);
 
 }

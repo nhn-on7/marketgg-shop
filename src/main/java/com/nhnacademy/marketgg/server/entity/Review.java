@@ -68,4 +68,8 @@ public class Review {
         this.asset = asset;
     }
 
+    public void makeBestReview() {
+        this.isBest = true;
+    }
+
 }

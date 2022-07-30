@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ReviewUpdateRequest;
@@ -56,7 +57,8 @@ public class ReviewController {
                                              @PathVariable(name = "memberUuid") final String uuid,
                                              @RequestPart @Valid final ReviewCreateRequest reviewRequest,
                                              BindingResult bindingResult,
-                                             @RequestPart(required = false) List<MultipartFile> images) throws IOException {
+                                             @RequestPart(required = false) List<MultipartFile> images)
+        throws IOException {
 
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
