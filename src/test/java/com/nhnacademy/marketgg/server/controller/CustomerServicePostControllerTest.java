@@ -2,8 +2,6 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
-import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostDto;
-import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

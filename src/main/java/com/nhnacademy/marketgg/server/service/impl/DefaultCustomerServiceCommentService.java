@@ -2,11 +2,9 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.CommentRequest;
 import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
-import com.nhnacademy.marketgg.server.dto.response.CustomerServiceCommentDto;
 import com.nhnacademy.marketgg.server.entity.CustomerServiceComment;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
-import com.nhnacademy.marketgg.server.exception.customerservicecomment.CustomerServiceCommentNotFoundException;
 import com.nhnacademy.marketgg.server.exception.customerservicepost.CustomerServicePostNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.customerservicecomment.CustomerServiceCommentRepository;
@@ -17,9 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

@@ -2,7 +2,6 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
-import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostDto;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;

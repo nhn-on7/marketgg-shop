@@ -4,13 +4,10 @@ import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
-import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
-import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostDto;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
-import com.nhnacademy.marketgg.server.entity.CustomerServiceComment;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
@@ -29,7 +26,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

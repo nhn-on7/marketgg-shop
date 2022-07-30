@@ -6,7 +6,6 @@ import com.nhnacademy.marketgg.server.dto.request.CommentRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
-import com.nhnacademy.marketgg.server.dto.response.CustomerServiceCommentDto;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
@@ -25,7 +24,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

@@ -2,7 +2,6 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.dto.request.CommentRequest;
 import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
-import com.nhnacademy.marketgg.server.dto.response.CustomerServiceCommentDto;
 import com.nhnacademy.marketgg.server.service.CustomerServiceCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
