@@ -69,6 +69,14 @@ public class AdminCustomerServicePostController {
                              .body(inquiryResponses);
     }
 
+    /**
+     * 1:1 문의의 답변 상태를 변경할 수 있는 PATCH Mapping 을 지원합니다.
+     *
+     * @param inquiryId - 상태를 변경할 게시글의 식별번호입니다.
+     * @param status - 변경할 상태 정보를 담고 있는 DTO 객체입니다.
+     * @return Mapping URI 를 담은 응답객체를 반환합니다.
+     * @since 1.0.0
+     */
     @PatchMapping("/oto-inquiries/{inquiryId}")
     public ResponseEntity<PostResponseForOtoInquiry> updateInquiryStatus(@PathVariable final Long inquiryId,
                                                                          @RequestBody final PostStatusUpdateRequest status) {

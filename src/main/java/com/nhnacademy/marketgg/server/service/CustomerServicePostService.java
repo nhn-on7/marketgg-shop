@@ -16,6 +16,14 @@ import java.util.List;
 public interface CustomerServicePostService {
 
     /**
+     * 1:1 문의를 등록하는 메소드입니다.
+     *
+     * @param memberId               - 등록하는 회원의 식별번호입니다.
+     * @param postRequest - 1:1 문의를 등록하기 위한 DTO 객체입니다.
+     */
+    void createOtoInquiry(final Long memberId, final PostRequest postRequest);
+
+    /**
      * 고객센터 게시글 단건을 조회하는 메소드입니다.
      *
      * @param csPostId - 고객센터 게시글의 식별번호입니다.
@@ -44,12 +52,13 @@ public interface CustomerServicePostService {
     List<PostResponseForOtoInquiry> retrieveOwnOtoInquiries(final Pageable pageable, final Long memberId);
 
     /**
-     * 1:1 문의를 등록하는 메소드입니다.
+     * 1:1 문의의 상태를 변경하는 메소드입니다.
      *
-     * @param memberId               - 등록하는 회원의 식별번호입니다.
-     * @param postRequest - 1:1 문의를 등록하기 위한 DTO 객체입니다.
+     * @param inquiryId - 상태를 변경할 1:1 문의의 식별번호입니다.
+     * @param status - 변경할 상태 정보를 담고 있는 DTO 객체입니다.
+     * @since 1.0.0
      */
-    void createOtoInquiry(final Long memberId, final PostRequest postRequest);
+    void updateInquiryStatus(Long inquiryId, PostStatusUpdateRequest status);
 
     /**
      * 고객센터 게시글을 삭제하는 메소드입니다.
@@ -58,7 +67,5 @@ public interface CustomerServicePostService {
      * @since 1.0.0
      */
     void deleteCustomerServicePost(Long csPostId);
-
-    void updateInquiryStatus(Long inquiryId, PostStatusUpdateRequest status);
 
 }
