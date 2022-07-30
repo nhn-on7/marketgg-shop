@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,10 +28,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DefaultCustomerServicePostService implements CustomerServicePostService {
 
-    private final CustomerServicePostRepository customerServicePostRepository;
+    private final CustomerServicePostRepository postRepository;
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
-    private final CustomerServiceCommentRepository customerServiceCommentRepository;
+    private final CustomerServiceCommentRepository commentRepository;
 
     private static final String OTO_INQUIRY = "1:1문의";
 
@@ -43,66 +44,78 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
 
         CustomerServicePost csPost = new CustomerServicePost(member, category, postRequest);
 
-        customerServicePostRepository.save(csPost);
+        postRepository.save(csPost);
     }
 
     @Override
     public PostResponseForOtoInquiry retrieveCustomerServicePost(final Long inquiryId) {
-        PostResponseForOtoInquiry otoInquiry = customerServicePostRepository.findOtoInquiryById(inquiryId);
-        List<CommentResponse> commentList = customerServiceCommentRepository.findByInquiryId(inquiryId);
-        PostResponseForOtoInquiry result = PostResponseForOtoInquiry.builder()
-                                                                    .otoInquiry(otoInquiry)
-                                                                    .commentList(commentList)
-                                                                    .build();
+        PostResponseForOtoInquiry otoInquiry = postRepository.findOtoInquiryById(inquiryId);
+
+        return addCommentList(otoInquiry);
+    }
+
+    @Override
+    public List<PostResponseForOtoInquiry> retrieveOtoInquiries(final Pageable pageable) {
+        List<PostResponseForOtoInquiry> result = new ArrayList<>();
+        String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY);
+        List<PostResponseForOtoInquiry> otoInquiries = postRepository.findPostsByCategoryId(pageable,
+                                                                                            categoryId)
+                                                                     .getContent();
+
+        for (PostResponseForOtoInquiry otoInquiry : otoInquiries) {
+            result.add(addCommentList(otoInquiry));
+        }
 
         return result;
     }
 
     @Override
-    public List<PostResponseForOtoInquiry> retrieveOtoInquiries(final Pageable pageable) {
+    public List<PostResponseForOtoInquiry> retrieveOwnOtoInquiries(final Pageable pageable, final Long memberId) {
+        List<PostResponseForOtoInquiry> result = new ArrayList<>();
         String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY);
-        List<PostResponseForOtoInquiry> otoInquiries = customerServicePostRepository.findPostsByCategoryId(pageable,
-                                                                                                           categoryId)
-                                                                                    .getContent();
 
-        return otoInquiries;
+        List<PostResponseForOtoInquiry> ownOtoInquiries = postRepository.findPostByCategoryAndMember(
+                                                                                               pageable,
+                                                                                               categoryId,
+                                                                                               memberId)
+                                                                        .getContent();
+
+        for (PostResponseForOtoInquiry otoInquiry : ownOtoInquiries) {
+            result.add(addCommentList(otoInquiry));
+        }
+
+        return result;
     }
 
-    @Override
-    public List<PostResponseForOtoInquiry> retrieveOwnOtoInquiries(final Pageable pageable, final Long memberId) {
-        String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY);
+    private PostResponseForOtoInquiry addCommentList(PostResponseForOtoInquiry otoInquiry) {
+        List<CommentResponse> commentList = commentRepository.findByInquiryId(otoInquiry.getId());
 
-        List<PostResponseForOtoInquiry> ownOtoInquiries = customerServicePostRepository.findPostByCategoryAndMember(pageable,
-                                                                                                              categoryId,
-                                                                                                              memberId)
-                                                                                 .getContent();
-
-        return ownOtoInquiries;
+        return PostResponseForOtoInquiry.builder().otoInquiry(otoInquiry).commentList(commentList).build();
     }
 
     @Override
     public void updateInquiryStatus(Long inquiryId, PostStatusUpdateRequest status) {
-        CustomerServicePost inquiry = customerServicePostRepository.findById(inquiryId)
-                                                                   .orElseThrow(
+        CustomerServicePost inquiry = postRepository.findById(inquiryId)
+                                                    .orElseThrow(
                                                                            CustomerServicePostNotFoundException::new);
 
         inquiry.updatePostStatus(status.getStatus());
-        customerServicePostRepository.save(inquiry);
+        postRepository.save(inquiry);
     }
 
     @Transactional
     @Override
     public void deleteCustomerServicePost(final Long csPostId) {
-        CustomerServicePost otoInquiry = customerServicePostRepository.findById(csPostId)
-                                                                      .orElseThrow(
+        CustomerServicePost otoInquiry = postRepository.findById(csPostId)
+                                                       .orElseThrow(
                                                                               CustomerServicePostNotFoundException::new);
-        List<Long> commentIds = customerServiceCommentRepository.findByInquiryId(csPostId)
-                                                                .stream()
-                                                                .map(CommentResponse::getId)
-                                                                .collect(Collectors.toList());
+        List<Long> commentIds = commentRepository.findByInquiryId(csPostId)
+                                                 .stream()
+                                                 .map(CommentResponse::getId)
+                                                 .collect(Collectors.toList());
 
-        customerServiceCommentRepository.deleteAllById(commentIds);
-        customerServicePostRepository.delete(otoInquiry);
+        commentRepository.deleteAllById(commentIds);
+        postRepository.delete(otoInquiry);
     }
 
 }

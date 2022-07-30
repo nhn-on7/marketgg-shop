@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class CommentRequest {
 
-    private Long csPostId;
-
     private Long memberId;
 
     private String content;

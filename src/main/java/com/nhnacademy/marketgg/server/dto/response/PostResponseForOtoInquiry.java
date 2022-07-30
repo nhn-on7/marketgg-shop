@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 public class PostResponseForOtoInquiry {
 
-    private String postNo;
+    private Long id;
 
     private String title;
 
@@ -29,7 +29,7 @@ public class PostResponseForOtoInquiry {
 
     @Builder
     public PostResponseForOtoInquiry(PostResponseForOtoInquiry otoInquiry, List<CommentResponse> commentList) {
-        this.postNo = otoInquiry.getPostNo();
+        this.id = otoInquiry.getId();
         this.title = otoInquiry.getTitle();
         this.content = otoInquiry.getContent();
         this.reason = otoInquiry.getReason();
