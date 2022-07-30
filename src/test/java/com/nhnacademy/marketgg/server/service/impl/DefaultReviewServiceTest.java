@@ -14,6 +14,7 @@ import com.nhnacademy.marketgg.server.dto.request.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ReviewResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
+import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Review;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
@@ -75,7 +76,7 @@ class DefaultReviewServiceTest {
     @BeforeEach
     void setUp() {
         MemberCreateRequest memberRequest = new MemberCreateRequest();
-        member = new Member(memberRequest);
+        member = new Member(memberRequest, new Cart());
 
         asset = Asset.create();
 

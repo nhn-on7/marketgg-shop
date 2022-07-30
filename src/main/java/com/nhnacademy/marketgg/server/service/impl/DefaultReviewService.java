@@ -89,9 +89,4 @@ public class DefaultReviewService implements ReviewService {
         reviewRepository.delete(reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new));
     }
 
-    @Override
-    public boolean approveReview(Long id) {
-        return false;
-    }
-
 }
