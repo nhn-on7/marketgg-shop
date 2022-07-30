@@ -6,10 +6,13 @@ import com.nhnacademy.marketgg.server.entity.QCustomerServicePost;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.QBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+
+import java.util.Optional;
 
 public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport implements CustomerServicePostRepositoryCustom {
 
@@ -52,8 +55,8 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
         return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 
-    private ConstructorExpression<PostResponseForOtoInquiry> selectAllCsPostColumns() {
-        return Projections.constructor(PostResponseForOtoInquiry.class,
+    private QBean<PostResponseForOtoInquiry> selectAllCsPostColumns() {
+        return Projections.fields(PostResponseForOtoInquiry.class,
                                        csPost.id,
                                        csPost.title,
                                        csPost.content,

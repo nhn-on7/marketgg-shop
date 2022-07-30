@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
+import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.entity.Category;
@@ -80,12 +81,12 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
     }
 
     @Override
-    public void updateInquiryStatus(Long inquiryId, String status) {
+    public void updateInquiryStatus(Long inquiryId, PostStatusUpdateRequest status) {
         CustomerServicePost inquiry = customerServicePostRepository.findById(inquiryId)
                                                                    .orElseThrow(
                                                                            CustomerServicePostNotFoundException::new);
 
-        inquiry.updatePostStatus(status);
+        inquiry.updatePostStatus(status.getStatus());
         customerServicePostRepository.save(inquiry);
     }
 

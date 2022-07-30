@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -67,14 +68,14 @@ public class AdminCustomerServiceControllerTest {
     void testUpdatePostStatus() throws Exception {
         String requestBody = objectMapper.writeValueAsString("답변중");
 
-        willDoNothing().given(customerServicePostService).updateInquiryStatus(anyLong(), anyString());
+        willDoNothing().given(customerServicePostService).updateInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
 
         this.mockMvc.perform(patch(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/{inquiryId}", 1L)
                                      .contentType(MediaType.APPLICATION_JSON)
                                      .content(requestBody))
                     .andExpect(status().isOk());
 
-        then(customerServicePostService).should().updateInquiryStatus(anyLong(), anyString());
+        then(customerServicePostService).should().updateInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
     }
 
     @Test

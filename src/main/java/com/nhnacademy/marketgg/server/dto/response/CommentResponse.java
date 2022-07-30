@@ -15,8 +15,8 @@ public class CommentResponse {
 
     private final Long memberId;
 
-    private String content;
+    private final String content;
 
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
 
 }

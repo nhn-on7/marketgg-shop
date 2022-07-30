@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.service;
 
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
+import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import org.springframework.data.domain.Pageable;
 
@@ -58,6 +59,6 @@ public interface CustomerServicePostService {
      */
     void deleteCustomerServicePost(Long csPostId);
 
-    void updateInquiryStatus(Long inquiryId, String status);
+    void updateInquiryStatus(Long inquiryId, PostStatusUpdateRequest status);
 
 }

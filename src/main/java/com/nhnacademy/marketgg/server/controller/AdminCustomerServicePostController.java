@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.constant.CustomerServicePostReason;
+import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import lombok.RequiredArgsConstructor;
@@ -70,7 +71,7 @@ public class AdminCustomerServicePostController {
 
     @PatchMapping("/oto-inquiries/{inquiryId}")
     public ResponseEntity<PostResponseForOtoInquiry> updateInquiryStatus(@PathVariable final Long inquiryId,
-                                                                         @RequestBody final String status) {
+                                                                         @RequestBody final PostStatusUpdateRequest status) {
         customerServicePostService.updateInquiryStatus(inquiryId, status);
 
         return ResponseEntity.status(HttpStatus.OK)
