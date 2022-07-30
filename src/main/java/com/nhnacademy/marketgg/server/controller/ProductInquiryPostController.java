@@ -2,13 +2,16 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
-import com.nhnacademy.marketgg.server.annotation.UUID;
+import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.ProductInquiryPostService;
+import java.net.URI;
+import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,10 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.util.List;
 
 /**
  * 상품 문의 관리를 위한 RestController 입니다.
@@ -42,6 +41,7 @@ public class ProductInquiryPostController {
     /**
      * 상품 문의 등록을 위한 POST Mapping 을 지원합니다.
      *
+     * @param memberInfo     - 상품 문의 등록할 회원의 정보입니다.
      * @param inquiryRequest - 상품 문의 등록을 위한 DTO 입니다.
      * @param productId      - 상품 문의 등록시 등록하는 상품의 PK 입니다.
      * @return - Mapping URI 를 담은 응답 객체를 반환합니다.
@@ -49,15 +49,16 @@ public class ProductInquiryPostController {
      */
     @RoleCheck(accessLevel = Role.LOGIN)
     @PostMapping("/products/{productId}/inquiries")
-    public ResponseEntity<CommonResponse> createProductInquiry(@UUID final String uuid,
+    public ResponseEntity<CommonResponse> createProductInquiry(final MemberInfo memberInfo,
                                                                @PathVariable final Long productId,
-                                                               @Valid @RequestBody final ProductInquiryRequest inquiryRequest) {
+                                                               @Valid @RequestBody final
+                                                               ProductInquiryRequest inquiryRequest) {
 
-        productInquiryPostService.createProductInquiry(uuid, inquiryRequest, productId);
+        productInquiryPostService.createProductInquiry(memberInfo, inquiryRequest, productId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("201 success"));
+                             .body(new SingleResponse<>("Add Success"));
     }
 
     /**
@@ -69,9 +70,10 @@ public class ProductInquiryPostController {
      */
     @RoleCheck(accessLevel = Role.ROLE_USER)
     @GetMapping("/products/{productId}/inquiries")
-    public ResponseEntity<CommonResponse> retrieveProductInquiryByProductId(@PathVariable final Long productId,
-                                                                            final Pageable pageable) {
-        List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageable);
+    public ResponseEntity<CommonResponse> retrieveProductInquiry(@PathVariable final Long productId,
+                                                                 final Pageable pageable) {
+        List<ProductInquiryResponse> productInquiryResponses
+                = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -81,15 +83,16 @@ public class ProductInquiryPostController {
     /**
      * 한 회원이 상품에 대해 문의한 전체 상품 문의 글을 조회하는 GET Mapping 을 지원합니다.
      *
-     * @param uuid - 회원의 uuid 로 조회합니다.
+     * @param memberInfo - 상품 문의 글을 조회할 회원의 정보 입니다.
      * @return - List<ProductInquiryResponse> 를 담은 응답 객체를 반환 합니다.
      * @since 1.0.0
      */
     @RoleCheck(accessLevel = Role.LOGIN)
     @GetMapping("/members/product-inquiries")
-    public ResponseEntity<CommonResponse> retrieveProductInquiryByMemberId(@UUID final String uuid,
-                                                                           final Pageable pageable) {
-        List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService.retrieveProductInquiryByMemberId(uuid, pageable);
+    public ResponseEntity<CommonResponse> retrieveProductInquiry(final MemberInfo memberInfo,
+                                                                 final Pageable pageable) {
+        List<ProductInquiryResponse> productInquiryResponses
+                = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create("/members/product-inquiries"))
@@ -114,7 +117,7 @@ public class ProductInquiryPostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("200 success"));
+                             .body(new SingleResponse<>("Delete Success"));
     }
 
 }

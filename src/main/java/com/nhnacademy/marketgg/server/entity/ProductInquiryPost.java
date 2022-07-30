@@ -1,14 +1,26 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
-import lombok.*;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.data.annotation.CreatedDate;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 @Table(name = "product_inquires_post")
 @Entity
@@ -28,26 +40,27 @@ public class ProductInquiryPost {
     @JoinColumn(name = "member_no")
     private Member member;
 
-    @NotNull(message = "제목은 필수 입력값입니다.")
-    @Length(max = 50)
     @Column
+    @NotNull(message = "제목은 필수 입력값입니다.")
+    @Size(max = 50)
     private String title;
 
-    @NotNull(message = "내용은 필수 입력값입니다.")
-    @Length(max = 200)
     @Column
+    @NotNull(message = "내용은 필수 입력값입니다.")
+    @Size(max = 200)
     private String content;
 
-    @NotNull
     @Column(name = "is_secret")
+    @NotNull
     private Boolean isSecret;
 
     @Column(name = "admin_reply")
     private String adminReply;
 
-    @CreatedDate
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @CreatedDate
+    @NotNull
+    private LocalDateTime createdDate;
 
     @Embeddable
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -75,7 +88,7 @@ public class ProductInquiryPost {
         this.title = productInquiryRequest.getTitle();
         this.content = productInquiryRequest.getContent();
         this.isSecret = productInquiryRequest.getIsSecret();
-        this.createdAt = LocalDateTime.now();
+        this.createdDate = LocalDateTime.now();
     }
 
     public void updateInquiry(ProductInquiryRequest inquiryReply) {

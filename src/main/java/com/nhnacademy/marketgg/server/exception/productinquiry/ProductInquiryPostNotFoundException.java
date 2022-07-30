@@ -1,11 +1,13 @@
 package com.nhnacademy.marketgg.server.exception.productinquiry;
 
+import com.nhnacademy.marketgg.server.exception.NotFoundException;
+
 /**
  * 상품문의를 찾을 수 없을 때 예외처리입니다.
  *
  * @version 1.0.0
  */
-public class ProductInquiryPostNotFoundException extends IllegalArgumentException {
+public class ProductInquiryPostNotFoundException extends NotFoundException {
 
     private static final String ERROR = "상품 문의를 찾을 수 없습니다.";
 
@@ -16,6 +18,34 @@ public class ProductInquiryPostNotFoundException extends IllegalArgumentExceptio
      */
     public ProductInquiryPostNotFoundException() {
         super(ERROR);
+    }
+
+    /** 
+     * 상품 문의 작성한 회원의 정보를 찾을 수 없을 때 예외처리입니다.
+     * 
+     * @version 1.0.0
+     */
+    public static class MemberWriteInquiryNotFoundException extends IllegalArgumentException {
+        
+        private static final String ERROR = "상품 문의 작성한 회원의 정보를 찾을 수 없습니다.";
+        
+        public MemberWriteInquiryNotFoundException() {
+            super(ERROR);
+        }
+    }
+
+    /**
+     * 생성할 상품 문의에 상품 정보를 찾을 수 없을 때 예외처리입니다.
+     *
+     * @version 1.0.0
+     */
+    public static class ProductAtInquiryNotFoundException extends IllegalArgumentException {
+
+        private static final String ERROR = "생성할 상품 문의에 상품 정보를 찾을 수 없습니다.";
+
+        public ProductAtInquiryNotFoundException() {
+            super(ERROR);
+        }
     }
 
 }

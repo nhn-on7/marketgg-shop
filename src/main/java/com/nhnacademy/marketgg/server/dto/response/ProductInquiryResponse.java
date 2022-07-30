@@ -6,6 +6,10 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * 상품 문의 응답 DTO 입니다.
+ *
+ */
 @RequiredArgsConstructor
 @Getter
 public class ProductInquiryResponse {

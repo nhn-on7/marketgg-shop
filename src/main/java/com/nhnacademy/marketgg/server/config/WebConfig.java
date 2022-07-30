@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.config;
 
-import com.nhnacademy.marketgg.server.elastic.repository.ElasticRepositoryMarker;
+import com.nhnacademy.marketgg.server.entity.elastic.repository.ElasticRepositoryMarker;
 import com.nhnacademy.marketgg.server.repository.JpaRepositoryMarker;
 
 import java.time.Duration;
