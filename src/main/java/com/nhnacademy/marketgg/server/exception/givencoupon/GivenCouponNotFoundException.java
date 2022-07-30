@@ -1,11 +1,13 @@
 package com.nhnacademy.marketgg.server.exception.givencoupon;
 
+import com.nhnacademy.marketgg.server.exception.NotFoundException;
+
 /**
  * 지급된 쿠폰내역을 찾을 수 없을 때 예외처리입니다.
  *
  * @version 1.0.0
  */
-public class GivenCouponNotFoundException extends IllegalArgumentException {
+public class GivenCouponNotFoundException extends NotFoundException {
 
     private static final String ERROR = "지급된 쿠폰내역을 찾을 수 없습니다.";
 

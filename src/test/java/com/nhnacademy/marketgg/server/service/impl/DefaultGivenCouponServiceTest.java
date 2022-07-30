@@ -4,9 +4,11 @@ import com.nhnacademy.marketgg.server.dto.request.CouponDto;
 import com.nhnacademy.marketgg.server.dto.request.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
+import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import com.nhnacademy.marketgg.server.entity.Member;
+import com.nhnacademy.marketgg.server.repository.cart.CartRepository;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
@@ -58,11 +60,14 @@ class DefaultGivenCouponServiceTest {
     @Mock
     UsedCouponRepository usedCouponRepository;
 
-    private static GivenCouponCreateRequest givenCouponRequest;
+    @Mock
+    CartRepository cartRepository;
+
+    private static GivenCouponRequest givenCouponRequest;
     private static MemberCreateRequest memberCreateRequest;
     private static CouponDto couponDto;
     private static GivenCoupon givenCoupon;
-    private static Member member;
+    private static Cart cart;
 
     Pageable pageable = PageRequest.of(0, 20);
     Page<GivenCoupon> inquiryPosts = new PageImpl<>(List.of(), pageable, 0);
@@ -77,15 +82,17 @@ class DefaultGivenCouponServiceTest {
         ReflectionTestUtils.setField(givenCouponRequest, "name", "name");
 
         couponDto = new CouponDto(1L, "name", "type", 10, 1000, 0.5);
-        givenCoupon = new GivenCoupon(new Coupon(1L, "name", "type", 10, 1000, 0.5), member);
+        ReflectionTestUtils.setField(couponDto, "expiredDate", 10);
+        cart = cartRepository.save(new Cart());
+        givenCoupon = new GivenCoupon(new Coupon(1L, "name", "type", 10, 1000, 0.5),
+                new Member(memberCreateRequest, cart), new GivenCouponRequest());
     }
 
     @Test
     @DisplayName("지급 쿠폰 생성")
     void testCreateGivenCoupons() {
-        Coupon coupon = new Coupon(1L, "name", "type", 10, 1000, 0.5);
-        given(memberRepository.findById(any())).willReturn(Optional.of(member));
-        given(couponRepository.findByName(anyString())).willReturn(coupon);
+        given(memberRepository.findById(any())).willReturn(Optional.of(new Member(memberCreateRequest, cart)));
+        given(couponRepository.findById(any())).willReturn(Optional.of(new Coupon(1L, "name", "type", 10, 1000, 0.5)));
 
         givenCouponService.createGivenCoupons(1L, givenCouponRequest);
 

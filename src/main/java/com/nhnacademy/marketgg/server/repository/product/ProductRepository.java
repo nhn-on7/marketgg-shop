@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.product;
 
+import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,5 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @version 1.0.0
  */
 public interface ProductRepository extends JpaRepository<Product, Long>, ProductRepositoryCustom {
+
+    Boolean existsByCategory(final Category category);
 
 }

@@ -2,13 +2,6 @@ gg:
   gateway:
     origin: http://127.0.0.1:6060
 
-  keystore:
-    type: PKCS12
-    path: "/clientCertificate.p12"
-    password: "market99!@#"
-
-  protocol: TLS
-
 server:
   port: 7080
 
@@ -28,6 +21,11 @@ spring:
   config:
     activate:
       on-profile: "common"
+    import: "optional:configserver:http://133.186.209.70:8888"
+
+
+  application:
+    name: marketgg-shop
 
   servlet:
     multipart:
@@ -67,21 +65,33 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate.format_sql: true
+
+#---
+#
+#spring:
+#  config:
+#    activate:
+#      on-profile: "devdb"
+#
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://133.186.211.156:3306/marketgg_shop
+#    username: on7
+#    password: ?nk9Wa#^Bg)on71!*,^2=d
+#
+#decorator:
+#  datasource:
+#    p6spy:
+#      enable-logging: false
 
 ---
 
+
 spring:
+  application:
+    name: marketgg-shop
+
   config:
-    activate:
-      on-profile: "devdb"
-
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://133.186.211.156:3306/marketgg_shop
-    username: on7
-    password: ?nk9Wa#^Bg)on71!*,^2=d
-
-decorator:
-  datasource:
-    p6spy:
-      enable-logging: false
+    import: "optional:configserver:http://133.186.209.70:8888"

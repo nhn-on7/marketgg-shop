@@ -10,8 +10,10 @@ import static org.mockito.Mockito.when;
 
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
+import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
+import com.nhnacademy.marketgg.server.repository.cart.CartRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import java.lang.reflect.Constructor;
 import java.time.LocalDateTime;
@@ -42,8 +44,8 @@ class DefaultMemberServiceTest {
     @BeforeEach
     void setUp() {
         MemberCreateRequest memberRequest = new MemberCreateRequest();
-        member = new Member(memberRequest);
-        noPassMember = new Member(memberRequest);
+        member = new Member(memberRequest, new Cart());
+        noPassMember = new Member(memberRequest, new Cart());
 
         ReflectionTestUtils.setField(member, "ggpassUpdatedAt",
             LocalDateTime.of(2019, 3, 11, 7, 10));
@@ -52,7 +54,7 @@ class DefaultMemberServiceTest {
     @Test
     @DisplayName("GG 패스 갱신일 확인")
     void checkPassUpdatedAt() {
-        when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
         LocalDateTime date = memberService.retrievePassUpdatedAt(1L);
 
@@ -62,7 +64,7 @@ class DefaultMemberServiceTest {
     @Test
     @DisplayName("GG 패스 갱신일 null 일시")
     void checkPassUpdatedAtIsNull() {
-        when(memberRepository.findById(anyLong())).thenReturn(Optional.of(noPassMember));
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(noPassMember));
 
         LocalDateTime date = memberService.retrievePassUpdatedAt(1L);
 
@@ -72,7 +74,7 @@ class DefaultMemberServiceTest {
     @Test
     @DisplayName("GG 패스 가입")
     void joinPass() {
-        when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
         memberService.subscribePass(1L);
 
@@ -82,9 +84,11 @@ class DefaultMemberServiceTest {
     @Test
     @DisplayName("GG 패스 해지")
     void withdrawPass() {
-        when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
         memberService.withdrawPass(1L);
+
+        assertThat(member.getGgpassUpdatedAt()).isBefore(LocalDateTime.now());
     }
 
     @Test

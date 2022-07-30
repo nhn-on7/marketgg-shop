@@ -110,7 +110,7 @@ public class MemberController {
      */
     @RoleCheck(accessLevel = Role.ROLE_USER)
     @GetMapping
-    public ResponseEntity<? extends CommonResponse> retrieveMember(HttpServletRequest request) {
+    public ResponseEntity<CommonResponse> retrieveMember(HttpServletRequest request) {
         String uuid = request.getHeader("AUTH-ID");
         MemberResponse memberResponse = memberService.retrieveMember(uuid);
 

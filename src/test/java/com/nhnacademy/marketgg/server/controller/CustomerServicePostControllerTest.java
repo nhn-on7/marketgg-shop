@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostDto;
+import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CustomerServicePostController.class)
-public class CustomerServicePostControllerTest {
+class CustomerServicePostControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
@@ -36,22 +36,22 @@ public class CustomerServicePostControllerTest {
     @MockBean
     CustomerServicePostService customerServicePostService;
 
-    private static final String DEFAULT_CUSTOMER_SERVICE = "/shop/v1/customer-services";
+    private static final String DEFAULT_CUSTOMER_SERVICE = "/customer-services";
 
     @Test
     @DisplayName("1:1 문의 등록")
     void testCreateOtoInquiry() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(new CustomerServicePostDto());
+        String requestBody = objectMapper.writeValueAsString(new PostRequest());
 
         willDoNothing().given(customerServicePostService)
-                       .createOtoInquiry(anyLong(), any(CustomerServicePostDto.class));
+                       .createOtoInquiry(anyLong(), any(PostRequest.class));
 
         this.mockMvc.perform(post(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/members/{memberId}", 1L)
                                      .contentType(MediaType.APPLICATION_JSON)
                                      .content(requestBody))
                     .andExpect(status().isCreated());
 
-        then(customerServicePostService).should().createOtoInquiry(anyLong(), any(CustomerServicePostDto.class));
+        then(customerServicePostService).should().createOtoInquiry(anyLong(), any(PostRequest.class));
     }
 
     @Test

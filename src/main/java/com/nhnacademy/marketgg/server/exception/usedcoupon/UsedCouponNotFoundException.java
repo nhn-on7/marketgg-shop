@@ -1,11 +1,13 @@
 package com.nhnacademy.marketgg.server.exception.usedcoupon;
 
+import com.nhnacademy.marketgg.server.exception.NotFoundException;
+
 /**
  * 사용된 쿠폰 내역을 찾을 수 없을 때 예외처리입니다.
  *
  * @version 1.0.0
  */
-public class UsedCouponNotFoundException extends IllegalArgumentException {
+public class UsedCouponNotFoundException extends NotFoundException {
 
     private static final String ERROR = "사용된 쿠폰내역을 찾을 수 없습니다.";
 

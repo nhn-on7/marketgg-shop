@@ -2,9 +2,10 @@ package com.nhnacademy.marketgg.server.exception.auth;
 
 public class UnAuthorizationException extends IllegalAccessException {
 
-    public UnAuthorizationException(String methodName, String roles) {
-        super("[ " + methodName + " ]: 접근 권한이 부족합니다. "
-            + "소유 권한: " + roles);
+    private static final String MESSAGE = "접근 할 수 없습니다.";
+
+    public UnAuthorizationException() {
+        super(MESSAGE);
     }
 
 }

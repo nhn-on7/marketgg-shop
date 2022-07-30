@@ -1,11 +1,13 @@
 package com.nhnacademy.marketgg.server.exception.customerservicepost;
 
+import com.nhnacademy.marketgg.server.exception.NotFoundException;
+
 /**
  * 고객센터 게시판을 찾을 수 없을 때 예외처리입니다.
  *
  * @version 1.0.0
  */
-public class CustomerServicePostNotFoundException extends IllegalArgumentException {
+public class CustomerServicePostNotFoundException extends NotFoundException {
 
     private static final String ERROR = "고객센터 게시판을 찾을 수 없습니다.";
 
