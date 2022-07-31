@@ -13,6 +13,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Table(name = "coupons")
 @Entity
@@ -30,18 +34,23 @@ public class Coupon {
     @Column(name = "coupon_no")
     private Long id;
 
+    @NotBlank(message = "쿠폰 이름이 유효하지 않습니다.")
     @Column
     private String name;
 
+    @NotBlank
     @Column
     private String type;
 
+    @Min(0)
     @Column(name = "expired_date")
     private Integer expiredDate;
 
+    @Positive
     @Column(name = "minimum_money")
     private Integer minimumMoney;
 
+    @NotNull
     @Column(name = "discount_amount")
     private Double discountAmount;
 

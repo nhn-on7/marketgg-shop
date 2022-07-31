@@ -1,6 +1,11 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.nhnacademy.marketgg.server.annotation.Role;
+import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.request.CouponDto;
+import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -40,14 +45,14 @@ public class CouponController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
+    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @PostMapping
-    public ResponseEntity<Void> createCoupon(@RequestBody final CouponDto couponDto) {
+    public ResponseEntity<CommonResponse> createCoupon(@Valid @RequestBody final CouponDto couponDto) {
         couponService.createCoupon(couponDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create(DEFAULT_COUPON))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(new SingleResponse<>("201 success"));
     }
 
     /**
@@ -57,13 +62,13 @@ public class CouponController {
      * @return 조회한 쿠폰의 정보를 담은 객체를 반환합니다.
      * @since 1.0.0
      */
+    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @GetMapping("/{couponId}")
-    public ResponseEntity<CouponDto> retrieveCoupon(@PathVariable final Long couponId) {
+    public ResponseEntity<CommonResponse> retrieveCoupon(@PathVariable final Long couponId) {
         CouponDto couponResponse = couponService.retrieveCoupon(couponId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_COUPON + "/" + couponId))
-                             .body(couponResponse);
+                             .body(new SingleResponse<>(couponResponse));
     }
 
     /**
@@ -72,13 +77,13 @@ public class CouponController {
      * @return 전체 쿠폰 목록 DTO 를 List 로 반환합니다.
      * @since 1.0.0
      */
+    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @GetMapping
-    public ResponseEntity<List<CouponDto>> retrieveCoupons(Pageable pageable) {
+    public ResponseEntity<CommonResponse> retrieveCoupons(final Pageable pageable) {
         List<CouponDto> couponResponses = couponService.retrieveCoupons(pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_COUPON))
-                             .body(couponResponses);
+                             .body(new ListResponse<>(couponResponses));
     }
 
     /**
@@ -89,16 +94,16 @@ public class CouponController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
+    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @PutMapping("/{couponId}")
-    public ResponseEntity<Void> updateCoupon(@PathVariable final Long couponId,
-                                             @RequestBody final CouponDto couponDto) {
+    public ResponseEntity<CommonResponse> updateCoupon(@PathVariable final Long couponId,
+                                                       @Valid @RequestBody final CouponDto couponDto) {
 
         couponService.updateCoupon(couponId, couponDto);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_COUPON))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(new SingleResponse<>("200 success"));
     }
 
     /**
@@ -108,14 +113,14 @@ public class CouponController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
+    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @DeleteMapping("/{couponId}")
-    public ResponseEntity<Void> deleteCoupon(@PathVariable final Long couponId) {
+    public ResponseEntity<CommonResponse> deleteCoupon(@PathVariable final Long couponId) {
         couponService.deleteCoupon(couponId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_COUPON))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(new SingleResponse<>("200 success"));
     }
 
 }

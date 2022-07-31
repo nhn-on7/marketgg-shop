@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-
 /**
  * 관리자 상품 문의 답글 등록을 위한 RestController 입니다.
  *
@@ -44,13 +42,14 @@ public class AdminProductInquiryPostController {
     @PutMapping("/{productId}/inquiries/{inquiryId}")
     public ResponseEntity<CommonResponse> updateProductInquiryReply(@PathVariable final Long productId,
                                                                     @PathVariable final Long inquiryId,
-                                                                    @RequestBody final ProductInquiryRequest inquiryReply) {
+                                                                    @RequestBody final
+                                                                    ProductInquiryRequest inquiryReply) {
 
         productInquiryPostService.updateProductInquiryReply(inquiryReply, inquiryId, productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("200 success"));
+                             .body(new SingleResponse<>("Add success"));
     }
 
 }

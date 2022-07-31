@@ -1,11 +1,11 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
-import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.productinquiry.ProductInquiryPostNotFoundException;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
@@ -28,7 +28,9 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -51,6 +53,8 @@ class DefaultProductInquiryPostServiceTest {
     private ProductInquiryPost productInquiryPost;
     @Mock
     private ProductInquiryRequest productInquiryRequest;
+    @Mock
+    private MemberInfo memberInfo;
 
     Pageable pageable = PageRequest.of(0, 20);
     Page<ProductInquiryResponse> inquiryPosts = new PageImpl<>(List.of(), pageable, 0);
@@ -61,7 +65,7 @@ class DefaultProductInquiryPostServiceTest {
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
 
-        productInquiryPostService.createProductInquiry(productInquiryRequest, 1L);
+        productInquiryPostService.createProductInquiry(memberInfo, productInquiryRequest, 1L);
 
         verify(memberRepository, times(1)).findById(anyLong());
         verify(productRepository, times(1)).findById(anyLong());
@@ -73,26 +77,31 @@ class DefaultProductInquiryPostServiceTest {
     void testCreateProductInquiryFail() {
         given(memberRepository.findById(anyLong())).willReturn(Optional.empty());
 
-        assertThatThrownBy(() -> productInquiryPostService.createProductInquiry(productInquiryRequest, 1L))
-                .isInstanceOf(MemberNotFoundException.class);
+        assertThatThrownBy(() -> productInquiryPostService
+                .createProductInquiry(memberInfo, productInquiryRequest, 2L))
+                .isInstanceOf(ProductInquiryPostNotFoundException.MemberWriteInquiryNotFoundException.class);
     }
 
     @Test
     @DisplayName("상품에 대해서 상품 문의 전체 조회 성공 테스트")
     void testRetrieveProductInquiryByProductId() {
-        given(productInquiryPostRepository.findALLByProductNo(anyLong(), any(PageRequest.class))).willReturn(inquiryPosts);
+        given(productInquiryPostRepository.findAllByProductNo(anyLong(), any(PageRequest.class)))
+                .willReturn(inquiryPosts);
         productInquiryPostService.retrieveProductInquiryByProductId(1L, pageable);
 
-        verify(productInquiryPostRepository, times(1)).findALLByProductNo(anyLong(), any(PageRequest.class));
+        verify(productInquiryPostRepository, times(1))
+                .findAllByProductNo(anyLong(), any(PageRequest.class));
     }
 
     @Test
     @DisplayName("특정 회원이 작성한 상품 문의 전체 조회 성공 테스트")
     void testRetrieveProductInquiryByMemberId() {
-        given(productInquiryPostRepository.findAllByMemberNo(anyLong(), any(PageRequest.class))).willReturn(inquiryPosts);
-        productInquiryPostService.retrieveProductInquiryByMemberId(1L, pageable);
+        given(productInquiryPostRepository.findAllByMemberNo(anyLong(), any(PageRequest.class)))
+                .willReturn(inquiryPosts);
+        productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
 
-        verify(productInquiryPostRepository, times(1)).findAllByMemberNo(anyLong(), any(PageRequest.class));
+        verify(productInquiryPostRepository, times(1))
+                .findAllByMemberNo(anyLong(), any(PageRequest.class));
     }
 
     @Test
@@ -103,8 +112,10 @@ class DefaultProductInquiryPostServiceTest {
 
         productInquiryPostService.updateProductInquiryReply(productInquiryRequest, 1L, 1L);
 
-        verify(productInquiryPostRepository, times(1)).findById(any(ProductInquiryPost.Pk.class));
-        verify(productInquiryPostRepository, times(1)).save(any(ProductInquiryPost.class));
+        verify(productInquiryPostRepository, times(1))
+                .findById(any(ProductInquiryPost.Pk.class));
+        verify(productInquiryPostRepository, times(1))
+                .save(any(ProductInquiryPost.class));
     }
 
     @Test
@@ -113,7 +124,8 @@ class DefaultProductInquiryPostServiceTest {
         given(productInquiryPostRepository.findById(new ProductInquiryPost.Pk(1L, 1L)))
                 .willReturn(Optional.empty());
         assertThatThrownBy(
-                () -> productInquiryPostService.updateProductInquiryReply(productInquiryRequest, 1L, 1L))
+                () -> productInquiryPostService.updateProductInquiryReply(
+                        productInquiryRequest, 1L, 1L))
                 .isInstanceOf(ProductInquiryPostNotFoundException.class);
     }
 
@@ -121,7 +133,8 @@ class DefaultProductInquiryPostServiceTest {
     @DisplayName("상품 문의 삭제 성공 테스트")
     void testDeleteProductInquiry() {
         productInquiryPostService.deleteProductInquiry(1L, 1L);
-        verify(productInquiryPostRepository, times(1)).deleteById(new ProductInquiryPost.Pk(1L, 1L));
+        verify(productInquiryPostRepository, times(1))
+                .deleteById(new ProductInquiryPost.Pk(1L, 1L));
     }
 
 }

@@ -4,12 +4,12 @@ import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import com.nhnacademy.marketgg.server.entity.QProductInquiryPost;
 import com.querydsl.core.types.Projections;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-import java.util.List;
 
 public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
         implements ProductInquiryPostRepositoryCustom {
@@ -19,7 +19,7 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Page<ProductInquiryResponse> findALLByProductNo(final Long id, final Pageable pageable) {
+    public Page<ProductInquiryResponse> findAllByProductNo(final Long id, final Pageable pageable) {
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
         List<ProductInquiryResponse> result = from(productInquiryPost)
@@ -29,7 +29,7 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
                         productInquiryPost.content,
                         productInquiryPost.isSecret,
                         productInquiryPost.adminReply,
-                        productInquiryPost.createdAt))
+                        productInquiryPost.createdDate))
                 .where(productInquiryPost.pk.productNo.eq(id))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -39,7 +39,7 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Page<ProductInquiryResponse> findAllByMemberNo(final String uuid, final Pageable pageable) {
+    public Page<ProductInquiryResponse> findAllByMemberNo(final Long id, final Pageable pageable) {
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
         List<ProductInquiryResponse> result = from(productInquiryPost)
@@ -49,8 +49,8 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
                         productInquiryPost.content,
                         productInquiryPost.isSecret,
                         productInquiryPost.adminReply,
-                        productInquiryPost.createdAt))
-                .where(productInquiryPost.member.uuid.eq(uuid))
+                        productInquiryPost.createdDate))
+                .where(productInquiryPost.member.id.eq(id))
                 .fetch();
 
         return new PageImpl<>(result, pageable, result.size());
