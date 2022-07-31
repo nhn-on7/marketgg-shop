@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
@@ -17,6 +18,7 @@ import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Review;
+import com.nhnacademy.marketgg.server.event.ReviewPointEvent;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
@@ -36,6 +38,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -62,6 +65,9 @@ class DefaultReviewServiceTest {
 
     @Mock
     ImageRepository imageRepository;
+
+    @Mock
+    ApplicationEventPublisher publisher;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -104,7 +110,7 @@ class DefaultReviewServiceTest {
     }
 
     @Test
-    @DisplayName("일반 리뷰 생성 성공 테스트")
+    @DisplayName("이미지 리뷰 생성 성공 테스트")
     void testCreateReview() throws IOException {
 
         URL url = getClass().getClassLoader().getResource("lee.png");
@@ -118,10 +124,25 @@ class DefaultReviewServiceTest {
         given(memberRepository.findByUuid(anyString())).willReturn(Optional.ofNullable(member));
         given(reviewRepository.save(any(Review.class))).willReturn(review);
         given(imageRepository.saveAll(any(List.class))).willReturn(images);
+        willDoNothing().given(publisher).publishEvent(any(ReviewPointEvent.class));
 
         this.reviewService.createReview(reviewRequest, images,"admin");
 
         then(reviewRepository).should().save(any(Review.class));
+        then(publisher).should().publishEvent(any(ReviewPointEvent.class));
+    }
+
+    @Test
+    @DisplayName("일반 리뷰 생성 성공 테스트")
+    void testTextReview() {
+        given(memberRepository.findByUuid(anyString())).willReturn(Optional.ofNullable(member));
+        given(reviewRepository.save(any(Review.class))).willReturn(review);
+        willDoNothing().given(publisher).publishEvent(any(ReviewPointEvent.class));
+
+        this.reviewService.createReview(reviewRequest, "admin");
+
+        then(reviewRepository).should().save(any(Review.class));
+        then(publisher).should().publishEvent(any(ReviewPointEvent.class));
     }
 
     @Test
