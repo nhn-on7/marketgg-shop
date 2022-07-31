@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,11 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @version 1.0.0
  */
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Component
 public class ImageFileHandler {
-
-    private ImageFileHandler() {
-    }
 
     private static final String DIR = System.getProperty("user.home");
 
@@ -74,4 +75,5 @@ public class ImageFileHandler {
     private static String uuidFilename(String filename) {
         return UUID.randomUUID() + "_" + filename;
     }
+
 }

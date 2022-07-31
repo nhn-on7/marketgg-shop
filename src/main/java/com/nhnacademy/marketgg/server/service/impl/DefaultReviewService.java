@@ -10,6 +10,7 @@ import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Review;
+import com.nhnacademy.marketgg.server.event.ReviewPointEvent;
 import com.nhnacademy.marketgg.server.exception.asset.AssetNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.review.ReviewNotFoundException;
@@ -22,6 +23,8 @@ import com.nhnacademy.marketgg.server.utils.ImageFileHandler;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import nonapi.io.github.classgraph.json.ReferenceEqualityKey;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -41,6 +44,7 @@ public class DefaultReviewService implements ReviewService {
     private final MemberRepository memberRepository;
     private final AssetRepository assetRepository;
     private final ImageRepository imageRepository;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     @Override
@@ -55,7 +59,9 @@ public class DefaultReviewService implements ReviewService {
 
         imageRepository.saveAll(parseImages);
 
-        reviewRepository.save(new Review(reviewRequest, member, asset));
+        Review review = reviewRepository.save(new Review(reviewRequest, member, asset));
+
+        publisher.publishEvent(ReviewPointEvent.dispensePointForNormalReview(review.getId(), member));
     }
 
     @Override

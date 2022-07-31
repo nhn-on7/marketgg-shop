@@ -5,18 +5,19 @@ import com.nhnacademy.marketgg.server.dto.response.PointRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.PointHistory;
+import com.nhnacademy.marketgg.server.event.ReviewPointEvent;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.order.OrderNotFoundException;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
 import com.nhnacademy.marketgg.server.service.PointService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +43,7 @@ public class DefaultPointService implements PointService {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
         Integer totalPoint = pointRepository.findLastTotalPoint(id);
         PointHistory pointHistory =
-                new PointHistory(member, null, totalPoint + pointRequest.getPoint(), pointRequest);
+            new PointHistory(member, null, totalPoint + pointRequest.getPoint(), pointRequest);
 
         pointRepository.save(pointHistory);
     }
@@ -53,14 +54,27 @@ public class DefaultPointService implements PointService {
                                            final PointHistoryRequest pointRequest) {
 
         Member member =
-                memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+            memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
         Integer totalPoint = pointRepository.findLastTotalPoint(memberId);
 
         this.checkMemberGrade(member.getMemberGrade().getGrade(), pointRequest);
 
         PointHistory pointHistory =
-                new PointHistory(member, order, totalPoint + pointRequest.getPoint(), pointRequest);
+            new PointHistory(member, order, totalPoint + pointRequest.getPoint(), pointRequest);
+
+        pointRepository.save(pointHistory);
+    }
+
+    @EventListener
+    public void savePointByReview(ReviewPointEvent point) {
+        Member member = point.getMember();
+        Integer totalPoint = pointRepository.findLastTotalPoint(member.getId());
+
+        PointHistoryRequest pointRequest =
+            new PointHistoryRequest(Math.toIntExact(point.getPoint()), "리뷰 적립");
+        PointHistory pointHistory =
+            new PointHistory(member, null, totalPoint + pointRequest.getPoint(), pointRequest);
 
         pointRepository.save(pointHistory);
     }
