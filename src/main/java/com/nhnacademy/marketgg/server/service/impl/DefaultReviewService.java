@@ -1,7 +1,5 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.request.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ReviewResponse;
@@ -23,7 +21,6 @@ import com.nhnacademy.marketgg.server.utils.ImageFileHandler;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import nonapi.io.github.classgraph.json.ReferenceEqualityKey;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -65,7 +62,7 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
-    public void createReview(ReviewCreateRequest reviewRequest, String uuid) {
+    public void createReview(final ReviewCreateRequest reviewRequest, final String uuid) {
         Member member = memberRepository.findByUuid(uuid).orElseThrow(MemberNotFoundException::new);
 
         Asset asset = assetRepository.save(Asset.create());
