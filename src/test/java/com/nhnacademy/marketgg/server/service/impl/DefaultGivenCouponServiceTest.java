@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.CouponDto;
-import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
+import com.nhnacademy.marketgg.server.dto.request.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.entity.Cart;
@@ -35,6 +35,7 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.atLeastOnce;
@@ -62,24 +63,31 @@ class DefaultGivenCouponServiceTest {
     @Mock
     CartRepository cartRepository;
 
-    private static GivenCouponRequest givenCouponRequest;
     private static MemberCreateRequest memberCreateRequest;
     private static CouponDto couponDto;
     private static GivenCoupon givenCoupon;
     private static Cart cart;
+    private static GivenCouponCreateRequest givenCouponRequest;
+    private static Member member;
 
     Pageable pageable = PageRequest.of(0, 20);
     Page<GivenCoupon> inquiryPosts = new PageImpl<>(List.of(), pageable, 0);
 
     @BeforeEach
     void beforeEach() {
-        givenCouponRequest = new GivenCouponRequest();
+        givenCouponRequest = new GivenCouponCreateRequest();
         memberCreateRequest = new MemberCreateRequest();
+        member = new Member(memberCreateRequest);
+
+        ReflectionTestUtils.setField(member, "id", 1L);
+        ReflectionTestUtils.setField(givenCouponRequest, "name", "name");
+
         couponDto = new CouponDto(1L, "name", "type", 10, 1000, 0.5);
         ReflectionTestUtils.setField(couponDto, "expiredDate", 10);
         cart = cartRepository.save(new Cart());
         givenCoupon = new GivenCoupon(new Coupon(1L, "name", "type", 10, 1000, 0.5),
-                new Member(memberCreateRequest, cart), new GivenCouponRequest());
+                new Member(memberCreateRequest, cart), givenCouponRequest);
+        givenCoupon = new GivenCoupon(new Coupon(1L, "name", "type", 10, 1000, 0.5), member);
     }
 
     @Test
@@ -87,8 +95,11 @@ class DefaultGivenCouponServiceTest {
     void testCreateGivenCoupons() {
         given(memberRepository.findById(any())).willReturn(Optional.of(new Member(memberCreateRequest, cart)));
         given(couponRepository.findById(any())).willReturn(Optional.of(new Coupon(1L, "name", "type", 10, 1000, 0.5)));
+        Coupon coupon = new Coupon(1L, "name", "type", 10, 1000, 0.5);
+        given(memberRepository.findById(any())).willReturn(Optional.of(member));
+        given(couponRepository.findByName(anyString())).willReturn(coupon);
 
-        givenCouponService.createGivenCoupons(anyLong(), givenCouponRequest);
+        givenCouponService.createGivenCoupons(1L, givenCouponRequest);
 
         then(givenCouponRepository).should().save(any(GivenCoupon.class));
     }

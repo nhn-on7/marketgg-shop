@@ -10,34 +10,34 @@ import java.time.LocalDateTime;
 @Getter
 public class GivenCouponResponse {
 
-    private final Long memberId;
-
     private final Long couponId;
 
-    private final String couponName;
+    private final Long memberId;
 
-    private final String couponType;
+    private final String name;
 
-    private final Integer couponMinimumMoney;
+    private final String type;
 
-    private final Double couponDiscountAmount;
+    private final Integer minimumMoney;
 
-    private final LocalDateTime expirationPeriod;
+    private final Double discountAmount;
 
-    private final CouponState couponState;
+    private final LocalDateTime expiredDate;
+
+    private final String state;
 
     public GivenCouponResponse(final GivenCoupon givenCoupon,
-                               final CouponState state,
-                               final LocalDateTime expirationPeriod) {
+                               final String state,
+                               final LocalDateTime expiredDate) {
 
         this.memberId = givenCoupon.getMember().getId();
         this.couponId = givenCoupon.getPk().getCouponId();
-        this.couponName = givenCoupon.getCoupon().getName();
-        this.couponType = givenCoupon.getCoupon().getType();
-        this.couponMinimumMoney = givenCoupon.getCoupon().getMinimumMoney();
-        this.couponDiscountAmount = givenCoupon.getCoupon().getDiscountAmount();
-        this.expirationPeriod = expirationPeriod;
-        this.couponState = state;
+        this.name = givenCoupon.getCoupon().getName();
+        this.type = givenCoupon.getCoupon().getType();
+        this.minimumMoney = givenCoupon.getCoupon().getMinimumMoney();
+        this.discountAmount = givenCoupon.getCoupon().getDiscountAmount();
+        this.expiredDate = expiredDate;
+        this.state = state;
     }
 
 }

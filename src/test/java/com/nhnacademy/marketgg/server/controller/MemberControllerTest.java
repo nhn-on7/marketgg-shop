@@ -2,7 +2,7 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
-import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
+import com.nhnacademy.marketgg.server.dto.request.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.service.GivenCouponService;
@@ -137,15 +137,15 @@ public class MemberControllerTest {
 
     @DisplayName("회원에게 지급 쿠폰 생성")
     void testCreateGivenCoupons() throws Exception {
-        doNothing().when(givenCouponService).createGivenCoupons(anyLong(), any(GivenCouponRequest.class));
-        String content = objectMapper.writeValueAsString(new GivenCouponRequest());
+        doNothing().when(givenCouponService).createGivenCoupons(anyLong(), any(GivenCouponCreateRequest.class));
+        String content = objectMapper.writeValueAsString(new GivenCouponCreateRequest());
 
         this.mockMvc.perform(post("/members/{memberId}/coupons", 1L)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(content))
                     .andExpect(status().isCreated());
 
-        verify(givenCouponService, times(1)).createGivenCoupons(anyLong(), any(GivenCouponRequest.class));
+        verify(givenCouponService, times(1)).createGivenCoupons(anyLong(), any(GivenCouponCreateRequest.class));
     }
 
     @Test
