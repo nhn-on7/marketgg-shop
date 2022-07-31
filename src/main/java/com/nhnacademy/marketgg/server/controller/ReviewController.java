@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ReviewUpdateRequest;
@@ -10,6 +9,7 @@ import com.nhnacademy.marketgg.server.service.ReviewService;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -64,11 +64,21 @@ public class ReviewController {
             throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
 
+        ResponseEntity<Void> returnResponseEntity =
+            ResponseEntity.status(HttpStatus.CREATED)
+                          .location(URI.create(DEFAULT_REVIEW_URI + productId + "/review/" + uuid))
+                          .contentType(MediaType.APPLICATION_JSON)
+                          .build();
+
+        if (Objects.isNull(images)) {
+            reviewService.createReview(reviewRequest, uuid);
+
+            return returnResponseEntity;
+        }
+
         reviewService.createReview(reviewRequest, images, uuid);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create(DEFAULT_REVIEW_URI + productId + "/review/" + uuid))
-                             .contentType(MediaType.APPLICATION_JSON).build();
+        return returnResponseEntity;
     }
 
     /**

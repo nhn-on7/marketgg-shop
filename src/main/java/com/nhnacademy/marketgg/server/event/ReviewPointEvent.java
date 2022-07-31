@@ -18,4 +18,8 @@ public class ReviewPointEvent {
         return new ReviewPointEvent(reviewId, member, 200L);
     }
 
+    public static ReviewPointEvent dispensePointForImageReview(Long reviewId, Member member) {
+        return new ReviewPointEvent(reviewId, member, 500L);
+    }
+
 }

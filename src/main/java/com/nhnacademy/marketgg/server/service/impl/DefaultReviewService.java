@@ -61,6 +61,17 @@ public class DefaultReviewService implements ReviewService {
 
         Review review = reviewRepository.save(new Review(reviewRequest, member, asset));
 
+        publisher.publishEvent(ReviewPointEvent.dispensePointForImageReview(review.getId(), member));
+    }
+
+    @Override
+    public void createReview(ReviewCreateRequest reviewRequest, String uuid) {
+        Member member = memberRepository.findByUuid(uuid).orElseThrow(MemberNotFoundException::new);
+
+        Asset asset = assetRepository.save(Asset.create());
+
+        Review review = reviewRepository.save(new Review(reviewRequest, member, asset));
+
         publisher.publishEvent(ReviewPointEvent.dispensePointForNormalReview(review.getId(), member));
     }
 

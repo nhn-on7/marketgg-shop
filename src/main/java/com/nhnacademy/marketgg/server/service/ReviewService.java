@@ -19,13 +19,15 @@ import org.springframework.web.multipart.MultipartFile;
 public interface ReviewService {
 
     /**
-     * 글로 작성된 리뷰를 생성합니다.
+     * 사진이 첨부된 리뷰를 생성합니다.
      *
      * @param reviewRequest - 리뷰 생성을 위한 dto입니다.
      * @param uuid          - 회원을 찾기 위한 uuid값입니다.
      */
     void createReview(final ReviewCreateRequest reviewRequest, List<MultipartFile> images, final String uuid)
         throws IOException;
+
+    void createReview(final ReviewCreateRequest reviewRequest, final String uuid);
 
     /**
      * 모든 리뷰를 조회합니다.
