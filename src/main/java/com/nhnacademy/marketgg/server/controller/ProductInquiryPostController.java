@@ -115,7 +115,7 @@ public class ProductInquiryPostController {
 
         productInquiryPostService.deleteProductInquiry(inquiryId, productId);
 
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(new SingleResponse<>("Delete Success"));
     }
