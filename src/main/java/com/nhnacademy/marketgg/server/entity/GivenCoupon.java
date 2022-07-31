@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
+import com.nhnacademy.marketgg.server.dto.request.GivenCouponCreateRequest;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -51,8 +51,8 @@ public class GivenCoupon {
 
     }
 
-    public GivenCoupon(final Coupon coupon, final Member member, final GivenCouponRequest givenCouponRequest) {
-        this.pk = new Pk(givenCouponRequest.getCouponId(), member.getId());
+    public GivenCoupon(final Coupon coupon, final Member member) {
+        this.pk = new Pk(coupon.getId(), member.getId());
         this.coupon = coupon;
         this.member = member;
         this.createdAt = LocalDateTime.now();

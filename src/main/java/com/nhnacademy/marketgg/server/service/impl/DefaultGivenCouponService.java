@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
+import com.nhnacademy.marketgg.server.dto.request.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.constant.CouponState;
 import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.entity.Coupon;
@@ -38,14 +38,13 @@ public class DefaultGivenCouponService implements GivenCouponService {
     @Transactional
     @Override
     public void createGivenCoupons(final Long memberId,
-                                   final GivenCouponRequest givenCouponRequest) {
+                                   final GivenCouponCreateRequest givenCouponRequest) {
 
         Member member = memberRepository.findById(memberId)
                                         .orElseThrow(MemberNotFoundException::new);
-        Coupon coupon = couponRepository.findById(givenCouponRequest.getCouponId())
-                                        .orElseThrow(CouponNotFoundException::new);
+        Coupon coupon = couponRepository.findByName(givenCouponRequest.getName());
 
-        GivenCoupon givenCoupon = new GivenCoupon(coupon, member, givenCouponRequest);
+        GivenCoupon givenCoupon = new GivenCoupon(coupon, member);
         givenCouponRepository.save(givenCoupon);
     }
 

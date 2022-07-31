@@ -3,7 +3,7 @@ package com.nhnacademy.marketgg.server.controller;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.annotation.UUID;
-import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
+import com.nhnacademy.marketgg.server.dto.request.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
@@ -169,7 +169,7 @@ public class MemberController {
      */
     @PostMapping("/{memberId}/coupons")
     public ResponseEntity<Void> createGivenCoupons(@PathVariable final Long memberId,
-                                                   @RequestBody final GivenCouponRequest givenCouponRequest) {
+                                                   @RequestBody final GivenCouponCreateRequest givenCouponRequest) {
 
         givenCouponService.createGivenCoupons(memberId, givenCouponRequest);
 

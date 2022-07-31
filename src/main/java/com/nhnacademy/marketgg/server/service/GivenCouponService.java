@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.service;
 
-import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
+import com.nhnacademy.marketgg.server.dto.request.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
 import org.springframework.data.domain.Pageable;
 
@@ -22,7 +22,7 @@ public interface GivenCouponService {
      *
      * @since 1.0.0
      */
-    void createGivenCoupons(Long memberId, GivenCouponRequest givenCouponRequest);
+    void createGivenCoupons(Long memberId, GivenCouponCreateRequest givenCouponRequest);
 
     /**
      * 회원에게 지급된 전체 지급 쿠폰 목록을 조회합니다.

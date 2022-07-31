@@ -32,7 +32,7 @@ public class DefaultCouponService implements CouponService {
 
     @Override
     public CouponDto retrieveCoupon(final Long couponId) {
-        Coupon coupon = couponRepository.findByCouponId(couponId);
+        Coupon coupon = couponRepository.findById(couponId).orElseThrow(CouponNotFoundException::new);
         return couponMapper.toDto(coupon);
     }
 

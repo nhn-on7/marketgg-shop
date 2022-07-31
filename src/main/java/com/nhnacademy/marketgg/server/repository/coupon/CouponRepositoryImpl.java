@@ -20,15 +20,6 @@ public class CouponRepositoryImpl extends QuerydslRepositorySupport implements C
     QCoupon coupon = QCoupon.coupon;
 
     @Override
-    public Coupon findByCouponId(Long couponId) {
-
-        return from(coupon)
-                .select(selectAllCouponColumns())
-                .where(coupon.id.eq(couponId))
-                .fetchOne();
-    }
-
-    @Override
     public Page<Coupon> findAllCoupons(Pageable pageable) {
 
         List<Coupon> result = from(coupon)
@@ -43,12 +34,12 @@ public class CouponRepositoryImpl extends QuerydslRepositorySupport implements C
     private ConstructorExpression<Coupon> selectAllCouponColumns() {
 
         return Projections.constructor(Coupon.class,
-                coupon.id,
-                coupon.name,
-                coupon.type,
-                coupon.expiredDate,
-                coupon.minimumMoney,
-                coupon.discountAmount);
+                                       coupon.id,
+                                       coupon.name,
+                                       coupon.type,
+                                       coupon.expiredDate,
+                                       coupon.minimumMoney,
+                                       coupon.discountAmount);
     }
 
 }
