@@ -10,7 +10,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public final class AspectUtils {
 
     public static final String AUTH_ID = "AUTH-ID";
-    public static final String WWW_AUTHENTICATION = "WWW-Authentication";
+    public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
 
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes requestAttributes =
