@@ -1,7 +1,8 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.constant.CustomerServicePostReason;
-import com.nhnacademy.marketgg.server.dto.response.CustomerServicePostDto;
+import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,14 +27,15 @@ import java.util.stream.Collectors;
  *
  * @version 1.0.0
  */
+// @RoleCheck(accessLevel = Role.ROLE_ADMIN)
 @RestController
-@RequestMapping("/shop/v1/admin/customer-services")
+@RequestMapping("/admin/customer-services")
 @RequiredArgsConstructor
 public class AdminCustomerServicePostController {
 
     private final CustomerServicePostService customerServicePostService;
 
-    private static final String DEFAULT_ADMIN_CUSTOMER_SERVICE = "/shop/v1/admin/customer-services";
+    private static final String DEFAULT_ADMIN_CUSTOMER_SERVICE = "/admin/customer-services";
 
     /**
      * 선택한 1:1 문의 단건을 조회하는 GET Mapping 을 지원합니다.
@@ -41,8 +45,8 @@ public class AdminCustomerServicePostController {
      * @since 1.0.0
      */
     @GetMapping("/oto-inquiries/{inquiryId}")
-    public ResponseEntity<CustomerServicePostDto> retrieveOtoInquiry(@PathVariable final Long inquiryId) {
-        CustomerServicePostDto inquiryResponse = customerServicePostService.retrieveCustomerServicePost(inquiryId);
+    public ResponseEntity<PostResponseForOtoInquiry> retrieveOtoInquiry(@PathVariable final Long inquiryId) {
+        PostResponseForOtoInquiry inquiryResponse = customerServicePostService.retrieveCustomerServicePost(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
@@ -57,12 +61,31 @@ public class AdminCustomerServicePostController {
      * @since 1.0.0
      */
     @GetMapping("/oto-inquiries")
-    public ResponseEntity<List<CustomerServicePostDto>> retrieveOtoInquiries(final Pageable pageable) {
-        List<CustomerServicePostDto> inquiryResponses = customerServicePostService.retrieveOtoInquiries(pageable);
+    public ResponseEntity<List<PostResponseForOtoInquiry>> retrieveOtoInquiries(final Pageable pageable) {
+        List<PostResponseForOtoInquiry> inquiryResponses = customerServicePostService.retrieveOtoInquiries(pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries"))
                              .body(inquiryResponses);
+    }
+
+    /**
+     * 1:1 문의의 답변 상태를 변경할 수 있는 PATCH Mapping 을 지원합니다.
+     *
+     * @param inquiryId - 상태를 변경할 게시글의 식별번호입니다.
+     * @param status - 변경할 상태 정보를 담고 있는 DTO 객체입니다.
+     * @return Mapping URI 를 담은 응답객체를 반환합니다.
+     * @since 1.0.0
+     */
+    @PatchMapping("/oto-inquiries/{inquiryId}")
+    public ResponseEntity<PostResponseForOtoInquiry> updateInquiryStatus(@PathVariable final Long inquiryId,
+                                                                         @RequestBody final PostStatusUpdateRequest status) {
+        customerServicePostService.updateInquiryStatus(inquiryId, status);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
     }
 
     /**

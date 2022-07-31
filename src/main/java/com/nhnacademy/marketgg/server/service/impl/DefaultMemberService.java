@@ -4,27 +4,29 @@ import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
 import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
 import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignUpResponse;
+import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.membergrade.MemberGradeNotFoundException;
+import com.nhnacademy.marketgg.server.repository.cart.CartRepository;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.membergrade.MemberGradeRepository;
 import com.nhnacademy.marketgg.server.service.MemberService;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class DefaultMemberService implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final CartRepository cartRepository;
     private final MemberGradeRepository memberGradeRepository;
     private final DeliveryAddressRepository deliveryAddressRepository;
 
@@ -61,6 +63,7 @@ public class DefaultMemberService implements MemberService {
                              .build();
     }
 
+    @Transactional
     @Override
     public void withdrawPass(final Long id) {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
@@ -84,14 +87,15 @@ public class DefaultMemberService implements MemberService {
                                                     .orElseThrow(MemberNotFoundException::new);
             return signUp(signUpRequest, referrerMember, registerGrade());
         }
-        return new ShopMemberSignUpResponse(memberRepository.save(new Member(signUpRequest, registerGrade()))
+        Cart savedCart = cartRepository.save(new Cart());
+        return new ShopMemberSignUpResponse(memberRepository.save(new Member(signUpRequest, registerGrade(), savedCart))
                                                             .getId(), null);
     }
 
     /**
      * 회원탈퇴시 SoftDelete 를 위한 메소드입니다.
      *
-     * @param uuid - 탈퇴를 신청한 회원의 uuid 입니다.
+     * @param uuid                  - 탈퇴를 신청한 회원의 uuid 입니다.
      * @param memberWithdrawRequest - 탈퇴 신청 시간을 담은 객체입니다.
      */
     @Transactional
@@ -120,11 +124,11 @@ public class DefaultMemberService implements MemberService {
      * @param signUpMemberGrade       - 회원가입을 하는 회원이 부여 받게되는 등급입니다.
      * @return ShopMemberSignUp - 회원가입을 하는 회원과 추천을 받게되는 회원의 uuid 를 담은 객체 입니다.
      */
-    private ShopMemberSignUpResponse signUp(final ShopMemberSignUpRequest shopMemberSignUpRequest
-            , final Member referrerMember
-            , final MemberGrade signUpMemberGrade) {
+    private ShopMemberSignUpResponse signUp(final ShopMemberSignUpRequest shopMemberSignUpRequest,
+                                            final Member referrerMember, final MemberGrade signUpMemberGrade) {
 
-        Member signUpMember = memberRepository.save(new Member(shopMemberSignUpRequest, signUpMemberGrade));
+        Cart savedCart = cartRepository.save(new Cart());
+        Member signUpMember = memberRepository.save(new Member(shopMemberSignUpRequest, signUpMemberGrade, savedCart));
         DeliveryAddress.Pk pk = new DeliveryAddress.Pk(signUpMember.getId());
         deliveryAddressRepository.save(new DeliveryAddress(pk, signUpMember, shopMemberSignUpRequest));
         return new ShopMemberSignUpResponse(signUpMember.getId(), referrerMember.getId());

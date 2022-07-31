@@ -13,7 +13,7 @@ public class DefaultAssetService implements AssetService {
     @Override
     @Transactional
     public Asset createAsset(String imageAddress) {
-        
         return null;
     }
+
 }

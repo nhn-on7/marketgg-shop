@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.advice;
 
 import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
-import java.util.Objects;
+import com.nhnacademy.marketgg.server.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -23,6 +23,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalControllerAdvice {
 
     /**
+     * 자원을 찾지 못했을 때 발생하는 예외를 처리합니다.
+     *
+     * @param e - 발생한 예외
+     * @return - 404 Not Found
+     */
+    @ExceptionHandler({
+        NotFoundException.class
+    })
+    public ResponseEntity<ErrorEntity> notFoundExceptionHandle(final NotFoundException e) {
+        log.error(e.toString());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(new ErrorEntity(e.getMessage()));
+    }
+
+    /**
      * 전체 Exception 에 대해 관리하는 Handler 입니다.
      *
      * @param ex - 에러 정보를 담은 Exception 입니다.
@@ -30,7 +46,7 @@ public class GlobalControllerAdvice {
      * @since 1.0.0
      */
     @ExceptionHandler(Exception.class)
-    private ResponseEntity<ErrorEntity> handleException(final Exception ex) {
+    public ResponseEntity<ErrorEntity> handleException(final Exception ex) {
         log.error("", ex);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -57,19 +73,19 @@ public class GlobalControllerAdvice {
         if (bindingResult.hasErrors()) {
             builder.append("Reason: ")
                    .append(bindingResult.getFieldError().getDefaultMessage())
-                   .append("\n")
+                   .append(System.lineSeparator())
                    .append("At: ")
                    .append(bindingResult.getObjectName())
-                   .append("\n")
+                   .append(System.lineSeparator())
                    .append("Field: ")
                    .append(bindingResult.getFieldError().getField())
-                   .append("\n")
+                   .append(System.lineSeparator())
                    .append("Not valid input: ")
                    .append(bindingResult.getFieldError().getRejectedValue())
-                   .append("\n");
+                   .append(System.lineSeparator());
         }
 
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(new ErrorEntity(builder.toString()));
     }

@@ -1,11 +1,13 @@
 package com.nhnacademy.marketgg.server.exception.order;
 
+import com.nhnacademy.marketgg.server.exception.NotFoundException;
+
 /**
  * 주문을 찾을 수 없을 때 예외처리입니다.
  *
  * @version 1.0.0
  */
-public class OrderNotFoundException extends IllegalArgumentException {
+public class OrderNotFoundException extends NotFoundException {
 
     private static final String ERROR = "주문을 찾을 수 없습니다.";
 

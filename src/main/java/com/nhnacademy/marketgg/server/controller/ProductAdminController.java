@@ -146,23 +146,4 @@ public class ProductAdminController {
                              .build();
     }
 
-    /**
-     * 상품 검색을 위한 GET Mapping을 지원합니다.
-     * 상품의 이름을 인자로 받아 해당 이름을 포함한 상품 엔티티를 검색합니다.
-     *
-     * @param productName - 상품 검색을 위한 String 타입 파라미터입니다.
-     * @return - List<ProductResponse> 를 담은 응답 객체를 반환 합니다.
-     * @since 1.0.0
-     */
-    @GetMapping("/search/{productName}")
-    public ResponseEntity<List<ProductResponse>> searchProductsByName(
-        @PathVariable final String productName) {
-        List<ProductResponse> productResponseList = this.productService.searchProductsByName(productName);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_PRODUCT + "/search/" + productName))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .body(productResponseList);
-    }
-
 }

@@ -1,11 +1,13 @@
 package com.nhnacademy.marketgg.server.exception.payment;
 
+import com.nhnacademy.marketgg.server.exception.NotFoundException;
+
 /**
  * 결제내역을 찾을 수 없을 때 예외처리입니다.
  *
  * @version 1.0.0
  */
-public class PaymentNotFoundException extends IllegalArgumentException {
+public class PaymentNotFoundException extends NotFoundException {
 
     private static final String ERROR = "결제내역을 찾을 수 없습니다.";
 
