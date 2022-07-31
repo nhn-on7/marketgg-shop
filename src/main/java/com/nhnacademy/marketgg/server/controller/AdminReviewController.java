@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.nhnacademy.marketgg.server.annotation.Role;
+import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.ReviewService;
@@ -23,6 +25,7 @@ public class AdminReviewController {
     private final ReviewService reviewService;
     private static final String DEFAULT_REVIEW_URI = "/admin/products/";
 
+    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @PostMapping("/{productId}/review/{reviewId}/makeBest")
     public ResponseEntity<CommonResponse> makeBestReview(@PathVariable final Long productId,
                                                          @PathVariable final Long reviewId) {
