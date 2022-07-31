@@ -1,10 +1,19 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+
 import com.nhnacademy.marketgg.server.dto.request.CouponDto;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
 import com.nhnacademy.marketgg.server.mapper.impl.CouponMapper;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,21 +21,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -44,7 +41,6 @@ class DefaultCouponServiceTest {
     private static CouponDto couponDto;
 
     Pageable pageable = PageRequest.of(0, 20);
-    Page<Coupon> inquiryPosts = new PageImpl<>(List.of(), pageable, 0);
 
     @BeforeAll
     static void beforeAll() {
@@ -64,7 +60,7 @@ class DefaultCouponServiceTest {
     @DisplayName("쿠폰 목록 조회")
     void testRetrieveCoupons() {
         given(couponRepository.findAllCoupons(pageable))
-                .willReturn(inquiryPosts);
+                .willReturn(Optional.of(any()));
 
         List<CouponDto> couponResponses = couponService.retrieveCoupons(pageable);
 

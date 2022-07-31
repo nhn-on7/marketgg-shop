@@ -1,9 +1,8 @@
 package com.nhnacademy.marketgg.server.dto.request;
 
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @Getter

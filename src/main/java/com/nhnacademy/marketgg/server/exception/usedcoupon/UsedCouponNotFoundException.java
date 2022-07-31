@@ -20,4 +20,12 @@ public class UsedCouponNotFoundException extends NotFoundException {
         super(ERROR);
     }
 
+    public static class GivenCouponInMemberNotFoundException extends NotFoundException {
+
+        private static final String MESSAGE = "해당 지급 쿠폰을 찾을 수 없습니다.";
+
+        public GivenCouponInMemberNotFoundException() {
+            super(MESSAGE);
+        }
+    }
 }

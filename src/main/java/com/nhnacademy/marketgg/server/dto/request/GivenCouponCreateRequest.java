@@ -1,10 +1,14 @@
 package com.nhnacademy.marketgg.server.dto.request;
 
+import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-
+/**
+ * 지급 쿠폰의 요청 DTO 입니다.
+ *
+ * @version 1.0.0
+ */
 @NoArgsConstructor
 @Getter
 public class GivenCouponCreateRequest {

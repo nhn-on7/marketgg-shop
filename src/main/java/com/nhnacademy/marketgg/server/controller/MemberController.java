@@ -1,8 +1,11 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import static org.springframework.http.HttpStatus.OK;
+
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.annotation.UUID;
+import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
@@ -16,6 +19,12 @@ import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.MemberService;
 import com.nhnacademy.marketgg.server.service.PointService;
+import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -28,15 +37,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-
-import static org.springframework.http.HttpStatus.OK;
 
 /**
  * 회원관리에 관련된 RestController 입니다.
@@ -164,17 +164,18 @@ public class MemberController {
     /**
      * 선택한 회원에게 쿠폰을 지급하는 PostMapping 을 지원합니다.
      *
-     * @param uuid               - 쿠폰을 등록할 회원의 uuid 입니다.
+     * @param memberInfo               - 쿠폰을 등록할 회원의 정보입니다.
      * @param givenCouponRequest - 등록할 쿠폰 번호 정보를 가진 요청 객체입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
     @RoleCheck(accessLevel = Role.ROLE_USER)
     @PostMapping("/coupons")
-    public ResponseEntity<CommonResponse> createGivenCoupons(@UUID final String uuid,
-                                                             @Valid @RequestBody final GivenCouponCreateRequest givenCouponRequest) {
+    public ResponseEntity<CommonResponse> createGivenCoupons(final MemberInfo memberInfo,
+                                                             @Valid @RequestBody
+                                                             final GivenCouponCreateRequest givenCouponRequest) {
 
-        givenCouponService.createGivenCoupons(uuid, givenCouponRequest);
+        givenCouponService.createGivenCoupons(memberInfo, givenCouponRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -184,15 +185,15 @@ public class MemberController {
     /**
      * 선택한 회원에게 지급된 쿠폰 목록을 조회하는 GetMapping 을 지원합니다.
      *
-     * @param uuid - 쿠폰을 조회할 회원의 uuid 입니다.
+     * @param memberInfo               - 쿠폰을 등록할 회원의 정보입니다.
      * @return 회원에게 지급된 쿠폰 목록을 가진 DTO 객체를 반환합니다.
      * @since 1.0.0
      */
     @RoleCheck(accessLevel = Role.ROLE_USER)
     @GetMapping("/coupons")
-    public ResponseEntity<CommonResponse> retrieveGivenCoupons(@UUID final String uuid,
+    public ResponseEntity<CommonResponse> retrieveGivenCoupons(final MemberInfo memberInfo,
                                                                final Pageable pageable) {
-        List<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(uuid, pageable);
+        List<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
