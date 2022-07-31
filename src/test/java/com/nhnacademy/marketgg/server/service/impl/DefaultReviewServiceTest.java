@@ -170,4 +170,16 @@ class DefaultReviewServiceTest {
         then(reviewRepository).should().delete(any(Review.class));
     }
 
+    @Test
+    @DisplayName("베스트후기 선정 테스트")
+    void testMakeBestReview() {
+        given(reviewRepository.findById(anyLong())).willReturn(Optional.ofNullable(review));
+
+        SingleResponse<Boolean> response = this.reviewService.makeBestReview(1L);
+
+        assertThat(response.getData()).isTrue();
+        then(reviewRepository).should().findById(anyLong());
+        then(reviewRepository).should().save(any(Review.class));
+    }
+
 }
