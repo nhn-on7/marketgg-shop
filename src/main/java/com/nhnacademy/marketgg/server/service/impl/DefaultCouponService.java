@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ public class DefaultCouponService implements CouponService {
     // MEMO 7: Mapstruct 사용 (toEntity, toDto)
     @Transactional
     @Override
-    public void createCoupon(final CouponDto couponDto) {
+    public void createCoupon(@Valid final CouponDto couponDto) {
         Coupon coupon = couponMapper.toEntity(couponDto);
         couponRepository.save(coupon);
     }
@@ -47,7 +48,7 @@ public class DefaultCouponService implements CouponService {
 
     @Transactional
     @Override
-    public void updateCoupon(final Long couponId, final CouponDto couponDto) {
+    public void updateCoupon(final Long couponId, @Valid final CouponDto couponDto) {
         Coupon coupon = couponRepository.findById(couponId).orElseThrow(CouponNotFoundException::new);
 
         // MEMO 8: Update method Dto -> Entity 로 null 아닌 컬럼만 업데이트
