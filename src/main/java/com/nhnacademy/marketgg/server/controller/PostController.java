@@ -7,6 +7,7 @@ import com.nhnacademy.marketgg.server.constant.CustomerServicePostReason;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.response.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
@@ -68,13 +69,29 @@ public class PostController {
     }
 
     /**
+     * 지정한 게시글의 상세정보를 조회할 수 있는 GET Mapping 을 지원합니다.
+     *
+     * @param boardNo - 조회할 게시글의 식별번호입니다.
+     * @return 지정한 게시글의 상세 정보를 담은 응답객체를 반환합니다.
+     * @since 1.0.0
+     */
+    @GetMapping("/{boardNo}")
+    public ResponseEntity<PostResponseForDetail> retrievePost(@PathVariable final Long boardNo) {
+        PostResponseForDetail response = postService.retrievePost(boardNo);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(DEFAULT_POST + "/" + boardNo))
+                             .body(response);
+    }
+
+    /**
      * 선택한 게시글을 조회하는 GET Mapping 을 지원합니다.
      *
      * @param boardNo - 선택한 게시글의 식별번호입니다.
      * @return 조회한 1:1 문의 단건의 정보를 담은 객체를 반환합니다.
      * @since 1.0.
      */
-    @GetMapping("/{boardNo}")
+    @GetMapping("/oto-inquiries/{boardNo}")
     public ResponseEntity<PostResponseForOtoInquiry> retrieveOwnOtoInquiry(@PathVariable final Long boardNo) {
         PostResponseForOtoInquiry inquiryResponse = postService.retrieveOtoInquiryPost(boardNo);
 
