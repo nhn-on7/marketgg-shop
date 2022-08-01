@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.repository.customerservicepost;
 
 import com.nhnacademy.marketgg.server.dto.response.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,16 @@ public interface CustomerServicePostRepositoryCustom {
      * @return 조회한 게시글을 DTO 객체로 반환합니다.
      */
     PostResponseForOtoInquiry findOtoInquiryById(final Long inquiryId);
+
+    /**
+     * 게시글 번호로 공지사항과 FAQ 를 조회한다.
+     *
+     * @param boardNo - 지정한 게시글의 식별번호입니다.
+     * @return 지정한 식별번호로 조회한 게시글의 상세정보를 반환합니다.
+     * @since 1.0.0
+     */
+    PostResponseForDetail findByBoardNo(Long boardNo);
+
     /**
      * 카테고리 번호에 따라 고객센터 게시글(공지사항, 1:1문의, FAQ) 목록을 조회하는 메소드입니다.
      *

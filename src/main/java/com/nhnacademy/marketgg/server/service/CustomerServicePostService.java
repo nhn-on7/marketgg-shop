@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
@@ -23,8 +24,18 @@ public interface CustomerServicePostService {
      *
      * @param memberId    - 등록하는 회원의 식별번호입니다.
      * @param postRequest - 1:1 문의를 등록하기 위한 DTO 객체입니다.
+     * @since 1.0.0
      */
     void createPost(final Long memberId, final PostRequest postRequest);
+
+    /**
+     * 지정한 게시글의 상세정보를 반환하는 메소드입니다.
+     *
+     * @param boardNo - 지정한 게시글의 식별번호입니다.
+     * @return 지정한 게시글의 상세정보를 반환합니다.
+     * @since 1.0.0
+     */
+    PostResponseForDetail retrievePost(Long boardNo);
 
     /**
      * 고객센터 1:1문의 단건을 조회하는 메소드입니다.

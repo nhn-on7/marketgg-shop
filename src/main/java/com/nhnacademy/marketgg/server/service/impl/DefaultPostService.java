@@ -5,6 +5,7 @@ import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
 import com.nhnacademy.marketgg.server.dto.response.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
@@ -55,6 +56,11 @@ public class DefaultPostService implements CustomerServicePostService {
 
         postRepository.save(csPost);
         elasticBoardRepository.save(new ElasticBoard(csPost));
+    }
+
+    @Override
+    public PostResponseForDetail retrievePost(final Long boardNo) {
+        return postRepository.findByBoardNo(boardNo);
     }
 
     @Override

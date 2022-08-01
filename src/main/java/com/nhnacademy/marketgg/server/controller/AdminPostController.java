@@ -6,6 +6,7 @@ import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import java.net.URI;
@@ -44,7 +45,7 @@ public class AdminPostController {
      * 게시글을 등록 할 수 있는 POST Mapping 을 지원합니다.
      *
      * @param postRequest - 등록할 게시글의 정보를 담은 객체입니다.
-     * @param memberInfo - 게시글을 등록할 회원의 정보를 담은 객체입니다.
+     * @param memberInfo  - 게시글을 등록할 회원의 정보를 담은 객체입니다.
      * @return Mapping 정보를 담은 응답객체를 반환합니다.
      * @since 1.0.0
      */
@@ -53,10 +54,26 @@ public class AdminPostController {
 
         postService.createPost(memberInfo.getId(), postRequest);
 
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_ADMIN_POST))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
+    }
+
+    /**
+     * 지정한 게시글의 상세정보를 조회할 수 있는 GET Mapping 을 지원합니다.
+     *
+     * @param boardNo - 조회할 게시글의 식별번호입니다.
+     * @return 지정한 게시글의 상세 정보를 담은 응답객체를 반환합니다.
+     * @since 1.0.0
+     */
+    @GetMapping("/{boardNo}")
+    public ResponseEntity<PostResponseForDetail> retrievePost(@PathVariable final Long boardNo) {
+        PostResponseForDetail response = postService.retrievePost(boardNo);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(DEFAULT_ADMIN_POST + "/" + boardNo))
+                             .body(response);
     }
 
     /**
@@ -66,7 +83,7 @@ public class AdminPostController {
      * @return 조회할 게시글의 정보를 담은 객체를 반환합니다.
      * @since 1.0.0
      */
-    @GetMapping("/{boardNo}")
+    @GetMapping("/oto-inquiries/{boardNo}")
     public ResponseEntity<PostResponseForOtoInquiry> retrieveOtoInquiryPost(@PathVariable final Long boardNo) {
         PostResponseForOtoInquiry inquiryResponse = postService.retrieveOtoInquiryPost(boardNo);
 
@@ -97,9 +114,9 @@ public class AdminPostController {
     /**
      * 입력받은 정보로 지정한 게시글을 수정 할 수 있는 PUT Mapping 을 지원합니다.
      *
-     * @param boardNo - 수정할 게시글의 식별번호입니다.
+     * @param boardNo     - 수정할 게시글의 식별번호입니다.
      * @param postRequest - 수정할 게시글의 정보를 담은 객체입니다.
-     * @param memberInfo - 멤버 정보를 담은 객체입니다.
+     * @param memberInfo  - 멤버 정보를 담은 객체입니다.
      * @return Mapping URI 를 담은 응답객체를 반환합니다.
      * @since 1.0.0
      */
@@ -125,7 +142,8 @@ public class AdminPostController {
      */
     @PatchMapping("/oto-inquiries/{boardNo}")
     public ResponseEntity<PostResponseForOtoInquiry> updateInquiryStatus(@PathVariable final Long boardNo,
-                                                                         @RequestBody final PostStatusUpdateRequest status) {
+                                                                         @RequestBody
+                                                                         final PostStatusUpdateRequest status) {
 
         postService.updateInquiryStatus(boardNo, status);
 
