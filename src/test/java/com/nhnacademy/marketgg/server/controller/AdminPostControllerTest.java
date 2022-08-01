@@ -34,7 +34,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -82,13 +81,13 @@ class AdminPostControllerTest {
     @Test
     @DisplayName("1:1 문의 단건 조회 - 관리자")
     void testRetrievePost() throws Exception {
-        given(postService.retrievePost(anyLong())).willReturn(null);
+        given(postService.retrieveOtoInquiryPost(anyLong())).willReturn(null);
 
         this.mockMvc.perform(get(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/{inquiryId}", 1L)
                                      .headers(headers))
                     .andExpect(status().isOk());
 
-        then(postService).should().retrievePost(anyLong());
+        then(postService).should().retrieveOtoInquiryPost(anyLong());
     }
 
     @Test

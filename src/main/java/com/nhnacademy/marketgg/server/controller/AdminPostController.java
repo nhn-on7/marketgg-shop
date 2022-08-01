@@ -40,8 +40,16 @@ public class AdminPostController {
 
     private static final String DEFAULT_ADMIN_POST = "/admin/customer-services";
 
+    /**
+     * 게시글을 등록 할 수 있는 POST Mapping 을 지원합니다.
+     *
+     * @param postRequest - 등록할 게시글의 정보를 담은 객체입니다.
+     * @param memberInfo - 게시글을 등록할 회원의 정보를 담은 객체입니다.
+     * @return Mapping 정보를 담은 응답객체를 반환합니다.
+     * @since 1.0.0
+     */
     @PostMapping
-    public ResponseEntity<Void> response(@RequestBody final PostRequest postRequest, final MemberInfo memberInfo) {
+    public ResponseEntity<Void> createPost(@RequestBody final PostRequest postRequest, final MemberInfo memberInfo) {
 
         postService.createPost(memberInfo.getId(), postRequest);
 
@@ -59,8 +67,8 @@ public class AdminPostController {
      * @since 1.0.0
      */
     @GetMapping("/{boardNo}")
-    public ResponseEntity<PostResponseForOtoInquiry> retrievePost(@PathVariable final Long boardNo) {
-        PostResponseForOtoInquiry inquiryResponse = postService.retrievePost(boardNo);
+    public ResponseEntity<PostResponseForOtoInquiry> retrieveOtoInquiryPost(@PathVariable final Long boardNo) {
+        PostResponseForOtoInquiry inquiryResponse = postService.retrieveOtoInquiryPost(boardNo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_POST + "/" + boardNo))

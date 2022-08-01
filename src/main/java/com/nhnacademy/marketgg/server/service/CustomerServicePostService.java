@@ -27,13 +27,13 @@ public interface CustomerServicePostService {
     void createPost(final Long memberId, final PostRequest postRequest);
 
     /**
-     * 고객센터 게시글 단건을 조회하는 메소드입니다.
+     * 고객센터 1:1문의 단건을 조회하는 메소드입니다.
      *
-     * @param csPostId - 고객센터 게시글의 식별번호입니다.
+     * @param boardNo - 고객센터 게시글의 식별번호입니다.
      * @return 조회한 게시글의 정보를 담은 DTO 객체를 반환합니다.
      * @since 1.0.0
      */
-    PostResponseForOtoInquiry retrievePost(final Long csPostId);
+    PostResponseForOtoInquiry retrieveOtoInquiryPost(final Long boardNo);
 
     /**
      * 1:1 문의 전체 목록을 조회하는 메소드입니다.

@@ -76,7 +76,7 @@ public class PostController {
      */
     @GetMapping("/{boardNo}")
     public ResponseEntity<PostResponseForOtoInquiry> retrieveOwnOtoInquiry(@PathVariable final Long boardNo) {
-        PostResponseForOtoInquiry inquiryResponse = postService.retrievePost(boardNo);
+        PostResponseForOtoInquiry inquiryResponse = postService.retrieveOtoInquiryPost(boardNo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/oto-inquiries/" + boardNo))

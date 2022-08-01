@@ -41,7 +41,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -114,13 +113,13 @@ class PostControllerTest {
     @Test
     @DisplayName("1:1 문의 단건 조회 - 사용자")
     void testRetrieveOtoInquiry() throws Exception {
-        given(postService.retrievePost(anyLong())).willReturn(null);
+        given(postService.retrieveOtoInquiryPost(anyLong())).willReturn(null);
 
         this.mockMvc.perform(get(DEFAULT_POST + "/oto-inquiries/{inquiryId}", 1L)
                                      .headers(headers))
                     .andExpect(status().isOk());
 
-        then(postService).should().retrievePost(anyLong());
+        then(postService).should().retrieveOtoInquiryPost(anyLong());
     }
 
     @Test

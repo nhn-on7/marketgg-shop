@@ -58,7 +58,7 @@ public class DefaultPostService implements CustomerServicePostService {
     }
 
     @Override
-    public PostResponseForOtoInquiry retrievePost(final Long boardNo) {
+    public PostResponseForOtoInquiry retrieveOtoInquiryPost(final Long boardNo) {
         PostResponseForOtoInquiry otoInquiry = postRepository.findOtoInquiryById(boardNo);
 
         return addCommentList(otoInquiry);
