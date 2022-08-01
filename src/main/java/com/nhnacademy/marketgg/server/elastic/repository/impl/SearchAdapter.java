@@ -21,6 +21,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -33,6 +34,9 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @RequiredArgsConstructor
 public class SearchAdapter implements SearchRepository {
+
+    @Value("{spring.elasticsearch.uris}")
+    private final String elastic;
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
@@ -51,10 +55,8 @@ public class SearchAdapter implements SearchRepository {
 
         Map<String, String> sort = this.buildSort(priceSortType);
         request.setRequest(request.getRequest() + " " + translator.converter(request.getRequest()));
-        HttpEntity<String> requestEntity =
-                new HttpEntity<>(objectMapper.writeValueAsString(
-                        new SearchRequestBodyForBool<>(optionCode, sort, request, PRODUCT)),
-                                 this.buildHeaders());
+        HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
+                        new SearchRequestBodyForBool<>(optionCode, sort, request, PRODUCT)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, PRODUCT).getBody());
     }
@@ -66,8 +68,7 @@ public class SearchAdapter implements SearchRepository {
 
         Map<String, String> sort = this.buildSort(priceSortType);
         request.setRequest(request.getRequest() + " " + translator.converter(request.getRequest()));
-        HttpEntity<String> requestEntity =
-                new HttpEntity<>(objectMapper.writeValueAsString(
+        HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
                         new SearchRequestBody<>(sort, request)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, PRODUCT).getBody());
@@ -81,8 +82,7 @@ public class SearchAdapter implements SearchRepository {
 
         Map<String, String> sort = this.buildSort(null);
         request.setRequest(request.getRequest() + " " + translator.converter(request.getRequest()));
-        HttpEntity<String> requestEntity =
-                new HttpEntity<>(objectMapper.writeValueAsString(
+        HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
                         new SearchRequestBodyForBool<>(categoryCode, sort, request, BOARD)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, BOARD).getBody());
@@ -96,12 +96,9 @@ public class SearchAdapter implements SearchRepository {
             throws JsonProcessingException, ParseException {
 
         Map<String, String> sort = this.buildSort(null);
-        request.setRequest(
-                request.getRequest() + " " + translator.converter(request.getRequest()));
-        HttpEntity<String> requestEntity =
-                new HttpEntity<>(objectMapper.writeValueAsString(
-                        new SearchRequestBodyForBool<>(categoryCode, sort, request, optionCode, option)),
-                                 this.buildHeaders());
+        request.setRequest(request.getRequest() + " " + translator.converter(request.getRequest()));
+        HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
+                        new SearchRequestBodyForBool<>(categoryCode, sort, request, optionCode, option)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, BOARD).getBody());
     }
@@ -125,8 +122,8 @@ public class SearchAdapter implements SearchRepository {
         if (document.compareTo(PRODUCT) != 0) {
             requestUri = DEFAULT_ELASTIC_BOARD;
         }
-        // FIXME: data 파일 연결해서 사용 (path 제대로 잡기)
-        return restTemplate.exchange("http://133.186.153.181:9200" + requestUri,
+
+        return restTemplate.exchange("http://" + elastic + requestUri,
                                      HttpMethod.POST,
                                      request,
                                      String.class);
