@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ReviewCreateRequest {
 
-    @Size(max = 300, message = "후기 내용은 300자를 넘을 수 없습니다.")
+    @Size(min = 10, max = 300, message = "후기 내용은 10자 이상, 300자 이하만 가능합니다.")
     private String content;
 
     @Max(value = 5, message = "평점은 5를 초과할 수 없습니다.")

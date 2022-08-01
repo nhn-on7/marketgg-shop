@@ -23,9 +23,9 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport
         QOrder order = QOrder.order;
 
         return from(pointHistory)
-            .innerJoin(member).on(pointHistory.member.id.eq(member.id))
+            .innerJoin(member)
             .where(pointHistory.member.id.eq(id))
-            .innerJoin(order).on(pointHistory.order.id.eq(order.id))
+            .innerJoin(order)
             .select(Projections.constructor(PointRetrieveResponse.class,
                                             member.id,
                                             order.id,

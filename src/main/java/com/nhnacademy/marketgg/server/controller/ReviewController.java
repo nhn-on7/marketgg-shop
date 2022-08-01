@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.controller;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ReviewUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.ReviewResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.ReviewService;
@@ -13,6 +14,7 @@ import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,15 +45,16 @@ public class ReviewController {
     private static final String DEFAULT_REVIEW_URI = "/products/";
 
     /**
-     * 글로 작성된 리뷰를 생성합니다. 추후 사진 기능이 추가될 예정입니다.
+     * 리뷰를 생성합니다. 추후 사진 기능이 추가될 예정입니다.
      *
      * @param productId     - 후기가 달릴 상품의 PK입니다.
      * @param uuid          - 후기를 작성한 회원을 구별하기 위한 고유값입니다.
      * @param reviewRequest - 후기 생성을 위한 dto 입니다.
      * @param bindingResult - validation 적용을 위한 파라미터입니다.
+     * @param images        - 후기 생성시 첨부된 사진들입니다.
      * @return Void를 담은 응답객체를 반환합니다.
      */
-    @PostMapping(value = "/{productId}/review/{memberUuid}", consumes = { MediaType.APPLICATION_JSON_VALUE,
+    @PostMapping(value = "/{productId}/reviews/{memberUuid}", consumes = { MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<Void> createReview(@PathVariable final Long productId,
                                              @PathVariable(name = "memberUuid") final String uuid,
@@ -88,11 +91,12 @@ public class ReviewController {
      * @param pageRequest - 기본 번호 0, 사이즈 10인 페이지 요청입니다.
      * @return - 페이지 정보가 담긴 공통 응답 객체를 반환합니다.
      */
-    @GetMapping("/{productId}/review")
+    @GetMapping("/{productId}/reviews")
     public ResponseEntity<CommonResponse> retrieveReviews(@PathVariable final Long productId,
                                                           final DefaultPageRequest pageRequest) {
 
-        SingleResponse<?> response = reviewService.retrieveReviews(pageRequest.getPageable());
+        SingleResponse<Page<ReviewResponse>> response =
+            reviewService.retrieveReviews(pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_REVIEW_URI + productId + "/review"))
@@ -106,11 +110,11 @@ public class ReviewController {
      * @param reviewId  - 작성된 후기의 기본키입니다.
      * @return - ReviewResponse가 담긴 공통 응답객체를 반환합니다.
      */
-    @GetMapping("/{productId}/review/{reviewId}")
+    @GetMapping("/{productId}/reviews/{reviewId}")
     public ResponseEntity<CommonResponse> retrieveReviewDetails(@PathVariable final Long productId,
                                                                 @PathVariable final Long reviewId) {
 
-        SingleResponse<?> response = reviewService.retrieveReviewDetails(reviewId);
+        SingleResponse<ReviewResponse> response = reviewService.retrieveReviewDetails(reviewId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_REVIEW_URI + productId + "/review/" + reviewId))
@@ -126,7 +130,7 @@ public class ReviewController {
      * @param bindingResult - validation을 체크합니다.
      * @return - Void 타입 응답객체를 반환합니다.
      */
-    @PutMapping("/{productId}/review/{reviewId}")
+    @PutMapping("/{productId}/reviews/{reviewId}")
     public ResponseEntity<Void> updateReview(@PathVariable final Long productId,
                                              @PathVariable final Long reviewId,
                                              @RequestBody @Valid final ReviewUpdateRequest reviewRequest,
@@ -150,7 +154,7 @@ public class ReviewController {
      * @param reviewId  - 후기의 식별번호 입니다.
      * @return - Void 타입 응답객체를 반환합니다.
      */
-    @DeleteMapping("/{productId}/review/{reviewId}")
+    @DeleteMapping("/{productId}/reviews/{reviewId}")
     public ResponseEntity<Void> deleteReview(@PathVariable final Long productId,
                                              @PathVariable final Long reviewId) {
         reviewService.deleteReview(reviewId);

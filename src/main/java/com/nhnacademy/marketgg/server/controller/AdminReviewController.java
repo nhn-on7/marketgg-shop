@@ -26,7 +26,7 @@ public class AdminReviewController {
     private static final String DEFAULT_REVIEW_URI = "/admin/products/";
 
     // @RoleCheck(accessLevel = Role.ROLE_ADMIN)
-    @PostMapping("/{productId}/review/{reviewId}/makeBest")
+    @PostMapping("/{productId}/reviews/{reviewId}/makeBest")
     public ResponseEntity<CommonResponse> makeBestReview(@PathVariable final Long productId,
                                                          @PathVariable final Long reviewId) {
 
@@ -35,7 +35,7 @@ public class AdminReviewController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                 DEFAULT_REVIEW_URI + productId + "/review/" + reviewId + "/makeBest"))
+                                 DEFAULT_REVIEW_URI + productId + "/reviews/" + reviewId + "/makeBest"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(response);
     }
