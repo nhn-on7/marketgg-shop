@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.controller.customerservice;
+package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.constant.CustomerServicePostReason;
 import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
@@ -29,13 +29,13 @@ import java.util.stream.Collectors;
  */
 // @RoleCheck(accessLevel = Role.ROLE_ADMIN)
 @RestController
-@RequestMapping("/admin/customer-services/oto-inquiries")
+@RequestMapping("/admin/customer-services")
 @RequiredArgsConstructor
-public class AdminOtoInquiryPostController {
+public class AdminPostController {
 
-    private final CustomerServicePostService customerServicePostService;
+    private final CustomerServicePostService postService;
 
-    private static final String DEFAULT_ADMIN_OTO_INQUIRY = "/admin/customer-services/oto-inquiries";
+    private static final String DEFAULT_ADMIN_POST = "/admin/customer-services";
 
     /**
      * 선택한 1:1 문의 단건을 조회하는 GET Mapping 을 지원합니다.
@@ -46,10 +46,10 @@ public class AdminOtoInquiryPostController {
      */
     @GetMapping("/oto-inquiries/{inquiryId}")
     public ResponseEntity<PostResponseForOtoInquiry> retrieveOtoInquiry(@PathVariable final Long inquiryId) {
-        PostResponseForOtoInquiry inquiryResponse = customerServicePostService.retrieveCustomerServicePost(inquiryId);
+        PostResponseForOtoInquiry inquiryResponse = postService.retrievePost(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_OTO_INQUIRY + "/" + inquiryId))
+                             .location(URI.create(DEFAULT_ADMIN_POST + "/oto-inquiries" + inquiryId))
                              .body(inquiryResponse);
     }
 
@@ -62,10 +62,10 @@ public class AdminOtoInquiryPostController {
      */
     @GetMapping("/oto-inquiries")
     public ResponseEntity<List<PostResponseForOtoInquiry>> retrieveOtoInquiries(final Pageable pageable) {
-        List<PostResponseForOtoInquiry> inquiryResponses = customerServicePostService.retrieveOtoInquiries(pageable);
+        List<PostResponseForOtoInquiry> inquiryResponses = postService.retrievePostList(pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_OTO_INQUIRY))
+                             .location(URI.create(DEFAULT_ADMIN_POST + "/oto-inquiries"))
                              .body(inquiryResponses);
     }
 
@@ -80,10 +80,10 @@ public class AdminOtoInquiryPostController {
     @PatchMapping("/oto-inquiries/{inquiryId}")
     public ResponseEntity<PostResponseForOtoInquiry> updateInquiryStatus(@PathVariable final Long inquiryId,
                                                                          @RequestBody final PostStatusUpdateRequest status) {
-        customerServicePostService.updateInquiryStatus(inquiryId, status);
+        postService.updateInquiryStatus(inquiryId, status);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_OTO_INQUIRY + "/" + inquiryId))
+                             .location(URI.create(DEFAULT_ADMIN_POST + "/oto-inquiries/" + inquiryId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -97,10 +97,10 @@ public class AdminOtoInquiryPostController {
      */
     @DeleteMapping("/oto-inquiries/{inquiryId}")
     public ResponseEntity<Void> deleteOtoInquiries(@PathVariable final Long inquiryId) {
-        customerServicePostService.deleteCustomerServicePost(inquiryId);
+        postService.deletePost(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_OTO_INQUIRY + "/" + inquiryId))
+                             .location(URI.create(DEFAULT_ADMIN_POST + "/oto-inquiries/" + inquiryId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -118,7 +118,7 @@ public class AdminOtoInquiryPostController {
                                      .collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_OTO_INQUIRY + "/reasons"))
+                             .location(URI.create(DEFAULT_ADMIN_POST + "/reasons"))
                              .body(reasons);
     }
 

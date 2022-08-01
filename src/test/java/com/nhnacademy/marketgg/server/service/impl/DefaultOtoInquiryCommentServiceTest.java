@@ -35,10 +35,10 @@ import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
-public class DefaultCustomerServiceCommentServiceTest {
+class DefaultOtoInquiryCommentServiceTest {
 
     @InjectMocks
-    DefaultCustomerServiceCommentService commentService;
+    DefaultOtoInquiryCommentService commentService;
 
     @Mock
     CustomerServiceCommentRepository commentRepository;
@@ -70,27 +70,6 @@ public class DefaultCustomerServiceCommentServiceTest {
         commentService.createComment(1L, 1L, new CommentRequest());
 
         then(commentRepository).should().save(any(CustomerServiceComment.class));
-    }
-
-    @Test
-    @DisplayName("댓글 단건 조회")
-    void testRetrieveComment() {
-        given(commentRepository.findCommentById(anyLong())).willReturn(
-                new CommentResponse(1L, 1L, 1L, "content", LocalDateTime.now()));
-
-        commentService.retrieveComment(1L);
-
-        then(commentRepository).should().findCommentById(anyLong());
-    }
-
-    @Test
-    @DisplayName("게시글의 댓글 목록 조회")
-    void testRetrieveCommentsByInquiry() {
-        given(commentRepository.findByInquiryId(anyLong())).willReturn(List.of());
-
-        commentService.retrieveCommentsByInquiry(1L);
-
-        then(commentRepository).should().findByInquiryId(anyLong());
     }
 
 }

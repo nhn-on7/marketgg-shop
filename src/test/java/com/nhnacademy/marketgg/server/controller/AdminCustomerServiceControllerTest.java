@@ -1,7 +1,6 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.controller.customerservice.AdminOtoInquiryPostController;
 import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import org.junit.jupiter.api.DisplayName;
@@ -27,8 +26,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AdminOtoInquiryPostController.class)
-public class AdminCustomerServiceControllerTest {
+@WebMvcTest(AdminPostController.class)
+class AdminCustomerServiceControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
@@ -37,30 +36,30 @@ public class AdminCustomerServiceControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    CustomerServicePostService customerServicePostService;
+    CustomerServicePostService postService;
 
     private static final String DEFAULT_ADMIN_CUSTOMER_SERVICE = "/admin/customer-services";
 
     @Test
     @DisplayName("1:1 문의 단건 조회 - 관리자")
-    void testRetrieveOtoInquiry() throws Exception {
-        given(customerServicePostService.retrieveCustomerServicePost(anyLong())).willReturn(null);
+    void testRetrievePost() throws Exception {
+        given(postService.retrievePost(anyLong())).willReturn(null);
 
         this.mockMvc.perform(get(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/{inquiryId}", 1L))
                     .andExpect(status().isOk());
 
-        then(customerServicePostService).should().retrieveCustomerServicePost(anyLong());
+        then(postService).should().retrievePost(anyLong());
     }
 
     @Test
     @DisplayName("1:1 문의 목록 조회 - 관리자")
-    void testRetrieveOtoInquiries() throws Exception {
-        given(customerServicePostService.retrieveOtoInquiries(any(Pageable.class))).willReturn(List.of());
+    void testRetrievePostList() throws Exception {
+        given(postService.retrievePostList(any(Pageable.class))).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries"))
                     .andExpect(status().isOk());
 
-        then(customerServicePostService).should().retrieveOtoInquiries(any(Pageable.class));
+        then(postService).should().retrievePostList(any(Pageable.class));
     }
 
     @Test
@@ -68,25 +67,25 @@ public class AdminCustomerServiceControllerTest {
     void testUpdatePostStatus() throws Exception {
         String requestBody = objectMapper.writeValueAsString(new PostStatusUpdateRequest());
 
-        willDoNothing().given(customerServicePostService).updateInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
+        willDoNothing().given(postService).updateInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
 
         this.mockMvc.perform(patch(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/{inquiryId}", 1L)
                                      .contentType(MediaType.APPLICATION_JSON)
                                      .content(requestBody))
                     .andExpect(status().isOk());
 
-        then(customerServicePostService).should().updateInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
+        then(postService).should().updateInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
     }
 
     @Test
     @DisplayName("1:1 문의 삭제 - 관리자")
     void testDeleteOtoInquiries() throws Exception {
-        willDoNothing().given(customerServicePostService).deleteCustomerServicePost(anyLong());
+        willDoNothing().given(postService).deletePost(anyLong());
 
         this.mockMvc.perform(delete(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/{inquiryId}", 1L))
                     .andExpect(status().isOk());
 
-        then(customerServicePostService).should().deleteCustomerServicePost(anyLong());
+        then(postService).should().deletePost(anyLong());
     }
 
     @Test

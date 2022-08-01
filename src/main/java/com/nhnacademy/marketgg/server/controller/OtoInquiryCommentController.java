@@ -1,7 +1,7 @@
-package com.nhnacademy.marketgg.server.controller.customerservice;
+package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.dto.request.CommentRequest;
-import com.nhnacademy.marketgg.server.service.CustomerServiceCommentService;
+import com.nhnacademy.marketgg.server.service.OtoInquiryCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,9 +25,9 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class OtoInquiryCommentController {
 
-    private final CustomerServiceCommentService customerServiceCommentService;
+    private final OtoInquiryCommentService otoInquiryCommentService;
 
-    private static final String DEFAULT_CS_COMMENT = "/customer-services/oto-inquiries";
+    private static final String DEFAULT_OTO_INQUIRY_COMMENT = "/customer-services/oto-inquiries";
 
     /**
      * 한 1:1 문의에 대해 댓글을 등록하는 POST Mapping 을 지원합니다.
@@ -42,11 +42,11 @@ public class OtoInquiryCommentController {
     public ResponseEntity<Void> createComment(@PathVariable final Long inquiryId,
                                               @PathVariable final Long memberId,
                                               @RequestBody final CommentRequest commentRequest) {
-        customerServiceCommentService.createComment(inquiryId, memberId, commentRequest);
+        otoInquiryCommentService.createComment(inquiryId, memberId, commentRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(
-                                     DEFAULT_CS_COMMENT + "/" + inquiryId + "/members/" + memberId + "/comments"))
+                                     DEFAULT_OTO_INQUIRY_COMMENT + "/" + inquiryId + "/members/" + memberId + "/comments"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

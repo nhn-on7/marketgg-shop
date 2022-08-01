@@ -1,5 +1,7 @@
-package com.nhnacademy.marketgg.server.controller.customerservice;
+package com.nhnacademy.marketgg.server.controller;
 
+import com.nhnacademy.marketgg.server.annotation.Role;
+import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
@@ -25,15 +27,15 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @version 1.0.0
  */
-// @RoleCheck(accessLevel = Role.ROLE_USER)
+@RoleCheck(accessLevel = Role.ROLE_USER)
 @RestController
-@RequestMapping("/customer-services/oto-inquiries")
+@RequestMapping("/customer-services")
 @RequiredArgsConstructor
-public class OtoInquiryPostController {
+public class PostController {
 
-    private final CustomerServicePostService customerServicePostService;
+    private final CustomerServicePostService postService;
 
-    private static final String DEFAULT_OTO_INQUIRY = "/customer-services/oto-inquiries";
+    private static final String DEFAULT_POST = "/customer-services";
 
     /**
      * 1:1 문의를 등록하는 POST Mapping 을 지원합니다.
@@ -47,14 +49,14 @@ public class OtoInquiryPostController {
      */
     @PostMapping("/oto-inquiries")
     public ResponseEntity<Void> createOtoInquiry(final MemberInfo memberInfo,
-                                                 @Valid @RequestBody final PostRequest postRequest) {
+                                                 @Valid @RequestBody
+                                                 final PostRequest postRequest) {
 
-        customerServicePostService.createOtoInquiry(memberInfo.getId(), postRequest);
+        postService.createPost(memberInfo.getId(), postRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(
-                                     DEFAULT_OTO_INQUIRY + "/members/" +
-                                             memberInfo.getId()))
+                                     DEFAULT_POST + "/oto-inquiries"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -70,34 +72,31 @@ public class OtoInquiryPostController {
     public ResponseEntity<PostResponseForOtoInquiry> retrieveOwnOtoInquiry(
             @PathVariable final Long inquiryId) {
         PostResponseForOtoInquiry inquiryResponse =
-                customerServicePostService.retrieveCustomerServicePost(inquiryId);
+                postService.retrievePost(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_OTO_INQUIRY + "/" + inquiryId))
+                                     DEFAULT_POST + "/oto-inquiries/" + inquiryId))
                              .body(inquiryResponse);
     }
 
     /**
      * 회원의 모든 1:1 문의 목록을 조회하는 GET Mapping 을 지원합니다.
      *
-     * @param memberId - 조회하는 회원의 식별번호입니다.
+     * @param memberInfo - 조회하는 회원의 정보입니다.
      * @param pageable - 페이징 처리를 위한 객체입니다.
      * @return 회원의 1:1 문의 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    @GetMapping("/oto-inquiries/members/{memberId}")
-    public ResponseEntity<List<PostResponseForOtoInquiry>> retrieveOwnOtoInquiries(
-            @PathVariable final Long memberId,
-            final Pageable pageable) {
+    @GetMapping("/oto-inquiries")
+    public ResponseEntity<List<PostResponseForOtoInquiry>> retrieveOwnOtoInquiries(final MemberInfo memberInfo, final Pageable pageable) {
+        
         List<PostResponseForOtoInquiry> inquiryResponses =
-                customerServicePostService.retrieveOwnOtoInquiries(pageable,
-                                                                   memberId);
+                postService.retrieveOwnPostList(pageable, memberInfo.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_OTO_INQUIRY + "/members/" +
-                                             memberId))
+                                     DEFAULT_POST + "/oto-inquiries"))
                              .body(inquiryResponses);
     }
 
@@ -110,11 +109,11 @@ public class OtoInquiryPostController {
      */
     @DeleteMapping("/oto-inquiries/{inquiryId}")
     public ResponseEntity<Void> deleteOtoInquiry(@PathVariable final Long inquiryId) {
-        customerServicePostService.deleteCustomerServicePost(inquiryId);
+        postService.deletePost(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_OTO_INQUIRY + "/" + inquiryId))
+                                     DEFAULT_POST + "/oto-inquiries/" + inquiryId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

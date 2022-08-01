@@ -10,7 +10,7 @@ import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.customerservicecomment.CustomerServiceCommentRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
-import com.nhnacademy.marketgg.server.service.CustomerServiceCommentService;
+import com.nhnacademy.marketgg.server.service.OtoInquiryCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DefaultCustomerServiceCommentService implements CustomerServiceCommentService {
+public class DefaultOtoInquiryCommentService implements OtoInquiryCommentService {
 
     private final CustomerServiceCommentRepository customerServiceCommentRepository;
     private final CustomerServicePostRepository customerServicePostRepository;
@@ -35,20 +35,6 @@ public class DefaultCustomerServiceCommentService implements CustomerServiceComm
         CustomerServiceComment comment = new CustomerServiceComment(csPost, member, commentRequest);
 
         customerServiceCommentRepository.save(comment);
-    }
-
-    @Override
-    public CommentResponse retrieveComment(final Long commentId) {
-        CommentResponse comment = customerServiceCommentRepository.findCommentById(commentId);
-
-        return comment;
-    }
-
-    @Override
-    public List<CommentResponse> retrieveCommentsByInquiry(final Long inquiryId) {
-        List<CommentResponse> comments = customerServiceCommentRepository.findByInquiryId(inquiryId);
-
-        return comments;
     }
 
 }

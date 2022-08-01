@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.utils;
 
-import com.nhnacademy.marketgg.client.utils.subutils.ConvertToEnglishUtil;
+import com.nhnacademy.marketgg.server.utils.subutils.ConvertToEnglishUtil;
 import java.util.regex.Pattern;
 
 /**

@@ -36,8 +36,8 @@ public class SearchAdapter implements SearchRepository {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
-    private final KoreanToEnglishTranslator koreanTranslator;
-    private final JSONParser jsonParser;
+    private final KoreanToEnglishTranslator translator;
+    private final JSONParser parser;
     private static final String DEFAULT_ELASTIC_PRODUCT = "/products/_search";
     private static final String DEFAULT_ELASTIC_BOARD =  "/boards/_search";
     private static final String PRODUCT = "product";
@@ -50,7 +50,7 @@ public class SearchAdapter implements SearchRepository {
             throws ParseException, JsonProcessingException {
 
         Map<String, String> sort = this.buildSort(priceSortType);
-        request.setRequest(request.getRequest() + " " + koreanTranslator.converter(request.getRequest()));
+        request.setRequest(request.getRequest() + " " + translator.converter(request.getRequest()));
         HttpEntity<String> requestEntity =
                 new HttpEntity<>(objectMapper.writeValueAsString(
                         new SearchRequestBodyForBool<>(optionCode, sort, request, PRODUCT)),
@@ -65,7 +65,7 @@ public class SearchAdapter implements SearchRepository {
             throws ParseException, JsonProcessingException {
 
         Map<String, String> sort = this.buildSort(priceSortType);
-        request.setRequest(request.getRequest() + " " + koreanTranslator.converter(request.getRequest()));
+        request.setRequest(request.getRequest() + " " + translator.converter(request.getRequest()));
         HttpEntity<String> requestEntity =
                 new HttpEntity<>(objectMapper.writeValueAsString(
                         new SearchRequestBody<>(sort, request)), this.buildHeaders());
@@ -80,7 +80,7 @@ public class SearchAdapter implements SearchRepository {
             throws JsonProcessingException, ParseException {
 
         Map<String, String> sort = this.buildSort(null);
-        request.setRequest(request.getRequest() + " " + koreanTranslator.converter(request.getRequest()));
+        request.setRequest(request.getRequest() + " " + translator.converter(request.getRequest()));
         HttpEntity<String> requestEntity =
                 new HttpEntity<>(objectMapper.writeValueAsString(
                         new SearchRequestBodyForBool<>(categoryCode, sort, request, BOARD)), this.buildHeaders());
@@ -97,7 +97,7 @@ public class SearchAdapter implements SearchRepository {
 
         Map<String, String> sort = this.buildSort(null);
         request.setRequest(
-                request.getRequest() + " " + koreanTranslator.converter(request.getRequest()));
+                request.getRequest() + " " + translator.converter(request.getRequest()));
         HttpEntity<String> requestEntity =
                 new HttpEntity<>(objectMapper.writeValueAsString(
                         new SearchRequestBodyForBool<>(categoryCode, sort, request, optionCode, option)),
@@ -136,7 +136,7 @@ public class SearchAdapter implements SearchRepository {
             throws ParseException, JsonProcessingException {
 
         List<T> list = new ArrayList<>();
-        JSONObject jsonObject = (JSONObject) jsonParser.parse(response);
+        JSONObject jsonObject = (JSONObject) parser.parse(response);
         JSONObject hits = (JSONObject) jsonObject.get("hits");
         JSONArray hitBody = (JSONArray) hits.get("hits");
         for (Object data : hitBody) {

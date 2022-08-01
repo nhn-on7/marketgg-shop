@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.elastic.dto.request;
 
-import com.nhnacademy.marketgg.client.dto.elastic.request.searchutil.MultiMatch;
-import com.nhnacademy.marketgg.client.dto.elastic.request.searchutil.Query;
+import com.nhnacademy.marketgg.server.elastic.dto.request.searchutil.MultiMatch;
+import com.nhnacademy.marketgg.server.elastic.dto.request.searchutil.Query;
 import java.util.Collections;
 import java.util.List;
 import lombok.Getter;

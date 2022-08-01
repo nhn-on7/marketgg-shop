@@ -4,7 +4,6 @@ import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
-import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticBoardRepository;
@@ -42,10 +41,10 @@ import static org.mockito.BDDMockito.willDoNothing;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
-public class DefaultCustomerServicePostServiceTest {
+public class DefaultPostServiceTest {
 
     @InjectMocks
-    DefaultCustomerServicePostService postService;
+    DefaultPostService postService;
 
     @Mock
     ElasticBoardRepository elasticBoardRepository;
@@ -82,7 +81,7 @@ public class DefaultCustomerServicePostServiceTest {
         given(categoryRepository.findById(anyString())).willReturn(Optional.of(category));
         given(categoryRepository.retrieveCategoryIdByName(anyString())).willReturn("702");
 
-        postService.createOtoInquiry(1L, new PostRequest());
+        postService.createPost(1L, new PostRequest());
 
         then(postRepository).should().save(any(CustomerServicePost.class));
         then(elasticBoardRepository).should().save(any(ElasticBoard.class));
@@ -97,7 +96,7 @@ public class DefaultCustomerServicePostServiceTest {
         given(postRepository.findOtoInquiryById(anyLong())).willReturn(otoInquiry);
         given(commentRepository.findByInquiryId(anyLong())).willReturn(List.of());
 
-        postService.retrieveCustomerServicePost(1L);
+        postService.retrievePost(1L);
 
         then(postRepository).should().findOtoInquiryById(anyLong());
         then(commentRepository).should().findByInquiryId(anyLong());
@@ -110,7 +109,7 @@ public class DefaultCustomerServicePostServiceTest {
         given(postRepository.findPostsByCategoryId(any(Pageable.class), anyString()))
                 .willReturn(Page.empty());
 
-        postService.retrieveOtoInquiries(PageRequest.of(0, 10));
+        postService.retrievePostList(PageRequest.of(0, 10));
 
         then(postRepository).should().findPostsByCategoryId(any(Pageable.class), anyString());
     }
@@ -122,7 +121,7 @@ public class DefaultCustomerServicePostServiceTest {
         given(postRepository.findPostByCategoryAndMember(any(Pageable.class), anyString(), anyLong()))
                 .willReturn(Page.empty());
 
-        postService.retrieveOwnOtoInquiries(PageRequest.of(0, 10), 1L);
+        postService.retrieveOwnPostList(PageRequest.of(0, 10), 1L);
 
         then(postRepository).should()
                             .findPostByCategoryAndMember(any(Pageable.class), anyString(), anyLong());
@@ -140,7 +139,7 @@ public class DefaultCustomerServicePostServiceTest {
         willDoNothing().given(postRepository).delete(any(CustomerServicePost.class));
 
         postRepository.save(csPost);
-        postService.deleteCustomerServicePost(1L);
+        postService.deletePost(1L);
 
         then(postRepository).should().findById(anyLong());
         then(postRepository).should().delete(any(CustomerServicePost.class));

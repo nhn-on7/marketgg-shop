@@ -4,6 +4,7 @@ import com.nhnacademy.marketgg.server.elastic.repository.ElasticRepositoryMarker
 import com.nhnacademy.marketgg.server.repository.JpaRepositoryMarker;
 import com.nhnacademy.marketgg.server.utils.KoreanToEnglishTranslator;
 import java.time.Duration;
+import org.json.simple.parser.JSONParser;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -48,6 +49,11 @@ public class ElasticConfig {
     @Bean
     public KoreanToEnglishTranslator translator() {
         return new KoreanToEnglishTranslator();
+    }
+
+    @Bean
+    public JSONParser parser() {
+        return new JSONParser();
     }
 
 }

@@ -1,9 +1,8 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.controller.customerservice.OtoInquiryCommentController;
 import com.nhnacademy.marketgg.server.dto.request.CommentRequest;
-import com.nhnacademy.marketgg.server.service.CustomerServiceCommentService;
+import com.nhnacademy.marketgg.server.service.OtoInquiryCommentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class OtoInquiryCommentControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    CustomerServiceCommentService customerServiceCommentService;
+    OtoInquiryCommentService otoInquiryCommentService;
 
     private static final String DEFAULT_CS_COMMENT = "/customer-services/oto-inquiries";
 
@@ -39,7 +38,7 @@ public class OtoInquiryCommentControllerTest {
     void testCreateComment() throws Exception {
         String requestBody = objectMapper.writeValueAsString(new CommentRequest());
 
-        willDoNothing().given(customerServiceCommentService)
+        willDoNothing().given(otoInquiryCommentService)
                        .createComment(anyLong(), anyLong(), any(CommentRequest.class));
 
         this.mockMvc.perform(post(DEFAULT_CS_COMMENT + "/{inquiryId}/members/{memberId}/comments",1L, 1L)
@@ -47,8 +46,8 @@ public class OtoInquiryCommentControllerTest {
                                      .content(requestBody))
                     .andExpect(status().isCreated());
 
-        then(customerServiceCommentService).should()
-                                           .createComment(anyLong(), anyLong(), any(CommentRequest.class));
+        then(otoInquiryCommentService).should()
+                                      .createComment(anyLong(), anyLong(), any(CommentRequest.class));
     }
 
 }

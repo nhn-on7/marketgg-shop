@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class DefaultCustomerServicePostService implements CustomerServicePostService {
+public class DefaultPostService implements CustomerServicePostService {
 
     private final CustomerServicePostRepository postRepository;
     private final CategoryRepository categoryRepository;
@@ -40,7 +40,7 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
 
     @Transactional
     @Override
-    public void createOtoInquiry(final Long memberId, final PostRequest postRequest) {
+    public void createPost(final Long memberId, final PostRequest postRequest) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY);
         Category category = categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
@@ -52,14 +52,14 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
     }
 
     @Override
-    public PostResponseForOtoInquiry retrieveCustomerServicePost(final Long inquiryId) {
+    public PostResponseForOtoInquiry retrievePost(final Long inquiryId) {
         PostResponseForOtoInquiry otoInquiry = postRepository.findOtoInquiryById(inquiryId);
 
         return addCommentList(otoInquiry);
     }
 
     @Override
-    public List<PostResponseForOtoInquiry> retrieveOtoInquiries(final Pageable pageable) {
+    public List<PostResponseForOtoInquiry> retrievePostList(final Pageable pageable) {
         List<PostResponseForOtoInquiry> result = new ArrayList<>();
         String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY);
         List<PostResponseForOtoInquiry> otoInquiries = postRepository.findPostsByCategoryId(pageable,
@@ -74,7 +74,7 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
     }
 
     @Override
-    public List<PostResponseForOtoInquiry> retrieveOwnOtoInquiries(final Pageable pageable, final Long memberId) {
+    public List<PostResponseForOtoInquiry> retrieveOwnPostList(final Pageable pageable, final Long memberId) {
         List<PostResponseForOtoInquiry> result = new ArrayList<>();
         String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY);
 
@@ -109,7 +109,7 @@ public class DefaultCustomerServicePostService implements CustomerServicePostSer
 
     @Transactional
     @Override
-    public void deleteCustomerServicePost(final Long csPostId) {
+    public void deletePost(final Long csPostId) {
         CustomerServicePost otoInquiry = postRepository.findById(csPostId)
                                                        .orElseThrow(
                                                                               CustomerServicePostNotFoundException::new);
