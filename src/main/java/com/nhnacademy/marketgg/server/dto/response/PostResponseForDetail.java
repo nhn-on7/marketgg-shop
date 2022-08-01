@@ -3,6 +3,8 @@ package com.nhnacademy.marketgg.server.dto.response;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @RequiredArgsConstructor
 @Getter
 public class PostResponseForDetail {
@@ -17,8 +19,8 @@ public class PostResponseForDetail {
 
     private final String status;
 
-    private final String createdAt;
+    private final LocalDateTime createdAt;
 
-    private final String updatedAt;
+    private final LocalDateTime updatedAt;
 
 }

@@ -81,7 +81,7 @@ public class DefaultPostService implements CustomerServicePostService {
     }
 
     @Override
-    public List<PostResponse> retrievesOwnPostList(final Integer page, final String categoryCode, final Long memberId) {
+    public List<PostResponse> retrieveOwnPostList(final Integer page, final String categoryCode, final Long memberId) {
         return postRepository.findPostByCategoryAndMember(PageRequest.of(page, 10), categoryCode, memberId)
                              .getContent();
     }

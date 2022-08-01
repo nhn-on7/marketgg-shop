@@ -6,6 +6,10 @@ import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ProductToCartRequest;
+import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
+import com.nhnacademy.marketgg.server.dto.response.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.CartProduct;
@@ -13,11 +17,13 @@ import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Product;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Dummy {
@@ -112,7 +118,7 @@ public class Dummy {
 
     public static Product getDummyProduct(Long productId, Long assetId) {
         Product product =
-            new Product(getDummyProductCreateRequest(), getDummyAsset(assetId), getDummyCategory());
+                new Product(getDummyProductCreateRequest(), getDummyAsset(assetId), getDummyCategory());
         ReflectionTestUtils.setField(product, "id", productId);
 
         return product;
@@ -149,4 +155,32 @@ public class Dummy {
     public static CartProduct getCartProduct(Long cartId, Long productId, Integer amount) {
         return new CartProduct(getDummyCart(cartId), getDummyProduct(productId), amount);
     }
+
+    public static PostResponseForDetail getDummyPostResponseForDetail() {
+        return new PostResponseForDetail(1L, "title", "content", "기타", "",
+                                         LocalDateTime.now(), LocalDateTime.now());
+    }
+
+    public static PostResponseForOtoInquiry getDummyPostResponseForOtoInquiry() {
+        PostResponseForOtoInquiry otoInquiry = new PostResponseForOtoInquiry();
+        ReflectionTestUtils.setField(otoInquiry, "id", 1L);
+        ReflectionTestUtils.setField(otoInquiry, "title", "title");
+        ReflectionTestUtils.setField(otoInquiry, "content", "content");
+        ReflectionTestUtils.setField(otoInquiry, "reason", "배송");
+        ReflectionTestUtils.setField(otoInquiry, "status", "답변중");
+        ReflectionTestUtils.setField(otoInquiry, "createdAt", LocalDateTime.now());
+        ReflectionTestUtils.setField(otoInquiry, "updatedAt", LocalDateTime.now());
+        ReflectionTestUtils.setField(otoInquiry, "commentList", List.of(getDummyCommentResponse()));
+
+        return otoInquiry;
+    }
+
+    public static CommentResponse getDummyCommentResponse() {
+        return new CommentResponse("content", 1L, LocalDateTime.now());
+    }
+
+    public static PostResponse getDummyPostResponse() {
+        return new PostResponse(1L, "701", "title", "상품", "empty", LocalDateTime.now());
+    }
+
 }

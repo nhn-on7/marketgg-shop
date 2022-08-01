@@ -110,10 +110,10 @@ public class PostController {
      * @since 1.0.0
      */
     @GetMapping("/categories/{categoryCode}")
-    public ResponseEntity<List<PostResponse>> retrievesPostList(@PathVariable final String categoryCode,
-                                                                final MemberInfo memberInfo, final Integer page) {
+    public ResponseEntity<List<PostResponse>> retrievePostList(@PathVariable final String categoryCode,
+                                                               final MemberInfo memberInfo, final Integer page) {
 
-        List<PostResponse> responses = postService.retrievesOwnPostList(page, categoryCode, memberInfo.getId());
+        List<PostResponse> responses = postService.retrieveOwnPostList(page, categoryCode, memberInfo.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/categories/" + categoryCode))
@@ -205,7 +205,7 @@ public class PostController {
     public ResponseEntity<Void> deleteOtoInquiry(@PathVariable final Long boardNo) {
         postService.deletePost(boardNo);
 
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .location(URI.create(DEFAULT_POST + "/oto-inquiries/" + boardNo))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();

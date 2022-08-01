@@ -18,7 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -44,10 +43,12 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,10 +63,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 })
 class AdminPostControllerTest {
 
+    MockMvc mockMvc;
+
     @Autowired
     ObjectMapper objectMapper;
-
-    MockMvc mockMvc;
 
     @MockBean
     CustomerServicePostService postService;
@@ -83,8 +84,8 @@ class AdminPostControllerTest {
     @BeforeEach
     void setUp(WebApplicationContext wac) throws JsonProcessingException {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
-                                 .alwaysDo(print())
-                                 .build();
+                                      .alwaysDo(print())
+                                      .build();
 
         uuid = UUID.randomUUID().toString();
         MemberInfo memberInfo = Dummy.getDummyMemberInfo(memberId, new Cart());
@@ -109,32 +110,60 @@ class AdminPostControllerTest {
                                      .content(requestBody))
                     .andExpect(status().isCreated());
 
-        then(postService).should().createPost(anyLong(), any(PostRequest.class));
+        then(postService).should(times(1)).createPost(anyLong(), any(PostRequest.class));
+    }
+
+    @Test
+    @DisplayName("고객센터 게시글 단건 조회 - 관리자")
+    void testRetrievePost() throws Exception {
+        given(postService.retrievePost(anyLong())).willReturn(Dummy.getDummyPostResponseForDetail());
+
+        this.mockMvc.perform(get(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/{boardNo}", 1L)
+                                     .headers(headers))
+                    .andExpect(status().isOk());
+
+        then(postService).should(times(1)).retrievePost(anyLong());
     }
 
     @Test
     @DisplayName("1:1 문의 단건 조회 - 관리자")
-    void testRetrievePost() throws Exception {
-        given(postService.retrieveOtoInquiryPost(anyLong())).willReturn(null);
+    void testRetrieveOtoInquiryPost() throws Exception {
+        given(postService.retrieveOtoInquiryPost(anyLong())).willReturn(Dummy.getDummyPostResponseForOtoInquiry());
 
-        this.mockMvc.perform(get(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/{inquiryId}", 1L)
+        this.mockMvc.perform(get(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/{boardNo}", 1L)
                                      .headers(headers))
                     .andExpect(status().isOk());
 
-        then(postService).should().retrieveOtoInquiryPost(anyLong());
+        then(postService).should(times(1)).retrieveOtoInquiryPost(anyLong());
     }
 
     @Test
-    @DisplayName("1:1 문의 목록 조회 - 관리자")
+    @DisplayName("카테고리 번호에 따른 게시글 목록 조회 - 관리자")
     void testRetrievePostList() throws Exception {
-        given(postService.retrievePostList(anyString(), anyInt())).willReturn(List.of());
+        given(postService.retrievePostList(anyString(), anyInt())).willReturn(List.of(Dummy.getDummyPostResponse()));
 
-        this.mockMvc.perform(get(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/categories/702")
+        this.mockMvc.perform(get(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/categories/{categoryCode}", "702")
                                      .headers(headers)
                                      .param("page", "1"))
                     .andExpect(status().isOk());
 
-        then(postService).should().retrievePostList(anyString(), anyInt());
+        then(postService).should(times(1)).retrievePostList(anyString(), anyInt());
+    }
+
+    @Test
+    @DisplayName("고객센터 게시글 수정")
+    void testUpdatePost() throws Exception {
+        String requestBody = objectMapper.writeValueAsString(new PostRequest());
+
+        willDoNothing().given(postService).updatePost(anyLong(), anyLong(), any(PostRequest.class));
+
+        this.mockMvc.perform(put(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/{boardNo}", 1L)
+                                     .headers(headers)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
+                    .andExpect(status().isOk());
+
+        then(postService).should(times(1)).updatePost(anyLong(), anyLong(), any(PostRequest.class));
     }
 
     @Test
@@ -142,18 +171,15 @@ class AdminPostControllerTest {
     void testUpdatePostStatus() throws Exception {
         String requestBody = objectMapper.writeValueAsString(new PostStatusUpdateRequest());
 
-        willDoNothing().given(postService)
-                       .updateInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
+        willDoNothing().given(postService).updateInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
 
-        this.mockMvc.perform(
-                    patch(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/{inquiryId}", 1L)
-                            .headers(headers)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(requestBody))
+        this.mockMvc.perform(patch(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/{boardNo}", 1L)
+                                     .headers(headers)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
                     .andExpect(status().isOk());
 
-        then(postService).should()
-                         .updateInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
+        then(postService).should().updateInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
     }
 
     @Test
@@ -161,10 +187,9 @@ class AdminPostControllerTest {
     void testDeleteOtoInquiries() throws Exception {
         willDoNothing().given(postService).deletePost(anyLong());
 
-        this.mockMvc.perform(
-                    delete(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/{inquiryId}", 1L)
-                            .headers(headers))
-                    .andExpect(status().isOk());
+        this.mockMvc.perform(delete(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/{boardNo}", 1L)
+                                     .headers(headers))
+                    .andExpect(status().isNoContent());
 
         then(postService).should().deletePost(anyLong());
     }

@@ -66,7 +66,7 @@ public interface CustomerServicePostService {
      * @return 회원의 1:1 문의 전체 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    List<PostResponse> retrievesOwnPostList(final Integer page, final String categoryCode, final Long memberId);
+    List<PostResponse> retrieveOwnPostList(final Integer page, final String categoryCode, final Long memberId);
 
     /**
      * 게시판 타입별고 검색을 진행 할 수 있습니다.

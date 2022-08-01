@@ -77,7 +77,7 @@ public class AdminPostController {
     }
 
     /**
-     * 선택한 게시글을 조회하는 GET Mapping 을 지원합니다.
+     * 선택한 1:1 문의를 조회하는 GET Mapping 을 지원합니다.
      *
      * @param boardNo - 조회할 게시글의 식별번호입니다.
      * @return 조회할 게시글의 정보를 담은 객체를 반환합니다.
@@ -163,7 +163,7 @@ public class AdminPostController {
     public ResponseEntity<Void> deletePost(@PathVariable final Long boardNo) {
         postService.deletePost(boardNo);
 
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .location(URI.create(DEFAULT_ADMIN_POST + "/" + boardNo))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();

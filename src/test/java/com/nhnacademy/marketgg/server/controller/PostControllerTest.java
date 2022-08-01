@@ -24,6 +24,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -35,7 +36,6 @@ import java.util.UUID;
 
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATION;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -43,6 +43,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -96,7 +97,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("1:1 문의 등록")
+    @DisplayName("1:1 문의 등록 - 사용자")
     void testCreateOtoInquiry() throws Exception {
         String requestBody = objectMapper.writeValueAsString(new PostRequest());
 
@@ -112,11 +113,23 @@ class PostControllerTest {
     }
 
     @Test
+    @DisplayName("고객센터 게시글 단건 조회 - 사용자")
+    void testRetrievePost() throws Exception {
+        given(postService.retrievePost(anyLong())).willReturn(Dummy.getDummyPostResponseForDetail());
+
+        this.mockMvc.perform(get(DEFAULT_POST + "/{boardNo}", 1L)
+                                     .headers(headers))
+                    .andExpect(status().isOk());
+
+        then(postService).should(times(1)).retrievePost(anyLong());
+    }
+
+    @Test
     @DisplayName("1:1 문의 단건 조회 - 사용자")
     void testRetrieveOtoInquiry() throws Exception {
-        given(postService.retrieveOtoInquiryPost(anyLong())).willReturn(null);
+        given(postService.retrieveOtoInquiryPost(anyLong())).willReturn(Dummy.getDummyPostResponseForOtoInquiry());
 
-        this.mockMvc.perform(get(DEFAULT_POST + "/oto-inquiries/{inquiryId}", 1L)
+        this.mockMvc.perform(get(DEFAULT_POST + "/oto-inquiries/{boardNo}", 1L)
                                      .headers(headers))
                     .andExpect(status().isOk());
 
@@ -124,37 +137,57 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("본인 1:1 문의 목록 조회 - 사용자")
-    void testRetrieveOwnOtoInquiries() throws Exception {
-        given(postService.retrievesOwnPostList(anyInt(), anyString(), anyLong())).willReturn(List.of());
+    @DisplayName("지정한 게시판 타입의 회원의 모든 고객센터 게시글 목록 조회 - 사용자")
+    void testRetrievePostList() throws Exception {
+        given(postService.retrieveOwnPostList(anyInt(), anyString(), anyLong())).willReturn(
+                List.of(Dummy.getDummyPostResponse()));
 
-        this.mockMvc.perform(get(DEFAULT_POST + "/categories/702")
+        this.mockMvc.perform(get(DEFAULT_POST + "/categories/{categoryCode}", "702")
                                      .headers(headers)
                                      .param("page", "1"))
                     .andExpect(status().isOk());
 
-        then(postService).should().retrievesOwnPostList(anyInt(), anyString(), anyLong());
+        then(postService).should(times(1)).retrieveOwnPostList(anyInt(), anyString(), anyLong());
     }
+
+    // @Test
+    // @DisplayName("지정한 게시판 타입의 전체 목록 검색 결과 조회 - 사용자")
+    // void testSearchPostListForCategory() throws Exception {
+    //     TODO: 여기 SearchRequest 가 엘라 서버건지 샵 서버건지 확인 필요
+    // }
+
+    // @Test
+    // @DisplayName("지정한 게시판 타입의 Reason 옵션으로 검색한 결과 조회 - 사용자")
+    // void testSearchPostListForReason() throws Exception {
+    //
+    // }
+
+    // @Test
+    // @DisplayName("지정한 게시판 타입의 Status 옵션으로 검색한 결과 조회 - 사용자")
+    // void testPostListForStatus() throws Exception {
+    //
+    // }
 
     @Test
     @DisplayName("1:1 문의 삭제 - 사용자")
-    void testDeleteOtoInquiries() throws Exception {
+    void testDeleteOtoInquiry() throws Exception {
         willDoNothing().given(postService).deletePost(anyLong());
 
-        this.mockMvc.perform(delete(DEFAULT_POST + "/oto-inquiries/{inquiryId}", 1L)
+        this.mockMvc.perform(delete(DEFAULT_POST + "/oto-inquiries/{boardNo}", 1L)
                                      .headers(headers))
-                    .andExpect(status().isOk());
+                    .andExpect(status().isNoContent());
 
-        then(postService).should().deletePost(anyLong());
+        then(postService).should(times(1)).deletePost(anyLong());
     }
 
     @Test
-    @DisplayName("고객센터 게시글 사유 목록 조회")
+    @DisplayName("고객센터 게시글의 선택 가능한 사유 목록 조회 - 사용자")
     void testRetrieveAllReasonValues() throws Exception {
-        this.mockMvc.perform(get(DEFAULT_POST + "/reasons")
-                                     .headers(headers))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.size()", is(9)));
+        MvcResult mvcResult = this.mockMvc.perform(get(DEFAULT_POST + "/reasons")
+                                                           .headers(headers))
+                                          .andExpect(status().isOk())
+                                          .andExpect(jsonPath("$.size()").value(9))
+                                          .andReturn();
     }
 
 }

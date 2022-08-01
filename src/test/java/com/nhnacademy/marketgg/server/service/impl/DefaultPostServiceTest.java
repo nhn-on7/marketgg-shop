@@ -118,7 +118,7 @@ public class DefaultPostServiceTest {
         given(postRepository.findPostByCategoryAndMember(any(Pageable.class), anyString(), anyLong()))
                 .willReturn(Page.empty());
 
-        postService.retrievesOwnPostList(0, "702", 1L);
+        postService.retrieveOwnPostList(0, "702", 1L);
 
         then(postRepository).should()
                             .findPostByCategoryAndMember(any(Pageable.class), anyString(), anyLong());
