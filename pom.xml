@@ -23,7 +23,7 @@
         <spring-cloud.version>2021.0.3</spring-cloud.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <jacoco.version>0.8.8</jacoco.version>
+        <jacoco.version>0.8.6</jacoco.version>
     </properties>
 
     <dependencyManagement>
@@ -142,18 +142,18 @@
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
+                        <phase>test-compile</phase>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
-                        <phase>test-compile</phase>
                     </execution>
 
                     <execution>
                         <id>report</id>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <phase>test</phase>
                     </execution>
 
                 </executions>
