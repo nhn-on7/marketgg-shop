@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.elastic.adapter;
+package com.nhnacademy.marketgg.server.elastic.repository.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
