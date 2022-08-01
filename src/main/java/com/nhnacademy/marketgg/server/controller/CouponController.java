@@ -36,8 +36,6 @@ public class CouponController {
 
     private final CouponService couponService;
 
-    private static final String DEFAULT_COUPON = "/admin/coupons";
-
     /**
      * 입력한 정보로 쿠폰을 등록하는 PostMapping 을 지원합니다.
      *
@@ -118,7 +116,7 @@ public class CouponController {
     public ResponseEntity<CommonResponse> deleteCoupon(@PathVariable final Long couponId) {
         couponService.deleteCoupon(couponId);
 
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(new SingleResponse<>("200 success"));
     }

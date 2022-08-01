@@ -20,4 +20,32 @@ public class GivenCouponNotFoundException extends NotFoundException {
         super(ERROR);
     }
 
+    /**
+     * 쿠폰 지급할 회원의 정보를 찾을 수 없을 때 예외처리입니다.
+     *
+     * @version 1.0.0
+     */
+    public static class MemberInfoNotFoundException extends NotFoundException {
+
+        private static final String ERROR = "쿠폰 지급할 회원 정보를 찾을 수 없습니다.";
+
+        public MemberInfoNotFoundException() {
+            super(ERROR);
+        }
+    }
+
+    /**
+     * 지급할 쿠폰의 정보를 찾을 수 없을 때 예외처리입니다.
+     *
+     * @version 1.0.0
+     */
+    public static class CouponInfoNotFoundException extends NotFoundException {
+
+        private static final String ERROR = "지급할 쿠폰의 정보를 찾을 수 없습니다.";
+
+        public CouponInfoNotFoundException() {
+            super(ERROR);
+        }
+    }
+
 }

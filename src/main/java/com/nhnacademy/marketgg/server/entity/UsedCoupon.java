@@ -1,11 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.UsedCouponDto;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
@@ -15,7 +11,11 @@ import javax.persistence.JoinColumns;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.io.Serializable;
+import javax.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Table(name = "used_coupons")
 @Entity
@@ -45,12 +45,15 @@ public class UsedCoupon {
     public static class Pk implements Serializable {
 
         @Column(name = "order_no")
+        @NotNull
         private Long orderId;
 
         @Column(name = "coupon_no")
+        @NotNull
         private Long couponId;
 
         @Column(name = "member_no")
+        @NotNull
         private Long memberId;
 
         public Pk(Long orderId, Long couponId, Long memberId) {

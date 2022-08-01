@@ -29,29 +29,29 @@ import javax.validation.constraints.Positive;
 @Setter
 public class Coupon {
 
+    @Column(name = "coupon_no")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "coupon_no")
     private Long id;
 
-    @NotBlank(message = "쿠폰 이름이 유효하지 않습니다.")
     @Column
+    @NotBlank(message = "쿠폰 이름이 유효하지 않습니다.")
     private String name;
 
-    @NotBlank
     @Column
+    @NotBlank
     private String type;
 
-    @Min(0)
     @Column(name = "expired_date")
+    @Positive
     private Integer expiredDate;
 
-    @Positive
     @Column(name = "minimum_money")
+    @Positive
     private Integer minimumMoney;
 
-    @NotNull
     @Column(name = "discount_amount")
+    @NotNull
     private Double discountAmount;
 
     // MEMO 0: 생성자 주석함

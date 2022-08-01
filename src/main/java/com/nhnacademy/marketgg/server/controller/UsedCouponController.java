@@ -58,7 +58,7 @@ public class UsedCouponController {
     public ResponseEntity<CommonResponse> deleteUsedCoupons(@Valid @RequestBody final UsedCouponDto usedCouponDto) {
         usedCouponService.deleteUsedCoupons(usedCouponDto);
 
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(new SingleResponse<>("201 success"));
     }

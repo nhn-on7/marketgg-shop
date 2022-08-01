@@ -1,18 +1,22 @@
 package com.nhnacademy.marketgg.server.dto.request;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
-// MEMO 2: Builder 로 Dto 에서 Entity 로 변환하는 생성자 MapStruct 가 만들어준당
+/**
+ * 쿠폰의 요청과 응답의 DTO 입니다.
+ *
+ * @version 1.0.0
+ */
 @AllArgsConstructor
+// MEMO 2: Builder 로 Dto 에서 Entity 로 변환하는 생성자 MapStruct 가 만들어준당
 @Builder
 @Getter
 @NoArgsConstructor
@@ -29,7 +33,7 @@ public class CouponDto {
     private String type;
 
     @NotNull
-    @Min(0)
+    @Positive
     private Integer expiredDate;
 
     @NotNull
