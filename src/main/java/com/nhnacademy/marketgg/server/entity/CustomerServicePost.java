@@ -54,7 +54,7 @@ public class CustomerServicePost {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public CustomerServicePost(Member member, Category category, PostRequest postRequest) {
+    public CustomerServicePost(final Member member, final Category category, final PostRequest postRequest) {
         this.member = member;
         this.category = category;
         this.content = postRequest.getContent();
@@ -65,7 +65,14 @@ public class CustomerServicePost {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void updatePostStatus(String status) {
+    public void updatePost(final PostRequest postRequest) {
+        this.title = postRequest.getTitle();
+        this.content = postRequest.getContent();
+        this.reason = postRequest.getReason();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updatePostStatus(final String status) {
         this.status = status;
         this.updatedAt = LocalDateTime.now();
     }

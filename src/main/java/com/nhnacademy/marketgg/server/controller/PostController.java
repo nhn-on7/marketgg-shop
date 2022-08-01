@@ -5,6 +5,7 @@ import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.constant.CustomerServicePostReason;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
+import com.nhnacademy.marketgg.server.dto.response.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import java.net.URI;
@@ -87,15 +88,15 @@ public class PostController {
      * 회원의 모든 1:1 문의 목록을 조회하는 GET Mapping 을 지원합니다.
      *
      * @param memberInfo - 조회하는 회원의 정보입니다.
-     * @param pageable - 페이징 처리를 위한 객체입니다.
+     * @param page - 페이징 처리를 위한 페이지 번호입니다..
      * @return 회원의 1:1 문의 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
     @GetMapping("/oto-inquiries")
-    public ResponseEntity<List<PostResponseForOtoInquiry>> retrieveOwnOtoInquiries(final MemberInfo memberInfo, final Pageable pageable) {
+    public ResponseEntity<List<PostResponse>> retrieveOwnOtoInquiries(final MemberInfo memberInfo, final Integer page) {
         
-        List<PostResponseForOtoInquiry> inquiryResponses =
-                postService.retrieveOwnPostList(pageable, memberInfo.getId());
+        List<PostResponse> inquiryResponses =
+                postService.retrievesOwnPostList(page, "702", memberInfo.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(

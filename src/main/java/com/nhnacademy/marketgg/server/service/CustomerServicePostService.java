@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.service;
 
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import org.springframework.data.domain.Pageable;
 
@@ -35,21 +36,25 @@ public interface CustomerServicePostService {
     /**
      * 1:1 문의 전체 목록을 조회하는 메소드입니다.
      *
-     * @param pageable - 페이징 처리를 위한 객체입니다.
+     * @param categoryCode - 페이징 처리를 위한 객체입니다.
+     * @param page - 조회 할 페이지 번호입니다.
      * @return 1:1 문의 전체 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    List<PostResponseForOtoInquiry> retrievePostList(final Pageable pageable);
+    List<PostResponse> retrievePostList(final String categoryCode, final Integer page);
 
     /**
      * 회원 본인의 1:1 전체 목록을 조회하는 메소드입니다.
      *
-     * @param pageable - 페이징 처리를 위한 객체입니다.
+     * @param page - 페이징 처리를 위한 페이지 번호입니다.
+     * @param categoryCode - 조회할 게시글의 게시판 타입입니다.
      * @param memberId - 조회하는 회원의 식별번호입니다.
      * @return 회원의 1:1 문의 전체 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    List<PostResponseForOtoInquiry> retrieveOwnPostList(final Pageable pageable, final Long memberId);
+    List<PostResponse> retrievesOwnPostList(final Integer page, final String categoryCode, final Long memberId);
+
+    void updatePost(final Long memberNo, final Long boardNo, final PostRequest postRequest);
 
     /**
      * 1:1 문의의 상태를 변경하는 메소드입니다.

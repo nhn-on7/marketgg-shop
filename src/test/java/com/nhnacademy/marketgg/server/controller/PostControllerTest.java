@@ -4,7 +4,9 @@ import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATION;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -124,14 +126,13 @@ class PostControllerTest {
     @Test
     @DisplayName("본인 1:1 문의 목록 조회 - 사용자")
     void testRetrieveOwnOtoInquiries() throws Exception {
-        given(postService.retrieveOwnPostList(any(Pageable.class), anyLong())).willReturn(
-                List.of());
+        given(postService.retrievesOwnPostList(anyInt(), anyString(), anyLong())).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_POST + "/oto-inquiries")
                                      .headers(headers))
                     .andExpect(status().isOk());
 
-        then(postService).should().retrieveOwnPostList(any(Pageable.class), anyLong());
+        then(postService).should().retrievesOwnPostList(anyInt(), anyString(), anyLong());
     }
 
     @Test

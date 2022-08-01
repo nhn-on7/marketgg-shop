@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.customerservicepost;
 
+import com.nhnacademy.marketgg.server.dto.response.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.QCustomerServicePost;
@@ -31,10 +32,16 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Page<PostResponseForOtoInquiry> findPostsByCategoryId(final Pageable pageable, final String categoryId) {
-        QueryResults<PostResponseForOtoInquiry> result = from(csPost)
+    public Page<PostResponse> findPostsByCategoryId(final Pageable pageable, final String categoryId) {
+        QueryResults<PostResponse> result = from(csPost)
                 .where(csPost.category.id.eq(categoryId))
-                .select(selectAllCsPostColumns())
+                .select(Projections.fields(PostResponse.class,
+                                           csPost.id.as("boardNo"),
+                                           csPost.category.id.as("categoryCode"),
+                                           csPost.title,
+                                           csPost.reason,
+                                           csPost.status,
+                                           csPost.createdAt))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
@@ -43,11 +50,17 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Page<PostResponseForOtoInquiry> findPostByCategoryAndMember(final Pageable pageable, final String categoryId, final Long memberId) {
-        QueryResults<PostResponseForOtoInquiry> result = from(csPost)
+    public Page<PostResponse> findPostByCategoryAndMember(final Pageable pageable, final String categoryId, final Long memberId) {
+        QueryResults<PostResponse> result = from(csPost)
                 .where(csPost.category.id.eq(categoryId))
                 .where(csPost.member.id.eq(memberId))
-                .select(selectAllCsPostColumns())
+                .select(Projections.fields(PostResponse.class,
+                                           csPost.id.as("boardNo"),
+                                           csPost.category.id.as("categoryCode"),
+                                           csPost.title,
+                                           csPost.reason,
+                                           csPost.status,
+                                           csPost.createdAt))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();

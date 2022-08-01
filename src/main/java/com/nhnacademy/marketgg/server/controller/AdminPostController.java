@@ -2,13 +2,15 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
+import com.nhnacademy.marketgg.server.dto.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +18,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -35,58 +40,80 @@ public class AdminPostController {
 
     private static final String DEFAULT_ADMIN_POST = "/admin/customer-services";
 
-    /**
-     * 선택한 1:1 문의 단건을 조회하는 GET Mapping 을 지원합니다.
-     *
-     * @param inquiryId - 조회할 1:1 문의의 식별번호입니다.
-     * @return 1:1 문의의 정보를 담은 객체를 반환합니다.
-     * @since 1.0.0
-     */
-    @GetMapping("/oto-inquiries/{inquiryId}")
-    public ResponseEntity<PostResponseForOtoInquiry> retrieveOtoInquiry(
-            @PathVariable final Long inquiryId) {
-        PostResponseForOtoInquiry inquiryResponse = postService.retrievePost(inquiryId);
+    @PostMapping
+    public ResponseEntity<Void> response(@RequestBody final PostRequest postRequest, final MemberInfo memberInfo) {
+
+        postService.createPost(memberInfo.getId(), postRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(
-                                     URI.create(DEFAULT_ADMIN_POST + "/oto-inquiries" + inquiryId))
+                             .location(URI.create(DEFAULT_ADMIN_POST))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
+    }
+
+    /**
+     * 선택한 게시글을 조회하는 GET Mapping 을 지원합니다.
+     *
+     * @param boardNo - 조회할 게시글의 식별번호입니다.
+     * @return 조회할 게시글의 정보를 담은 객체를 반환합니다.
+     * @since 1.0.0
+     */
+    @GetMapping("/{boardNo}")
+    public ResponseEntity<PostResponseForOtoInquiry> retrievePost(@PathVariable final Long boardNo) {
+        PostResponseForOtoInquiry inquiryResponse = postService.retrievePost(boardNo);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(DEFAULT_ADMIN_POST + "/" + boardNo))
                              .body(inquiryResponse);
     }
 
     /**
-     * 모든 1:1 문의 목록을 조회하는 GET Mapping 을 지원합니다.
+     * 선택한 카테고리 번호의 모든 게시글 목록을 조회하는 GET Mapping 을 지원합니다.
      *
-     * @param pageable - 페이징 처리를 위한 객체입니다.
-     * @return 1:1 문의 목록을 List 로 반환합니다.
+     * @param categoryCode - 조회할 게시글의 게시판 타입입니다.
+     * @param page         - 조회 할 페이지 번호입니다.
+     * @return 게시글 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    @GetMapping("/oto-inquiries")
-    public ResponseEntity<List<PostResponseForOtoInquiry>> retrieveOtoInquiries(
-            final Pageable pageable) {
-        List<PostResponseForOtoInquiry> inquiryResponses = postService.retrievePostList(pageable);
+    @GetMapping("/categories/{categoryCode}")
+    public ResponseEntity<List<PostResponse>> retrievePostList(@PathVariable final String categoryCode,
+                                                               @RequestParam final Integer page) {
+
+        List<PostResponse> responses = postService.retrievePostList(categoryCode, page);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_POST + "/oto-inquiries"))
-                             .body(inquiryResponses);
+                             .body(responses);
+    }
+
+    @PutMapping("/{boardNo}")
+    public ResponseEntity<Void> updatePost(@PathVariable final Long boardNo, @RequestBody final PostRequest postRequest,
+                                           final MemberInfo memberInfo) {
+
+        postService.updatePost(memberInfo.getId(), boardNo, postRequest);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(DEFAULT_ADMIN_POST))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
     }
 
     /**
      * 1:1 문의의 답변 상태를 변경할 수 있는 PATCH Mapping 을 지원합니다.
      *
-     * @param inquiryId - 상태를 변경할 게시글의 식별번호입니다.
-     * @param status    - 변경할 상태 정보를 담고 있는 DTO 객체입니다.
+     * @param boardNo - 상태를 변경할 게시글의 식별번호입니다.
+     * @param status  - 변경할 상태 정보를 담고 있는 DTO 객체입니다.
      * @return Mapping URI 를 담은 응답객체를 반환합니다.
      * @since 1.0.0
      */
-    @PatchMapping("/oto-inquiries/{inquiryId}")
-    public ResponseEntity<PostResponseForOtoInquiry> updateInquiryStatus(
-            @PathVariable final Long inquiryId, @RequestBody final PostStatusUpdateRequest status) {
+    @PatchMapping("/oto-inquiries/{boardNo}")
+    public ResponseEntity<PostResponseForOtoInquiry> updateInquiryStatus(@PathVariable final Long boardNo,
+                                                                         @RequestBody final PostStatusUpdateRequest status) {
 
-        postService.updateInquiryStatus(inquiryId, status);
+        postService.updateInquiryStatus(boardNo, status);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(
-                                     URI.create(DEFAULT_ADMIN_POST + "/oto-inquiries/" + inquiryId))
+                             .location(URI.create(DEFAULT_ADMIN_POST + "/oto-inquiries/" + boardNo))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -94,17 +121,16 @@ public class AdminPostController {
     /**
      * 선택한 1:1 문의를 삭제하는 DELETE Mapping 을 지원합니다.
      *
-     * @param inquiryId - 삭제할 1:1 문의의 식별번호입니다.
+     * @param boardNo - 삭제할 1:1 문의의 식별번호입니다.
      * @return Mapping URI 를 담은 응답객체를 반환합니다.
      * @since 1.0.0
      */
-    @DeleteMapping("/oto-inquiries/{inquiryId}")
-    public ResponseEntity<Void> deleteOtoInquiries(@PathVariable final Long inquiryId) {
-        postService.deletePost(inquiryId);
+    @DeleteMapping("/{boardNo}")
+    public ResponseEntity<Void> deletePost(@PathVariable final Long boardNo) {
+        postService.deletePost(boardNo);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(
-                                     URI.create(DEFAULT_ADMIN_POST + "/oto-inquiries/" + inquiryId))
+                             .location(URI.create(DEFAULT_ADMIN_POST + "/" + boardNo))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

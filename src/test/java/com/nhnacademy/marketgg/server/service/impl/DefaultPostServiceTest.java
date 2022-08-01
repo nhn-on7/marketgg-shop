@@ -103,13 +103,13 @@ public class DefaultPostServiceTest {
     }
 
     @Test
-    @DisplayName("1:1 문의 목록 조회")
+    @DisplayName("게시글 목록 조회")
     void testRetrieveOtoInquiries() {
         given(categoryRepository.retrieveCategoryIdByName(anyString())).willReturn("702");
         given(postRepository.findPostsByCategoryId(any(Pageable.class), anyString()))
                 .willReturn(Page.empty());
 
-        postService.retrievePostList(PageRequest.of(0, 10));
+        postService.retrievePostList("702", 0);
 
         then(postRepository).should().findPostsByCategoryId(any(Pageable.class), anyString());
     }
@@ -121,7 +121,7 @@ public class DefaultPostServiceTest {
         given(postRepository.findPostByCategoryAndMember(any(Pageable.class), anyString(), anyLong()))
                 .willReturn(Page.empty());
 
-        postService.retrieveOwnPostList(PageRequest.of(0, 10), 1L);
+        postService.retrievesOwnPostList(0, "702", 1L);
 
         then(postRepository).should()
                             .findPostByCategoryAndMember(any(Pageable.class), anyString(), anyLong());

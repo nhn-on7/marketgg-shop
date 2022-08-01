@@ -3,7 +3,9 @@ package com.nhnacademy.marketgg.server.controller;
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATION;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -92,13 +94,13 @@ class AdminPostControllerTest {
     @Test
     @DisplayName("1:1 문의 목록 조회 - 관리자")
     void testRetrievePostList() throws Exception {
-        given(postService.retrievePostList(any(Pageable.class))).willReturn(List.of());
+        given(postService.retrievePostList(anyString(), anyInt())).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries")
                                      .headers(headers))
                     .andExpect(status().isOk());
 
-        then(postService).should().retrievePostList(any(Pageable.class));
+        then(postService).should().retrievePostList(anyString(), anyInt());
     }
 
     @Test
