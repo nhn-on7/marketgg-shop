@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>com.nhnacademy.marketgg</groupId>
-    <artifactId>server</artifactId>
+    <artifactId>marketgg-shop</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <name>marketgg-shop</name>
@@ -22,6 +22,8 @@
         <java.version>11</java.version>
         <spring-cloud.version>2021.0.3</spring-cloud.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <jacoco.version>0.8.8</jacoco.version>
     </properties>
 
     <dependencyManagement>
@@ -134,15 +136,9 @@
             </plugin>
 
             <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.9.1.2184</version>
-            </plugin>
-
-            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.6</version>
+                <version>${jacoco.version}</version>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
@@ -151,6 +147,7 @@
                         </goals>
                         <phase>test-compile</phase>
                     </execution>
+
                     <execution>
                         <id>report</id>
                         <goals>
@@ -158,6 +155,7 @@
                         </goals>
                         <phase>test</phase>
                     </execution>
+
                 </executions>
             </plugin>
 
