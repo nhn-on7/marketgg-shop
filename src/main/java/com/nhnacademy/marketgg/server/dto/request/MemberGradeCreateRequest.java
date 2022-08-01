@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class MemberGradeCreateRequest {
 
     @NotBlank
-    @Size(min = 6, max = 20)
+    @Size(min = 3, max = 20)
     private String grade;
 
 }

@@ -59,7 +59,7 @@ public class PointHistory {
 
     @Column(name = "updated_at")
     @NotNull
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedDate;
 
     /**
      * 포인트 내역을 생성할 수 있는 생성자입니다.
@@ -76,7 +76,7 @@ public class PointHistory {
         this.point = pointRequest.getPoint();
         this.totalPoint = totalPoint;
         this.content = pointRequest.getContent();
-        this.updatedAt = LocalDateTime.now();
+        this.updatedDate = LocalDateTime.now();
     }
 
 }
