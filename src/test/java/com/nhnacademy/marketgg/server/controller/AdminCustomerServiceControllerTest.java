@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.controller.customerservice.AdminOtoInquiryPostController;
 import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +18,6 @@ import java.util.List;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AdminCustomerServicePostController.class)
+@WebMvcTest(AdminOtoInquiryPostController.class)
 public class AdminCustomerServiceControllerTest {
 
     @Autowired

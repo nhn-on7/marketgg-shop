@@ -1,13 +1,11 @@
-package com.nhnacademy.marketgg.server.controller;
+package com.nhnacademy.marketgg.server.controller.customerservice;
 
 import com.nhnacademy.marketgg.server.dto.request.CommentRequest;
-import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
 import com.nhnacademy.marketgg.server.service.CustomerServiceCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.List;
 
 /**
  * 1:1 문의의 댓글에 관련된 Rest Controller 입니다.
@@ -26,7 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/customer-services/oto-inquiries")
 @RequiredArgsConstructor
-public class CustomerServiceCommentController {
+public class OtoInquiryCommentController {
 
     private final CustomerServiceCommentService customerServiceCommentService;
 

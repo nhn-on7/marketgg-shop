@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.controller;
+package com.nhnacademy.marketgg.server.controller.customerservice;
 
 import com.nhnacademy.marketgg.server.constant.CustomerServicePostReason;
 import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
@@ -29,13 +29,13 @@ import java.util.stream.Collectors;
  */
 // @RoleCheck(accessLevel = Role.ROLE_ADMIN)
 @RestController
-@RequestMapping("/admin/customer-services")
+@RequestMapping("/admin/customer-services/oto-inquiries")
 @RequiredArgsConstructor
-public class AdminCustomerServicePostController {
+public class AdminOtoInquiryPostController {
 
     private final CustomerServicePostService customerServicePostService;
 
-    private static final String DEFAULT_ADMIN_CUSTOMER_SERVICE = "/admin/customer-services";
+    private static final String DEFAULT_ADMIN_OTO_INQUIRY = "/admin/customer-services/oto-inquiries";
 
     /**
      * 선택한 1:1 문의 단건을 조회하는 GET Mapping 을 지원합니다.
@@ -49,7 +49,7 @@ public class AdminCustomerServicePostController {
         PostResponseForOtoInquiry inquiryResponse = customerServicePostService.retrieveCustomerServicePost(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
+                             .location(URI.create(DEFAULT_ADMIN_OTO_INQUIRY + "/" + inquiryId))
                              .body(inquiryResponse);
     }
 
@@ -65,7 +65,7 @@ public class AdminCustomerServicePostController {
         List<PostResponseForOtoInquiry> inquiryResponses = customerServicePostService.retrieveOtoInquiries(pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries"))
+                             .location(URI.create(DEFAULT_ADMIN_OTO_INQUIRY))
                              .body(inquiryResponses);
     }
 
@@ -83,7 +83,7 @@ public class AdminCustomerServicePostController {
         customerServicePostService.updateInquiryStatus(inquiryId, status);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
+                             .location(URI.create(DEFAULT_ADMIN_OTO_INQUIRY + "/" + inquiryId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -100,7 +100,7 @@ public class AdminCustomerServicePostController {
         customerServicePostService.deleteCustomerServicePost(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
+                             .location(URI.create(DEFAULT_ADMIN_OTO_INQUIRY + "/" + inquiryId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -118,7 +118,7 @@ public class AdminCustomerServicePostController {
                                      .collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/reasons"))
+                             .location(URI.create(DEFAULT_ADMIN_OTO_INQUIRY + "/reasons"))
                              .body(reasons);
     }
 

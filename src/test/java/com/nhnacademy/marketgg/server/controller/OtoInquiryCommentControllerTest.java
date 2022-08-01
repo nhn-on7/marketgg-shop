@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.controller.customerservice.OtoInquiryCommentController;
 import com.nhnacademy.marketgg.server.dto.request.CommentRequest;
 import com.nhnacademy.marketgg.server.service.CustomerServiceCommentService;
 import org.junit.jupiter.api.DisplayName;
@@ -11,19 +12,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CustomerServiceCommentController.class)
-public class CustomerServiceCommentControllerTest {
+@WebMvcTest(OtoInquiryCommentController.class)
+public class OtoInquiryCommentControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;

@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.controller;
+package com.nhnacademy.marketgg.server.controller.customerservice;
 
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
@@ -27,13 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 // @RoleCheck(accessLevel = Role.ROLE_USER)
 @RestController
-@RequestMapping("/customer-services")
+@RequestMapping("/customer-services/oto-inquiries")
 @RequiredArgsConstructor
-public class CustomerServicePostController {
+public class OtoInquiryPostController {
 
     private final CustomerServicePostService customerServicePostService;
 
-    private static final String DEFAULT_CUSTOMER_SERVICE = "/customer-services";
+    private static final String DEFAULT_OTO_INQUIRY = "/customer-services/oto-inquiries";
 
     /**
      * 1:1 문의를 등록하는 POST Mapping 을 지원합니다.
@@ -53,7 +53,7 @@ public class CustomerServicePostController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(
-                                     DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/members/" +
+                                     DEFAULT_OTO_INQUIRY + "/members/" +
                                              memberInfo.getId()))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
@@ -74,7 +74,7 @@ public class CustomerServicePostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
+                                     DEFAULT_OTO_INQUIRY + "/" + inquiryId))
                              .body(inquiryResponse);
     }
 
@@ -96,7 +96,7 @@ public class CustomerServicePostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/members/" +
+                                     DEFAULT_OTO_INQUIRY + "/members/" +
                                              memberId))
                              .body(inquiryResponses);
     }
@@ -114,7 +114,7 @@ public class CustomerServicePostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
+                                     DEFAULT_OTO_INQUIRY + "/" + inquiryId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
