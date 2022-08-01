@@ -52,7 +52,6 @@ public class AdminPostController {
      */
     @PostMapping
     public ResponseEntity<Void> createPost(@RequestBody final PostRequest postRequest, final MemberInfo memberInfo) {
-
         postService.createPost(memberInfo.getId(), postRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)

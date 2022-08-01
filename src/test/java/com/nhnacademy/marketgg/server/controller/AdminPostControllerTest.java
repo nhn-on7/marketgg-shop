@@ -3,7 +3,12 @@ package com.nhnacademy.marketgg.server.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.annotation.Role;
+import com.nhnacademy.marketgg.server.aop.AuthInjectAspect;
+import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
+import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
+import com.nhnacademy.marketgg.server.aop.UuidAspect;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
@@ -14,11 +19,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Collections;
@@ -38,16 +47,24 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AdminPostController.class)
+@Transactional
+@SpringBootTest
+@ActiveProfiles({ "testdb", "common" })
+@Import({
+        RoleCheckAspect.class,
+        AuthInjectAspect.class,
+        UuidAspect.class,
+        MemberInfoAspect.class
+})
 class AdminPostControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
 
-    @Autowired
     MockMvc mockMvc;
 
     @MockBean
@@ -65,7 +82,7 @@ class AdminPostControllerTest {
 
     @BeforeEach
     void setUp(WebApplicationContext wac) throws JsonProcessingException {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
                                  .alwaysDo(print())
                                  .build();
 
@@ -77,6 +94,22 @@ class AdminPostControllerTest {
         headers = new HttpHeaders();
         headers.set(AUTH_ID, uuid);
         headers.set(WWW_AUTHENTICATION, roles);
+    }
+
+    @Test
+    @DisplayName("고객센터 게시글 등록 - 관리자")
+    void testCreatePost() throws Exception {
+        String requestBody = objectMapper.writeValueAsString(new PostRequest());
+
+        willDoNothing().given(postService).createPost(anyLong(), any(PostRequest.class));
+
+        this.mockMvc.perform(post(DEFAULT_ADMIN_CUSTOMER_SERVICE)
+                                     .headers(headers)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
+                    .andExpect(status().isCreated());
+
+        then(postService).should().createPost(anyLong(), any(PostRequest.class));
     }
 
     @Test
