@@ -15,6 +15,4 @@ public interface CouponRepository extends JpaRepository<Coupon, Long>, CouponRep
 
     Optional<Coupon> findByName(final String name);
 
-    Page<Coupon> findAllCoupons(Pageable pageable);
-
 }
