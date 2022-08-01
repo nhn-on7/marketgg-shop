@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
 import com.nhnacademy.marketgg.server.exception.NotFoundException;
+import com.nhnacademy.marketgg.server.service.PostService;
 import com.nhnacademy.marketgg.server.service.SearchService;
 import java.time.LocalDateTime;
 import java.util.List;
