@@ -7,6 +7,9 @@ import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.annotation.UUID;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.GivenCouponCreateRequest;
+import com.nhnacademy.marketgg.server.dto.AuthInfo;
+import com.nhnacademy.marketgg.server.dto.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
@@ -105,14 +108,14 @@ public class MemberController {
     /**
      * 사용자 정보를 반환합니다.
      *
-     * @param request - 요청 정보
+     * @param authInfo - Auth Server 의 사용자 정보
+     * @param memberInfo - Shop Server 의 사용자 정보
      * @return - 사용자 정보를 반환합니다.
      */
     @RoleCheck(accessLevel = Role.ROLE_USER)
     @GetMapping
-    public ResponseEntity<CommonResponse> retrieveMember(HttpServletRequest request) {
-        String uuid = request.getHeader("AUTH-ID");
-        MemberResponse memberResponse = memberService.retrieveMember(uuid);
+    public ResponseEntity<CommonResponse> retrieveMember(final AuthInfo authInfo, final MemberInfo memberInfo) {
+        MemberResponse memberResponse = new MemberResponse(authInfo, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -133,11 +136,11 @@ public class MemberController {
 
         if (Objects.nonNull(signUp.getReferrerMemberId())) {
             pointService.createPointHistory(signUp.getReferrerMemberId(),
-                    new PointHistoryRequest(5000, "추천인 이벤트"));
+                new PointHistoryRequest(5000, "추천인 이벤트"));
         }
 
         pointService.createPointHistory(signUp.getSignUpMemberId(),
-                new PointHistoryRequest(5000, "회원 가입 추천인 이벤트"));
+            new PointHistoryRequest(5000, "회원 가입 추천인 이벤트"));
 
         return ResponseEntity.status(OK)
                              .location(URI.create("/members/signup"))

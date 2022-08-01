@@ -1,10 +1,12 @@
 package com.nhnacademy.marketgg.server.config;
 
 import java.time.Duration;
+import javax.servlet.Filter;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 /**
  * Web Configuration 을 설정할 수 있습니다.
@@ -28,6 +30,11 @@ public class WebConfig {
                 .setReadTimeout(Duration.ofSeconds(10L))
                 .setConnectTimeout(Duration.ofSeconds(5L))
                 .build();
+    }
+
+    @Bean
+    public Filter characterEncodingFilter() {
+        return new CharacterEncodingFilter("UTF-8", true);
     }
 
 }

@@ -6,9 +6,18 @@ name: Build and Deploy
 on:
   push:
     branches: [ "develop" ]
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
@@ -49,4 +58,3 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script_stop: true
           script: "./marketgg-shop/restart.sh"
-

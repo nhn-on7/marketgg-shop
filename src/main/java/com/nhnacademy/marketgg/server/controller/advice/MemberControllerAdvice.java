@@ -35,8 +35,8 @@ public class MemberControllerAdvice {
     @ExceptionHandler({
         UnAuthenticException.class
     })
-    public ResponseEntity<ErrorEntity> memberExceptionHandler(Exception e) {
-        log.error(e.toString());
+    public ResponseEntity<ErrorEntity> memberExceptionHandler(UnAuthenticException e) {
+        log.error("", e);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED )
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(new ErrorEntity(e.getMessage()));
