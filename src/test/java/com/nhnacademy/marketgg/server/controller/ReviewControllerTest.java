@@ -74,7 +74,7 @@ class ReviewControllerTest {
         MockMultipartFile dto = new MockMultipartFile("reviewRequest", "jsondata", "application/json",
                                                       content.getBytes(StandardCharsets.UTF_8));
 
-        this.mockMvc.perform(multipart("/products/{productId}/review/{memberUuid}", 1L, "admin")
+        this.mockMvc.perform(multipart("/products/{productId}/reviews/{memberUuid}", 1L, "admin")
                                  .file(dto)
                                  .file(file)
                                  .file(file)
@@ -91,7 +91,7 @@ class ReviewControllerTest {
     void testRetrieveReviews() throws Exception {
         given(reviewService.retrieveReviews(new DefaultPageRequest().getPageable())).willReturn(new SingleResponse<>());
 
-        this.mockMvc.perform(get("/products/{productId}/review/", 1L))
+        this.mockMvc.perform(get("/products/{productId}/reviews/", 1L))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
@@ -103,7 +103,7 @@ class ReviewControllerTest {
     void testRetrieveReviewDetails() throws Exception {
         given(reviewService.retrieveReviewDetails(anyLong())).willReturn(new SingleResponse<>());
 
-        this.mockMvc.perform(get("/products/{productId}/review/{reviewId}", 1L, 1L))
+        this.mockMvc.perform(get("/products/{productId}/reviews/{reviewId}", 1L, 1L))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
@@ -117,7 +117,7 @@ class ReviewControllerTest {
         BDDMockito.willDoNothing().given(reviewService)
                   .updateReview(any(ReviewUpdateRequest.class), anyLong());
 
-        this.mockMvc.perform(put("/products/{productId}/review/{reviewId}", 1L, 1L)
+        this.mockMvc.perform(put("/products/{productId}/reviews/{reviewId}", 1L, 1L)
                                  .contentType(MediaType.APPLICATION_JSON)
                                  .content(content))
                     .andExpect(status().isOk());
@@ -128,7 +128,7 @@ class ReviewControllerTest {
     @Test
     @DisplayName("후기 삭제 테스트")
     void testDeleteReview() throws Exception {
-        this.mockMvc.perform(delete("/products/{productId}/review/{reviewId}", 1L, 1L))
+        this.mockMvc.perform(delete("/products/{productId}/reviews/{reviewId}", 1L, 1L))
                     .andExpect(status().isOk());
 
         then(reviewService).should().deleteReview(anyLong());
