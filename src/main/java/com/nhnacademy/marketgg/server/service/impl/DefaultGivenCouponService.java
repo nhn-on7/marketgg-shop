@@ -69,7 +69,7 @@ public class DefaultGivenCouponService implements GivenCouponService {
         Integer expiredDate = givenCoupons.getCoupon().getExpiredDate();
         LocalDateTime expirationPeriod = givenCoupons.getCreatedAt().plusDays(expiredDate);
 
-        if (usedCouponRepository.findAllByGivenCoupon(givenCoupons).isPresent()) {
+        if (!usedCouponRepository.findAllByGivenCoupon(givenCoupons).isEmpty()) {
             state = USED;
         } else if (expirationPeriod.isBefore(LocalDateTime.now())) {
             state = EXPIRED;

@@ -43,15 +43,18 @@ public class Coupon {
     private String type;
 
     @Column(name = "expired_date")
+    @NotNull
     @Positive
     private Integer expiredDate;
 
     @Column(name = "minimum_money")
+    @NotNull
     @Positive
     private Integer minimumMoney;
 
     @Column(name = "discount_amount")
     @NotNull
+    @Positive
     private Double discountAmount;
 
     // MEMO 0: 생성자 주석함

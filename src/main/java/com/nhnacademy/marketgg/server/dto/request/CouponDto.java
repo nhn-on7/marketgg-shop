@@ -41,6 +41,7 @@ public class CouponDto {
     private Integer minimumMoney;
 
     @NotNull
+    @Positive(message = "할인량은 음수가 될 수 없습니다.")
     private Double discountAmount;
 
 }
