@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
+import com.nhnacademy.marketgg.server.service.PostService;
 import com.nhnacademy.marketgg.server.service.SearchService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 @RequestMapping("/admin/search/boards")
 @RequiredArgsConstructor
-public class AdminSearchController {
+public class AdminBoardSearchController {
 
     private final PostService postService;
     private final SearchService searchService;
