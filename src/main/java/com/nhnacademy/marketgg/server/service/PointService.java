@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.service;
 
 import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.dto.response.PointRetrieveResponse;
+import com.nhnacademy.marketgg.server.event.ReviewPointEvent;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public interface PointService {
     /**
      * 주문에 관련하지않은 포인트 내역을 생성합니다.
      *
-     * @param id - 지정한 회원의 식별번호입니다.
+     * @param id           - 지정한 회원의 식별번호입니다.
      * @param pointRequest - 포인트 내역을 생성하기 위한 DTO 입니다.
      * @since 1.0.0
      */
@@ -40,11 +41,20 @@ public interface PointService {
     /**
      * 주문에 관련한 포인트 내역을 생성합니다.
      *
-     * @param memberId - 지정한 회원의 식별번호입니다.
-     * @param orderId - 지정한 주문의 식별번호입니다.
+     * @param memberId     - 지정한 회원의 식별번호입니다.
+     * @param orderId      - 지정한 주문의 식별번호입니다.
      * @param pointRequest - 포인트 내역을 생성하기 위한 DTO 입니다.
      * @since 1.0.0
      */
-    void createPointHistoryForOrder(final Long memberId, final Long orderId, final PointHistoryRequest pointRequest);
+    void createPointHistoryForOrder(final Long memberId, final Long orderId,
+                                    final PointHistoryRequest pointRequest);
+
+    /**
+     * 리뷰 등록시 자등으로 포인트를 적립해줍니다.
+     * 사진이 포함된 리뷰와 글로만 작성된 리뷰로 나뉘어 포인트가 차등 지급됩니다.
+     *
+     * @param reviewPointEvent - 포인트 지급을 위한 이벤트입니다.
+     */
+    void savePointByReview(final ReviewPointEvent reviewPointEvent);
 
 }
