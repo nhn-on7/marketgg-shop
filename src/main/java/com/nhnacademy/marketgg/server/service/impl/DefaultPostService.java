@@ -1,12 +1,16 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
 import com.nhnacademy.marketgg.server.dto.response.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
+import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
+import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticBoardRepository;
+import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -19,6 +23,7 @@ import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerSer
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +40,7 @@ public class DefaultPostService implements CustomerServicePostService {
     private final MemberRepository memberRepository;
     private final CustomerServiceCommentRepository commentRepository;
     private final ElasticBoardRepository elasticBoardRepository;
+    private final SearchRepository searchRepository;
 
     private static final String OTO_INQUIRY = "1:1문의";
 
@@ -72,6 +78,21 @@ public class DefaultPostService implements CustomerServicePostService {
         List<CommentResponse> commentList = commentRepository.findByInquiryId(otoInquiry.getId());
 
         return PostResponseForOtoInquiry.builder().otoInquiry(otoInquiry).commentList(commentList).build();
+    }
+
+    @Override
+    public List<SearchBoardResponse> searchForCategory(final String categoryCode, final SearchRequest searchRequest)
+            throws ParseException, JsonProcessingException {
+
+        return searchRepository.searchBoardWithCategoryCode(categoryCode, searchRequest, "categoryCode");
+    }
+
+    @Override
+    public List<SearchBoardResponse> searchForOption(final String categoryCode, final SearchRequest searchRequest,
+                                                     final String option, final String optionType)
+            throws JsonProcessingException, ParseException {
+
+        return searchRepository.searchBoardWithOption(categoryCode, option, searchRequest, optionType);
     }
 
     @Transactional
