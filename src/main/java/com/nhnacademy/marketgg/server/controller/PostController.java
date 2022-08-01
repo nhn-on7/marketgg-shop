@@ -2,12 +2,15 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
+import com.nhnacademy.marketgg.server.constant.CustomerServicePostReason;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -116,6 +119,23 @@ public class PostController {
                                      DEFAULT_POST + "/oto-inquiries/" + inquiryId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
+    }
+
+    /**
+     * 고객센터 게시글의 사유 목록을 불러오는 GET Mapping 을 지원합니다.
+     *
+     * @return 사유 목록을 반환합니다.
+     * @since 1.0.0
+     */
+    @GetMapping("/reasons")
+    public ResponseEntity<List<String>> retrieveAllReasonValues() {
+        List<String> reasons = Arrays.stream(CustomerServicePostReason.values())
+                                     .map(CustomerServicePostReason::reason)
+                                     .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(DEFAULT_POST + "/oto-inquiries/reasons"))
+                             .body(reasons);
     }
 
 }
