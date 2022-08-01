@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -30,18 +31,21 @@ public class Dib {
     @EmbeddedId
     private Pk pk;
 
-    @MapsId(value = "memberNo")
+    @MapsId(value = "memberId")
     @ManyToOne
     @JoinColumn(name = "member_no")
+    @NotNull
     private Member member;
 
-    @MapsId(value = "productNo")
+    @MapsId(value = "productId")
     @ManyToOne
     @JoinColumn(name = "product_no")
+    @NotNull
     private Product product;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @NotNull
+    private LocalDateTime createdDate;
 
     @Embeddable
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -50,14 +54,16 @@ public class Dib {
     public static class Pk implements Serializable {
 
         @Column(name = "member_no")
-        private Long memberNo;
+        @NotNull
+        private Long memberId;
 
         @Column(name = "product_no")
-        private Long productNo;
+        @NotNull
+        private Long productId;
 
-        public Pk(final Long memberNo, final Long productNo) {
-            this.memberNo = memberNo;
-            this.productNo = productNo;
+        public Pk(final Long memberId, final Long productId) {
+            this.memberId = memberId;
+            this.productId = productId;
         }
 
     }
@@ -74,7 +80,7 @@ public class Dib {
         this.pk = pk;
         this.member = member;
         this.product = product;
-        this.createdAt = LocalDateTime.now();
+        this.createdDate = LocalDateTime.now();
     }
 
 }

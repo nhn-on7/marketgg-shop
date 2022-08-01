@@ -6,9 +6,8 @@ import com.nhnacademy.marketgg.server.entity.QDib;
 import com.nhnacademy.marketgg.server.entity.QMember;
 import com.nhnacademy.marketgg.server.entity.QProduct;
 import com.querydsl.core.types.Projections;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-
 import java.util.List;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class DibRepositoryImpl extends QuerydslRepositorySupport implements DibRepositoryCustom {
 
@@ -23,15 +22,15 @@ public class DibRepositoryImpl extends QuerydslRepositorySupport implements DibR
         QMember member = QMember.member;
 
         return from(dib)
-                .innerJoin(member).on(dib.pk.memberNo.eq(memberId))
-                .innerJoin(product).on(dib.pk.productNo.eq(product.id))
-                .where(dib.pk.memberNo.eq(memberId))
-                .select(Projections.constructor(DibRetrieveResponse.class,
-                                         dib.product.id,
-                                         dib.product.name,
-                                         dib.product.price,
-                                         dib.createdAt))
-                .fetch();
+            .innerJoin(member).on(dib.pk.memberId.eq(memberId))
+            .innerJoin(product).on(dib.pk.productId.eq(product.id))
+            .where(dib.pk.memberId.eq(memberId))
+            .select(Projections.constructor(DibRetrieveResponse.class,
+                                            dib.product.id,
+                                            dib.product.name,
+                                            dib.product.price,
+                                            dib.createdDate))
+            .fetch();
     }
 
 }

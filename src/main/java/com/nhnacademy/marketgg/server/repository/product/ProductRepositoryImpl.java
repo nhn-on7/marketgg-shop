@@ -83,9 +83,9 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
             product.expirationDate,
             product.allergyInfo,
             product.capacity,
-            product.createdAt,
-            product.updatedAt,
-            product.deletedAt);
+            product.createdDate,
+            product.updatedDate,
+            product.deletedDate);
     }
 
 }

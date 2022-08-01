@@ -15,15 +15,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * 회원 Entity 입니다.
+ * 회원 개체입니다.
  *
- * @version 1.0.0
+ * @version 1.0
+ * @since 1.0
  */
 @Table(name = "members")
 @Entity
@@ -35,8 +39,10 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_no")
+    @NotNull
     private Long id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "member_grade_no")
     private MemberGrade memberGrade;
@@ -45,9 +51,13 @@ public class Member {
     @JoinColumn(name = "cart_no")
     private Cart cart;
 
+    @NotBlank
+    @Size(min = 36, max = 36)
     @Column(unique = true)
     private String uuid;
 
+    @NotNull
+    @Size(min = 1, max = 1)
     @Column
     private Character gender;
 
@@ -58,13 +68,15 @@ public class Member {
     private LocalDateTime ggpassUpdatedAt;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @NotNull
+    private LocalDateTime createdDate;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @NotNull
+    private LocalDateTime updatedDate;
 
     @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
+    private LocalDateTime deletedDate;
 
     /**
      * 회원을 생성하기 위한 생성자입니다.
@@ -79,9 +91,9 @@ public class Member {
         this.gender = memberRequest.getGender();
         this.birthDate = memberRequest.getBirthDate();
         this.ggpassUpdatedAt = memberRequest.getGgpassUpdateAt();
-        this.createdAt = memberRequest.getCreatedAt();
-        this.updatedAt = memberRequest.getUpdatedAt();
-        this.deletedAt = memberRequest.getDeletedAt();
+        this.createdDate = memberRequest.getCreatedAt();
+        this.updatedDate = memberRequest.getUpdatedAt();
+        this.deletedDate = memberRequest.getDeletedAt();
     }
 
     /**
@@ -99,8 +111,8 @@ public class Member {
         this.uuid = shopMemberSignupRequest.getUuid();
         this.gender = shopMemberSignupRequest.getGender();
         this.birthDate = shopMemberSignupRequest.getBirthDate();
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.createdDate = LocalDateTime.now();
+        this.updatedDate = LocalDateTime.now();
     }
 
     /**
@@ -117,7 +129,7 @@ public class Member {
     }
 
     public void withdraw(final MemberWithdrawRequest memberWithdrawRequest) {
-        this.deletedAt = memberWithdrawRequest.getDeletedAt();
+        this.deletedDate = memberWithdrawRequest.getDeletedDate();
     }
 
 }

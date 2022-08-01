@@ -3,16 +3,20 @@ package com.nhnacademy.marketgg.server.controller;
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.service.ProductInquiryPostService;
+import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 상품 문의 관리를 위한 RestController 입니다.
@@ -57,9 +61,11 @@ public class ProductInquiryPostController {
      * @since 1.0.0
      */
     @GetMapping("/products/{productId}/inquiries")
-    public ResponseEntity<List<ProductInquiryResponse>> retrieveProductInquiryByProductId(@PathVariable final Long productId,
-                                                                                          Pageable pageable) {
-        List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageable);
+    public ResponseEntity<List<ProductInquiryResponse>> retrieveProductInquiry(@PathVariable final Long productId,
+                                                                               Pageable pageable) {
+
+        List<ProductInquiryResponse> productInquiryResponses
+            = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_INQUIRY + "/products/" + productId + "/inquiries"))
@@ -76,8 +82,9 @@ public class ProductInquiryPostController {
      */
     @GetMapping("/members/{memberId}/product-inquiries")
     public ResponseEntity<List<ProductInquiryResponse>> retrieveProductInquiryByMemberId(@PathVariable final Long memberId,
-                                                                                         Pageable pageable) {
-        List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService.retrieveProductInquiryByMemberId(memberId, pageable);
+        Pageable pageable) {
+        List<ProductInquiryResponse> productInquiryResponses = productInquiryPostService.retrieveProductInquiryByMemberId(
+            memberId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_INQUIRY + "/members/" + memberId + "/product-inquiries"))

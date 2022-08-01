@@ -7,10 +7,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 회원 등급 개체입니다.
+ *
+ * @version 1.0
+ * @since 1.0
+ */
 @Table(name = "member_grades")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,9 +29,12 @@ public class MemberGrade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_grade_no")
+    @NotNull
     private Long id;
 
     @Column
+    @NotBlank
+    @Size(min = 6, max = 20)
     private String grade;
 
     public MemberGrade(MemberGradeCreateRequest memberRequest) {

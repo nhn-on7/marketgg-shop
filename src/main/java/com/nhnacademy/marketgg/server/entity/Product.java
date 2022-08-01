@@ -14,12 +14,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 상품 엔티티입니다.
+ * 상품 개체입니다.
  *
  * @since 1.0.0
  */
@@ -32,64 +36,89 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_no")
+    @NotNull
     private Long id;
 
     @OneToOne
     @JoinColumn(name = "asset_no")
+    @NotNull
     private Asset asset;
 
     @ManyToOne
     @JoinColumn(name = "category_code")
+    @NotNull
     private Category category;
 
     @Column
+    @NotBlank
+    @Size(min = 1, max = 100)
     private String name;
 
     @Column
+    @NotBlank
+    @Size(min = 1, max = 255)
     private String content;
 
     @Column(name = "total_stock")
+    @NotNull
     private Long totalStock;
 
     @Column
+    @NotNull
     private Long price;
 
     @Column
+    @NotBlank
     private String description;
 
     @Column
+    @NotBlank
+    @Size(min = 1, max = 10)
     private String unit;
 
     @Column(name = "delivery_type")
+    @NotBlank
+    @Size(min = 1, max = 10)
     private String deliveryType;
 
     @Column
+    @NotEmpty
+    @Size(min = 1, max = 10)
     private String origin;
 
     @Column(name = "package_type")
+    @NotBlank
+    @Size(min = 1, max = 10)
     private String packageType;
 
     @Column(name = "expiration_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull
     private LocalDate expirationDate;
 
     @Column(name = "allergy_info")
+    @NotBlank
+    @Size(min = 1, max = 100)
     private String allergyInfo;
 
     @Column
+    @NotBlank
+    @Size(min = 1, max = 10)
     private String capacity;
 
     @Column(name = "created_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
-    private LocalDateTime createdAt;
+    @NotNull
+    private LocalDateTime createdDate;
 
     @Column(name = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
-    private LocalDateTime updatedAt;
+    @NotNull
+    private LocalDateTime updatedDate;
 
     @Column(name = "deleted_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
-    private LocalDateTime deletedAt;
+    private LocalDateTime deletedDate;
 
     public Product(ProductCreateRequest productRequest, Asset asset, Category category) {
         this.asset = asset;
@@ -106,8 +135,8 @@ public class Product {
         this.expirationDate = productRequest.getExpirationDate();
         this.allergyInfo = productRequest.getAllergyInfo();
         this.capacity = productRequest.getCapacity();
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.createdDate = LocalDateTime.now();
+        this.updatedDate = LocalDateTime.now();
     }
 
     public void updateProduct(ProductUpdateRequest productRequest, Asset asset, Category category) {
@@ -125,7 +154,7 @@ public class Product {
         this.expirationDate = productRequest.getExpirationDate();
         this.allergyInfo = productRequest.getAllergyInfo();
         this.capacity = productRequest.getCapacity();
-        this.updatedAt = LocalDateTime.now();
+        this.updatedDate = LocalDateTime.now();
     }
 
     /**
@@ -133,11 +162,11 @@ public class Product {
      * null 이 아닌 경우 상품이 삭제된 상태입니다.
      */
     public void deleteProduct() {
-        this.deletedAt = LocalDateTime.now();
+        this.deletedDate = LocalDateTime.now();
     }
 
     public void restoreProduct() {
-        this.deletedAt = null;
+        this.deletedDate = null;
     }
 
 }

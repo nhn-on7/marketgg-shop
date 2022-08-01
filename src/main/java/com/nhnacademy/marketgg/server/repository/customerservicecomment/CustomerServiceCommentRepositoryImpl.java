@@ -6,9 +6,8 @@ import com.nhnacademy.marketgg.server.entity.QCustomerServiceComment;
 import com.nhnacademy.marketgg.server.entity.QCustomerServicePost;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-
 import java.util.List;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class CustomerServiceCommentRepositoryImpl extends QuerydslRepositorySupport implements CustomerServiceCommentRepositoryCustom {
 
@@ -42,7 +41,7 @@ public class CustomerServiceCommentRepositoryImpl extends QuerydslRepositorySupp
                                        comment.customerServicePost.id,
                                        comment.member.id,
                                        comment.content,
-                                       comment.createdAt);
+                                       comment.createdDate);
     }
 
 }

@@ -37,7 +37,7 @@ public class Dummy {
     }
 
     public static Member getDummyMember(Cart cart) {
-        Member member = new Member(getDummyMemberCreateRequest(""), cart);
+        Member member = new Member(getDummyMemberCreateRequest("022db29c-d0e2-11e5-bb4c-60f81dca7676"), cart);
 
         return member;
     }
