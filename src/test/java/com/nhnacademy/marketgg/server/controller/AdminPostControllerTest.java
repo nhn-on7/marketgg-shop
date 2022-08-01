@@ -1,5 +1,31 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.annotation.Role;
+import com.nhnacademy.marketgg.server.dto.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
+import com.nhnacademy.marketgg.server.dummy.Dummy;
+import com.nhnacademy.marketgg.server.entity.Cart;
+import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
+import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATION;
 import static org.mockito.ArgumentMatchers.any;
@@ -14,31 +40,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.dto.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
-import com.nhnacademy.marketgg.server.dummy.Dummy;
-import com.nhnacademy.marketgg.server.entity.Cart;
-import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
-import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 @WebMvcTest(AdminPostController.class)
 class AdminPostControllerTest {
@@ -95,8 +96,9 @@ class AdminPostControllerTest {
     void testRetrievePostList() throws Exception {
         given(postService.retrievePostList(anyString(), anyInt())).willReturn(List.of());
 
-        this.mockMvc.perform(get(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries")
-                                     .headers(headers))
+        this.mockMvc.perform(get(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/categories/702")
+                                     .headers(headers)
+                                     .param("page", "1"))
                     .andExpect(status().isOk());
 
         then(postService).should().retrievePostList(anyString(), anyInt());
@@ -127,7 +129,7 @@ class AdminPostControllerTest {
         willDoNothing().given(postService).deletePost(anyLong());
 
         this.mockMvc.perform(
-                    delete(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/{inquiryId}", 1L)
+                    delete(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/{inquiryId}", 1L)
                             .headers(headers))
                     .andExpect(status().isOk());
 

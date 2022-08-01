@@ -104,7 +104,6 @@ public class DefaultPostServiceTest {
     @Test
     @DisplayName("게시글 목록 조회")
     void testRetrieveOtoInquiries() {
-        given(categoryRepository.retrieveCategoryIdByName(anyString())).willReturn("702");
         given(postRepository.findPostsByCategoryId(any(Pageable.class), anyString()))
                 .willReturn(Page.empty());
 
@@ -116,7 +115,6 @@ public class DefaultPostServiceTest {
     @Test
     @DisplayName("특정 회원의 1:1 문의 목록 조회")
     void testRetrieveOwnOtoInquiries() {
-        given(categoryRepository.retrieveCategoryIdByName(anyString())).willReturn("702");
         given(postRepository.findPostByCategoryAndMember(any(Pageable.class), anyString(), anyLong()))
                 .willReturn(Page.empty());
 
@@ -132,7 +130,7 @@ public class DefaultPostServiceTest {
         CustomerServicePost csPost = new CustomerServicePost(member, category, new PostRequest());
 
         given(postRepository.findById(anyLong())).willReturn(Optional.of(csPost));
-        given(commentRepository.findByInquiryId(anyLong())).willReturn(List.of());
+        given(commentRepository.findCommentIdsByInquiryId(anyLong())).willReturn(List.of());
 
         willDoNothing().given(elasticBoardRepository).deleteById(anyLong());
         willDoNothing().given(postRepository).delete(any(CustomerServicePost.class));
@@ -142,7 +140,7 @@ public class DefaultPostServiceTest {
 
         then(postRepository).should().findById(anyLong());
         then(postRepository).should().delete(any(CustomerServicePost.class));
-        then(commentRepository).should().findByInquiryId(anyLong());
+        then(commentRepository).should().findCommentIdsByInquiryId(anyLong());
     }
 
 }

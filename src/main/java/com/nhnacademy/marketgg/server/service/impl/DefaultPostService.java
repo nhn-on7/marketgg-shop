@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -70,6 +69,12 @@ public class DefaultPostService implements CustomerServicePostService {
         return addCommentList(otoInquiry);
     }
 
+    private PostResponseForOtoInquiry addCommentList(final PostResponseForOtoInquiry otoInquiry) {
+        List<CommentResponse> commentList = commentRepository.findByInquiryId(otoInquiry.getId());
+
+        return PostResponseForOtoInquiry.builder().otoInquiry(otoInquiry).commentList(commentList).build();
+    }
+
     @Override
     public List<PostResponse> retrievePostList(final String categoryCode, final Integer page) {
         return postRepository.findPostsByCategoryId(PageRequest.of(page, 10), categoryCode).getContent();
@@ -77,13 +82,8 @@ public class DefaultPostService implements CustomerServicePostService {
 
     @Override
     public List<PostResponse> retrievesOwnPostList(final Integer page, final String categoryCode, final Long memberId) {
-        return postRepository.findPostByCategoryAndMember(PageRequest.of(page, 10), categoryCode, memberId).getContent();
-    }
-
-    private PostResponseForOtoInquiry addCommentList(final PostResponseForOtoInquiry otoInquiry) {
-        List<CommentResponse> commentList = commentRepository.findByInquiryId(otoInquiry.getId());
-
-        return PostResponseForOtoInquiry.builder().otoInquiry(otoInquiry).commentList(commentList).build();
+        return postRepository.findPostByCategoryAndMember(PageRequest.of(page, 10), categoryCode, memberId)
+                             .getContent();
     }
 
     @Override
@@ -104,7 +104,8 @@ public class DefaultPostService implements CustomerServicePostService {
     @Transactional
     @Override
     public void updatePost(final Long memberNo, final Long boardNo, final PostRequest postRequest) {
-        CustomerServicePost post = postRepository.findById(boardNo).orElseThrow(CustomerServicePostNotFoundException::new);
+        CustomerServicePost post = postRepository.findById(boardNo)
+                                                 .orElseThrow(CustomerServicePostNotFoundException::new);
         post.updatePost(postRequest);
 
         postRepository.save(post);
@@ -113,8 +114,10 @@ public class DefaultPostService implements CustomerServicePostService {
     @Transactional
     @Override
     public void updateInquiryStatus(final Long boardNo, final PostStatusUpdateRequest status) {
-        CustomerServicePost board = postRepository.findById(boardNo).orElseThrow(CustomerServicePostNotFoundException::new);
-        ElasticBoard elasticBoard = elasticBoardRepository.findById(boardNo).orElseThrow(CustomerServicePostNotFoundException::new);
+        CustomerServicePost board = postRepository.findById(boardNo)
+                                                  .orElseThrow(CustomerServicePostNotFoundException::new);
+        ElasticBoard elasticBoard = elasticBoardRepository.findById(boardNo)
+                                                          .orElseThrow(CustomerServicePostNotFoundException::new);
 
         board.updatePostStatus(status.getStatus());
         elasticBoard.setStatus(status.getStatus());
@@ -126,11 +129,9 @@ public class DefaultPostService implements CustomerServicePostService {
     @Transactional
     @Override
     public void deletePost(final Long boardNo) {
-        CustomerServicePost otoInquiry = postRepository.findById(boardNo).orElseThrow(CustomerServicePostNotFoundException::new);
-        List<Long> commentIds = commentRepository.findByInquiryId(boardNo)
-                                                 .stream()
-                                                 .map(CommentResponse::getId)
-                                                 .collect(Collectors.toList());
+        CustomerServicePost otoInquiry = postRepository.findById(boardNo)
+                                                       .orElseThrow(CustomerServicePostNotFoundException::new);
+        List<Long> commentIds = commentRepository.findCommentIdsByInquiryId(boardNo);
 
         commentRepository.deleteAllById(commentIds);
         postRepository.delete(otoInquiry);

@@ -12,11 +12,6 @@ import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
-import java.net.URI;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -29,6 +24,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 사용자의 고객센터에 관련된 Rest Controller 입니다.
@@ -101,7 +102,7 @@ public class PostController {
     }
 
     /**
-     * 회원의 모든 1:1 문의 목록을 조회하는 GET Mapping 을 지원합니다.
+     * 회원의 모든 고객센터 게시글 목록을 조회하는 GET Mapping 을 지원합니다.
      *
      * @param memberInfo - 조회하는 회원의 정보입니다.
      * @param page       - 페이징 처리를 위한 페이지 번호입니다..
@@ -122,10 +123,10 @@ public class PostController {
     /**
      * 지정한 게시판 타입의 전체 목록을 검색한 결과를 반환합니다.
      *
-     * @param categoryCode - 검색을 진행 할 게시판 타입입니다.
+     * @param categoryCode  - 검색을 진행 할 게시판 타입입니다.
      * @param searchRequest - 검색을 진행 할 검색 정보입니다.
      * @return 검색정보로 검색한 결과 목록 응답객체를 반환합니다.
-     * @throws ParseException 파싱도중 예외처리입니다.
+     * @throws ParseException          파싱도중 예외처리입니다.
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */
@@ -144,11 +145,11 @@ public class PostController {
     /**
      * 지정한 게시판 타입의 Reason 옵션으로 검색한 결과를 반환합니다.
      *
-     * @param categoryCode - 검색을 진행 할 게시판 타입입니다.
-     * @param option - 검색을 진행 할 필터의 값입니다.
+     * @param categoryCode  - 검색을 진행 할 게시판 타입입니다.
+     * @param option        - 검색을 진행 할 필터의 값입니다.
      * @param searchRequest - 검색을 진행 할 검색정보입니다.
      * @return 검색정보로 검색한 결과 목록 응답객체를 반환합니다.
-     * @throws ParseException 파싱도중 예외처리입니다.
+     * @throws ParseException          파싱도중 예외처리입니다.
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */
@@ -170,11 +171,11 @@ public class PostController {
     /**
      * 지정한 게시판 타입의 Status 옵션으로 검색한 결과를 반환합니다.
      *
-     * @param categoryCode - 검색을 진행 할 게시판 타입입니다.
-     * @param option - 검색을 진행 할 필터의 값입니다.
+     * @param categoryCode  - 검색을 진행 할 게시판 타입입니다.
+     * @param option        - 검색을 진행 할 필터의 값입니다.
      * @param searchRequest - 검색을 진행 할 검색정보입니다.
      * @return 검색정보로 검색한 결과 목록 응답객체를 반환합니다.
-     * @throws ParseException 파싱도중 예외처리입니다.
+     * @throws ParseException          파싱도중 예외처리입니다.
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */

@@ -1,5 +1,38 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.annotation.Role;
+import com.nhnacademy.marketgg.server.aop.AuthInjectAspect;
+import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
+import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
+import com.nhnacademy.marketgg.server.aop.UuidAspect;
+import com.nhnacademy.marketgg.server.dto.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.request.PostRequest;
+import com.nhnacademy.marketgg.server.dummy.Dummy;
+import com.nhnacademy.marketgg.server.entity.Cart;
+import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
+import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATION;
 import static org.hamcrest.Matchers.is;
@@ -16,38 +49,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.aop.AuthInjectAspect;
-import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
-import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
-import com.nhnacademy.marketgg.server.aop.UuidAspect;
-import com.nhnacademy.marketgg.server.dto.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.PostRequest;
-import com.nhnacademy.marketgg.server.dummy.Dummy;
-import com.nhnacademy.marketgg.server.entity.Cart;
-import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
-import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 
 @Transactional
 @SpringBootTest
@@ -127,8 +128,9 @@ class PostControllerTest {
     void testRetrieveOwnOtoInquiries() throws Exception {
         given(postService.retrievesOwnPostList(anyInt(), anyString(), anyLong())).willReturn(List.of());
 
-        this.mockMvc.perform(get(DEFAULT_POST + "/oto-inquiries")
-                                     .headers(headers))
+        this.mockMvc.perform(get(DEFAULT_POST + "/categories/702")
+                                     .headers(headers)
+                                     .param("page", "1"))
                     .andExpect(status().isOk());
 
         then(postService).should().retrievesOwnPostList(anyInt(), anyString(), anyLong());
@@ -149,7 +151,7 @@ class PostControllerTest {
     @Test
     @DisplayName("고객센터 게시글 사유 목록 조회")
     void testRetrieveAllReasonValues() throws Exception {
-        this.mockMvc.perform(get(DEFAULT_POST + "/oto-inquiries/reasons")
+        this.mockMvc.perform(get(DEFAULT_POST + "/reasons")
                                      .headers(headers))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.size()", is(9)));

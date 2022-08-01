@@ -10,11 +10,6 @@ import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.utils.KoreanToEnglishTranslator;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
@@ -30,20 +25,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class SearchAdapter implements SearchRepository {
 
     @Value("{spring.elasticsearch.uris}")
-    private final String elastic;
+    private String elastic;
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final KoreanToEnglishTranslator translator;
     private final JSONParser parser;
     private static final String DEFAULT_ELASTIC_PRODUCT = "/products/_search";
-    private static final String DEFAULT_ELASTIC_BOARD =  "/boards/_search";
+    private static final String DEFAULT_ELASTIC_BOARD = "/boards/_search";
     private static final String PRODUCT = "product";
     private static final String BOARD = "board";
 
@@ -56,7 +57,7 @@ public class SearchAdapter implements SearchRepository {
         Map<String, String> sort = this.buildSort(priceSortType);
         request.setRequest(request.getRequest() + " " + translator.converter(request.getRequest()));
         HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
-                        new SearchRequestBodyForBool<>(optionCode, sort, request, PRODUCT)), this.buildHeaders());
+                new SearchRequestBodyForBool<>(optionCode, sort, request, PRODUCT)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, PRODUCT).getBody());
     }
@@ -69,7 +70,7 @@ public class SearchAdapter implements SearchRepository {
         Map<String, String> sort = this.buildSort(priceSortType);
         request.setRequest(request.getRequest() + " " + translator.converter(request.getRequest()));
         HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
-                        new SearchRequestBody<>(sort, request)), this.buildHeaders());
+                new SearchRequestBody<>(sort, request)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, PRODUCT).getBody());
     }
@@ -83,7 +84,7 @@ public class SearchAdapter implements SearchRepository {
         Map<String, String> sort = this.buildSort(null);
         request.setRequest(request.getRequest() + " " + translator.converter(request.getRequest()));
         HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
-                        new SearchRequestBodyForBool<>(categoryCode, sort, request, BOARD)), this.buildHeaders());
+                new SearchRequestBodyForBool<>(categoryCode, sort, request, BOARD)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, BOARD).getBody());
     }
@@ -98,7 +99,7 @@ public class SearchAdapter implements SearchRepository {
         Map<String, String> sort = this.buildSort(null);
         request.setRequest(request.getRequest() + " " + translator.converter(request.getRequest()));
         HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
-                        new SearchRequestBodyForBool<>(categoryCode, sort, request, optionCode, option)), this.buildHeaders());
+                new SearchRequestBodyForBool<>(categoryCode, sort, request, optionCode, option)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, BOARD).getBody());
     }

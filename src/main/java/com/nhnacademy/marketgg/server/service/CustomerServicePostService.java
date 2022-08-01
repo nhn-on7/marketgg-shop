@@ -8,8 +8,9 @@ import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
-import java.util.List;
 import org.json.simple.parser.ParseException;
+
+import java.util.List;
 
 
 /**
@@ -70,10 +71,10 @@ public interface CustomerServicePostService {
     /**
      * 게시판 타입별고 검색을 진행 할 수 있습니다.
      *
-     * @param categoryCode - 검색을 진행 할 게시판 타입입니다.
+     * @param categoryCode  - 검색을 진행 할 게시판 타입입니다.
      * @param searchRequest - 검색을 진행 할 검색 정보입니다.
      * @return 검색정보로 검색한 결과목록을 반환합니다.
-     * @throws ParseException 파싱도중 예외처리입니다.
+     * @throws ParseException          파싱도중 예외처리입니다.
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */
@@ -83,12 +84,12 @@ public interface CustomerServicePostService {
     /**
      * Reason, Status 와 같은 옵션으로 검색을 진행 할 수 있습니다.
      *
-     * @param categoryCode - 검색을 진행 할 게시판 타입입니다.
+     * @param categoryCode  - 검색을 진행 할 게시판 타입입니다.
      * @param searchRequest - 검색을 진행할 검색 정보입니다.
-     * @param option - 검색을 진행 할 필터 값입니다.
-     * @param optionType - 게시글을 진행 할 필터 타입입니다.
+     * @param option        - 검색을 진행 할 필터 값입니다.
+     * @param optionType    - 게시글을 진행 할 필터 타입입니다.
      * @return 검색정보로 검색한 결과목록을 반환합니다.
-     * @throws ParseException 파싱도중 예외처리입니다.
+     * @throws ParseException          파싱도중 예외처리입니다.
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */
@@ -99,8 +100,8 @@ public interface CustomerServicePostService {
     /**
      * 입력받은 정보로 게시글을 수정 할 수 있습니다.
      *
-     * @param memberNo - 게시글을 수정 할 회원의 식별번호입니다.
-     * @param boardNo - 수정할 게시글의 식별번호입니다.
+     * @param memberNo    - 게시글을 수정 할 회원의 식별번호입니다.
+     * @param boardNo     - 수정할 게시글의 식별번호입니다.
      * @param postRequest - 수정할 게시글의 정보를 담은 객체입니다.
      * @since 1.0.0
      */

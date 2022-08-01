@@ -9,8 +9,6 @@ import com.nhnacademy.marketgg.server.dto.response.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
-import java.net.URI;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
+import java.util.List;
 
 /**
  * 관리자의 고객센터 관리에 관련된 Rest Controller 입니다.
@@ -142,8 +143,7 @@ public class AdminPostController {
      */
     @PatchMapping("/oto-inquiries/{boardNo}")
     public ResponseEntity<PostResponseForOtoInquiry> updateInquiryStatus(@PathVariable final Long boardNo,
-                                                                         @RequestBody
-                                                                         final PostStatusUpdateRequest status) {
+                                                                         @RequestBody final PostStatusUpdateRequest status) {
 
         postService.updateInquiryStatus(boardNo, status);
 
