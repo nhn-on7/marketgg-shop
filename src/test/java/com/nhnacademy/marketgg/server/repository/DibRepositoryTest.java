@@ -21,6 +21,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @DataJpaTest
 class DibRepositoryTest {
@@ -37,14 +38,15 @@ class DibRepositoryTest {
         Asset asset = Asset.create();
         Categorization categorization = new Categorization(new CategorizationCreateRequest());
         Category category = new Category(new CategoryCreateRequest(), categorization);
+        ReflectionTestUtils.setField(category, "id", "100");
         Cart savedCart = cartRepository.save(new Cart());
 
         Dib dib = new Dib(new Dib.Pk(1L, 1L), new Member(new MemberCreateRequest(), savedCart),
-                          new Product(new ProductCreateRequest(), asset, category));
+                new Product(new ProductCreateRequest(), asset, category));
 
         dibRepository.save(dib);
 
-        List<DibRetrieveResponse> results = dibRepository.findAllDibs(1L);
+        List<DibRetrieveResponse> results = dibRepository.findAllDibs(dib.getPk().getMemberNo());
 
         assertThat(results).hasSize(1);
     }

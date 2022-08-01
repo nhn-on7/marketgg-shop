@@ -14,6 +14,7 @@ import com.nhnacademy.marketgg.server.service.ProductInquiryPostService;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,15 +48,15 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     }
 
     @Override
-    public List<ProductInquiryResponse> retrieveProductInquiryByProductId(final Long id,
+    public Page<ProductInquiryResponse> retrieveProductInquiryByProductId(final Long id,
                                                                           final Pageable pageable) {
-        return productInquiryPostRepository.findAllByProductNo(id, pageable).getContent();
+        return productInquiryPostRepository.findAllByProductNo(id, pageable);
     }
 
     @Override
-    public List<ProductInquiryResponse> retrieveProductInquiryByMemberId(final MemberInfo memberInfo,
+    public Page<ProductInquiryResponse> retrieveProductInquiryByMemberId(final MemberInfo memberInfo,
                                                                          final Pageable pageable) {
-        return productInquiryPostRepository.findAllByMemberNo(memberInfo.getId(), pageable).getContent();
+        return productInquiryPostRepository.findAllByMemberNo(memberInfo.getId(), pageable);
     }
 
     @Override

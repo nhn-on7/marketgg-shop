@@ -7,11 +7,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.AuthInfo;
+import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
-import com.nhnacademy.marketgg.server.exception.auth.UnAuthenticException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * Controller 클래스에서 Auth Server 의 회원 요청 시 파라미터로 쉽게 전달받을 수 있는 AOP.
@@ -34,7 +37,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @Slf4j
 @Aspect
-@Order(40)
+@Order(20)
 @Component
 @RequiredArgsConstructor
 public class AuthInjectAspect {
@@ -56,13 +59,15 @@ public class AuthInjectAspect {
     public Object authInject(ProceedingJoinPoint pjp) throws Throwable {
         log.info("Method: {}", pjp.getSignature().getName());
 
-        HttpServletRequest request = AspectUtils.getRequest();
+        ServletRequestAttributes requestAttributes =
+            (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = requestAttributes.getRequest();
 
         String jwt = request.getHeader(AUTHORIZATION);
-        String uuid = request.getHeader(AspectUtils.AUTH_ID);
+        String uuid = request.getHeader("WWW-Authentication");
 
-        if (isInvalidAuth(jwt, uuid)) {
-            throw new UnAuthenticException();
+        if (Objects.isNull(jwt) || Objects.isNull(uuid)) {
+            throw new IllegalArgumentException();
         }
 
         HttpHeaders headers = new HttpHeaders();
@@ -85,10 +90,6 @@ public class AuthInjectAspect {
                               }).toArray();
 
         return pjp.proceed(args);
-    }
-
-    private boolean isInvalidAuth(String jwt, String uuid) {
-        return jwt.isBlank() || uuid.isBlank();
     }
 
     private AuthInfo validCheck(ResponseEntity<String> response)

@@ -40,7 +40,7 @@ public class RoleCheckAspect {
      */
     @Before(value = "@annotation(roleCheck) || @within(roleCheck)")
     public void checkRole(RoleCheck roleCheck)
-        throws IOException, IllegalAccessException {
+            throws IOException, IllegalAccessException {
 
         log.debug("Role Check AOP");
 
@@ -71,7 +71,7 @@ public class RoleCheckAspect {
 
     private boolean isInvalidHeader(String roleHeader, String uuid) {
         return (Objects.isNull(roleHeader) || Objects.isNull(uuid))
-            || (roleHeader.isBlank() || uuid.isBlank());
+                || (roleHeader.isBlank() || uuid.isBlank());
     }
 
     private void isUser(List<String> roles) throws UnAuthorizationException {

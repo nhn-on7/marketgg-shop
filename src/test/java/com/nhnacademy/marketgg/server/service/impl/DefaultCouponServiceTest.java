@@ -6,8 +6,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import com.nhnacademy.marketgg.server.dto.request.CouponDto;
+import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
 import com.nhnacademy.marketgg.server.mapper.impl.CouponMapper;
@@ -21,6 +23,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,8 +62,10 @@ class DefaultCouponServiceTest {
     @Test
     @DisplayName("쿠폰 목록 조회")
     void testRetrieveCoupons() {
+        Page<Coupon> response = mock(Page.class);
+
         given(couponRepository.findAllCoupons(pageable))
-                .willReturn(Optional.of(any()));
+                .willReturn(response);
 
         List<CouponDto> couponResponses = couponService.retrieveCoupons(pageable);
 

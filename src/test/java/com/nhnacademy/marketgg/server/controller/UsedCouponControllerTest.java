@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -37,6 +38,9 @@ class UsedCouponControllerTest {
     @BeforeAll
     static void beforeEach() {
         usedCouponDto = new UsedCouponDto();
+        ReflectionTestUtils.setField(usedCouponDto, "orderId", 1L);
+        ReflectionTestUtils.setField(usedCouponDto, "couponId", 1L);
+        ReflectionTestUtils.setField(usedCouponDto, "memberId", 1L);
     }
 
     @Test
@@ -62,7 +66,7 @@ class UsedCouponControllerTest {
         this.mockMvc.perform(delete(DEFAULT_USED_COUPONS)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestBody))
-                    .andExpect(status().isOk());
+                    .andExpect(status().isNoContent());
     }
 
 }

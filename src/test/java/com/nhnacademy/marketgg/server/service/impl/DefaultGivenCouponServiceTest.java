@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.atLeastOnce;
@@ -13,6 +14,7 @@ import com.nhnacademy.marketgg.server.dto.request.CouponDto;
 import com.nhnacademy.marketgg.server.dto.request.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
+import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
@@ -40,6 +42,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.mockito.ArgumentMatchers.anyString;
+
 @ExtendWith(MockitoExtension.class)
 @Transactional
 class DefaultGivenCouponServiceTest {
@@ -62,21 +66,22 @@ class DefaultGivenCouponServiceTest {
     @Mock
     CartRepository cartRepository;
 
-    private static MemberCreateRequest memberCreateRequest;
-    private static CouponDto couponDto;
-    private static GivenCoupon givenCoupon;
-    private static Cart cart;
-    private static GivenCouponCreateRequest givenCouponRequest;
-    private static Member member;
+    CouponDto couponDto;
+    GivenCoupon givenCoupon;
+    Cart cart;
+    GivenCouponCreateRequest givenCouponRequest;
+    MemberCreateRequest memberCreateRequest;
+    Member member;
 
     Pageable pageable = PageRequest.of(0, 20);
     Page<GivenCoupon> inquiryPosts = new PageImpl<>(List.of(), pageable, 0);
+    MemberInfo memberInfo;
 
     @BeforeEach
     void beforeEach() {
         givenCouponRequest = new GivenCouponCreateRequest();
         memberCreateRequest = new MemberCreateRequest();
-        Member member = new Member(memberCreateRequest, new Cart());
+        member = new Member(memberCreateRequest, new Cart());
 
         ReflectionTestUtils.setField(member, "id", 1L);
         ReflectionTestUtils.setField(givenCouponRequest, "name", "name");
@@ -86,18 +91,18 @@ class DefaultGivenCouponServiceTest {
         cart = cartRepository.save(new Cart());
         givenCoupon = new GivenCoupon(new Coupon(1L, "name", "type", 10, 1000, 0.5),
                 new Member(memberCreateRequest, cart));
+        memberInfo = Dummy.getDummyMemberInfo(1L, cart);
     }
 
     @Test
     @DisplayName("지급 쿠폰 생성")
     void testCreateGivenCoupons() {
         given(memberRepository.findById(any())).willReturn(Optional.of(new Member(memberCreateRequest, cart)));
-        given(couponRepository.findById(any())).willReturn(Optional.of(new Coupon(1L, "name", "type", 10, 1000, 0.5)));
         Coupon coupon = new Coupon(1L, "name", "type", 10, 1000, 0.5);
         given(memberRepository.findById(any())).willReturn(Optional.of(member));
-        given(couponRepository.findByName(anyString())).willReturn(coupon);
+        given(couponRepository.findByName(anyString())).willReturn(Optional.of(coupon));
 
-        givenCouponService.createGivenCoupons(any(MemberInfo.class), givenCouponRequest);
+        givenCouponService.createGivenCoupons(memberInfo, givenCouponRequest);
 
         then(givenCouponRepository).should().save(any(GivenCoupon.class));
     }
@@ -107,7 +112,7 @@ class DefaultGivenCouponServiceTest {
     void testRetrieveGivenCoupons() {
         given(givenCouponRepository.findByMemberId(anyLong(), any(Pageable.class))).willReturn(Optional.of(inquiryPosts));
 
-        givenCouponService.retrieveGivenCoupons(any(MemberInfo.class), pageable);
+        givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
 
         verify(givenCouponRepository, atLeastOnce()).findByMemberId(any(), any(Pageable.class));
     }

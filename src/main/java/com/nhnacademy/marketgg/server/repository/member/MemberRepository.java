@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.repository.member;
 
 import com.nhnacademy.marketgg.server.entity.Member;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -10,4 +11,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 
+    Optional<Member> findByUuid(String uuid);
 }

@@ -41,7 +41,6 @@ public class DefaultCouponService implements CouponService {
     @Override
     public List<CouponDto> retrieveCoupons(final Pageable pageable) {
         List<Coupon> couponList = couponRepository.findAllCoupons(pageable)
-                                                  .orElseThrow(CouponNotFoundException::new)
                                                   .getContent();
 
         return couponList.stream()

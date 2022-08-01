@@ -104,7 +104,7 @@ public class CouponControllerTest {
         willDoNothing().given(couponService).deleteCoupon(anyLong());
 
         this.mockMvc.perform(delete(DEFAULT_COUPON + "/" + 1L))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         then(couponService).should().deleteCoupon(anyLong());
     }

@@ -8,8 +8,6 @@ import com.nhnacademy.marketgg.server.annotation.UUID;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.AuthInfo;
-import com.nhnacademy.marketgg.server.dto.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.GivenCouponRequest;
 import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;

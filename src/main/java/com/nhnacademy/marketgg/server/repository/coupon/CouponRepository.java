@@ -1,7 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.coupon;
 
 import com.nhnacademy.marketgg.server.entity.Coupon;
-import java.net.ContentHandler;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,5 +15,6 @@ public interface CouponRepository extends JpaRepository<Coupon, Long>, CouponRep
 
     Optional<Coupon> findByName(final String name);
 
-    Optional<Page<Coupon>> findAllCoupons(Pageable pageable);
+    Page<Coupon> findAllCoupons(Pageable pageable);
+
 }

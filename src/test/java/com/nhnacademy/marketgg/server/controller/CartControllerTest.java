@@ -56,7 +56,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @Transactional
 @SpringBootTest
-@ActiveProfiles({ "testdb", "common" })
+@ActiveProfiles({"testdb", "common"})
 @Import({
     RoleCheckAspect.class,
     AuthInjectAspect.class,

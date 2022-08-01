@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
+import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
@@ -124,7 +125,7 @@ public class MemberControllerTest {
 
     @DisplayName("회원에게 지급 쿠폰 생성")
     void testCreateGivenCoupons() throws Exception {
-        doNothing().when(givenCouponService).createGivenCoupons(anyLong(), any(GivenCouponCreateRequest.class));
+        doNothing().when(givenCouponService).createGivenCoupons(any(MemberInfo.class), any(GivenCouponCreateRequest.class));
         String content = objectMapper.writeValueAsString(new GivenCouponCreateRequest());
 
         this.mockMvc.perform(post("/members/{memberId}/coupons", 1L)
@@ -132,18 +133,18 @@ public class MemberControllerTest {
                     .content(content))
                     .andExpect(status().isCreated());
 
-        verify(givenCouponService, times(1)).createGivenCoupons(anyLong(), any(GivenCouponCreateRequest.class));
+        verify(givenCouponService, times(1)).createGivenCoupons(any(MemberInfo.class), any(GivenCouponCreateRequest.class));
     }
 
     @Test
     @DisplayName("회원에게 지급된 쿠폰 전체 조회")
     void testRetrieveGivenCoupons() throws Exception {
-        when(givenCouponService.retrieveGivenCoupons(anyLong(), any(Pageable.class))).thenReturn(List.of());
+        when(givenCouponService.retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class))).thenReturn(List.of());
 
-        this.mockMvc.perform(get("/members/{memberId}/coupons", 1L))
+        this.mockMvc.perform(get("/members/coupons"))
                     .andExpect(status().isOk());
 
-        verify(givenCouponService, times(1)).retrieveGivenCoupons(anyLong(), any(Pageable.class));
+        verify(givenCouponService, times(1)).retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class));
     }
 
 }
