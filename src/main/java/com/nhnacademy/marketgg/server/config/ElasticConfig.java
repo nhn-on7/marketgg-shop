@@ -17,6 +17,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         classes = { JpaRepositoryMarker.class }),
                                  basePackageClasses = { ElasticRepositoryMarker.class })
 @Configuration
-public class DbConfig {
+public class ElasticConfig {
 
 }
