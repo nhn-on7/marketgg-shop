@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
-import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATION;
+import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATE;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
@@ -98,7 +98,7 @@ class CartControllerTest {
         String roles = mapper.writeValueAsString(Collections.singletonList(Role.ROLE_USER));
         headers = new HttpHeaders();
         headers.set(AUTH_ID, uuid);
-        headers.set(WWW_AUTHENTICATION, roles);
+        headers.set(WWW_AUTHENTICATE, roles);
     }
 
     @Test
@@ -108,7 +108,7 @@ class CartControllerTest {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(AUTH_ID, uuid);
-        headers.set(WWW_AUTHENTICATION, roles);
+        headers.set(WWW_AUTHENTICATE, roles);
 
         ProductToCartRequest request = Dummy.getDummyProductToCartRequest(productId);
         String jsonRequest = mapper.writeValueAsString(request);

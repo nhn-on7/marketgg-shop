@@ -7,20 +7,15 @@ import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.exception.auth.UnAuthenticException;
 import com.nhnacademy.marketgg.server.exception.auth.UnAuthorizationException;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * Annotation 으로 권한 처리하는 클래스
@@ -47,11 +42,11 @@ public class RoleCheckAspect {
     public void checkRole(RoleCheck roleCheck)
         throws IOException, IllegalAccessException {
 
-        log.info("Role Check AOP");
+        log.debug("Role Check AOP");
 
         HttpServletRequest request = AspectUtils.getRequest();
 
-        String roleHeader = request.getHeader(AspectUtils.WWW_AUTHENTICATION);
+        String roleHeader = request.getHeader(AspectUtils.WWW_AUTHENTICATE);
         String uuid = request.getHeader(AspectUtils.AUTH_ID);
 
         if (isInvalidHeader(roleHeader, uuid)) {
