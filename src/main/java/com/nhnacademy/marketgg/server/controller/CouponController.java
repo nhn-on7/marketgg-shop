@@ -50,7 +50,7 @@ public class CouponController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("201 success"));
+                             .body(new SingleResponse<>("Add success"));
     }
 
     /**
@@ -101,7 +101,7 @@ public class CouponController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("200 success"));
+                             .body(new SingleResponse<>("Update success"));
     }
 
     /**
@@ -118,7 +118,7 @@ public class CouponController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("200 success"));
+                             .body(new SingleResponse<>("Delete success"));
     }
 
 }

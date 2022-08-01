@@ -3,9 +3,9 @@ package com.nhnacademy.marketgg.server.service;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
-import org.springframework.data.domain.Pageable;
-
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * 상품 문의 서비스입니다.
@@ -30,7 +30,7 @@ public interface ProductInquiryPostService {
      * @param id - 조회할 상품의 PK 입니다.
      * @return - 상품 문의 글을 List 로 반환합니다.
      */
-    List<ProductInquiryResponse> retrieveProductInquiryByProductId(Long id, Pageable pageable);
+    Page<ProductInquiryResponse> retrieveProductInquiryByProductId(Long id, Pageable pageable);
 
     /**
      * 회원이 남긴 모든 상품 문의 글을 조회합니다.
@@ -38,7 +38,7 @@ public interface ProductInquiryPostService {
      * @param memberInfo - 조회할 회원의 정보입니다.
      * @return - 상품 문의 글을 List 로 반환합니다.
      */
-    List<ProductInquiryResponse> retrieveProductInquiryByMemberId(MemberInfo memberInfo, Pageable pageable);
+    Page<ProductInquiryResponse> retrieveProductInquiryByMemberId(MemberInfo memberInfo, Pageable pageable);
 
     /**
      * 상품 문의 글에 대한 관리자의 답글을 상품 문의 글에 업데이트합니다.

@@ -44,7 +44,7 @@ public class UsedCouponController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("201 success"));
+                             .body(new SingleResponse<>("Add success"));
     }
 
     /**
@@ -60,7 +60,7 @@ public class UsedCouponController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("201 success"));
+                             .body(new SingleResponse<>("Delete success"));
     }
 
 }

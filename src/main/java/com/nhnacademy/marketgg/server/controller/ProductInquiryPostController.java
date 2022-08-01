@@ -13,6 +13,7 @@ import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -72,12 +73,12 @@ public class ProductInquiryPostController {
     @GetMapping("/products/{productId}/inquiries")
     public ResponseEntity<CommonResponse> retrieveProductInquiry(@PathVariable final Long productId,
                                                                  final Pageable pageable) {
-        List<ProductInquiryResponse> productInquiryResponses
+        Page<ProductInquiryResponse> productInquiryResponses
                 = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new ListResponse<>(productInquiryResponses));
+                             .body(new SingleResponse<>(productInquiryResponses));
     }
 
     /**
@@ -91,13 +92,13 @@ public class ProductInquiryPostController {
     @GetMapping("/members/product-inquiries")
     public ResponseEntity<CommonResponse> retrieveProductInquiry(final MemberInfo memberInfo,
                                                                  final Pageable pageable) {
-        List<ProductInquiryResponse> productInquiryResponses
+        Page<ProductInquiryResponse> productInquiryResponses
                 = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create("/members/product-inquiries"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new ListResponse<>(productInquiryResponses));
+                             .body(new SingleResponse<>(productInquiryResponses));
     }
 
     /**

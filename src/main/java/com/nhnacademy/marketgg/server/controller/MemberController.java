@@ -179,7 +179,7 @@ public class MemberController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("201 success"));
+                             .body(new SingleResponse<>("Add success"));
     }
 
     /**
