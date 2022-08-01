@@ -86,6 +86,15 @@ public class AdminPostController {
                              .body(responses);
     }
 
+    /**
+     * 입력받은 정보로 지정한 게시글을 수정 할 수 있는 PUT Mapping 을 지원합니다.
+     *
+     * @param boardNo - 수정할 게시글의 식별번호입니다.
+     * @param postRequest - 수정할 게시글의 정보를 담은 객체입니다.
+     * @param memberInfo - 멤버 정보를 담은 객체입니다.
+     * @return Mapping URI 를 담은 응답객체를 반환합니다.
+     * @since 1.0.0
+     */
     @PutMapping("/{boardNo}")
     public ResponseEntity<Void> updatePost(@PathVariable final Long boardNo, @RequestBody final PostRequest postRequest,
                                            final MemberInfo memberInfo) {

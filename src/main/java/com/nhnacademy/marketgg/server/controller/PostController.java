@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -52,9 +51,8 @@ public class PostController {
      * @since 1.0.0
      */
     @PostMapping("/oto-inquiries")
-    public ResponseEntity<Void> createOtoInquiry(final MemberInfo memberInfo,
-                                                 @Valid @RequestBody
-                                                 final PostRequest postRequest) {
+    public ResponseEntity<Void> createOtoInquiry(@Valid @RequestBody final PostRequest postRequest,
+                                                 final MemberInfo memberInfo) {
 
         postService.createPost(memberInfo.getId(), postRequest);
 
@@ -66,21 +64,18 @@ public class PostController {
     }
 
     /**
-     * 선택한 1:1 문의를 조회하는 GET Mapping 을 지원합니다.
+     * 선택한 게시글을 조회하는 GET Mapping 을 지원합니다.
      *
-     * @param inquiryId - 선택한 1:1 문의의 식별번호입니다.
+     * @param boardNo - 선택한 게시글의 식별번호입니다.
      * @return 조회한 1:1 문의 단건의 정보를 담은 객체를 반환합니다.
      * @since 1.0.
      */
-    @GetMapping("/oto-inquiries/{inquiryId}")
-    public ResponseEntity<PostResponseForOtoInquiry> retrieveOwnOtoInquiry(
-            @PathVariable final Long inquiryId) {
-        PostResponseForOtoInquiry inquiryResponse =
-                postService.retrievePost(inquiryId);
+    @GetMapping("/{boardNo}")
+    public ResponseEntity<PostResponseForOtoInquiry> retrieveOwnOtoInquiry(@PathVariable final Long boardNo) {
+        PostResponseForOtoInquiry inquiryResponse = postService.retrievePost(boardNo);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(
-                                     DEFAULT_POST + "/oto-inquiries/" + inquiryId))
+                             .location(URI.create(DEFAULT_POST + "/oto-inquiries/" + boardNo))
                              .body(inquiryResponse);
     }
 
@@ -88,36 +83,34 @@ public class PostController {
      * 회원의 모든 1:1 문의 목록을 조회하는 GET Mapping 을 지원합니다.
      *
      * @param memberInfo - 조회하는 회원의 정보입니다.
-     * @param page - 페이징 처리를 위한 페이지 번호입니다..
+     * @param page       - 페이징 처리를 위한 페이지 번호입니다..
      * @return 회원의 1:1 문의 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    @GetMapping("/oto-inquiries")
-    public ResponseEntity<List<PostResponse>> retrieveOwnOtoInquiries(final MemberInfo memberInfo, final Integer page) {
-        
-        List<PostResponse> inquiryResponses =
-                postService.retrievesOwnPostList(page, "702", memberInfo.getId());
+    @GetMapping("/categories/{categoryCode}")
+    public ResponseEntity<List<PostResponse>> retrievesPostList(@PathVariable final String categoryCode,
+                                                                final MemberInfo memberInfo, final Integer page) {
+
+        List<PostResponse> responses = postService.retrievesOwnPostList(page, categoryCode, memberInfo.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(
-                                     DEFAULT_POST + "/oto-inquiries"))
-                             .body(inquiryResponses);
+                             .location(URI.create(DEFAULT_POST + "/" + categoryCode))
+                             .body(responses);
     }
 
     /**
      * 선택한 1:1 문의를 삭제하는 DELETE Mapping 을 지원합니다.
      *
-     * @param inquiryId - 선택한 1:1 문의의 식별번호입니다.
+     * @param boardNo - 선택한 1:1 문의의 식별번호입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @DeleteMapping("/oto-inquiries/{inquiryId}")
-    public ResponseEntity<Void> deleteOtoInquiry(@PathVariable final Long inquiryId) {
-        postService.deletePost(inquiryId);
+    @DeleteMapping("/oto-inquiries/{boardNo}")
+    public ResponseEntity<Void> deleteOtoInquiry(@PathVariable final Long boardNo) {
+        postService.deletePost(boardNo);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(
-                                     DEFAULT_POST + "/oto-inquiries/" + inquiryId))
+                             .location(URI.create(DEFAULT_POST + "/oto-inquiries/" + boardNo))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -135,7 +128,7 @@ public class PostController {
                                      .collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_POST + "/oto-inquiries/reasons"))
+                             .location(URI.create(DEFAULT_POST + "/reasons"))
                              .body(reasons);
     }
 
