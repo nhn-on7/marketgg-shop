@@ -9,30 +9,19 @@ import com.nhnacademy.marketgg.server.dto.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
-<<<<<<< HEAD
-import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
-import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
-=======
-import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
 import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
-import com.nhnacademy.marketgg.server.dto.response.member.ShopMemberSignUpResponse;
->>>>>>> dfd9907 (Refactor: Code Smells 개선 #181)
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
-import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.service.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.MemberService;
 import com.nhnacademy.marketgg.server.service.PointService;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
-<<<<<<< HEAD
-=======
 import java.util.Objects;
->>>>>>> dfd9907 (Refactor: Code Smells 개선 #181)
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
