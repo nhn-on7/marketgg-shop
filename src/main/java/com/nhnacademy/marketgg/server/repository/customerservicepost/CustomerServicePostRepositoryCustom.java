@@ -49,4 +49,13 @@ public interface CustomerServicePostRepositoryCustom {
      */
     Page<PostResponse> findPostByCategoryAndMember(final Pageable pageable, final String categoryId, final Long memberId);
 
+    /**
+     * 게시글 번호로 본인의 1:1 문의 단건의 상세 정보를 조회하는 메소드입니다.
+     *
+     * @param boardNo - 조회할 게시글의 식별번호입니다.
+     * @param memberId - 조회하는 회원의 식별번호입니다.
+     * @return 조회한 게시글의 상세 정보를 반환합니다.
+     * @since 1.0.0
+     */
+    PostResponseForOtoInquiry findOwnOtoInquiryById(Long boardNo, Long memberId);
 }

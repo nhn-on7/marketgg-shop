@@ -103,6 +103,17 @@ public class DefaultPostServiceTest {
     }
 
     @Test
+    @DisplayName("회원의 1:1 문의 단건 조회")
+    void testRetrieveOwnOtoInquiryPost() {
+        given(postRepository.findOwnOtoInquiryById(anyLong(), anyLong()))
+                .willReturn(Dummy.getDummyPostResponseForOtoInquiry());
+
+        postService.retrieveOwnOtoInquiryPost(1L, 1L);
+
+        then(postRepository).should(times(1)).findOwnOtoInquiryById(anyLong(), anyLong());
+    }
+
+    @Test
     @DisplayName("게시글 목록 조회")
     void testRetrievePostList() {
         given(postRepository.findPostsByCategoryId(any(Pageable.class), anyString()))

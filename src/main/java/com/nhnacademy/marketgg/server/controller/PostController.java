@@ -91,8 +91,10 @@ public class PostController {
      * @since 1.0.
      */
     @GetMapping("/oto-inquiries/{boardNo}")
-    public ResponseEntity<PostResponseForOtoInquiry> retrieveOwnOtoInquiry(@PathVariable final Long boardNo) {
-        PostResponseForOtoInquiry inquiryResponse = postService.retrieveOtoInquiryPost(boardNo);
+    public ResponseEntity<PostResponseForOtoInquiry> retrieveOwnOtoInquiry(@PathVariable final Long boardNo,
+                                                                           final MemberInfo memberInfo) {
+
+        PostResponseForOtoInquiry inquiryResponse = postService.retrieveOwnOtoInquiryPost(boardNo, memberInfo.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/oto-inquiries/" + boardNo))

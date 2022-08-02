@@ -39,13 +39,23 @@ public interface CustomerServicePostService {
     PostResponseForDetail retrievePost(Long boardNo);
 
     /**
-     * 고객센터 1:1문의 단건을 조회하는 메소드입니다.
+     * 1:1 문의 단건을 조회하는 메소드입니다.
      *
-     * @param boardNo - 고객센터 게시글의 식별번호입니다.
+     * @param boardNo - 게시글의 식별번호입니다.
      * @return 조회한 게시글의 정보를 담은 DTO 객체를 반환합니다.
      * @since 1.0.0
      */
     PostResponseForOtoInquiry retrieveOtoInquiryPost(final Long boardNo);
+
+    /**
+     * 회원의 1:1 문의 단건을 조회하는 메소드입니다.
+     *
+     * @param boardNo - 게시글의 식별번호입니다.
+     * @param memberId - 조회할 회원의 식별번호입니다.
+     * @return 조회한 게시글의 정보를 담은 DTO 객체를 반환합니다.
+     * @since 1.0.0
+     */
+    PostResponseForOtoInquiry retrieveOwnOtoInquiryPost(final Long boardNo, final Long memberId);
 
     /**
      * 1:1 문의 전체 목록을 조회하는 메소드입니다.

@@ -126,24 +126,37 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("1:1 문의 단건 조회 - 사용자")
-    void testRetrieveOtoInquiry() throws Exception {
-        given(postService.retrieveOtoInquiryPost(anyLong())).willReturn(Dummy.getDummyPostResponseForOtoInquiry());
+    @DisplayName("회원의 1:1 문의 단건 조회 - 사용자")
+    void testRetrieveOwnOtoInquiry() throws Exception {
+        given(postService.retrieveOwnOtoInquiryPost(anyLong(), anyLong())).willReturn(Dummy.getDummyPostResponseForOtoInquiry());
 
         this.mockMvc.perform(get(DEFAULT_POST + "/oto-inquiries/{boardNo}", 1L)
                                      .headers(headers))
                     .andExpect(status().isOk());
 
-        then(postService).should().retrieveOtoInquiryPost(anyLong());
+        then(postService).should().retrieveOwnOtoInquiryPost(anyLong(), anyLong());
     }
 
     @Test
-    @DisplayName("지정한 게시판 타입의 회원의 모든 고객센터 게시글 목록 조회 - 사용자")
+    @DisplayName("카테고리별 고객센터 게시글 목록 조회 - 사용자")
+    void testRetrievePostList() throws Exception {
+        given(postService.retrievePostList(anyString(), anyInt())).willReturn(List.of(Dummy.getDummyPostResponse()));
+
+        this.mockMvc.perform(get(DEFAULT_POST + "/categories/{categoryCode}", "701")
+                                     .headers(headers)
+                                     .param("page", "1"))
+                .andExpect(status().isOk());
+
+        then(postService).should(times(1)).retrievePostList(anyString(), anyInt());
+    }
+
+    @Test
+    @DisplayName("회원의 1:1 문의 목록 조회 - 사용자")
     void testRetrieveOwnPostList() throws Exception {
         given(postService.retrieveOwnPostList(anyInt(), anyString(), anyLong()))
                 .willReturn(List.of(Dummy.getDummyPostResponse()));
 
-        this.mockMvc.perform(get(DEFAULT_POST + "/categories/{categoryCode}", "702")
+        this.mockMvc.perform(get(DEFAULT_POST + "/oto-inquiries")
                                      .headers(headers)
                                      .param("page", "1"))
                     .andExpect(status().isOk());

@@ -31,6 +31,15 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
+    public PostResponseForOtoInquiry findOwnOtoInquiryById(Long boardNo, Long memberId) {
+        return from(csPost)
+                .where(csPost.id.eq(boardNo))
+                .where(csPost.member.id.eq(memberId))
+                .select(selectAllCsPostColumns())
+                .fetchOne();
+    }
+
+    @Override
     public PostResponseForDetail findByBoardNo(final Long boardNo) {
         return from(csPost)
                 .where(csPost.id.eq(boardNo))
