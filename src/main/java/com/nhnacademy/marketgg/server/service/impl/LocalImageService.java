@@ -26,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 
 @Component
-@Primary
+// @Primary
 public class LocalImageService implements ImageService {
 
     private static final String DIR = System.getProperty("user.home");

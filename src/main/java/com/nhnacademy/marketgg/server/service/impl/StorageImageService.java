@@ -1,9 +1,9 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import com.nhnacademy.marketgg.server.cloud.AuthService;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.service.ImageService;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,30 +12,33 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
+@RequiredArgsConstructor
 @Component
+@Primary
 public class StorageImageService implements ImageService {
 
     private static final String DIR = System.getProperty("user.home");
+    private final AuthService authService;
 
     @Override
     public List<Image> parseImages(List<MultipartFile> multipartFiles, Asset asset) throws IOException {
         List<Image> images = new ArrayList<>();
 
-        if (!CollectionUtils.isEmpty(multipartFiles)) {
-            String dir = String.valueOf(Files.createDirectories(returnDir()));
-            Integer sequence = 1;
-
-            for (MultipartFile multipartFile : multipartFiles) {
-
-                sequence++;
-            }
+        if (CollectionUtils.isEmpty(multipartFiles)) {
+            throw new IOException("이미지가 없습니다.");
         }
+
+        String s = authService.requestToken();
+        log.warn(s);
         return images;
     }
 
