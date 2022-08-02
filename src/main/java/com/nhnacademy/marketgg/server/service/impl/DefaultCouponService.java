@@ -3,11 +3,9 @@ package com.nhnacademy.marketgg.server.service.impl;
 import com.nhnacademy.marketgg.server.dto.request.CouponDto;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
-import com.nhnacademy.marketgg.server.mapper.impl.CouponMapper;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import com.nhnacademy.marketgg.server.service.CouponService;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -18,34 +16,25 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class DefaultCouponService implements CouponService {
 
-    // MEMO 6: Mapstruct 사용하기 위해 등록한 컴포넌트 빈을 주입
-    private final CouponMapper couponMapper;
     private final CouponRepository couponRepository;
 
-    // MEMO 7: Mapstruct 사용 (toEntity, toDto)
     @Transactional
     @Override
     public void createCoupon(@Valid final CouponDto couponDto) {
-        Coupon coupon = couponMapper.toEntity(couponDto);
+        Coupon coupon = new Coupon(couponDto);
         couponRepository.save(coupon);
     }
 
     @Override
-    public CouponDto retrieveCoupon(final Long couponId) {
-        Coupon coupon = couponRepository.findById(couponId)
-                                        .orElseThrow(CouponNotFoundException::new);
+    public CouponDto retrieveCoupon(final Long id) {
 
-        return couponMapper.toDto(coupon);
+        return couponRepository.findCouponDtoById(id).orElseThrow(CouponNotFoundException::new);
     }
 
     @Override
     public List<CouponDto> retrieveCoupons(final Pageable pageable) {
-        List<Coupon> couponList = couponRepository.findAllCoupons(pageable)
-                                                  .getContent();
 
-        return couponList.stream()
-                         .map(couponMapper::toDto)
-                         .collect(Collectors.toUnmodifiableList());
+        return couponRepository.findAllCoupons(pageable).getContent();
     }
 
     @Transactional
@@ -53,9 +42,7 @@ public class DefaultCouponService implements CouponService {
     public void updateCoupon(final Long couponId, @Valid final CouponDto couponDto) {
         Coupon coupon = couponRepository.findById(couponId)
                                         .orElseThrow(CouponNotFoundException::new);
-
-        // MEMO 8: Update method Dto -> Entity 로 null 아닌 컬럼만 업데이트
-        couponMapper.updateCouponFromCouponDto(couponDto, coupon);
+        coupon.updateCoupon(couponDto);
 
         couponRepository.save(coupon);
     }

@@ -1,23 +1,5 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.request.CouponDto;
-import com.nhnacademy.marketgg.server.entity.GivenCoupon;
-import com.nhnacademy.marketgg.server.service.CouponService;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -28,6 +10,22 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.dto.request.CouponDto;
+import com.nhnacademy.marketgg.server.service.CouponService;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(CouponController.class)
 public class CouponControllerTest {
@@ -44,19 +42,30 @@ public class CouponControllerTest {
     private static final String DEFAULT_COUPON = "/admin/coupons";
 
     Pageable pageable = PageRequest.of(0, 20);
-    Page<GivenCoupon> inquiryPosts = new PageImpl<>(List.of(), pageable, 0);
+    CouponDto couponDto;
+
+    @BeforeEach
+    void setUp() {
+        couponDto = new CouponDto();
+        ReflectionTestUtils.setField(couponDto, "id", 1L);
+        ReflectionTestUtils.setField(couponDto, "name", "신규 쿠폰");
+        ReflectionTestUtils.setField(couponDto, "type", "정률할인");
+        ReflectionTestUtils.setField(couponDto, "expiredDate", 1);
+        ReflectionTestUtils.setField(couponDto, "minimumMoney", 1);
+        ReflectionTestUtils.setField(couponDto, "discountAmount", 0.5);
+    }
 
     @Test
     @DisplayName("쿠폰 등록")
     void testCreateCoupon() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(new CouponDto(1L, "name", "type", 10, 1000, 0.5));
+        String requestBody = objectMapper.writeValueAsString(couponDto);
 
-        willDoNothing().given(couponService).createCoupon(any(CouponDto.class));
+        willDoNothing().given(couponService).createCoupon(couponDto);
 
         this.mockMvc.perform(post(DEFAULT_COUPON)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(requestBody))
-                .andExpect(status().isCreated());
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+                    .andExpect(status().isCreated());
 
         then(couponService).should().createCoupon(any(CouponDto.class));
     }
@@ -67,7 +76,7 @@ public class CouponControllerTest {
         given(couponService.retrieveCoupon(anyLong())).willReturn(null);
 
         this.mockMvc.perform(get(DEFAULT_COUPON + "/" + 1L))
-                .andExpect(status().isOk());
+                    .andExpect(status().isOk());
 
         then(couponService).should().retrieveCoupon(anyLong());
     }
@@ -78,7 +87,7 @@ public class CouponControllerTest {
         given(couponService.retrieveCoupons(pageable)).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_COUPON))
-                .andExpect(status().isOk());
+                    .andExpect(status().isOk());
 
         then(couponService).should().retrieveCoupons(pageable);
     }
@@ -86,25 +95,25 @@ public class CouponControllerTest {
     @Test
     @DisplayName("쿠폰 수정")
     void testUpdateCoupon() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(new CouponDto(1L, "name", "type", 10, 1000, 0.5));
+        String requestBody = objectMapper.writeValueAsString(couponDto);
 
-        willDoNothing().given(couponService).updateCoupon(anyLong(), any(CouponDto.class));
+        willDoNothing().given(couponService).updateCoupon(1L, couponDto);
 
         this.mockMvc.perform(put(DEFAULT_COUPON + "/" + 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(requestBody))
-                .andExpect(status().isOk());
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestBody))
+                    .andExpect(status().isOk());
 
         then(couponService).should().updateCoupon(anyLong(), any(CouponDto.class));
     }
-    
+
     @Test
     @DisplayName("쿠폰 삭제")
     void testDeleteCoupon() throws Exception {
         willDoNothing().given(couponService).deleteCoupon(anyLong());
 
         this.mockMvc.perform(delete(DEFAULT_COUPON + "/" + 1L))
-                .andExpect(status().isNoContent());
+                    .andExpect(status().isNoContent());
 
         then(couponService).should().deleteCoupon(anyLong());
     }
