@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -151,9 +152,9 @@ public class PostController {
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */
-    @PostMapping("/categories/{categoryCode}/search/reason/{option}")
+    @PostMapping("/categories/{categoryCode}/search/reason")
     public ResponseEntity<List<SearchBoardResponse>> searchPostListForReason(@PathVariable final String categoryCode,
-                                                                             @PathVariable final String option,
+                                                                             @RequestParam final String option,
                                                                              @RequestBody final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
@@ -177,9 +178,9 @@ public class PostController {
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */
-    @PostMapping("/categories/{categoryCode}/search/status/{option}")
+    @PostMapping("/categories/{categoryCode}/search/status")
     public ResponseEntity<List<SearchBoardResponse>> searchPostListForStatus(@PathVariable final String categoryCode,
-                                                                             @PathVariable final String option,
+                                                                             @RequestParam final String option,
                                                                              @RequestBody final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
