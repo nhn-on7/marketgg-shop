@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  *
  * @version 1.0.0
  */
-@RoleCheck(accessLevel = Role.ROLE_USER)
+// @RoleCheck(accessLevel = Role.ROLE_USER)
 @RestController
 @RequestMapping("/customer-services")
 @RequiredArgsConstructor
@@ -103,16 +103,15 @@ public class PostController {
     /**
      * 회원의 모든 고객센터 게시글 목록을 조회하는 GET Mapping 을 지원합니다.
      *
-     * @param memberInfo - 조회하는 회원의 정보입니다.
-     * @param page       - 페이징 처리를 위한 페이지 번호입니다..
+     * @param categoryCode - 조회할 게시글 목록의 카테고리 식별번호입니다.
+     * @param page       - 페이징 처리를 위한 페이지 번호입니다.
      * @return 회원의 1:1 문의 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
     @GetMapping("/categories/{categoryCode}")
-    public ResponseEntity<List<PostResponse>> retrievePostList(@PathVariable final String categoryCode,
-                                                               final MemberInfo memberInfo, final Integer page) {
+    public ResponseEntity<List<PostResponse>> retrievePostList(@PathVariable final String categoryCode, final Integer page) {
 
-        List<PostResponse> responses = postService.retrieveOwnPostList(page, categoryCode, memberInfo.getId());
+        List<PostResponse> responses = postService.retrievePostList(categoryCode, page);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/categories/" + categoryCode))

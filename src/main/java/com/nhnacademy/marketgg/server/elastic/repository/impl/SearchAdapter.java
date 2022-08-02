@@ -36,8 +36,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class SearchAdapter implements SearchRepository {
 
-    @Value("{spring.elasticsearch.uris}")
-    private String elastic;
+    // @Value("{spring.elasticsearch.uris}")
+    // private String elastic;
+    private static final String ELASTIC = "http://133.186.153.181:9200";
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
@@ -124,7 +125,7 @@ public class SearchAdapter implements SearchRepository {
             requestUri = DEFAULT_ELASTIC_BOARD;
         }
 
-        return restTemplate.exchange("http://" + elastic + requestUri,
+        return restTemplate.exchange(ELASTIC + requestUri,
                                      HttpMethod.POST,
                                      request,
                                      String.class);
