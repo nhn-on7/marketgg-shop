@@ -1,5 +1,5 @@
 ---
-name: CoRock's Feature request template
+name: 'CoRock: Feature request'
 about: Suggest an idea for this project
 title: ''
 labels: ''
@@ -13,5 +13,4 @@ A clear and concise description of what the problem is. Ex. I'm always frustrate
 
 ## Description
 
-**Describe the solution you'd like**
 A clear and concise description of what you want to happen.
