@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
+import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;

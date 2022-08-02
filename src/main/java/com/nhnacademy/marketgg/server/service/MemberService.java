@@ -1,10 +1,8 @@
 package com.nhnacademy.marketgg.server.service;
 
-import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
-import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
-import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
-import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignUpResponse;
-
+import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
+import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import java.time.LocalDateTime;
 
 /**

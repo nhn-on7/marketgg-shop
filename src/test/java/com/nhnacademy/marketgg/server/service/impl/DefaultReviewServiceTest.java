@@ -9,9 +9,9 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.ReviewUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ReviewResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;

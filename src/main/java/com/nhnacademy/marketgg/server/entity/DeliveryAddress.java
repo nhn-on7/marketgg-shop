@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

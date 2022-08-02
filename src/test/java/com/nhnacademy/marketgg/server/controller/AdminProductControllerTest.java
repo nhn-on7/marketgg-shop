@@ -15,8 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.admin.AdminProductController;
-import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.ProductService;
@@ -63,9 +63,9 @@ class AdminProductControllerTest {
         productRequest = new ProductCreateRequest();
         ReflectionTestUtils.setField(productRequest, "categoryCode", "001");
         productResponse =
-                new ProductResponse(null, null, null, null, null, null, null, null, null, null,
-                                    null, null, null,
-                                    null, null, null, null, null, null, null, null);
+            new ProductResponse(null, null, null, null, null, null, null, null, null, null,
+                null, null, null,
+                null, null, null, null, null, null, null, null);
     }
 
     @Test
@@ -77,19 +77,19 @@ class AdminProductControllerTest {
         String filePath = Objects.requireNonNull(url).getPath();
 
         MockMultipartFile file =
-                new MockMultipartFile("image", "lee.png", "image/png",
-                                      new FileInputStream(filePath));
+            new MockMultipartFile("image", "lee.png", "image/png",
+                new FileInputStream(filePath));
 
         MockMultipartFile dto =
-                new MockMultipartFile("productRequest", "jsondata", "application/json",
-                                      content.getBytes(StandardCharsets.UTF_8));
+            new MockMultipartFile("productRequest", "jsondata", "application/json",
+                content.getBytes(StandardCharsets.UTF_8));
 
         this.mockMvc.perform(multipart(DEFAULT_PRODUCT).file(dto)
                                                        .file(file)
                                                        .contentType(
-                                                               MediaType.APPLICATION_JSON_VALUE)
+                                                           MediaType.APPLICATION_JSON_VALUE)
                                                        .contentType(
-                                                               MediaType.MULTIPART_FORM_DATA_VALUE)
+                                                           MediaType.MULTIPART_FORM_DATA_VALUE)
                                                        .characterEncoding(StandardCharsets.UTF_8))
                     .andExpect(status().isCreated())
                     .andExpect(header().string("Location", DEFAULT_PRODUCT));
@@ -130,17 +130,17 @@ class AdminProductControllerTest {
 
         String content = this.objectMapper.writeValueAsString(productUpdateRequest);
         MockMultipartFile dto =
-                new MockMultipartFile("productRequest", "jsondata", "application/json",
-                                      content.getBytes(StandardCharsets.UTF_8));
+            new MockMultipartFile("productRequest", "jsondata", "application/json",
+                content.getBytes(StandardCharsets.UTF_8));
 
         URL url = getClass().getClassLoader().getResource("lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile file =
-                new MockMultipartFile("image", "lee.png", "image/png",
-                                      new FileInputStream(filePath));
+            new MockMultipartFile("image", "lee.png", "image/png",
+                new FileInputStream(filePath));
 
         MockMultipartHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.multipart(DEFAULT_PRODUCT + "/{product}", 1L);
+            MockMvcRequestBuilders.multipart(DEFAULT_PRODUCT + "/{product}", 1L);
         builder.with(new RequestPostProcessor() {
             @Override
             public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {

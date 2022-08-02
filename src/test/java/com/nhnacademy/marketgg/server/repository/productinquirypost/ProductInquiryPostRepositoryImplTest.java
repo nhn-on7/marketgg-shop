@@ -2,10 +2,10 @@ package com.nhnacademy.marketgg.server.repository.productinquirypost;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.MemberGradeCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberGradeCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -17,7 +17,6 @@ import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
@@ -77,7 +76,7 @@ class ProductInquiryPostRepositoryImplTest {
             productInquiryPostRepository.save(productInquiryPost);
         }
         assertThat(productInquiryPostRepository.findAllByProductNo(2L, PageRequest.of(0, 10)))
-                .hasSize(5);
+            .hasSize(5);
     }
 
     // @Test
@@ -89,7 +88,7 @@ class ProductInquiryPostRepositoryImplTest {
             productInquiryPostRepository.save(productInquiryPost);
         }
         assertThat(productInquiryPostRepository.findAllByMemberNo(1L, PageRequest.of(0, 10)))
-                .hasSize(5);
+            .hasSize(5);
     }
 
 }

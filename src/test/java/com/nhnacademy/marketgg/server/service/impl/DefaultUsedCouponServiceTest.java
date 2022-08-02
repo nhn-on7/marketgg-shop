@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.request.UsedCouponDto;
+import com.nhnacademy.marketgg.server.dto.request.coupon.UsedCouponDto;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.UsedCoupon;

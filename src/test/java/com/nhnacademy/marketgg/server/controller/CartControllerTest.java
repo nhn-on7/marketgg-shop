@@ -28,7 +28,7 @@ import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
 import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
 import com.nhnacademy.marketgg.server.aop.UuidAspect;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.ProductToCartRequest;
+import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;

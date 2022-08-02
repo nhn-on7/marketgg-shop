@@ -1,10 +1,16 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
+
 import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
-import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticBoardRepository;
@@ -17,6 +23,8 @@ import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicecomment.CustomerServiceCommentRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,16 +37,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.willDoNothing;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -108,7 +106,7 @@ public class DefaultCustomerServicePostServiceTest {
     void testRetrieveOtoInquiries() {
         given(categoryRepository.retrieveCategoryIdByName(anyString())).willReturn("702");
         given(postRepository.findPostsByCategoryId(any(Pageable.class), anyString()))
-                .willReturn(Page.empty());
+            .willReturn(Page.empty());
 
         postService.retrieveOtoInquiries(PageRequest.of(0, 10));
 
@@ -120,7 +118,7 @@ public class DefaultCustomerServicePostServiceTest {
     void testRetrieveOwnOtoInquiries() {
         given(categoryRepository.retrieveCategoryIdByName(anyString())).willReturn("702");
         given(postRepository.findPostByCategoryAndMember(any(Pageable.class), anyString(), anyLong()))
-                .willReturn(Page.empty());
+            .willReturn(Page.empty());
 
         postService.retrieveOwnOtoInquiries(PageRequest.of(0, 10), 1L);
 

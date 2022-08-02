@@ -1,10 +1,15 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+
 import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CommentRequest;
-import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Categorization;
@@ -15,6 +20,9 @@ import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.repository.customerservicecomment.CustomerServiceCommentRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,15 +31,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -76,7 +75,7 @@ public class DefaultCustomerServiceCommentServiceTest {
     @DisplayName("댓글 단건 조회")
     void testRetrieveComment() {
         given(commentRepository.findCommentById(anyLong())).willReturn(
-                new CommentResponse(1L, 1L, 1L, "content", LocalDateTime.now()));
+            new CommentResponse(1L, 1L, 1L, "content", LocalDateTime.now()));
 
         commentService.retrieveComment(1L);
 

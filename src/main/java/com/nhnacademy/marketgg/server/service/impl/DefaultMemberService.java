@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
-import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
-import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
+import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;

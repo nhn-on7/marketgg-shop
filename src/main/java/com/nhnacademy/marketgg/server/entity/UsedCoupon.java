@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.UsedCouponDto;
+import com.nhnacademy.marketgg.server.dto.request.coupon.UsedCouponDto;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

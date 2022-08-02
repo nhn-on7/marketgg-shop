@@ -5,26 +5,22 @@ import static org.springframework.http.HttpStatus.OK;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.annotation.UUID;
-import com.nhnacademy.marketgg.server.dto.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.AuthInfo;
-import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
-import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
-import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
+import com.nhnacademy.marketgg.server.dto.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
 import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
-import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
-import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignUpResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.service.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.MemberService;
 import com.nhnacademy.marketgg.server.service.PointService;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -106,7 +102,7 @@ public class MemberController {
     /**
      * 사용자 정보를 반환합니다.
      *
-     * @param authInfo - Auth Server 의 사용자 정보
+     * @param authInfo   - Auth Server 의 사용자 정보
      * @param memberInfo - Shop Server 의 사용자 정보
      * @return - 사용자 정보를 반환합니다.
      */
@@ -156,7 +152,7 @@ public class MemberController {
     /**
      * 선택한 회원에게 쿠폰을 지급하는 PostMapping 을 지원합니다.
      *
-     * @param memberInfo               - 쿠폰을 등록할 회원의 정보입니다.
+     * @param memberInfo         - 쿠폰을 등록할 회원의 정보입니다.
      * @param givenCouponRequest - 등록할 쿠폰 번호 정보를 가진 요청 객체입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
@@ -164,8 +160,7 @@ public class MemberController {
     @RoleCheck(accessLevel = Role.ROLE_USER)
     @PostMapping("/coupons")
     public ResponseEntity<CommonResponse> createGivenCoupons(final MemberInfo memberInfo,
-                                                             @Valid @RequestBody
-                                                             final GivenCouponCreateRequest givenCouponRequest) {
+                                                             @Valid @RequestBody final GivenCouponCreateRequest givenCouponRequest) {
 
         givenCouponService.createGivenCoupons(memberInfo, givenCouponRequest);
 
@@ -177,7 +172,7 @@ public class MemberController {
     /**
      * 선택한 회원에게 지급된 쿠폰 목록을 조회하는 GetMapping 을 지원합니다.
      *
-     * @param memberInfo               - 쿠폰을 등록할 회원의 정보입니다.
+     * @param memberInfo - 쿠폰을 등록할 회원의 정보입니다.
      * @return 회원에게 지급된 쿠폰 목록을 가진 DTO 객체를 반환합니다.
      * @since 1.0.0
      */

@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.coupon;
 
-import com.nhnacademy.marketgg.server.dto.request.CouponDto;
+import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.QCoupon;
 import com.querydsl.core.types.ConstructorExpression;

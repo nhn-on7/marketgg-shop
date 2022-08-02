@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
