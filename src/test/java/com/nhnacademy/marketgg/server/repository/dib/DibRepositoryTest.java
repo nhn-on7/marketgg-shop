@@ -69,7 +69,7 @@ class DibRepositoryTest {
 
         dibRepository.save(dib);
 
-        List<DibRetrieveResponse> results = dibRepository.findAllDibs(dib.getPk().getMemberNo());
+        List<DibRetrieveResponse> results = dibRepository.findAllDibs(dib.getPk().getMemberId());
 
         assertThat(results).hasSize(1);
     }
