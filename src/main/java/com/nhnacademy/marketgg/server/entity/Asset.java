@@ -34,17 +34,17 @@ public class Asset {
     @Column(name = "created_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     @NotNull
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     @NotNull
-    private LocalDateTime updatedDate;
+    private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     @NotNull
-    private LocalDateTime deletedDate;
+    private LocalDateTime deletedAt;
 
     /**
      * 빈 장바구니를 생성해주는 정적 팩토리 메서드입니다.
@@ -53,8 +53,8 @@ public class Asset {
      */
     public static Asset create() {
         Asset asset = new Asset();
-        asset.createdDate = LocalDateTime.now();
-        asset.updatedDate = LocalDateTime.now();
+        asset.createdAt = LocalDateTime.now();
+        asset.updatedAt = LocalDateTime.now();
         return asset;
     }
 

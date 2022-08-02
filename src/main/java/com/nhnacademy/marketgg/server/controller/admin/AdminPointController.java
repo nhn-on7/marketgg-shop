@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.controller;
+package com.nhnacademy.marketgg.server.controller.admin;
 
 import com.nhnacademy.marketgg.server.dto.response.PointRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.PointService;

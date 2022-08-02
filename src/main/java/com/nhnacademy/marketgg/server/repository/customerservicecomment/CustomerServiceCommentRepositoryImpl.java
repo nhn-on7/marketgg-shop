@@ -41,7 +41,7 @@ public class CustomerServiceCommentRepositoryImpl extends QuerydslRepositorySupp
                                        comment.customerServicePost.id,
                                        comment.member.id,
                                        comment.content,
-                                       comment.createdDate);
+                                       comment.createdAt);
     }
 
 }

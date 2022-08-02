@@ -27,7 +27,6 @@ public class MemberCreateRequest {
     private String uuid;
 
     @NotNull
-    @Size(min = 1, max = 1)
     private Character gender;
 
     private LocalDate birthDate;

@@ -21,7 +21,6 @@ import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  * 회원 개체입니다.
@@ -57,7 +56,6 @@ public class Member {
     private String uuid;
 
     @NotNull
-    @Size(min = 1, max = 1)
     @Column
     private Character gender;
 
@@ -69,14 +67,14 @@ public class Member {
 
     @Column(name = "created_at")
     @NotNull
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     @NotNull
-    private LocalDateTime updatedDate;
+    private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
-    private LocalDateTime deletedDate;
+    private LocalDateTime deletedAt;
 
     /**
      * 회원을 생성하기 위한 생성자입니다.
@@ -91,9 +89,9 @@ public class Member {
         this.gender = memberRequest.getGender();
         this.birthDate = memberRequest.getBirthDate();
         this.ggpassUpdatedAt = memberRequest.getGgpassUpdateAt();
-        this.createdDate = memberRequest.getCreatedAt();
-        this.updatedDate = memberRequest.getUpdatedAt();
-        this.deletedDate = memberRequest.getDeletedAt();
+        this.createdAt = memberRequest.getCreatedAt();
+        this.updatedAt = memberRequest.getUpdatedAt();
+        this.deletedAt = memberRequest.getDeletedAt();
     }
 
     /**
@@ -111,8 +109,8 @@ public class Member {
         this.uuid = shopMemberSignupRequest.getUuid();
         this.gender = shopMemberSignupRequest.getGender();
         this.birthDate = shopMemberSignupRequest.getBirthDate();
-        this.createdDate = LocalDateTime.now();
-        this.updatedDate = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     /**
@@ -129,7 +127,7 @@ public class Member {
     }
 
     public void withdraw(final MemberWithdrawRequest memberWithdrawRequest) {
-        this.deletedDate = memberWithdrawRequest.getDeletedDate();
+        this.deletedAt = memberWithdrawRequest.getDeletedAt();
     }
 
 }

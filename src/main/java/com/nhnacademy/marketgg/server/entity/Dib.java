@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -80,7 +82,7 @@ public class Dib {
         this.pk = pk;
         this.member = member;
         this.product = product;
-        this.createdDate = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
 }

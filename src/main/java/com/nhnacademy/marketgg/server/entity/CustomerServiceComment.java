@@ -48,13 +48,13 @@ public class CustomerServiceComment {
 
     @Column(name = "created_at")
     @NotNull
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     public CustomerServiceComment(CustomerServicePost csPost, Member member, CommentRequest commentRequest) {
         this.customerServicePost = csPost;
         this.member = member;
         this.content = commentRequest.getContent();
-        this.createdDate = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
 }

@@ -17,6 +17,6 @@ import java.time.LocalDateTime;
 public class MemberWithdrawRequest {
 
     @NotNull
-    private LocalDateTime deletedDate;
+    private LocalDateTime deletedAt;
 
 }

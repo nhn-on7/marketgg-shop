@@ -51,14 +51,14 @@ public class CartProduct {
 
     @Column(name = "created_at")
     @NotNull
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     public CartProduct(Cart cart, Product product, Integer amount) {
         this.pk = new Pk(cart.getId(), product.getId());
         this.cart = cart;
         this.product = product;
         this.amount = amount;
-        this.createdDate = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
     public void updateAmount(Integer amount) {

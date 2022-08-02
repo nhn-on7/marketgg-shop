@@ -29,7 +29,7 @@ public class DibRepositoryImpl extends QuerydslRepositorySupport implements DibR
                                             dib.product.id,
                                             dib.product.name,
                                             dib.product.price,
-                                            dib.createdDate))
+                                            dib.createdAt))
             .fetch();
     }
 

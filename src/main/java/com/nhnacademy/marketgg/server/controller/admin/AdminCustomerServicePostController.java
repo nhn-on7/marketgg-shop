@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.controller;
+package com.nhnacademy.marketgg.server.controller.admin;
 
 import com.nhnacademy.marketgg.server.constant.CustomerServicePostReason;
 import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;

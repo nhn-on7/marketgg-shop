@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,12 +40,12 @@ public class Product {
     @NotNull
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "asset_no")
     @NotNull
     private Asset asset;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_code")
     @NotNull
     private Category category;
@@ -109,16 +110,16 @@ public class Product {
     @Column(name = "created_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     @NotNull
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
     @NotNull
-    private LocalDateTime updatedDate;
+    private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
-    private LocalDateTime deletedDate;
+    private LocalDateTime deletedAt;
 
     public Product(ProductCreateRequest productRequest, Asset asset, Category category) {
         this.asset = asset;
@@ -135,8 +136,8 @@ public class Product {
         this.expirationDate = productRequest.getExpirationDate();
         this.allergyInfo = productRequest.getAllergyInfo();
         this.capacity = productRequest.getCapacity();
-        this.createdDate = LocalDateTime.now();
-        this.updatedDate = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public void updateProduct(ProductUpdateRequest productRequest, Asset asset, Category category) {
@@ -154,7 +155,7 @@ public class Product {
         this.expirationDate = productRequest.getExpirationDate();
         this.allergyInfo = productRequest.getAllergyInfo();
         this.capacity = productRequest.getCapacity();
-        this.updatedDate = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     /**
@@ -162,11 +163,11 @@ public class Product {
      * null 이 아닌 경우 상품이 삭제된 상태입니다.
      */
     public void deleteProduct() {
-        this.deletedDate = LocalDateTime.now();
+        this.deletedAt = LocalDateTime.now();
     }
 
     public void restoreProduct() {
-        this.deletedDate = null;
+        this.deletedAt = null;
     }
 
 }
