@@ -2,7 +2,6 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
-import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.PostResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
@@ -35,7 +34,6 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
@@ -149,7 +147,7 @@ public class DefaultPostServiceTest {
         postService.searchForOption("701", Dummy.getSearchRequest(), "회원", "reason");
 
         then(searchRepository).should(times(1))
-                .searchBoardWithOption(anyString(), anyString(), any(SearchRequest.class), anyString());
+                              .searchBoardWithOption(anyString(), anyString(), any(SearchRequest.class), anyString());
     }
 
     @Test

@@ -137,18 +137,18 @@ class PostControllerTest {
         then(postService).should().retrieveOtoInquiryPost(anyLong());
     }
 
-    // FIXME: 멤버정보 받아오기 수정
-    // @Test
+    @Test
     @DisplayName("지정한 게시판 타입의 회원의 모든 고객센터 게시글 목록 조회 - 사용자")
-    void testRetrievePostList() throws Exception {
-        given(postService.retrievePostList(anyString(), anyInt())).willReturn(List.of(Dummy.getDummyPostResponse()));
+    void testRetrieveOwnPostList() throws Exception {
+        given(postService.retrieveOwnPostList(anyInt(), anyString(), anyLong()))
+                .willReturn(List.of(Dummy.getDummyPostResponse()));
 
         this.mockMvc.perform(get(DEFAULT_POST + "/categories/{categoryCode}", "702")
                                      .headers(headers)
                                      .param("page", "1"))
                     .andExpect(status().isOk());
 
-        then(postService).should(times(1)).retrievePostList(anyString(), anyInt());
+        then(postService).should(times(1)).retrieveOwnPostList(anyInt(), anyString(), anyLong());
     }
 
     @Test
