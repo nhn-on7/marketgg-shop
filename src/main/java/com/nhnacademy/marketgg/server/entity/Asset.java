@@ -28,7 +28,6 @@ public class Asset {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "asset_no")
-    @NotNull
     private Long id;
 
     @Column(name = "created_at")
@@ -43,7 +42,6 @@ public class Asset {
 
     @Column(name = "deleted_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
-    @NotNull
     private LocalDateTime deletedAt;
 
     /**
@@ -55,6 +53,7 @@ public class Asset {
         Asset asset = new Asset();
         asset.createdAt = LocalDateTime.now();
         asset.updatedAt = LocalDateTime.now();
+
         return asset;
     }
 

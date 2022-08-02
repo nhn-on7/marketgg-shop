@@ -22,6 +22,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Dummy {
 
+    public static String DUMMY_UUID = "022db29c-d0e2-11e5-bb4c-60f81dca7676";
+
     public static MemberCreateRequest getDummyMemberCreateRequest(String uuid) {
         MemberCreateRequest memberCreateRequest = new MemberCreateRequest();
         ReflectionTestUtils.setField(memberCreateRequest, "uuid", uuid);
@@ -37,9 +39,7 @@ public class Dummy {
     }
 
     public static Member getDummyMember(Cart cart) {
-        Member member = new Member(getDummyMemberCreateRequest("022db29c-d0e2-11e5-bb4c-60f81dca7676"), cart);
-
-        return member;
+        return new Member(getDummyMemberCreateRequest(DUMMY_UUID), cart);
     }
 
     public static Member getDummyMember(String uuid, Cart cart) {
