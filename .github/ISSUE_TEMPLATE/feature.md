@@ -3,7 +3,7 @@ name: Feature
 about: Feature 작업 사항
 title: ''
 labels: Feat
-assignees: ''
+assignees: corock
 
 ---
 
