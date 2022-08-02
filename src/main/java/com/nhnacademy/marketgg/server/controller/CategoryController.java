@@ -4,6 +4,9 @@ import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.CategoryService;
+import java.net.URI;
+import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,10 +19,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.util.List;
 
 /**
  * 카테고리 관리에 관련된 RestController 입니다.
@@ -43,7 +42,7 @@ public class CategoryController {
      * @since 1.0.0
      */
     @PostMapping
-    ResponseEntity<Void> createCategory(@Valid @RequestBody final CategoryCreateRequest categoryCreateRequest) {
+    public ResponseEntity<Void> createCategory(@Valid @RequestBody final CategoryCreateRequest categoryCreateRequest) {
         categoryService.createCategory(categoryCreateRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -76,9 +75,10 @@ public class CategoryController {
      * @since 1.0.0
      */
     @GetMapping("/categorizations/{categorizationId}")
-    public ResponseEntity<List<CategoryRetrieveResponse>> retrieveCategoriesByCategorization(@PathVariable final String categorizationId) {
+    public ResponseEntity<List<CategoryRetrieveResponse>> retrieveCategoriesByCategorization(
+        @PathVariable final String categorizationId) {
         List<CategoryRetrieveResponse> categoryResponses = categoryService.retrieveCategoriesByCategorization(
-                categorizationId);
+            categorizationId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_CATEGORY + "/" + categorizationId))

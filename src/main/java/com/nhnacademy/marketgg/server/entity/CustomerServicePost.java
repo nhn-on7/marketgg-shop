@@ -2,11 +2,7 @@ package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.constant.CustomerServicePostStatus;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,8 +11,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+/**
+ * 고객센터 게시글 개체입니다.
+ */
 @Table(name = "cs_posts")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -54,6 +55,13 @@ public class CustomerServicePost {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    /**
+     * 고객센터 게시글 생성자입니다.
+     *
+     * @param member      - 게시글 작성 회원
+     * @param category    - 게시글이 속한 카테고리
+     * @param postRequest - 게시글 요청 객체
+     */
     public CustomerServicePost(Member member, Category category, PostRequest postRequest) {
         this.member = member;
         this.category = category;

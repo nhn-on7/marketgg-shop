@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
-import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
-import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
+import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -36,17 +36,21 @@ public class DefaultMemberService implements MemberService {
 
     @Override
     public LocalDateTime retrievePassUpdatedAt(final Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findById(id)
+                                        .orElseThrow(MemberNotFoundException::new);
+
         if (Objects.isNull(member.getGgpassUpdatedAt())) {
             return LocalDateTime.of(1, 1, 1, 1, 1, 1);
         }
+
         return member.getGgpassUpdatedAt();
     }
 
     @Transactional
     @Override
     public void subscribePass(final Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findById(id)
+                                        .orElseThrow(MemberNotFoundException::new);
         member.passSubscribe();
 
         // TODO : GG PASS 자동결제 로직 필요

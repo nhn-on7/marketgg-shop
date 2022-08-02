@@ -24,9 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CustomerServiceCommentController {
 
-    private final CustomerServiceCommentService customerServiceCommentService;
-
     private static final String DEFAULT_CS_COMMENT = "/customer-services/oto-inquiries";
+
+    private final CustomerServiceCommentService customerServiceCommentService;
 
     /**
      * 한 1:1 문의에 대해 댓글을 등록하는 POST Mapping 을 지원합니다.
@@ -41,11 +41,12 @@ public class CustomerServiceCommentController {
     public ResponseEntity<Void> createComment(@PathVariable final Long inquiryId,
                                               @PathVariable final Long memberId,
                                               @RequestBody final CommentRequest commentRequest) {
+
         customerServiceCommentService.createComment(inquiryId, memberId, commentRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create(
-                                 DEFAULT_CS_COMMENT + "/" + inquiryId + "/members/" + memberId + "/comments"))
+                             .location(URI.create(DEFAULT_CS_COMMENT + "/"
+                                                      + inquiryId + "/members/" + memberId + "/comments"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

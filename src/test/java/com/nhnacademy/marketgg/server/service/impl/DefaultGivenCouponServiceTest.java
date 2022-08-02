@@ -10,9 +10,9 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.CouponDto;
-import com.nhnacademy.marketgg.server.dto.request.GivenCouponCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
+import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
@@ -41,8 +41,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -90,7 +88,7 @@ class DefaultGivenCouponServiceTest {
         ReflectionTestUtils.setField(couponDto, "expiredDate", 10);
         cart = cartRepository.save(new Cart());
         givenCoupon = new GivenCoupon(new Coupon(couponDto),
-                new Member(memberCreateRequest, cart));
+            new Member(memberCreateRequest, cart));
         memberInfo = Dummy.getDummyMemberInfo(1L, cart);
     }
 

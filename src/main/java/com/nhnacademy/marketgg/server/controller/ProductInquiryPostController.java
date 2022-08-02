@@ -3,7 +3,7 @@ package com.nhnacademy.marketgg.server.controller;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.ProductInquiryRequest;
+import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
@@ -72,7 +72,7 @@ public class ProductInquiryPostController {
     public ResponseEntity<CommonResponse> retrieveProductInquiry(@PathVariable final Long productId,
                                                                  final Pageable pageable) {
         Page<ProductInquiryResponse> productInquiryResponses
-                = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageable);
+            = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -91,7 +91,7 @@ public class ProductInquiryPostController {
     public ResponseEntity<CommonResponse> retrieveProductInquiry(final MemberInfo memberInfo,
                                                                  final Pageable pageable) {
         Page<ProductInquiryResponse> productInquiryResponses
-                = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
+            = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create("/members/product-inquiries"))

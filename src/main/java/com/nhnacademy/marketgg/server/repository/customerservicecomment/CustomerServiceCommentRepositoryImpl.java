@@ -21,18 +21,18 @@ public class CustomerServiceCommentRepositoryImpl extends QuerydslRepositorySupp
     @Override
     public CommentResponse findCommentById(Long commentId) {
         return from(comment)
-                .where(comment.id.eq(commentId))
-                .select(selectAllCommentColumns())
-                .fetchOne();
+            .where(comment.id.eq(commentId))
+            .select(selectAllCommentColumns())
+            .fetchOne();
     }
 
     @Override
     public List<CommentResponse> findByInquiryId(final Long inquiryId) {
         return from(comment)
-                .innerJoin(post).on(comment.customerServicePost.id.eq(post.id))
-                .where(post.id.eq(inquiryId))
-                .select(selectAllCommentColumns())
-                .fetch();
+            .innerJoin(post).on(comment.customerServicePost.id.eq(post.id))
+            .where(post.id.eq(inquiryId))
+            .select(selectAllCommentColumns())
+            .fetch();
     }
 
     private ConstructorExpression<CommentResponse> selectAllCommentColumns() {

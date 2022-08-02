@@ -1,12 +1,12 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
+import com.nhnacademy.marketgg.server.constant.CouponState;
 import static com.nhnacademy.marketgg.server.constant.CouponState.EXPIRED;
 import static com.nhnacademy.marketgg.server.constant.CouponState.USED;
 import static com.nhnacademy.marketgg.server.constant.CouponState.VALID;
 
-import com.nhnacademy.marketgg.server.constant.CouponState;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;

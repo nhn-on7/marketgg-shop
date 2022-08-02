@@ -1,7 +1,6 @@
 package com.nhnacademy.marketgg.server.service;
 
-import com.nhnacademy.marketgg.server.dto.request.CouponDto;
-import com.nhnacademy.marketgg.server.entity.Coupon;
+import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

@@ -11,11 +11,10 @@ import com.nhnacademy.marketgg.server.repository.customerservicecomment.Customer
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.CustomerServiceCommentService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +27,10 @@ public class DefaultCustomerServiceCommentService implements CustomerServiceComm
     @Transactional
     @Override
     public void createComment(final Long inquiryId, final Long memberId, final CommentRequest commentRequest) {
-        CustomerServicePost csPost = customerServicePostRepository.findById(inquiryId).orElseThrow(
-                CustomerServicePostNotFoundException::new);
+        CustomerServicePost csPost
+            = customerServicePostRepository.findById(inquiryId)
+                                           .orElseThrow(CustomerServicePostNotFoundException::new);
+
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
 
         CustomerServiceComment comment = new CustomerServiceComment(csPost, member, commentRequest);
@@ -39,16 +40,12 @@ public class DefaultCustomerServiceCommentService implements CustomerServiceComm
 
     @Override
     public CommentResponse retrieveComment(final Long commentId) {
-        CommentResponse comment = customerServiceCommentRepository.findCommentById(commentId);
-
-        return comment;
+        return customerServiceCommentRepository.findCommentById(commentId);
     }
 
     @Override
     public List<CommentResponse> retrieveCommentsByInquiry(final Long inquiryId) {
-        List<CommentResponse> comments = customerServiceCommentRepository.findByInquiryId(inquiryId);
-
-        return comments;
+        return customerServiceCommentRepository.findByInquiryId(inquiryId);
     }
 
 }

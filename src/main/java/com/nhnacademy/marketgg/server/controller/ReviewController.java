@@ -41,8 +41,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class ReviewController {
 
-    private final ReviewService reviewService;
     private static final String DEFAULT_REVIEW_URI = "/products/";
+    private static final String REVIEW_PATH = "/review/";
+
+    private final ReviewService reviewService;
 
     /**
      * 리뷰를 생성합니다. 추후 사진 기능이 추가될 예정입니다.
@@ -69,7 +71,7 @@ public class ReviewController {
 
         ResponseEntity<Void> returnResponseEntity =
             ResponseEntity.status(HttpStatus.CREATED)
-                          .location(URI.create(DEFAULT_REVIEW_URI + productId + "/review/" + uuid))
+                          .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH + uuid))
                           .contentType(MediaType.APPLICATION_JSON)
                           .build();
 
@@ -117,7 +119,7 @@ public class ReviewController {
         SingleResponse<ReviewResponse> response = reviewService.retrieveReviewDetails(reviewId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_REVIEW_URI + productId + "/review/" + reviewId))
+                             .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH + reviewId))
                              .contentType(MediaType.APPLICATION_JSON).body(response);
     }
 
@@ -143,7 +145,7 @@ public class ReviewController {
         reviewService.updateReview(reviewRequest, reviewId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_REVIEW_URI + productId + "/review/" + reviewId))
+                             .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH + reviewId))
                              .contentType(MediaType.APPLICATION_JSON).build();
     }
 
@@ -160,7 +162,7 @@ public class ReviewController {
         reviewService.deleteReview(reviewId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_REVIEW_URI + productId + "/review/" + reviewId))
+                             .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH + reviewId))
                              .contentType(MediaType.APPLICATION_JSON).build();
     }
 

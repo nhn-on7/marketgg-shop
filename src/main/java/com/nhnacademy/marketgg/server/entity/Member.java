@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
-import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.persistence.Column;

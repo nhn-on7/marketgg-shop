@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.service;
 
-import com.nhnacademy.marketgg.server.dto.request.UsedCouponDto;
+import com.nhnacademy.marketgg.server.dto.request.coupon.UsedCouponDto;
 
 /**
  * 사용 쿠폰 관리 서비스 입니다.

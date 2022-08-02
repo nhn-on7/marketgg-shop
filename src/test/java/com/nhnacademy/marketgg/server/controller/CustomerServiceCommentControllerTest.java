@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CustomerServiceCommentController.class)
-public class CustomerServiceCommentControllerTest {
+class CustomerServiceCommentControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;

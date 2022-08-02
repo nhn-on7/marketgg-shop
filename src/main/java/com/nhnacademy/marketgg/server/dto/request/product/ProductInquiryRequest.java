@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.dto.request;
+package com.nhnacademy.marketgg.server.dto.request.product;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

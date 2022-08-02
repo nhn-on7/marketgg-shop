@@ -21,9 +21,10 @@
     <properties>
         <java.version>11</java.version>
         <spring-cloud.version>2021.0.3</spring-cloud.version>
+        <querydsl.version>5.0.0</querydsl.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <jacoco.version>0.8.6</jacoco.version>
+        <jacoco.version>0.8.8</jacoco.version>
     </properties>
 
     <dependencyManagement>
@@ -96,13 +97,13 @@
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
-            <version>5.0.0</version>
+            <version>${querydsl.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
-            <version>5.0.0</version>
+            <version>${querydsl.version}</version>
         </dependency>
 
         <dependency>
@@ -124,9 +125,18 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*Config.*</exclude>
+                        <exclude>**/*Request.*</exclude>
+                        <exclude>**/*Response.*</exclude>
+                        <exclude>**/Q*.*</exclude>
+
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>prepare-agent</id>
+                        <id>jacoco-prepare-agent</id>
                         <phase>test-compile</phase>
                         <goals>
                             <goal>prepare-agent</goal>
@@ -134,7 +144,7 @@
                     </execution>
 
                     <execution>
-                        <id>report</id>
+                        <id>jacoco-report</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>report</goal>
@@ -166,8 +176,10 @@
                             <outputDirectory>target/generated-sources/annotations</outputDirectory>
                         </configuration>
                     </execution>
+
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 

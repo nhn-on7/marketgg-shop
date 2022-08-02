@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.dto.request;
+package com.nhnacademy.marketgg.server.dto.request.product;
 
 import java.time.LocalDate;
 import lombok.Getter;
@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class ProductCreateRequest {
+public class ProductUpdateRequest {
 
+    private Long assetNo;
     private String categoryCode;
-    private Long labelNo;
     private String name;
     private String content;
     private Long totalStock;

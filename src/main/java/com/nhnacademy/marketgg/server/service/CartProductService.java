@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.service;
 
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.ProductToCartRequest;
+import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dto.response.CartProductResponse;
 import java.util.List;
 

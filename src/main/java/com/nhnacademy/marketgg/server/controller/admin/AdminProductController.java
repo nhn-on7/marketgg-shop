@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
-import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.ProductUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
@@ -63,11 +63,11 @@ public class AdminProductController {
     /**
      * 전체 상품 목록 조회를 위한 GET Mapping 을 지원합니다.
      *
-     * @return - List<ProductResponse> 를 담은 응답 객체를 반환 합니다.
+     * @return - List&lt;ProductResponse&gt; 를 담은 응답 객체를 반환 합니다.
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<? extends CommonResponse> retrieveProducts(DefaultPageRequest pageRequest) {
+    public ResponseEntity<CommonResponse> retrieveProducts(DefaultPageRequest pageRequest) {
         SingleResponse<Page> productList = this.productService.retrieveProducts(pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -84,7 +84,7 @@ public class AdminProductController {
      * @since 1.0.0
      */
     @GetMapping("/{productId}")
-    public ResponseEntity<? extends CommonResponse> retrieveProductDetails(
+    public ResponseEntity<CommonResponse> retrieveProductDetails(
         @PathVariable final Long productId) {
 
         SingleResponse<ProductResponse> response = this.productService.retrieveProductDetails(productId);
@@ -100,9 +100,9 @@ public class AdminProductController {
      *
      * @param productRequest - 상품 수정을 위한 DTO 입니다.
      * @param image          - 상품 수정을 위한 MultipartFile 입니다.
-     * @param productId      상품 수정을 위한 PK 입니다.
+     * @param productId      - 상품 수정을 위한 PK 입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
-     * @throws IOException
+     * @throws IOException - 입출력에서 문제 발생 시 예외를 던집니다.
      * @since 1.0.0
      */
     @PutMapping("/{productId}")
@@ -135,6 +135,12 @@ public class AdminProductController {
                              .build();
     }
 
+    /**
+     * 상품 상태가 삭제인 값을 복구합니다.
+     *
+     * @param productId - 상품 복구를 위한 기본키입니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     */
     @PostMapping("/{productId}/restore")
     public ResponseEntity<Void> restoreProduct(@PathVariable final Long productId) {
         this.productService.restoreProduct(productId);

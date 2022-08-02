@@ -27,9 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LabelController {
 
-    private final LabelService labelService;
-
     private static final String DEFAULT_LABEL = "/admin/labels";
+
+    private final LabelService labelService;
 
     /**
      * 입력한 정보로 라벨을 등록하는 POST Mapping 을 지원합니다.
@@ -39,7 +39,7 @@ public class LabelController {
      * @since 1.0.0
      */
     @PostMapping
-    ResponseEntity<Void> registerLabel(@RequestBody final LabelCreateRequest labelCreateRequest) {
+    public ResponseEntity<Void> registerLabel(@RequestBody final LabelCreateRequest labelCreateRequest) {
         labelService.createLabel(labelCreateRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -55,7 +55,7 @@ public class LabelController {
      * @since 1.0.0
      */
     @GetMapping
-    ResponseEntity<List<LabelRetrieveResponse>> retrieveLabels() {
+    public ResponseEntity<List<LabelRetrieveResponse>> retrieveLabels() {
         List<LabelRetrieveResponse> labelResponse = labelService.retrieveLabels();
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -71,7 +71,7 @@ public class LabelController {
      * @since 1.0.0
      */
     @DeleteMapping("/{labelId}")
-    ResponseEntity<Void> deleteLabel(@PathVariable final Long labelId) {
+    public ResponseEntity<Void> deleteLabel(@PathVariable final Long labelId) {
         labelService.deleteLabel(labelId);
 
         return ResponseEntity.status(HttpStatus.OK)
