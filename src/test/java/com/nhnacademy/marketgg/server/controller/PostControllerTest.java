@@ -140,15 +140,14 @@ class PostControllerTest {
     @Test
     @DisplayName("지정한 게시판 타입의 회원의 모든 고객센터 게시글 목록 조회 - 사용자")
     void testRetrievePostList() throws Exception {
-        given(postService.retrieveOwnPostList(anyInt(), anyString(), anyLong())).willReturn(
-                List.of(Dummy.getDummyPostResponse()));
+        given(postService.retrievePostList(anyString(), anyInt())).willReturn(List.of(Dummy.getDummyPostResponse()));
 
         this.mockMvc.perform(get(DEFAULT_POST + "/categories/{categoryCode}", "702")
                                      .headers(headers)
                                      .param("page", "1"))
                     .andExpect(status().isOk());
 
-        then(postService).should(times(1)).retrieveOwnPostList(anyInt(), anyString(), anyLong());
+        then(postService).should(times(1)).retrievePostList(anyString(), anyInt());
     }
 
     @Test
