@@ -6,7 +6,9 @@ import com.nhnacademy.marketgg.server.entity.QMember;
 import com.nhnacademy.marketgg.server.entity.QOrder;
 import com.nhnacademy.marketgg.server.entity.QPointHistory;
 import com.querydsl.core.types.Projections;
+import java.awt.*;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport
@@ -27,12 +29,12 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport
             .where(pointHistory.member.id.eq(id))
             .innerJoin(order)
             .select(Projections.constructor(PointRetrieveResponse.class,
-                                            member.id,
-                                            order.id,
-                                            pointHistory.point,
-                                            pointHistory.totalPoint,
-                                            pointHistory.content,
-                                            pointHistory.updatedAt))
+                member.id,
+                order.id,
+                pointHistory.point,
+                pointHistory.totalPoint,
+                pointHistory.content,
+                pointHistory.updatedAt))
             .fetch();
     }
 
@@ -46,23 +48,23 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport
             .innerJoin(member).on(pointHistory.member.id.eq(member.id))
             .innerJoin(order).on(pointHistory.order.id.eq(order.id))
             .select(Projections.constructor(PointRetrieveResponse.class,
-                                            member.id,
-                                            order.id,
-                                            pointHistory.point,
-                                            pointHistory.totalPoint,
-                                            pointHistory.content,
-                                            pointHistory.updatedAt))
+                member.id,
+                order.id,
+                pointHistory.point,
+                pointHistory.totalPoint,
+                pointHistory.content,
+                pointHistory.updatedAt))
             .fetch();
     }
 
     @Override
-    public Integer findLastTotalPoint(final Long id) {
+    public Optional<PointHistory> findLastTotalPoint(final Long id) {
         QPointHistory pointHistory = QPointHistory.pointHistory;
 
-        return from(pointHistory)
+        return Optional.ofNullable(from(pointHistory)
             .where(pointHistory.member.id.eq(id))
             .orderBy(pointHistory.updatedAt.desc())
-            .fetchFirst().getTotalPoint();
+            .fetchFirst());
     }
 
 }

@@ -5,7 +5,7 @@ import com.nhnacademy.marketgg.server.dto.response.PointRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.PointHistory;
-import com.nhnacademy.marketgg.server.event.ReviewPointEvent;
+import com.nhnacademy.marketgg.server.event.SavePointEvent;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.order.OrderNotFoundException;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
@@ -13,11 +13,14 @@ import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
 import com.nhnacademy.marketgg.server.service.PointService;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Service
 @RequiredArgsConstructor
@@ -41,9 +44,11 @@ public class DefaultPointService implements PointService {
     @Override
     public void createPointHistory(final Long id, final PointHistoryRequest pointRequest) {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
-        Integer totalPoint = pointRepository.findLastTotalPoint(id);
+        AtomicReference<Integer> totalPoint = new AtomicReference<>(0);
+        pointRepository.findLastTotalPoint(member.getId())
+                       .ifPresent(x -> totalPoint.set(x.getTotalPoint()));
         PointHistory pointHistory =
-            new PointHistory(member, null, totalPoint + pointRequest.getPoint(), pointRequest);
+            new PointHistory(member, null, totalPoint.get() + pointRequest.getPoint(), pointRequest);
 
         pointRepository.save(pointHistory);
     }
@@ -53,28 +58,33 @@ public class DefaultPointService implements PointService {
     public void createPointHistoryForOrder(final Long memberId, final Long orderId,
                                            final PointHistoryRequest pointRequest) {
 
-        Member member =
-            memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
-        Integer totalPoint = pointRepository.findLastTotalPoint(memberId);
+        AtomicReference<Integer> totalPoint = new AtomicReference<>(0);
+        pointRepository.findLastTotalPoint(member.getId())
+                       .ifPresent(x -> totalPoint.set(x.getTotalPoint()));
 
         this.checkMemberGrade(member.getMemberGrade().getGrade(), pointRequest);
 
         PointHistory pointHistory =
-            new PointHistory(member, order, totalPoint + pointRequest.getPoint(), pointRequest);
+            new PointHistory(member, order, totalPoint.get() + pointRequest.getPoint(), pointRequest);
 
         pointRepository.save(pointHistory);
     }
 
-    @EventListener
-    public void savePointByReview(ReviewPointEvent point) {
+    @Async
+    @TransactionalEventListener
+    public void savePointByEvent(SavePointEvent point) {
         Member member = point.getMember();
-        Integer totalPoint = pointRepository.findLastTotalPoint(member.getId());
 
-        PointHistoryRequest pointRequest =
-            new PointHistoryRequest(Math.toIntExact(point.getPoint()), "리뷰 적립");
+        AtomicReference<Integer> totalPoint = new AtomicReference<>(0);
+        pointRepository.findLastTotalPoint(member.getId())
+                       .ifPresent(x -> totalPoint.set(x.getTotalPoint()));
+
+        PointHistoryRequest pointHistoryRequest =
+            new PointHistoryRequest(Math.toIntExact(point.getPoint()), point.getContent());
         PointHistory pointHistory =
-            new PointHistory(member, null, totalPoint + pointRequest.getPoint(), pointRequest);
+            new PointHistory(member, null, totalPoint.get() + point.getPoint(), pointHistoryRequest);
 
         pointRepository.save(pointHistory);
     }

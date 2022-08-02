@@ -96,11 +96,13 @@
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
+            <version>5.0.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
+            <version>5.0.0</version>
         </dependency>
 
         <dependency>
@@ -138,8 +140,13 @@
                             <goal>report</goal>
                         </goals>
                     </execution>
-
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
             </plugin>
 
             <plugin>

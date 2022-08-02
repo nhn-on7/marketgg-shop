@@ -42,6 +42,16 @@ public class CouponRepositoryImpl extends QuerydslRepositorySupport implements C
         return Optional.ofNullable(result);
     }
 
+    @Override
+    public Optional<Coupon> findCouponByName(String name) {
+
+        Coupon result = from(coupon)
+            .where(coupon.name.eq(name))
+            .fetchOne();
+
+        return Optional.ofNullable(result);
+    }
+
     private ConstructorExpression<CouponDto> selectAllCouponColumns() {
 
         return Projections.constructor(CouponDto.class,

@@ -2,7 +2,7 @@ package com.nhnacademy.marketgg.server.service;
 
 import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.dto.response.PointRetrieveResponse;
-import com.nhnacademy.marketgg.server.event.ReviewPointEvent;
+import com.nhnacademy.marketgg.server.event.SavePointEvent;
 import java.util.List;
 
 /**
@@ -48,13 +48,5 @@ public interface PointService {
      */
     void createPointHistoryForOrder(final Long memberId, final Long orderId,
                                     final PointHistoryRequest pointRequest);
-
-    /**
-     * 리뷰 등록시 자등으로 포인트를 적립해줍니다.
-     * 사진이 포함된 리뷰와 글로만 작성된 리뷰로 나뉘어 포인트가 차등 지급됩니다.
-     *
-     * @param reviewPointEvent - 포인트 지급을 위한 이벤트입니다.
-     */
-    void savePointByReview(final ReviewPointEvent reviewPointEvent);
 
 }
