@@ -14,6 +14,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 쿠폰 개체입니다.
+ */
 @Table(name = "coupons")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

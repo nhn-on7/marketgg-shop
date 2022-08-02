@@ -3,7 +3,6 @@ package com.nhnacademy.marketgg.server.repository.usedcoupon;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import com.nhnacademy.marketgg.server.entity.UsedCoupon;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -20,8 +19,6 @@ public interface UsedCouponRepository extends JpaRepository<UsedCoupon, UsedCoup
      * @return - 지급 쿠폰을 가진 사용 쿠폰을 반환합니다.
      * @since 1.0.0
      */
-
-
     List<UsedCoupon> findAllByGivenCoupon(GivenCoupon givenCoupon);
 
 }

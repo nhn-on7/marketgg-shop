@@ -42,7 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
-public class DefaultDibServiceTest {
+class DefaultDibServiceTest {
 
     @InjectMocks
     DefaultDibService dibService;

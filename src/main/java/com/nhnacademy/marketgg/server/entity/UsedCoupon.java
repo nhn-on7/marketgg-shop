@@ -7,7 +7,6 @@ import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -32,10 +31,8 @@ public class UsedCoupon {
     private Order order;
 
     @OneToOne
-    @JoinColumns({
-            @JoinColumn(name = "coupon_no", referencedColumnName = "coupon_no", updatable = false, insertable = false),
-            @JoinColumn(name = "member_no", referencedColumnName = "member_no", updatable = false, insertable = false)
-    })
+    @JoinColumn(name = "coupon_no", referencedColumnName = "coupon_no", updatable = false, insertable = false)
+    @JoinColumn(name = "member_no", referencedColumnName = "member_no", updatable = false, insertable = false)
     private GivenCoupon givenCoupon;
 
     @Embeddable

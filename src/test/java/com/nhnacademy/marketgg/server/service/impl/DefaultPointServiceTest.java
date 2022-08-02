@@ -28,6 +28,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -97,10 +99,11 @@ class DefaultPointServiceTest {
         verify(pointHistoryRepository, times(1)).save(any(PointHistory.class));
     }
 
-    @Test
-    @DisplayName("사용자 등급 일반, 주문 관련 포인트 내역 생성")
-    void testCreatePointHistoryForOrderIsMember() {
-        ReflectionTestUtils.setField(memberGradeCreateRequest, "grade", "Member");
+    @ParameterizedTest
+    @ValueSource(strings = { "Member", "VIP", "G-VIP" })
+    @DisplayName("사용자 등급(일반, VIP, G-VIP)별 주문 관련 포인트 내역 생성")
+    void testCreatePointHistoryForOrderIsMember(String value) {
+        ReflectionTestUtils.setField(memberGradeCreateRequest, "grade", value);
         MemberGrade memberGrade = new MemberGrade(memberGradeCreateRequest);
 
         Member member = new Member(memberCreateRequest, cart);
@@ -108,49 +111,7 @@ class DefaultPointServiceTest {
 
         ReflectionTestUtils.setField(pointHistoryRequest, "point", 1000);
         ReflectionTestUtils.setField(member, "memberGrade", memberGrade);
-        ReflectionTestUtils.setField(member.getMemberGrade(), "grade", "Member");
-
-        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
-        given(orderRepository.findById(anyLong())).willReturn(Optional.of(order));
-
-        pointService.createPointHistoryForOrder(1L, 1L, pointHistoryRequest);
-
-        verify(pointHistoryRepository, times(1)).save(any(PointHistory.class));
-    }
-
-    @Test
-    @DisplayName("사용자 등급 VIP, 주문 관련 포인트 내역 생성")
-    void testCreatePointHistoryForOrderIsVip() {
-        ReflectionTestUtils.setField(memberGradeCreateRequest, "grade", "VIP");
-        MemberGrade memberGrade = new MemberGrade(memberGradeCreateRequest);
-
-        Member member = new Member(memberCreateRequest, cart);
-        Order order = new Order(member, orderCreateRequest);
-
-        ReflectionTestUtils.setField(pointHistoryRequest, "point", 1000);
-        ReflectionTestUtils.setField(member, "memberGrade", memberGrade);
-        ReflectionTestUtils.setField(member.getMemberGrade(), "grade", "VIP");
-
-        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
-        given(orderRepository.findById(anyLong())).willReturn(Optional.of(order));
-
-        pointService.createPointHistoryForOrder(1L, 1L, pointHistoryRequest);
-
-        verify(pointHistoryRepository, times(1)).save(any(PointHistory.class));
-    }
-
-    @Test
-    @DisplayName("사용자 등급 G-VIP, 주문 관련 포인트 내역 생성")
-    void testCreatePointHistoryForOrderIsGVip() {
-        ReflectionTestUtils.setField(memberGradeCreateRequest, "grade", "G-VIP");
-        MemberGrade memberGrade = new MemberGrade(memberGradeCreateRequest);
-
-        Member member = new Member(memberCreateRequest, cart);
-        Order order = new Order(member, orderCreateRequest);
-
-        ReflectionTestUtils.setField(pointHistoryRequest, "point", 1000);
-        ReflectionTestUtils.setField(member, "memberGrade", memberGrade);
-        ReflectionTestUtils.setField(member.getMemberGrade(), "grade", "G-VIP");
+        ReflectionTestUtils.setField(member.getMemberGrade(), "grade", value);
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(orderRepository.findById(anyLong())).willReturn(Optional.of(order));

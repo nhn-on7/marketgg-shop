@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.AuthInfo;
-import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import java.util.Arrays;
@@ -59,8 +58,8 @@ public class AuthInjectAspect {
     public Object authInject(ProceedingJoinPoint pjp) throws Throwable {
         log.info("Method: {}", pjp.getSignature().getName());
 
-        ServletRequestAttributes requestAttributes =
-            (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        ServletRequestAttributes requestAttributes
+            = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
 
         String jwt = request.getHeader(AUTHORIZATION);
@@ -102,8 +101,7 @@ public class AuthInjectAspect {
             throw new IllegalArgumentException(error.getMessage());
         }
 
-        SingleResponse<AuthInfo> authInfo
-            = mapper.readValue(response.getBody(), new TypeReference<>() {
+        SingleResponse<AuthInfo> authInfo = mapper.readValue(response.getBody(), new TypeReference<>() {
         });
 
         return authInfo.getData();

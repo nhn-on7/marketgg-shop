@@ -72,7 +72,7 @@ public class ProductInquiryPostController {
     public ResponseEntity<CommonResponse> retrieveProductInquiry(@PathVariable final Long productId,
                                                                  final Pageable pageable) {
         Page<ProductInquiryResponse> productInquiryResponses
-                = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageable);
+            = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -91,7 +91,7 @@ public class ProductInquiryPostController {
     public ResponseEntity<CommonResponse> retrieveProductInquiry(final MemberInfo memberInfo,
                                                                  final Pageable pageable) {
         Page<ProductInquiryResponse> productInquiryResponses
-                = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
+            = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create("/members/product-inquiries"))

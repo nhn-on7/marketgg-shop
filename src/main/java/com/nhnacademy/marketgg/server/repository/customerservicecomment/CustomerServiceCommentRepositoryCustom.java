@@ -1,10 +1,8 @@
 package com.nhnacademy.marketgg.server.repository.customerservicecomment;
 
 import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
-import com.nhnacademy.marketgg.server.entity.CustomerServiceComment;
-import org.springframework.data.repository.NoRepositoryBean;
-
 import java.util.List;
+import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface CustomerServiceCommentRepositoryCustom {

@@ -3,6 +3,9 @@ package com.nhnacademy.marketgg.server.controller;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
+import java.net.URI;
+import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -10,16 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.util.List;
 
 /**
  * 사용자의 고객센터에 관련된 Rest Controller 입니다.
@@ -32,9 +30,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerServicePostController {
 
-    private final CustomerServicePostService customerServicePostService;
-
     private static final String DEFAULT_CUSTOMER_SERVICE = "/customer-services";
+
+    private final CustomerServicePostService customerServicePostService;
 
     /**
      * 1:1 문의를 등록하는 POST Mapping 을 지원합니다.
@@ -104,8 +102,7 @@ public class CustomerServicePostController {
         customerServicePostService.deleteCustomerServicePost(inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(
-                                     DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
+                             .location(URI.create(DEFAULT_CUSTOMER_SERVICE + "/oto-inquiries/" + inquiryId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

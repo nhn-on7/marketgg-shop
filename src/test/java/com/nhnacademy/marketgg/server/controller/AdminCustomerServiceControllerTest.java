@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AdminCustomerServicePostController.class)
-public class AdminCustomerServiceControllerTest {
+class AdminCustomerServiceControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;

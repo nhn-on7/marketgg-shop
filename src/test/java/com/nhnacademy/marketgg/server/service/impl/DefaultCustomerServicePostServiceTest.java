@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
-public class DefaultCustomerServicePostServiceTest {
+class DefaultCustomerServicePostServiceTest {
 
     @InjectMocks
     DefaultCustomerServicePostService postService;

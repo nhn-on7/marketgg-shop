@@ -28,7 +28,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(CouponController.class)
-public class CouponControllerTest {
+class CouponControllerTest {
 
     @Autowired
     MockMvc mockMvc;

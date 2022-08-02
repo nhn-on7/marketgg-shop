@@ -36,17 +36,21 @@ public class DefaultMemberService implements MemberService {
 
     @Override
     public LocalDateTime retrievePassUpdatedAt(final Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findById(id)
+                                        .orElseThrow(MemberNotFoundException::new);
+
         if (Objects.isNull(member.getGgpassUpdatedAt())) {
             return LocalDateTime.of(1, 1, 1, 1, 1, 1);
         }
+
         return member.getGgpassUpdatedAt();
     }
 
     @Transactional
     @Override
     public void subscribePass(final Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findById(id)
+                                        .orElseThrow(MemberNotFoundException::new);
         member.passSubscribe();
 
         // TODO : GG PASS 자동결제 로직 필요
