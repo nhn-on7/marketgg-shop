@@ -5,7 +5,6 @@ import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.service.ImageService;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -39,6 +38,14 @@ public class StorageImageService implements ImageService {
 
         String s = authService.requestToken();
         log.warn(s);
+
+        List<String> on7Storage = authService.getObjectList("on7_storage");
+        if (on7Storage != null) {
+            for (String s1 : on7Storage) {
+                log.warn(s1);
+            }
+        }
+
         return images;
     }
 
