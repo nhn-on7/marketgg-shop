@@ -183,4 +183,20 @@ public class DefaultPostServiceTest {
 
     }
 
+    @Test
+    @DisplayName("게시글 삭제")
+    void testDeletePost() {
+        CustomerServicePost dummyPost = Dummy.getCustomerServicePost();
+        List<Long> commentList = List.of(1L);
+
+        given(postRepository.findById(anyLong())).willReturn(Optional.of(dummyPost));
+        given(commentRepository.findCommentIdsByInquiryId(anyLong())).willReturn(commentList);
+
+        postService.deletePost(1L);
+
+        then(commentRepository).should(times(1)).findCommentIdsByInquiryId(anyLong());
+        then(postRepository).should(times(1)).delete(any(CustomerServicePost.class));
+        then(elasticBoardRepository).should(times(1)).deleteById(anyLong());
+    }
+
 }

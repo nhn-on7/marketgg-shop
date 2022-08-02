@@ -129,12 +129,12 @@ public class DefaultPostService implements CustomerServicePostService {
     @Transactional
     @Override
     public void deletePost(final Long boardNo) {
-        CustomerServicePost otoInquiry = postRepository.findById(boardNo)
+        CustomerServicePost post = postRepository.findById(boardNo)
                                                        .orElseThrow(CustomerServicePostNotFoundException::new);
         List<Long> commentIds = commentRepository.findCommentIdsByInquiryId(boardNo);
 
         commentRepository.deleteAllById(commentIds);
-        postRepository.delete(otoInquiry);
+        postRepository.delete(post);
         elasticBoardRepository.deleteById(boardNo);
     }
 
