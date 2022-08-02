@@ -3,11 +3,12 @@ package com.nhnacademy.marketgg.server.service.impl;
 import com.nhnacademy.marketgg.server.dto.request.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
 import com.nhnacademy.marketgg.server.dto.response.MemberResponse;
-import com.nhnacademy.marketgg.server.dto.response.ShopMemberSignUpResponse;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
+import com.nhnacademy.marketgg.server.event.SavePointEvent;
+import com.nhnacademy.marketgg.server.event.SignedUpCouponEvent;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.membergrade.MemberGradeNotFoundException;
 import com.nhnacademy.marketgg.server.repository.cart.CartRepository;
@@ -18,6 +19,7 @@ import com.nhnacademy.marketgg.server.service.MemberService;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,8 @@ public class DefaultMemberService implements MemberService {
     private final CartRepository cartRepository;
     private final MemberGradeRepository memberGradeRepository;
     private final DeliveryAddressRepository deliveryAddressRepository;
+
+    private final ApplicationEventPublisher publisher;
 
     @Override
     public LocalDateTime retrievePassUpdatedAt(final Long id) {
@@ -81,15 +85,32 @@ public class DefaultMemberService implements MemberService {
      */
     @Transactional
     @Override
-    public ShopMemberSignUpResponse signUp(final ShopMemberSignUpRequest signUpRequest) {
-        if (referrerCheck(signUpRequest) != null) {
-            Member referrerMember = memberRepository.findByUuid(referrerCheck(signUpRequest))
-                                                    .orElseThrow(MemberNotFoundException::new);
-            return signUp(signUpRequest, referrerMember, registerGrade());
-        }
+    public void signUp(final ShopMemberSignUpRequest signUpRequest) {
         Cart savedCart = cartRepository.save(new Cart());
-        return new ShopMemberSignUpResponse(memberRepository.save(new Member(signUpRequest, registerGrade(), savedCart))
-                                                            .getId(), null);
+
+        Member signUpMember = memberRepository.save(new Member(signUpRequest, registerGrade(), savedCart));
+
+        deliveryAddressRepository.save(new DeliveryAddress(signUpMember, signUpRequest));
+
+        publisher.publishEvent(SignedUpCouponEvent.signUpCoupon(signUpMember));
+
+        if (referrerCheck(signUpRequest) != null) {
+            Member referredMember = memberRepository.findByUuid(referrerCheck(signUpRequest))
+                                                    .orElseThrow(MemberNotFoundException::new);
+
+            publisher.publishEvent(SavePointEvent.dispensePointForReferred(signUpMember));
+            publisher.publishEvent(SavePointEvent.dispensePointForReferred(referredMember));
+        }
+    }
+
+    /**
+     * 추천인 여부를 체크하는 메소드 입니다.
+     *
+     * @param shopMemberSignUpRequest - 회원가입시 입력한 정보를 담고있는 객체입니다.
+     * @return 추천인의 uuid 를 담고있는 메소드를 반환합니다.
+     */
+    private String referrerCheck(final ShopMemberSignUpRequest shopMemberSignUpRequest) {
+        return shopMemberSignUpRequest.getReferrerUuid();
     }
 
     /**
@@ -114,34 +135,6 @@ public class DefaultMemberService implements MemberService {
     private MemberGrade registerGrade() {
         return memberGradeRepository.findByGrade("Member")
                                     .orElseThrow(MemberGradeNotFoundException::new);
-    }
-
-    /**
-     * 추천인이 있을 경우의 추천하는 회원의 회원가입 메소드입니다.
-     *
-     * @param shopMemberSignUpRequest - 회원가입시 입력한 정보를 담고있는 객체입니다.
-     * @param referrerMember          - 추천을 받은 회원 입니다.
-     * @param signUpMemberGrade       - 회원가입을 하는 회원이 부여 받게되는 등급입니다.
-     * @return ShopMemberSignUp - 회원가입을 하는 회원과 추천을 받게되는 회원의 uuid 를 담은 객체 입니다.
-     */
-    private ShopMemberSignUpResponse signUp(final ShopMemberSignUpRequest shopMemberSignUpRequest,
-                                            final Member referrerMember, final MemberGrade signUpMemberGrade) {
-
-        Cart savedCart = cartRepository.save(new Cart());
-        Member signUpMember = memberRepository.save(new Member(shopMemberSignUpRequest, signUpMemberGrade, savedCart));
-        DeliveryAddress.Pk pk = new DeliveryAddress.Pk(signUpMember.getId());
-        deliveryAddressRepository.save(new DeliveryAddress(pk, signUpMember, shopMemberSignUpRequest));
-        return new ShopMemberSignUpResponse(signUpMember.getId(), referrerMember.getId());
-    }
-
-    /**
-     * 추천인 여부를 체크하는 메소드 입니다.
-     *
-     * @param shopMemberSignUpRequest - 회원가입시 입력한 정보를 담고있는 객체입니다.
-     * @return 추천인의 uuid 를 담고있는 메소드를 반환합니다.
-     */
-    private String referrerCheck(final ShopMemberSignUpRequest shopMemberSignUpRequest) {
-        return shopMemberSignUpRequest.getReferrerUuid();
     }
 
 }

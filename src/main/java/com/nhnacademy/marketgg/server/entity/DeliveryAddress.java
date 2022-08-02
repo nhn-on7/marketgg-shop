@@ -1,12 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.ShopMemberSignUpRequest;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
@@ -17,7 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
-import java.io.Serializable;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Table(name = "delivery_addresses")
 @Entity
@@ -45,18 +43,6 @@ public class DeliveryAddress {
     @Column(name = "detail_address")
     private String detailAddress;
 
-    public DeliveryAddress(final Pk pk
-            , final Member signUpMember
-            , final ShopMemberSignUpRequest shopMemberSignUpRequest) {
-
-        this.pk = pk;
-        this.member = signUpMember;
-        this.isDefaultAddress = Boolean.TRUE;
-        this.zipCode = shopMemberSignUpRequest.getZipcode();
-        this.address = shopMemberSignUpRequest.getAddress();
-        this.detailAddress = shopMemberSignUpRequest.getDetailAddress();
-    }
-
     @Embeddable
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
@@ -73,6 +59,17 @@ public class DeliveryAddress {
         public Pk(Long memberNo) {
             this.memberNo = memberNo;
         }
+    }
+
+    public DeliveryAddress(final Member signUpMember,
+                           final ShopMemberSignUpRequest shopMemberSignUpRequest) {
+
+        this.pk = new Pk(signUpMember.getId());
+        this.member = signUpMember;
+        this.isDefaultAddress = Boolean.TRUE;
+        this.zipCode = shopMemberSignUpRequest.getZipcode();
+        this.address = shopMemberSignUpRequest.getAddress();
+        this.detailAddress = shopMemberSignUpRequest.getDetailAddress();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.repository.coupon;
 
 import com.nhnacademy.marketgg.server.dto.request.CouponDto;
+import com.nhnacademy.marketgg.server.entity.Coupon;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,5 +24,7 @@ public interface CouponRepositoryCustom {
     Page<CouponDto> findAllCoupons(Pageable pageable);
 
     Optional<CouponDto> findCouponDtoById(Long id);
+
+    Optional<Coupon> findCouponByName(String name);
 
 }

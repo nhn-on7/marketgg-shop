@@ -8,7 +8,7 @@ import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Review;
-import com.nhnacademy.marketgg.server.event.ReviewPointEvent;
+import com.nhnacademy.marketgg.server.event.SavePointEvent;
 import com.nhnacademy.marketgg.server.exception.asset.AssetNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.review.ReviewNotFoundException;
@@ -58,7 +58,7 @@ public class DefaultReviewService implements ReviewService {
 
         Review review = reviewRepository.save(new Review(reviewRequest, member, asset));
 
-        publisher.publishEvent(ReviewPointEvent.dispensePointForImageReview(review.getId(), member));
+        publisher.publishEvent(SavePointEvent.dispensePointForImageReview(member));
     }
 
     @Override
@@ -69,7 +69,7 @@ public class DefaultReviewService implements ReviewService {
 
         Review review = reviewRepository.save(new Review(reviewRequest, member, asset));
 
-        publisher.publishEvent(ReviewPointEvent.dispensePointForNormalReview(review.getId(), member));
+        publisher.publishEvent(SavePointEvent.dispensePointForNormalReview(member));
     }
 
     @Override

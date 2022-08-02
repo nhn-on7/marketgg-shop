@@ -129,21 +129,12 @@ public class MemberController {
      * @since 1.0.0
      */
     @PostMapping("/signup")
-    public ResponseEntity<Void> doSignUp(@RequestBody final ShopMemberSignUpRequest shopMemberSignUpRequest) {
-        ShopMemberSignUpResponse signUp = memberService.signUp(shopMemberSignUpRequest);
+    public ResponseEntity<CommonResponse> doSignUp(@RequestBody final ShopMemberSignUpRequest shopMemberSignUpRequest) {
+        memberService.signUp(shopMemberSignUpRequest);
 
-        if (Objects.nonNull(signUp.getReferrerMemberId())) {
-            pointService.createPointHistory(signUp.getReferrerMemberId(),
-                new PointHistoryRequest(5000, "추천인 이벤트"));
-        }
-
-        pointService.createPointHistory(signUp.getSignUpMemberId(),
-            new PointHistoryRequest(5000, "회원 가입 추천인 이벤트"));
-
-        return ResponseEntity.status(OK)
-                             .location(URI.create("/members/signup"))
+        return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(new SingleResponse<>("Add success"));
     }
 
     /**

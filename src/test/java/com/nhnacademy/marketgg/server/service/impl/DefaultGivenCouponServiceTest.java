@@ -100,7 +100,7 @@ class DefaultGivenCouponServiceTest {
         given(memberRepository.findById(any())).willReturn(Optional.of(new Member(memberCreateRequest, cart)));
         Coupon coupon = new Coupon(couponDto);
         given(memberRepository.findById(any())).willReturn(Optional.of(member));
-        given(couponRepository.findByName(anyString())).willReturn(Optional.of(coupon));
+        given(couponRepository.findCouponByName(anyString())).willReturn(Optional.of(coupon));
 
         givenCouponService.createGivenCoupons(memberInfo, givenCouponRequest);
 

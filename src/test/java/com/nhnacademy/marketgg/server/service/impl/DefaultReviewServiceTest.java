@@ -18,7 +18,7 @@ import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Review;
-import com.nhnacademy.marketgg.server.event.ReviewPointEvent;
+import com.nhnacademy.marketgg.server.event.SavePointEvent;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
@@ -92,14 +92,14 @@ class DefaultReviewServiceTest {
         review = new Review(reviewRequest, member, asset);
 
         reviewResponse = new ReviewResponse(1L,
-                                            1L,
-                                            1L,
-                                            "content",
-                                            5L,
-                                            true,
-                                            LocalDateTime.now(),
-                                            LocalDateTime.now(),
-                                            null);
+            1L,
+            1L,
+            "content",
+            5L,
+            true,
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+            null);
 
         reviewUpdateRequest = new ReviewUpdateRequest();
         ReflectionTestUtils.setField(reviewUpdateRequest, "reviewId", 1L);
@@ -124,12 +124,12 @@ class DefaultReviewServiceTest {
         given(memberRepository.findByUuid(anyString())).willReturn(Optional.ofNullable(member));
         given(reviewRepository.save(any(Review.class))).willReturn(review);
         given(imageRepository.saveAll(any(List.class))).willReturn(images);
-        willDoNothing().given(publisher).publishEvent(any(ReviewPointEvent.class));
+        willDoNothing().given(publisher).publishEvent(any(SavePointEvent.class));
 
-        this.reviewService.createReview(reviewRequest, images,"admin");
+        this.reviewService.createReview(reviewRequest, images, "admin");
 
         then(reviewRepository).should().save(any(Review.class));
-        then(publisher).should().publishEvent(any(ReviewPointEvent.class));
+        then(publisher).should().publishEvent(any(SavePointEvent.class));
     }
 
     @Test
@@ -137,12 +137,12 @@ class DefaultReviewServiceTest {
     void testTextReview() {
         given(memberRepository.findByUuid(anyString())).willReturn(Optional.ofNullable(member));
         given(reviewRepository.save(any(Review.class))).willReturn(review);
-        willDoNothing().given(publisher).publishEvent(any(ReviewPointEvent.class));
+        willDoNothing().given(publisher).publishEvent(any(SavePointEvent.class));
 
         this.reviewService.createReview(reviewRequest, "admin");
 
         then(reviewRepository).should().save(any(Review.class));
-        then(publisher).should().publishEvent(any(ReviewPointEvent.class));
+        then(publisher).should().publishEvent(any(SavePointEvent.class));
     }
 
     @Test

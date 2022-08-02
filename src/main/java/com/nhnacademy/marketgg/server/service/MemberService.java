@@ -54,7 +54,7 @@ public interface MemberService {
      * @param shopMemberSignupRequest - 회원가입 정보를 담은 객체입니다.
      * @since 1.0.0
      */
-    ShopMemberSignUpResponse signUp(final ShopMemberSignUpRequest shopMemberSignupRequest);
+    void signUp(final ShopMemberSignUpRequest shopMemberSignupRequest);
 
     void withdraw(final String uuid, final MemberWithdrawRequest memberWithdrawRequest);
 }
