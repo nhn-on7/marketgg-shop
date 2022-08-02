@@ -88,12 +88,9 @@ public class NhnStorageService implements StorageService {
     public void uploadObject(String containerName, String objectName, final InputStream inputStream) {
         String url = this.getUrl(containerName);
 
-        final RequestCallback requestCallback = new RequestCallback() {
-            @Override
-            public void doWithRequest(final ClientHttpRequest request) throws IOException {
-                request.getHeaders().add("X-Auth-Token", tokenId);
-                IOUtils.copy(inputStream, request.getBody());
-            }
+        final RequestCallback requestCallback = request -> {
+            request.getHeaders().add("X-Auth-Token", tokenId);
+            IOUtils.copy(inputStream, request.getBody());
         };
 
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
