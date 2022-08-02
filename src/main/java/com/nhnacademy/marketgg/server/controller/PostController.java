@@ -100,22 +100,40 @@ public class PostController {
     }
 
     /**
-     * 카테고리에 따라 회원의 모든 고객센터 게시글 목록을 조회하는 GET Mapping 을 지원합니다.
+     * 카테고리에 따라 고객센터 게시글 목록을 조회하는 GET Mapping 을 지원합니다.
      *
      * @param categoryCode - 조회할 게시글 목록의 카테고리 식별번호입니다.
-     * @param page       - 페이징 처리를 위한 페이지 번호입니다.
+     * @param page         - 페이징 처리를 위한 페이지 번호입니다.
      * @return 게시글 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
     @GetMapping("/categories/{categoryCode}")
-    public ResponseEntity<List<PostResponse>> retrieveOwnPostList(@PathVariable final String categoryCode,
-                                                                  final Integer page,
-                                                                  final MemberInfo memberInfo) {
+    public ResponseEntity<List<PostResponse>> retrievePostList(@PathVariable final String categoryCode,
+                                                               @RequestParam final Integer page) {
 
-        List<PostResponse> responses = postService.retrieveOwnPostList(page, categoryCode, memberInfo.getId());
+        List<PostResponse> responses = postService.retrievePostList(categoryCode, page);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/categories/" + categoryCode))
+                             .body(responses);
+    }
+
+    /**
+     * 회원의 1:1 문의 목록을 조회하는 GET Mapping 을 지원합니다.
+     *
+     * @param page - 페이징 처리를 위한 페이지 번호입니다.
+     * @param memberInfo - 목록을 조회하는 회원의 정보가 담긴 객체입니다.
+     * @return 조회한 1:1 문의 목록을 List 로 반환합니다.
+     * @since 1.0.0
+     */
+    @GetMapping("/oto-inquiries")
+    public ResponseEntity<List<PostResponse>> retrieveOwnPostList(@RequestParam final Integer page,
+                                                                  final MemberInfo memberInfo) {
+
+        List<PostResponse> responses = postService.retrieveOwnPostList(page, "702", memberInfo.getId());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(DEFAULT_POST + "/oto-inquiries"))
                              .body(responses);
     }
 

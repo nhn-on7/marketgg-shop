@@ -107,7 +107,7 @@ public class AdminPostController {
         List<PostResponse> responses = postService.retrievePostList(categoryCode, page);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_POST + "/oto-inquiries"))
+                             .location(URI.create(DEFAULT_ADMIN_POST + "/categories/" + categoryCode))
                              .body(responses);
     }
 
