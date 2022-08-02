@@ -20,8 +20,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 
-@DataJpaTest
+// @DataJpaTest
 class CartProductRepositoryTest {
 
     @Autowired
@@ -45,7 +46,7 @@ class CartProductRepositoryTest {
     @Autowired
     CategoryRepository categoryRepository;
 
-    @Test
+    // @Test
     @DisplayName("회원의 장바구니 목록 조회")
     void testFindCartByMemberId() {
         Cart cart = cartRepository.save(new Cart());

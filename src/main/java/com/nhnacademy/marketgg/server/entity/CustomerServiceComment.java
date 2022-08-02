@@ -1,8 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import java.time.LocalDateTime;
 import com.nhnacademy.marketgg.server.dto.request.CommentRequest;
-
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,20 +28,26 @@ public class CustomerServiceComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cs_comment_no")
+    @NotNull
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "cs_post_no")
+    @NotNull
     private CustomerServicePost customerServicePost;
 
     @ManyToOne
     @JoinColumn(name = "member_no")
+    @NotNull
     private Member member;
 
     @Column
+    @NotBlank
+    @Size
     private String content;
 
     @Column(name = "created_at")
+    @NotNull
     private LocalDateTime createdAt;
 
     public CustomerServiceComment(CustomerServicePost csPost, Member member, CommentRequest commentRequest) {

@@ -8,14 +8,21 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 /**
- * 라벨 Entity 입니다.
+ * 라벨 개체입니다.
  *
- * @version 1.0.0
+ * @version 1.0
+ * @since 1.0
  */
 @Table(name = "labels")
 @Entity
@@ -29,6 +36,8 @@ public class Label {
     private Long id;
 
     @Column
+    @NotBlank
+    @Size(max = 30)
     private String name;
 
     /**

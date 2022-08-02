@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,12 +15,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 상품 엔티티입니다.
+ * 상품 개체입니다.
  *
  * @since 1.0.0
  */
@@ -34,57 +39,81 @@ public class Product {
     @Column(name = "product_no")
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "asset_no")
+    @NotNull
     private Asset asset;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_code")
+    @NotNull
     private Category category;
 
     @Column
+    @NotBlank
+    @Size(min = 1, max = 100)
     private String name;
 
     @Column
+    @NotBlank
+    @Size(min = 1, max = 255)
     private String content;
 
     @Column(name = "total_stock")
+    @NotNull
     private Long totalStock;
 
     @Column
+    @NotNull
     private Long price;
 
     @Column
+    @NotBlank
     private String description;
 
     @Column
+    @NotBlank
+    @Size(min = 1, max = 10)
     private String unit;
 
     @Column(name = "delivery_type")
+    @NotBlank
+    @Size(min = 1, max = 10)
     private String deliveryType;
 
     @Column
+    @NotEmpty
+    @Size(min = 1, max = 10)
     private String origin;
 
     @Column(name = "package_type")
+    @NotBlank
+    @Size(min = 1, max = 10)
     private String packageType;
 
     @Column(name = "expiration_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull
     private LocalDate expirationDate;
 
     @Column(name = "allergy_info")
+    @NotBlank
+    @Size(min = 1, max = 100)
     private String allergyInfo;
 
     @Column
+    @NotBlank
+    @Size(min = 1, max = 10)
     private String capacity;
 
     @Column(name = "created_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+    @NotNull
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+    @NotNull
     private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")

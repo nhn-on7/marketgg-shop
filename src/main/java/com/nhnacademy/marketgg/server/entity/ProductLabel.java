@@ -14,6 +14,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 상품 라벨 개체입니다.
+ *
+ * @since 1.0.0
+ */
 @Table(name = "product_labels")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -15,15 +15,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
- * 회원 Entity 입니다.
+ * 회원 개체입니다.
  *
- * @version 1.0.0
+ * @version 1.0
+ * @since 1.0
  */
 @Table(name = "members")
 @Entity
@@ -37,6 +40,7 @@ public class Member {
     @Column(name = "member_no")
     private Long id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "member_grade_no")
     private MemberGrade memberGrade;
@@ -45,9 +49,12 @@ public class Member {
     @JoinColumn(name = "cart_no")
     private Cart cart;
 
+    @NotBlank
+    @Size(min = 36, max = 36)
     @Column(unique = true)
     private String uuid;
 
+    @NotNull
     @Column
     private Character gender;
 
@@ -58,9 +65,11 @@ public class Member {
     private LocalDateTime ggpassUpdatedAt;
 
     @Column(name = "created_at")
+    @NotNull
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
+    @NotNull
     private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")

@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.entity;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,15 +8,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * 사진 엔티티입니다.
+ * 이미지 개체입니다.
  *
- * @since 1.0.0
+ * @version 1.0
+ * @since 1.0
  */
 @Table(name = "images")
 @Entity
@@ -28,6 +29,7 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_no")
+    @NotNull
     private Long id;
 
     @ManyToOne
