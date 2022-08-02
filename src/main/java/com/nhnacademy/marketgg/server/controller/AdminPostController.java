@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
@@ -8,8 +9,11 @@ import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
+import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
+import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -108,6 +112,58 @@ public class AdminPostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_POST + "/categories/" + categoryCode))
+                             .body(responses);
+    }
+
+    /**
+     * 지정한 게시판 타입의 Reason 옵션으로 검색한 결과를 반환합니다.
+     *
+     * @param categoryCode  - 검색을 진행 할 게시판 타입입니다.
+     * @param option        - 검색을 진행 할 필터의 값입니다.
+     * @param searchRequest - 검색을 진행 할 검색정보입니다.
+     * @return 검색정보로 검색한 결과 목록 응답객체를 반환합니다.
+     * @throws ParseException          파싱도중 예외처리입니다.
+     * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
+     * @since 1.0.0
+     */
+    @PostMapping("/categories/{categoryCode}/search/reason")
+    public ResponseEntity<List<SearchBoardResponse>> searchPostListForReason(@PathVariable final String categoryCode,
+                                                                             @RequestParam final String option,
+                                                                             @RequestBody final SearchRequest searchRequest)
+            throws ParseException, JsonProcessingException {
+
+        List<SearchBoardResponse> responses =
+                postService.searchForOption(categoryCode, searchRequest, option, "reason");
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(
+                                     DEFAULT_ADMIN_POST + "/categories/" + categoryCode + "/search/reason/" + option))
+                             .body(responses);
+    }
+
+    /**
+     * 지정한 게시판 타입의 Status 옵션으로 검색한 결과를 반환합니다.
+     *
+     * @param categoryCode  - 검색을 진행 할 게시판 타입입니다.
+     * @param option        - 검색을 진행 할 필터의 값입니다.
+     * @param searchRequest - 검색을 진행 할 검색정보입니다.
+     * @return 검색정보로 검색한 결과 목록 응답객체를 반환합니다.
+     * @throws ParseException          파싱도중 예외처리입니다.
+     * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
+     * @since 1.0.0
+     */
+    @PostMapping("/categories/{categoryCode}/search/status")
+    public ResponseEntity<List<SearchBoardResponse>> searchPostListForStatus(@PathVariable final String categoryCode,
+                                                                             @RequestParam final String option,
+                                                                             @RequestBody final SearchRequest searchRequest)
+            throws ParseException, JsonProcessingException {
+
+        List<SearchBoardResponse> responses =
+                postService.searchForOption(categoryCode, searchRequest, option, "status");
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(
+                                     DEFAULT_ADMIN_POST + "/categories/" + categoryCode + "/search/status/" + option))
                              .body(responses);
     }
 

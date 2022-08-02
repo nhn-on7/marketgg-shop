@@ -128,7 +128,8 @@ class PostControllerTest {
     @Test
     @DisplayName("회원의 1:1 문의 단건 조회 - 사용자")
     void testRetrieveOwnOtoInquiry() throws Exception {
-        given(postService.retrieveOwnOtoInquiryPost(anyLong(), anyLong())).willReturn(Dummy.getDummyPostResponseForOtoInquiry());
+        given(postService.retrieveOwnOtoInquiryPost(anyLong(), anyLong())).willReturn(
+                Dummy.getDummyPostResponseForOtoInquiry());
 
         this.mockMvc.perform(get(DEFAULT_POST + "/oto-inquiries/{boardNo}", 1L)
                                      .headers(headers))
@@ -145,7 +146,7 @@ class PostControllerTest {
         this.mockMvc.perform(get(DEFAULT_POST + "/categories/{categoryCode}", "701")
                                      .headers(headers)
                                      .param("page", "1"))
-                .andExpect(status().isOk());
+                    .andExpect(status().isOk());
 
         then(postService).should(times(1)).retrievePostList(anyString(), anyInt());
     }
@@ -179,44 +180,6 @@ class PostControllerTest {
                     .andExpect(status().isOk());
 
         then(postService).should(times(1)).searchForCategory(anyString(), any(SearchRequest.class));
-    }
-
-    @Test
-    @DisplayName("지정한 게시판 타입의 Reason 옵션으로 검색한 결과 조회 - 사용자")
-    void testSearchPostListForReason() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(Dummy.getSearchRequest());
-
-        given(postService.searchForOption(anyString(), any(SearchRequest.class), anyString(), anyString()))
-                .willReturn(List.of(Dummy.getSearchBoardResponse()));
-
-        this.mockMvc.perform(post(DEFAULT_POST + "/categories/{categoryCode}/search/reason", "701")
-                                     .headers(headers)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(requestBody)
-                                     .param("option", "취소/환불/교환"))
-                    .andExpect(status().isOk());
-
-        then(postService).should(times(1))
-                         .searchForOption(anyString(), any(SearchRequest.class), anyString(), anyString());
-    }
-
-    @Test
-    @DisplayName("지정한 게시판 타입의 Status 옵션으로 검색한 결과 조회 - 사용자")
-    void testPostListForStatus() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(Dummy.getSearchRequest());
-
-        given(postService.searchForOption(anyString(), any(SearchRequest.class), anyString(), anyString()))
-                .willReturn(List.of(Dummy.getSearchBoardResponse()));
-
-        this.mockMvc.perform(post(DEFAULT_POST + "/categories/{categoryCode}/search/status", "701", "미답변")
-                                     .headers(headers)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(requestBody)
-                                     .param("option", "종료"))
-                    .andExpect(status().isOk());
-
-        then(postService).should(times(1))
-                         .searchForOption(anyString(), any(SearchRequest.class), anyString(), anyString());
     }
 
     @Test

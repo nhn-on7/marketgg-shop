@@ -11,6 +11,7 @@ import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
+import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
@@ -148,6 +149,44 @@ class AdminPostControllerTest {
                     .andExpect(status().isOk());
 
         then(postService).should(times(1)).retrievePostList(anyString(), anyInt());
+    }
+
+    @Test
+    @DisplayName("지정한 게시판 타입의 Reason 옵션으로 검색한 결과 조회 - 관리자")
+    void testSearchPostListForReason() throws Exception {
+        String requestBody = objectMapper.writeValueAsString(Dummy.getSearchRequest());
+
+        given(postService.searchForOption(anyString(), any(SearchRequest.class), anyString(), anyString()))
+                .willReturn(List.of(Dummy.getSearchBoardResponse()));
+
+        this.mockMvc.perform(post(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/categories/{categoryCode}/search/reason", "701")
+                                     .headers(headers)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody)
+                                     .param("option", "취소/환불/교환"))
+                    .andExpect(status().isOk());
+
+        then(postService).should(times(1))
+                         .searchForOption(anyString(), any(SearchRequest.class), anyString(), anyString());
+    }
+
+    @Test
+    @DisplayName("지정한 게시판 타입의 Status 옵션으로 검색한 결과 조회 - 관리자")
+    void testPostListForStatus() throws Exception {
+        String requestBody = objectMapper.writeValueAsString(Dummy.getSearchRequest());
+
+        given(postService.searchForOption(anyString(), any(SearchRequest.class), anyString(), anyString()))
+                .willReturn(List.of(Dummy.getSearchBoardResponse()));
+
+        this.mockMvc.perform(post(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/categories/{categoryCode}/search/status", "701", "미답변")
+                                     .headers(headers)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody)
+                                     .param("option", "종료"))
+                    .andExpect(status().isOk());
+
+        then(postService).should(times(1))
+                         .searchForOption(anyString(), any(SearchRequest.class), anyString(), anyString());
     }
 
     @Test
