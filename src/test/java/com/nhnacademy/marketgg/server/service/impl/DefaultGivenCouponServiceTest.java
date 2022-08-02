@@ -86,10 +86,10 @@ class DefaultGivenCouponServiceTest {
         ReflectionTestUtils.setField(member, "id", 1L);
         ReflectionTestUtils.setField(givenCouponRequest, "name", "name");
 
-        couponDto = new CouponDto(1L, "name", "type", 10, 1000, 0.5);
+        couponDto = new CouponDto();
         ReflectionTestUtils.setField(couponDto, "expiredDate", 10);
         cart = cartRepository.save(new Cart());
-        givenCoupon = new GivenCoupon(new Coupon(1L, "name", "type", 10, 1000, 0.5),
+        givenCoupon = new GivenCoupon(new Coupon(couponDto),
                 new Member(memberCreateRequest, cart));
         memberInfo = Dummy.getDummyMemberInfo(1L, cart);
     }
@@ -98,7 +98,7 @@ class DefaultGivenCouponServiceTest {
     @DisplayName("지급 쿠폰 생성")
     void testCreateGivenCoupons() {
         given(memberRepository.findById(any())).willReturn(Optional.of(new Member(memberCreateRequest, cart)));
-        Coupon coupon = new Coupon(1L, "name", "type", 10, 1000, 0.5);
+        Coupon coupon = new Coupon(couponDto);
         given(memberRepository.findById(any())).willReturn(Optional.of(member));
         given(couponRepository.findByName(anyString())).willReturn(Optional.of(coupon));
 
