@@ -35,7 +35,7 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
         return from(csPost)
                 .where(csPost.id.eq(boardNo))
                 .select(Projections.fields(PostResponseForDetail.class,
-                                           csPost.id.as("boardNo"),
+                                           csPost.id,
                                            csPost.title,
                                            csPost.content,
                                            csPost.reason,
@@ -50,7 +50,7 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
         QueryResults<PostResponse> result = from(csPost)
                 .where(csPost.category.id.eq(categoryId))
                 .select(Projections.fields(PostResponse.class,
-                                           csPost.id.as("boardNo"),
+                                           csPost.id,
                                            csPost.category.id.as("categoryCode"),
                                            csPost.title,
                                            csPost.reason,
@@ -70,7 +70,7 @@ public class CustomerServicePostRepositoryImpl extends QuerydslRepositorySupport
                 .where(csPost.category.id.eq(categoryId))
                 .where(csPost.member.id.eq(memberId))
                 .select(Projections.fields(PostResponse.class,
-                                           csPost.id.as("boardNo"),
+                                           csPost.id,
                                            csPost.category.id.as("categoryCode"),
                                            csPost.title,
                                            csPost.reason,

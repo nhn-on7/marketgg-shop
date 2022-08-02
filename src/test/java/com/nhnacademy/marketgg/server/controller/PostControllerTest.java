@@ -10,6 +10,7 @@ import com.nhnacademy.marketgg.server.aop.UuidAspect;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
+import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
@@ -103,7 +104,7 @@ class PostControllerTest {
 
         willDoNothing().given(postService).createPost(anyLong(), any(PostRequest.class));
 
-        this.mockMvc.perform(post(DEFAULT_POST + "/oto-inquiries")
+        this.mockMvc.perform(post(DEFAULT_POST)
                                      .headers(headers)
                                      .contentType(MediaType.APPLICATION_JSON)
                                      .content(requestBody))
@@ -150,23 +151,58 @@ class PostControllerTest {
         then(postService).should(times(1)).retrieveOwnPostList(anyInt(), anyString(), anyLong());
     }
 
-    // @Test
-    // @DisplayName("지정한 게시판 타입의 전체 목록 검색 결과 조회 - 사용자")
-    // void testSearchPostListForCategory() throws Exception {
-    //     TODO: 여기 SearchRequest 가 엘라 서버건지 샵 서버건지 확인 필요
-    // }
+    @Test
+    @DisplayName("지정한 게시판 타입의 전체 목록 검색 결과 조회 - 사용자")
+    void testSearchPostListForCategory() throws Exception {
+        String requestBody = objectMapper.writeValueAsString(Dummy.getSearchRequest());
 
-    // @Test
-    // @DisplayName("지정한 게시판 타입의 Reason 옵션으로 검색한 결과 조회 - 사용자")
-    // void testSearchPostListForReason() throws Exception {
-    //
-    // }
+        given(postService.searchForCategory(anyString(), any(SearchRequest.class)))
+                .willReturn(List.of(Dummy.getSearchBoardResponse()));
 
-    // @Test
-    // @DisplayName("지정한 게시판 타입의 Status 옵션으로 검색한 결과 조회 - 사용자")
-    // void testPostListForStatus() throws Exception {
-    //
-    // }
+        this.mockMvc.perform(post(DEFAULT_POST + "/categories/{categoryCode}/search", "701")
+                                     .headers(headers)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
+                    .andExpect(status().isOk());
+
+        then(postService).should(times(1)).searchForCategory(anyString(), any(SearchRequest.class));
+    }
+
+    @Test
+    @DisplayName("지정한 게시판 타입의 Reason 옵션으로 검색한 결과 조회 - 사용자")
+    void testSearchPostListForReason() throws Exception {
+        String requestBody = objectMapper.writeValueAsString(Dummy.getSearchRequest());
+
+        given(postService.searchForOption(anyString(), any(SearchRequest.class), anyString(), anyString()))
+                .willReturn(List.of(Dummy.getSearchBoardResponse()));
+
+        this.mockMvc.perform(post(DEFAULT_POST + "/categories/{categoryCode}/search/reason/{option}", "701", "회원")
+                                     .headers(headers)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
+                    .andExpect(status().isOk());
+
+        then(postService).should(times(1))
+                         .searchForOption(anyString(), any(SearchRequest.class), anyString(), anyString());
+    }
+
+    @Test
+    @DisplayName("지정한 게시판 타입의 Status 옵션으로 검색한 결과 조회 - 사용자")
+    void testPostListForStatus() throws Exception {
+        String requestBody = objectMapper.writeValueAsString(Dummy.getSearchRequest());
+
+        given(postService.searchForOption(anyString(), any(SearchRequest.class), anyString(), anyString()))
+                .willReturn(List.of(Dummy.getSearchBoardResponse()));
+
+        this.mockMvc.perform(post(DEFAULT_POST + "/categories/{categoryCode}/search/status/{option}", "701", "미답변")
+                                     .headers(headers)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
+                    .andExpect(status().isOk());
+
+        then(postService).should(times(1))
+                         .searchForOption(anyString(), any(SearchRequest.class), anyString(), anyString());
+    }
 
     @Test
     @DisplayName("1:1 문의 삭제 - 사용자")

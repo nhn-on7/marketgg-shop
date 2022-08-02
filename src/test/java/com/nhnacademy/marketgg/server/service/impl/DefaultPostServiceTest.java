@@ -1,21 +1,20 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.MemberCreateRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
-import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
+import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.PostResponse;
+import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
+import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticBoardRepository;
-import com.nhnacademy.marketgg.server.entity.Cart;
-import com.nhnacademy.marketgg.server.entity.Categorization;
-import com.nhnacademy.marketgg.server.entity.Category;
+import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
-import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicecomment.CustomerServiceCommentRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,9 +22,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -37,6 +36,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -55,29 +55,27 @@ public class DefaultPostServiceTest {
     CustomerServiceCommentRepository commentRepository;
 
     @Mock
+    SearchRepository searchRepository;
+
+    @Mock
     MemberRepository memberRepository;
 
     @Mock
     CategoryRepository categoryRepository;
 
-    private static Category category;
-    private static Member member;
+    static List<PostResponse> list;
 
     @BeforeAll
     static void beforeAll() {
-        MemberCreateRequest memberRequest = new MemberCreateRequest();
-        CategoryCreateRequest categoryRequest = new CategoryCreateRequest();
-        CategorizationCreateRequest categorizationRequest = new CategorizationCreateRequest();
-        member = new Member(memberRequest, new Cart());
-        Categorization categorization = new Categorization(categorizationRequest);
-        category = new Category(categoryRequest, categorization);
+        list = List.of(Dummy.getDummyPostResponse());
     }
 
     @Test
     @DisplayName("1:1 문의 등록")
-    void testCreateOtoInquiry() {
-        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
-        given(categoryRepository.findById(anyString())).willReturn(Optional.of(category));
+    void testCreatePost() {
+        given(memberRepository.findById(anyLong())).willReturn(
+                Optional.of(Dummy.getDummyMember(Dummy.getDummyCart(1L))));
+        given(categoryRepository.findById(anyString())).willReturn(Optional.of(Dummy.getDummyCategory()));
         given(categoryRepository.retrieveCategoryIdByName(anyString())).willReturn("702");
 
         postService.createPost(1L, new PostRequest());
@@ -87,60 +85,102 @@ public class DefaultPostServiceTest {
     }
 
     @Test
-    @DisplayName("1:1 문의 단건 조회")
-    void testRetrieveCustomerServicePost() {
-        PostResponseForOtoInquiry otoInquiry = new PostResponseForOtoInquiry();
-        ReflectionTestUtils.setField(otoInquiry, "id", 1L);
+    @DisplayName("게시글 단건 조회")
+    void testRetrievePost() {
+        given(postRepository.findByBoardNo(anyLong())).willReturn(Dummy.getDummyPostResponseForDetail());
 
-        given(postRepository.findOtoInquiryById(anyLong())).willReturn(otoInquiry);
-        given(commentRepository.findByInquiryId(anyLong())).willReturn(List.of());
+        postService.retrievePost(1L);
+
+        then(postRepository).should(times(1)).findByBoardNo(anyLong());
+    }
+
+    @Test
+    @DisplayName("1:1 문의 단건 조회")
+    void testRetrieveOtoInquiryPost() {
+        given(postRepository.findOtoInquiryById(anyLong())).willReturn(Dummy.getDummyPostResponseForOtoInquiry());
 
         postService.retrieveOtoInquiryPost(1L);
 
-        then(postRepository).should().findOtoInquiryById(anyLong());
-        then(commentRepository).should().findByInquiryId(anyLong());
+        then(postRepository).should(times(1)).findOtoInquiryById(anyLong());
     }
 
     @Test
     @DisplayName("게시글 목록 조회")
-    void testRetrieveOtoInquiries() {
+    void testRetrievePostList() {
         given(postRepository.findPostsByCategoryId(any(Pageable.class), anyString()))
-                .willReturn(Page.empty());
+                .willReturn(new PageImpl<>(list, PageRequest.of(0, 10), 1));
 
-        postService.retrievePostList("702", 0);
+        postService.retrievePostList("701", 0);
 
-        then(postRepository).should().findPostsByCategoryId(any(Pageable.class), anyString());
+        then(postRepository).should(times(1))
+                            .findPostsByCategoryId(any(Pageable.class), anyString());
     }
 
     @Test
-    @DisplayName("특정 회원의 1:1 문의 목록 조회")
-    void testRetrieveOwnOtoInquiries() {
+    @DisplayName("특정 회원의 게시글 목록 조회")
+    void testRetrieveOwnPostList() {
         given(postRepository.findPostByCategoryAndMember(any(Pageable.class), anyString(), anyLong()))
-                .willReturn(Page.empty());
+                .willReturn(new PageImpl<>(list, PageRequest.of(0, 10), 1));
 
-        postService.retrieveOwnPostList(0, "702", 1L);
+        postService.retrieveOwnPostList(0, "701", 1L);
 
-        then(postRepository).should()
+        then(postRepository).should(times(1))
                             .findPostByCategoryAndMember(any(Pageable.class), anyString(), anyLong());
     }
 
     @Test
-    @DisplayName("1:1 문의 삭제(댓글이 없을 경우)")
-    void testDeleteCustomerServicePostNotExistsComments() {
-        CustomerServicePost csPost = new CustomerServicePost(member, category, new PostRequest());
+    @DisplayName("게시판 타입(카테고리)으로 게시글 검색")
+    void testSearchForCategory() throws ParseException, JsonProcessingException {
+        given(searchRepository.searchBoardWithCategoryCode(anyString(), any(SearchRequest.class), anyString()))
+                .willReturn(List.of(Dummy.getSearchBoardResponse()));
 
-        given(postRepository.findById(anyLong())).willReturn(Optional.of(csPost));
-        given(commentRepository.findCommentIdsByInquiryId(anyLong())).willReturn(List.of());
+        postService.searchForCategory("701", Dummy.getSearchRequest());
 
-        willDoNothing().given(elasticBoardRepository).deleteById(anyLong());
-        willDoNothing().given(postRepository).delete(any(CustomerServicePost.class));
+        then(searchRepository).should(times(1))
+                              .searchBoardWithCategoryCode(anyString(), any(SearchRequest.class), anyString());
+    }
 
-        postRepository.save(csPost);
-        postService.deletePost(1L);
+    @Test
+    @DisplayName("옵션(상태, 사유)으로 게시글 검색")
+    void testSearchForOption() throws ParseException, JsonProcessingException {
+        given(searchRepository.searchBoardWithOption(anyString(), anyString(), any(SearchRequest.class), anyString()))
+                .willReturn(List.of(Dummy.getSearchBoardResponse()));
 
-        then(postRepository).should().findById(anyLong());
-        then(postRepository).should().delete(any(CustomerServicePost.class));
-        then(commentRepository).should().findCommentIdsByInquiryId(anyLong());
+        postService.searchForOption("701", Dummy.getSearchRequest(), "회원", "reason");
+
+        then(searchRepository).should(times(1))
+                .searchBoardWithOption(anyString(), anyString(), any(SearchRequest.class), anyString());
+    }
+
+    @Test
+    @DisplayName("게시글 수정")
+    void testUpdatePost() {
+        CustomerServicePost dummyPost = Dummy.getCustomerServicePost();
+
+        given(postRepository.findById(anyLong())).willReturn(Optional.of(dummyPost));
+
+        postService.updatePost(1L, dummyPost.getId(), Dummy.getPostRequest());
+
+        then(postRepository).should(times(1)).findById(anyLong());
+        then(postRepository).should(times(1)).save(any(CustomerServicePost.class));
+    }
+
+    @Test
+    @DisplayName("1:1 문의 상태 변경")
+    void testUpdateInquiryStatus() {
+        CustomerServicePost dummyPost = Dummy.getCustomerServicePost();
+        ElasticBoard dummyboard = Dummy.getElasticBoard();
+
+        given(postRepository.findById(anyLong())).willReturn(Optional.of(dummyPost));
+        given(elasticBoardRepository.findById(anyLong())).willReturn(Optional.of(dummyboard));
+
+        postService.updateInquiryStatus(1L, Dummy.getPostStatusUpdateRequest());
+
+        then(postRepository).should(times(1)).findById(anyLong());
+        then(elasticBoardRepository).should(times(1)).findById(anyLong());
+        then(postRepository).should(times(1)).save(any(CustomerServicePost.class));
+        then(elasticBoardRepository).should(times(1)).save(any(ElasticBoard.class));
+
     }
 
 }

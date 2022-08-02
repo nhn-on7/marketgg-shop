@@ -48,8 +48,8 @@ public class SearchRequestBody<T> {
 
     public SearchRequestBody(final T sortMap, final SearchRequest request) {
         this.sort = Collections.singletonList(sortMap);
-        this.from = request.getPageRequest().getPageNumber();
-        this.size = request.getPageRequest().getPageSize();
+        this.from = request.getPage();
+        this.size = request.getSize();
         this.query = new Query(new MultiMatch(request.getRequest(), DEFAULT_PRODUCT_FIELD));
     }
 

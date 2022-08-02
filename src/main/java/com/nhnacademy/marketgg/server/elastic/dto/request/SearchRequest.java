@@ -27,6 +27,8 @@ public class SearchRequest {
      *
      * @since 1.0.0
      */
-    private PageRequest pageRequest;
+    private Integer page;
+
+    private Integer size;
 
 }

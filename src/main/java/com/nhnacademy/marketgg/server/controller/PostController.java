@@ -56,15 +56,14 @@ public class PostController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @PostMapping("/oto-inquiries")
+    @PostMapping
     public ResponseEntity<Void> createOtoInquiry(@Valid @RequestBody final PostRequest postRequest,
                                                  final MemberInfo memberInfo) {
 
         postService.createPost(memberInfo.getId(), postRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create(
-                                     DEFAULT_POST + "/oto-inquiries"))
+                             .location(URI.create(DEFAULT_POST))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

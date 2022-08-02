@@ -69,7 +69,7 @@ public interface CustomerServicePostService {
     List<PostResponse> retrieveOwnPostList(final Integer page, final String categoryCode, final Long memberId);
 
     /**
-     * 게시판 타입별고 검색을 진행 할 수 있습니다.
+     * 게시판 타입별로 검색을 진행 할 수 있습니다.
      *
      * @param categoryCode  - 검색을 진행 할 게시판 타입입니다.
      * @param searchRequest - 검색을 진행 할 검색 정보입니다.

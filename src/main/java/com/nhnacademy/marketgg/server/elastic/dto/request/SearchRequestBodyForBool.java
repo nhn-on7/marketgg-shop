@@ -52,14 +52,23 @@ public class SearchRequestBodyForBool<T> {
      */
     private final BoolQuery query;
 
+    /**
+     * 조건을 담은 검색을 진행 할 수 있는 요청객체를 생성합니다.
+     *
+     * @param sortMap - 결과 목록의 정렬기준입니다.
+     * @param request - 검색을 진행할 검색정보를 담은 객체입니다.
+     * @param optionCode - 검색을 진행할 옵션 값입니다.
+     * @param option - 검색을 진행할 옵션입니다.
+     * @since 1.0.0
+     */
     public SearchRequestBodyForBool(final String optionCode, final T sortMap,
                                     final SearchRequest request, final String option) {
 
         List<String> requestOption = DEFAULT_PRODUCT_FIELD;
 
         this.sort = Collections.singletonList(sortMap);
-        this.from = request.getPageRequest().getPageNumber();
-        this.size = request.getPageRequest().getPageSize();
+        this.from = request.getPage();
+        this.size = request.getSize();
         if (Boolean.TRUE.equals(this.isBoard(option))) {
             requestOption = DEFAULT_BOARD_FIELD;
         }
@@ -68,12 +77,22 @@ public class SearchRequestBodyForBool<T> {
                                  new Must(new MultiMatch(request.getRequest(), requestOption)))));
     }
 
+    /**
+     * 조건을 담은 검색을 진행 할 수 있는 요청객체를 생성합니다.
+     *
+     * @param categoryCode - 검색을 진행할 카테고리의 식별번호입니다.
+     * @param sortMap - 결과 목록의 정렬기준입니다.
+     * @param request - 검색을 진행할 검색정보를 담은 객체입니다.
+     * @param optionCode - 검색을 진행할 옵션 값입니다.
+     * @param option - 검색을 진행할 옵션입니다.
+     * @since 1.0.0
+     */
     public SearchRequestBodyForBool(final String categoryCode, final T sortMap,
                                     final SearchRequest request, final String optionCode,
                                     final String option) {
         this.sort = Collections.singletonList(sortMap);
-        this.from = request.getPageRequest().getPageNumber();
-        this.size = request.getPageRequest().getPageSize();
+        this.from = request.getPage();
+        this.size = request.getSize();
         this.query = new BoolQuery(new Bool(List.of(new Must(new MultiMatch(categoryCode, CATEGORY_FIELD)),
                                                     new Must(new MultiMatch(optionCode, List.of(option))),
                                                     new Must(new MultiMatch(request.getRequest(), DEFAULT_BOARD_FIELD)))));
