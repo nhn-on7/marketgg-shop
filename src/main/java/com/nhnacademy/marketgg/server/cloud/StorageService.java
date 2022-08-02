@@ -1,8 +1,9 @@
 package com.nhnacademy.marketgg.server.cloud;
 
+import java.io.InputStream;
 import java.util.List;
 
-public interface AuthService {
+public interface StorageService {
 
     String requestToken();
 
@@ -10,5 +11,5 @@ public interface AuthService {
 
     List<String> getObjectList(final String containerName);
 
-
+    void uploadObject(String containerName, String objectName, final InputStream inputStream);
 }

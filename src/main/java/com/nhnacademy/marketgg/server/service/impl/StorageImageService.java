@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.cloud.AuthService;
+import com.nhnacademy.marketgg.server.cloud.StorageService;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.service.ImageService;
@@ -26,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class StorageImageService implements ImageService {
 
     private static final String DIR = System.getProperty("user.home");
-    private final AuthService authService;
+    private final StorageService storageService;
 
     @Override
     public List<Image> parseImages(List<MultipartFile> multipartFiles, Asset asset) throws IOException {
@@ -36,10 +36,10 @@ public class StorageImageService implements ImageService {
             throw new IOException("이미지가 없습니다.");
         }
 
-        String s = authService.requestToken();
+        String s = storageService.requestToken();
         log.warn(s);
 
-        List<String> on7Storage = authService.getObjectList("on7_storage");
+        List<String> on7Storage = storageService.getObjectList("on7_storage");
         if (on7Storage != null) {
             for (String s1 : on7Storage) {
                 log.warn(s1);

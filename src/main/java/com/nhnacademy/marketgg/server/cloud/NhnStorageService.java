@@ -1,26 +1,36 @@
 package com.nhnacademy.marketgg.server.cloud;
 
+import static org.springframework.http.HttpMethod.PUT;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpRequest;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpMessageConverterExtractor;
+import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
 @Service
-public class NhnAuthService implements AuthService {
+public class NhnStorageService implements StorageService {
 
     private final String AUTH_URL = "https://api-identity.infrastructure.cloud.toast.com/v2.0";
     private final String USER_NAME = "computerhermit96@gmail.com";
     private final String PASSWORD = "123!";
     private final String TENANT_ID = "8a2dd42738a0427180466a56561b5eef";
-    private final String STORAGE_URL = "https://api-storage.cloud.toast.com/v1/AUTH_8a2dd42738a0427180466a56561b5eef";
+    private final String STORAGE_URL =
+        "https://api-storage.cloud.toast.com/v1/AUTH_8a2dd42738a0427180466a56561b5eef";
     private final RestTemplate restTemplate;
 
     private PasswordCredentials passwordCredentials;
@@ -72,6 +82,28 @@ public class NhnAuthService implements AuthService {
     @Override
     public List<String> getObjectList(final String containerName) {
         return this.getContainerList(this.getUrl(containerName));
+    }
+
+    @Override
+    public void uploadObject(String containerName, String objectName, final InputStream inputStream) {
+        String url = this.getUrl(containerName);
+
+        final RequestCallback requestCallback = new RequestCallback() {
+            @Override
+            public void doWithRequest(final ClientHttpRequest request) throws IOException {
+                request.getHeaders().add("X-Auth-Token", tokenId);
+                IOUtils.copy(inputStream, request.getBody());
+            }
+        };
+
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setBufferRequestBody(false);
+        RestTemplate restTemplate = new RestTemplate(requestFactory);
+
+        HttpMessageConverterExtractor<String> responseExtractor =
+            new HttpMessageConverterExtractor<>(String.class, restTemplate.getMessageConverters());
+
+        restTemplate.execute(url, PUT, requestCallback, responseExtractor);
     }
 
     private String getUrl(String containerName) {
