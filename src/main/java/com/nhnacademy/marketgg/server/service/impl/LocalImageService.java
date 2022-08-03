@@ -1,7 +1,8 @@
-package com.nhnacademy.marketgg.server.utils;
+package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
+import com.nhnacademy.marketgg.server.service.ImageService;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,8 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,9 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
  * @version 1.0.0
  */
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Component
-public class ImageFileHandler {
+@Primary
+public class LocalImageService implements ImageService {
 
     private static final String DIR = System.getProperty("user.home");
 
@@ -41,7 +41,9 @@ public class ImageFileHandler {
      * @return - 사진 리스트를 반환합니다.
      * @throws IOException - IOException을 발생시킵니다.
      */
-    public static List<Image> parseImages(List<MultipartFile> multipartFiles, Asset asset)
+
+    @Override
+    public List<Image> parseImages(List<MultipartFile> multipartFiles, Asset asset)
         throws IOException {
 
         List<Image> images = new ArrayList<>();
@@ -66,13 +68,13 @@ public class ImageFileHandler {
         return images;
     }
 
-    private static Path returnDir() {
+    private Path returnDir() {
         String format = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
 
         return Paths.get(DIR, format);
     }
 
-    private static String uuidFilename(String filename) {
+    private String uuidFilename(String filename) {
         return UUID.randomUUID() + "_" + filename;
     }
 
