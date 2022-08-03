@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.cloud.StorageService;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
@@ -33,7 +32,6 @@ public class StorageImageService implements ImageService {
 
     private static final String DIR = System.getProperty("user.home");
     private final StorageService storageService;
-    private final ObjectMapper objectMapper;
 
     @Override
     public List<Image> parseImages(List<MultipartFile> multipartFiles, Asset asset) throws IOException {
@@ -74,13 +72,7 @@ public class StorageImageService implements ImageService {
 
             sequence++;
             storageService.uploadObject("on7_storage", filename, inputStream);
-        }
 
-        List<String> on7Storage = storageService.getObjectList("on7_storage");
-        if (on7Storage != null) {
-            for (String s1 : on7Storage) {
-                log.warn(s1);
-            }
         }
 
         return images;

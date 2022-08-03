@@ -4,16 +4,19 @@ import static org.springframework.http.HttpMethod.PUT;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -104,6 +107,28 @@ public class NhnStorageService implements StorageService {
             new HttpMessageConverterExtractor<>(String.class, restTemplate.getMessageConverters());
 
         restTemplate.execute(url, PUT, requestCallback, responseExtractor);
+    }
+
+    @Override
+    public InputStream downloadObject(String containerName, String objectName)
+        throws JsonProcessingException {
+
+        String url = this.getUrl(containerName, objectName);
+
+        storageResponse = objectMapper.readValue(requestToken(), StorageResponse.class);
+        String tokenId = storageResponse.getAccess().getToken().getId();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", tokenId);
+        headers.setAccept(List.of(MediaType.APPLICATION_OCTET_STREAM));
+
+        HttpEntity<String> requestHttpEntity = new HttpEntity<>(null, headers);
+
+        ResponseEntity<byte[]> response
+            = this.restTemplate.exchange(url, HttpMethod.GET, requestHttpEntity, byte[].class);
+
+
+        return new ByteArrayInputStream(Objects.requireNonNull(response.getBody()));
     }
 
     private String getUrl(String containerName, String objectName) {

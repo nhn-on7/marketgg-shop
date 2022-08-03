@@ -14,4 +14,6 @@ public interface StorageService {
 
     void uploadObject(String containerName, String objectName, final InputStream inputStream)
         throws JsonProcessingException;
+
+    InputStream downloadObject(String containerName, String objectName) throws JsonProcessingException;
 }
