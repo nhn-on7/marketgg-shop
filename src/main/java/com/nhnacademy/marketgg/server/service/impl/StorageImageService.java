@@ -6,13 +6,18 @@ import com.nhnacademy.marketgg.server.cloud.StorageService;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.service.ImageService;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,11 +44,17 @@ public class StorageImageService implements ImageService {
             throw new IOException("이미지가 없습니다.");
         }
 
-        String s = storageService.requestToken();
+        String dir = String.valueOf(Files.createDirectories(returnDir()));
+        Integer sequence = 1;
+        for (MultipartFile multipartFile : multipartFiles) {
+            String filename = uuidFilename(multipartFile.getOriginalFilename());
+            File objFile = new File(dir, Objects.requireNonNull(filename));
 
-        StorageResponse access = objectMapper.readValue(s, StorageResponse.class);
-        log.warn(s);
-        log.warn(String.valueOf(access));
+            multipartFile.transferTo(objFile);
+            InputStream inputStream = new FileInputStream(objFile);
+
+            storageService.uploadObject("on7_storage", filename, inputStream);
+        }
 
         List<String> on7Storage = storageService.getObjectList("on7_storage");
         if (on7Storage != null) {

@@ -2,7 +2,8 @@ package com.nhnacademy.marketgg.server.cloud;
 
 import static org.springframework.http.HttpMethod.PUT;
 
-import java.io.IOException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,7 +15,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpMessageConverterExtractor;
@@ -32,11 +32,12 @@ public class NhnStorageService implements StorageService {
     private final String STORAGE_URL =
         "https://api-storage.cloud.toast.com/v1/AUTH_8a2dd42738a0427180466a56561b5eef";
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
     private PasswordCredentials passwordCredentials;
     private Auth auth;
     private TokenRequest tokenRequest;
-    private String tokenId;
+    private StorageResponse storageResponse;
 
     @Override
     public String requestToken() {
@@ -72,7 +73,6 @@ public class NhnStorageService implements StorageService {
             this.restTemplate.exchange(url, HttpMethod.GET, requestHttpEntity, String.class);
 
         if (response.getStatusCode() == HttpStatus.OK) {
-            // String으로 받은 목록을 배열로 변환
             return Arrays.asList(response.getBody().split("\\r?\\n"));
         }
 
@@ -85,8 +85,11 @@ public class NhnStorageService implements StorageService {
     }
 
     @Override
-    public void uploadObject(String containerName, String objectName, final InputStream inputStream) {
-        String url = this.getUrl(containerName);
+    public void uploadObject(String containerName, String objectName, final InputStream inputStream)
+        throws JsonProcessingException {
+        String url = this.getUrl(containerName, objectName);
+        storageResponse = objectMapper.readValue(requestToken(), StorageResponse.class);
+        String tokenId = storageResponse.getAccess().getToken().getId();
 
         final RequestCallback requestCallback = request -> {
             request.getHeaders().add("X-Auth-Token", tokenId);
@@ -101,6 +104,10 @@ public class NhnStorageService implements StorageService {
             new HttpMessageConverterExtractor<>(String.class, restTemplate.getMessageConverters());
 
         restTemplate.execute(url, PUT, requestCallback, responseExtractor);
+    }
+
+    private String getUrl(String containerName, String objectName) {
+        return this.STORAGE_URL + "/" + containerName + "/" + objectName;
     }
 
     private String getUrl(String containerName) {
