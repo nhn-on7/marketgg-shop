@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.repository.customerservicepost;
 
+import com.nhnacademy.marketgg.server.dto.response.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.QCustomerServicePost;
@@ -21,46 +23,79 @@ public class CustomerServicePostRepositoryImpl
     }
 
     @Override
-    public PostResponseForOtoInquiry findOtoInquiryById(Long inquiryId) {
+    public PostResponseForOtoInquiry findOtoInquiryById(final Long inquiryId) {
         return from(csPost).where(csPost.id.eq(inquiryId))
                            .select(selectAllCsPostColumns())
                            .fetchOne();
     }
 
     @Override
-    public Page<PostResponseForOtoInquiry> findPostsByCategoryId(final Pageable pageable, final String categoryId) {
-        QueryResults<PostResponseForOtoInquiry> result = from(csPost).where(csPost.category.id.eq(categoryId))
-                                                                     .select(selectAllCsPostColumns())
-                                                                     .offset(pageable.getOffset())
-                                                                     .limit(pageable.getPageSize())
-                                                                     .fetchResults();
+    public PostResponseForOtoInquiry findOwnOtoInquiryById(Long boardNo, Long memberId) {
+        return from(csPost).where(csPost.id.eq(boardNo))
+                           .where(csPost.member.id.eq(memberId))
+                           .select(selectAllCsPostColumns())
+                           .fetchOne();
+    }
+
+    @Override
+    public PostResponseForDetail findByBoardNo(final Long boardNo) {
+        return from(csPost).where(csPost.id.eq(boardNo))
+                           .select(Projections.fields(PostResponseForDetail.class,
+                               csPost.id,
+                               csPost.title,
+                               csPost.content,
+                               csPost.reason,
+                               csPost.status,
+                               csPost.createdAt,
+                               csPost.updatedAt))
+                           .fetchOne();
+    }
+
+    @Override
+    public Page<PostResponse> findPostsByCategoryId(final Pageable pageable, final String categoryId) {
+        QueryResults<PostResponse> result = from(csPost).where(csPost.category.id.eq(categoryId))
+                                                        .select(Projections.fields(PostResponse.class,
+                                                            csPost.id,
+                                                            csPost.category.id.as("categoryCode"),
+                                                            csPost.title,
+                                                            csPost.reason,
+                                                            csPost.status,
+                                                            csPost.createdAt))
+                                                        .offset(pageable.getOffset())
+                                                        .limit(pageable.getPageSize())
+                                                        .fetchResults();
 
         return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 
     @Override
-    public Page<PostResponseForOtoInquiry> findPostByCategoryAndMember(final Pageable pageable, final String categoryId,
-                                                                       final Long memberId) {
-
-        QueryResults<PostResponseForOtoInquiry> result = from(csPost).where(csPost.category.id.eq(categoryId))
-                                                                     .where(csPost.member.id.eq(memberId))
-                                                                     .select(selectAllCsPostColumns())
-                                                                     .offset(pageable.getOffset())
-                                                                     .limit(pageable.getPageSize())
-                                                                     .fetchResults();
+    public Page<PostResponse> findPostByCategoryAndMember(final Pageable pageable, final String categoryId,
+                                                          final Long memberId) {
+        QueryResults<PostResponse> result = from(csPost).where(csPost.category.id.eq(categoryId))
+                                                        .where(csPost.member.id.eq(memberId))
+                                                        .select(Projections.fields(PostResponse.class,
+                                                            csPost.id,
+                                                            csPost.category.id.as("categoryCode"),
+                                                            csPost.title,
+                                                            csPost.reason,
+                                                            csPost.status,
+                                                            csPost.createdAt))
+                                                        .offset(pageable.getOffset())
+                                                        .limit(pageable.getPageSize())
+                                                        .fetchResults();
 
         return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 
     private QBean<PostResponseForOtoInquiry> selectAllCsPostColumns() {
         return Projections.fields(PostResponseForOtoInquiry.class,
-                                  csPost.id,
-                                  csPost.title,
-                                  csPost.content,
-                                  csPost.reason,
-                                  csPost.status,
-                                  csPost.createdAt,
-                                  csPost.updatedAt
+            csPost.id,
+            csPost.title,
+            csPost.content,
+            csPost.reason,
+            csPost.status,
+            csPost.createdAt,
+            csPost.updatedAt
         );
     }
 

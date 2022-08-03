@@ -21,14 +21,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
  * @version 1.0.0
  */
 
-@EnableJpaRepositories(excludeFilters = @ComponentScan.Filter(
-        type = FilterType.ASSIGNABLE_TYPE,
-        classes = { ElasticRepositoryMarker.class }),
-                       basePackageClasses = { JpaRepositoryMarker.class })
-@EnableElasticsearchRepositories(excludeFilters = @ComponentScan.Filter(
-        type = FilterType.ASSIGNABLE_TYPE,
-        classes = { JpaRepositoryMarker.class }),
-                       basePackageClasses = { ElasticRepositoryMarker.class })
 @Configuration
 public class WebConfig {
 

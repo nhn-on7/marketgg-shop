@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.repository.customerservicepost;
 
+import com.nhnacademy.marketgg.server.dto.response.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,15 @@ public interface CustomerServicePostRepositoryCustom {
     PostResponseForOtoInquiry findOtoInquiryById(final Long inquiryId);
 
     /**
+     * 게시글 번호로 공지사항과 FAQ 를 조회한다.
+     *
+     * @param boardNo - 지정한 게시글의 식별번호입니다.
+     * @return 지정한 식별번호로 조회한 게시글의 상세정보를 반환합니다.
+     * @since 1.0.0
+     */
+    PostResponseForDetail findByBoardNo(Long boardNo);
+
+    /**
      * 카테고리 번호에 따라 고객센터 게시글(공지사항, 1:1문의, FAQ) 목록을 조회하는 메소드입니다.
      *
      * @param pageable   - 페이징 처리를 위한 객체입니다.
@@ -24,7 +35,7 @@ public interface CustomerServicePostRepositoryCustom {
      * @return 카테고리 번호에 따른 게시글 목록을 Page 로 반환합니다.
      * @since 1.0.0
      */
-    Page<PostResponseForOtoInquiry> findPostsByCategoryId(final Pageable pageable, final String categoryId);
+    Page<PostResponse> findPostsByCategoryId(final Pageable pageable, final String categoryId);
 
     /**
      * 카테고리 번호와 회원 번호에 따라 고객센터 게시글 목록을 조회하는 메소드입니다.
@@ -35,7 +46,15 @@ public interface CustomerServicePostRepositoryCustom {
      * @return 카테고리 번호와 회원 번호에 따른 게시글 목록을 Page 로 반환합니다.
      * @since 1.0.0
      */
-    Page<PostResponseForOtoInquiry> findPostByCategoryAndMember(final Pageable pageable, final String categoryId,
-                                                                final Long memberId);
+    Page<PostResponse> findPostByCategoryAndMember(final Pageable pageable, final String categoryId, final Long memberId);
 
+    /**
+     * 게시글 번호로 본인의 1:1 문의 단건의 상세 정보를 조회하는 메소드입니다.
+     *
+     * @param boardNo  - 조회할 게시글의 식별번호입니다.
+     * @param memberId - 조회하는 회원의 식별번호입니다.
+     * @return 조회한 게시글의 상세 정보를 반환합니다.
+     * @since 1.0.0
+     */
+    PostResponseForOtoInquiry findOwnOtoInquiryById(Long boardNo, Long memberId);
 }

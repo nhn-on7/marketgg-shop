@@ -62,7 +62,7 @@ public class CustomerServicePost {
      * @param category    - 게시글이 속한 카테고리
      * @param postRequest - 게시글 요청 객체
      */
-    public CustomerServicePost(Member member, Category category, PostRequest postRequest) {
+    public CustomerServicePost(final Member member, final Category category, final PostRequest postRequest) {
         this.member = member;
         this.category = category;
         this.content = postRequest.getContent();
@@ -73,7 +73,14 @@ public class CustomerServicePost {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void updatePostStatus(String status) {
+    public void updatePost(final PostRequest postRequest) {
+        this.title = postRequest.getTitle();
+        this.content = postRequest.getContent();
+        this.reason = postRequest.getReason();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updatePostStatus(final String status) {
         this.status = status;
         this.updatedAt = LocalDateTime.now();
     }

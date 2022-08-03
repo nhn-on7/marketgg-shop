@@ -3,19 +3,30 @@ package com.nhnacademy.marketgg.server.dummy;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.PostRequest;
+import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
+import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
+import com.nhnacademy.marketgg.server.dto.response.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
+import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
+import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
+import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
+import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.CartProduct;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
+import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.entity.Product;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -150,4 +161,69 @@ public class Dummy {
     public static CartProduct getCartProduct(Long cartId, Long productId, Integer amount) {
         return new CartProduct(getDummyCart(cartId), getDummyProduct(productId), amount);
     }
+
+    public static PostResponseForDetail getDummyPostResponseForDetail() {
+        return new PostResponseForDetail(1L, "title", "content", "기타", "",
+            LocalDateTime.now(), LocalDateTime.now());
+    }
+
+    public static PostResponseForOtoInquiry getDummyPostResponseForOtoInquiry() {
+        PostResponseForOtoInquiry otoInquiry = new PostResponseForOtoInquiry();
+        ReflectionTestUtils.setField(otoInquiry, "id", 1L);
+        ReflectionTestUtils.setField(otoInquiry, "title", "title");
+        ReflectionTestUtils.setField(otoInquiry, "content", "content");
+        ReflectionTestUtils.setField(otoInquiry, "reason", "배송");
+        ReflectionTestUtils.setField(otoInquiry, "status", "답변중");
+        ReflectionTestUtils.setField(otoInquiry, "createdAt", LocalDateTime.now());
+        ReflectionTestUtils.setField(otoInquiry, "updatedAt", LocalDateTime.now());
+        ReflectionTestUtils.setField(otoInquiry, "commentList", List.of(getDummyCommentResponse()));
+
+        return otoInquiry;
+    }
+
+    public static PostRequest getPostRequest() {
+        PostRequest postRequest = new PostRequest();
+        ReflectionTestUtils.setField(postRequest, "categoryCode", "702");
+        ReflectionTestUtils.setField(postRequest, "title", "title");
+        ReflectionTestUtils.setField(postRequest, "content", "content");
+        ReflectionTestUtils.setField(postRequest, "reason", "상품");
+
+        return postRequest;
+    }
+
+    public static PostStatusUpdateRequest getPostStatusUpdateRequest() {
+        PostStatusUpdateRequest updateRequest = new PostStatusUpdateRequest();
+        ReflectionTestUtils.setField(updateRequest, "status", "답변중");
+
+        return updateRequest;
+    }
+
+    public static CustomerServicePost getCustomerServicePost() {
+        CustomerServicePost post = new CustomerServicePost(getDummyMember(new Cart()), getDummyCategory(),
+            getPostRequest());
+        ReflectionTestUtils.setField(post, "id", 1L);
+
+        return post;
+    }
+
+    public static ElasticBoard getElasticBoard() {
+        return new ElasticBoard(getCustomerServicePost());
+    }
+
+    public static CommentResponse getDummyCommentResponse() {
+        return new CommentResponse("content", 1L, LocalDateTime.now());
+    }
+
+    public static PostResponse getDummyPostResponse() {
+        return new PostResponse(1L, "701", "title", "상품", "empty", LocalDateTime.now());
+    }
+
+    public static SearchBoardResponse getSearchBoardResponse() {
+        return new SearchBoardResponse(1L, "701", "title", "회원", "답변완료", LocalDateTime.now());
+    }
+
+    public static SearchRequest getSearchRequest() {
+        return new SearchRequest("hi", 0, 10);
+    }
+
 }
