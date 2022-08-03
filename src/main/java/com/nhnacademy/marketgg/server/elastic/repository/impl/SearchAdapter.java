@@ -36,10 +36,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class SearchAdapter implements SearchRepository {
 
-    // @Value("{spring.elasticsearch.uris}")
-    // private String elastic;
-    private static final String ELASTIC = "http://133.186.153.181:9200";
-
+    @Value("${gg.elastic.origin}")
+    private String elastic;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final KoreanToEnglishTranslator translator;
@@ -125,7 +123,7 @@ public class SearchAdapter implements SearchRepository {
             requestUri = DEFAULT_ELASTIC_BOARD;
         }
 
-        return restTemplate.exchange(ELASTIC + requestUri,
+        return restTemplate.exchange(elastic + requestUri,
                                      HttpMethod.POST,
                                      request,
                                      String.class);
