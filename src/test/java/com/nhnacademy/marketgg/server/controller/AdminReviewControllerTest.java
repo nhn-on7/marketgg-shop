@@ -36,7 +36,7 @@ class AdminReviewControllerTest {
     void testMakeBestReview() throws Exception {
         given(reviewService.makeBestReview(anyLong())).willReturn(new SingleResponse<>());
 
-        this.mockMvc.perform(post("/admin/products/{productId}/reviews/{reviewId}/makeBest", 1L, 1L)
+        this.mockMvc.perform(post("/admin/products/{productId}/reviews/{reviewId}/make-best", 1L, 1L)
                                  .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
 

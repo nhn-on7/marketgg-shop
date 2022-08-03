@@ -7,8 +7,8 @@ import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
-import com.nhnacademy.marketgg.server.event.SavePointEvent;
-import com.nhnacademy.marketgg.server.event.SignedUpCouponEvent;
+import com.nhnacademy.marketgg.server.entity.event.SavePointEvent;
+import com.nhnacademy.marketgg.server.entity.event.GivenCouponEvent;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.membergrade.MemberGradeNotFoundException;
 import com.nhnacademy.marketgg.server.repository.cart.CartRepository;
@@ -96,7 +96,7 @@ public class DefaultMemberService implements MemberService {
 
         deliveryAddressRepository.save(new DeliveryAddress(signUpMember, signUpRequest));
 
-        publisher.publishEvent(SignedUpCouponEvent.signUpCoupon(signUpMember));
+        publisher.publishEvent(GivenCouponEvent.signUpCoupon(signUpMember));
 
         if (referrerCheck(signUpRequest) != null) {
             Member referredMember = memberRepository.findByUuid(referrerCheck(signUpRequest))

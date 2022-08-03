@@ -11,7 +11,7 @@ import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import com.nhnacademy.marketgg.server.entity.Member;
-import com.nhnacademy.marketgg.server.event.SignedUpCouponEvent;
+import com.nhnacademy.marketgg.server.entity.event.GivenCouponEvent;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
 import com.nhnacademy.marketgg.server.exception.givencoupon.GivenCouponNotFoundException;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
@@ -83,7 +83,7 @@ public class DefaultGivenCouponService implements GivenCouponService {
 
     @Async
     @TransactionalEventListener
-    public void createGivenCoupon(SignedUpCouponEvent coupon) {
+    public void createGivenCoupon(GivenCouponEvent coupon) {
         Coupon signUpCoupon = couponRepository.findCouponByName(coupon.getCouponName())
                                               .orElseThrow(CouponNotFoundException::new);
         GivenCoupon givenCoupon = new GivenCoupon(signUpCoupon, coupon.getMember());

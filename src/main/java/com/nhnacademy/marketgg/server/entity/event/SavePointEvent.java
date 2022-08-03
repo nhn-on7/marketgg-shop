@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.event;
+package com.nhnacademy.marketgg.server.entity.event;
 
 import com.nhnacademy.marketgg.server.entity.Member;
 import lombok.AllArgsConstructor;

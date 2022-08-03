@@ -2,7 +2,6 @@ package com.nhnacademy.marketgg.server.service;
 
 import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.dto.response.PointRetrieveResponse;
-import com.nhnacademy.marketgg.server.event.SavePointEvent;
 import java.util.List;
 
 /**

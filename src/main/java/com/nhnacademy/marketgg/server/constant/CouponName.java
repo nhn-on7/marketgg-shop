@@ -8,12 +8,14 @@ public enum CouponName {
     BESTREVIEW("베스트 후기 쿠폰"),
     BIRTHDAY("생일 쿠폰");
 
-    private final String couponName;
+    private final String couponTypeName;
 
     CouponName(String name) {
-        this.couponName = name;
+        this.couponTypeName = name;
     }
 
-    public String couponName() { return this.couponName; }
+    public String couponName() {
+        return this.couponTypeName;
+    }
 
 }
