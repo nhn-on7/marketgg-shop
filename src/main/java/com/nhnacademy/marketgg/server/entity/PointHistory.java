@@ -32,7 +32,6 @@ public class PointHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "point_no")
-    @NotNull
     private Long id;
 
     @ManyToOne
