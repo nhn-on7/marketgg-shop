@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,7 +57,23 @@ public class LocalImageService implements ImageService {
                 File dest = new File(dir, Objects.requireNonNull(filename));
                 multipartFile.transferTo(dest);
 
-                Image image = new Image(asset, String.valueOf(dest));
+                String originalFileExtension = "";
+                String contentType = multipartFile.getContentType();
+
+                if (contentType.contains("image/jpeg")) {
+                    originalFileExtension = ".jpg";
+                }
+                if (contentType.contains("image/png")) {
+                    originalFileExtension = ".png";
+                }
+                Image image = Image.builder()
+                                   .type(originalFileExtension)
+                                   .name(filename)
+                                   .imageAddress(dir)
+                                   .length(dest.length())
+                                   .asset(asset)
+                                   .classification("local")
+                                   .build();
                 image.setImageSequence(sequence);
                 images.add(image);
                 sequence++;

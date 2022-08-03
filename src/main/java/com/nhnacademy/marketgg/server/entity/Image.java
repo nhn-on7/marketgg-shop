@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,7 +29,6 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_no")
-    @NotNull
     private Long id;
 
     @ManyToOne
@@ -41,9 +41,27 @@ public class Image {
     @Column(name = "image_sequence")
     private Integer imageSequence;
 
-    public Image(Asset asset, String imageAddress) {
+    @Column
+    private String name;
+
+    @Column
+    private String type;
+
+    @Column
+    private Long length;
+
+    @Column
+    private String classification;
+
+    @Builder
+    private Image(Asset asset, String imageAddress, String name, String type, Long length,
+                  String classification) {
         this.asset = asset;
         this.imageAddress = imageAddress;
+        this.name = name;
+        this.type = type;
+        this.length = length;
+        this.classification = classification;
     }
 
     public void setImageSequence(Integer sequence) {

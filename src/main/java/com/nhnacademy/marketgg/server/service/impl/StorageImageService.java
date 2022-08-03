@@ -1,7 +1,6 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.cloud.StorageResponse;
 import com.nhnacademy.marketgg.server.cloud.StorageService;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
@@ -53,6 +52,27 @@ public class StorageImageService implements ImageService {
             multipartFile.transferTo(objFile);
             InputStream inputStream = new FileInputStream(objFile);
 
+            String originalFileExtension = "";
+            String contentType = multipartFile.getContentType();
+
+            if (contentType.contains("image/jpeg")) {
+                originalFileExtension = ".jpg";
+            }
+            if (contentType.contains("image/png")) {
+                originalFileExtension = ".png";
+            }
+            Image image = Image.builder()
+                               .type(originalFileExtension)
+                               .name(filename)
+                               .imageAddress(dir)
+                               .length(objFile.length())
+                               .asset(asset)
+                               .classification("storage")
+                               .build();
+            image.setImageSequence(sequence);
+            images.add(image);
+
+            sequence++;
             storageService.uploadObject("on7_storage", filename, inputStream);
         }
 

@@ -139,8 +139,9 @@ public class DefaultProductService implements ProductService {
         imageFile.transferTo(dest);
 
         Asset asset = this.assetRepository.save(Asset.create());
-        Image image = new Image(asset, dest.toString());
-        this.imageRepository.save(image);
+        //TODO: Image 마무리작업 후 상품 로직 바꾸기
+        // Image image = new Image(asset, dest.toString());
+        // this.imageRepository.save(image);
 
         return asset;
     }
