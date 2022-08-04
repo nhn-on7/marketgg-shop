@@ -15,7 +15,7 @@ import org.json.simple.parser.ParseException;
 /**
  * 고객센터 서비스입니다.
  *
- * @author 박세완
+ * @author 박세완, 김정민
  * @version 1.0.0
  */
 public interface PostService {

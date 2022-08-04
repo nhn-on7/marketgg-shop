@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 관리자 관련 포인트 내역 관리를 할 수 있는 Mapping 을 지원합니다.
  *
+ * @author 박세완
  * @version 1.0.0
  */
 @RestController
