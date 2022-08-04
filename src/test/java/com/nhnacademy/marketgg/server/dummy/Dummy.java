@@ -10,6 +10,7 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForReady;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
@@ -160,25 +161,6 @@ public class Dummy {
         return new CartProduct(getDummyCart(cartId), getDummyProduct(productId), amount);
     }
 
-    public static PostResponseForReady getDummyPostResponseForDetail() {
-        return new PostResponseForReady(1L, "title", "content", "기타", "",
-                                        LocalDateTime.now(), LocalDateTime.now());
-    }
-
-    public static PostResponseForOtoInquiry getDummyPostResponseForOtoInquiry() {
-        PostResponseForOtoInquiry otoInquiry = new PostResponseForOtoInquiry();
-        ReflectionTestUtils.setField(otoInquiry, "id", 1L);
-        ReflectionTestUtils.setField(otoInquiry, "title", "title");
-        ReflectionTestUtils.setField(otoInquiry, "content", "content");
-        ReflectionTestUtils.setField(otoInquiry, "reason", "배송");
-        ReflectionTestUtils.setField(otoInquiry, "status", "답변중");
-        ReflectionTestUtils.setField(otoInquiry, "createdAt", LocalDateTime.now());
-        ReflectionTestUtils.setField(otoInquiry, "updatedAt", LocalDateTime.now());
-        ReflectionTestUtils.setField(otoInquiry, "commentList", List.of(getDummyCommentResponse()));
-
-        return otoInquiry;
-    }
-
     public static PostRequest getPostRequest() {
         PostRequest postRequest = new PostRequest();
         ReflectionTestUtils.setField(postRequest, "categoryCode", "702");
@@ -208,16 +190,8 @@ public class Dummy {
         return new ElasticBoard(getCustomerServicePost());
     }
 
-    public static CommentResponse getDummyCommentResponse() {
-        return new CommentResponse("content", 1L, LocalDateTime.now());
-    }
-
     public static PostResponse getDummyPostResponse() {
         return new PostResponse(1L, "701", "title", "상품", "empty", LocalDateTime.now());
-    }
-
-    public static SearchBoardResponse getSearchBoardResponse() {
-        return new SearchBoardResponse(1L, "701", "title", "회원", "답변완료", LocalDateTime.now());
     }
 
     public static SearchRequest getSearchRequest() {

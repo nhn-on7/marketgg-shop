@@ -48,7 +48,7 @@ public interface PostService {
      * @return 지정한 게시글의 상세정보를 반환합니다.
      * @since 1.0.0
      */
-    PostResponseForDetail retrievePost(final Long postNo, final MemberInfo memberInfo);
+    PostResponseForDetail retrievePost(final Long postNo, final MemberInfo memberInfo) throws JsonProcessingException;
 
     /**
      * 게시판 타입별로 검색을 진행 할 수 있습니다.

@@ -79,7 +79,9 @@ public class DefaultPostService implements PostService {
     }
 
     @Override
-    public PostResponseForDetail retrievePost(final Long postNo, final MemberInfo memberInfo) {
+    public PostResponseForDetail retrievePost(final Long postNo, final MemberInfo memberInfo)
+            throws JsonProcessingException {
+
         CustomerServicePost post =
                 postRepository.findById(postNo).orElseThrow(CustomerServiceCommentNotFoundException::new);
         if (post.getCategory().getId().compareTo(OTO_CODE) == 0 || !memberInfo.isAdmin()) {

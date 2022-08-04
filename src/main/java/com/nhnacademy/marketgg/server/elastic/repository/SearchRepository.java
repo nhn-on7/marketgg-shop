@@ -10,6 +10,7 @@ import org.json.simple.parser.ParseException;
 /**
  * 검색 Repository 입니다.
  *
+ * @author 박세완
  * @version 1.0.0
  */
 public interface SearchRepository {

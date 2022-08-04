@@ -11,7 +11,7 @@ public class CommentResponse {
 
     private final String content;
 
-    private final String email;
+    private final String name;
 
     private final LocalDateTime createdAt;
 
