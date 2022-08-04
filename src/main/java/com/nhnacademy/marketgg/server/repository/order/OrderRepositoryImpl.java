@@ -5,9 +5,11 @@ import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.QOrder;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
+import java.util.Objects;
 
 public class OrderRepositoryImpl extends QuerydslRepositorySupport implements OrderRepositoryCustom {
 
@@ -18,17 +20,10 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
     QOrder order = QOrder.order;
 
     @Override
-    public List<OrderResponse> findAllOrder() {
+    public List<OrderResponse> findOrderList(Long memberId, boolean isUser) {
         return from(order)
                 .select(selectOrderResponse())
-                .fetch();
-    }
-
-    @Override
-    public List<OrderResponse> findOrderListById(Long memberId) {
-        return from(order)
-                .select(selectOrderResponse())
-                .where(order.member.id.eq(memberId))
+                .where(eqMemberId(memberId, isUser))
                 .fetch();
     }
 
@@ -40,6 +35,13 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
                                 order.orderStatus,
                                 order.createdAt
         );
+    }
+
+    private BooleanExpression eqMemberId(Long memberId, boolean isUser) {
+        if (isUser) {
+            return order.member.id.eq(memberId);
+        }
+        return null;
     }
 
 }

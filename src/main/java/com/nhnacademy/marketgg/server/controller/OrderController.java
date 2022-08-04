@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.OrderCreateRequest;
+import com.nhnacademy.marketgg.server.dto.response.OrderDetailResponse;
 import com.nhnacademy.marketgg.server.dto.response.OrderResponse;
 import com.nhnacademy.marketgg.server.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,7 +51,7 @@ public class OrderController {
     // 주문 목록 조회 - 관리자는 모든 회원, 회원은 본인 것
     @GetMapping
     public ResponseEntity<List<OrderResponse>> retrieveOrderList(final MemberInfo memberInfo) {
-        List<OrderResponse> responses = orderService.retrieveOrderList(memberInfo.getId(), memberInfo.isUser());
+        List<OrderResponse> responses = orderService.retrieveOrderList(memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX))
@@ -59,7 +61,10 @@ public class OrderController {
 
     // 주문 상세 조회
     @GetMapping("/{orderId}")
-    public ResponseEntity<Void> retrieveOrderDetail() {
+    public ResponseEntity<Void/*OrderDetailResponse*/> retrieveOrderDetail(@PathVariable final Long orderId,
+                                                                   final MemberInfo memberInfo) {
+
+        // OrderDetailResponse response = orderService.retrieveOrder(orderId, memberInfo.getId(), memberInfo.isUser());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX))

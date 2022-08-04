@@ -8,8 +8,6 @@ import java.util.List;
 @NoRepositoryBean
 public interface OrderRepositoryCustom {
 
-    List<OrderResponse> findAllOrder();
-
-    List<OrderResponse> findOrderListById(Long memberId);
+    List<OrderResponse> findOrderList(Long id, boolean user);
 
 }

@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.constant.OrderStatus;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -21,9 +22,9 @@ import lombok.NoArgsConstructor;
  * 주문 개체입니다.
  *
  * @author 공통
+ * @author 김정민
  * @version 1.0
  * @since 1.0
- * @author 김정민
  */
 @Table(name = "orders")
 @Entity
@@ -78,7 +79,7 @@ public class Order {
     public Order(Member member, OrderCreateRequest orderRequest) {
         this.member = member;
         this.totalAmount = orderRequest.getTotalAmount();
-        this.orderStatus = orderRequest.getOrderStatus();
+        this.orderStatus = OrderStatus.WAITING.status();
         this.usedPoint = orderRequest.getUsedPoint();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
