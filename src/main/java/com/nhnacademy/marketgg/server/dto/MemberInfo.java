@@ -10,7 +10,6 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
 public class MemberInfo {
 
@@ -21,6 +20,17 @@ public class MemberInfo {
     private final LocalDate birthDate;
     private final LocalDateTime ggpassUpdatedAt;
     private Set<String> roles;
+
+    public MemberInfo(Long id, Cart cart, String memberGrade, Character gender, LocalDate birthDate,
+                      LocalDateTime ggpassUpdatedAt) {
+        this.id = id;
+        this.cart = cart;
+        this.memberGrade = memberGrade;
+        this.gender = gender;
+        this.birthDate = birthDate;
+        this.ggpassUpdatedAt = ggpassUpdatedAt;
+        this.roles = new HashSet<>();
+    }
 
     public void addRoles(List<String> roles) {
         this.roles = new HashSet<>(roles);
