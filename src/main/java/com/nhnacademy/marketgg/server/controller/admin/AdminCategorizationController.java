@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.controller;
+package com.nhnacademy.marketgg.server.controller.admin;
 
 import com.nhnacademy.marketgg.server.dto.response.CategorizationRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.CategorizationService;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/admin/categorizations")
 @RequiredArgsConstructor
-public class CategorizationController {
+public class AdminCategorizationController {
 
     private final CategorizationService categorizationService;
 

@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.controller;
+package com.nhnacademy.marketgg.server.controller.admin;
 
 import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.LabelRetrieveResponse;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/admin/labels")
 @RequiredArgsConstructor
-public class LabelController {
+public class AdminLabelController {
 
     private static final String DEFAULT_LABEL = "/admin/labels";
 

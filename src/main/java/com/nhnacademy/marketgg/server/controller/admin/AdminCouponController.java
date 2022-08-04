@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.controller;
+package com.nhnacademy.marketgg.server.controller.admin;
 
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
@@ -32,7 +32,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/coupons")
 @RequiredArgsConstructor
-public class CouponController {
+public class AdminCouponController {
 
     private final CouponService couponService;
 
