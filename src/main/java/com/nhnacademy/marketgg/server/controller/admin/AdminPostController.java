@@ -3,7 +3,6 @@ package com.nhnacademy.marketgg.server.controller.admin;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
-import com.nhnacademy.marketgg.server.constant.OtoReason;
 import com.nhnacademy.marketgg.server.constant.OtoStatus;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
@@ -57,7 +56,7 @@ public class AdminPostController {
      * @since 1.0.0
      */
     @PostMapping("/categories/{categoryCode}/options/{optionType}/search")
-    public ResponseEntity<List<PostResponse>> searchPostListForReason(@PathVariable final String categoryCode,
+    public ResponseEntity<List<PostResponse>> searchPostListForOption(@PathVariable final String categoryCode,
                                                                       @PathVariable final String optionType,
                                                                       @RequestParam final String option,
                                                                       @RequestBody final SearchRequest searchRequest)
@@ -77,8 +76,8 @@ public class AdminPostController {
      * 입력받은 정보로 지정한 게시글을 수정 할 수 있는 PUT Mapping 을 지원합니다.
      *
      * @param categoryCode - 수정할 게시글의 카테고리 번호입니다.
-     * @param postNo      - 수정할 게시글의 식별번호입니다.
-     * @param postRequest - 수정할 게시글의 정보를 담은 객체입니다.
+     * @param postNo       - 수정할 게시글의 식별번호입니다.
+     * @param postRequest  - 수정할 게시글의 정보를 담은 객체입니다.
      * @return Mapping URI 를 담은 응답객체를 반환합니다.
      * @since 1.0.0
      */
@@ -86,7 +85,7 @@ public class AdminPostController {
     public ResponseEntity<Void> updatePost(@PathVariable final String categoryCode, @PathVariable final Long postNo,
                                            @RequestBody final PostRequest postRequest) {
 
-        postService.updatePost(postNo, postRequest, categoryCode);
+        postService.updatePost(categoryCode, postNo, postRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_POST + "/categories/" + categoryCode + "/" + postNo))
@@ -103,27 +102,27 @@ public class AdminPostController {
     @GetMapping("/status")
     public ResponseEntity<List<String>> retrieveStatusList() {
         List<String> status = Arrays.stream(OtoStatus.values())
-                                     .map(OtoStatus::status)
-                                     .collect(Collectors.toList());
+                                    .map(OtoStatus::status)
+                                    .collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK)
-                .location(URI.create(DEFAULT_ADMIN_POST + "/status"))
-                .body(status);
+                             .location(URI.create(DEFAULT_ADMIN_POST + "/status"))
+                             .body(status);
     }
 
     /**
      * 1:1 문의의 답변 상태를 변경할 수 있는 PATCH Mapping 을 지원합니다.
      *
-     * @param postNo - 상태를 변경할 게시글의 식별번호입니다.
-     * @param status - 변경할 상태 정보를 담고 있는 DTO 객체입니다.
+     * @param postNo              - 상태를 변경할 게시글의 식별번호입니다.
+     * @param statusUpdateRequest - 변경할 상태 정보를 담고 있는 DTO 객체입니다.
      * @return Mapping URI 를 담은 응답객체를 반환합니다.
      * @since 1.0.0
      */
     @PatchMapping("/{postNo}/status")
     public ResponseEntity<Void> updateInquiryStatus(@PathVariable final Long postNo,
-                                                    @RequestBody final PostStatusUpdateRequest status) {
+                                                    @RequestBody final PostStatusUpdateRequest statusUpdateRequest) {
 
-        postService.updateInquiryStatus(postNo, status);
+        postService.updateOtoInquiryStatus(postNo, statusUpdateRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_POST + "/" + postNo + "/status"))

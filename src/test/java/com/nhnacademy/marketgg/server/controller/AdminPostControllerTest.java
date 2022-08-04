@@ -208,7 +208,7 @@ class AdminPostControllerTest {
     void testUpdatePostStatus() throws Exception {
         String requestBody = objectMapper.writeValueAsString(new PostStatusUpdateRequest());
 
-        willDoNothing().given(postService).updateInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
+        willDoNothing().given(postService).updateOtoInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
 
         this.mockMvc.perform(patch(DEFAULT_ADMIN_CUSTOMER_SERVICE + "/oto-inquiries/{boardNo}", 1L)
                 .headers(headers)
@@ -216,7 +216,7 @@ class AdminPostControllerTest {
                 .content(requestBody))
                     .andExpect(status().isOk());
 
-        then(postService).should().updateInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
+        then(postService).should().updateOtoInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
     }
 
     @Test

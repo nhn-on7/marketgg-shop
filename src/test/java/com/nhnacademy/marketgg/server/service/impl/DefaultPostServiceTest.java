@@ -183,7 +183,7 @@ class DefaultPostServiceTest {
         given(postRepository.findById(anyLong())).willReturn(Optional.of(dummyPost));
         given(elasticBoardRepository.findById(anyLong())).willReturn(Optional.of(dummyboard));
 
-        postService.updateInquiryStatus(1L, Dummy.getPostStatusUpdateRequest());
+        postService.updateOtoInquiryStatus(1L, Dummy.getPostStatusUpdateRequest());
 
         then(postRepository).should(times(1)).findById(anyLong());
         then(elasticBoardRepository).should(times(1)).findById(anyLong());

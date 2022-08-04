@@ -57,7 +57,7 @@ public class PostController {
     public ResponseEntity<Void> createPost(@Valid @RequestBody final PostRequest postRequest,
                                            final MemberInfo memberInfo) {
 
-        postService.createPost(memberInfo.getId(), postRequest);
+        postService.createPost(postRequest, memberInfo);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_POST))
@@ -78,7 +78,7 @@ public class PostController {
                                                                @RequestParam final Integer page,
                                                                final MemberInfo memberInfo) {
 
-        List<PostResponse> responses = postService.retrievePostList(categoryCode, page);
+        List<PostResponse> responses = postService.retrievePostList(categoryCode, page, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/categories/" + categoryCode))
@@ -95,7 +95,7 @@ public class PostController {
     @GetMapping("/{postNo}")
     public ResponseEntity<PostResponseForDetail> retrievePost(@PathVariable final Long postNo, final MemberInfo memberInfo) {
 
-        PostResponseForDetail response = postService.retrievePost(postNo);
+        PostResponseForDetail response = postService.retrievePost(postNo, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/" + postNo))
@@ -107,6 +107,7 @@ public class PostController {
      *
      * @param categoryCode  - 검색을 진행 할 게시판 타입입니다.
      * @param searchRequest - 검색을 진행 할 검색 정보입니다.
+     * @param memberInfo - 검색을 진행 할 회원의 정보입니다.
      * @return 검색정보로 검색한 결과 목록 응답객체를 반환합니다.
      * @throws ParseException          파싱도중 예외처리입니다.
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
@@ -115,10 +116,11 @@ public class PostController {
 
     @PostMapping("/categories/{categoryCode}/search")
     public ResponseEntity<List<PostResponse>> searchPostListForCategory(@PathVariable final String categoryCode,
-                                                                        @RequestBody final SearchRequest searchRequest)
+                                                                        @RequestBody final SearchRequest searchRequest,
+                                                                        final MemberInfo memberInfo)
             throws ParseException, JsonProcessingException {
 
-        List<PostResponse> responses = postService.searchForCategory(categoryCode, searchRequest);
+        List<PostResponse> responses = postService.searchForCategory(categoryCode, searchRequest, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/categories/" + categoryCode + "/search"))
@@ -137,7 +139,7 @@ public class PostController {
     @DeleteMapping("/categories/{categoryCode}/{postNo}")
     public ResponseEntity<Void> deletePost(@PathVariable final String categoryCode, @PathVariable final Long postNo,
                                            final MemberInfo memberInfo) {
-        postService.deletePost(postNo);
+        postService.deletePost(categoryCode, postNo, memberInfo);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .location(URI.create(DEFAULT_POST + postNo))
