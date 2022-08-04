@@ -1,0 +1,204 @@
+package com.nhnacademy.marketgg.server.service.impl;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
+
+import com.nhnacademy.marketgg.server.auth.AuthRepository;
+import com.nhnacademy.marketgg.server.dto.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.MemberNameResponse;
+import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentReady;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentResponse;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForReady;
+import com.nhnacademy.marketgg.server.dummy.Dummy;
+import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
+import com.nhnacademy.marketgg.server.elastic.repository.ElasticBoardRepository;
+import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
+import com.nhnacademy.marketgg.server.entity.Cart;
+import com.nhnacademy.marketgg.server.entity.Categorization;
+import com.nhnacademy.marketgg.server.entity.Category;
+import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
+import com.nhnacademy.marketgg.server.entity.Member;
+import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
+import com.nhnacademy.marketgg.server.repository.customerservicecomment.CustomerServiceCommentRepository;
+import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
+import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.transaction.annotation.Transactional;
+
+@ExtendWith(MockitoExtension.class)
+@Transactional
+class DefaultPostServiceTest {
+
+    @InjectMocks
+    DefaultPostService postService;
+
+    @Mock
+    CustomerServicePostRepository postRepository;
+    @Mock
+    ElasticBoardRepository elasticBoardRepository;
+    @Mock
+    CategoryRepository categoryRepository;
+    @Mock
+    CustomerServiceCommentRepository commentRepository;
+    @Mock
+    MemberRepository memberRepository;
+    @Mock
+    SearchRepository searchRepository;
+    @Mock
+    AuthRepository authRepository;
+
+    private static final String NOTICE_CODE = "701";
+    private static final String OTO_CODE = "702";
+    private static final String FAQ_CODE = "703";
+    private static final Integer PAGE_SIZE = 10;
+
+    private PostResponse postResponse;
+    private PostResponseForDetail detail;
+    private PostResponseForReady ready;
+    private CommentResponse commentResponse;
+    private PageRequest pageRequest;
+    private MemberInfo memberInfo;
+    private MemberCreateRequest createRequest;
+    private CategoryCreateRequest categoryCreateRequest;
+    private CategorizationCreateRequest categorizationCreateRequest;
+    private PostRequest postRequest;
+    private Cart cart;
+    private CustomerServicePost post;
+    private ElasticBoard board;
+    private Category category;
+
+    @BeforeEach
+    void setUp() {
+        cart = new Cart();
+        postResponse = new PostResponse(1L, NOTICE_CODE, "Hello", " ", " ", LocalDateTime.now());
+        CommentReady commentReady = new CommentReady("hello", "99990000111122223333444455556666", LocalDateTime.now());
+        MemberNameResponse memberNameResponse = new MemberNameResponse("99990000111122223333444455556666", "박세완");
+        commentResponse = new CommentResponse("hello", "박세완", LocalDateTime.now());
+        ready = new PostResponseForReady(2L, FAQ_CODE, "Hello", "hi", "환불", "미답변",
+                                                              LocalDateTime.now(), LocalDateTime.now(),
+                                                              List.of(commentReady));
+        detail = new PostResponseForDetail(ready, List.of(memberNameResponse));
+
+        pageRequest = PageRequest.of(0, PAGE_SIZE);
+        memberInfo = Dummy.getDummyMemberInfo(1L, cart);
+        createRequest = new MemberCreateRequest();
+        categoryCreateRequest = new CategoryCreateRequest();
+        categorizationCreateRequest = new CategorizationCreateRequest();
+        postRequest = new PostRequest();
+        Member member = new Member(createRequest, cart);
+        category = new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest));
+        post = new CustomerServicePost(member, category, postRequest);
+        board = new ElasticBoard(post);
+    }
+
+    @Test
+    @DisplayName("게시글 등록")
+    void testCreatePost() {
+        ReflectionTestUtils.setField(postRequest, "categoryCode", "702");
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(new Member(createRequest, cart)));
+        given(categoryRepository.findById(anyString())).willReturn(
+                Optional.of(new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest))));
+        given(postRepository.save(any(CustomerServicePost.class))).willReturn(post);
+        given(elasticBoardRepository.save(any(ElasticBoard.class))).willReturn(board);
+
+        postService.createPost(postRequest, memberInfo);
+
+        then(postRepository).should(times(1)).save(any(CustomerServicePost.class));
+        then(elasticBoardRepository).should(times(1)).save(any(ElasticBoard.class));
+    }
+
+    @Test
+    @DisplayName("게시글 등록 실패(권한 이슈)")
+    void testCreatePostNoAccess() {
+        ReflectionTestUtils.setField(postRequest, "categoryCode", "701");
+        postService.createPost(postRequest, memberInfo);
+
+        then(postRepository).should(times(0)).save(any(CustomerServicePost.class));
+        then(elasticBoardRepository).should(times(0)).save(any(ElasticBoard.class));
+    }
+
+    @Test
+    @DisplayName("게시글 목록 조회(1:1 문의)")
+    void testRetrievePostList() {
+        ReflectionTestUtils.setField(postRequest, "categoryCode", "702");
+        given(postRepository.findPostByCategoryAndMember(any(PageRequest.class), anyString(), anyLong())).willReturn(Page.empty());
+
+        List<PostResponse> list = postService.retrievePostList("702", 0, memberInfo);
+
+        assertThat(list).isEmpty();
+    }
+
+    @Test
+    @DisplayName("게시글 목록 조회(1:1 문의 X)")
+    void testRetrievePostListNotOto() {
+        given(postRepository.findPostsByCategoryId(any(PageRequest.class), anyString())).willReturn(Page.empty());
+
+        List<PostResponse> list = postService.retrievePostList("701", 0, memberInfo);
+
+        assertThat(list).isEmpty();
+    }
+
+    @Test
+    @DisplayName("게시글 상세 조회")
+    void testRetrievePost() throws Exception {
+        ReflectionTestUtils.setField(postRequest, "categoryCode", "701");
+        ReflectionTestUtils.setField(category, "id", "701");
+        ReflectionTestUtils.setField(post, "category", category);
+        given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
+        given(postRepository.findOwnOtoInquiry(anyLong(), anyLong())).willReturn(ready);
+        given(postRepository.findByBoardNo(anyLong())).willReturn(ready);
+
+        PostResponseForDetail postResponseForDetail = postService.retrievePost(1L, memberInfo);
+
+        assertThat(postResponseForDetail.getCategoryCode()).isEqualTo("701");
+    }
+
+    @Test
+    @DisplayName("카테고리 별 검색")
+    void testSearchForCategory() throws Exception {
+    }
+
+    @Test
+    @DisplayName("옵션 별 검색")
+    void testSearchForOption() throws Exception {
+    }
+
+    @Test
+    @DisplayName("게시글 수정")
+    void testUpdatePost() throws Exception {
+    }
+
+    @Test
+    @DisplayName("1:1 문의 상태 변경")
+    void testUpdateOtoInquiryStatus() throws Exception {
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void testDeletePost() throws Exception {
+    }
+
+}

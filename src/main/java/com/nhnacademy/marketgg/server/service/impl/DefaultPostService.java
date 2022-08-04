@@ -7,7 +7,6 @@ import com.nhnacademy.marketgg.server.dto.MemberNameResponse;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentReady;
-import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForReady;
@@ -30,7 +29,6 @@ import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.PostService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.PageRequest;
@@ -71,6 +69,7 @@ public class DefaultPostService implements PostService {
     @Override
     public List<PostResponse> retrievePostList(final String categoryCode, final Integer page,
                                                final MemberInfo memberInfo) {
+
         if (Boolean.TRUE.equals(this.isAccess(memberInfo, categoryCode, "retrieveList"))) {
             return postRepository.findPostsByCategoryId(PageRequest.of(page, PAGE_SIZE), categoryCode).getContent();
         }
@@ -95,7 +94,7 @@ public class DefaultPostService implements PostService {
                                                 final MemberInfo memberInfo)
             throws ParseException, JsonProcessingException {
 
-        if(Boolean.TRUE.equals(isAccess(memberInfo, categoryCode, "search"))) {
+        if (Boolean.TRUE.equals(isAccess(memberInfo, categoryCode, "search"))) {
             return searchRepository.searchBoardWithCategoryCode(categoryCode, searchRequest, "board");
         }
         return List.of();
@@ -111,7 +110,7 @@ public class DefaultPostService implements PostService {
 
     @Override
     public void updatePost(final String categoryCode, final Long postNo, final PostRequest postRequest) {
-        if(categoryCode.compareTo(OTO_CODE) != 0) {
+        if (categoryCode.compareTo(OTO_CODE) != 0) {
             CustomerServicePost post = postRepository.findById(postNo).orElseThrow(
                     CustomerServicePostNotFoundException::new);
             post.updatePost(postRequest);
@@ -123,7 +122,8 @@ public class DefaultPostService implements PostService {
 
     @Override
     public void updateOtoInquiryStatus(final Long postNo, final PostStatusUpdateRequest statusUpdateRequest) {
-        CustomerServicePost post = postRepository.findById(postNo).orElseThrow(CustomerServicePostNotFoundException::new);
+        CustomerServicePost post =
+                postRepository.findById(postNo).orElseThrow(CustomerServicePostNotFoundException::new);
         post.updatePostStatus(statusUpdateRequest.getStatus());
 
         CustomerServicePost savePost = postRepository.save(post);
@@ -132,7 +132,7 @@ public class DefaultPostService implements PostService {
 
     @Override
     public void deletePost(final String categoryCode, final Long postNo, final MemberInfo memberInfo) {
-        if(isAccess(memberInfo, categoryCode, "memberDelete") || isAccess(memberInfo, categoryCode, "adminDelete")) {
+        if (isAccess(memberInfo, categoryCode, "memberDelete") || isAccess(memberInfo, categoryCode, "adminDelete")) {
             postRepository.deleteById(postNo);
             elasticBoardRepository.deleteById(postNo);
             commentRepository.deleteAllByCustomerServicePost_Id(postNo);
@@ -164,7 +164,7 @@ public class DefaultPostService implements PostService {
 
     private PostResponseForDetail convertToDetail(final PostResponseForReady response) throws JsonProcessingException {
         List<String> uuidList = new ArrayList<>();
-        for(CommentReady ready : response.getCommentReady()) {
+        for (CommentReady ready : response.getCommentReady()) {
             uuidList.add(ready.getUuid());
         }
         List<MemberNameResponse> nameList = authRepository.getNameListByUuid(uuidList);
