@@ -10,7 +10,7 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
-import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForReady;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.entity.Asset;
@@ -160,9 +160,9 @@ public class Dummy {
         return new CartProduct(getDummyCart(cartId), getDummyProduct(productId), amount);
     }
 
-    public static PostResponseForDetail getDummyPostResponseForDetail() {
-        return new PostResponseForDetail(1L, "title", "content", "기타", "",
-            LocalDateTime.now(), LocalDateTime.now());
+    public static PostResponseForReady getDummyPostResponseForDetail() {
+        return new PostResponseForReady(1L, "title", "content", "기타", "",
+                                        LocalDateTime.now(), LocalDateTime.now());
     }
 
     public static PostResponseForOtoInquiry getDummyPostResponseForOtoInquiry() {

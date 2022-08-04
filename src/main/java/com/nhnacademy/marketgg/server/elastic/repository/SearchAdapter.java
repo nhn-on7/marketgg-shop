@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.elastic.repository.impl;
+package com.nhnacademy.marketgg.server.elastic.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -83,7 +83,7 @@ public class SearchAdapter implements SearchRepository {
         Map<String, String> sort = this.buildSort(null);
         request.setRequest(request.getRequest() + " " + translator.converter(request.getRequest()));
         HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
-                new SearchRequestBodyForBool<>(categoryCode, sort, request, BOARD)), this.buildHeaders());
+                new SearchRequestBodyForBool<>(categoryCode, sort, request, option)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, BOARD).getBody());
     }

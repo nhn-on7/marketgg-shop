@@ -6,6 +6,7 @@ import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForReady;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import java.util.List;
 import org.json.simple.parser.ParseException;

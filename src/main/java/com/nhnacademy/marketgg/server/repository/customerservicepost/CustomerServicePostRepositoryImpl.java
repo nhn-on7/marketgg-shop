@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.repository.customerservicepost;
 
-import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentResponse;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentReady;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
-import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForReady;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.QCustomerServiceComment;
 import com.nhnacademy.marketgg.server.entity.QCustomerServicePost;
@@ -27,7 +27,7 @@ public class CustomerServicePostRepositoryImpl
     }
 
     @Override
-    public PostResponseForDetail findOwnOtoInquiry(final Long postNo, final Long memberId) {
+    public PostResponseForReady findOwnOtoInquiry(final Long postNo, final Long memberId) {
         return from(csPost).where(csPost.id.eq(postNo).and(csPost.member.id.eq(memberId)))
                            .select(getDetailFields(postNo))
                            .innerJoin(csComment).on(csComment.customerServicePost.id.eq(csPost.id))
@@ -35,7 +35,7 @@ public class CustomerServicePostRepositoryImpl
     }
 
     @Override
-    public PostResponseForDetail findByBoardNo(final Long postNo) {
+    public PostResponseForReady findByBoardNo(final Long postNo) {
         return from(csPost).where(csPost.id.eq(postNo))
                            .select(getDetailFields(postNo))
                            .innerJoin(csComment).on(csComment.customerServicePost.id.eq(csPost.id))
@@ -79,8 +79,8 @@ public class CustomerServicePostRepositoryImpl
         return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 
-    private QBean<PostResponseForDetail> getDetailFields(final Long postNo) {
-        return Projections.fields(PostResponseForDetail.class,
+    private QBean<PostResponseForReady> getDetailFields(final Long postNo) {
+        return Projections.fields(PostResponseForReady.class,
                                   csPost.id,
                                   csPost.category.id.as("categoryCode"),
                                   csPost.title,
@@ -90,9 +90,9 @@ public class CustomerServicePostRepositoryImpl
                                   csPost.createdAt,
                                   csPost.updatedAt,
                                   ExpressionUtils.as(JPAExpressions.select(Projections.constructor(
-                                                                           CommentResponse.class,
+                                                                           CommentReady.class,
                                                                            csComment.content,
-                                                                           csComment.member.id,
+                                                                           csComment.member.uuid,
                                                                            csComment.createdAt))
                                                                    .from(csComment)
                                                                    .where(csComment.customerServicePost.id.eq(
