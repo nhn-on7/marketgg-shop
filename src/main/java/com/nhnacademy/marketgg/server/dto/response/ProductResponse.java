@@ -18,7 +18,7 @@ public class ProductResponse {
 
     private final Long assetNo;
 
-    private final Category category;
+    // private final Category category;
 
     private final String categoryCode;
 

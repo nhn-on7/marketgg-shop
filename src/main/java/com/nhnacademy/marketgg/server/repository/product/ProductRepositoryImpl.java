@@ -68,7 +68,6 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
             product.id,
             product.asset,
             product.asset.id,
-            product.category,
             product.category.id,
             product.category.name,
             product.name,

@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.controller.admin;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
@@ -68,7 +69,7 @@ public class AdminProductController {
      */
     @GetMapping
     public ResponseEntity<CommonResponse> retrieveProducts(DefaultPageRequest pageRequest) {
-        SingleResponse<Page> productList = this.productService.retrieveProducts(pageRequest.getPageable());
+        DefaultPageResult<ProductResponse> productList = this.productService.retrieveProducts(pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT))

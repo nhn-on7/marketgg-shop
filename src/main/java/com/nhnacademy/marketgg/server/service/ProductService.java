@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.service;
 
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
@@ -35,7 +36,7 @@ public interface ProductService {
      * @since 1.0.0
      */
 
-    SingleResponse<Page> retrieveProducts(Pageable pageable);
+    DefaultPageResult<ProductResponse> retrieveProducts(Pageable pageable);
 
     /**
      * 상품 Id를 통해 상세 정보를 조회합니다.
