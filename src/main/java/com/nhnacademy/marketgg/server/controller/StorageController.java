@@ -1,10 +1,11 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.cloud.StorageService;
+import com.nhnacademy.marketgg.server.dto.response.ImageResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import java.io.InputStream;
-import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,12 +26,12 @@ public class StorageController {
 
     @GetMapping("/{assetNo}")
     public ResponseEntity<CommonResponse> retrieveReviewDetails(
-        @PathVariable(name = "assetNo") final Long assetId) {
+        @PathVariable(name = "assetNo") final Long assetId) throws JsonProcessingException {
 
-        SingleResponse<InputStream> response = storageService.downloadObject();
+        ImageResponse imageResponse = storageService.retrieveImage(assetId);
+        InputStream inputStream = storageService.downloadObject("on7_storage", imageResponse.getName());
 
-        return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH + reviewId))
-                             .contentType(MediaType.APPLICATION_JSON).body(response);
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
+                             .body(new SingleResponse<>(inputStream));
     }
 }

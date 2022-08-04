@@ -4,6 +4,8 @@ import static org.springframework.http.HttpMethod.PUT;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.dto.response.ImageResponse;
+import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -28,6 +30,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class NhnStorageService implements StorageService {
 
+    private final ImageRepository imageRepository;
     private final String AUTH_URL = "https://api-identity.infrastructure.cloud.toast.com/v2.0";
     private final String USER_NAME = "computerhermit96@gmail.com";
     private final String PASSWORD = "123!";
@@ -129,6 +132,11 @@ public class NhnStorageService implements StorageService {
 
 
         return new ByteArrayInputStream(Objects.requireNonNull(response.getBody()));
+    }
+
+    @Override
+    public ImageResponse retrieveImage(final Long id) {
+        return imageRepository.findByAssetId(id);
     }
 
     private String getUrl(String containerName, String objectName) {
