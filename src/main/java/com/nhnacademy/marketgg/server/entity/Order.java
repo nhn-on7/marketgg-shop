@@ -76,10 +76,11 @@ public class Order {
      */
     public Order(Member member, OrderCreateRequest orderRequest) {
         this.member = member;
-        this.orderDate = LocalDateTime.now();
         this.totalAmount = orderRequest.getTotalAmount();
         this.orderStatus = orderRequest.getOrderStatus();
         this.usedPoint = orderRequest.getUsedPoint();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public static Order test() {
