@@ -4,6 +4,7 @@ package com.nhnacademy.marketgg.server.utils.subutils;
  * 한국어 검색어를 키보드 배열에 맞는 알파벳으로 전환해줍니다.
  * ex) 박세완 -> qkrtpdhks, 천재 -> cjswo
  *
+ * @author 박세완
  * @version 1.0.0
  */
 public class ConvertToEnglishUtil {

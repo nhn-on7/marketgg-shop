@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * 포인트 내역 Service 입니다.
  *
+ * @author 박세완
  * @version 1.0.0
  */
 public interface PointService {

@@ -96,7 +96,8 @@ public class PostController {
      * @since 1.0.0
      */
     @GetMapping("/{postNo}")
-    public ResponseEntity<PostResponseForDetail> retrievePost(@PathVariable final Long postNo, final MemberInfo memberInfo) {
+    public ResponseEntity<PostResponseForDetail> retrievePost(@PathVariable final Long postNo, final MemberInfo memberInfo)
+            throws JsonProcessingException {
 
         PostResponseForDetail response = postService.retrievePost(postNo, memberInfo);
 

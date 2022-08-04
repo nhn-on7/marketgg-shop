@@ -7,6 +7,7 @@ import lombok.Getter;
 /**
  * 검색어로 여러 필드를 조회할 떄 사용할 수 있습니다.
  *
+ * @author 박세완
  * @version 1.0.0
  */
 @AllArgsConstructor

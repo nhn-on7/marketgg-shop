@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 상품 관리를 위한 RestController 입니다.
  *
+ * @author 박세완, 조현진
  * @version 1.0.0
  */
 @RestController

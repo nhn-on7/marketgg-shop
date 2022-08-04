@@ -15,6 +15,8 @@ public interface CustomerServicePostRepositoryCustom {
      * @param postNo - 조회할 1:1 문의의 번호입니다.
      * @param memberId - 게시글을 조회할 회원의 식별번호입니다.
      * @return 조회한 게시글을 DTO 객체로 반환합니다.
+     * @author 박세완
+     * @since 1.0.0
      */
     PostResponseForReady findOwnOtoInquiry(final Long postNo, final Long memberId);
 
@@ -23,6 +25,7 @@ public interface CustomerServicePostRepositoryCustom {
      *
      * @param postNo - 지정한 게시글의 식별번호입니다.
      * @return 지정한 식별번호로 조회한 게시글의 상세정보를 반환합니다.
+     * @author 박세완
      * @since 1.0.0
      */
     PostResponseForReady findByBoardNo(Long postNo);
@@ -33,6 +36,7 @@ public interface CustomerServicePostRepositoryCustom {
      * @param pageable   - 페이징 처리를 위한 객체입니다.
      * @param categoryId - 조회할 게시글 목록의 카테고리 식별번호입니다.
      * @return 카테고리 번호에 따른 게시글 목록을 Page 로 반환합니다.
+     * @author 박세완
      * @since 1.0.0
      */
     Page<PostResponse> findPostsByCategoryId(final Pageable pageable, final String categoryId);
@@ -44,6 +48,7 @@ public interface CustomerServicePostRepositoryCustom {
      * @param categoryId - 조회할 게시글 목록의 카테고리 식별번호입니다.
      * @param memberId   - 조회할 게시글 목록의 작성자인 회원의 식별번호입니다.
      * @return 카테고리 번호와 회원 번호에 따른 게시글 목록을 Page 로 반환합니다.
+     * @author 박세완
      * @since 1.0.0
      */
     Page<PostResponse> findPostByCategoryAndMember(final Pageable pageable, final String categoryId, final Long memberId);

@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 상품 서비스 입니다.
  *
+ * @author 박세완, 조현진
  * @version 1.0.0
  */
 public interface ProductService {

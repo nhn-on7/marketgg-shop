@@ -5,6 +5,7 @@ import com.nhnacademy.marketgg.server.dto.request.customerservice.CommentRequest
 /**
  * 고객센터(1:1 문의)의 댓글 서비스입니다.
  *
+ * @author 박세완, 김정민
  * @version 1.0.0
  */
 public interface OtoInquiryCommentService {

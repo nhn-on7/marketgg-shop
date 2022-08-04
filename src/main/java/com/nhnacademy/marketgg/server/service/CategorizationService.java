@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * 카테고리 분류표 서비스입니다.
  *
+ * @author 박세완
  * @version 1.0.0
  */
 public interface CategorizationService {

@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 /**
  * 라벨 개체입니다.
  *
+ * @author 공통
  * @version 1.0
  * @since 1.0
  */

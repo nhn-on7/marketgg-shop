@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 1:1 문의의 댓글에 관련된 Rest Controller 입니다.
  *
+ * @author 박세완
  * @version 1.0.0
  */
 @RoleCheck(accessLevel = Role.ROLE_USER)

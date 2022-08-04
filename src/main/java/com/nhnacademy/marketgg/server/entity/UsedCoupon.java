@@ -16,6 +16,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 사용 쿠폰 개체입니다.
+ *
+ * @author 공통
+ * @version 1.0.0
+ */
 @Table(name = "used_coupons")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

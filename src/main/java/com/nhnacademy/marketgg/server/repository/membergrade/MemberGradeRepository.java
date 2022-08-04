@@ -8,6 +8,7 @@ import java.util.Optional;
 /**
  * 회원 등급 레포지토리 입니다.
  *
+ * @author 박세완
  * @version 1.0.0
  */
 public interface MemberGradeRepository extends JpaRepository<MemberGrade, Long>, MemberGradeRepositoryCustom {

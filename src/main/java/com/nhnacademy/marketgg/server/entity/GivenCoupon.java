@@ -20,6 +20,7 @@ import org.springframework.data.annotation.CreatedDate;
  * 지급 쿠폰 엔티티 입니다.
  * 쿠폰 id, 회원 id 를 받아서 지급 쿠폰을 생성합니다.
  *
+ * @author 공통
  * @version 1.0.0
  */
 @Table(name = "given_coupons")

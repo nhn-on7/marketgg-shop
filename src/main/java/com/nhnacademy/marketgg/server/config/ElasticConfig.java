@@ -11,6 +11,12 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+/**
+ * 엘라스틱 서치의 설정과 기능을 주입해주는 Configuration 입니다.
+ *
+ * @author 박세완
+ * @version 1.0.0
+ */
 @EnableJpaRepositories(excludeFilters = @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE,
         classes = { ElasticRepositoryMarker.class }),

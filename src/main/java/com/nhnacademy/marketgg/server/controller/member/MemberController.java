@@ -56,6 +56,7 @@ public class MemberController {
      *
      * @param memberId - GG 패스 갱신일시를 확인 할 회원의 식별번호입니다.
      * @return 선택한 회원의 GG 패스 갱신일을 반환합니다.
+     * @author 박세완
      * @since 1.0.0
      */
     @GetMapping("/{memberId}/ggpass")
@@ -73,6 +74,7 @@ public class MemberController {
      *
      * @param memberId - GG 패스를 구독할 회원의 식별번호입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     * @author 박세완
      * @since 1.0.0
      */
     @PostMapping("/{memberId}/ggpass/subscribe")
@@ -90,6 +92,7 @@ public class MemberController {
      *
      * @param memberId - GG 패스를 구독해지할 회원의 식별번호입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     * @author 박세완
      * @since 1.0.0
      */
     @PostMapping("/{memberId}/ggpass/withdraw")

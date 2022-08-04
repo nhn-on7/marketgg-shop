@@ -18,6 +18,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+/**
+ * 배송 주소 개체입니다.
+ *
+ * @author 공통
+ * @version 1.0.0
+ */
 @Table(name = "delivery_addresses")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

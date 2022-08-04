@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 카테고리 관리에 관련된 RestController 입니다.
  *
+ * @author 박세완, 김정민
  * @version 1.0.0
  */
 @RestController
