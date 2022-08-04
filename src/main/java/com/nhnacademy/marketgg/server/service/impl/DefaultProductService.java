@@ -22,9 +22,11 @@ import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.label.LabelRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.productlabel.ProductLabelRepository;
+import com.nhnacademy.marketgg.server.service.ImageService;
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +46,7 @@ public class DefaultProductService implements ProductService {
     private final ImageRepository imageRepository;
     private final ProductLabelRepository productLabelRepository;
     private final LabelRepository labelRepository;
+    private final ImageService imageService;
 
     private final ElasticProductRepository elasticProductRepository;
 
@@ -54,14 +57,19 @@ public class DefaultProductService implements ProductService {
     public void createProduct(final ProductCreateRequest productRequest, MultipartFile imageFile)
             throws IOException {
 
-        Asset asset = fileUpload(imageFile);
+        // Asset asset = fileUpload(imageFile);
+        Asset asset = assetRepository.save(Asset.create());
+        List<MultipartFile> images = new ArrayList<>();
+        images.add(imageFile);
+        List<Image> parseImages = imageService.parseImages(images, asset);
+        imageRepository.saveAll(parseImages);
 
         Category category = categoryRepository.findById(productRequest.getCategoryCode())
                                                    .orElseThrow(CategoryNotFoundException::new);
         Product product = productRepository.save(new Product(productRequest, asset, category));
         ProductLabel.Pk pk = new ProductLabel.Pk(product.getId(), productRequest.getLabelNo());
         Label label =
-                labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);
+                labelRepository.findById(pk.getLabelNo()).orElseThrow(LabelNotFoundException::new);
         Image image = imageRepository.findByAssetIdAndImageSequence(asset.getId(), 1)
                                      .orElseThrow(ImageNotFoundException::new);
 
