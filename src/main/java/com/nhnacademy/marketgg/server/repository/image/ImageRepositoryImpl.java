@@ -2,7 +2,6 @@ package com.nhnacademy.marketgg.server.repository.image;
 
 import com.nhnacademy.marketgg.server.dto.response.ImageResponse;
 import com.nhnacademy.marketgg.server.entity.Image;
-import com.nhnacademy.marketgg.server.entity.QAsset;
 import com.nhnacademy.marketgg.server.entity.QImage;
 import com.querydsl.core.types.Projections;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;

@@ -1,15 +1,13 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.cloud.StorageService;
 import com.nhnacademy.marketgg.server.dto.response.ImageResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import java.io.IOException;
 import java.io.InputStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,13 +23,14 @@ public class StorageController {
     private final StorageService storageService;
 
     @GetMapping("/{assetNo}")
-    public ResponseEntity<CommonResponse> retrieveReviewDetails(
-        @PathVariable(name = "assetNo") final Long assetId) throws JsonProcessingException {
+    public ResponseEntity<byte[]> retrieveReviewDetails(
+        @PathVariable(name = "assetNo") final Long assetId) throws IOException {
 
         ImageResponse imageResponse = storageService.retrieveImage(assetId);
-        InputStream inputStream = storageService.downloadObject("on7_storage", imageResponse.getName());
+        InputStream image = storageService.downloadObject("on7_storage", imageResponse.getName());
 
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>(inputStream));
+        byte[] bytes = IOUtils.toByteArray(image);
+
+        return new ResponseEntity<>(bytes, HttpStatus.OK);
     }
 }
