@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.nhnacademy.marketgg.server.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,11 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
+/**
+ * 주문에 관련된 Rest Controller 입니다.
+ *
+ * @version 1.0.0
+ * @author 김정민
+ */
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
+    private final OrderService orderService;
     private static final String ORDER_PREFIX = "/orders/";
 
     // 주문서 작성

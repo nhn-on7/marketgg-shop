@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
  *
  * @version 1.0
  * @since 1.0
+ * @author 김정민
  */
 @Table(name = "orders")
 @Entity
@@ -40,10 +41,6 @@ public class Order {
     @NotNull
     private Member member;
 
-    @Column(name = "order_date")
-    @NotNull
-    private LocalDateTime orderDate;
-
     @Column(name = "total_amount")
     @NotNull
     private Long totalAmount;
@@ -56,6 +53,20 @@ public class Order {
     @Column(name = "used_point")
     @NotNull
     private Integer usedPoint;
+
+    @Column(name = "tracking_no")
+    private Integer trackingNo;
+
+    @Column(name = "created_at")
+    @NotNull
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    @NotNull
+    private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     /**
      * 주문 생성자입니다.
