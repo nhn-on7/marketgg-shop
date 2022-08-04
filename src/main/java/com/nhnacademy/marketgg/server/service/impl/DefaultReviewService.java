@@ -8,7 +8,8 @@ import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Review;
-import com.nhnacademy.marketgg.server.event.SavePointEvent;
+import com.nhnacademy.marketgg.server.entity.event.GivenCouponEvent;
+import com.nhnacademy.marketgg.server.entity.event.SavePointEvent;
 import com.nhnacademy.marketgg.server.exception.asset.AssetNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.review.ReviewNotFoundException;
@@ -56,7 +57,7 @@ public class DefaultReviewService implements ReviewService {
 
         imageRepository.saveAll(parseImages);
 
-        Review review = reviewRepository.save(new Review(reviewRequest, member, asset));
+        reviewRepository.save(new Review(reviewRequest, member, asset));
 
         publisher.publishEvent(SavePointEvent.dispensePointForImageReview(member));
     }
@@ -67,7 +68,7 @@ public class DefaultReviewService implements ReviewService {
 
         Asset asset = assetRepository.save(Asset.create());
 
-        Review review = reviewRepository.save(new Review(reviewRequest, member, asset));
+        reviewRepository.save(new Review(reviewRequest, member, asset));
 
         publisher.publishEvent(SavePointEvent.dispensePointForNormalReview(member));
     }
@@ -105,6 +106,7 @@ public class DefaultReviewService implements ReviewService {
         reviewRepository.delete(reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new));
     }
 
+    @Transactional
     @Override
     public SingleResponse<Boolean> makeBestReview(final Long id) {
         Review review = reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new);
@@ -112,6 +114,7 @@ public class DefaultReviewService implements ReviewService {
 
         if (Boolean.TRUE.equals(review.getIsBest())) {
             reviewRepository.save(review);
+            publisher.publishEvent(GivenCouponEvent.bestReviewCoupon(review.getMember()));
             return new SingleResponse<>(true);
         }
 

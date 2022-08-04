@@ -3,7 +3,6 @@ package com.nhnacademy.marketgg.server.elastic.dto.request;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.domain.PageRequest;
 
 /**
  * 사용자의 검색 및 반환 할 페이지를 표시합니다.

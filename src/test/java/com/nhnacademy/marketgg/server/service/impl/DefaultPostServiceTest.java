@@ -38,7 +38,7 @@ import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
-public class DefaultPostServiceTest {
+class DefaultPostServiceTest {
 
     @InjectMocks
     DefaultPostService postService;

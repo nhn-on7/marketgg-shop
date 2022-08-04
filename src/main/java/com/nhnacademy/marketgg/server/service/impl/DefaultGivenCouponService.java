@@ -11,7 +11,7 @@ import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import com.nhnacademy.marketgg.server.entity.Member;
-import com.nhnacademy.marketgg.server.event.SignedUpCouponEvent;
+import com.nhnacademy.marketgg.server.entity.event.GivenCouponEvent;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
 import com.nhnacademy.marketgg.server.exception.givencoupon.GivenCouponNotFoundException;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Service
@@ -82,8 +83,8 @@ public class DefaultGivenCouponService implements GivenCouponService {
     }
 
     @Async
-    @TransactionalEventListener
-    public void createGivenCoupon(SignedUpCouponEvent coupon) {
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void createGivenCoupon(final GivenCouponEvent coupon) {
         Coupon signUpCoupon = couponRepository.findCouponByName(coupon.getCouponName())
                                               .orElseThrow(CouponNotFoundException::new);
         GivenCoupon givenCoupon = new GivenCoupon(signUpCoupon, coupon.getMember());
