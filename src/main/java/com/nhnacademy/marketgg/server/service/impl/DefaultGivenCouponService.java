@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Service
@@ -82,8 +83,8 @@ public class DefaultGivenCouponService implements GivenCouponService {
     }
 
     @Async
-    @TransactionalEventListener
-    public void createGivenCoupon(GivenCouponEvent coupon) {
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void createGivenCoupon(final GivenCouponEvent coupon) {
         Coupon signUpCoupon = couponRepository.findCouponByName(coupon.getCouponName())
                                               .orElseThrow(CouponNotFoundException::new);
         GivenCoupon givenCoupon = new GivenCoupon(signUpCoupon, coupon.getMember());

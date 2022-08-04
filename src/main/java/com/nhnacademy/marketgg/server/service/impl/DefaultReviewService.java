@@ -57,7 +57,7 @@ public class DefaultReviewService implements ReviewService {
 
         imageRepository.saveAll(parseImages);
 
-        Review review = reviewRepository.save(new Review(reviewRequest, member, asset));
+        reviewRepository.save(new Review(reviewRequest, member, asset));
 
         publisher.publishEvent(SavePointEvent.dispensePointForImageReview(member));
     }
@@ -68,7 +68,7 @@ public class DefaultReviewService implements ReviewService {
 
         Asset asset = assetRepository.save(Asset.create());
 
-        Review review = reviewRepository.save(new Review(reviewRequest, member, asset));
+        reviewRepository.save(new Review(reviewRequest, member, asset));
 
         publisher.publishEvent(SavePointEvent.dispensePointForNormalReview(member));
     }

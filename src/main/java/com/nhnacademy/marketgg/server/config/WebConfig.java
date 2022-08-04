@@ -1,17 +1,10 @@
 package com.nhnacademy.marketgg.server.config;
 
-import com.nhnacademy.marketgg.server.elastic.repository.ElasticRepositoryMarker;
-import com.nhnacademy.marketgg.server.repository.JpaRepositoryMarker;
-
 import java.time.Duration;
 import javax.servlet.Filter;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -34,9 +27,9 @@ public class WebConfig {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder
-                .setReadTimeout(Duration.ofSeconds(10L))
-                .setConnectTimeout(Duration.ofSeconds(5L))
-                .build();
+            .setReadTimeout(Duration.ofSeconds(10L))
+            .setConnectTimeout(Duration.ofSeconds(5L))
+            .build();
     }
 
     @Bean

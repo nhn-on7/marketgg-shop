@@ -36,7 +36,6 @@ public class AdminProductController {
 
     private final ProductService productService;
 
-    // TODO: Develop 브랜치 머지 후 @Value값으로 고치기
     private static final String DEFAULT_ADMIN_PRODUCT = "/admin/products";
 
     /**

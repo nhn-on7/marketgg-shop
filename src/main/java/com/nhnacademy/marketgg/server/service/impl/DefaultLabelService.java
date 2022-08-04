@@ -2,18 +2,16 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.LabelRetrieveResponse;
-import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticProductRepository;
 import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.exception.label.LabelNotFoundException;
 import com.nhnacademy.marketgg.server.repository.label.LabelRepository;
 import com.nhnacademy.marketgg.server.service.LabelService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

@@ -1,8 +1,6 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
@@ -12,6 +10,8 @@ import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
+import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -27,9 +27,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.net.URI;
-import java.util.List;
 
 /**
  * 관리자의 고객센터 관리에 관련된 Rest Controller 입니다.
@@ -130,14 +127,14 @@ public class AdminPostController {
     public ResponseEntity<List<SearchBoardResponse>> searchPostListForReason(@PathVariable final String categoryCode,
                                                                              @RequestParam final String option,
                                                                              @RequestBody final SearchRequest searchRequest)
-            throws ParseException, JsonProcessingException {
+        throws ParseException, JsonProcessingException {
 
         List<SearchBoardResponse> responses =
-                postService.searchForOption(categoryCode, searchRequest, option, "reason");
+            postService.searchForOption(categoryCode, searchRequest, option, "reason");
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_ADMIN_POST + "/categories/" + categoryCode + "/search/reason/" + option))
+                                 DEFAULT_ADMIN_POST + "/categories/" + categoryCode + "/search/reason/" + option))
                              .body(responses);
     }
 
@@ -156,14 +153,14 @@ public class AdminPostController {
     public ResponseEntity<List<SearchBoardResponse>> searchPostListForStatus(@PathVariable final String categoryCode,
                                                                              @RequestParam final String option,
                                                                              @RequestBody final SearchRequest searchRequest)
-            throws ParseException, JsonProcessingException {
+        throws ParseException, JsonProcessingException {
 
         List<SearchBoardResponse> responses =
-                postService.searchForOption(categoryCode, searchRequest, option, "status");
+            postService.searchForOption(categoryCode, searchRequest, option, "status");
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_ADMIN_POST + "/categories/" + categoryCode + "/search/status/" + option))
+                                 DEFAULT_ADMIN_POST + "/categories/" + categoryCode + "/search/status/" + option))
                              .body(responses);
     }
 

@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.entity.event;
 
-import static com.nhnacademy.marketgg.server.constant.CouponName.BESTREVIEW;
-import static com.nhnacademy.marketgg.server.constant.CouponName.SIGNUP;
+import static com.nhnacademy.marketgg.server.constant.CouponsName.BESTREVIEW;
+import static com.nhnacademy.marketgg.server.constant.CouponsName.SIGNUP;
 
 import com.nhnacademy.marketgg.server.entity.Member;
 import lombok.AllArgsConstructor;

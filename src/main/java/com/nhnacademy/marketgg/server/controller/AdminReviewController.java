@@ -29,7 +29,7 @@ public class AdminReviewController {
                                                          @PathVariable final Long reviewId) {
 
         SingleResponse<Boolean> response = reviewService.makeBestReview(reviewId);
-        log.info("다음의 상품이 베스트후기로 선정되었습니다:" + productId);
+        log.info("다음의 상품이 베스트후기로 선정되었습니다:{}", productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
