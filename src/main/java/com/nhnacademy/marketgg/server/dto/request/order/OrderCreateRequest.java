@@ -7,14 +7,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 주문을 생성하기 위한 요청 정보를 담고 있는 클래스입니다.
+ * 주문을 생성하기 위한 요청 정보를 담고 있는 DTO 클래스입니다.
  *
  * @version 1.0
  * @since 1.0
+ * @author 김정민
  */
 @NoArgsConstructor
 @Getter
 public class OrderCreateRequest {
+
+    @NotNull
+    private Long memberId;
 
     @NotNull
     private Long totalAmount;
