@@ -12,6 +12,8 @@ public class PostResponseForDetail {
 
     private final Long id;
 
+    private final String categoryCode;
+
     private final String title;
 
     private final String content;

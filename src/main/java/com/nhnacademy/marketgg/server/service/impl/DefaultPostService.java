@@ -8,13 +8,13 @@ import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
+import com.nhnacademy.marketgg.server.elastic.dto.request.searchutil.Bool;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticBoardRepository;
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
-import com.nhnacademy.marketgg.server.exception.customerservicepost.CustomerServicePostNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicecomment.CustomerServiceCommentRepository;
@@ -39,23 +39,40 @@ public class DefaultPostService implements PostService {
     private final ElasticBoardRepository elasticBoardRepository;
     private final SearchRepository searchRepository;
 
-    private static final String OTO_INQUIRY = "1:1문의";
+    private static final String NOTICE_CODE = "701";
+    private static final String OTO_CODE = "702";
+    private static final String FAQ_CODE = "703";
     private static final Integer PAGE_SIZE = 10;
 
+    @Transactional
     @Override
     public void createPost(final PostRequest postRequest, final MemberInfo memberInfo) {
-        
+        if (Boolean.TRUE.equals(this.isAccess(memberInfo, postRequest.getCategoryCode(), "create"))) {
+            Member member = memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
+            Category category = categoryRepository.findById(postRequest.getCategoryCode()).orElseThrow(
+                    CategoryNotFoundException::new);
+            CustomerServicePost post = new CustomerServicePost(member, category, postRequest);
+
+            CustomerServicePost savePost = postRepository.save(post);
+            elasticBoardRepository.save(new ElasticBoard(savePost));
+        }
     }
 
     @Override
     public List<PostResponse> retrievePostList(final String categoryCode, final Integer page,
                                                final MemberInfo memberInfo) {
-        return null;
+        if(Boolean.TRUE.equals(this.isAccess(memberInfo, categoryCode, "retrieveList"))) {
+            return postRepository.findPostsByCategoryId(PageRequest.of(page, PAGE_SIZE), categoryCode).getContent();
+        }
+        return postRepository.findPostByCategoryAndMember(PageRequest.of(page, PAGE_SIZE), categoryCode, memberInfo.getId()).getContent();
     }
 
     @Override
     public PostResponseForDetail retrievePost(final Long postNo, final MemberInfo memberInfo) {
-        return null;
+        PostResponseForDetail postResponseForDetail = new retrieve
+
+
+        return postRepository.findByb;
     }
 
     @Override
@@ -87,79 +104,22 @@ public class DefaultPostService implements PostService {
 
     }
 
-    // @Transactional
-    // @Override
-    // public void createPost(final ) {
-    //     Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-    //     String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY);
-    //     Category category = categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
-    //
-    //     CustomerServicePost csPost = new CustomerServicePost(member, category, postRequest);
-    //
-    //     postRepository.save(csPost);
-    //     elasticBoardRepository.save(new ElasticBoard(csPost));
-    // }
-    //
-    // @Override
-    // public List<PostResponse> retrievePostList(final String categoryCode, final Integer page) {
-    //     return postRepository.findPostsByCategoryId(PageRequest.of(page, PAGE_SIZE), categoryCode).getContent();
-    // }
-    //
-    // @Override
-    // public PostResponseForDetail retrievePost(final Long boardNo) {
-    //     return postRepository.findByBoardNo(boardNo);
-    // }
-    //
-    // @Override
-    // public List<PostResponse> searchForCategory(final String categoryCode, final SearchRequest searchRequest)
-    //         throws ParseException, JsonProcessingException {
-    //
-    //     return searchRepository.searchBoardWithCategoryCode(categoryCode, searchRequest, "categoryCode");
-    // }
-    //
-    // @Override
-    // public List<PostResponse> searchForOption(final String categoryCode, final SearchRequest searchRequest,
-    //                                           final String option, final String optionType)
-    //         throws JsonProcessingException, ParseException {
-    //
-    //     return searchRepository.searchBoardWithOption(categoryCode, option, searchRequest, optionType);
-    // }
-    //
-    // @Transactional
-    // @Override
-    // public void updatePost(final Long memberNo, final Long boardNo, final PostRequest postRequest) {
-    //     CustomerServicePost post = postRepository.findById(boardNo)
-    //                                              .orElseThrow(CustomerServicePostNotFoundException::new);
-    //     post.updatePost(postRequest);
-    //
-    //     postRepository.save(post);
-    // }
-    //
-    // @Transactional
-    // @Override
-    // public void updateOtoInquiryStatus(final Long boardNo, final PostStatusUpdateRequest status) {
-    //     CustomerServicePost board = postRepository.findById(boardNo)
-    //                                               .orElseThrow(CustomerServicePostNotFoundException::new);
-    //     ElasticBoard elasticBoard = elasticBoardRepository.findById(boardNo)
-    //                                                       .orElseThrow(CustomerServicePostNotFoundException::new);
-    //
-    //     board.updatePostStatus(status.getStatus());
-    //     elasticBoard.setStatus(status.getStatus());
-    //
-    //     postRepository.save(board);
-    //     elasticBoardRepository.save(elasticBoard);
-    // }
-    //
-    // @Transactional
-    // @Override
-    // public void deletePost(final Long boardNo) {
-    //     CustomerServicePost post = postRepository.findById(boardNo)
-    //                                              .orElseThrow(CustomerServicePostNotFoundException::new);
-    //     List<Long> commentIds = commentRepository.findCommentIdsByInquiryId(boardNo);
-    //
-    //     commentRepository.deleteAllById(commentIds);
-    //     postRepository.delete(post);
-    //     elasticBoardRepository.deleteById(boardNo);
-    // }
+    private Boolean isAccess(final MemberInfo memberInfo, final String categoryCode, final String option) {
+        List<String> create = List.of(NOTICE_CODE, FAQ_CODE);
+        List<String> retrieveList = List.of(OTO_CODE);
+
+        switch (option) {
+            case "create": {
+                return (memberInfo.isAdmin()) || !create.contains(categoryCode);
+            }
+            case "retrieveList": {
+                return memberInfo.isAdmin() || !retrieveList.contains(categoryCode);
+            }
+            case "retrieve": {
+                return true;
+            }
+            default: return false;
+        }
+    }
 
 }
