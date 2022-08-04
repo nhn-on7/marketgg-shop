@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.OrderResponse;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -31,8 +32,11 @@ public class DefaultOrderService implements OrderService {
         // Memo: 주문, 사용쿠폰, 포인트이력, 주문배송지, 주문상품, 장바구니 save(추가, 수정, 삭제)
     }
 
+    // 주문 목록 조회 - 관리자(전체), 회원(본인)
     @Override
-    public List<OrderResponse> retrieveOrderList(Long memberId, boolean isUser) {
-        return (isUser ? orderRepository.findOrderListById(memberId) : orderRepository.findAllOrder());
+    public List<OrderResponse> retrieveOrderList(MemberInfo memberinfo) {
+        // return (isUser ? orderRepository.findOrderListById(memberId) : orderRepository.findAllOrder());
+        return orderRepository.findOrderList(memberinfo.getId(), memberinfo.isUser());
     }
+
 }
