@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.controller.admin.AdminLabelController;
 import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.service.LabelService;
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(LabelController.class)
-class LabelControllerTest {
+@WebMvcTest(AdminLabelController.class)
+class AdminLabelControllerTest {
 
     @Autowired
     MockMvc mockMvc;

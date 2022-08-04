@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.controller;
+package com.nhnacademy.marketgg.server.controller.member;
 
 import com.nhnacademy.marketgg.server.dto.response.DibRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.DibService;

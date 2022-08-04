@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.response.CategorizationRetrieveResponse;
+import com.nhnacademy.marketgg.server.controller.admin.AdminCategorizationController;
 import com.nhnacademy.marketgg.server.service.CategorizationService;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -18,8 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-@WebMvcTest(CategorizationController.class)
-class CategorizationControllerTest {
+@WebMvcTest(AdminCategorizationController.class)
+class AdminCategorizationControllerTest {
 
     @Autowired
     MockMvc mockMvc;

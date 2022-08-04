@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.nhnacademy.marketgg.server.controller.member.PointController;
 import com.nhnacademy.marketgg.server.service.PointService;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
