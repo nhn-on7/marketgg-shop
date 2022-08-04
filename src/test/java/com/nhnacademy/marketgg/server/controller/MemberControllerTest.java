@@ -42,7 +42,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @Import({
     RoleCheckAspect.class
 })
-public class MemberControllerTest {
+class MemberControllerTest {
 
     @Autowired
     MockMvc mockMvc;

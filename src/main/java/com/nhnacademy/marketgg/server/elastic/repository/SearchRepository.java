@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.elastic.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.dto.response.PostResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
 import java.util.List;
 import org.json.simple.parser.ParseException;
@@ -55,9 +55,9 @@ public interface SearchRepository {
      * @throws ParseException          파싱 오류 발생 시 예외를 던집니다.
      * @since 1.0.0
      */
-    List<SearchBoardResponse> searchBoardWithCategoryCode(final String categoryCode,
-                                                          final SearchRequest request,
-                                                          final String option)
+    List<PostResponse> searchBoardWithCategoryCode(final String categoryCode,
+                                                   final SearchRequest request,
+                                                   final String option)
             throws JsonProcessingException, ParseException;
 
     /**
@@ -72,7 +72,7 @@ public interface SearchRepository {
      * @throws ParseException          파싱 오류 발생 시 예외를 던집니다.
      * @since 1.0.0
      */
-    List<SearchBoardResponse> searchBoardWithOption(final String categoryCode,
+    List<PostResponse> searchBoardWithOption(final String categoryCode,
                                                     final String optionCode,
                                                     final SearchRequest request,
                                                     final String option)

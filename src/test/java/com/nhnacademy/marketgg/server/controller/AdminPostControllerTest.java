@@ -31,7 +31,7 @@ import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
-import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
+import com.nhnacademy.marketgg.server.service.PostService;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -68,7 +68,7 @@ class AdminPostControllerTest {
     ObjectMapper objectMapper;
 
     @MockBean
-    CustomerServicePostService postService;
+    PostService postService;
 
     @MockBean
     MemberRepository memberRepository;

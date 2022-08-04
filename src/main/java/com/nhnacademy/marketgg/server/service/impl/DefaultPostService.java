@@ -9,7 +9,6 @@ import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticBoardRepository;
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.entity.Category;
@@ -22,7 +21,7 @@ import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicecomment.CustomerServiceCommentRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
-import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
+import com.nhnacademy.marketgg.server.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +32,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DefaultPostService implements CustomerServicePostService {
+public class DefaultPostService implements PostService {
 
     private final CustomerServicePostRepository postRepository;
     private final CategoryRepository categoryRepository;
@@ -94,14 +93,14 @@ public class DefaultPostService implements CustomerServicePostService {
     }
 
     @Override
-    public List<SearchBoardResponse> searchForCategory(final String categoryCode, final SearchRequest searchRequest)
+    public List<PostResponse> searchForCategory(final String categoryCode, final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
         return searchRepository.searchBoardWithCategoryCode(categoryCode, searchRequest, "categoryCode");
     }
 
     @Override
-    public List<SearchBoardResponse> searchForOption(final String categoryCode, final SearchRequest searchRequest,
+    public List<PostResponse> searchForOption(final String categoryCode, final SearchRequest searchRequest,
                                                      final String option, final String optionType)
             throws JsonProcessingException, ParseException {
 

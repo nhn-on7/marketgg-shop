@@ -43,23 +43,16 @@ class AdminCategoryControllerTest {
     @MockBean
     CategoryService categoryService;
 
-    // @MockBean
-    // CategoryRepository categoryRepository;
-    //
-    // @MockBean
-    // CategorizationRepository categorizationRepository;
-
     private static final String DEFAULT_CATEGORY = "/admin/categories";
 
     private CategoryCreateRequest categoryCreateRequest;
     private CategoryUpdateRequest categoryUpdateRequest;
-    private CategorizationCreateRequest categorizationCreateRequest;
 
     @BeforeEach
     void setUp() {
         categoryCreateRequest = new CategoryCreateRequest();
         categoryUpdateRequest = new CategoryUpdateRequest();
-        categorizationCreateRequest = new CategorizationCreateRequest();
+        CategorizationCreateRequest categorizationCreateRequest = new CategorizationCreateRequest();
 
         ReflectionTestUtils.setField(categoryCreateRequest, "categoryCode", "101");
         ReflectionTestUtils.setField(categoryCreateRequest, "categorizationCode", "100");

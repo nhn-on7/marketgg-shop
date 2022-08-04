@@ -3,10 +3,10 @@ package com.nhnacademy.marketgg.server.elastic.repository.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.dto.response.PostResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequestBody;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequestBodyForBool;
-import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.utils.KoreanToEnglishTranslator;
@@ -75,7 +75,7 @@ public class SearchAdapter implements SearchRepository {
     }
 
     @Override
-    public List<SearchBoardResponse> searchBoardWithCategoryCode(final String categoryCode,
+    public List<PostResponse> searchBoardWithCategoryCode(final String categoryCode,
                                                                  final SearchRequest request,
                                                                  final String option)
             throws JsonProcessingException, ParseException {
@@ -89,10 +89,10 @@ public class SearchAdapter implements SearchRepository {
     }
 
     @Override
-    public List<SearchBoardResponse> searchBoardWithOption(final String categoryCode,
-                                                           final String optionCode,
-                                                           final SearchRequest request,
-                                                           final String option)
+    public List<PostResponse> searchBoardWithOption(final String categoryCode,
+                                                    final String optionCode,
+                                                    final SearchRequest request,
+                                                    final String option)
             throws JsonProcessingException, ParseException {
 
         Map<String, String> sort = this.buildSort(null);

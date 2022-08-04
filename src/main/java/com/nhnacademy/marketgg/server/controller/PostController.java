@@ -8,8 +8,7 @@ import com.nhnacademy.marketgg.server.dto.response.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
-import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
+import com.nhnacademy.marketgg.server.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -41,7 +40,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostController {
 
-    private final CustomerServicePostService postService;
+    private final PostService postService;
 
     private static final String DEFAULT_POST = "/customer-services";
 
@@ -150,11 +149,11 @@ public class PostController {
      * @since 1.0.0
      */
     @PostMapping("/categories/{categoryCode}/search")
-    public ResponseEntity<List<SearchBoardResponse>> searchPostListForCategory(@PathVariable final String categoryCode,
+    public ResponseEntity<List<PostResponse>> searchPostListForCategory(@PathVariable final String categoryCode,
                                                                                @RequestBody final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
-        List<SearchBoardResponse> responses = postService.searchForCategory(categoryCode, searchRequest);
+        List<PostResponse> responses = postService.searchForCategory(categoryCode, searchRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/categories/" + categoryCode + "/search"))

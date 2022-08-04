@@ -7,7 +7,6 @@ import com.nhnacademy.marketgg.server.dto.response.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
 import org.json.simple.parser.ParseException;
 
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.List;
  *
  * @version 1.0.0
  */
-public interface CustomerServicePostService {
+public interface PostService {
 
     /**
      * 1:1 문의를 등록하는 메소드입니다.
@@ -88,7 +87,7 @@ public interface CustomerServicePostService {
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */
-    List<SearchBoardResponse> searchForCategory(final String categoryCode, final SearchRequest searchRequest)
+    List<PostResponse> searchForCategory(final String categoryCode, final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException;
 
     /**
@@ -103,7 +102,7 @@ public interface CustomerServicePostService {
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */
-    List<SearchBoardResponse> searchForOption(final String categoryCode, final SearchRequest searchRequest,
+    List<PostResponse> searchForOption(final String categoryCode, final SearchRequest searchRequest,
                                               final String option, final String optionType)
             throws JsonProcessingException, ParseException;
 

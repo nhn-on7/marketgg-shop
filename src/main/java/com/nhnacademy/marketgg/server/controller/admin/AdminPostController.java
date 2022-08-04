@@ -1,8 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
@@ -10,8 +8,7 @@ import com.nhnacademy.marketgg.server.dto.response.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
-import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
+import com.nhnacademy.marketgg.server.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -42,7 +39,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminPostController {
 
-    private final CustomerServicePostService postService;
+    private final PostService postService;
 
     private static final String DEFAULT_ADMIN_POST = "/admin/customer-services";
 
@@ -127,12 +124,12 @@ public class AdminPostController {
      * @since 1.0.0
      */
     @PostMapping("/categories/{categoryCode}/search/reason")
-    public ResponseEntity<List<SearchBoardResponse>> searchPostListForReason(@PathVariable final String categoryCode,
+    public ResponseEntity<List<PostResponse>> searchPostListForReason(@PathVariable final String categoryCode,
                                                                              @RequestParam final String option,
                                                                              @RequestBody final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
-        List<SearchBoardResponse> responses =
+        List<PostResponse> responses =
                 postService.searchForOption(categoryCode, searchRequest, option, "reason");
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -153,12 +150,12 @@ public class AdminPostController {
      * @since 1.0.0
      */
     @PostMapping("/categories/{categoryCode}/search/status")
-    public ResponseEntity<List<SearchBoardResponse>> searchPostListForStatus(@PathVariable final String categoryCode,
+    public ResponseEntity<List<PostResponse>> searchPostListForStatus(@PathVariable final String categoryCode,
                                                                              @RequestParam final String option,
                                                                              @RequestBody final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
-        List<SearchBoardResponse> responses =
+        List<PostResponse> responses =
                 postService.searchForOption(categoryCode, searchRequest, option, "status");
 
         return ResponseEntity.status(HttpStatus.OK)

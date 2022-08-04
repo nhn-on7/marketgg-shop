@@ -14,7 +14,6 @@ import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.CartProduct;
