@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.repository.customerservicepost;
 
-import com.nhnacademy.marketgg.server.dto.response.PostResponse;
-import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
-import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForOtoInquiry;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;

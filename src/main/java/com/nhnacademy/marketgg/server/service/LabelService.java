@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.service;
 
-import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.label.LabelCreateRequest;
 
-import com.nhnacademy.marketgg.server.dto.response.LabelRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.label.LabelRetrieveResponse;
 import java.util.List;
 
 /**

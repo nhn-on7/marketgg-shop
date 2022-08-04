@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.repository;
 
-import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.response.category.CategoryRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.repository.categorization.CategorizationRepository;

@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.label;
 
-import com.nhnacademy.marketgg.server.dto.response.LabelRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.label.LabelRetrieveResponse;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;

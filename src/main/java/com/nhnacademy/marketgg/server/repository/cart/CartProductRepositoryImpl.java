@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.cart;
 
-import com.nhnacademy.marketgg.server.dto.response.CartProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.cart.CartProductResponse;
 import com.nhnacademy.marketgg.server.entity.CartProduct;
 import com.nhnacademy.marketgg.server.entity.QCartProduct;
 import com.querydsl.core.types.Projections;

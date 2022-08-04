@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
-import com.nhnacademy.marketgg.server.dto.response.PointRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.PointService;
 import java.net.URI;
 import java.util.List;

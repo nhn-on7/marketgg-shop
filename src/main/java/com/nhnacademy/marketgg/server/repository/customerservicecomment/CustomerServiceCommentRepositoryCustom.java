@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.customerservicecomment;
 
-import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentResponse;
 import java.util.List;
 import org.springframework.data.repository.NoRepositoryBean;
 

@@ -1,8 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
-import com.nhnacademy.marketgg.server.dto.response.LabelRetrieveResponse;
-import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
+import com.nhnacademy.marketgg.server.dto.request.label.LabelCreateRequest;
+import com.nhnacademy.marketgg.server.dto.response.label.LabelRetrieveResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticProductRepository;
 import com.nhnacademy.marketgg.server.entity.Label;

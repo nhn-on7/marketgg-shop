@@ -1,17 +1,17 @@
 package com.nhnacademy.marketgg.server.dummy;
 
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.PostRequest;
-import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
+import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
-import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
-import com.nhnacademy.marketgg.server.dto.response.PostResponse;
-import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
-import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentResponse;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.entity.Asset;

@@ -2,7 +2,7 @@ package com.nhnacademy.marketgg.server.service;
 
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
-import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

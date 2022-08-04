@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
-import com.nhnacademy.marketgg.server.dto.response.PointRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
+import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.PointHistory;
@@ -13,7 +13,6 @@ import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
 import com.nhnacademy.marketgg.server.service.PointService;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;

@@ -3,7 +3,7 @@ package com.nhnacademy.marketgg.server.elastic.repository.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.response.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequestBody;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequestBodyForBool;

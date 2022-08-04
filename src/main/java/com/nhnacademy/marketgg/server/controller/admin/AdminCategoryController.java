@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
-import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.CategoryUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategoryUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.category.CategoryRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.CategoryService;
 import java.net.URI;
 import java.util.List;

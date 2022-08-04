@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.elastic.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.dto.response.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
 import java.util.List;

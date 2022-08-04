@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;

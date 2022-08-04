@@ -2,10 +2,10 @@ package com.nhnacademy.marketgg.server.repository.dib;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
-import com.nhnacademy.marketgg.server.dto.response.DibRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.dib.DibRetrieveResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Cart;

@@ -7,7 +7,7 @@ import static com.nhnacademy.marketgg.server.constant.CouponState.USED;
 import static com.nhnacademy.marketgg.server.constant.CouponState.VALID;
 
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
+import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import com.nhnacademy.marketgg.server.entity.Member;

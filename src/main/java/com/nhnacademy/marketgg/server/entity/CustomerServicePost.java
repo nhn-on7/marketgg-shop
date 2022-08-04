@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.constant.CustomerServicePostStatus;
-import com.nhnacademy.marketgg.server.dto.request.PostRequest;
+import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;

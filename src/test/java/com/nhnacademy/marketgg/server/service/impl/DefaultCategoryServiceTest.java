@@ -10,10 +10,10 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
-import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.CategoryUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategoryUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.category.CategoryRetrieveResponse;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticBoardRepository;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticProductRepository;
 import com.nhnacademy.marketgg.server.entity.Categorization;

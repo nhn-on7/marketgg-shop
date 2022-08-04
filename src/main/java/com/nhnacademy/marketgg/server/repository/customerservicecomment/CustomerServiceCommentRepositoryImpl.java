@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.customerservicecomment;
 
-import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentResponse;
 import com.nhnacademy.marketgg.server.entity.CustomerServiceComment;
 import com.nhnacademy.marketgg.server.entity.QCustomerServiceComment;
 import com.nhnacademy.marketgg.server.entity.QCustomerServicePost;

@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
-import com.nhnacademy.marketgg.server.dto.response.CategorizationRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.category.CategorizationRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.CategorizationService;
 import java.net.URI;
 import java.util.List;

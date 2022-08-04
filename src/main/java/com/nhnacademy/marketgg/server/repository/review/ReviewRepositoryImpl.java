@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.review;
 
-import com.nhnacademy.marketgg.server.dto.response.ReviewResponse;
+import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.entity.QReview;
 import com.nhnacademy.marketgg.server.entity.Review;
 import com.querydsl.core.QueryResults;

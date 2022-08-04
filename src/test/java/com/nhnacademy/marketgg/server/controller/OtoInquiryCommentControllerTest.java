@@ -19,7 +19,7 @@ import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
 import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
 import com.nhnacademy.marketgg.server.aop.UuidAspect;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.CommentRequest;
+import com.nhnacademy.marketgg.server.dto.request.customerservice.CommentRequest;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;

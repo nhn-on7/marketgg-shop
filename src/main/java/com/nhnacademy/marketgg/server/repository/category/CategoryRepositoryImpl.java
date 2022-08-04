@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.category;
 
-import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.category.CategoryRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.QCategorization;
 import com.nhnacademy.marketgg.server.entity.QCategory;

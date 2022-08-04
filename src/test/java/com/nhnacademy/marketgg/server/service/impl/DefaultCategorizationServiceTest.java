@@ -3,7 +3,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-import com.nhnacademy.marketgg.server.dto.response.CategorizationRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.category.CategorizationRetrieveResponse;
 import com.nhnacademy.marketgg.server.repository.categorization.CategorizationRepository;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

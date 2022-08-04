@@ -1,11 +1,11 @@
 package com.nhnacademy.marketgg.server.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.dto.request.PostRequest;
-import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.PostResponse;
-import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
-import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
+import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
+import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import org.json.simple.parser.ParseException;
 

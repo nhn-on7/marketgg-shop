@@ -3,7 +3,7 @@ package com.nhnacademy.marketgg.server.controller;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.CommentRequest;
+import com.nhnacademy.marketgg.server.dto.request.customerservice.CommentRequest;
 import com.nhnacademy.marketgg.server.service.OtoInquiryCommentService;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;

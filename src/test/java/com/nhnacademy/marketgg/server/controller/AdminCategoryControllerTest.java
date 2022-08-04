@@ -16,9 +16,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.admin.AdminCategoryController;
-import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.CategoryUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategoryUpdateRequest;
 import com.nhnacademy.marketgg.server.service.CategoryService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
