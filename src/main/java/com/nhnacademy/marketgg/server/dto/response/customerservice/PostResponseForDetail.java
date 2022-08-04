@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.dto.response.customerservice;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -22,5 +23,7 @@ public class PostResponseForDetail {
     private final LocalDateTime createdAt;
 
     private final LocalDateTime updatedAt;
+
+    private final List<CommentResponse> commentList;
 
 }

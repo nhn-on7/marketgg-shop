@@ -2,7 +2,6 @@ package com.nhnacademy.marketgg.server.repository.customerservicepost;
 
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
-import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForOtoInquiry;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.QCustomerServicePost;
 import com.querydsl.core.QueryResults;
