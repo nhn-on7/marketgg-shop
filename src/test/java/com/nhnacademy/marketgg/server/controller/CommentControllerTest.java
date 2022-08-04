@@ -51,7 +51,7 @@ import org.springframework.web.context.WebApplicationContext;
     UuidAspect.class,
     MemberInfoAspect.class
 })
-class OtoInquiryCommentControllerTest {
+class CommentControllerTest {
 
     MockMvc mockMvc;
 

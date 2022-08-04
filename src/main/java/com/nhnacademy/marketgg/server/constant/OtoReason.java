@@ -5,7 +5,7 @@ package com.nhnacademy.marketgg.server.constant;
  *
  * @version 1.0.0
  */
-public enum CustomerServicePostReason {
+public enum OtoReason {
 
     DELIVERY("배송"),
     PACKAGING("포장"),
@@ -19,7 +19,7 @@ public enum CustomerServicePostReason {
 
     private final String reason;
 
-    CustomerServicePostReason(String reason) {
+    OtoReason(String reason) {
         this.reason = reason;
     }
 

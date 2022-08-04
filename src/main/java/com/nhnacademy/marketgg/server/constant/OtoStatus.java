@@ -5,7 +5,7 @@ package com.nhnacademy.marketgg.server.constant;
  *
  * @version 1.0.0
  */
-public enum CustomerServicePostStatus {
+public enum OtoStatus {
 
     UNANSWERED("미답변"),
     ANSWERING("답변중"),
@@ -13,7 +13,7 @@ public enum CustomerServicePostStatus {
 
     private final String status;
 
-    CustomerServicePostStatus(String status) {
+    OtoStatus(String status) {
         this.status = status;
     }
 

@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.constant.CustomerServicePostStatus;
+import com.nhnacademy.marketgg.server.constant.OtoStatus;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -68,7 +68,7 @@ public class CustomerServicePost {
         this.content = postRequest.getContent();
         this.title = postRequest.getTitle();
         this.reason = postRequest.getReason();
-        this.status = CustomerServicePostStatus.UNANSWERED.status();
+        this.status = OtoStatus.UNANSWERED.status();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
