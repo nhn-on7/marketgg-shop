@@ -22,6 +22,7 @@ import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseF
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForReady;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
+import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticBoardRepository;
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.entity.Cart;
@@ -81,6 +82,7 @@ class DefaultPostServiceTest {
     private CommentResponse commentResponse;
     private PageRequest pageRequest;
     private MemberInfo memberInfo;
+    private SearchRequest searchRequest;
     private MemberCreateRequest createRequest;
     private CategoryCreateRequest categoryCreateRequest;
     private CategorizationCreateRequest categorizationCreateRequest;
@@ -102,6 +104,7 @@ class DefaultPostServiceTest {
                                                               List.of(commentReady));
         detail = new PostResponseForDetail(ready, List.of(memberNameResponse));
 
+        searchRequest = new SearchRequest("hello", 0, PAGE_SIZE);
         pageRequest = PageRequest.of(0, PAGE_SIZE);
         memberInfo = Dummy.getDummyMemberInfo(1L, cart);
         createRequest = new MemberCreateRequest();
@@ -117,7 +120,7 @@ class DefaultPostServiceTest {
     @Test
     @DisplayName("게시글 등록")
     void testCreatePost() {
-        ReflectionTestUtils.setField(postRequest, "categoryCode", "702");
+        ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(new Member(createRequest, cart)));
         given(categoryRepository.findById(anyString())).willReturn(
                 Optional.of(new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest))));
@@ -133,7 +136,7 @@ class DefaultPostServiceTest {
     @Test
     @DisplayName("게시글 등록 실패(권한 이슈)")
     void testCreatePostNoAccess() {
-        ReflectionTestUtils.setField(postRequest, "categoryCode", "701");
+        ReflectionTestUtils.setField(postRequest, "categoryCode", NOTICE_CODE);
         postService.createPost(postRequest, memberInfo);
 
         then(postRepository).should(times(0)).save(any(CustomerServicePost.class));
@@ -143,10 +146,10 @@ class DefaultPostServiceTest {
     @Test
     @DisplayName("게시글 목록 조회(1:1 문의)")
     void testRetrievePostList() {
-        ReflectionTestUtils.setField(postRequest, "categoryCode", "702");
+        ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
         given(postRepository.findPostByCategoryAndMember(any(PageRequest.class), anyString(), anyLong())).willReturn(Page.empty());
 
-        List<PostResponse> list = postService.retrievePostList("702", 0, memberInfo);
+        List<PostResponse> list = postService.retrievePostList(OTO_CODE, 0, memberInfo);
 
         assertThat(list).isEmpty();
     }
@@ -156,7 +159,7 @@ class DefaultPostServiceTest {
     void testRetrievePostListNotOto() {
         given(postRepository.findPostsByCategoryId(any(PageRequest.class), anyString())).willReturn(Page.empty());
 
-        List<PostResponse> list = postService.retrievePostList("701", 0, memberInfo);
+        List<PostResponse> list = postService.retrievePostList(NOTICE_CODE, 0, memberInfo);
 
         assertThat(list).isEmpty();
     }
@@ -164,8 +167,8 @@ class DefaultPostServiceTest {
     @Test
     @DisplayName("게시글 상세 조회")
     void testRetrievePost() throws Exception {
-        ReflectionTestUtils.setField(postRequest, "categoryCode", "701");
-        ReflectionTestUtils.setField(category, "id", "701");
+        ReflectionTestUtils.setField(postRequest, "categoryCode", NOTICE_CODE);
+        ReflectionTestUtils.setField(category, "id", NOTICE_CODE);
         ReflectionTestUtils.setField(post, "category", category);
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postRepository.findOwnOtoInquiry(anyLong(), anyLong())).willReturn(ready);
@@ -173,22 +176,50 @@ class DefaultPostServiceTest {
 
         PostResponseForDetail postResponseForDetail = postService.retrievePost(1L, memberInfo);
 
-        assertThat(postResponseForDetail.getCategoryCode()).isEqualTo("701");
+        assertThat(postResponseForDetail.getCategoryCode()).isEqualTo(NOTICE_CODE);
     }
 
     @Test
     @DisplayName("카테고리 별 검색")
     void testSearchForCategory() throws Exception {
+        ReflectionTestUtils.setField(postRequest, "categoryCode", NOTICE_CODE);
+        given(searchRepository.searchBoardWithCategoryCode(anyString(), any(SearchRequest.class), anyString())).willReturn(List.of(postResponse));
+
+        List<PostResponse> responses = postService.searchForCategory(NOTICE_CODE, searchRequest, memberInfo);
+
+        assertThat(responses).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("카테고리 별 검색 (사용자의 1:1 문의 검색 시)")
+    void testSearchForCategoryForOto() throws Exception {
+        ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
+
+        List<PostResponse> responses = postService.searchForCategory(OTO_CODE, searchRequest, memberInfo);
+
+        assertThat(responses).isEmpty();
     }
 
     @Test
     @DisplayName("옵션 별 검색")
     void testSearchForOption() throws Exception {
+        ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
+        given(searchRepository.searchBoardWithOption(anyString(), anyString(), any(SearchRequest.class), anyString())).willReturn(List.of(postResponse));
+        List<PostResponse> responses = postService.searchForOption(OTO_CODE, searchRequest, "reason", "배송");
+
+        assertThat(responses).hasSize(1);
     }
 
     @Test
     @DisplayName("게시글 수정")
     void testUpdatePost() throws Exception {
+        ReflectionTestUtils.setField(postRequest, "categoryCode", NOTICE_CODE);
+        given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
+        given(postRepository.save(any(CustomerServicePost.class))).willReturn(post);
+        postService.updatePost(NOTICE_CODE, );
+
+        then(postRepository).should(times(1)).save(any(CustomerServicePost.class));
+        then(elasticBoardRepository).should(times(1)).save(any(ElasticBoard.class));
     }
 
     @Test
