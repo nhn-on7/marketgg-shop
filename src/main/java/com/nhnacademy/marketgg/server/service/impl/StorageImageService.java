@@ -30,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Primary
 public class StorageImageService implements ImageService {
 
-    private static final String DIR = System.getProperty("user.home");
+    private static final String DIR = "https://api-storage.cloud.toast.com/v1/AUTH_8a2dd42738a0427180466a56561b5eef/on7_storage/";
     private final StorageService storageService;
 
     @Override
@@ -62,7 +62,7 @@ public class StorageImageService implements ImageService {
             Image image = Image.builder()
                                .type(originalFileExtension)
                                .name(filename)
-                               .imageAddress(dir)
+                               .imageAddress(DIR)
                                .length(objFile.length())
                                .asset(asset)
                                .classification("storage")

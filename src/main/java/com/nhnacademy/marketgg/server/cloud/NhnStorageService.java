@@ -130,7 +130,6 @@ public class NhnStorageService implements StorageService {
         ResponseEntity<byte[]> response
             = this.restTemplate.exchange(url, HttpMethod.GET, requestHttpEntity, byte[].class);
 
-
         return new ByteArrayInputStream(Objects.requireNonNull(response.getBody()));
     }
 
