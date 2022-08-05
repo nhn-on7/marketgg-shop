@@ -18,7 +18,6 @@ import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentReady;
-import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForReady;
@@ -39,6 +38,7 @@ import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -70,6 +70,8 @@ class DefaultPostServiceTest {
     MemberRepository memberRepository;
     @Mock
     SearchRepository searchRepository;
+    @Mock
+    AuthRepository authRepository;
 
     private static final String NOTICE_CODE = "701";
     private static final String OTO_CODE = "702";
@@ -78,6 +80,7 @@ class DefaultPostServiceTest {
 
     private PostResponse postResponse;
     private PostResponseForReady ready;
+    private PostResponseForReady ready2;
     private MemberInfo memberInfo;
     private SearchRequest searchRequest;
     private MemberCreateRequest createRequest;
@@ -92,12 +95,15 @@ class DefaultPostServiceTest {
     @BeforeEach
     void setUp() {
         cart = new Cart();
-        postResponse = new PostResponse(1L, NOTICE_CODE, "Hello", " ", " ", LocalDateTime.now());
+        postResponse = new PostResponse(1L, FAQ_CODE, "Hello", " ", " ", LocalDateTime.now());
         CommentReady commentReady = new CommentReady("hello", "99990000111122223333444455556666", LocalDateTime.now());
-        MemberNameResponse memberNameResponse = new MemberNameResponse("99990000111122223333444455556666", "박세완");
         ready = new PostResponseForReady(2L, FAQ_CODE, "Hello", "hi", "환불", "미답변",
-                                                              LocalDateTime.now(), LocalDateTime.now(),
-                                                              List.of(commentReady));
+                                         LocalDateTime.now(), LocalDateTime.now(),
+                                         List.of(commentReady));
+
+        ready2 = new PostResponseForReady(3L, OTO_CODE, "Hello", "hi", "환불", "미답변",
+                                          LocalDateTime.now(), LocalDateTime.now(),
+                                          List.of(commentReady));
 
         searchRequest = new SearchRequest("hello", 0, PAGE_SIZE);
         memberInfo = Dummy.getDummyMemberInfo(1L, cart);
@@ -141,7 +147,8 @@ class DefaultPostServiceTest {
     @DisplayName("게시글 목록 조회(1:1 문의)")
     void testRetrievePostList() {
         ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
-        given(postRepository.findPostByCategoryAndMember(any(PageRequest.class), anyString(), anyLong())).willReturn(Page.empty());
+        given(postRepository.findPostByCategoryAndMember(any(PageRequest.class), anyString(), anyLong())).willReturn(
+                Page.empty());
 
         List<PostResponse> list = postService.retrievePostList(OTO_CODE, 0, memberInfo);
 
@@ -161,23 +168,45 @@ class DefaultPostServiceTest {
     @Test
     @DisplayName("게시글 상세 조회")
     void testRetrievePost() throws Exception {
-        ReflectionTestUtils.setField(postRequest, "categoryCode", NOTICE_CODE);
-        ReflectionTestUtils.setField(category, "id", NOTICE_CODE);
+        ReflectionTestUtils.setField(memberInfo, "roles", Set.of("ROLE_ADMIN"));
+        ReflectionTestUtils.setField(categoryCreateRequest, "categoryCode", FAQ_CODE);
+        ReflectionTestUtils.setField(postRequest, "categoryCode", FAQ_CODE);
+        ReflectionTestUtils.setField(ready, "categoryCode", FAQ_CODE);
+        ReflectionTestUtils.setField(category, "id", FAQ_CODE);
         ReflectionTestUtils.setField(post, "category", category);
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
-        given(postRepository.findOwnOtoInquiry(anyLong(), anyLong())).willReturn(ready);
         given(postRepository.findByBoardNo(anyLong())).willReturn(ready);
+        given(authRepository.getNameListByUuid(any())).willReturn(
+                List.of(new MemberNameResponse("99990000111122223333444455556666", "박세완")));
 
         PostResponseForDetail postResponseForDetail = postService.retrievePost(1L, memberInfo);
 
-        assertThat(postResponseForDetail.getCategoryCode()).isEqualTo(NOTICE_CODE);
+        assertThat(postResponseForDetail.getCategoryCode()).isEqualTo(FAQ_CODE);
+    }
+
+    @Test
+    @DisplayName("게시글 상세 조회 (1:1)")
+    void testRetrievePostForOto() throws Exception {
+        ReflectionTestUtils.setField(categoryCreateRequest, "categoryCode", OTO_CODE);
+        ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
+        ReflectionTestUtils.setField(category, "id", OTO_CODE);
+        ReflectionTestUtils.setField(post, "category", category);
+        given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
+        given(postRepository.findOwnOtoInquiry(anyLong(), anyLong())).willReturn(ready2);
+        given(authRepository.getNameListByUuid(any())).willReturn(
+                List.of(new MemberNameResponse("99990000111122223333444455556666", "박세완")));
+
+        PostResponseForDetail postResponseForDetail = postService.retrievePost(1L, memberInfo);
+
+        assertThat(postResponseForDetail.getCategoryCode()).isEqualTo(OTO_CODE);
     }
 
     @Test
     @DisplayName("카테고리 별 검색")
     void testSearchForCategory() throws Exception {
         ReflectionTestUtils.setField(postRequest, "categoryCode", NOTICE_CODE);
-        given(searchRepository.searchBoardWithCategoryCode(anyString(), any(SearchRequest.class), anyString())).willReturn(List.of(postResponse));
+        given(searchRepository.searchBoardWithCategoryCode(anyString(), any(SearchRequest.class),
+                                                           anyString())).willReturn(List.of(postResponse));
 
         List<PostResponse> responses = postService.searchForCategory(NOTICE_CODE, searchRequest, memberInfo);
 
@@ -198,7 +227,8 @@ class DefaultPostServiceTest {
     @DisplayName("옵션 별 검색")
     void testSearchForOption() throws Exception {
         ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
-        given(searchRepository.searchBoardWithOption(anyString(), anyString(), any(SearchRequest.class), anyString())).willReturn(List.of(postResponse));
+        given(searchRepository.searchBoardWithOption(anyString(), anyString(), any(SearchRequest.class),
+                                                     anyString())).willReturn(List.of(postResponse));
         List<PostResponse> responses = postService.searchForOption(OTO_CODE, searchRequest, "reason", "배송");
 
         assertThat(responses).hasSize(1);
@@ -220,7 +250,7 @@ class DefaultPostServiceTest {
     @DisplayName("1:1 문의 상태 변경")
     void testUpdateOtoInquiryStatus() {
         PostStatusUpdateRequest updateRequest = new PostStatusUpdateRequest();
-        ReflectionTestUtils.setField(updateRequest, "content", "hi");
+        ReflectionTestUtils.setField(updateRequest, "status", "hi");
         ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postRepository.save(any(CustomerServicePost.class))).willReturn(post);
@@ -233,13 +263,29 @@ class DefaultPostServiceTest {
 
     @Test
     @DisplayName("게시글 삭제")
-    void testDeletePost() throws Exception {
-        ReflectionTestUtils.setField(postRequest, "categoryCode", NOTICE_CODE);
+    void testDeletePost() {
+        ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
         willDoNothing().given(postRepository).deleteById(anyLong());
         willDoNothing().given(elasticBoardRepository).deleteById(anyLong());
         willDoNothing().given(commentRepository).deleteAllByCustomerServicePost_Id(anyLong());
 
-        postService.deletePost(NOTICE_CODE, 1L, memberInfo);
+        postService.deletePost(OTO_CODE, 1L, memberInfo);
+
+        then(postRepository).should(times(1)).deleteById(anyLong());
+        then(elasticBoardRepository).should(times(1)).deleteById(anyLong());
+        then(commentRepository).should(times(1)).deleteAllByCustomerServicePost_Id(anyLong());
+    }
+
+    @Test
+    @DisplayName("관리자의 게시글 삭제")
+    void testDeletePostForAdmin() {
+        ReflectionTestUtils.setField(memberInfo, "roles", Set.of("ROLE_ADMIN"));
+        ReflectionTestUtils.setField(postRequest, "categoryCode", FAQ_CODE);
+        willDoNothing().given(postRepository).deleteById(anyLong());
+        willDoNothing().given(elasticBoardRepository).deleteById(anyLong());
+        willDoNothing().given(commentRepository).deleteAllByCustomerServicePost_Id(anyLong());
+
+        postService.deletePost(FAQ_CODE, 1L, memberInfo);
 
         then(postRepository).should(times(1)).deleteById(anyLong());
         then(elasticBoardRepository).should(times(1)).deleteById(anyLong());

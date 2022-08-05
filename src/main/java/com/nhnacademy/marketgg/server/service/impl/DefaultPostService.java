@@ -17,7 +17,6 @@ import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
-import com.nhnacademy.marketgg.server.exception.NotFoundException;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
 import com.nhnacademy.marketgg.server.exception.customerservicecomment.CustomerServiceCommentNotFoundException;
 import com.nhnacademy.marketgg.server.exception.customerservicepost.CustomerServicePostNotFoundException;
@@ -55,7 +54,7 @@ public class DefaultPostService implements PostService {
     @Transactional
     @Override
     public void createPost(final PostRequest postRequest, final MemberInfo memberInfo) {
-        if (Boolean.TRUE.equals(this.isAccess(memberInfo, postRequest.getCategoryCode(), "create"))) {
+        if (this.isAccess(memberInfo, postRequest.getCategoryCode(), "create")) {
             Member member = memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
             Category category = categoryRepository.findById(postRequest.getCategoryCode()).orElseThrow(
                     CategoryNotFoundException::new);
@@ -70,7 +69,7 @@ public class DefaultPostService implements PostService {
     public List<PostResponse> retrievePostList(final String categoryCode, final Integer page,
                                                final MemberInfo memberInfo) {
 
-        if (Boolean.TRUE.equals(this.isAccess(memberInfo, categoryCode, "retrieveList"))) {
+        if (this.isAccess(memberInfo, categoryCode, "retrieveList")) {
             return postRepository.findPostsByCategoryId(PageRequest.of(page, PAGE_SIZE), categoryCode).getContent();
         }
         return postRepository.findPostByCategoryAndMember(PageRequest.of(page, PAGE_SIZE), categoryCode,
@@ -94,7 +93,7 @@ public class DefaultPostService implements PostService {
                                                 final MemberInfo memberInfo)
             throws ParseException, JsonProcessingException {
 
-        if (Boolean.TRUE.equals(isAccess(memberInfo, categoryCode, "search"))) {
+        if (this.isAccess(memberInfo, categoryCode, "search")) {
             return searchRepository.searchBoardWithCategoryCode(categoryCode, searchRequest, "board");
         }
         return List.of();
@@ -132,14 +131,15 @@ public class DefaultPostService implements PostService {
 
     @Override
     public void deletePost(final String categoryCode, final Long postNo, final MemberInfo memberInfo) {
-        if (isAccess(memberInfo, categoryCode, "memberDelete") || isAccess(memberInfo, categoryCode, "adminDelete")) {
+        if (this.isAccess(memberInfo, categoryCode, "memberDelete") ||
+                this.isAccess(memberInfo, categoryCode, "adminDelete")) {
             postRepository.deleteById(postNo);
             elasticBoardRepository.deleteById(postNo);
             commentRepository.deleteAllByCustomerServicePost_Id(postNo);
         }
     }
 
-    private Boolean isAccess(final MemberInfo memberInfo, final String categoryCode, final String option) {
+    private boolean isAccess(final MemberInfo memberInfo, final String categoryCode, final String option) {
         List<String> otoNonExistList = List.of(NOTICE_CODE, FAQ_CODE);
         List<String> otoExistList = List.of(OTO_CODE);
 
@@ -147,18 +147,11 @@ public class DefaultPostService implements PostService {
             case "create": {
                 return (memberInfo.isAdmin()) || !otoNonExistList.contains(categoryCode);
             }
-            case "retrieveList":
-            case "search": {
-                return memberInfo.isAdmin() || !otoExistList.contains(categoryCode);
-            }
             case "memberDelete": {
                 return !memberInfo.isAdmin() && !otoNonExistList.contains(categoryCode);
             }
-            case "adminDelete": {
-                return memberInfo.isAdmin() && otoExistList.contains(categoryCode);
-            }
             default:
-                throw new NotFoundException("허용되지 않는 옵션잆니다. 값: " + option);
+                return memberInfo.isAdmin() || !otoExistList.contains(categoryCode);
         }
     }
 
