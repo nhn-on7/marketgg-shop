@@ -68,7 +68,7 @@ class CommentControllerTest {
     String uuid;
     Long memberId = 1L;
 
-    private static final String DEFAULT_CS_COMMENT = "/customer-services/oto-inquiries";
+    private static final String DEFAULT_CS_COMMENT = "/customer-services";
 
     @BeforeEach
     void setUp(WebApplicationContext wac) throws JsonProcessingException {
@@ -94,7 +94,7 @@ class CommentControllerTest {
         willDoNothing().given(otoInquiryCommentService)
                        .createComment(anyLong(), anyLong(), any(CommentRequest.class));
 
-        this.mockMvc.perform(post(DEFAULT_CS_COMMENT + "/{inquiryId}/comments", 1L)
+        this.mockMvc.perform(post(DEFAULT_CS_COMMENT + "/{postNo}", 1L)
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))

@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.controller.product.ProductInquiryPostController;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
