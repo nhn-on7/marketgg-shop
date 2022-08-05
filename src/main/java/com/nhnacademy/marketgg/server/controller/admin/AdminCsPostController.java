@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/admin/customer-services")
 @RequiredArgsConstructor
-public class AdminPostController {
+public class AdminCsPostController {
 
     private final PostService postService;
 
@@ -47,7 +47,7 @@ public class AdminPostController {
     /**
      * 지정한 게시판 타입의 Reason 옵션으로 검색한 결과를 반환합니다.
      *
-     * @param categoryCode  - 검색을 진행 할 게시판 타입입니다.
+     * @param categoryId  - 검색을 진행 할 게시판 타입입니다.
      * @param option        - 검색을 진행 할 필터의 값입니다.
      * @param searchRequest - 검색을 진행 할 검색정보입니다.
      * @return 검색정보로 검색한 결과 목록 응답객체를 반환합니다.
@@ -55,19 +55,19 @@ public class AdminPostController {
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */
-    @PostMapping("/categories/{categoryCode}/options/{optionType}/search")
-    public ResponseEntity<List<PostResponse>> searchPostListForOption(@PathVariable final String categoryCode,
+    @PostMapping("/categories/{categoryId}/options/{optionType}/search")
+    public ResponseEntity<List<PostResponse>> searchPostListForOption(@PathVariable final String categoryId,
                                                                       @PathVariable final String optionType,
                                                                       @RequestParam final String option,
                                                                       @RequestBody final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
         List<PostResponse> responses =
-                postService.searchForOption(categoryCode, searchRequest, optionType, option);
+                postService.searchForOption(categoryId, searchRequest, optionType, option);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_ADMIN_POST + "/categories/" + categoryCode + "/options/" + optionType
+                                     DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/options/" + optionType
                                              + "/search?option=" + option))
                              .body(responses);
     }
@@ -75,20 +75,20 @@ public class AdminPostController {
     /**
      * 입력받은 정보로 지정한 게시글을 수정 할 수 있는 PUT Mapping 을 지원합니다.
      *
-     * @param categoryCode - 수정할 게시글의 카테고리 번호입니다.
+     * @param categoryId - 수정할 게시글의 카테고리 번호입니다.
      * @param postNo       - 수정할 게시글의 식별번호입니다.
      * @param postRequest  - 수정할 게시글의 정보를 담은 객체입니다.
      * @return Mapping URI 를 담은 응답객체를 반환합니다.
      * @since 1.0.0
      */
-    @PutMapping("/categories/{categoryCode}/{postNo}")
-    public ResponseEntity<Void> updatePost(@PathVariable final String categoryCode, @PathVariable final Long postNo,
+    @PutMapping("/categories/{categoryId}/{postNo}")
+    public ResponseEntity<Void> updatePost(@PathVariable final String categoryId, @PathVariable final Long postNo,
                                            @RequestBody final PostRequest postRequest) {
 
-        postService.updatePost(categoryCode, postNo, postRequest);
+        postService.updatePost(categoryId, postNo, postRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_POST + "/categories/" + categoryCode + "/" + postNo))
+                             .location(URI.create(DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/" + postNo))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

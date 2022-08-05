@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
-import com.nhnacademy.marketgg.server.controller.customerservice.PostController;
+import com.nhnacademy.marketgg.server.controller.customerservice.CsPostController;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
@@ -34,11 +34,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(PostController.class)
+@WebMvcTest(CsPostController.class)
 @Import({
         RoleCheckAspect.class
 })
-class PostControllerTest {
+class CsPostControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -84,7 +84,7 @@ class PostControllerTest {
         given(postService.retrievePostList(anyString(), anyInt(), any(MemberInfo.class))).willReturn(
                 List.of(postResponse));
 
-        this.mockMvc.perform(get(DEFAULT_POST + "/categories/{categoryCode}", "702")
+        this.mockMvc.perform(get(DEFAULT_POST + "/categories/{categoryId}", "702")
                                      .param("page", "0"))
                     .andExpect(status().isOk());
 
@@ -96,7 +96,7 @@ class PostControllerTest {
     void testRetrievePost() throws Exception {
         given(postService.retrievePost(anyLong(), any(MemberInfo.class))).willReturn(postResponseForDetail);
 
-        this.mockMvc.perform(get(DEFAULT_POST + "/{postNo}", 1L))
+        this.mockMvc.perform(get(DEFAULT_POST + "/{postId}", 1L))
                 .andExpect(status().isOk());
 
         then(postService).should(times(1)).retrievePost(anyLong(), any(MemberInfo.class));
@@ -107,7 +107,7 @@ class PostControllerTest {
     void testSearchPostListForCategory() throws Exception {
         given(postService.searchForCategory(anyString(), any(SearchRequest.class), any(MemberInfo.class))).willReturn(List.of(postResponse));
 
-        this.mockMvc.perform(post(DEFAULT_POST + "/categories/{categoryCode}/search", "703")
+        this.mockMvc.perform(post(DEFAULT_POST + "/categories/{categoryId}/search", "703")
                                      .contentType(MediaType.APPLICATION_JSON)
                                      .content(objectMapper.writeValueAsString(searchRequest)))
                 .andExpect(status().isOk());
@@ -120,7 +120,7 @@ class PostControllerTest {
     void testDeletePost() throws Exception {
         willDoNothing().given(postService).deletePost(anyString(), anyLong(), any(MemberInfo.class));
 
-        this.mockMvc.perform(delete(DEFAULT_POST + "/categories/{categoryCode}/{postNo}", "702", 1L))
+        this.mockMvc.perform(delete(DEFAULT_POST + "/categories/{categoryId}/{postId}", "702", 1L))
                 .andExpect(status().isNoContent());
 
         then(postService).should(times(1)).deletePost(anyString(), anyLong(), any(MemberInfo.class));

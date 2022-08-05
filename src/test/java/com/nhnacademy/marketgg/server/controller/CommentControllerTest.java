@@ -94,7 +94,7 @@ class CommentControllerTest {
         willDoNothing().given(otoInquiryCommentService)
                        .createComment(anyLong(), anyLong(), any(CommentRequest.class));
 
-        this.mockMvc.perform(post(DEFAULT_CS_COMMENT + "/{postNo}", 1L)
+        this.mockMvc.perform(post(DEFAULT_CS_COMMENT + "/{postId}", 1L)
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))

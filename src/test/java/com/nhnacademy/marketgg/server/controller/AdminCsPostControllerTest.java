@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
-import com.nhnacademy.marketgg.server.controller.admin.AdminPostController;
+import com.nhnacademy.marketgg.server.controller.admin.AdminCsPostController;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
@@ -33,11 +33,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(AdminPostController.class)
+@WebMvcTest(AdminCsPostController.class)
 @Import({
         RoleCheckAspect.class
 })
-class AdminPostControllerTest {
+class AdminCsPostControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -70,7 +70,7 @@ class AdminPostControllerTest {
                 List.of(postResponse));
 
         this.mockMvc.perform(
-                    post(DEFAULT_ADMIN_POST + "/categories/{categoryCode}/options/{optionType}/search", "702", "reason")
+                    post(DEFAULT_ADMIN_POST + "/categories/{categoryId}/options/{optionType}/search", "702", "reason")
                             .param("option", "배송")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(searchRequest)))
@@ -85,7 +85,7 @@ class AdminPostControllerTest {
     void testUpdatePost() throws Exception {
         willDoNothing().given(postService).updatePost(anyString(), anyLong(), any(PostRequest.class));
 
-        this.mockMvc.perform(put(DEFAULT_ADMIN_POST + "/categories/{categoryCode}/{postNo}", "701", 1L)
+        this.mockMvc.perform(put(DEFAULT_ADMIN_POST + "/categories/{categoryId}/{postId}", "701", 1L)
                                      .contentType(MediaType.APPLICATION_JSON)
                                      .content(objectMapper.writeValueAsString(postRequest)))
                     .andExpect(status().isOk());
@@ -105,7 +105,7 @@ class AdminPostControllerTest {
     void testUpdateInquiryStatus() throws Exception {
         willDoNothing().given(postService).updateOtoInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
 
-        this.mockMvc.perform(patch(DEFAULT_ADMIN_POST + "/{postNo}/status", 1L)
+        this.mockMvc.perform(patch(DEFAULT_ADMIN_POST + "/{postId}/status", 1L)
                                      .contentType(MediaType.APPLICATION_JSON)
                                      .content(objectMapper.writeValueAsString(updateRequest)))
                     .andExpect(status().isOk());

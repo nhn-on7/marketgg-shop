@@ -34,21 +34,21 @@ public class CommentController {
     /**
      * 한 1:1 문의에 대해 댓글을 등록하는 POST Mapping 을 지원합니다.
      *
-     * @param postNo      - 댓글을 등록할 1:1 문의의 식별번호입니다.
+     * @param postId      - 댓글을 등록할 1:1 문의의 식별번호입니다.
      * @param memberInfo     - 댓글을 등록하는 회원의 정보입니다.
      * @param commentRequest - 댓글을 등록하기 위한 DTO 객체입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @PostMapping("/{postNo}")
-    public ResponseEntity<Void> createComment(@PathVariable final Long postNo,
+    @PostMapping("/{postId}")
+    public ResponseEntity<Void> createComment(@PathVariable final Long postId,
                                               @RequestBody final CommentRequest commentRequest,
                                               final MemberInfo memberInfo) {
 
-        otoInquiryCommentService.createComment(postNo, memberInfo.getId(), commentRequest);
+        otoInquiryCommentService.createComment(postId, memberInfo.getId(), commentRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create(DEFAULT_CS + "/" + postNo))
+                             .location(URI.create(DEFAULT_CS + "/" + postId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

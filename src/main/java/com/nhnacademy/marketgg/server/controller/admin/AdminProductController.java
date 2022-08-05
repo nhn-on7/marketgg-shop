@@ -37,7 +37,6 @@ public class AdminProductController {
 
     private final ProductService productService;
 
-    // TODO: Develop 브랜치 머지 후 @Value값으로 고치기
     private static final String DEFAULT_ADMIN_PRODUCT = "/admin/products";
 
     /**
@@ -46,7 +45,7 @@ public class AdminProductController {
      * @param productRequest - 상품 생성을 위한 DTO 입니다.
      * @param image          - 상품 등록시 필요한 image 입니다. MultipartFile 타입 입니다.
      * @return - Mapping URI 를 담은 응답 객체를 반환합니다.
-     * @throws IOException - IOException을 던집니다.
+     * @throws IOException - IOException 을 던집니다.
      * @since 1.0.0
      */
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -119,8 +118,8 @@ public class AdminProductController {
     }
 
     /**
-     * 상품 소프트 삭제를 위한 POST Mapping를 지원합니다.
-     * Delete Query가 날아가는 것이 아닌, 상품의 상태 값을 '삭제'로 변경 합니다.
+     * 상품 소프트 삭제를 위한 POST Mapping 를 지원합니다.
+     * Delete Query 가 날아가는 것이 아닌, 상품의 상태 값을 '삭제'로 변경 합니다.
      *
      * @param productId - 상품 삭제를 위한 PK 입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
