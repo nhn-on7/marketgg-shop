@@ -81,7 +81,7 @@ public class StorageImageService implements ImageService {
     private Path returnDir() {
         String format = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
 
-        return Paths.get(DIR, format);
+        return Paths.get(System.getProperty("user.home"), format);
     }
 
     private String uuidFilename(String filename) {
