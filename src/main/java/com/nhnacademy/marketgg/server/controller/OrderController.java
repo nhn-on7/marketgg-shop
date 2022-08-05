@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import com.nhnacademy.marketgg.server.annotation.Role;
+import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.OrderDetailResponse;
@@ -27,6 +29,7 @@ import java.util.List;
  * @author 김정민
  * @version 1.0.0
  */
+// @RoleCheck(accessLevel = Role.ROLE_USER)
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
@@ -61,15 +64,15 @@ public class OrderController {
 
     // 주문 상세 조회
     @GetMapping("/{orderId}")
-    public ResponseEntity<Void/*OrderDetailResponse*/> retrieveOrderDetail(@PathVariable final Long orderId,
+    public ResponseEntity<OrderDetailResponse> retrieveOrderDetail(@PathVariable final Long orderId,
                                                                    final MemberInfo memberInfo) {
 
-        // OrderDetailResponse response = orderService.retrieveOrder(orderId, memberInfo.getId(), memberInfo.isUser());
+        OrderDetailResponse response = orderService.retrieveOrder(orderId, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(response);
     }
 
     // 운송장 번호 생성된 후 주문서 수정, 배송파트 담당자가 수정하실 듯
