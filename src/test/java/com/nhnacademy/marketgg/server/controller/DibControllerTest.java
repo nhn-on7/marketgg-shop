@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.controller.member.DibController;
 import com.nhnacademy.marketgg.server.service.DibService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

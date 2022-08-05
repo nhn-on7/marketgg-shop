@@ -1,20 +1,19 @@
 package com.nhnacademy.marketgg.server.dummy;
 
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.PostRequest;
-import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
+import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
-import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
-import com.nhnacademy.marketgg.server.dto.response.PostResponse;
-import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
-import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentResponse;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForReady;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.CartProduct;
@@ -162,25 +161,6 @@ public class Dummy {
         return new CartProduct(getDummyCart(cartId), getDummyProduct(productId), amount);
     }
 
-    public static PostResponseForDetail getDummyPostResponseForDetail() {
-        return new PostResponseForDetail(1L, "title", "content", "기타", "",
-            LocalDateTime.now(), LocalDateTime.now());
-    }
-
-    public static PostResponseForOtoInquiry getDummyPostResponseForOtoInquiry() {
-        PostResponseForOtoInquiry otoInquiry = new PostResponseForOtoInquiry();
-        ReflectionTestUtils.setField(otoInquiry, "id", 1L);
-        ReflectionTestUtils.setField(otoInquiry, "title", "title");
-        ReflectionTestUtils.setField(otoInquiry, "content", "content");
-        ReflectionTestUtils.setField(otoInquiry, "reason", "배송");
-        ReflectionTestUtils.setField(otoInquiry, "status", "답변중");
-        ReflectionTestUtils.setField(otoInquiry, "createdAt", LocalDateTime.now());
-        ReflectionTestUtils.setField(otoInquiry, "updatedAt", LocalDateTime.now());
-        ReflectionTestUtils.setField(otoInquiry, "commentList", List.of(getDummyCommentResponse()));
-
-        return otoInquiry;
-    }
-
     public static PostRequest getPostRequest() {
         PostRequest postRequest = new PostRequest();
         ReflectionTestUtils.setField(postRequest, "categoryCode", "702");
@@ -210,16 +190,8 @@ public class Dummy {
         return new ElasticBoard(getCustomerServicePost());
     }
 
-    public static CommentResponse getDummyCommentResponse() {
-        return new CommentResponse("content", 1L, LocalDateTime.now());
-    }
-
     public static PostResponse getDummyPostResponse() {
         return new PostResponse(1L, "701", "title", "상품", "empty", LocalDateTime.now());
-    }
-
-    public static SearchBoardResponse getSearchBoardResponse() {
-        return new SearchBoardResponse(1L, "701", "title", "회원", "답변완료", LocalDateTime.now());
     }
 
     public static SearchRequest getSearchRequest() {

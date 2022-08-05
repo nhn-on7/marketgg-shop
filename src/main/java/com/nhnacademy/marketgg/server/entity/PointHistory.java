@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
+import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 /**
  * 포인트 내역 개체입니다.
  *
+ * @author 공통
  * @version 1.0
  * @since 1.0
  */

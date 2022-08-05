@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.label;
 
-import com.nhnacademy.marketgg.server.dto.response.LabelRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.label.LabelRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.entity.QLabel;
 import com.querydsl.core.types.Projections;

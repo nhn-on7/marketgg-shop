@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 /**
  * 받은 검색어의 한=>영 전환을 진행 해줍니다.
  *
+ * @author 박세완
  * @version 1.0.0
  */
 public class KoreanToEnglishTranslator {

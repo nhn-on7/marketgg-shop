@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.OrderCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 /**
  * 주문 개체입니다.
  *
+ * @author 공통
  * @version 1.0
  * @since 1.0
  */

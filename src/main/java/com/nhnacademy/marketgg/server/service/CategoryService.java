@@ -1,14 +1,15 @@
 package com.nhnacademy.marketgg.server.service;
 
-import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.CategoryUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.CategoryRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategoryUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.category.CategoryRetrieveResponse;
 
 import java.util.List;
 
 /**
  * 카테고리 서비스입니다.
  *
+ * @author 박세완, 김정민
  * @version 1.0.0
  */
 public interface CategoryService {

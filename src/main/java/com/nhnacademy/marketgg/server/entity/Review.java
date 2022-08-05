@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.ReviewCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.ReviewUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +22,8 @@ import lombok.NoArgsConstructor;
 /**
  * 후기 개체입니다.
  *
- * @since 1.0.0
+ * @author 공통
+ * @version  1.0.0
  */
 @Table(name = "reviews")
 @Entity

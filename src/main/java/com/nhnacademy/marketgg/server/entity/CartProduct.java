@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 /**
  * 장바구니에 담긴 상품 목록 개체입니다.
  *
+ * @author 공통
  * @version 1.0
  * @since 1.0
  */

@@ -1,39 +1,48 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.dto.request.PostRequest;
-import com.nhnacademy.marketgg.server.dto.request.PostStatusUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.CommentResponse;
-import com.nhnacademy.marketgg.server.dto.response.PostResponse;
-import com.nhnacademy.marketgg.server.dto.response.PostResponseForDetail;
-import com.nhnacademy.marketgg.server.dto.response.PostResponseForOtoInquiry;
+import com.nhnacademy.marketgg.server.auth.AuthRepository;
+import com.nhnacademy.marketgg.server.dto.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.MemberNameResponse;
+import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
+import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentReady;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
+import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForReady;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticBoardRepository;
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
+import com.nhnacademy.marketgg.server.exception.customerservicecomment.CustomerServiceCommentNotFoundException;
 import com.nhnacademy.marketgg.server.exception.customerservicepost.CustomerServicePostNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicecomment.CustomerServiceCommentRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
-import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
+import com.nhnacademy.marketgg.server.service.PostService;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
+/**
+ * 고객센터의 게시글 서비스의 구현체입니다.
+ *
+ * @author 박세완
+ * @version 1.0.0
+ */
 @Service
 @RequiredArgsConstructor
-public class DefaultPostService implements CustomerServicePostService {
+public class DefaultPostService implements PostService {
 
     private final CustomerServicePostRepository postRepository;
     private final CategoryRepository categoryRepository;
@@ -41,108 +50,124 @@ public class DefaultPostService implements CustomerServicePostService {
     private final CustomerServiceCommentRepository commentRepository;
     private final ElasticBoardRepository elasticBoardRepository;
     private final SearchRepository searchRepository;
+    private final AuthRepository authRepository;
 
-    private static final String OTO_INQUIRY = "1:1문의";
+    private static final String NOTICE_CODE = "701";
+    private static final String OTO_CODE = "702";
+    private static final String FAQ_CODE = "703";
+    private static final Integer PAGE_SIZE = 10;
 
     @Transactional
     @Override
-    public void createPost(final Long memberId, final PostRequest postRequest) {
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        String categoryId = categoryRepository.retrieveCategoryIdByName(OTO_INQUIRY);
-        Category category = categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
+    public void createPost(final PostRequest postRequest, final MemberInfo memberInfo) {
+        if (this.isAccess(memberInfo, postRequest.getCategoryCode(), "create")) {
+            Member member = memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
+            Category category = categoryRepository.findById(postRequest.getCategoryCode()).orElseThrow(
+                    CategoryNotFoundException::new);
+            CustomerServicePost post = new CustomerServicePost(member, category, postRequest);
 
-        CustomerServicePost csPost = new CustomerServicePost(member, category, postRequest);
-
-        postRepository.save(csPost);
-        elasticBoardRepository.save(new ElasticBoard(csPost));
+            CustomerServicePost savePost = postRepository.save(post);
+            elasticBoardRepository.save(new ElasticBoard(savePost));
+        }
     }
 
     @Override
-    public PostResponseForDetail retrievePost(final Long boardNo) {
-        return postRepository.findByBoardNo(boardNo);
+    public List<PostResponse> retrievePostList(final String categoryCode, final Integer page,
+                                               final MemberInfo memberInfo) {
+
+        if (this.isAccess(memberInfo, categoryCode, "retrieveList")) {
+            return postRepository.findPostsByCategoryId(PageRequest.of(page, PAGE_SIZE), categoryCode).getContent();
+        }
+        return postRepository.findPostByCategoryAndMember(PageRequest.of(page, PAGE_SIZE), categoryCode,
+                                                          memberInfo.getId()).getContent();
     }
 
     @Override
-    public PostResponseForOtoInquiry retrieveOtoInquiryPost(final Long boardNo) {
-        PostResponseForOtoInquiry otoInquiry = postRepository.findOtoInquiryById(boardNo);
+    public PostResponseForDetail retrievePost(final Long postNo, final MemberInfo memberInfo)
+            throws JsonProcessingException {
 
-        return addCommentList(otoInquiry);
+        CustomerServicePost post =
+                postRepository.findById(postNo).orElseThrow(CustomerServiceCommentNotFoundException::new);
+        if (post.getCategory().getId().compareTo(OTO_CODE) == 0 || !memberInfo.isAdmin()) {
+            return this.convertToDetail(postRepository.findOwnOtoInquiry(postNo, memberInfo.getId()));
+        }
+        return this.convertToDetail(postRepository.findByBoardNo(postNo));
     }
 
     @Override
-    public PostResponseForOtoInquiry retrieveOwnOtoInquiryPost(Long boardNo, Long memberId) {
-        PostResponseForOtoInquiry otoInquiry = postRepository.findOwnOtoInquiryById(boardNo, memberId);
-
-        return addCommentList(otoInquiry);
-    }
-
-    private PostResponseForOtoInquiry addCommentList(final PostResponseForOtoInquiry otoInquiry) {
-        List<CommentResponse> commentList = commentRepository.findByInquiryId(otoInquiry.getId());
-
-        return PostResponseForOtoInquiry.builder().otoInquiry(otoInquiry).commentList(commentList).build();
-    }
-
-    @Override
-    public List<PostResponse> retrievePostList(final String categoryCode, final Integer page) {
-        return postRepository.findPostsByCategoryId(PageRequest.of(page, 10), categoryCode).getContent();
-    }
-
-    @Override
-    public List<PostResponse> retrieveOwnPostList(final Integer page, final String categoryCode, final Long memberId) {
-        return postRepository.findPostByCategoryAndMember(PageRequest.of(page, 10), categoryCode, memberId)
-                             .getContent();
-    }
-
-    @Override
-    public List<SearchBoardResponse> searchForCategory(final String categoryCode, final SearchRequest searchRequest)
+    public List<PostResponse> searchForCategory(final String categoryCode, final SearchRequest searchRequest,
+                                                final MemberInfo memberInfo)
             throws ParseException, JsonProcessingException {
 
-        return searchRepository.searchBoardWithCategoryCode(categoryCode, searchRequest, "categoryCode");
+        if (this.isAccess(memberInfo, categoryCode, "search")) {
+            return searchRepository.searchBoardWithCategoryCode(categoryCode, searchRequest, "board");
+        }
+        return List.of();
     }
 
     @Override
-    public List<SearchBoardResponse> searchForOption(final String categoryCode, final SearchRequest searchRequest,
-                                                     final String option, final String optionType)
+    public List<PostResponse> searchForOption(final String categoryCode, final SearchRequest searchRequest,
+                                              final String optionType, final String option)
             throws JsonProcessingException, ParseException {
 
         return searchRepository.searchBoardWithOption(categoryCode, option, searchRequest, optionType);
     }
 
-    @Transactional
     @Override
-    public void updatePost(final Long memberNo, final Long boardNo, final PostRequest postRequest) {
-        CustomerServicePost post = postRepository.findById(boardNo)
-                                                 .orElseThrow(CustomerServicePostNotFoundException::new);
-        post.updatePost(postRequest);
+    public void updatePost(final String categoryCode, final Long postNo, final PostRequest postRequest) {
+        if (categoryCode.compareTo(OTO_CODE) != 0) {
+            CustomerServicePost post = postRepository.findById(postNo).orElseThrow(
+                    CustomerServicePostNotFoundException::new);
+            post.updatePost(postRequest);
 
-        postRepository.save(post);
+            CustomerServicePost savePost = postRepository.save(post);
+            elasticBoardRepository.save(new ElasticBoard(savePost));
+        }
     }
 
-    @Transactional
     @Override
-    public void updateInquiryStatus(final Long boardNo, final PostStatusUpdateRequest status) {
-        CustomerServicePost board = postRepository.findById(boardNo)
-                                                  .orElseThrow(CustomerServicePostNotFoundException::new);
-        ElasticBoard elasticBoard = elasticBoardRepository.findById(boardNo)
-                                                          .orElseThrow(CustomerServicePostNotFoundException::new);
+    public void updateOtoInquiryStatus(final Long postNo, final PostStatusUpdateRequest statusUpdateRequest) {
+        CustomerServicePost post =
+                postRepository.findById(postNo).orElseThrow(CustomerServicePostNotFoundException::new);
+        post.updatePostStatus(statusUpdateRequest.getStatus());
 
-        board.updatePostStatus(status.getStatus());
-        elasticBoard.setStatus(status.getStatus());
-
-        postRepository.save(board);
-        elasticBoardRepository.save(elasticBoard);
+        CustomerServicePost savePost = postRepository.save(post);
+        elasticBoardRepository.save(new ElasticBoard(savePost));
     }
 
-    @Transactional
     @Override
-    public void deletePost(final Long boardNo) {
-        CustomerServicePost post = postRepository.findById(boardNo)
-                                                       .orElseThrow(CustomerServicePostNotFoundException::new);
-        List<Long> commentIds = commentRepository.findCommentIdsByInquiryId(boardNo);
+    public void deletePost(final String categoryCode, final Long postNo, final MemberInfo memberInfo) {
+        if (this.isAccess(memberInfo, categoryCode, "memberDelete")
+                || this.isAccess(memberInfo, categoryCode, "adminDelete")) {
+            postRepository.deleteById(postNo);
+            elasticBoardRepository.deleteById(postNo);
+            commentRepository.deleteAllByCustomerServicePost_Id(postNo);
+        }
+    }
 
-        commentRepository.deleteAllById(commentIds);
-        postRepository.delete(post);
-        elasticBoardRepository.deleteById(boardNo);
+    private boolean isAccess(final MemberInfo memberInfo, final String categoryCode, final String option) {
+        List<String> otoNonExistList = List.of(NOTICE_CODE, FAQ_CODE);
+        List<String> otoExistList = List.of(OTO_CODE);
+
+        switch (option) {
+            case "create": {
+                return (memberInfo.isAdmin()) || !otoNonExistList.contains(categoryCode);
+            }
+            case "memberDelete": {
+                return !memberInfo.isAdmin() && !otoNonExistList.contains(categoryCode);
+            }
+            default:
+                return memberInfo.isAdmin() || !otoExistList.contains(categoryCode);
+        }
+    }
+
+    private PostResponseForDetail convertToDetail(final PostResponseForReady response) throws JsonProcessingException {
+        List<String> uuidList = new ArrayList<>();
+        for (CommentReady ready : response.getCommentReady()) {
+            uuidList.add(ready.getUuid());
+        }
+        List<MemberNameResponse> nameList = authRepository.getNameListByUuid(uuidList);
+        return new PostResponseForDetail(response, nameList);
     }
 
 }

@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 /**
  * 찜 Entity 입니다.
  *
+ * @author 공통
  * @version 1.0.0
  */
 @Table(name = "dibs")

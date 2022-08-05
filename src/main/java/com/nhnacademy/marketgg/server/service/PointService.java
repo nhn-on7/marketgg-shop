@@ -1,12 +1,13 @@
 package com.nhnacademy.marketgg.server.service;
 
-import com.nhnacademy.marketgg.server.dto.request.PointHistoryRequest;
-import com.nhnacademy.marketgg.server.dto.response.PointRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
+import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
 import java.util.List;
 
 /**
  * 포인트 내역 Service 입니다.
  *
+ * @author 박세완
  * @version 1.0.0
  */
 public interface PointService {

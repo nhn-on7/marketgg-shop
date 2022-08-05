@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.LabelCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.label.LabelCreateRequest;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 /**
  * 라벨 개체입니다.
  *
+ * @author 공통
  * @version 1.0
  * @since 1.0
  */

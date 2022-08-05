@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.categorization;
 
-import com.nhnacademy.marketgg.server.dto.response.CategorizationRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.category.CategorizationRetrieveResponse;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;

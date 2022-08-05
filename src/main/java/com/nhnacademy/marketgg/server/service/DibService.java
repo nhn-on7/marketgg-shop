@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.service;
 
-import com.nhnacademy.marketgg.server.dto.response.DibRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.dib.DibRetrieveResponse;
 
 import java.util.List;
 

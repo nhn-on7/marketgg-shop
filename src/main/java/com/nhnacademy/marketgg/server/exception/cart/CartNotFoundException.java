@@ -5,6 +5,7 @@ import com.nhnacademy.marketgg.server.exception.NotFoundException;
 /**
  * 장바구니를 찾을 수 없을 때 예외처리입니다.
  *
+ * @author 공통
  * @version 1.0.0
  */
 public class CartNotFoundException extends NotFoundException {

@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.dib;
 
-import com.nhnacademy.marketgg.server.dto.response.DibRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.dib.DibRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Dib;
 import com.nhnacademy.marketgg.server.entity.QDib;
 import com.nhnacademy.marketgg.server.entity.QMember;

@@ -14,6 +14,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+/**
+ * 결제 개체입니다/
+ *
+ * @author 공통
+ * @version 1.0.0
+ */
 @Table(name = "payments")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

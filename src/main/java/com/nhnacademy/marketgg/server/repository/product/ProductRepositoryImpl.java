@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.product;
 
-import com.nhnacademy.marketgg.server.dto.response.ProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.QProduct;
 import com.querydsl.core.QueryResults;

@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.constant.CustomerServicePostStatus;
-import com.nhnacademy.marketgg.server.dto.request.PostRequest;
+import com.nhnacademy.marketgg.server.constant.OtoStatus;
+import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +17,9 @@ import lombok.NoArgsConstructor;
 
 /**
  * 고객센터 게시글 개체입니다.
+ *
+ * @author 공통
+ * @version 1.0.0
  */
 @Table(name = "cs_posts")
 @Entity
@@ -68,7 +71,7 @@ public class CustomerServicePost {
         this.content = postRequest.getContent();
         this.title = postRequest.getTitle();
         this.reason = postRequest.getReason();
-        this.status = CustomerServicePostStatus.UNANSWERED.status();
+        this.status = OtoStatus.UNANSWERED.status();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }

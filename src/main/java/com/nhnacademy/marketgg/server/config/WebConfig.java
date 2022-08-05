@@ -13,7 +13,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
  *
  * @version 1.0.0
  */
-
 @Configuration
 public class WebConfig {
 

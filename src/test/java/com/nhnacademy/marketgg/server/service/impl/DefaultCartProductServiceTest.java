@@ -13,7 +13,7 @@ import static org.mockito.Mockito.times;
 
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
-import com.nhnacademy.marketgg.server.dto.response.CartProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.cart.CartProductResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.CartProduct;

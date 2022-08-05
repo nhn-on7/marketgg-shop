@@ -7,6 +7,7 @@ import lombok.Setter;
 /**
  * 사용자의 검색 및 반환 할 페이지를 표시합니다.
  *
+ * @author 박세완
  * @version 1.0.0
  */
 @AllArgsConstructor

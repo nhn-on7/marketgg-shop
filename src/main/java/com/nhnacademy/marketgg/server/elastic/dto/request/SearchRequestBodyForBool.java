@@ -11,6 +11,7 @@ import lombok.Getter;
 /**
  * 카테고리 내에서 검색 시, 해당 객체를 통해 요청을 진행합니다.
  *
+ * @author 박세완
  * @version 1.0.0
  */
 @Getter

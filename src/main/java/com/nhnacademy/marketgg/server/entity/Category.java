@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.CategoryUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.category.CategoryUpdateRequest;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 /**
  * 카테고리 개체입니다.
  *
+ * @author 공통
  * @version 1.0.0
  */
 @Table(name = "categories")

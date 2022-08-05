@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * 회원 레포지토리 입니다.
  *
+ * @author 박세완
  * @version 1.0.0
  */
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {

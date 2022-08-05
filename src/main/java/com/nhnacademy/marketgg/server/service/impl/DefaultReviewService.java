@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dto.request.ReviewCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.ReviewUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.ReviewResponse;
+import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;

@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.productinquirypost;
 
-import com.nhnacademy.marketgg.server.dto.response.ProductInquiryResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import com.nhnacademy.marketgg.server.entity.QProductInquiryPost;
 import com.querydsl.core.types.Projections;
