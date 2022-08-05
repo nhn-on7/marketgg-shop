@@ -120,7 +120,7 @@ public class CsPostController {
      * @since 1.0.0
      */
 
-    @PostMapping("/categories/{categoryId}/search")
+    @GetMapping("/categories/{categoryId}/search")
     public ResponseEntity<List<PostResponse>> searchPostListForCategory(@PathVariable final String categoryId,
                                                                         @RequestParam final String keyword,
                                                                         @RequestParam final Integer page,

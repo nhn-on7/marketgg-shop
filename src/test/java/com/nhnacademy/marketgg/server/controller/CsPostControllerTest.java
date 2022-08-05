@@ -105,7 +105,7 @@ class CsPostControllerTest {
     void testSearchPostListForCategory() throws Exception {
         given(postService.searchForCategory(anyString(), any(SearchRequest.class), any(MemberInfo.class))).willReturn(List.of(postResponse));
 
-        this.mockMvc.perform(post(DEFAULT_POST + "/categories/{categoryId}/search", "703")
+        this.mockMvc.perform(get(DEFAULT_POST + "/categories/{categoryId}/search", "703")
                 .param("keyword", "op")
                 .param("page", "0"))
                     .andExpect(status().isOk());

@@ -68,7 +68,7 @@ class AdminCsPostControllerTest {
             List.of(postResponse));
 
         this.mockMvc.perform(
-                post(DEFAULT_ADMIN_POST + "/categories/{categoryId}/options/{optionType}/search", "702", "reason")
+                get(DEFAULT_ADMIN_POST + "/categories/{categoryId}/options/{optionType}/search", "702", "reason")
                     .param("option", "배송")
                     .param("keyword", "hi")
                     .param("page", "0"))

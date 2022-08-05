@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,7 +57,7 @@ public class AdminCsPostController {
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */
-    @PostMapping("/categories/{categoryId}/options/{optionType}/search")
+    @GetMapping("/categories/{categoryId}/options/{optionType}/search")
     public ResponseEntity<List<PostResponse>> searchPostListForOption(@PathVariable final String categoryId,
                                                                       @PathVariable final String optionType,
                                                                       @RequestParam final String option,
