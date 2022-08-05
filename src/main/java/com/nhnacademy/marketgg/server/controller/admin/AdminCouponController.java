@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.controller;
+package com.nhnacademy.marketgg.server.controller.admin;
 
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
@@ -7,6 +7,8 @@ import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.CouponService;
+import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,18 +23,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.List;
-
 /**
  * 쿠폰 관련 Rest Controller 입니다.
  *
  * @since 1.0.0
  */
 @RestController
+@RoleCheck(accessLevel = Role.ROLE_ADMIN)
 @RequestMapping("/admin/coupons")
 @RequiredArgsConstructor
-public class CouponController {
+public class AdminCouponController {
 
     private final CouponService couponService;
 
@@ -43,7 +43,6 @@ public class CouponController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @PostMapping
     public ResponseEntity<CommonResponse> createCoupon(@Valid @RequestBody final CouponDto couponDto) {
         couponService.createCoupon(couponDto);
@@ -60,7 +59,6 @@ public class CouponController {
      * @return 조회한 쿠폰의 정보를 담은 객체를 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @GetMapping("/{couponId}")
     public ResponseEntity<CommonResponse> retrieveCoupon(@PathVariable final Long couponId) {
         CouponDto couponResponse = couponService.retrieveCoupon(couponId);
@@ -75,7 +73,6 @@ public class CouponController {
      * @return 전체 쿠폰 목록 DTO 를 List 로 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @GetMapping
     public ResponseEntity<CommonResponse> retrieveCoupons(final Pageable pageable) {
         List<CouponDto> couponResponses = couponService.retrieveCoupons(pageable);
@@ -92,7 +89,6 @@ public class CouponController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @PutMapping("/{couponId}")
     public ResponseEntity<CommonResponse> updateCoupon(@PathVariable final Long couponId,
                                                        @Valid @RequestBody final CouponDto couponDto) {
@@ -111,7 +107,6 @@ public class CouponController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @DeleteMapping("/{couponId}")
     public ResponseEntity<CommonResponse> deleteCoupon(@PathVariable final Long couponId) {
         couponService.deleteCoupon(couponId);

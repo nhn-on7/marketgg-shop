@@ -11,17 +11,15 @@ import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateReques
 import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
 import com.nhnacademy.marketgg.server.dto.response.GivenCouponResponse;
-import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.service.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.MemberService;
-import com.nhnacademy.marketgg.server.service.PointService;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -47,9 +45,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private static final String MEMBER_PREFIX = "/member/";
-
     private final MemberService memberService;
-    private final PointService pointService;
     private final GivenCouponService givenCouponService;
 
     /**

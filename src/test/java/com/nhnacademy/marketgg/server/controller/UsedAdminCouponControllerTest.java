@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.controller.coupon.UsedCouponController;
 import com.nhnacademy.marketgg.server.dto.request.coupon.UsedCouponDto;
 import com.nhnacademy.marketgg.server.service.UsedCouponService;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,7 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UsedCouponController.class)
-class UsedCouponControllerTest {
+class UsedAdminCouponControllerTest {
 
     @Autowired
     MockMvc mockMvc;

@@ -4,3 +4,7 @@ spring:
 
   config:
     import: "optional:configserver:http://133.186.209.70:8888"
+
+  batch:
+    job:
+      enabled: false
