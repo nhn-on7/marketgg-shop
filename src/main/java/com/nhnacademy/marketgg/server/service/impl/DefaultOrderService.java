@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.OrderCreateRequest;
+import com.nhnacademy.marketgg.server.dto.response.OrderDetailResponse;
 import com.nhnacademy.marketgg.server.dto.response.OrderResponse;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Order;
@@ -24,7 +25,7 @@ public class DefaultOrderService implements OrderService {
 
     @Transactional
     @Override
-    public void createOrder(OrderCreateRequest orderRequest, Long memberId) {
+    public void createOrder(final OrderCreateRequest orderRequest, final Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         Order order = new Order(member, orderRequest);
 
@@ -34,9 +35,14 @@ public class DefaultOrderService implements OrderService {
 
     // 주문 목록 조회 - 관리자(전체), 회원(본인)
     @Override
-    public List<OrderResponse> retrieveOrderList(MemberInfo memberinfo) {
+    public List<OrderResponse> retrieveOrderList(final MemberInfo memberinfo) {
         // return (isUser ? orderRepository.findOrderListById(memberId) : orderRepository.findAllOrder());
         return orderRepository.findOrderList(memberinfo.getId(), memberinfo.isUser());
+    }
+
+    @Override
+    public OrderDetailResponse retrieveOrder(Long orderId, MemberInfo memberInfo) {
+        return orderRepository.findOrderDetail(orderId, memberInfo.getId(), memberInfo.isUser());
     }
 
 }
