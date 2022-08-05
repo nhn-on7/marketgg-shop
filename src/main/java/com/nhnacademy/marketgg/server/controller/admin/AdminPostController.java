@@ -67,8 +67,8 @@ public class AdminPostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_ADMIN_POST + "/categories/" + categoryCode + "/options/" + optionType +
-                                             "/search?option=" + option))
+                                     DEFAULT_ADMIN_POST + "/categories/" + categoryCode + "/options/" + optionType
+                                             + "/search?option=" + option))
                              .body(responses);
     }
 

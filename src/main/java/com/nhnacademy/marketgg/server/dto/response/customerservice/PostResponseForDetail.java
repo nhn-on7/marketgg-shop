@@ -7,6 +7,12 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 고객센터 게시글의 상세 내용 DTO 입니다.
+ *
+ * @author 박세완
+ * @version 1.0.0
+ */
 @RequiredArgsConstructor
 @Getter
 public class PostResponseForDetail {
@@ -29,6 +35,13 @@ public class PostResponseForDetail {
 
     private final List<CommentResponse> commentList;
 
+    /**
+     * 게시글 상세 내용을 생성하기 위한 생성자입니다.
+     *
+     * @param response - Repository 에서 프로젝션한 가공하지 않은 상세 내용 DTO 입니다.
+     * @param nameList - auth 서버에 uuid 를 통해 요청한 사용자의 이름 목록입니다.
+     * @since 1.0.0
+     */
     public PostResponseForDetail(final PostResponseForReady response, final List<MemberNameResponse> nameList) {
         this.id = response.getId();
         this.categoryCode = response.getCategoryCode();
@@ -41,7 +54,8 @@ public class PostResponseForDetail {
         this.commentList = this.addCommentList(response.getCommentReady(), nameList);
     }
 
-    private List<CommentResponse> addCommentList(final List<CommentReady> ready, final List<MemberNameResponse> nameList) {
+    private List<CommentResponse> addCommentList(final List<CommentReady> ready,
+                                                 final List<MemberNameResponse> nameList) {
         List<CommentResponse> response = new ArrayList<>();
         for (CommentReady commentReady : ready) {
             response.add(new CommentResponse(commentReady.getContent(), this.getName(commentReady.getUuid(), nameList),
@@ -51,8 +65,8 @@ public class PostResponseForDetail {
     }
 
     private String getName(final String uuid, final List<MemberNameResponse> nameList) {
-        for(MemberNameResponse name : nameList) {
-            if(uuid.compareTo(name.getUuid()) == 0) {
+        for (MemberNameResponse name : nameList) {
+            if (uuid.compareTo(name.getUuid()) == 0) {
                 return name.getName();
             }
         }

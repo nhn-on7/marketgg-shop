@@ -34,6 +34,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 고객센터의 게시글 서비스의 구현체입니다.
+ *
+ * @author 박세완
+ * @version 1.0.0
+ */
 @Service
 @RequiredArgsConstructor
 public class DefaultPostService implements PostService {
@@ -131,8 +137,8 @@ public class DefaultPostService implements PostService {
 
     @Override
     public void deletePost(final String categoryCode, final Long postNo, final MemberInfo memberInfo) {
-        if (this.isAccess(memberInfo, categoryCode, "memberDelete") ||
-                this.isAccess(memberInfo, categoryCode, "adminDelete")) {
+        if (this.isAccess(memberInfo, categoryCode, "memberDelete")
+                || this.isAccess(memberInfo, categoryCode, "adminDelete")) {
             postRepository.deleteById(postNo);
             elasticBoardRepository.deleteById(postNo);
             commentRepository.deleteAllByCustomerServicePost_Id(postNo);

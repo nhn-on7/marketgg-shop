@@ -8,7 +8,6 @@ import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
-import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForReady;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.service.PostService;
 import java.net.URI;
@@ -71,7 +70,7 @@ public class PostController {
      *
      * @param categoryCode - 조회할 게시글 목록의 카테고리 식별번호입니다.
      * @param page         - 페이징 처리를 위한 페이지 번호입니다.
-     * @param memberInfo - 로그인 한 회원의 정보입니다.
+     * @param memberInfo   - 로그인 한 회원의 정보입니다.
      * @return 게시글 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
@@ -90,13 +89,14 @@ public class PostController {
     /**
      * 지정한 게시글의 상세정보를 조회할 수 있는 GET Mapping 을 지원합니다.
      *
-     * @param postNo - 조회할 게시글의 식별번호입니다.
+     * @param postNo     - 조회할 게시글의 식별번호입니다.
      * @param memberInfo - 로그인 한 회원의 정보입니다.
      * @return 지정한 게시글의 상세 정보를 담은 응답객체를 반환합니다.
      * @since 1.0.0
      */
     @GetMapping("/{postNo}")
-    public ResponseEntity<PostResponseForDetail> retrievePost(@PathVariable final Long postNo, final MemberInfo memberInfo)
+    public ResponseEntity<PostResponseForDetail> retrievePost(@PathVariable final Long postNo,
+                                                              final MemberInfo memberInfo)
             throws JsonProcessingException {
 
         PostResponseForDetail response = postService.retrievePost(postNo, memberInfo);
@@ -111,7 +111,7 @@ public class PostController {
      *
      * @param categoryCode  - 검색을 진행 할 게시판 타입입니다.
      * @param searchRequest - 검색을 진행 할 검색 정보입니다.
-     * @param memberInfo - 검색을 진행 할 회원의 정보입니다.
+     * @param memberInfo    - 검색을 진행 할 회원의 정보입니다.
      * @return 검색정보로 검색한 결과 목록 응답객체를 반환합니다.
      * @throws ParseException          파싱도중 예외처리입니다.
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
