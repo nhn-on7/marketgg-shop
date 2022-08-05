@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 
 import com.nhnacademy.marketgg.server.auth.AuthRepository;
@@ -14,6 +15,7 @@ import com.nhnacademy.marketgg.server.dto.MemberNameResponse;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
+import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentReady;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentResponse;
@@ -68,8 +70,6 @@ class DefaultPostServiceTest {
     MemberRepository memberRepository;
     @Mock
     SearchRepository searchRepository;
-    @Mock
-    AuthRepository authRepository;
 
     private static final String NOTICE_CODE = "701";
     private static final String OTO_CODE = "702";
@@ -77,10 +77,7 @@ class DefaultPostServiceTest {
     private static final Integer PAGE_SIZE = 10;
 
     private PostResponse postResponse;
-    private PostResponseForDetail detail;
     private PostResponseForReady ready;
-    private CommentResponse commentResponse;
-    private PageRequest pageRequest;
     private MemberInfo memberInfo;
     private SearchRequest searchRequest;
     private MemberCreateRequest createRequest;
@@ -98,14 +95,11 @@ class DefaultPostServiceTest {
         postResponse = new PostResponse(1L, NOTICE_CODE, "Hello", " ", " ", LocalDateTime.now());
         CommentReady commentReady = new CommentReady("hello", "99990000111122223333444455556666", LocalDateTime.now());
         MemberNameResponse memberNameResponse = new MemberNameResponse("99990000111122223333444455556666", "박세완");
-        commentResponse = new CommentResponse("hello", "박세완", LocalDateTime.now());
         ready = new PostResponseForReady(2L, FAQ_CODE, "Hello", "hi", "환불", "미답변",
                                                               LocalDateTime.now(), LocalDateTime.now(),
                                                               List.of(commentReady));
-        detail = new PostResponseForDetail(ready, List.of(memberNameResponse));
 
         searchRequest = new SearchRequest("hello", 0, PAGE_SIZE);
-        pageRequest = PageRequest.of(0, PAGE_SIZE);
         memberInfo = Dummy.getDummyMemberInfo(1L, cart);
         createRequest = new MemberCreateRequest();
         categoryCreateRequest = new CategoryCreateRequest();
@@ -212,11 +206,11 @@ class DefaultPostServiceTest {
 
     @Test
     @DisplayName("게시글 수정")
-    void testUpdatePost() throws Exception {
+    void testUpdatePost() {
         ReflectionTestUtils.setField(postRequest, "categoryCode", NOTICE_CODE);
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postRepository.save(any(CustomerServicePost.class))).willReturn(post);
-        postService.updatePost(NOTICE_CODE, );
+        postService.updatePost(NOTICE_CODE, 1L, postRequest);
 
         then(postRepository).should(times(1)).save(any(CustomerServicePost.class));
         then(elasticBoardRepository).should(times(1)).save(any(ElasticBoard.class));
@@ -224,12 +218,32 @@ class DefaultPostServiceTest {
 
     @Test
     @DisplayName("1:1 문의 상태 변경")
-    void testUpdateOtoInquiryStatus() throws Exception {
+    void testUpdateOtoInquiryStatus() {
+        PostStatusUpdateRequest updateRequest = new PostStatusUpdateRequest();
+        ReflectionTestUtils.setField(updateRequest, "content", "hi");
+        ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
+        given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
+        given(postRepository.save(any(CustomerServicePost.class))).willReturn(post);
+
+        postService.updateOtoInquiryStatus(1L, new PostStatusUpdateRequest());
+
+        then(postRepository).should(times(1)).save(any(CustomerServicePost.class));
+        then(elasticBoardRepository).should(times(1)).save(any(ElasticBoard.class));
     }
 
     @Test
     @DisplayName("게시글 삭제")
     void testDeletePost() throws Exception {
+        ReflectionTestUtils.setField(postRequest, "categoryCode", NOTICE_CODE);
+        willDoNothing().given(postRepository).deleteById(anyLong());
+        willDoNothing().given(elasticBoardRepository).deleteById(anyLong());
+        willDoNothing().given(commentRepository).deleteAllByCustomerServicePost_Id(anyLong());
+
+        postService.deletePost(NOTICE_CODE, 1L, memberInfo);
+
+        then(postRepository).should(times(1)).deleteById(anyLong());
+        then(elasticBoardRepository).should(times(1)).deleteById(anyLong());
+        then(commentRepository).should(times(1)).deleteAllByCustomerServicePost_Id(anyLong());
     }
 
 }
