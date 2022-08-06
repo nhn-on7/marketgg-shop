@@ -1,19 +1,17 @@
-# Market GG Shop Server
+# Market GG Shop Service
 
-Market GG Shop 서버입니다.  
-
-이 서버는 
+해당 프로젝트는 Market GG 에 필요한 API 를 제공함으로써 Client 의 요청을 받아 그에 상응하는 서비스를 수행합니다.
 
 # Getting Started
 
 ```
 ./mvnw spring-boot:run
-
 ```
 
 # Project Architecture
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2d28fc4a-a496-4f39-8b02-75ec724b6ead/Untitled.png)
+![image](https://user-images.githubusercontent.com/71637466/183253657-9ad6b385-0976-4899-b73b-245ab0af6653.png)
+
 
 # Features
 
@@ -122,9 +120,7 @@ Market GG Shop 서버입니다.
 
 - 사용자에게 지급되는 GivenCoupon 등록, 삭제, 조회
 - 사용자가 사용하면 기록에 남는 UsedCoupon 생성, 삭제
-
 ### **Techinical Issue**
-
 - Spring Event → 회원가입 시 쿠폰 자동 지급
 - Spring Event → 베스트 후기 선정 시 쿠폰 자동 지급
 - Scheduler ****→ 매일 생일인 회원에게 쿠폰 자동 지급
@@ -206,8 +202,6 @@ Market GG Shop 서버입니다.
 
 ## Tech Stack
 
----
-
 ### Build Tools
 
 ![ApacheMaven](https://img.shields.io/badge/Maven-C71A36?style=flat&logo=ApacheMaven&logoColor=white)
@@ -215,19 +209,14 @@ Market GG Shop 서버입니다.
 ### Datebases
 
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=MySQL&logoColor=white)
-
 ![Elasticsearch](https://img.shields.io/badge/Elasticsearch-005571?style=flat&logo=Elasticsearch&logoColor=white)
 
 ### DevOps
 
 ![GitHubActions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat&logo=GitHubActions&logoColor=white)
-
 ![SonarQube](https://img.shields.io/badge/SonarQube-4E98CD?style=flat&logo=SonarQube&logoColor=white)
-
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=Docker&logoColor=white)
-
 ![Logstash](https://img.shields.io/badge/Logstash-005571?style=flat&logo=Logstash&logoColor=white)
-
 ![Kibana](https://img.shields.io/badge/Kibana-005571?style=flat&logo=Kibana&logoColor=white)
 
 ### Frameworks
@@ -242,18 +231,15 @@ Market GG Shop 서버입니다.
 
 ![Junit5](https://img.shields.io/badge/Junit5-25A162?style=flat&logo=Junit5&logoColor=white)
 
-### 브랜치 관리 전략
+### 형상 관리 전략
 
 ![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=Git&logoColor=white)
-
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=GitHub&logoColor=white)
-
 ![Sourcetree](https://img.shields.io/badge/Sourcetree-0052CC?style=flat&logo=Sourcetree&logoColor=white)
 
-- Git Flow 전략 채용
-    
-    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0c07b6a6-579e-48d1-843b-1a318a7d3deb/Untitled.png)
-    
+- Git Flow 를 사용하여 관리
+모든 브랜치는 Pull Request에 코드 리뷰 진행 후 merge 합니다.
+![image](https://user-images.githubusercontent.com/71637466/183255360-68cb4eef-cbc3-4005-9889-bf8bed192b43.png)
 - Main: 배포시 사용
 - Develop: 개발 단계가 끝난 부분에 대해서 Merge 내용 포함
 - Feature: 기능 개발 단계
@@ -261,20 +247,15 @@ Market GG Shop 서버입니다.
 
 ## ERD
 
----
-
-[https://www.erdcloud.com/d/r3hPLAoaz863LkeFj](https://www.erdcloud.com/d/r3hPLAoaz863LkeFj)
+![marketgg_shop-v2-7-2](https://user-images.githubusercontent.com/38161720/183255251-d9a37c48-9f08-430a-851e-ed7c2af5516e.png)
 
 ## Contributors
 
----
-
-<a href="[https://github.com/nhn-on7/marketgg-gateway/graphs/contributors](https://github.com/nhn-on7/marketgg-gateway/graphs/contributors)">
-<img src="[https://contrib.rocks/image?repo=nhn-on7/marketgg-gateway](https://contrib.rocks/image?repo=nhn-on7/marketgg-gateway)" />
+<a href="https://github.com/nhn-on7/marketgg-shop/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=nhn-on7/marketgg-shop" />
 </a>
 
-## License
 
----
+## License
 
 Market GG is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
