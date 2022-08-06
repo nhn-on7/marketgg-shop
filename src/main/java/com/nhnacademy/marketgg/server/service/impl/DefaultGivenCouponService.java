@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import static com.nhnacademy.marketgg.server.constant.CouponNames.BIRTHDAY;
 import static com.nhnacademy.marketgg.server.constant.CouponState.EXPIRED;
 import static com.nhnacademy.marketgg.server.constant.CouponState.USED;
 import static com.nhnacademy.marketgg.server.constant.CouponState.VALID;
@@ -21,7 +20,6 @@ import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.GivenCouponService;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
@@ -29,7 +27,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -95,21 +92,4 @@ public class DefaultGivenCouponService implements GivenCouponService {
         givenCouponRepository.save(givenCoupon);
     }
 
-    @Scheduled(cron = "@daily", zone = "Asia/Seoul")
-    public void scheduleBirthdayCoupon() {
-        log.info("스케줄러 시작 시간: {}", LocalDateTime.now());
-
-        Coupon birthdayCoupon = couponRepository.findCouponByName(BIRTHDAY.couponName())
-                                                .orElseThrow(CouponNotFoundException::new);
-
-        String todayDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd"));
-        List<Member> members = memberRepository.findBirthdayMember(todayDate);
-
-        for (Member member : members) {
-            log.info("오늘 생일인 회원: {}", member);
-            GivenCoupon givenCoupon = new GivenCoupon(birthdayCoupon, member);
-            givenCouponRepository.save(givenCoupon);
-        }
-        log.info("스케줄러 끝 시간: {}", LocalDateTime.now());
-    }
 }
