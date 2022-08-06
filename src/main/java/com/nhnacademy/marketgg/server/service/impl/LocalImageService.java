@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import com.nhnacademy.marketgg.server.dto.response.ImageResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.service.ImageService;
@@ -81,6 +82,12 @@ public class LocalImageService implements ImageService {
         }
 
         return images;
+    }
+
+    @Override
+    public ImageResponse uploadImage(MultipartFile image) {
+
+        return null;
     }
 
     private Path returnDir() {
