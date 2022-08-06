@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.constant;
 
-public enum CouponName {
+public enum CouponNames {
 
-    SIGNUP("회원가입 쿠폰"),
+    SIGNUP("신규 가입 쿠폰"),
     GVIP("GVIP 쿠폰"),
     VIP("VIP 쿠폰"),
     BESTREVIEW("베스트 후기 쿠폰"),
@@ -10,10 +10,12 @@ public enum CouponName {
 
     private final String couponName;
 
-    CouponName(String name) {
+    CouponNames(String name) {
         this.couponName = name;
     }
 
-    public String couponName() { return this.couponName; }
+    public String couponName() {
+        return this.couponName;
+    }
 
 }
