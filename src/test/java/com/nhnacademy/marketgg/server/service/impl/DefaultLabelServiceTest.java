@@ -83,7 +83,7 @@ class DefaultLabelServiceTest {
         Categorization cz = new Categorization(czr);
         Category category = new Category(cr, cz);
         Label label = new Label(lc);
-        Image image = new Image(asset, null);
+        Image image = Image.builder().build();
 
         List<ElasticProduct> list = List.of(new ElasticProduct(new Product(pr, asset, category), label, image));
         given(labelRepository.findById(anyLong())).willReturn(

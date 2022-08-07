@@ -65,7 +65,7 @@ class AdminProductControllerTest {
         productResponse =
             new ProductResponse(null, null, null, null, null, null, null, null, null, null,
                 null, null, null,
-                null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null);
     }
 
     @Test
