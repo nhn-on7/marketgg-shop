@@ -30,6 +30,9 @@ public class OrderCreateRequest {
     private Long totalAmount;
 
     // 결제 방식
-    private String paymentType;
+    private String orderType;
+
+    // 바로구매 vs 장바구니
+    private boolean isDirectBuy;
 
 }

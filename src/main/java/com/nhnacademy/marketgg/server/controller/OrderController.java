@@ -4,6 +4,7 @@ import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.OrderCreateRequest;
+import com.nhnacademy.marketgg.server.dto.response.OrderCreateResponse;
 import com.nhnacademy.marketgg.server.dto.response.OrderDetailResponse;
 import com.nhnacademy.marketgg.server.dto.response.OrderResponse;
 import com.nhnacademy.marketgg.server.service.OrderService;
@@ -40,15 +41,15 @@ public class OrderController {
 
     // 주문서 작성
     @PostMapping
-    public ResponseEntity<Void> createOrder(@RequestBody final OrderCreateRequest orderRequest,
-                                            final MemberInfo memberInfo) {
+    public ResponseEntity<OrderCreateResponse> createOrder(@RequestBody final OrderCreateRequest orderRequest,
+                                                           final MemberInfo memberInfo) {
 
-        orderService.createOrder(orderRequest, memberInfo.getId());
+        OrderCreateResponse response = orderService.createOrder(orderRequest, memberInfo.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(ORDER_PREFIX))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(response);
     }
 
     // 주문 목록 조회 - 관리자는 모든 회원, 회원은 본인 것
@@ -67,7 +68,7 @@ public class OrderController {
     public ResponseEntity<OrderDetailResponse> retrieveOrderDetail(@PathVariable final Long orderId,
                                                                    final MemberInfo memberInfo) {
 
-        OrderDetailResponse response = orderService.retrieveOrder(orderId, memberInfo);
+        OrderDetailResponse response = orderService.retrieveOrderDetail(orderId, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX))
@@ -75,7 +76,7 @@ public class OrderController {
                              .body(response);
     }
 
-    // 운송장 번호 생성된 후 주문서 수정, 배송파트 담당자가 수정하실 듯
+    // 운송장 번호 생성된 후 주문서 수정, 배송파트 담당자분이 처리한다고 하심
     @PatchMapping("/{orderId}")
     public ResponseEntity<Void> updateOrder() {
 
@@ -87,7 +88,8 @@ public class OrderController {
 
     // 주문 취소 -> 주문서 삭제
     @PutMapping("/{orderId}")
-    public ResponseEntity<Void> deleteOrder() {
+    public ResponseEntity<Void> deleteOrder(@PathVariable final Long orderId) {
+        orderService.deleteOrder(orderId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX))
