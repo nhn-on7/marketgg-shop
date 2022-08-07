@@ -1,16 +1,11 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import com.nhnacademy.marketgg.server.cloud.StorageService;
+import com.nhnacademy.marketgg.server.service.StorageService;
 import com.nhnacademy.marketgg.server.dto.response.ImageResponse;
-import com.nhnacademy.marketgg.server.entity.Asset;
-import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.service.ImageService;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.client.ml.inference.preprocessing.Multi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

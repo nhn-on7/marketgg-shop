@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.cloud;
+package com.nhnacademy.marketgg.server.dto.response.cloud;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
@@ -7,14 +7,12 @@ import lombok.ToString;
 
 @NoArgsConstructor
 @Getter
-@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Token {
+@ToString
+public class Access {
 
-    private String id;
+    private Token token;
 
-    private String expires;
-
-    private Tenant tenant;
+    private User user;
 
 }

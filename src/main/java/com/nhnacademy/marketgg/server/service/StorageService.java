@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.cloud;
+package com.nhnacademy.marketgg.server.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.response.ImageResponse;

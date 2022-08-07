@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.cloud;
+package com.nhnacademy.marketgg.server.dto.response.cloud;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

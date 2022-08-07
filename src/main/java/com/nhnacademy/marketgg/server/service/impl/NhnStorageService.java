@@ -1,11 +1,16 @@
-package com.nhnacademy.marketgg.server.cloud;
+package com.nhnacademy.marketgg.server.service.impl;
 
 import static org.springframework.http.HttpMethod.PUT;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.dto.request.cloud.Auth;
+import com.nhnacademy.marketgg.server.dto.request.cloud.PasswordCredentials;
+import com.nhnacademy.marketgg.server.dto.request.cloud.TokenRequest;
 import com.nhnacademy.marketgg.server.dto.response.ImageResponse;
+import com.nhnacademy.marketgg.server.dto.response.cloud.StorageResponse;
 import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
+import com.nhnacademy.marketgg.server.service.StorageService;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Arrays;

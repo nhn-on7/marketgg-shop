@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.cloud.StorageService;
+import com.nhnacademy.marketgg.server.service.StorageService;
 import com.nhnacademy.marketgg.server.dto.response.ImageResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
