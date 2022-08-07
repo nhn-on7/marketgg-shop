@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -32,12 +33,12 @@ public class GivenCoupon {
     private Pk pk;
 
     @MapsId(value = "couponId")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_no")
     private Coupon coupon;
 
     @MapsId(value = "memberNo")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_no")
     private Member member;
 

@@ -129,4 +129,7 @@ public class Member {
         this.deletedAt = memberWithdrawRequest.getDeletedAt();
     }
 
+    public void updateGrade(MemberGrade memberGrade) {
+        this.memberGrade = memberGrade;
+    }
 }
