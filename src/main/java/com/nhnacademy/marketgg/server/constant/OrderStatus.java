@@ -2,8 +2,10 @@ package com.nhnacademy.marketgg.server.constant;
 
 public enum OrderStatus {
 
-    WAITING("결제대기"),
-    COMPLETE("결제완료");
+    PAY_WAITING("결제대기"),
+    PAY_COMPLETE("결제완료"),
+    CANCEL_WAITING("취소/환불접수"),
+    CANCEL_COMPLETE("취소/환불완료");
 
     private final String status;
 
