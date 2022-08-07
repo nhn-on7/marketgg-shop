@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.config;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -12,16 +13,14 @@ import org.springframework.context.annotation.Configuration;
 public class BatchJobConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
-    private final Step updateMemberGradeStep;
-    private final Step giveCouponGVIPMemberStep;
-    private final Step giveCouponVIPMemberStep;
+    private final List<Step> stepList;
 
     @Bean
     public Job memberGradeJob() {
         return jobBuilderFactory.get("memberGradeJob")
-                                .start(updateMemberGradeStep)
-                                .next(giveCouponGVIPMemberStep)
-                                .next(giveCouponVIPMemberStep)
+                                .start(stepList.get(2))
+                                .next(stepList.get(0))
+                                .next(stepList.get(1))
                                 .build();
     }
 
