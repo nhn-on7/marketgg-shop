@@ -78,7 +78,7 @@ public class Order {
     public Order(Member member, OrderCreateRequest orderRequest) {
         this.member = member;
         this.totalAmount = orderRequest.getTotalAmount();
-        this.orderStatus = OrderStatus.WAITING.status();
+        this.orderStatus = OrderStatus.PAY_WAITING.status();
         this.usedPoint = orderRequest.getUsedPoint();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
