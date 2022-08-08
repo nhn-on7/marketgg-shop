@@ -14,6 +14,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.label.LabelCreateRequest;
@@ -23,7 +24,10 @@ import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
+import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
+import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticProductRepository;
+import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
@@ -37,12 +41,15 @@ import com.nhnacademy.marketgg.server.repository.label.LabelRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.productlabel.ProductLabelRepository;
 import com.nhnacademy.marketgg.server.service.ImageService;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,6 +73,8 @@ class DefaultProductServiceTest {
     DefaultProductService productService;
 
     @Mock
+    private SearchRepository searchRepository;
+    @Mock
     private ProductRepository productRepository;
     @Mock
     private AssetRepository assetRepository;
@@ -86,7 +95,6 @@ class DefaultProductServiceTest {
     private static ProductCreateRequest productRequest;
     private static ProductUpdateRequest productUpdateRequest;
     private static ProductResponse productResponse;
-    private static LabelCreateRequest labelCreateRequest;
     private static Asset asset;
     private static Category category;
     private static Label label;
@@ -94,13 +102,14 @@ class DefaultProductServiceTest {
     private static ElasticProduct elasticProduct;
     private static Image image;
     private static Product product;
+    private static SearchProductResponse searchProductResponse;
 
     @BeforeAll
     static void beforeAll() {
         productResponse =
-            new ProductResponse(null, null, null, null, null, null, null, null, null, null,
-                null, null, null,
-                null, null, null, null, null, null, null);
+                new ProductResponse(null, null, null, null, null, null, null, null, null, null,
+                                    null, null, null,
+                                    null, null, null, null, null, null, null);
 
         productRequest = new ProductCreateRequest();
         ReflectionTestUtils.setField(productRequest, "categoryCode", "001");
@@ -136,7 +145,7 @@ class DefaultProductServiceTest {
         category = new Category(categoryRequest, categorization);
         image = Image.builder().build();
 
-        labelCreateRequest = new LabelCreateRequest();
+        LabelCreateRequest labelCreateRequest = new LabelCreateRequest();
         ReflectionTestUtils.setField(labelCreateRequest, "name", "안녕");
 
         label = new Label(labelCreateRequest);
@@ -146,6 +155,7 @@ class DefaultProductServiceTest {
         product = new Product(productRequest, asset, category);
         ReflectionTestUtils.setField(product, "id", 1L);
 
+        searchProductResponse = new SearchProductResponse();
     }
 
     @Test
@@ -155,8 +165,8 @@ class DefaultProductServiceTest {
         String filePath = Objects.requireNonNull(url).getPath();
 
         MockMultipartFile file =
-            new MockMultipartFile("image", "test.png", "image/png",
-                new FileInputStream(filePath));
+                new MockMultipartFile("image", "test.png", "image/png",
+                                      new FileInputStream(filePath));
 
 
         given(categoryRepository.findById(any())).willReturn(Optional.ofNullable(category));
@@ -164,7 +174,7 @@ class DefaultProductServiceTest {
         given(productRepository.save(any(Product.class))).willReturn(product);
         given(labelRepository.findById(anyLong())).willReturn(Optional.ofNullable(label));
         given(imageRepository.findByAssetIdAndImageSequence(anyLong(), anyInt())).willReturn(Optional.ofNullable(
-            image));
+                image));
 
 
         productService.createProduct(productRequest, file);
@@ -185,8 +195,8 @@ class DefaultProductServiceTest {
         List<Image> images = List.of(image);
 
         MockMultipartFile file =
-            new MockMultipartFile("image", "test.png", "image/png",
-                new FileInputStream(filePath));
+                new MockMultipartFile("image", "test.png", "image/png",
+                                      new FileInputStream(filePath));
 
         given(imageService.parseImages(any(List.class), any(Asset.class))).willReturn(images);
         given(assetRepository.save(any(Asset.class))).willReturn(asset);
@@ -194,8 +204,8 @@ class DefaultProductServiceTest {
 
 
         assertThatThrownBy(
-            () -> productService.createProduct(productRequest, file)).hasMessageContaining(
-            "카테고리를 찾을 수 없습니다.");
+                () -> productService.createProduct(productRequest, file)).hasMessageContaining(
+                "카테고리를 찾을 수 없습니다.");
     }
 
     @Test
@@ -209,7 +219,7 @@ class DefaultProductServiceTest {
         given(productRepository.findAllProducts(PageRequest.of(0, 1))).willReturn(page);
 
         DefaultPageResult<ProductResponse> productResponses =
-            productService.retrieveProducts(PageRequest.of(0, 1));
+                productService.retrieveProducts(PageRequest.of(0, 1));
 
         assertThat(productResponses).isNotNull();
         // then(elasticProductRepository).should().findAll(any(PageRequest.class));
@@ -222,7 +232,7 @@ class DefaultProductServiceTest {
         given(productRepository.queryById(anyLong())).willReturn(productResponse);
 
         SingleResponse<ProductResponse> productResponse =
-            productService.retrieveProductDetails(anyLong());
+                productService.retrieveProductDetails(anyLong());
 
         assertThat(productResponse).isNotNull();
         verify(productRepository, atLeastOnce()).queryById(anyLong());
@@ -241,8 +251,8 @@ class DefaultProductServiceTest {
 
 
         MockMultipartFile file =
-            new MockMultipartFile("image", "test.png", "image/png",
-                new FileInputStream(filePath));
+                new MockMultipartFile("image", "test.png", "image/png",
+                                      new FileInputStream(filePath));
 
         ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest();
         ReflectionTestUtils.setField(productUpdateRequest, "categoryCode", "001");
@@ -267,16 +277,16 @@ class DefaultProductServiceTest {
         when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThatThrownBy(
-            () -> productService.updateProduct(productUpdateRequest, imageFile,
-                1L)).hasMessageContaining(
-            "상품을 찾을 수 없습니다.");
+                () -> productService.updateProduct(productUpdateRequest, imageFile,
+                                                   1L)).hasMessageContaining(
+                "상품을 찾을 수 없습니다.");
     }
 
     @Test
     @DisplayName("상품 삭제 성공 테스트")
     void testDeleteProductSuccess() {
         when(productRepository.findById(anyLong())).thenReturn(
-            Optional.of(new Product(productRequest, asset, category)));
+                Optional.of(new Product(productRequest, asset, category)));
         willDoNothing().given(elasticProductRepository).deleteById(anyLong());
 
         productService.deleteProduct(anyLong());
@@ -291,18 +301,51 @@ class DefaultProductServiceTest {
         when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> productService.deleteProduct(1L)).hasMessageContaining(
-            "상품을 찾을 수 없습니다.");
+                "상품을 찾을 수 없습니다.");
     }
 
     @Test
     @DisplayName("카테고리 코드로 상품 목록 조회 테스트")
-    void testSearchProductsByCategoryCode() {
+    void testFindProductsByCategoryCode() {
         given(elasticProductRepository.findAllByCategoryCode(any(PageRequest.class), anyString()))
-            .willReturn(new PageImpl<>(List.of(elasticProduct)));
+                .willReturn(new PageImpl<>(List.of(elasticProduct)));
 
         productService.findProductByCategory(PageRequest.of(0, 1), "101");
 
         then(elasticProductRepository).should().findAllByCategoryCode(any(PageRequest.class), anyString());
+    }
+
+    @Test
+    @DisplayName("전체 목록 내 상품 검색")
+    void testSearchProductList() throws ParseException, JsonProcessingException {
+        given(searchRepository.searchProductWithKeyword(any(SearchRequest.class), any())).willReturn(
+                List.of(searchProductResponse));
+
+        productService.searchProductList("hi", 0);
+
+        then(searchRepository).should(times(1)).searchProductWithKeyword(any(SearchRequest.class), any());
+    }
+
+    @Test
+    @DisplayName("카테고리 내 상품 목록 검색")
+    void testSearchProductListByCategory() throws ParseException, JsonProcessingException {
+        given(searchRepository.searchProductForCategory(anyString(), any(SearchRequest.class), any())).willReturn(
+                List.of(searchProductResponse));
+
+        productService.searchProductListByCategory("100","hi", 0);
+
+        then(searchRepository).should(times(1)).searchProductForCategory(anyString(), any(SearchRequest.class), any());
+    }
+
+    @Test
+    @DisplayName("카테고리 내 지정한 가격 옵션별 상품 목록 검색")
+    void testSearchProductListByPrice() throws ParseException, JsonProcessingException {
+        given(searchRepository.searchProductForCategory(anyString(), any(SearchRequest.class), anyString())).willReturn(
+                List.of(searchProductResponse));
+
+        productService.searchProductListByPrice("100", "desc", "hi", 0);
+
+        then(searchRepository).should(times(1)).searchProductForCategory(anyString(), any(SearchRequest.class), anyString());
     }
 
 }
