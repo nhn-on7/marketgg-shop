@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -35,29 +36,36 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class NhnStorageService implements StorageService {
 
+
     private final ImageRepository imageRepository;
-    private final String AUTH_URL = "https://api-identity.infrastructure.cloud.toast.com/v2.0";
-    private final String USER_NAME = "computerhermit96@gmail.com";
-    private final String PASSWORD = "123!";
-    private final String TENANT_ID = "8a2dd42738a0427180466a56561b5eef";
-    private final String STORAGE_URL =
-        "https://api-storage.cloud.toast.com/v1/AUTH_8a2dd42738a0427180466a56561b5eef";
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
+    private static final String HEADER_NAME = "X-Auth-Token";
     private PasswordCredentials passwordCredentials;
     private Auth auth;
     private TokenRequest tokenRequest;
     private StorageResponse storageResponse;
 
+    @Value("${gg.storage.auth-url}")
+    private String authUrl;
+    @Value("${gg.storage.user-name}")
+    private String userName;
+    @Value("${gg.storage.password}")
+    private String password;
+    @Value("${gg.storage.tenant-id}")
+    private String tenantId;
+    @Value("${gg.storage.storage-url}")
+    private String storageUrl;
+
     @Override
     public String requestToken() {
 
-        passwordCredentials = new PasswordCredentials(USER_NAME, PASSWORD);
-        auth = new Auth(TENANT_ID, passwordCredentials);
+        passwordCredentials = new PasswordCredentials(userName, password);
+        auth = new Auth(tenantId, passwordCredentials);
         tokenRequest = new TokenRequest(auth);
 
-        String identityUrl = this.AUTH_URL + "/tokens";
+        String identityUrl = this.authUrl + "/tokens";
 
         // 헤더 생성
         HttpHeaders headers = new HttpHeaders();
@@ -96,7 +104,7 @@ public class NhnStorageService implements StorageService {
     }
 
     @Override
-    public void uploadObject(String containerName, String objectName, final InputStream inputStream)
+    public void uploadObject(final String containerName, String objectName, final InputStream inputStream)
         throws JsonProcessingException {
         String url = this.getUrl(containerName, objectName);
         storageResponse = objectMapper.readValue(requestToken(), StorageResponse.class);
@@ -118,7 +126,7 @@ public class NhnStorageService implements StorageService {
     }
 
     @Override
-    public InputStream downloadObject(String containerName, String objectName)
+    public InputStream downloadObject(final String containerName, final String objectName)
         throws JsonProcessingException {
 
         String url = this.getUrl(containerName, objectName);
@@ -127,7 +135,7 @@ public class NhnStorageService implements StorageService {
         String tokenId = storageResponse.getAccess().getToken().getId();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-Auth-Token", tokenId);
+        headers.add(HEADER_NAME, tokenId);
         headers.setAccept(List.of(MediaType.APPLICATION_OCTET_STREAM));
 
         HttpEntity<String> requestHttpEntity = new HttpEntity<>(null, headers);
@@ -144,11 +152,11 @@ public class NhnStorageService implements StorageService {
     }
 
     private String getUrl(String containerName, String objectName) {
-        return this.STORAGE_URL + "/" + containerName + "/" + objectName;
+        return this.storageUrl + "/" + containerName + "/" + objectName;
     }
 
     private String getUrl(String containerName) {
-        return this.STORAGE_URL + "/" + containerName;
+        return this.storageUrl + "/" + containerName;
     }
 
 }

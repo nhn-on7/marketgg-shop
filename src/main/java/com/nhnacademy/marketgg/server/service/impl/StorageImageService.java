@@ -1,12 +1,12 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.service.StorageService;
 import com.nhnacademy.marketgg.server.dto.response.ImageResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.service.ImageService;
+import com.nhnacademy.marketgg.server.service.StorageService;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -33,7 +33,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Primary
 public class StorageImageService implements ImageService {
 
-    private static final String DIR = "https://api-storage.cloud.toast.com/v1/AUTH_8a2dd42738a0427180466a56561b5eef/on7_storage/";
+    private static final String DIR =
+        "https://api-storage.cloud.toast.com/v1/AUTH_8a2dd42738a0427180466a56561b5eef/on7_storage/";
     private final StorageService storageService;
     private final ImageRepository imageRepository;
     private final AssetRepository assetRepository;
@@ -108,4 +109,5 @@ public class StorageImageService implements ImageService {
 
         return UUID.randomUUID() + "_" + filename;
     }
+
 }

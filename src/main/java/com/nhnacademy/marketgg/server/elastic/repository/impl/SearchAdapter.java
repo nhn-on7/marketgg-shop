@@ -9,7 +9,7 @@ import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequestBodyForBo
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchBoardResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
-import com.nhnacademy.marketgg.server.utils.KoreanToEnglishTranslator;
+import com.nhnacademy.marketgg.server.util.KoreanToEnglishTranslator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;

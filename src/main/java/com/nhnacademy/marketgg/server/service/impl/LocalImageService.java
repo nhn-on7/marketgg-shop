@@ -15,18 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 멀티 파일 업로드를 위한 유틸 클래스입니다.
  *
+ * @author 조현진
  * @version 1.0.0
  */
 
-@Component
-// @Primary
+@Service
 public class LocalImageService implements ImageService {
 
     private static final String DIR = System.getProperty("user.home");
@@ -43,8 +43,7 @@ public class LocalImageService implements ImageService {
      */
 
     @Override
-    public List<Image> parseImages(List<MultipartFile> multipartFiles, Asset asset)
-        throws IOException {
+    public List<Image> parseImages(List<MultipartFile> multipartFiles, Asset asset) throws IOException {
 
         List<Image> images = new ArrayList<>();
 
@@ -67,14 +66,8 @@ public class LocalImageService implements ImageService {
                 if (contentType.contains("image/png")) {
                     originalFileExtension = ".png";
                 }
-                Image image = Image.builder()
-                                   .type(originalFileExtension)
-                                   .name(filename)
-                                   .imageAddress(dir)
-                                   .length(dest.length())
-                                   .asset(asset)
-                                   .classification("local")
-                                   .build();
+                Image image = Image.builder().type(originalFileExtension).name(filename).imageAddress(dir)
+                                   .length(dest.length()).asset(asset).classification("local").build();
                 image.setImageSequence(sequence);
                 images.add(image);
                 sequence++;
