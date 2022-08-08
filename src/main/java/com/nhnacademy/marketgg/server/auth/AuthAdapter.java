@@ -19,8 +19,7 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class AuthAdapter implements AuthRepository {
 
-    @Value("${gg.auth.origin}")
-    private String auth;
+    private String auth = "http://127.0.0.1:7070";
 
     private final RestTemplate restTemplate;
 

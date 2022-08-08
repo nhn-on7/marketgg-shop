@@ -2,7 +2,7 @@ package com.nhnacademy.marketgg.server.config;
 
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticRepositoryMarker;
 import com.nhnacademy.marketgg.server.repository.JpaRepositoryMarker;
-import com.nhnacademy.marketgg.server.utils.KoreanToEnglishTranslator;
+import com.nhnacademy.marketgg.server.util.KoreanToEnglishTranslator;
 import org.json.simple.parser.JSONParser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

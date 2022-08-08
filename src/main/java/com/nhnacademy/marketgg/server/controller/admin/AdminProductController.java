@@ -3,14 +3,14 @@ package com.nhnacademy.marketgg.server.controller.admin;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.service.ProductService;
 import java.io.IOException;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +48,7 @@ public class AdminProductController {
      * @throws IOException - IOException 을 던집니다.
      * @since 1.0.0
      */
-    @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> createProduct(@RequestPart final ProductCreateRequest productRequest,
                                               @RequestPart final MultipartFile image) throws IOException {
 
@@ -68,7 +68,7 @@ public class AdminProductController {
      */
     @GetMapping
     public ResponseEntity<CommonResponse> retrieveProducts(DefaultPageRequest pageRequest) {
-        SingleResponse<Page> productList = this.productService.retrieveProducts(pageRequest.getPageable());
+        DefaultPageResult<ProductResponse> productList = this.productService.retrieveProducts(pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT))

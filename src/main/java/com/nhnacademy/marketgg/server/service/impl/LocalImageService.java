@@ -1,7 +1,9 @@
-package com.nhnacademy.marketgg.server.utils;
+package com.nhnacademy.marketgg.server.service.impl;
 
+import com.nhnacademy.marketgg.server.dto.response.ImageResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
+import com.nhnacademy.marketgg.server.service.ImageService;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,21 +15,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 멀티 파일 업로드를 위한 유틸 클래스입니다.
  *
+ * @author 조현진
  * @version 1.0.0
  */
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Component
-public class ImageFileHandler {
+@Service
+public class LocalImageService implements ImageService {
 
     private static final String DIR = System.getProperty("user.home");
 
@@ -41,8 +41,9 @@ public class ImageFileHandler {
      * @return - 사진 리스트를 반환합니다.
      * @throws IOException - IOException을 발생시킵니다.
      */
-    public static List<Image> parseImages(List<MultipartFile> multipartFiles, Asset asset)
-        throws IOException {
+
+    @Override
+    public List<Image> parseImages(List<MultipartFile> multipartFiles, Asset asset) throws IOException {
 
         List<Image> images = new ArrayList<>();
 
@@ -56,7 +57,17 @@ public class ImageFileHandler {
                 File dest = new File(dir, Objects.requireNonNull(filename));
                 multipartFile.transferTo(dest);
 
-                Image image = new Image(asset, String.valueOf(dest));
+                String originalFileExtension = "";
+                String contentType = multipartFile.getContentType();
+
+                if (contentType.contains("image/jpeg")) {
+                    originalFileExtension = ".jpg";
+                }
+                if (contentType.contains("image/png")) {
+                    originalFileExtension = ".png";
+                }
+                Image image = Image.builder().type(originalFileExtension).name(filename).imageAddress(dir)
+                                   .length(dest.length()).asset(asset).classification("local").build();
                 image.setImageSequence(sequence);
                 images.add(image);
                 sequence++;
@@ -66,13 +77,19 @@ public class ImageFileHandler {
         return images;
     }
 
-    private static Path returnDir() {
+    @Override
+    public ImageResponse uploadImage(MultipartFile image) {
+
+        return null;
+    }
+
+    private Path returnDir() {
         String format = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
 
         return Paths.get(DIR, format);
     }
 
-    private static String uuidFilename(String filename) {
+    private String uuidFilename(String filename) {
         return UUID.randomUUID() + "_" + filename;
     }
 

@@ -18,7 +18,7 @@ import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.review.ReviewRepository;
 import com.nhnacademy.marketgg.server.service.ReviewService;
-import com.nhnacademy.marketgg.server.utils.ImageFileHandler;
+import com.nhnacademy.marketgg.server.service.ImageService;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +43,7 @@ public class DefaultReviewService implements ReviewService {
     private final AssetRepository assetRepository;
     private final ImageRepository imageRepository;
     private final ApplicationEventPublisher publisher;
+    private final ImageService imageService;
 
     @Transactional
     @Override
@@ -53,7 +54,7 @@ public class DefaultReviewService implements ReviewService {
 
         Asset asset = assetRepository.save(Asset.create());
 
-        List<Image> parseImages = ImageFileHandler.parseImages(images, asset);
+        List<Image> parseImages = imageService.parseImages(images, asset);
 
         imageRepository.saveAll(parseImages);
 

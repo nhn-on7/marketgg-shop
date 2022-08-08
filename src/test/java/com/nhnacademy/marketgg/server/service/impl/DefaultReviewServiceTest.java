@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.will;
 import static org.mockito.BDDMockito.willDoNothing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +17,7 @@ import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Cart;
+import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Review;
 import com.nhnacademy.marketgg.server.entity.event.SavePointEvent;
@@ -23,6 +25,7 @@ import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.review.ReviewRepository;
+import com.nhnacademy.marketgg.server.service.ImageService;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -68,6 +71,9 @@ class DefaultReviewServiceTest {
 
     @Mock
     ApplicationEventPublisher publisher;
+
+    @Mock
+    ImageService imageService;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -124,6 +130,7 @@ class DefaultReviewServiceTest {
         given(memberRepository.findByUuid(anyString())).willReturn(Optional.ofNullable(member));
         given(reviewRepository.save(any(Review.class))).willReturn(review);
         given(imageRepository.saveAll(any(List.class))).willReturn(images);
+        given(assetRepository.save(any(Asset.class))).willReturn(asset);
         willDoNothing().given(publisher).publishEvent(any(SavePointEvent.class));
 
         this.reviewService.createReview(reviewRequest, images, "admin");
