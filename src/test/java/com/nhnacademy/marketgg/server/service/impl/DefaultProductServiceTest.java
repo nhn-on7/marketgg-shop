@@ -300,7 +300,7 @@ class DefaultProductServiceTest {
         given(elasticProductRepository.findAllByCategoryCode(any(PageRequest.class), anyString()))
             .willReturn(new PageImpl<>(List.of(elasticProduct)));
 
-        productService.searchProductByCategory(PageRequest.of(0, 1), "101");
+        productService.findProductByCategory(PageRequest.of(0, 1), "101");
 
         then(elasticProductRepository).should().findAllByCategoryCode(any(PageRequest.class), anyString());
     }
