@@ -71,6 +71,13 @@ public class DefaultPointService implements PointService {
         pointRepository.save(pointHistory);
     }
 
+    /**
+     * 리뷰 포인트와 추천인 포인트를 적립해주는 EventListener 입니다.
+     *
+     * @author 조현진
+     * @author 민아영
+     * @param point - 회원에게 지급할 포인트 입니다.
+     */
     @Async
     @TransactionalEventListener
     public void savePointByEvent(SavePointEvent point) {

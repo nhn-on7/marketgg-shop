@@ -27,6 +27,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+/**
+ * 생일 쿠폰 발급과 매월 회원 등급 관리에 관한 Scheduler 를 설정한 클래스입니다.
+ *
+ * @author 민아영
+ * @version 1.0.0
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -39,6 +45,12 @@ public class CouponIssuanceScheduler {
     private final MemberRepository memberRepository;
     private final GivenCouponRepository givenCouponRepository;
 
+    /**
+     * 매일 자정에 생일인 회원을 조회하여 생일 쿠픈을 지급하는 메소드입니다.
+     *
+     * @author 민아영
+     * @since 1.0.0
+     */
     @Async
     @Scheduled(cron = "@daily", zone = "Asia/Seoul")
     public void scheduleBirthdayCoupon() {
@@ -58,6 +70,12 @@ public class CouponIssuanceScheduler {
         log.info("스케줄러 끝 시간: {}", LocalDateTime.now());
     }
 
+    /**
+     * 매월 1일 자정에 회원 등급을 업데이트하고 등급에 따른 쿠폰을 지급해주는 Batch Job 을 실행하는 Scheduler 입니다.
+     *
+     * @author 민아영
+     * @since 1.0.0
+     */
     @Async
     @Scheduled(cron = "@monthly", zone = "Asia/Seoul")
     public void scheduleMemberGradeCoupon() {

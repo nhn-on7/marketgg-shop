@@ -31,6 +31,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+/**
+ * 지급 쿠폰 로직을 처리하는 구현체입니다.
+ * <p>
+ * {@link com.nhnacademy.marketgg.server.service.GivenCouponService}
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -83,6 +88,13 @@ public class DefaultGivenCouponService implements GivenCouponService {
         return new GivenCouponResponse(givenCoupons, state.state(), expirationPeriod);
     }
 
+    /**
+     * 회원가입을 하면 지급 쿠폰을 자동 생성해주는 EventListener 입니다.
+     *
+     * @param coupon - 회원에게 지급할 쿠폰의 정보입니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
     @Async
     @TransactionalEventListener
     public void createGivenCoupon(SignedUpCouponEvent coupon) {

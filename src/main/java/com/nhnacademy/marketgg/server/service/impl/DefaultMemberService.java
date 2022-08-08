@@ -84,8 +84,10 @@ public class DefaultMemberService implements MemberService {
     /**
      * 회원가입시 회원정보를 DB 에 추가하는 메소드입니다.
      *
+     * @author 김훈민
+     * @author 민아영
      * @param signUpRequest - 회원가입시 입력한 정보를 담고있는 객체입니다.
-     * @return ShopMemberSignUpResponse - 회원가입을 하는 회원과 추천을 받게되는 회원의 uuid 를 담은 객체 입니다.
+     * @since 1.0.0
      */
     @Transactional
     @Override
@@ -110,6 +112,7 @@ public class DefaultMemberService implements MemberService {
     /**
      * 추천인 여부를 체크하는 메소드 입니다.
      *
+     * @author 민아영
      * @param shopMemberSignUpRequest - 회원가입시 입력한 정보를 담고있는 객체입니다.
      * @return 추천인의 uuid 를 담고있는 메소드를 반환합니다.
      */
