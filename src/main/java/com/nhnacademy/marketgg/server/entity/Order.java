@@ -76,10 +76,10 @@ public class Order {
      * @param member       - 주문을 한 회원 객체
      * @param orderRequest - 주문 요청 객체
      */
-    public Order(Member member, OrderCreateRequest orderRequest) {
+    public Order(final Member member, final OrderCreateRequest orderRequest) {
         this.member = member;
         this.totalAmount = orderRequest.getTotalAmount();
-        this.orderStatus = OrderStatus.PAY_WAITING.status();
+        this.orderStatus = OrderStatus.PAY_WAITING.getStatus();
         this.usedPoint = orderRequest.getUsedPoint();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();

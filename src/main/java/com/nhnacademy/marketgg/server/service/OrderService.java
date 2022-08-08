@@ -50,6 +50,6 @@ public interface OrderService {
      * @param orderId - 삭제할 주문의 식별번호입니다.
      * @since 1.0.0
      */
-    void deleteOrder(Long orderId);
+    void deleteOrder(final Long orderId);
 
 }

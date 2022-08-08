@@ -32,7 +32,7 @@ public class DefaultOrderService implements OrderService {
     private final PointHistoryRepository pointRepository;
     private final UsedCouponRepository usedCouponRepository;
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public OrderCreateResponse createOrder(final OrderCreateRequest orderRequest, final Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
@@ -54,12 +54,13 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public OrderDetailResponse retrieveOrderDetail(Long orderId, MemberInfo memberInfo) {
+    public OrderDetailResponse retrieveOrderDetail(final Long orderId, final MemberInfo memberInfo) {
         return orderRepository.findOrderDetail(orderId, memberInfo.getId(), memberInfo.isUser());
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public void deleteOrder(Long orderId) {
+    public void deleteOrder(final Long orderId) {
         orderRepository.deleteById(orderId);
     }
 }

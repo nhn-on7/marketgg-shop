@@ -17,7 +17,7 @@ public interface OrderRepositoryCustom {
      * @return 일반 회원이라면 본인의 주문 목록, 관리자라면 전체 주문 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    List<OrderResponse> findOrderList(Long memberId, boolean isUser);
+    List<OrderResponse> findOrderList(final Long memberId, boolean isUser);
 
     /**
      * 주문 상세를 조회하는 메소드입니다.
@@ -28,6 +28,6 @@ public interface OrderRepositoryCustom {
      * @return 관리자라면 회원에 상관없이, 회원이라면 본인의 주문 상세를 반환합니다.
      * @since 1.0.0
      */
-    OrderDetailResponse findOrderDetail(Long orderId, Long memberId, boolean isUser);
+    OrderDetailResponse findOrderDetail(final Long orderId, final Long memberId, final boolean isUser);
 
 }

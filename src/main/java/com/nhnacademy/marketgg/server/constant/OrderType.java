@@ -1,5 +1,10 @@
 package com.nhnacademy.marketgg.server.constant;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Getter
 public enum OrderType {
 
     CARD("신용카드"),
@@ -8,13 +13,5 @@ public enum OrderType {
     PHONE("휴대폰");
 
     private final String type;
-
-    OrderType(String type) {
-        this.type = type;
-    }
-
-    public String type() {
-        return this.type;
-    }
 
 }

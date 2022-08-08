@@ -3,6 +3,8 @@ package com.nhnacademy.marketgg.server.dto.request.order;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 /**
@@ -16,23 +18,31 @@ import java.util.Map;
 @Getter
 public class OrderCreateRequest {
 
+    @NotNull
     private Long memberId;
 
+    @NotNull
     private Long couponId;
 
+    @NotNull
     private Long deliveryAddressId;
 
     // 상품번호, 수량
+    @NotNull
     private Map<Long, Long> productMap;
 
+    @NotNull
     private Integer usedPoint;
 
+    @NotNull
     private Long totalAmount;
 
     // 결제 방식
+    @NotBlank
     private String orderType;
 
     // 바로구매 vs 장바구니
+    @NotNull
     private boolean isDirectBuy;
 
 }
