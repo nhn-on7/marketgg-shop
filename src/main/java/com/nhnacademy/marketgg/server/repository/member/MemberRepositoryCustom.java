@@ -9,8 +9,8 @@ import org.springframework.data.repository.NoRepositoryBean;
 @NoRepositoryBean
 public interface MemberRepositoryCustom {
 
-    Optional<MemberInfo> findMemberInfoByUuid(String uuid);
+    Optional<MemberInfo> findMemberInfoByUuid(final String uuid);
 
-    List<Member> findBirthdayMember(String birthday);
+    List<Member> findAllMembersByBirthday(final String birthday);
 
 }

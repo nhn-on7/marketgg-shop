@@ -1,7 +1,7 @@
-package com.nhnacademy.marketgg.server.schedule;
+package com.nhnacademy.marketgg.server.scheduler;
 
 
-import static com.nhnacademy.marketgg.server.constant.CouponNames.BIRTHDAY;
+import static com.nhnacademy.marketgg.server.constant.CouponName.BIRTHDAY;
 
 import com.nhnacademy.marketgg.server.config.BatchJobConfig;
 import com.nhnacademy.marketgg.server.entity.Coupon;
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class Scheduler {
+public class CouponIssuanceScheduler {
 
     private final JobLauncher jobLauncher;
     private final BatchJobConfig jobConfig;
@@ -48,7 +48,7 @@ public class Scheduler {
                                                 .orElseThrow(CouponNotFoundException::new);
 
         String todayDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd"));
-        List<Member> members = memberRepository.findBirthdayMember(todayDate);
+        List<Member> members = memberRepository.findAllMembersByBirthday(todayDate);
 
         for (Member member : members) {
             log.info("오늘 생일인 회원: {}", member);
@@ -59,7 +59,7 @@ public class Scheduler {
     }
 
     @Async
-    @Scheduled(cron = "@monthly", zone = "Asia/Seoul")
+    @Scheduled(cron = "30 59 15 * * *", zone = "Asia/Seoul")
     public void scheduleMemberGradeCoupon() {
         log.info("등급 쿠폰 스케줄러 시작 시간: {}", LocalDateTime.now());
 

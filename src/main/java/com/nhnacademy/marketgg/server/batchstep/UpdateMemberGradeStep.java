@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.step;
+package com.nhnacademy.marketgg.server.batchstep;
 
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
@@ -28,13 +28,13 @@ public class UpdateMemberGradeStep {
     private final OrderRepository orderRepository;
 
     private static final int CHUNK_SIZE = 5;
-    private static final Long GVIP = 1L;
-    private static final Long VIP = 2L;
-    private static final Long MEMBER = 3L;
+    private static final long GVIP = 1L;
+    private static final long VIP = 2L;
+    private static final long MEMBER = 3L;
 
     @Bean
     public Step memberGradeUpdateStep() {
-        return stepBuilderFactory.get("updateMemberGradeStep")
+        return stepBuilderFactory.get("memberGradeUpdateStep")
                                  .<Member, Member>chunk(CHUNK_SIZE)
                                  .reader(allMemberReader())
                                  .processor(updateGradeProcessor())
@@ -58,12 +58,12 @@ public class UpdateMemberGradeStep {
     public ItemProcessor<Member, Member> updateGradeProcessor() {
 
         return member -> {
-            Long memberGrade;
-            Long account = totalAccountForMonth(member);
+            long memberGrade;
+            long account = totalAccountForMonth(member);
 
-            if (account < 300000L) {
+            if (account < 300_000L) {
                 memberGrade = MEMBER;
-            } else if (account < 500000L) {
+            } else if (account < 500_000L) {
                 memberGrade = VIP;
             } else {
                 memberGrade = GVIP;
@@ -84,11 +84,8 @@ public class UpdateMemberGradeStep {
 
     private Long totalAccountForMonth(Member member) {
         List<Order> orderByMonth = orderRepository.findOrderByMonth(member);
-        Long totalAmount = 0L;
-        for (Order order : orderByMonth) {
-            totalAmount += order.getTotalAmount();
-        }
-        return totalAmount;
+
+        return orderByMonth.stream().mapToLong(Order::getTotalAmount).sum();
     }
 
 }

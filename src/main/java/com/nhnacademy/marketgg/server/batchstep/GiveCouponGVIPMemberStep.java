@@ -1,6 +1,6 @@
-package com.nhnacademy.marketgg.server.step;
+package com.nhnacademy.marketgg.server.batchstep;
 
-import static com.nhnacademy.marketgg.server.constant.CouponNames.VIP;
+import static com.nhnacademy.marketgg.server.constant.CouponName.GVIP;
 
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-public class GiveCouponVIPMemberStep {
+public class GiveCouponGVIPMemberStep {
 
     private final EntityManagerFactory entityManagerFactory;
     private final StepBuilderFactory stepBuilderFactory;
@@ -30,35 +30,36 @@ public class GiveCouponVIPMemberStep {
     private static final int CHUNK_SIZE = 5;
 
     @Bean
-    public Step vipGivenCouponMemberStep() {
-        return stepBuilderFactory.get("giveCouponVIPMemberStep")
+    public Step gVipGivenCouponMemberStep() {
+        return stepBuilderFactory.get("gVipGivenCouponMemberStep")
                                  .<Member, GivenCoupon>chunk(CHUNK_SIZE)
-                                 .reader(vipMemberReader())
-                                 .processor(vipGivenCouponProcessor())
-                                 .writer(vipMemberWriter())
+                                 .reader(gVIPMemberReader())
+                                 .processor(gVipGivenCouponProcessor())
+                                 .writer(gVIPMemberWriter())
                                  .allowStartIfComplete(true)
                                  .build();
     }
 
     @Bean
-    public JpaPagingItemReader<Member> vipMemberReader() {
+    public JpaPagingItemReader<Member> gVIPMemberReader() {
         return new JpaPagingItemReaderBuilder<Member>()
-            .queryString("SELECT m FROM Member m WHERE m.memberGrade = 2")
+            .queryString("SELECT m FROM Member m WHERE m.memberGrade = 1")
             .pageSize(CHUNK_SIZE)
             .entityManagerFactory(entityManagerFactory)
-            .name("vipMemberReader")
+            .name("gVIPMemberReader")
             .build();
     }
 
     @Bean
-    public ItemProcessor<Member, GivenCoupon> vipGivenCouponProcessor() {
-        Coupon vipCoupon = couponRepository.findCouponByName(VIP.couponName())
-                                           .orElseThrow(CouponNotFoundException::new);
-        return member -> new GivenCoupon(vipCoupon, member);
+    public ItemProcessor<Member, GivenCoupon> gVipGivenCouponProcessor() {
+        Coupon gVipCoupon = couponRepository.findCouponByName(GVIP.couponName())
+                                            .orElseThrow(CouponNotFoundException::new);
+        return member -> new GivenCoupon(gVipCoupon, member);
     }
 
+
     @Bean
-    public JpaItemWriter<GivenCoupon> vipMemberWriter() {
+    public JpaItemWriter<GivenCoupon> gVIPMemberWriter() {
         JpaItemWriter<GivenCoupon> writer = new JpaItemWriter<>();
         writer.setEntityManagerFactory(entityManagerFactory);
         return writer;

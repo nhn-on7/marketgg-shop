@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.event;
 
-import static com.nhnacademy.marketgg.server.constant.CouponNames.SIGNUP;
+import static com.nhnacademy.marketgg.server.constant.CouponName.SIGNUP;
 
 import com.nhnacademy.marketgg.server.entity.Member;
 import lombok.AllArgsConstructor;

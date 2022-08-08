@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 쿠폰 관련 Rest Controller 입니다.
+ * 관리자가 쿠폰을 등록, 수정, 조회, 삭제 요청하는 Rest Controller 입니다.
  *
  * @since 1.0.0
  */

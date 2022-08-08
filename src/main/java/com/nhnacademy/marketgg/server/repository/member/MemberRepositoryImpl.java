@@ -18,7 +18,7 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
     }
 
     @Override
-    public Optional<MemberInfo> findMemberInfoByUuid(String uuid) {
+    public Optional<MemberInfo> findMemberInfoByUuid(final String uuid) {
         QMember member = QMember.member;
 
         MemberInfo memberInfo = from(member)
@@ -32,7 +32,7 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
     }
 
     @Override
-    public List<Member> findBirthdayMember(String birthday) {
+    public List<Member> findAllMembersByBirthday(final String birthday) {
         QMember member = QMember.member;
 
         StringTemplate dateFormat
