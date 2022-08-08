@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.nhnacademy.marketgg.server.dto.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.OrderCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.OrderCreateResponse;
 import com.nhnacademy.marketgg.server.dto.response.OrderDetailResponse;
 import com.nhnacademy.marketgg.server.dto.response.OrderResponse;
@@ -15,11 +15,10 @@ import com.nhnacademy.marketgg.server.repository.orderproduct.OrderProductReposi
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.OrderService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +42,7 @@ public class DefaultOrderService implements OrderService {
 
 
         return new OrderCreateResponse(orderRequest.getTotalAmount(), orderRequest.getOrderType(),
-                                       orderRequest.isDirectBuy());
+            orderRequest.isDirectBuy());
     }
 
     // 주문 목록 조회 - 관리자(전체), 회원(본인)
