@@ -1,5 +1,10 @@
 package com.nhnacademy.marketgg.server.constant;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Getter
 public enum OrderStatus {
 
     PAY_WAITING("결제대기"),
@@ -8,13 +13,5 @@ public enum OrderStatus {
     CANCEL_COMPLETE("취소/환불완료");
 
     private final String status;
-
-    OrderStatus(String status) {
-        this.status = status;
-    }
-
-    public String status() {
-        return this.status;
-    }
 
 }

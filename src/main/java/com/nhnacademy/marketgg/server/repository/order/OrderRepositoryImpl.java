@@ -20,14 +20,14 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
     QOrder order = QOrder.order;
 
     @Override
-    public List<OrderResponse> findOrderList(Long memberId, boolean isUser) {
+    public List<OrderResponse> findOrderList(final Long memberId, final boolean isUser) {
         return from(order).select(selectOrderResponse())
                           .where(eqMemberId(memberId, isUser))
                           .fetch();
     }
 
     @Override
-    public OrderDetailResponse findOrderDetail(Long orderId, Long memberId, boolean isUser) {
+    public OrderDetailResponse findOrderDetail(final Long orderId, final Long memberId, final boolean isUser) {
         return from(order).select(selectOrderDetailResponse())
                           .where(order.id.eq(orderId))
                           .where(eqMemberId(memberId, isUser))
@@ -54,7 +54,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
                                        order.createdAt);
     }
 
-    private BooleanExpression eqMemberId(Long memberId, boolean isUser) {
+    private BooleanExpression eqMemberId(final Long memberId, final boolean isUser) {
         if (isUser) {
             return order.member.id.eq(memberId);
         }
