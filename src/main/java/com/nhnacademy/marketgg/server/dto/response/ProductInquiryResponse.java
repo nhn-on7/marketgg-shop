@@ -1,14 +1,12 @@
 package com.nhnacademy.marketgg.server.dto.response;
 
 import com.nhnacademy.marketgg.server.entity.Member;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
-
 /**
  * 상품 문의 응답 DTO 입니다.
- *
  */
 @RequiredArgsConstructor
 @Getter

@@ -1,9 +1,8 @@
 package com.nhnacademy.marketgg.server.dto.response;
 
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Getter

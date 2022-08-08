@@ -15,8 +15,8 @@ import lombok.Getter;
 public class SearchRequestBody<T> {
 
     private static final List<String> DEFAULT_PRODUCT_FIELD =
-            List.of("productName", "productName.forSyno", "content", "content.forSyno",
-                    "description", "description.forSyno");
+        List.of("productName", "productName.forSyno", "content", "content.forSyno",
+            "description", "description.forSyno");
 
     /**
      * 검색 결과 목록의 정렬 기준을 지정합니다.

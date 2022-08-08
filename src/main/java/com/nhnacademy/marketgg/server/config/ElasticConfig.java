@@ -12,13 +12,13 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaRepositories(excludeFilters = @ComponentScan.Filter(
-        type = FilterType.ASSIGNABLE_TYPE,
-        classes = { ElasticRepositoryMarker.class }),
-                       basePackageClasses = { JpaRepositoryMarker.class })
+    type = FilterType.ASSIGNABLE_TYPE,
+    classes = {ElasticRepositoryMarker.class}),
+    basePackageClasses = {JpaRepositoryMarker.class})
 @EnableElasticsearchRepositories(excludeFilters = @ComponentScan.Filter(
-        type = FilterType.ASSIGNABLE_TYPE,
-        classes = { JpaRepositoryMarker.class }),
-                                 basePackageClasses = { ElasticRepositoryMarker.class })
+    type = FilterType.ASSIGNABLE_TYPE,
+    classes = {JpaRepositoryMarker.class}),
+    basePackageClasses = {ElasticRepositoryMarker.class})
 @Configuration
 public class ElasticConfig {
 

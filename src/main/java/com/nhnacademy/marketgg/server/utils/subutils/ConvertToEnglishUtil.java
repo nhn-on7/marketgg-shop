@@ -27,24 +27,24 @@ public class ConvertToEnglishUtil {
      * @since 1.0.0
      */
     public ConvertToEnglishUtil() {
-        this.arrChoSungEng = new String[] { "r", "R", "s", "e", "E",
-                "f", "a", "q", "Q", "t", "T", "d", "w",
-                "W", "c", "z", "x", "v", "g" };
+        this.arrChoSungEng = new String[]{"r", "R", "s", "e", "E",
+            "f", "a", "q", "Q", "t", "T", "d", "w",
+            "W", "c", "z", "x", "v", "g"};
 
-        this.arrJungSungEng = new String[] { "k", "o", "i", "O",
-                "j", "p", "u", "P", "h", "hk", "ho", "hl",
-                "y", "n", "nj", "np", "nl", "b", "m", "ml",
-                "l" };
+        this.arrJungSungEng = new String[]{"k", "o", "i", "O",
+            "j", "p", "u", "P", "h", "hk", "ho", "hl",
+            "y", "n", "nj", "np", "nl", "b", "m", "ml",
+            "l"};
 
-        this.arrJongSungEng = new String[] { "", "r", "R", "rt",
-                "s", "sw", "sg", "e", "f", "fr", "fa", "fq",
-                "ft", "fx", "fv", "fg", "a", "q", "qt", "t",
-                "T", "d", "w", "c", "z", "x", "v", "g" };
+        this.arrJongSungEng = new String[]{"", "r", "R", "rt",
+            "s", "sw", "sg", "e", "f", "fr", "fa", "fq",
+            "ft", "fx", "fv", "fg", "a", "q", "qt", "t",
+            "T", "d", "w", "c", "z", "x", "v", "g"};
 
-        this.arrSingleJaumEng = new String[] { "r", "R", "rt",
-                "s", "sw", "sg", "e", "E", "f", "fr", "fa", "fq",
-                "ft", "fx", "fv", "fg", "a", "q", "Q", "qt", "t",
-                "T", "d", "w", "W", "c", "z", "x", "v", "g" };
+        this.arrSingleJaumEng = new String[]{"r", "R", "rt",
+            "s", "sw", "sg", "e", "E", "f", "fr", "fa", "fq",
+            "ft", "fx", "fv", "fg", "a", "q", "Q", "qt", "t",
+            "T", "d", "w", "W", "c", "z", "x", "v", "g"};
     }
 
     /**

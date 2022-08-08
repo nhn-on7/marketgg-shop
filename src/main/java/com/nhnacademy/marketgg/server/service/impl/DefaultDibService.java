@@ -11,11 +11,10 @@ import com.nhnacademy.marketgg.server.repository.dib.DibRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.service.DibService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +32,7 @@ public class DefaultDibService implements DibService {
         Member member = memberRepository.findById(memberId)
                                         .orElseThrow(MemberNotFoundException::new);
         Product product = productRepository.findById(productId)
-                .orElseThrow(ProductNotFoundException::new);
+                                           .orElseThrow(ProductNotFoundException::new);
 
         Dib.Pk pk = new Dib.Pk(memberId, productId);
 
@@ -52,7 +51,7 @@ public class DefaultDibService implements DibService {
     @Override
     public void deleteDib(final Long memberId, final Long productId) {
         Dib dib = dibRepository.findById(new Dib.Pk(memberId, productId))
-                .orElseThrow(DibNotFoundException::new);
+                               .orElseThrow(DibNotFoundException::new);
 
         dibRepository.delete(dib);
     }

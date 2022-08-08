@@ -23,13 +23,12 @@ import com.nhnacademy.marketgg.server.repository.customerservicecomment.Customer
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.CustomerServicePostService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -95,7 +94,7 @@ public class DefaultPostService implements CustomerServicePostService {
 
     @Override
     public List<SearchBoardResponse> searchForCategory(final String categoryCode, final SearchRequest searchRequest)
-            throws ParseException, JsonProcessingException {
+        throws ParseException, JsonProcessingException {
 
         return searchRepository.searchBoardWithCategoryCode(categoryCode, searchRequest, "categoryCode");
     }
@@ -103,7 +102,7 @@ public class DefaultPostService implements CustomerServicePostService {
     @Override
     public List<SearchBoardResponse> searchForOption(final String categoryCode, final SearchRequest searchRequest,
                                                      final String option, final String optionType)
-            throws JsonProcessingException, ParseException {
+        throws JsonProcessingException, ParseException {
 
         return searchRepository.searchBoardWithOption(categoryCode, option, searchRequest, optionType);
     }
@@ -137,7 +136,7 @@ public class DefaultPostService implements CustomerServicePostService {
     @Override
     public void deletePost(final Long boardNo) {
         CustomerServicePost post = postRepository.findById(boardNo)
-                                                       .orElseThrow(CustomerServicePostNotFoundException::new);
+                                                 .orElseThrow(CustomerServicePostNotFoundException::new);
         List<Long> commentIds = commentRepository.findCommentIdsByInquiryId(boardNo);
 
         commentRepository.deleteAllById(commentIds);

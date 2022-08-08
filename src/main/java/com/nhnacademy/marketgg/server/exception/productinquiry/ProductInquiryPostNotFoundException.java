@@ -20,15 +20,15 @@ public class ProductInquiryPostNotFoundException extends NotFoundException {
         super(ERROR);
     }
 
-    /** 
+    /**
      * 상품 문의 작성한 회원의 정보를 찾을 수 없을 때 예외처리입니다.
-     * 
+     *
      * @version 1.0.0
      */
     public static class MemberWriteInquiryNotFoundException extends IllegalArgumentException {
-        
+
         private static final String ERROR = "상품 문의 작성한 회원의 정보를 찾을 수 없습니다.";
-        
+
         public MemberWriteInquiryNotFoundException() {
             super(ERROR);
         }
