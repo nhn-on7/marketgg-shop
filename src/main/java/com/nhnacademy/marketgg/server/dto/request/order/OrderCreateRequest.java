@@ -33,14 +33,14 @@ public class OrderCreateRequest {
     @NotNull
     private Long deliveryAddressId;
 
-    @NotNull
-    private Integer zipCode;
-
-    @NotNull
-    private String address;
-
-    @NotNull
-    private String detailAddress;
+    // @NotNull
+    // private Integer zipCode;
+    //
+    // @NotNull
+    // private String address;
+    //
+    // @NotNull
+    // private String detailAddress;
 
     // 장바구니에서 받아올 주문할 상품 목록
     @NotNull
