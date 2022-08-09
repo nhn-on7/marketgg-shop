@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum OrderStatus {
 
+    DEPOSIT_WAITING("입금대기"),
     PAY_WAITING("결제대기"),
     PAY_COMPLETE("결제완료"),
     CANCEL_WAITING("취소/환불접수"),

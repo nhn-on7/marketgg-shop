@@ -1,8 +1,12 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.constant.OrderStatus;
+import com.nhnacademy.marketgg.server.constant.OrderType;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
-import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,9 +18,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 /**
  * 주문 개체입니다.
@@ -79,7 +81,8 @@ public class Order {
     public Order(final Member member, final OrderCreateRequest orderRequest) {
         this.member = member;
         this.totalAmount = orderRequest.getTotalAmount();
-        this.orderStatus = OrderStatus.PAY_WAITING.getStatus();
+        this.orderStatus = orderRequest.getOrderType().equals(OrderType.VIRTUAL.getType())
+                ? OrderStatus.DEPOSIT_WAITING.getStatus() : OrderStatus.PAY_WAITING.getStatus();
         this.usedPoint = orderRequest.getUsedPoint();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();

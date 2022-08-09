@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.repository.order;
 
-import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailResponse;
-import com.nhnacademy.marketgg.server.dto.response.order.OrderResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import java.util.List;
 import org.springframework.data.repository.NoRepositoryBean;
 
@@ -16,7 +16,7 @@ public interface OrderRepositoryCustom {
      * @return 일반 회원이라면 본인의 주문 목록, 관리자라면 전체 주문 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    List<OrderResponse> findOrderList(final Long memberId, boolean isUser);
+    List<OrderRetrieveResponse> findOrderList(final Long memberId, boolean isUser);
 
     /**
      * 주문 상세를 조회하는 메소드입니다.
@@ -27,6 +27,6 @@ public interface OrderRepositoryCustom {
      * @return 관리자라면 회원에 상관없이, 회원이라면 본인의 주문 상세를 반환합니다.
      * @since 1.0.0
      */
-    OrderDetailResponse findOrderDetail(final Long orderId, final Long memberId, final boolean isUser);
+    OrderDetailRetrieveResponse findOrderDetail(final Long orderId, final Long memberId, final boolean isUser);
 
 }

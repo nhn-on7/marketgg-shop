@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class OrderDetailResponse {
+public class OrderRetrieveResponse {
 
     private final Long id;
 
@@ -15,10 +15,6 @@ public class OrderDetailResponse {
     private final Long totalAmount;
 
     private final String orderStatus;
-
-    private final Integer usedPoint;
-
-    private final Integer trackingNo;
 
     private final LocalDateTime createdAt;
 

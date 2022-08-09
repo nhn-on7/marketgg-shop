@@ -2,9 +2,11 @@ package com.nhnacademy.marketgg.server.service.order;
 
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderCreateResponse;
-import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailResponse;
-import com.nhnacademy.marketgg.server.dto.response.order.OrderResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import java.util.List;
 
 /**
@@ -25,6 +27,9 @@ public interface OrderService {
      */
     OrderCreateResponse createOrder(final OrderCreateRequest orderRequest, final Long memberId);
 
+    // memo: javadoc
+    OrderFormResponse retrieveOrderForm(List<ProductToOrder> products, MemberInfo memberInfo);
+
     /**
      * 주문 목록을 조회하는 메소드입니다.
      *
@@ -32,7 +37,7 @@ public interface OrderService {
      * @return - 조회하는 회원의 종류에 따라 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    List<OrderResponse> retrieveOrderList(final MemberInfo memberInfo);
+    List<OrderRetrieveResponse> retrieveOrderList(final MemberInfo memberInfo);
 
     /**
      * 주문 상세를 조회하는 메소드입니다.
@@ -42,7 +47,7 @@ public interface OrderService {
      * @return 조회하는 회원의 종류에 따라 상세 조회 정보를 반환합니다.
      * @since 1.0.0
      */
-    OrderDetailResponse retrieveOrderDetail(final Long orderId, final MemberInfo memberInfo);
+    OrderDetailRetrieveResponse retrieveOrderDetail(final Long orderId, final MemberInfo memberInfo);
 
     /**
      * 주문(내역)을 삭제하는 메소드입니다.
@@ -51,5 +56,4 @@ public interface OrderService {
      * @since 1.0.0
      */
     void deleteOrder(final Long orderId);
-
 }
