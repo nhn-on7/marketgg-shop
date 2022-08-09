@@ -13,4 +13,5 @@ public interface DeliveryAddressService {
     void updateDeliveryAddress(final MemberInfo memberInfo,
                                final UpdateDeliveryAddressRequest updateDeliveryAddressRequest);
 
+    void deleteDeliveryAddress(final MemberInfo memberInfo);
 }

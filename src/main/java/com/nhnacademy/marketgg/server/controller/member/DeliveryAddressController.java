@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +42,15 @@ public class DeliveryAddressController {
         deliveryAddressService.updateDeliveryAddress(memberInfo, updateDeliveryAddressRequest);
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Add success"));
+                             .body(new SingleResponse<>("Update success"));
+    }
+
+    @DeleteMapping("/delivery-address")
+    public ResponseEntity<CommonResponse> deleteDeliveryAddress(MemberInfo memberInfo) {
+        deliveryAddressService.deleteDeliveryAddress(memberInfo);
+        return ResponseEntity.status(HttpStatus.OK)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(new SingleResponse<>("Delete success"));
     }
 
 }

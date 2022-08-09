@@ -20,7 +20,9 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
     private final MemberRepository memberRepository;
 
     @Override
-    public void createDeliveryAddress(MemberInfo memberInfo, final CreateDeliveryAddressRequest deliveryAddressRequest) {
+    public void createDeliveryAddress(final MemberInfo memberInfo,
+                                      final CreateDeliveryAddressRequest deliveryAddressRequest) {
+
         Member member = getMember(memberInfo);
 
         DeliveryAddress.Pk pk = new DeliveryAddress.Pk(member.getId());
@@ -37,7 +39,9 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
     }
 
     @Override
-    public void updateDeliveryAddress(MemberInfo memberInfo, final UpdateDeliveryAddressRequest updateDeliveryAddressRequest) {
+    public void updateDeliveryAddress(final MemberInfo memberInfo,
+                                      final UpdateDeliveryAddressRequest updateDeliveryAddressRequest) {
+
         Member member = getMember(memberInfo);
 
         DeliveryAddress.Pk pk = new DeliveryAddress.Pk(member.getId());
@@ -46,6 +50,18 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
 
         deliveryAddress.update(member, updateDeliveryAddressRequest);
+    }
+
+    @Override
+    public void deleteDeliveryAddress(MemberInfo memberInfo) {
+        Member member = getMember(memberInfo);
+
+        DeliveryAddress.Pk pk = new DeliveryAddress.Pk(member.getId());
+
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(pk)
+                                                                   .orElseThrow(DeliveryAddressNotFoundException::new);
+
+        deliveryAddressRepository.delete(deliveryAddress);
     }
 
     private Member getMember(MemberInfo memberInfo) {
