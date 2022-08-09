@@ -8,15 +8,15 @@ import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.exception.RequestParamOrPathVariableIsNonNullException;
+import com.nhnacademy.marketgg.server.exception.RequestParamIsNonNullException;
 import com.nhnacademy.marketgg.server.service.post.PostService;
-
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -30,8 +30,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 /**
  * 관리자의 고객센터 관리에 관련된 Rest Controller 입니다.
@@ -69,19 +67,20 @@ public class AdminCsPostController {
                                                                       @RequestParam final String option,
                                                                       @RequestParam final String keyword,
                                                                       @RequestParam final Integer page)
-        throws ParseException, JsonProcessingException {
+            throws ParseException, JsonProcessingException {
 
-        for(Serializable validContent : List.of(categoryId, optionType, option, keyword, page)) {
+        for (Serializable validContent : List.of(option, keyword, page)) {
             this.checkRpAndPbIsNonNull(validContent);
         }
 
         List<PostResponse> responses =
-            postService.searchForOption(categoryId, new SearchRequest(keyword, page, PAGE_SIZE), optionType, option);
+                postService.searchForOption(categoryId, new SearchRequest(keyword, page, PAGE_SIZE), optionType,
+                                            option);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                 DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/options/" + optionType
-                                     + "/search?option=" + option))
+                                     DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/options/" + optionType
+                                             + "/search?option=" + option))
                              .body(responses);
     }
 
@@ -97,10 +96,6 @@ public class AdminCsPostController {
     @PutMapping("/categories/{categoryId}/{postNo}")
     public ResponseEntity<Void> updatePost(@PathVariable final String categoryId, @PathVariable final Long postNo,
                                            @Valid @RequestBody final PostRequest postRequest) {
-
-        for(Serializable validContent : List.of(categoryId, postNo)) {
-            this.checkRpAndPbIsNonNull(validContent);
-        }
 
         postService.updatePost(categoryId, postNo, postRequest);
 
@@ -139,8 +134,6 @@ public class AdminCsPostController {
     public ResponseEntity<Void> updateInquiryStatus(@PathVariable final Long postNo,
                                                     @RequestBody final PostStatusUpdateRequest statusUpdateRequest) {
 
-        this.checkRpAndPbIsNonNull(postNo);
-
         postService.updateOtoInquiryStatus(postNo, statusUpdateRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -149,9 +142,9 @@ public class AdminCsPostController {
                              .build();
     }
 
-    private <T>void checkRpAndPbIsNonNull(final T validContent) {
+    private <T> void checkRpAndPbIsNonNull(final T validContent) {
         if (Objects.isNull(validContent)) {
-            throw new RequestParamOrPathVariableIsNonNullException();
+            throw new RequestParamIsNonNullException();
         }
     }
 

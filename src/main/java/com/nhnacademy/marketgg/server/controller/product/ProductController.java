@@ -3,9 +3,12 @@ package com.nhnacademy.marketgg.server.controller.product;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
+import com.nhnacademy.marketgg.server.exception.RequestParamIsNonNullException;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
+import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Pageable;
@@ -42,11 +45,11 @@ public class ProductController {
      * @since 1.0.0
      */
     @GetMapping("/categories/{categoryCode}")
-    public ResponseEntity<List<ElasticProduct>> findProductsByCategory(
-        @PathVariable final String categoryCode, final Pageable pageable) {
+    public ResponseEntity<List<ElasticProduct>> findProductsByCategory(@PathVariable final String categoryCode,
+                                                                       final Pageable pageable) {
 
         List<ElasticProduct> productResponseList =
-            productService.findProductByCategory(pageable, categoryCode);
+                productService.findProductByCategory(pageable, categoryCode);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI + "/categories/" + categoryCode))
@@ -66,10 +69,15 @@ public class ProductController {
      */
     @GetMapping("/search")
     public ResponseEntity<List<SearchProductResponse>> searchProductList(@RequestParam final String keyword,
-                                                                         @RequestParam final Integer page) throws ParseException, JsonProcessingException {
+                                                                         @RequestParam final Integer page)
+            throws ParseException, JsonProcessingException {
+
+        for (Serializable validContent : List.of(keyword, page)) {
+            this.checkRpAndPbIsNonNull(validContent);
+        }
 
         List<SearchProductResponse> productList =
-            productService.searchProductList(keyword, page);
+                productService.searchProductList(keyword, page);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI + "/search?keyword=" + keyword + "&page=" + page))
@@ -91,14 +99,20 @@ public class ProductController {
     @GetMapping("/categories/{categoryId}/search")
     public ResponseEntity<List<SearchProductResponse>> searchProductListByCategory(@PathVariable final String categoryId,
                                                                                    @RequestParam final String keyword,
-                                                                                   @RequestParam final Integer page) throws ParseException, JsonProcessingException {
+                                                                                   @RequestParam final Integer page)
+            throws ParseException, JsonProcessingException {
+
+        for (Serializable validContent : List.of(keyword, page)) {
+            this.checkRpAndPbIsNonNull(validContent);
+        }
 
         List<SearchProductResponse> productList =
-            productService.searchProductListByCategory(categoryId, keyword, page);
+                productService.searchProductListByCategory(categoryId, keyword, page);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                 DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/search?keyword=" + keyword + "&page=" + page))
+                                     DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/search?keyword=" + keyword
+                                             + "&page=" + page))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productList);
     }
@@ -119,16 +133,28 @@ public class ProductController {
     public ResponseEntity<List<SearchProductResponse>> searchProductListByPrice(@PathVariable final String categoryId,
                                                                                 @PathVariable final String option,
                                                                                 @RequestParam final String keyword,
-                                                                                @RequestParam final Integer page) throws ParseException, JsonProcessingException {
+                                                                                @RequestParam final Integer page)
+            throws ParseException, JsonProcessingException {
+
+        for (Serializable validContent : List.of(option, keyword, page)) {
+            this.checkRpAndPbIsNonNull(validContent);
+        }
 
         List<SearchProductResponse> productList =
-            productService.searchProductListByPrice(categoryId, option, keyword, page);
+                productService.searchProductListByPrice(categoryId, option, keyword, page);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                 DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/price/" + option + "?keyword=" + keyword + "&page=" + page))
+                                     DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/price/" + option
+                                             + "?keyword=" + keyword + "&page=" + page))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productList);
+    }
+
+    private <T> void checkRpAndPbIsNonNull(final T validContent) {
+        if (Objects.isNull(validContent)) {
+            throw new RequestParamIsNonNullException();
+        }
     }
 
 }

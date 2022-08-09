@@ -4,7 +4,7 @@ import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.CommentRequest;
-import com.nhnacademy.marketgg.server.exception.RequestParamOrPathVariableIsNonNullException;
+import com.nhnacademy.marketgg.server.exception.RequestParamIsNonNullException;
 import com.nhnacademy.marketgg.server.service.otoinquiry.OtoInquiryCommentService;
 import java.net.URI;
 import java.util.Objects;
@@ -50,20 +50,12 @@ public class CommentController {
                                               @Valid @RequestBody final CommentRequest commentRequest,
                                               final MemberInfo memberInfo) {
 
-        this.checkRpAndPbIsNonNull(postId);
-
         otoInquiryCommentService.createComment(postId, memberInfo.getId(), commentRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_CS + "/" + postId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
-    }
-
-    private <T>void checkRpAndPbIsNonNull(final T validContent) {
-        if (Objects.isNull(validContent)) {
-            throw new RequestParamOrPathVariableIsNonNullException();
-        }
     }
 
 }

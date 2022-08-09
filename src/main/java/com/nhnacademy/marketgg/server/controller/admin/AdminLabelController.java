@@ -4,12 +4,12 @@ import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.request.label.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.label.LabelRetrieveResponse;
-import com.nhnacademy.marketgg.server.exception.RequestParamOrPathVariableIsNonNullException;
+import com.nhnacademy.marketgg.server.exception.RequestParamIsNonNullException;
 import com.nhnacademy.marketgg.server.service.label.LabelService;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
-
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 /**
  * 라벨관리에 관련된 RestController 입니다.
@@ -81,19 +79,11 @@ public class AdminLabelController {
      */
     @DeleteMapping("/{labelId}")
     public ResponseEntity<Void> deleteLabel(@PathVariable final Long labelId) {
-        this.checkRpAndPbIsNonNull(labelId);
-
         labelService.deleteLabel(labelId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_LABEL + "/" + labelId))
                              .build();
-    }
-
-    private <T>void checkRpAndPbIsNonNull(final T validContent) {
-        if (Objects.isNull(validContent)) {
-            throw new RequestParamOrPathVariableIsNonNullException();
-        }
     }
 
 }

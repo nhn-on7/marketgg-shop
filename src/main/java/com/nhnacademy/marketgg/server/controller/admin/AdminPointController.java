@@ -3,12 +3,9 @@ package com.nhnacademy.marketgg.server.controller.admin;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
-import com.nhnacademy.marketgg.server.exception.RequestParamOrPathVariableIsNonNullException;
 import com.nhnacademy.marketgg.server.service.point.PointService;
 import java.net.URI;
 import java.util.List;
-import java.util.Objects;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -15,10 +15,9 @@ import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
-import com.nhnacademy.marketgg.server.exception.RequestParamOrPathVariableIsNonNullException;
+import com.nhnacademy.marketgg.server.exception.RequestParamIsNonNullException;
 import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.member.MemberService;
-import com.nhnacademy.marketgg.server.service.point.PointService;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,7 +30,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,7 +51,6 @@ public class MemberController {
     private static final String MEMBER_PREFIX = "/member/";
 
     private final MemberService memberService;
-    private final PointService pointService;
     private final GivenCouponService givenCouponService;
 
     /**
@@ -171,7 +168,8 @@ public class MemberController {
     @RoleCheck(accessLevel = Role.ROLE_USER)
     @PostMapping("/coupons")
     public ResponseEntity<CommonResponse> createGivenCoupons(final MemberInfo memberInfo,
-                                                             @Valid @RequestBody final GivenCouponCreateRequest givenCouponRequest) {
+                                                             @Valid @RequestBody
+                                                             final GivenCouponCreateRequest givenCouponRequest) {
 
         givenCouponService.createGivenCoupons(memberInfo, givenCouponRequest);
 
@@ -197,9 +195,9 @@ public class MemberController {
                              .body(new ListResponse<>(givenCouponResponses));
     }
 
-    private <T>void checkRpAndPbIsNonNull(final T validContent) {
+    private <T> void checkRpAndPbIsNonNull(final T validContent) {
         if (Objects.isNull(validContent)) {
-            throw new RequestParamOrPathVariableIsNonNullException();
+            throw new RequestParamIsNonNullException();
         }
     }
 
