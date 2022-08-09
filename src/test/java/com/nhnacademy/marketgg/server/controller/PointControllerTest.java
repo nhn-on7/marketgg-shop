@@ -1,7 +1,10 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,9 +37,11 @@ class PointControllerTest {
     @Test
     @DisplayName("회원의 포인트 내역 목록 조회")
     void retrievePointHistory() throws Exception {
-        given(pointService.retrievePointHistories(anyLong())).willReturn(List.of());
+        given(pointService.retrievePointHistories(any())).willReturn(List.of());
         mockMvc.perform(get(DEFAULT_MEMBER + "/points"))
                .andExpect(status().isOk());
+
+        then(pointService).should(times(1)).retrievePointHistories(any());
     }
 
 }

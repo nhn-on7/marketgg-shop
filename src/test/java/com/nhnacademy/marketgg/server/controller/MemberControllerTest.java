@@ -4,6 +4,9 @@ import static com.nhnacademy.marketgg.server.annotation.Role.ROLE_USER;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -65,34 +68,34 @@ class MemberControllerTest {
     @Test
     @DisplayName("GG 패스 갱신일자 확인")
     void testCheckPassUpdatedAt() throws Exception {
-        when(memberService.retrievePassUpdatedAt(anyLong())).thenReturn(LocalDateTime.now());
+        given(memberService.retrievePassUpdatedAt(any())).willReturn(LocalDateTime.now());
 
         this.mockMvc.perform(get("/members/ggpass"))
                     .andExpect(status().isOk());
 
-        verify(memberService, times(1)).retrievePassUpdatedAt(anyLong());
+        then(memberService).should(times(1)).retrievePassUpdatedAt(any());
     }
 
     @Test
     @DisplayName("GG 패스 가입")
     void testJoinPass() throws Exception {
-        doNothing().when(memberService).subscribePass(anyLong());
+        willDoNothing().given(memberService).subscribePass(any());
 
         this.mockMvc.perform(post("/members/ggpass/subscribe", 1L))
                     .andExpect(status().isOk());
 
-        verify(memberService, times(1)).subscribePass(anyLong());
+        then(memberService).should(times(1)).subscribePass(any());
     }
 
     @Test
     @DisplayName("GG 패스 해지")
     void testWithdrawPass() throws Exception {
-        doNothing().when(memberService).withdrawPass(anyLong());
+        willDoNothing().given(memberService).withdrawPass(any());
 
         this.mockMvc.perform(post("/members/ggpass/withdraw", 1L))
                     .andExpect(status().isOk());
 
-        verify(memberService, times(1)).withdrawPass(anyLong());
+        then(memberService).should(times(1)).withdrawPass(any());
     }
 
     @Test
