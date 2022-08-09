@@ -8,8 +8,12 @@ import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequestBody;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequestBodyForBool;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
-import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.util.KoreanToEnglishTranslator;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
@@ -25,12 +29,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
+/**
+ * 검색을 위한 Adapter 입니다.
+ *
+ * @author 박세완
+ * @version 1.0.0
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -76,8 +80,8 @@ public class SearchAdapter implements SearchRepository {
 
     @Override
     public List<PostResponse> searchBoardWithCategoryCode(final String categoryCode,
-                                                                 final SearchRequest request,
-                                                                 final String option)
+                                                          final SearchRequest request,
+                                                          final String option)
             throws JsonProcessingException, ParseException {
 
         Map<String, String> sort = this.buildSort(null);
