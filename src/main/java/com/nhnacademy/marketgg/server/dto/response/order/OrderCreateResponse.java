@@ -11,6 +11,4 @@ public class OrderCreateResponse {
 
     private final String orderType;
 
-    private final boolean isDirectBuy;
-
 }

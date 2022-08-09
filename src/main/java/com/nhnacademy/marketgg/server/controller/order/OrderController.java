@@ -2,12 +2,12 @@ package com.nhnacademy.marketgg.server.controller.order;
 
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderCreateResponse;
-import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailResponse;
-import com.nhnacademy.marketgg.server.dto.response.order.OrderResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.order.OrderService;
-import java.net.URI;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
+import java.util.List;
 
 /**
  * 주문에 관련된 Rest Controller 입니다.
@@ -36,7 +39,7 @@ public class OrderController {
     private final OrderService orderService;
     private static final String ORDER_PREFIX = "/orders";
 
-    // 주문서 작성
+    // 주문서 등록
     @PostMapping
     public ResponseEntity<OrderCreateResponse> createOrder(@RequestBody final OrderCreateRequest orderRequest,
                                                            final MemberInfo memberInfo) {
@@ -49,10 +52,23 @@ public class OrderController {
                              .body(response);
     }
 
+    // 주문서 작성폼 정보 조회
+    @GetMapping("/orderForm")
+    public ResponseEntity<OrderFormResponse> retrieveOrderForm(@RequestBody final List<ProductToOrder> products,
+                                                               final MemberInfo memberInfo) {
+
+        OrderFormResponse response = orderService.retrieveOrderForm(products, memberInfo);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(ORDER_PREFIX + "/orderForm"))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(response);
+    }
+
     // 주문 목록 조회 - 관리자는 모든 회원, 회원은 본인 것
     @GetMapping
-    public ResponseEntity<List<OrderResponse>> retrieveOrderList(final MemberInfo memberInfo) {
-        List<OrderResponse> responses = orderService.retrieveOrderList(memberInfo);
+    public ResponseEntity<List<OrderRetrieveResponse>> retrieveOrderList(final MemberInfo memberInfo) {
+        List<OrderRetrieveResponse> responses = orderService.retrieveOrderList(memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX))
@@ -62,10 +78,10 @@ public class OrderController {
 
     // 주문 상세 조회
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderDetailResponse> retrieveOrderDetail(@PathVariable final Long orderId,
-                                                                   final MemberInfo memberInfo) {
+    public ResponseEntity<OrderDetailRetrieveResponse> retrieveOrderDetail(@PathVariable final Long orderId,
+                                                                           final MemberInfo memberInfo) {
 
-        OrderDetailResponse response = orderService.retrieveOrderDetail(orderId, memberInfo);
+        OrderDetailRetrieveResponse response = orderService.retrieveOrderDetail(orderId, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX))

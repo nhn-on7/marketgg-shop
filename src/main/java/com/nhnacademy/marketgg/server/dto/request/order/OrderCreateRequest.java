@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.dto.request.order;
 
+import java.util.List;
 import java.util.Map;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -26,9 +27,9 @@ public class OrderCreateRequest {
     @NotNull
     private Long deliveryAddressId;
 
-    // 상품번호, 수량
+    // 장바구니에서 받아올 주문할 상품 객체 리스트(임시)
     @NotNull
-    private Map<Long, Long> productMap;
+    private List<ProductToOrder> products;
 
     @NotNull
     private Integer usedPoint;
@@ -36,12 +37,7 @@ public class OrderCreateRequest {
     @NotNull
     private Long totalAmount;
 
-    // 결제 방식
     @NotBlank
     private String orderType;
-
-    // 바로구매 vs 장바구니
-    @NotNull
-    private boolean isDirectBuy;
 
 }
