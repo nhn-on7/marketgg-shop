@@ -97,8 +97,8 @@ public class ProductInquiryPost {
         this.createdDate = LocalDateTime.now();
     }
 
-    public void updateInquiry(ProductInquiryRequest inquiryReply) {
-        this.adminReply = inquiryReply.getAdminReply();
+    public void updateInquiry(String inquiryReply) {
+        this.adminReply = inquiryReply;
     }
 
 }

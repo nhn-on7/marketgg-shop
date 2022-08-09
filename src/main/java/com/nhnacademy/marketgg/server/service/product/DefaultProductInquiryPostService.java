@@ -58,7 +58,7 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
 
     @Override
     @Transactional
-    public void updateProductInquiryReply(final ProductInquiryRequest inquiryReply,
+    public void updateProductInquiryReply(final String inquiryReply,
                                           final Long inquiryId,
                                           final Long productId) {
         ProductInquiryPost inquiryPost =

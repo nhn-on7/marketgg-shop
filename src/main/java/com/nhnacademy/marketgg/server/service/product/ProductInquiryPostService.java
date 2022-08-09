@@ -47,7 +47,7 @@ public interface ProductInquiryPostService {
      * @param productId    - 상품의 PK 입니다.
      * @since 1.0.0
      */
-    void updateProductInquiryReply(ProductInquiryRequest inquiryReply, Long inquiryId, Long productId);
+    void updateProductInquiryReply(String inquiryReply, Long inquiryId, Long productId);
 
     /**
      * 상품 문의 글을 삭제합니다.
