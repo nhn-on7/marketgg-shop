@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UuidAspect {
 
-    @Around("execution(* com.nhnacademy.marketgg.server.controller.*.*(.., com.nhnacademy.marketgg.server.annotation.UUID ,..))")
+    @Around("execution(* com.nhnacademy.marketgg.server.controller.*.*(.., @com.nhnacademy.marketgg.server.annotation.UUID (*) ,..))")
     public Object getUuid(ProceedingJoinPoint pjp) throws Throwable {
         log.info("Method: {}", pjp.getSignature().getName());
 

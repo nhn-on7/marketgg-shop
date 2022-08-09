@@ -1,10 +1,17 @@
 package com.nhnacademy.marketgg.server.repository.product;
 
+<<<<<<< Updated upstream
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
+=======
+import com.nhnacademy.marketgg.server.annotation.GGJpaTest;
+import com.nhnacademy.marketgg.server.dto.request.CategorizationCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.ProductCreateRequest;
+>>>>>>> Stashed changes
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
@@ -12,9 +19,12 @@ import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.categorization.CategorizationRepository;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
+<<<<<<< Updated upstream
 import java.time.LocalDate;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.AfterEach;
+=======
+>>>>>>> Stashed changes
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +33,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 
+<<<<<<< Updated upstream
 @ActiveProfiles(value = { "local", "testdb" })
+=======
+import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+>>>>>>> Stashed changes
 @DataJpaTest
 class ProductRepositoryImplTest {
 
