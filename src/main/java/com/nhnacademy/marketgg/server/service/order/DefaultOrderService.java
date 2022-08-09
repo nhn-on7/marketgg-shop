@@ -10,8 +10,11 @@ import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
+import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Order;
+import com.nhnacademy.marketgg.server.entity.OrderProduct;
+import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
 import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponRepository;
@@ -48,9 +51,12 @@ public class DefaultOrderService implements OrderService {
     public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         Order order = new Order(member, orderRequest);
+        // Product product = productRepository.find
+        // OrderProduct orderProduct = new OrderProduct();
+        // memo: 배송지 조회
 
         orderRepository.save(order);
-        // Memo: 주문, 주문배송지, 주문상품 save
+        // Memo: 주문배송지, 주문상품 save
 
 
         // return new OrderToPayment();

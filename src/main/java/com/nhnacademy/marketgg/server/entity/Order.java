@@ -81,7 +81,7 @@ public class Order {
     public Order(final Member member, final OrderCreateRequest orderRequest) {
         this.member = member;
         this.totalAmount = orderRequest.getTotalAmount();
-        this.orderStatus = orderRequest.getOrderType().equals(PaymentType.VIRTUAL.getType())
+        this.orderStatus = orderRequest.getPaymentType().equals(PaymentType.VIRTUAL.getType())
                 ? OrderStatus.DEPOSIT_WAITING.getStatus() : OrderStatus.PAY_WAITING.getStatus();
         this.usedPoint = orderRequest.getUsedPoint();
         this.createdAt = LocalDateTime.now();

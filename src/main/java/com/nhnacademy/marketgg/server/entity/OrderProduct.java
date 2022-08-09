@@ -73,6 +73,13 @@ public class OrderProduct {
         @NotNull
         private Long productNo;
 
+        public Pk(Long orderId, Long productId) {
+            this.orderNo = orderId;
+            this.productNo = productId;
+        }
+
     }
+
+    // memo: 주문상품 생성자 만들고 order, product 받고 수량받아야함
 
 }
