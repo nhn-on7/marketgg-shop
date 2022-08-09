@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.service.deliveryaddress;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.CreateDeliveryAddressRequest;
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.UpdateDeliveryAddressRequest;
+import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.exception.deliveryaddresses.DeliveryAddressNotFoundException;
@@ -11,6 +12,8 @@ import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddress
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -53,15 +56,18 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
     }
 
     @Override
-    public void deleteDeliveryAddress(MemberInfo memberInfo) {
-        Member member = getMember(memberInfo);
-
-        DeliveryAddress.Pk pk = new DeliveryAddress.Pk(member.getId());
+    public void deleteDeliveryAddress(final MemberInfo memberInfo) {
+        DeliveryAddress.Pk pk = new DeliveryAddress.Pk(getMember(memberInfo).getId());
 
         DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(pk)
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
 
         deliveryAddressRepository.delete(deliveryAddress);
+    }
+
+    @Override
+    public List<DeliveryAddressResponse> retrieveDeliveryAddresses(final MemberInfo memberInfo) {
+        return deliveryAddressRepository.findDeliveryAddressesByMemberId(getMember(memberInfo).getId());
     }
 
     private Member getMember(MemberInfo memberInfo) {
