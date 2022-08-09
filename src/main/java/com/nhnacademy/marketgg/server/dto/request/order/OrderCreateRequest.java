@@ -21,13 +21,28 @@ public class OrderCreateRequest {
     @NotNull
     private Long memberId;
 
+    @NotBlank
+    private String name;
+
+    @NotBlank
+    private String email;
+
     @NotNull
     private Long couponId;
 
     @NotNull
     private Long deliveryAddressId;
 
-    // 장바구니에서 받아올 주문할 상품 객체 리스트(임시)
+    @NotNull
+    private Integer zipCode;
+
+    @NotNull
+    private String address;
+
+    @NotNull
+    private String detailAddress;
+
+    // 장바구니에서 받아올 주문할 상품 목록
     @NotNull
     private List<ProductToOrder> products;
 
@@ -38,6 +53,9 @@ public class OrderCreateRequest {
     private Long totalAmount;
 
     @NotBlank
-    private String orderType;
+    private String paymentType;
+
+    @NotNull
+    private Integer expectedSavePoint;
 
 }

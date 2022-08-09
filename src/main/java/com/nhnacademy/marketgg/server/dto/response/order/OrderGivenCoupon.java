@@ -9,14 +9,16 @@ import java.time.LocalDateTime;
 @Getter
 public class OrderGivenCoupon {
 
-    private final Long couponId;
+    private final Long id;
 
-    private final String couponName;
+    private final String name;
 
-    private final LocalDateTime couponExpiredAt;
+    private final LocalDateTime createdAt; // 쿠폰 지급일시
 
-    private final Integer couponMinimumMoney;
+    private final Integer expiredDate; // 쿠폰 유효기간(일)
 
-    private final Double couponDiscountAmount; // 할인량
+    private final Integer minimumMoney;
+
+    private final Double discountAmount; // 할인량(실수: 정률할인, 정수: 정액할인)
 
 }
