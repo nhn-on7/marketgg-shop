@@ -172,8 +172,6 @@ class DefaultProductServiceTest {
         given(assetRepository.save(any(Asset.class))).willReturn(asset);
         given(productRepository.save(any(Product.class))).willReturn(product);
         given(labelRepository.findById(anyLong())).willReturn(Optional.ofNullable(label));
-        given(imageRepository.findByAssetIdAndImageSequence(anyLong(), anyInt())).willReturn(Optional.ofNullable(
-            image));
 
 
         productService.createProduct(productRequest, file);
@@ -182,7 +180,6 @@ class DefaultProductServiceTest {
         verify(categoryRepository, atLeastOnce()).findById(any());
         verify(imageRepository, atLeastOnce()).saveAll(any());
         verify(assetRepository, atLeastOnce()).save(any());
-        then(elasticProductRepository).should().save(any(ElasticProduct.class));
     }
 
     @Test
@@ -257,8 +254,6 @@ class DefaultProductServiceTest {
         ReflectionTestUtils.setField(productUpdateRequest, "categoryCode", "001");
 
         given(assetRepository.save(any(Asset.class))).willReturn(asset);
-        given(labelRepository.findById(anyLong())).willReturn(Optional.of(label));
-        given(imageRepository.findByAssetIdAndImageSequence(anyLong(), anyInt())).willReturn(Optional.of(image));
         given(categoryRepository.findById(any())).willReturn(Optional.ofNullable(category));
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
 
@@ -267,7 +262,6 @@ class DefaultProductServiceTest {
         then(productRepository).should().save(any());
         then(categoryRepository).should().findById(any());
         then(assetRepository).should().save(any());
-        then(elasticProductRepository).should().save(any(ElasticProduct.class));
     }
 
     @Test

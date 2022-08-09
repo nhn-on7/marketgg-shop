@@ -77,11 +77,8 @@ public class DefaultProductService implements ProductService {
         ProductLabel.Pk pk = new ProductLabel.Pk(product.getId(), productRequest.getLabelNo());
         Label label =
                 labelRepository.findById(pk.getLabelNo()).orElseThrow(LabelNotFoundException::new);
-        Image image = imageRepository.findByAssetIdAndImageSequence(asset.getId(), 1)
-                                     .orElseThrow(ImageNotFoundException::new);
 
         productLabelRepository.save(new ProductLabel(pk, product, label));
-        elasticProductRepository.save(new ElasticProduct(product, label, image));
     }
 
     @Override
@@ -111,14 +108,8 @@ public class DefaultProductService implements ProductService {
                                               .orElseThrow(CategoryNotFoundException::new);
 
         product.updateProduct(productRequest, asset, category);
-        Label label =
-                labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);
-        Image image = imageRepository.findByAssetIdAndImageSequence(asset.getId(), 1)
-                                     .orElseThrow(ImageNotFoundException::new);
-        ElasticProduct elasticProduct = new ElasticProduct(product, label, image);
 
         productRepository.save(product);
-        elasticProductRepository.save(elasticProduct);
     }
 
     @Transactional
@@ -135,22 +126,16 @@ public class DefaultProductService implements ProductService {
     public void restoreProduct(final Long id) {
         Product product =
                 this.productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
-        Label label =
-                labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);
-        Image image = imageRepository.findByAssetIdAndImageSequence(product.getAsset().getId(), 1)
-                                     .orElseThrow(ImageNotFoundException::new);
-        ElasticProduct elasticProduct = new ElasticProduct(product, label, image);
 
         product.restoreProduct();
         productRepository.save(product);
-        elasticProductRepository.save(elasticProduct);
     }
 
     @Override
     public List<ElasticProduct> findProductByCategory(final Pageable pageable,
                                                       final String categoryCode) {
-        return this.elasticProductRepository.findAllByCategoryCode(pageable, categoryCode).getContent();
 
+        return this.elasticProductRepository.findAllByCategoryCode(pageable, categoryCode).getContent();
     }
 
     private Asset fileUpload(MultipartFile imageFile) throws IOException {
