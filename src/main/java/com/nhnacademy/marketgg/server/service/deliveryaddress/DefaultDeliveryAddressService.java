@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.service.deliveryaddress;
 
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.CreateDeliveryAddressRequest;
-import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.UpdateDeliveryAddressRequest;
+import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -24,26 +24,20 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
 
     @Override
     public void createDeliveryAddress(final MemberInfo memberInfo,
-                                      final CreateDeliveryAddressRequest deliveryAddressRequest) {
+                                      final DeliveryAddressCreateRequest deliveryAddressRequest) {
 
         Member member = getMember(memberInfo);
 
         DeliveryAddress.Pk pk = new DeliveryAddress.Pk(member.getId());
 
-        DeliveryAddress deliveryAddress = new DeliveryAddress(pk,
-                member,
-                deliveryAddressRequest.isDefaultAddress(),
-                deliveryAddressRequest.getZipCode(),
-                deliveryAddressRequest.getAddress(),
-                deliveryAddressRequest.getDetailAddress());
+        DeliveryAddress deliveryAddress = new DeliveryAddress(pk, member, deliveryAddressRequest);
 
         deliveryAddressRepository.save(deliveryAddress);
-
     }
 
     @Override
     public void updateDeliveryAddress(final MemberInfo memberInfo,
-                                      final UpdateDeliveryAddressRequest updateDeliveryAddressRequest) {
+                                      final DeliveryAddressUpdateRequest deliveryAddressUpdateRequest) {
 
         Member member = getMember(memberInfo);
 
@@ -52,7 +46,7 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
         DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(pk)
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
 
-        deliveryAddress.update(member, updateDeliveryAddressRequest);
+        deliveryAddress.update(member, deliveryAddressUpdateRequest);
     }
 
     @Override

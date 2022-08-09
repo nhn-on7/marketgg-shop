@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.UpdateDeliveryAddressRequest;
+import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -51,39 +52,13 @@ public class DeliveryAddress {
     @Column(name = "detail_address")
     private String detailAddress;
 
-    public DeliveryAddress(Pk pk, Member member,
-                           boolean defaultAddress,
-                           Integer zipCode,
-                           String address,
-                           String detailAddress) {
-
-        this.pk = pk;
-        this.member = member;
-        this.isDefaultAddress = defaultAddress;
-        this.zipCode = zipCode;
-        this.address = address;
-        this.detailAddress = detailAddress;
-
-    }
-
-    public void update(final Member member, final UpdateDeliveryAddressRequest updateDeliveryAddressRequest) {
-
-        this.member = member;
-        this.isDefaultAddress = updateDeliveryAddressRequest.isDefaultAddress();
-        this.zipCode = updateDeliveryAddressRequest.getZipCode();
-        this.address = updateDeliveryAddressRequest.getAddress();
-        this.detailAddress = updateDeliveryAddressRequest.getDetailAddress();
-
-    }
-
     @Embeddable
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     @AllArgsConstructor
     @Getter
     @EqualsAndHashCode
     public static class Pk implements Serializable {
 
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "delivery_address_no")
         private Long id;
 
@@ -94,8 +69,8 @@ public class DeliveryAddress {
             this.memberNo = memberNo;
         }
 
-    }
 
+    }
     public DeliveryAddress(final Member signUpMember,
                            final ShopMemberSignUpRequest shopMemberSignUpRequest) {
 
@@ -105,6 +80,31 @@ public class DeliveryAddress {
         this.zipCode = shopMemberSignUpRequest.getZipcode();
         this.address = shopMemberSignUpRequest.getAddress();
         this.detailAddress = shopMemberSignUpRequest.getDetailAddress();
+
+    }
+
+    public DeliveryAddress(final Pk pk,
+                           final Member member,
+                           final DeliveryAddressCreateRequest createRequest) {
+
+        this.pk = pk;
+        this.member = member;
+        this.isDefaultAddress = createRequest.isDefaultAddress();
+        this.zipCode = createRequest.getZipCode();
+        this.address = createRequest.getAddress();
+        this.detailAddress = createRequest.getDetailAddress();
+
+    }
+
+    public void update(final Member member,
+                       final DeliveryAddressUpdateRequest updateRequest) {
+
+        this.member = member;
+        this.isDefaultAddress = updateRequest.isDefaultAddress();
+        this.zipCode = updateRequest.getZipCode();
+        this.address = updateRequest.getAddress();
+        this.detailAddress = updateRequest.getDetailAddress();
+
     }
 
 }
