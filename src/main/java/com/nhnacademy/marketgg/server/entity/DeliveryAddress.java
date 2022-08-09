@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.UpdateDeliveryAddressRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,15 +51,41 @@ public class DeliveryAddress {
     @Column(name = "detail_address")
     private String detailAddress;
 
+    public DeliveryAddress(Pk pk, Member member,
+                           boolean defaultAddress,
+                           Integer zipCode,
+                           String address,
+                           String detailAddress) {
+
+        this.pk = pk;
+        this.member = member;
+        this.isDefaultAddress = defaultAddress;
+        this.zipCode = zipCode;
+        this.address = address;
+        this.detailAddress = detailAddress;
+
+    }
+
+    public void update(final Member member, final UpdateDeliveryAddressRequest updateDeliveryAddressRequest) {
+
+        this.member = member;
+        this.isDefaultAddress = updateDeliveryAddressRequest.isDefaultAddress();
+        this.zipCode = updateDeliveryAddressRequest.getZipCode();
+        this.address = updateDeliveryAddressRequest.getAddress();
+        this.detailAddress = updateDeliveryAddressRequest.getDetailAddress();
+
+    }
+
     @Embeddable
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
     @Getter
     @EqualsAndHashCode
     public static class Pk implements Serializable {
 
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "delivery_address_no")
-        private Long deliveryAddressNo;
+        private Long id;
 
         @Column(name = "member_no")
         private Long memberNo;
@@ -65,6 +93,7 @@ public class DeliveryAddress {
         public Pk(Long memberNo) {
             this.memberNo = memberNo;
         }
+
     }
 
     public DeliveryAddress(final Member signUpMember,
