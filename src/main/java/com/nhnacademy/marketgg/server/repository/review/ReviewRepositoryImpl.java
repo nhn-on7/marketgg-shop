@@ -44,14 +44,14 @@ public class ReviewRepositoryImpl extends QuerydslRepositorySupport implements R
         QReview review = QReview.review;
 
         return Projections.constructor(ReviewResponse.class,
-                                       review.id,
-                                       review.member.id,
-                                       review.asset.id,
-                                       review.content,
-                                       review.rating,
-                                       review.isBest,
-                                       review.createdAt,
-                                       review.updatedAt,
-                                       review.deletedAt);
+            review.id,
+            review.member.id,
+            review.asset.id,
+            review.content,
+            review.rating,
+            review.isBest,
+            review.createdAt,
+            review.updatedAt,
+            review.deletedAt);
     }
 }

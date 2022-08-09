@@ -2,7 +2,7 @@ package com.nhnacademy.marketgg.server.controller.admin;
 
 import com.nhnacademy.marketgg.server.dto.request.label.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.label.LabelRetrieveResponse;
-import com.nhnacademy.marketgg.server.service.LabelService;
+import com.nhnacademy.marketgg.server.service.label.LabelService;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

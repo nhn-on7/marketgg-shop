@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.admin.AdminCategorizationController;
-import com.nhnacademy.marketgg.server.service.CategorizationService;
+import com.nhnacademy.marketgg.server.service.category.CategorizationService;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

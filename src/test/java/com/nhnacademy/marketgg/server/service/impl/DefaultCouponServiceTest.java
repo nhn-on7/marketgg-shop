@@ -12,6 +12,7 @@ import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
+import com.nhnacademy.marketgg.server.service.coupon.DefaultCouponService;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;

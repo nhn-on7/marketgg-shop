@@ -1,12 +1,10 @@
 package com.nhnacademy.marketgg.server.dto.response.product;
 
 import com.nhnacademy.marketgg.server.entity.Asset;
-import com.nhnacademy.marketgg.server.entity.Category;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter

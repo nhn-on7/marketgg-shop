@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 
 public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
-        implements ProductInquiryPostRepositoryCustom {
+    implements ProductInquiryPostRepositoryCustom {
 
     public ProductInquiryPostRepositoryImpl() {
         super(ProductInquiryPost.class);
@@ -23,17 +23,17 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
         List<ProductInquiryResponse> result = from(productInquiryPost)
-                .select(Projections.constructor(ProductInquiryResponse.class,
-                        productInquiryPost.member,
-                        productInquiryPost.title,
-                        productInquiryPost.content,
-                        productInquiryPost.isSecret,
-                        productInquiryPost.adminReply,
-                        productInquiryPost.createdDate))
-                .where(productInquiryPost.pk.productNo.eq(id))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+            .select(Projections.constructor(ProductInquiryResponse.class,
+                productInquiryPost.member,
+                productInquiryPost.title,
+                productInquiryPost.content,
+                productInquiryPost.isSecret,
+                productInquiryPost.adminReply,
+                productInquiryPost.createdDate))
+            .where(productInquiryPost.pk.productNo.eq(id))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
 
         return new PageImpl<>(result, pageable, result.size());
     }
@@ -43,15 +43,15 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
         List<ProductInquiryResponse> result = from(productInquiryPost)
-                .select(Projections.constructor(ProductInquiryResponse.class,
-                        productInquiryPost.member,
-                        productInquiryPost.title,
-                        productInquiryPost.content,
-                        productInquiryPost.isSecret,
-                        productInquiryPost.adminReply,
-                        productInquiryPost.createdDate))
-                .where(productInquiryPost.member.id.eq(id))
-                .fetch();
+            .select(Projections.constructor(ProductInquiryResponse.class,
+                productInquiryPost.member,
+                productInquiryPost.title,
+                productInquiryPost.content,
+                productInquiryPost.isSecret,
+                productInquiryPost.adminReply,
+                productInquiryPost.createdDate))
+            .where(productInquiryPost.member.id.eq(id))
+            .fetch();
 
         return new PageImpl<>(result, pageable, result.size());
     }

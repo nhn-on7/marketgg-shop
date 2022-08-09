@@ -17,13 +17,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
 import com.nhnacademy.marketgg.server.controller.member.MemberController;
-import com.nhnacademy.marketgg.server.dto.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
-import com.nhnacademy.marketgg.server.service.GivenCouponService;
-import com.nhnacademy.marketgg.server.service.MemberService;
-import com.nhnacademy.marketgg.server.service.PointService;
+import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
+import com.nhnacademy.marketgg.server.service.member.MemberService;
+import com.nhnacademy.marketgg.server.service.point.PointService;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;

@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.admin.AdminCouponController;
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
-import com.nhnacademy.marketgg.server.service.CouponService;
+import com.nhnacademy.marketgg.server.service.coupon.CouponService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

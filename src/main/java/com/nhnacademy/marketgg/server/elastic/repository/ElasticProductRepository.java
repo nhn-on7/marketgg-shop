@@ -34,7 +34,7 @@ public interface ElasticProductRepository extends ElasticsearchRepository<Elasti
     /**
      * 지정한 카테고리를 지닌 상품 목록을 모두 조회합니다.
      *
-     * @param pageable - 조회할 페이지의 정보입니다.
+     * @param pageable     - 조회할 페이지의 정보입니다.
      * @param categoryCode - 조회를 진행 할 카테고리 식별번호입니다.
      * @return 지정한 카테고리를 지닌 상품 목록을 반환합니다.
      * @since 1.0.0

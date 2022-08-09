@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.image;
 
-import com.nhnacademy.marketgg.server.dto.response.ImageResponse;
+import com.nhnacademy.marketgg.server.dto.response.image.ImageResponse;
 import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.entity.QImage;
 import com.querydsl.core.types.Projections;
@@ -19,10 +19,10 @@ public class ImageRepositoryImpl extends QuerydslRepositorySupport implements Im
         return from(image)
             .where(image.asset.id.eq(id))
             .select(Projections.constructor(ImageResponse.class,
-                                            image.name,
-                                            image.length,
-                                            image.imageAddress,
-                                            image.imageSequence))
+                image.name,
+                image.length,
+                image.imageAddress,
+                image.imageSequence))
             .orderBy(image.imageSequence.asc())
             .fetchFirst();
     }

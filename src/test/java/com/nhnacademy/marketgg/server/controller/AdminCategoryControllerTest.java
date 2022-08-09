@@ -19,7 +19,7 @@ import com.nhnacademy.marketgg.server.controller.admin.AdminCategoryController;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryUpdateRequest;
-import com.nhnacademy.marketgg.server.service.CategoryService;
+import com.nhnacademy.marketgg.server.service.category.CategoryService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

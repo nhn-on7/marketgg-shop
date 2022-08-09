@@ -21,6 +21,7 @@ import com.nhnacademy.marketgg.server.repository.cart.CartRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
+import com.nhnacademy.marketgg.server.service.point.DefaultPointService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

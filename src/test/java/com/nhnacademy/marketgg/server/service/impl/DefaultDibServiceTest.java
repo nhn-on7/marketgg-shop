@@ -28,6 +28,7 @@ import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException
 import com.nhnacademy.marketgg.server.repository.dib.DibRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
+import com.nhnacademy.marketgg.server.service.dib.DefaultDibService;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;

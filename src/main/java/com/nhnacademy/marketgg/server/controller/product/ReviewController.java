@@ -3,10 +3,10 @@ package com.nhnacademy.marketgg.server.controller.product;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
-import com.nhnacademy.marketgg.server.service.ReviewService;
+import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
+import com.nhnacademy.marketgg.server.service.product.ReviewService;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -56,8 +56,8 @@ public class ReviewController {
      * @param images        - 후기 생성시 첨부된 사진들입니다.
      * @return Void를 담은 응답객체를 반환합니다.
      */
-    @PostMapping(value = "/{productId}/reviews/{memberUuid}", consumes = { MediaType.APPLICATION_JSON_VALUE,
-        MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(value = "/{productId}/reviews/{memberUuid}", consumes = {MediaType.APPLICATION_JSON_VALUE,
+        MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> createReview(@PathVariable final Long productId,
                                              @PathVariable(name = "memberUuid") final String uuid,
                                              @RequestPart @Valid final ReviewCreateRequest reviewRequest,

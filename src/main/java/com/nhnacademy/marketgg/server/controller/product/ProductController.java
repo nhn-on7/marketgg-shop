@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.product;
 
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
-import com.nhnacademy.marketgg.server.service.ProductService;
+import com.nhnacademy.marketgg.server.service.product.ProductService;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -38,10 +38,10 @@ public class ProductController {
      */
     @GetMapping("/categories/{categoryCode}")
     public ResponseEntity<List<ElasticProduct>> searchProductsByCategory(
-            @PathVariable final String categoryCode, final Pageable pageable) {
+        @PathVariable final String categoryCode, final Pageable pageable) {
 
         List<ElasticProduct> productResponseList =
-                productService.searchProductByCategory(pageable, categoryCode);
+            productService.searchProductByCategory(pageable, categoryCode);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI + "/search/" + categoryCode))

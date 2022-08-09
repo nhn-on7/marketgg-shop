@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -23,7 +22,7 @@ import lombok.NoArgsConstructor;
  * 후기 개체입니다.
  *
  * @author 공통
- * @version  1.0.0
+ * @version 1.0.0
  */
 @Table(name = "reviews")
 @Entity

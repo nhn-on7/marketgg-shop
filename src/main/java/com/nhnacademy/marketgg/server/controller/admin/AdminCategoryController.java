@@ -3,7 +3,7 @@ package com.nhnacademy.marketgg.server.controller.admin;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.category.CategoryRetrieveResponse;
-import com.nhnacademy.marketgg.server.service.CategoryService;
+import com.nhnacademy.marketgg.server.service.category.CategoryService;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;

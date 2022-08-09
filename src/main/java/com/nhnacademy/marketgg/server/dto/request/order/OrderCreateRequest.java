@@ -1,11 +1,10 @@
 package com.nhnacademy.marketgg.server.dto.request.order;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import java.util.Map;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Map;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * 주문을 생성하기 위한 요청 정보를 담고 있는 DTO 클래스입니다.

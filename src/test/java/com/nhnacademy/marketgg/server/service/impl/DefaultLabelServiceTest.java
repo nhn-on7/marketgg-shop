@@ -24,6 +24,7 @@ import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.exception.label.LabelNotFoundException;
 import com.nhnacademy.marketgg.server.repository.label.LabelRepository;
+import com.nhnacademy.marketgg.server.service.label.DefaultLabelService;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;

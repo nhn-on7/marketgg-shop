@@ -3,7 +3,7 @@ package com.nhnacademy.marketgg.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.coupon.UsedCouponController;
 import com.nhnacademy.marketgg.server.dto.request.coupon.UsedCouponDto;
-import com.nhnacademy.marketgg.server.service.UsedCouponService;
+import com.nhnacademy.marketgg.server.service.coupon.UsedCouponService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

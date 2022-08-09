@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 /**
  * 상품 문의 DTO 입니다.
- *
  */
 @NoArgsConstructor
 @Getter

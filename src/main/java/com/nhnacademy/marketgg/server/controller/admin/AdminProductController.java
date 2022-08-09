@@ -7,7 +7,7 @@ import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
-import com.nhnacademy.marketgg.server.service.ProductService;
+import com.nhnacademy.marketgg.server.service.product.ProductService;
 import java.io.IOException;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.member;
 
 import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
-import com.nhnacademy.marketgg.server.service.PointService;
+import com.nhnacademy.marketgg.server.service.point.PointService;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -39,8 +39,8 @@ public class PointController {
         List<PointRetrieveResponse> responses = pointService.retrievePointHistories(memberId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .location(URI.create(DEFAULT_MEMBER + "/" + memberId + "/points"))
-                .body(responses);
+                             .location(URI.create(DEFAULT_MEMBER + "/" + memberId + "/points"))
+                             .body(responses);
     }
 
 }

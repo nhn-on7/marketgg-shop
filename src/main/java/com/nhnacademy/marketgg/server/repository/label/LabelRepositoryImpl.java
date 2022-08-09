@@ -4,9 +4,8 @@ import com.nhnacademy.marketgg.server.dto.response.label.LabelRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.entity.QLabel;
 import com.querydsl.core.types.Projections;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-
 import java.util.List;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class LabelRepositoryImpl extends QuerydslRepositorySupport implements LabelRepositoryCustom {
 
@@ -19,10 +18,10 @@ public class LabelRepositoryImpl extends QuerydslRepositorySupport implements La
         QLabel label = QLabel.label;
 
         return from(label)
-                .select(Projections.constructor(LabelRetrieveResponse.class,
-                                         label.id,
-                                         label.name))
-                .fetch();
+            .select(Projections.constructor(LabelRetrieveResponse.class,
+                label.id,
+                label.name))
+            .fetch();
     }
 
 }

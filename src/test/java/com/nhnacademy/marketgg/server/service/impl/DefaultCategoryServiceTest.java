@@ -24,6 +24,7 @@ import com.nhnacademy.marketgg.server.repository.categorization.CategorizationRe
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
+import com.nhnacademy.marketgg.server.service.category.DefaultCategoryService;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;

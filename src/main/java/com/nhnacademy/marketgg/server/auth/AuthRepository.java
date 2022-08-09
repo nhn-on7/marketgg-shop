@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.dto.MemberNameResponse;
+import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import java.util.List;
 
 /**

@@ -19,11 +19,11 @@ public class SearchRequestBodyForBool<T> {
 
     private static final List<String> CATEGORY_FIELD = List.of("categoryCode");
     private static final List<String> DEFAULT_PRODUCT_FIELD =
-            List.of("productName", "productName.forSyno", "content", "content.forSyno",
-                    "description", "description.forSyno");
+        List.of("productName", "productName.forSyno", "content", "content.forSyno",
+            "description", "description.forSyno");
 
     private static final List<String> DEFAULT_BOARD_FIELD =
-            List.of("title", "title.forSyno");
+        List.of("title", "title.forSyno");
 
     /**
      * 검색 결과 목록의 정렬 기준을 지정합니다.
@@ -56,10 +56,10 @@ public class SearchRequestBodyForBool<T> {
     /**
      * 조건을 담은 검색을 진행 할 수 있는 요청객체를 생성합니다.
      *
-     * @param sortMap - 결과 목록의 정렬기준입니다.
-     * @param request - 검색을 진행할 검색정보를 담은 객체입니다.
+     * @param sortMap    - 결과 목록의 정렬기준입니다.
+     * @param request    - 검색을 진행할 검색정보를 담은 객체입니다.
      * @param optionCode - 검색을 진행할 옵션 값입니다.
-     * @param option - 검색을 진행할 옵션입니다.
+     * @param option     - 검색을 진행할 옵션입니다.
      * @since 1.0.0
      */
     public SearchRequestBodyForBool(final String optionCode, final T sortMap,
@@ -74,18 +74,18 @@ public class SearchRequestBodyForBool<T> {
             requestOption = DEFAULT_BOARD_FIELD;
         }
         this.query = new BoolQuery(
-                new Bool(List.of(new Must(new MultiMatch(optionCode, CATEGORY_FIELD)),
-                                 new Must(new MultiMatch(request.getRequest(), requestOption)))));
+            new Bool(List.of(new Must(new MultiMatch(optionCode, CATEGORY_FIELD)),
+                new Must(new MultiMatch(request.getRequest(), requestOption)))));
     }
 
     /**
      * 조건을 담은 검색을 진행 할 수 있는 요청객체를 생성합니다.
      *
      * @param categoryCode - 검색을 진행할 카테고리의 식별번호입니다.
-     * @param sortMap - 결과 목록의 정렬기준입니다.
-     * @param request - 검색을 진행할 검색정보를 담은 객체입니다.
-     * @param optionCode - 검색을 진행할 옵션 값입니다.
-     * @param option - 검색을 진행할 옵션입니다.
+     * @param sortMap      - 결과 목록의 정렬기준입니다.
+     * @param request      - 검색을 진행할 검색정보를 담은 객체입니다.
+     * @param optionCode   - 검색을 진행할 옵션 값입니다.
+     * @param option       - 검색을 진행할 옵션입니다.
      * @since 1.0.0
      */
     public SearchRequestBodyForBool(final String categoryCode, final T sortMap,
@@ -95,11 +95,11 @@ public class SearchRequestBodyForBool<T> {
         this.from = request.getPage();
         this.size = request.getSize();
         this.query = new BoolQuery(new Bool(List.of(new Must(new MultiMatch(categoryCode, CATEGORY_FIELD)),
-                                                    new Must(new MultiMatch(optionCode, List.of(option))),
-                                                    new Must(new MultiMatch(request.getRequest(), DEFAULT_BOARD_FIELD)))));
+            new Must(new MultiMatch(optionCode, List.of(option))),
+            new Must(new MultiMatch(request.getRequest(), DEFAULT_BOARD_FIELD)))));
     }
 
-    private Boolean isBoard(final String document){
+    private Boolean isBoard(final String document) {
         return document.compareTo("board") == 0;
     }
 

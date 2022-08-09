@@ -3,7 +3,8 @@ package com.nhnacademy.marketgg.server.controller.coupon;
 import com.nhnacademy.marketgg.server.dto.request.coupon.UsedCouponDto;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
-import com.nhnacademy.marketgg.server.service.UsedCouponService;
+import com.nhnacademy.marketgg.server.service.coupon.UsedCouponService;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 /**
  * 사용 쿠폰에 관련된 RestController 입니다.

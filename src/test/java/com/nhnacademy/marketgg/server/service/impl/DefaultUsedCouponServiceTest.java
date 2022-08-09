@@ -7,6 +7,7 @@ import com.nhnacademy.marketgg.server.entity.UsedCoupon;
 import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponRepository;
 import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
+import com.nhnacademy.marketgg.server.service.coupon.DefaultUsedCouponService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

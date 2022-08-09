@@ -1,9 +1,8 @@
 package com.nhnacademy.marketgg.server.repository.dib;
 
 import com.nhnacademy.marketgg.server.dto.response.dib.DibRetrieveResponse;
-import org.springframework.data.repository.NoRepositoryBean;
-
 import java.util.List;
+import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface DibRepositoryCustom {

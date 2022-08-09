@@ -11,7 +11,7 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 
-import com.nhnacademy.marketgg.server.dto.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dto.response.cart.CartProductResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
@@ -22,6 +22,7 @@ import com.nhnacademy.marketgg.server.exception.cart.CartNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.cart.CartProductRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
+import com.nhnacademy.marketgg.server.service.cart.DefaultCartProductService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

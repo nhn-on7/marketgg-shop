@@ -14,6 +14,7 @@ import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
+import com.nhnacademy.marketgg.server.service.member.DefaultMemberService;
 import java.lang.reflect.Constructor;
 import java.time.LocalDateTime;
 import java.util.Optional;

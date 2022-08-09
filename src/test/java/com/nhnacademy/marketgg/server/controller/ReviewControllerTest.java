@@ -19,7 +19,7 @@ import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
-import com.nhnacademy.marketgg.server.service.ReviewService;
+import com.nhnacademy.marketgg.server.service.product.ReviewService;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;

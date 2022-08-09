@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.admin.AdminLabelController;
 import com.nhnacademy.marketgg.server.dto.request.label.LabelCreateRequest;
-import com.nhnacademy.marketgg.server.service.LabelService;
+import com.nhnacademy.marketgg.server.service.label.LabelService;
 import java.util.ArrayList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

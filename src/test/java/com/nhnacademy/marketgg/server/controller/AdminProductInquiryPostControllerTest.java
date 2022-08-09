@@ -3,7 +3,7 @@ package com.nhnacademy.marketgg.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.admin.AdminProductInquiryPostController;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
-import com.nhnacademy.marketgg.server.service.ProductInquiryPostService;
+import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

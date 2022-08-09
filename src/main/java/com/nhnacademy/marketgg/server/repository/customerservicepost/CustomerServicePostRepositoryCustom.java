@@ -12,7 +12,7 @@ public interface CustomerServicePostRepositoryCustom {
     /**
      * 게시글 번호로 1:1 문의를 조회하는 메소드입니다.
      *
-     * @param postNo - 조회할 1:1 문의의 번호입니다.
+     * @param postNo   - 조회할 1:1 문의의 번호입니다.
      * @param memberId - 게시글을 조회할 회원의 식별번호입니다.
      * @return 조회한 게시글을 DTO 객체로 반환합니다.
      * @author 박세완

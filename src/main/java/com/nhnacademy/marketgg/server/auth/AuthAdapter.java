@@ -2,10 +2,9 @@ package com.nhnacademy.marketgg.server.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.MemberNameResponse;
+import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -31,11 +30,11 @@ public class AuthAdapter implements AuthRepository {
         String requestBody = objectMapper.writeValueAsString(uuidList);
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, buildHeaders());
         ResponseEntity<List<MemberNameResponse>> response = restTemplate.exchange(
-                auth + "/name",
-                HttpMethod.POST,
-                requestEntity,
-                new ParameterizedTypeReference<>() {
-                });
+            auth + "/name",
+            HttpMethod.POST,
+            requestEntity,
+            new ParameterizedTypeReference<>() {
+            });
 
         return response.getBody();
     }

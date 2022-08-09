@@ -2,7 +2,7 @@ package com.nhnacademy.marketgg.server.aop;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import java.util.Arrays;
@@ -26,7 +26,7 @@ public class MemberInfoAspect {
     private final MemberRepository memberRepository;
     private final ObjectMapper mapper;
 
-    @Around("execution(* com.nhnacademy.marketgg.server.controller..*.*(.., com.nhnacademy.marketgg.server.dto.MemberInfo, ..))")
+    @Around("execution(* com.nhnacademy.marketgg.server.controller..*.*(.., com.nhnacademy.marketgg.server.dto.info.MemberInfo, ..))")
     public Object getMemberInfo(ProceedingJoinPoint pjp) throws Throwable {
         log.info("Method: {}", pjp.getSignature().getName());
 

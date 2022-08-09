@@ -2,9 +2,9 @@ package com.nhnacademy.marketgg.server.controller.customerservice;
 
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
-import com.nhnacademy.marketgg.server.dto.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.CommentRequest;
-import com.nhnacademy.marketgg.server.service.OtoInquiryCommentService;
+import com.nhnacademy.marketgg.server.service.otoinquiry.OtoInquiryCommentService;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,7 +34,7 @@ public class CommentController {
     /**
      * 한 1:1 문의에 대해 댓글을 등록하는 POST Mapping 을 지원합니다.
      *
-     * @param postId      - 댓글을 등록할 1:1 문의의 식별번호입니다.
+     * @param postId         - 댓글을 등록할 1:1 문의의 식별번호입니다.
      * @param memberInfo     - 댓글을 등록하는 회원의 정보입니다.
      * @param commentRequest - 댓글을 등록하기 위한 DTO 객체입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.

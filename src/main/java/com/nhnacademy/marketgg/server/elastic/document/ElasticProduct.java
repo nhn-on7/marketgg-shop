@@ -51,8 +51,8 @@ public class ElasticProduct {
      * 엘라스틱 서치의 상품을 생성하는 생성자입니다.
      *
      * @param product - 등록할 상품의 정보를 담고있습니다.
-     * @param label - 등록할 라벨의 정보를 담고있습니다.
-     * @param image - 등록할 이미지의 정보를 담고있습니다.
+     * @param label   - 등록할 라벨의 정보를 담고있습니다.
+     * @param image   - 등록할 이미지의 정보를 담고있습니다.
      * @author 박세완
      * @since 1.0.0
      */

@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.member;
 
-import com.nhnacademy.marketgg.server.dto.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.QMember;
 import com.querydsl.core.types.Projections;

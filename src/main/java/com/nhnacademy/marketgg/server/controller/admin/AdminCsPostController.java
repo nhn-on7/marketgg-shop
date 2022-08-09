@@ -8,7 +8,7 @@ import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.service.PostService;
+import com.nhnacademy.marketgg.server.service.post.PostService;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;

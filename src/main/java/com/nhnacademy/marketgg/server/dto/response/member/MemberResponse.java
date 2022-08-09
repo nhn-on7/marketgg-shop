@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.dto.response.member;
 
-import com.nhnacademy.marketgg.server.dto.AuthInfo;
-import com.nhnacademy.marketgg.server.dto.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Builder;

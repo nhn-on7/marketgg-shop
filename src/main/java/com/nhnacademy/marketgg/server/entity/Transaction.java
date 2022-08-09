@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
  * 거래 개체입니다.
  *
  * @author 공통
- * @version  1.0.0
+ * @version 1.0.0
  */
 @Table(name = "transactions")
 @Entity

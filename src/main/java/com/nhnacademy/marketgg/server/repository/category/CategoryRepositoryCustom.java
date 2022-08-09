@@ -1,9 +1,8 @@
 package com.nhnacademy.marketgg.server.repository.category;
 
 import com.nhnacademy.marketgg.server.dto.response.category.CategoryRetrieveResponse;
-import org.springframework.data.repository.NoRepositoryBean;
-
 import java.util.List;
+import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface CategoryRepositoryCustom {
