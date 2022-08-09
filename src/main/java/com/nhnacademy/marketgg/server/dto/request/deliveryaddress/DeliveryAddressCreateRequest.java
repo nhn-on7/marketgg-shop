@@ -8,11 +8,7 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 @Getter
-public class UpdateDeliveryAddressRequest {
-
-    // 배송지 Id
-    @NotNull
-    private Long id;
+public class DeliveryAddressCreateRequest {
 
     @NotNull
     private boolean isDefaultAddress;

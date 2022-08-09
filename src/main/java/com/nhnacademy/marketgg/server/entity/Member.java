@@ -95,6 +95,24 @@ public class Member {
     }
 
     /**
+     * 회원을 생성하기 위한 생성자입니다.
+     *
+     * @param memberRequest - 회원을 생성하기 위한 DTO 입니다.
+     * @since 1.0.0
+     */
+    public Member(final MemberCreateRequest memberRequest, final MemberGrade memberGrade, final Cart cart) {
+        this.memberGrade = memberGrade;
+        this.cart = cart;
+        this.uuid = memberRequest.getUuid();
+        this.gender = memberRequest.getGender();
+        this.birthDate = memberRequest.getBirthDate();
+        this.ggpassUpdatedAt = memberRequest.getGgpassUpdateAt();
+        this.createdAt = memberRequest.getCreatedAt();
+        this.updatedAt = memberRequest.getUpdatedAt();
+        this.deletedAt = memberRequest.getDeletedAt();
+    }
+
+    /**
      * 회원가입 처리를 위한 생성자 입니다.
      *
      * @param shopMemberSignupRequest - 클라이언트 폼에서 가입한 회원의 정보를 담은 DTO 입니다.

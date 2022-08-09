@@ -3,8 +3,8 @@ package com.nhnacademy.marketgg.server.controller.member;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.CreateDeliveryAddressRequest;
-import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.UpdateDeliveryAddressRequest;
+import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
@@ -34,7 +34,7 @@ public class DeliveryAddressController {
 
     @PostMapping("/delivery-address")
     public ResponseEntity<CommonResponse> createDeliveryAddress(MemberInfo member,
-                                                                @Validated @RequestBody final CreateDeliveryAddressRequest deliveryAddressRequest) {
+                                                                @Validated @RequestBody final DeliveryAddressCreateRequest deliveryAddressRequest) {
         deliveryAddressService.createDeliveryAddress(member, deliveryAddressRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -43,8 +43,8 @@ public class DeliveryAddressController {
 
     @PatchMapping("/delivery-address")
     public ResponseEntity<CommonResponse> updateDeliveryAddress(MemberInfo member,
-                                                                @Validated @RequestBody final UpdateDeliveryAddressRequest updateDeliveryAddressRequest) {
-        deliveryAddressService.updateDeliveryAddress(member, updateDeliveryAddressRequest);
+                                                                @Validated @RequestBody final DeliveryAddressUpdateRequest deliveryAddressUpdateRequest) {
+        deliveryAddressService.updateDeliveryAddress(member, deliveryAddressUpdateRequest);
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(new SingleResponse<>("Update success"));

@@ -5,6 +5,7 @@ import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateR
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
@@ -17,6 +18,7 @@ import com.nhnacademy.marketgg.server.entity.CartProduct;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
+import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.entity.Product;
@@ -47,6 +49,10 @@ public class Dummy {
 
     public static Member getDummyMember(Cart cart) {
         return new Member(getDummyMemberCreateRequest(DUMMY_UUID), cart);
+    }
+
+    public static Member getDummyMember(Cart cart, MemberGrade memberGrade) {
+        return new Member(getDummyMemberCreateRequest(DUMMY_UUID),  memberGrade, cart);
     }
 
     public static Member getDummyMember(String uuid, Cart cart) {
@@ -192,6 +198,17 @@ public class Dummy {
 
     public static SearchRequest getSearchRequest() {
         return new SearchRequest("hi", 0, 10);
+    }
+
+    public static DeliveryAddressCreateRequest getDeliveryAddressCreateRequest() {
+        DeliveryAddressCreateRequest createRequest = new DeliveryAddressCreateRequest();
+
+        ReflectionTestUtils.setField(createRequest, "isDefaultAddress", false);
+        ReflectionTestUtils.setField(createRequest, "zipCode", 50182);
+        ReflectionTestUtils.setField(createRequest, "address", "김해시 내동 삼성아파트");
+        ReflectionTestUtils.setField(createRequest, "detailAddress","3층");
+
+        return createRequest;
     }
 
 }
