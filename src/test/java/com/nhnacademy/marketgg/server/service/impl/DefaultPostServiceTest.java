@@ -126,12 +126,10 @@ class DefaultPostServiceTest {
         given(categoryRepository.findById(anyString())).willReturn(
                 Optional.of(new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest))));
         given(postRepository.save(any(CustomerServicePost.class))).willReturn(post);
-        given(elasticBoardRepository.save(any(ElasticBoard.class))).willReturn(board);
 
         postService.createPost(postRequest, memberInfo);
 
         then(postRepository).should(times(1)).save(any(CustomerServicePost.class));
-        then(elasticBoardRepository).should(times(1)).save(any(ElasticBoard.class));
     }
 
     @Test
@@ -141,7 +139,6 @@ class DefaultPostServiceTest {
         postService.createPost(postRequest, memberInfo);
 
         then(postRepository).should(times(0)).save(any(CustomerServicePost.class));
-        then(elasticBoardRepository).should(times(0)).save(any(ElasticBoard.class));
     }
 
     @Test
@@ -244,7 +241,6 @@ class DefaultPostServiceTest {
         postService.updatePost(NOTICE_CODE, 1L, postRequest);
 
         then(postRepository).should(times(1)).save(any(CustomerServicePost.class));
-        then(elasticBoardRepository).should(times(1)).save(any(ElasticBoard.class));
     }
 
     @Test
@@ -259,7 +255,6 @@ class DefaultPostServiceTest {
         postService.updateOtoInquiryStatus(1L, new PostStatusUpdateRequest());
 
         then(postRepository).should(times(1)).save(any(CustomerServicePost.class));
-        then(elasticBoardRepository).should(times(1)).save(any(ElasticBoard.class));
     }
 
     @Test

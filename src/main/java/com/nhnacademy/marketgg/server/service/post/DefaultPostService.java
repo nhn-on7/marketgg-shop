@@ -65,8 +65,7 @@ public class DefaultPostService implements PostService {
                 CategoryNotFoundException::new);
             CustomerServicePost post = new CustomerServicePost(member, category, postRequest);
 
-            CustomerServicePost savePost = postRepository.save(post);
-            elasticBoardRepository.save(new ElasticBoard(savePost));
+            postRepository.save(post);
         }
     }
 
@@ -119,8 +118,7 @@ public class DefaultPostService implements PostService {
                 CustomerServicePostNotFoundException::new);
             post.updatePost(postRequest);
 
-            CustomerServicePost savePost = postRepository.save(post);
-            elasticBoardRepository.save(new ElasticBoard(savePost));
+            postRepository.save(post);
         }
     }
 
@@ -130,8 +128,7 @@ public class DefaultPostService implements PostService {
             postRepository.findById(postNo).orElseThrow(CustomerServicePostNotFoundException::new);
         post.updatePostStatus(statusUpdateRequest.getStatus());
 
-        CustomerServicePost savePost = postRepository.save(post);
-        elasticBoardRepository.save(new ElasticBoard(savePost));
+        postRepository.save(post);
     }
 
     @Override
