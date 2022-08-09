@@ -29,6 +29,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+
+/**
+ * 검색을 위한 Adapter 입니다.
+ *
+ * @author 박세완
+ * @version 1.0.0
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -76,7 +83,7 @@ public class SearchAdapter implements SearchRepository {
     public List<PostResponse> searchBoardWithCategoryCode(final String categoryCode,
                                                           final SearchRequest request,
                                                           final String option)
-        throws JsonProcessingException, ParseException {
+            throws JsonProcessingException, ParseException {
 
         Map<String, String> sort = this.buildSort(null);
         request.setRequest(request.getRequest() + " " + translator.converter(request.getRequest()));

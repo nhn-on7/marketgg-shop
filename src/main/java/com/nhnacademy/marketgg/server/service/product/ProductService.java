@@ -7,11 +7,9 @@ import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
-
+import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
 import java.io.IOException;
 import java.util.List;
-
-import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +28,7 @@ public interface ProductService {
      *
      * @param productRequest - 상품 생성을 위한 DTO입니다. deletedAt 속성만 nullable 입니다.
      * @param image          - 상품 생성을 위한 MultipartFile 타입 파라미터입니다. null일 수 없습니다.
-     * @throws IOException 입 출력에 관한 예외처리입니다.
+     * @throws IOException 입출력에 관한 예외처리입니다.
      * @since 1.0.0
      */
     void createProduct(final ProductCreateRequest productRequest, MultipartFile image) throws IOException;
@@ -60,7 +58,7 @@ public interface ProductService {
      * @param productRequest - 상품 수정을 위한 DTO 입니다.
      * @param image          - 상품 수정을 위한 MultipartFile 타입 인자입니다.
      * @param productId      - 상품의 PK 값 입니다.
-     * @throws IOException 입 출력에 관한 예외처리입니다.
+     * @throws IOException 입출력에 관한 예외처리입니다.
      * @since 1.0.0
      */
     void updateProduct(final ProductUpdateRequest productRequest, MultipartFile image, final Long productId)
@@ -96,7 +94,8 @@ public interface ProductService {
      * @throws JsonProcessingException Json 과 관련된 예외 처리입니다.
      * @since 1.0.0
      */
-    List<SearchProductResponse> searchProductList(final String keyword, final Integer page) throws ParseException, JsonProcessingException;
+    List<SearchProductResponse> searchProductList(final String keyword, final Integer page)
+            throws ParseException, JsonProcessingException;
 
     /**
      * 카테고리 목록에서 검색한 상품 목록을 반환합니다.
@@ -109,7 +108,9 @@ public interface ProductService {
      * @throws JsonProcessingException Json 과 관련된 예외 처리입니다.
      * @since 1.0.0
      */
-    List<SearchProductResponse> searchProductListByCategory(final String categoryId, final String keyword, final Integer page) throws ParseException, JsonProcessingException;
+    List<SearchProductResponse> searchProductListByCategory(final String categoryId, final String keyword,
+                                                            final Integer page)
+            throws ParseException, JsonProcessingException;
 
     /**
      * 카테고리 목록내에서 선택한 가격 정렬 옵션으로 정렬된 상품 목록을 반환합니다.
@@ -123,6 +124,8 @@ public interface ProductService {
      * @throws JsonProcessingException Json 과 관련된 예외 처리입니다.
      * @since 1.0.0
      */
-    List<SearchProductResponse> searchProductListByPrice(final String categoryId, final String option, final String keyword, final Integer page) throws ParseException, JsonProcessingException;
+    List<SearchProductResponse> searchProductListByPrice(final String categoryId, final String option,
+                                                         final String keyword, final Integer page)
+            throws ParseException, JsonProcessingException;
 
 }
