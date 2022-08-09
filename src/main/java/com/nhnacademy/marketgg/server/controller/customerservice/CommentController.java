@@ -4,8 +4,11 @@ import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.CommentRequest;
+import com.nhnacademy.marketgg.server.exception.RequestParamOrPathVariableIsNonNullException;
 import com.nhnacademy.marketgg.server.service.otoinquiry.OtoInquiryCommentService;
 import java.net.URI;
+import java.util.Objects;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * 1:1 문의의 댓글에 관련된 Rest Controller 입니다.
@@ -42,8 +47,10 @@ public class CommentController {
      */
     @PostMapping("/{postId}")
     public ResponseEntity<Void> createComment(@PathVariable final Long postId,
-                                              @RequestBody final CommentRequest commentRequest,
+                                              @Valid @RequestBody final CommentRequest commentRequest,
                                               final MemberInfo memberInfo) {
+
+        this.checkRpAndPbIsNonNull(postId);
 
         otoInquiryCommentService.createComment(postId, memberInfo.getId(), commentRequest);
 
@@ -51,6 +58,12 @@ public class CommentController {
                              .location(URI.create(DEFAULT_CS + "/" + postId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
+    }
+
+    private <T>void checkRpAndPbIsNonNull(final T validContent) {
+        if (Objects.isNull(validContent)) {
+            throw new RequestParamOrPathVariableIsNonNullException();
+        }
     }
 
 }

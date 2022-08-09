@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
 import com.nhnacademy.marketgg.server.controller.member.PointController;
 import com.nhnacademy.marketgg.server.service.point.PointService;
 import java.util.List;
@@ -13,9 +14,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(PointController.class)
+@Import({
+        RoleCheckAspect.class
+})
 class PointControllerTest {
 
     @Autowired
@@ -30,7 +35,7 @@ class PointControllerTest {
     @DisplayName("회원의 포인트 내역 목록 조회")
     void retrievePointHistory() throws Exception {
         given(pointService.retrievePointHistories(anyLong())).willReturn(List.of());
-        mockMvc.perform(get(DEFAULT_MEMBER + "/{memberId}/points", 1L))
+        mockMvc.perform(get(DEFAULT_MEMBER + "/points"))
                .andExpect(status().isOk());
     }
 

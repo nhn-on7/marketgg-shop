@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
+import com.nhnacademy.marketgg.server.annotation.Role;
+import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.category.CategoryRetrieveResponse;
@@ -23,9 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 카테고리 관리에 관련된 RestController 입니다.
  *
- * @author 박세완, 김정민
+ * @author 박세완
+ * @author 김정민
  * @version 1.0.0
  */
+@RoleCheck(accessLevel = Role.ROLE_ADMIN)
 @RestController
 @RequestMapping("/admin/categories")
 @RequiredArgsConstructor

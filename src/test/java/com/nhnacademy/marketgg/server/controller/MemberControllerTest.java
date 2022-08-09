@@ -62,14 +62,12 @@ class MemberControllerTest {
     @MockBean
     GivenCouponService givenCouponService;
 
-    Pageable pageable = PageRequest.of(0, 20);
-
     @Test
     @DisplayName("GG 패스 갱신일자 확인")
     void testCheckPassUpdatedAt() throws Exception {
         when(memberService.retrievePassUpdatedAt(anyLong())).thenReturn(LocalDateTime.now());
 
-        this.mockMvc.perform(get("/members/{memberId}/ggpass", 1L))
+        this.mockMvc.perform(get("/members/ggpass"))
                     .andExpect(status().isOk());
 
         verify(memberService, times(1)).retrievePassUpdatedAt(anyLong());
@@ -80,7 +78,7 @@ class MemberControllerTest {
     void testJoinPass() throws Exception {
         doNothing().when(memberService).subscribePass(anyLong());
 
-        this.mockMvc.perform(post("/members/{memberId}/ggpass/subscribe", 1L))
+        this.mockMvc.perform(post("/members/ggpass/subscribe", 1L))
                     .andExpect(status().isOk());
 
         verify(memberService, times(1)).subscribePass(anyLong());
@@ -91,7 +89,7 @@ class MemberControllerTest {
     void testWithdrawPass() throws Exception {
         doNothing().when(memberService).withdrawPass(anyLong());
 
-        this.mockMvc.perform(post("/members/{memberId}/ggpass/withdraw", 1L))
+        this.mockMvc.perform(post("/members/ggpass/withdraw", 1L))
                     .andExpect(status().isOk());
 
         verify(memberService, times(1)).withdrawPass(anyLong());

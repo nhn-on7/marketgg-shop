@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
+import com.nhnacademy.marketgg.server.annotation.Role;
+import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.response.category.CategorizationRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.category.CategorizationService;
 import java.net.URI;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 박세완
  * @version 1.0.0
  */
+@RoleCheck(accessLevel = Role.ROLE_ADMIN)
 @RestController
 @RequestMapping("/admin/categorizations")
 @RequiredArgsConstructor

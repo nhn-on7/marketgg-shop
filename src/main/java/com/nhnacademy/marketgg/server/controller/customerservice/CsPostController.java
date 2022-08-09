@@ -9,10 +9,14 @@ import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
+import com.nhnacademy.marketgg.server.exception.RequestParamOrPathVariableIsNonNullException;
 import com.nhnacademy.marketgg.server.service.post.PostService;
+
+import java.io.Serializable;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -80,6 +84,10 @@ public class CsPostController {
                                                                @RequestParam final Integer page,
                                                                final MemberInfo memberInfo) {
 
+        for(Serializable validContent : List.of(categoryId, page)) {
+            this.checkRpAndPbIsNonNull(validContent);
+        }
+
         List<PostResponse> responses = postService.retrievePostList(categoryId, page, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -96,9 +104,12 @@ public class CsPostController {
      * @since 1.0.0
      */
     @GetMapping("/{postId}")
-    public ResponseEntity<PostResponseForDetail> retrievePost(@PathVariable final Long postId,
-                                                              final MemberInfo memberInfo)
+    public ResponseEntity<PostResponseForDetail> retrievePost(@PathVariable final Long postId, final MemberInfo memberInfo)
         throws JsonProcessingException {
+
+        for(Serializable validContent : List.of(postId)) {
+            this.checkRpAndPbIsNonNull(validContent);
+        }
 
         PostResponseForDetail response = postService.retrievePost(postId, memberInfo);
 
@@ -127,6 +138,10 @@ public class CsPostController {
                                                                         final MemberInfo memberInfo)
         throws ParseException, JsonProcessingException {
 
+        for(Serializable validContent : List.of(categoryId, keyword, page)) {
+            this.checkRpAndPbIsNonNull(validContent);
+        }
+
         List<PostResponse> responses = postService.searchForCategory(categoryId, new SearchRequest(keyword, page, PAGE_SIZE), memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -146,6 +161,11 @@ public class CsPostController {
     @DeleteMapping("/categories/{categoryId}/{postId}")
     public ResponseEntity<Void> deletePost(@PathVariable final String categoryId, @PathVariable final Long postId,
                                            final MemberInfo memberInfo) {
+
+        for(Serializable validContent : List.of(categoryId, postId)) {
+            this.checkRpAndPbIsNonNull(validContent);
+        }
+
         postService.deletePost(categoryId, postId, memberInfo);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
@@ -169,6 +189,12 @@ public class CsPostController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/reasons"))
                              .body(reasons);
+    }
+
+    private <T>void checkRpAndPbIsNonNull(final T validContent) {
+        if (Objects.isNull(validContent)) {
+            throw new RequestParamOrPathVariableIsNonNullException();
+        }
     }
 
 }

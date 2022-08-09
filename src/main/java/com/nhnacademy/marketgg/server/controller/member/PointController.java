@@ -1,14 +1,18 @@
 package com.nhnacademy.marketgg.server.controller.member;
 
+import com.nhnacademy.marketgg.server.annotation.Role;
+import com.nhnacademy.marketgg.server.annotation.RoleCheck;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.point.PointService;
+
 import java.net.URI;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 박세완
  * @version 1.0.0
  */
+@RoleCheck(accessLevel = Role.ROLE_USER)
 @RestController
-@RequestMapping("/members/{memberId}/points")
+@RequestMapping("/members/points")
 @RequiredArgsConstructor
 public class PointController {
 
@@ -30,16 +35,16 @@ public class PointController {
     /**
      * 지정한 회원의 포인트 내역을 반환합니다.
      *
-     * @param memberId - 지정한 회원의 식별번호입니다.
+     * @param memberInfo - 지정한 회원의 정보를 담은 객체입니다.
      * @return 지정한 회원의 포인트 내역을 List 로 반환합니다.
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<List<PointRetrieveResponse>> retrievePointHistory(@PathVariable final Long memberId) {
-        List<PointRetrieveResponse> responses = pointService.retrievePointHistories(memberId);
+    public ResponseEntity<List<PointRetrieveResponse>> retrievePointHistory(final MemberInfo memberInfo) {
+        List<PointRetrieveResponse> responses = pointService.retrievePointHistories(memberInfo.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_MEMBER + "/" + memberId + "/points"))
+                             .location(URI.create(DEFAULT_MEMBER + "/points"))
                              .body(responses);
     }
 

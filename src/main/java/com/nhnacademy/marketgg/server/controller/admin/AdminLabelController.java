@@ -1,10 +1,15 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
+import com.nhnacademy.marketgg.server.annotation.Role;
+import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.request.label.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.label.LabelRetrieveResponse;
+import com.nhnacademy.marketgg.server.exception.RequestParamOrPathVariableIsNonNullException;
 import com.nhnacademy.marketgg.server.service.label.LabelService;
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,12 +22,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * 라벨관리에 관련된 RestController 입니다.
  *
  * @author 박세완
  * @version 1.0.0
  */
+@RoleCheck(accessLevel = Role.ROLE_ADMIN)
 @RestController
 @RequestMapping("/admin/labels")
 @RequiredArgsConstructor
@@ -40,7 +48,7 @@ public class AdminLabelController {
      * @since 1.0.0
      */
     @PostMapping
-    public ResponseEntity<Void> registerLabel(@RequestBody final LabelCreateRequest labelCreateRequest) {
+    public ResponseEntity<Void> registerLabel(@Valid @RequestBody final LabelCreateRequest labelCreateRequest) {
         labelService.createLabel(labelCreateRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -73,11 +81,19 @@ public class AdminLabelController {
      */
     @DeleteMapping("/{labelId}")
     public ResponseEntity<Void> deleteLabel(@PathVariable final Long labelId) {
+        this.checkRpAndPbIsNonNull(labelId);
+
         labelService.deleteLabel(labelId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_LABEL + "/" + labelId))
                              .build();
+    }
+
+    private <T>void checkRpAndPbIsNonNull(final T validContent) {
+        if (Objects.isNull(validContent)) {
+            throw new RequestParamOrPathVariableIsNonNullException();
+        }
     }
 
 }
