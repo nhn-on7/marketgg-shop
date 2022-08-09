@@ -1,15 +1,15 @@
 package com.nhnacademy.marketgg.server.service.order;
 
-import com.nhnacademy.marketgg.server.constant.OrderType;
+import com.nhnacademy.marketgg.server.constant.PaymentType;
+import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
-import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
-import com.nhnacademy.marketgg.server.dto.response.order.OrderCreateResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
@@ -22,12 +22,12 @@ import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryReposi
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,36 +45,58 @@ public class DefaultOrderService implements OrderService {
 
     @Transactional(readOnly = true)
     @Override
-    public OrderCreateResponse createOrder(final OrderCreateRequest orderRequest, final Long memberId) {
+    public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         Order order = new Order(member, orderRequest);
 
         orderRepository.save(order);
-        // Memo: 주문, 사용쿠폰, 포인트이력, 주문배송지, 주문상품 save(추가 or 수정 or 삭제)
+        // Memo: 주문, 주문배송지, 주문상품 save
 
 
-        return new OrderCreateResponse(orderRequest.getTotalAmount(), orderRequest.getOrderType());
+        // return new OrderToPayment();
+        return null;
     }
 
     @Override
-    public OrderFormResponse retrieveOrderForm(List<ProductToOrder> products, MemberInfo memberInfo) {
-        // memo: 하단에 OrderFormResponse 보내는거 비워져있는 부분 조회해오기
+    public OrderFormResponse retrieveOrderForm(final List<ProductToOrder> products, final MemberInfo memberInfo,
+                                               final AuthInfo authInfo) {
 
-        List<String> orderTypes = Arrays.stream(OrderType.values())
-                                        .map(OrderType::getType)
-                                        .collect(Collectors.toList());
-        // memo: ggpass 가 완성되어 있지않음..
-        // OrderFormResponse orderFormResponse = OrderFormResponse.builder()
-        //                                                        .products(products)
-        //                                                        .memberName().memberEmail()/*.haveGgpass()*/
-        //                                                        .givenCouponList()
-        //                                                        .totalPoint()
-        //                                                        .orderType(orderTypes)
-        //                                                        .totalOrigin().couponDiscount().usedPoint()
-        //                                                        .totalAmount().savePoint()
-        //                                                        .build();
+        Long memberId = memberInfo.getId();
+        List<OrderGivenCoupon> orderGivenCoupons = givenCouponRepository.findOwnCouponsByMemberId(memberId);
+        AtomicReference<Integer> totalPoint = new AtomicReference<>(0);
+        pointRepository.findLastTotalPoint(memberId)
+                       .ifPresent(x -> totalPoint.set(x.getTotalPoint()));
+        // memo: 배송지 조회
+        List<String> paymentTypes = Arrays.stream(PaymentType.values())
+                                          .map(PaymentType::getType)
+                                          .collect(Collectors.toList());
+        // memo: ggpass 가 완성되어 있지않음
+        return OrderFormResponse.builder()
+                                .products(products)
+                                .memberId(memberId).memberName(authInfo.getName())
+                                .memberEmail(authInfo.getEmail()).memberGrade(memberInfo.getMemberGrade())
+                                /*.haveGgpass()*/
+                                .givenCouponList(orderGivenCoupons)
+                                .totalPoint(totalPoint.get())
+                                .deliveryAddressId(null) // memo: 배송지 조회하고 수정하기
+                                .zipCode(null)
+                                .address(null)
+                                .detailAddress(null)
+                                .isDefault(true)
+                                .paymentType(paymentTypes)
+                                .totalOrigin(calculateTotalOrigin(products))
+                                .build();
+    }
 
-        return null;
+    // memo: 원가 계산
+    private Long calculateTotalOrigin(List<ProductToOrder> products) {
+        Long result = 0L;
+
+        for (ProductToOrder product : products) {
+            result += product.getPrice();
+        }
+
+        return result;
     }
 
     // 주문 목록 조회 - 관리자(전체), 회원(본인)

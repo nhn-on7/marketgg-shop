@@ -1,12 +1,13 @@
 package com.nhnacademy.marketgg.server.controller.order;
 
+import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
-import com.nhnacademy.marketgg.server.dto.response.order.OrderCreateResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,10 +42,10 @@ public class OrderController {
 
     // 주문서 등록
     @PostMapping
-    public ResponseEntity<OrderCreateResponse> createOrder(@RequestBody final OrderCreateRequest orderRequest,
-                                                           final MemberInfo memberInfo) {
+    public ResponseEntity<OrderToPayment> createOrder(@RequestBody final OrderCreateRequest orderRequest,
+                                                      final MemberInfo memberInfo) {
 
-        OrderCreateResponse response = orderService.createOrder(orderRequest, memberInfo.getId());
+        OrderToPayment response = orderService.createOrder(orderRequest, memberInfo.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(ORDER_PREFIX))
@@ -55,9 +56,9 @@ public class OrderController {
     // 주문서 작성폼 정보 조회
     @GetMapping("/orderForm")
     public ResponseEntity<OrderFormResponse> retrieveOrderForm(@RequestBody final List<ProductToOrder> products,
-                                                               final MemberInfo memberInfo) {
+                                                               final MemberInfo memberInfo, final AuthInfo authInfo) {
 
-        OrderFormResponse response = orderService.retrieveOrderForm(products, memberInfo);
+        OrderFormResponse response = orderService.retrieveOrderForm(products, memberInfo, authInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/orderForm"))

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class OrderToPayment {
 
-    private final String orderId;
+    private final String orderId; // prefix + orderId
 
     private final String orderName;
 
@@ -16,5 +16,11 @@ public class OrderToPayment {
     private final String memberEmail;
 
     private final Long totalAmount;
+
+    private final Long couponId;
+
+    private final Integer usedPoint;
+
+    private final Integer expectedSavePoint;
 
 }

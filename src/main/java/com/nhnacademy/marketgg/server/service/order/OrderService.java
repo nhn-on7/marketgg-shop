@@ -1,12 +1,14 @@
 package com.nhnacademy.marketgg.server.service.order;
 
+import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
-import com.nhnacademy.marketgg.server.dto.response.order.OrderCreateResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
+
 import java.util.List;
 
 /**
@@ -25,10 +27,11 @@ public interface OrderService {
      * @return - 주문 등록 후 결제에 넘겨줄 정보를 담은 DTO 를 반환합니다.
      * @since 1.0.0
      */
-    OrderCreateResponse createOrder(final OrderCreateRequest orderRequest, final Long memberId);
+    OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId);
 
     // memo: javadoc
-    OrderFormResponse retrieveOrderForm(List<ProductToOrder> products, MemberInfo memberInfo);
+    OrderFormResponse retrieveOrderForm(final List<ProductToOrder> products, final MemberInfo memberInfo,
+                                        final AuthInfo authInfo);
 
     /**
      * 주문 목록을 조회하는 메소드입니다.

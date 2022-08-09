@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.constant.OrderStatus;
-import com.nhnacademy.marketgg.server.constant.OrderType;
+import com.nhnacademy.marketgg.server.constant.PaymentType;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -81,7 +81,7 @@ public class Order {
     public Order(final Member member, final OrderCreateRequest orderRequest) {
         this.member = member;
         this.totalAmount = orderRequest.getTotalAmount();
-        this.orderStatus = orderRequest.getOrderType().equals(OrderType.VIRTUAL.getType())
+        this.orderStatus = orderRequest.getOrderType().equals(PaymentType.VIRTUAL.getType())
                 ? OrderStatus.DEPOSIT_WAITING.getStatus() : OrderStatus.PAY_WAITING.getStatus();
         this.usedPoint = orderRequest.getUsedPoint();
         this.createdAt = LocalDateTime.now();
