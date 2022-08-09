@@ -15,15 +15,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * auth 서버에서 uuid 목록을 전송해 이름목록을 가져옵니다.
+ *
+ * @author 박세완
+ * @version 1.0.0
+ */
 @Component
 @RequiredArgsConstructor
 public class AuthAdapter implements AuthRepository {
 
-    private String auth = "http://127.0.0.1:7070";
+    @Value("{gg.gateway.origin}")
+    private String auth;
 
     private final RestTemplate restTemplate;
 
     private final ObjectMapper objectMapper;
+
+    private static final String DEFAULT_AUTH = "/auth/v1/info";
 
     @Override
     public List<MemberNameResponse> getNameListByUuid(final List<String> uuidList) throws JsonProcessingException {
@@ -31,7 +40,7 @@ public class AuthAdapter implements AuthRepository {
         String requestBody = objectMapper.writeValueAsString(uuidList);
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, buildHeaders());
         ResponseEntity<List<MemberNameResponse>> response = restTemplate.exchange(
-                auth + "/name",
+                auth + DEFAULT_AUTH + "/names",
                 HttpMethod.POST,
                 requestEntity,
                 new ParameterizedTypeReference<>() {
