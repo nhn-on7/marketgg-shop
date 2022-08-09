@@ -1,12 +1,16 @@
 package com.nhnacademy.marketgg.server.service.product;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
+import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
+import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticProductRepository;
+import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Image;
@@ -29,7 +33,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import lombok.RequiredArgsConstructor;
+import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -49,15 +55,16 @@ public class DefaultProductService implements ProductService {
     private final ImageService imageService;
 
     private final ElasticProductRepository elasticProductRepository;
+    private final SearchRepository searchRepository;
 
     private static final String DIR = System.getProperty("user.home");
+    private static final Integer PAGE_SIZE = 10;
 
     @Transactional
     @Override
     public void createProduct(final ProductCreateRequest productRequest, MultipartFile imageFile)
-        throws IOException {
+            throws IOException {
 
-        // Asset asset = fileUpload(imageFile);
         Asset asset = assetRepository.save(Asset.create());
         List<MultipartFile> images = new ArrayList<>();
         images.add(imageFile);
@@ -69,7 +76,7 @@ public class DefaultProductService implements ProductService {
         Product product = productRepository.save(new Product(productRequest, asset, category));
         ProductLabel.Pk pk = new ProductLabel.Pk(product.getId(), productRequest.getLabelNo());
         Label label =
-            labelRepository.findById(pk.getLabelNo()).orElseThrow(LabelNotFoundException::new);
+                labelRepository.findById(pk.getLabelNo()).orElseThrow(LabelNotFoundException::new);
         Image image = imageRepository.findByAssetIdAndImageSequence(asset.getId(), 1)
                                      .orElseThrow(ImageNotFoundException::new);
 
@@ -80,7 +87,8 @@ public class DefaultProductService implements ProductService {
     @Override
     public DefaultPageResult<ProductResponse> retrieveProducts(final Pageable pageable) {
         Page<ProductResponse> allProducts = productRepository.findAllProducts(pageable);
-        return new DefaultPageResult(allProducts.getContent(), allProducts.getTotalElements(), allProducts.getTotalPages(), allProducts.getNumber());
+        return new DefaultPageResult(allProducts.getContent(), allProducts.getTotalElements(),
+                                     allProducts.getTotalPages(), allProducts.getNumber());
 
         // return new SingleResponse<>(elasticProductRepository.findAll(pageable));
     }
@@ -96,7 +104,7 @@ public class DefaultProductService implements ProductService {
                               final Long productId) throws IOException {
 
         Product product =
-            productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+                productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
         Asset asset = fileUpload(imageFile);
 
         Category category = categoryRepository.findById(productRequest.getCategoryCode())
@@ -104,7 +112,7 @@ public class DefaultProductService implements ProductService {
 
         product.updateProduct(productRequest, asset, category);
         Label label =
-            labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);
+                labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);
         Image image = imageRepository.findByAssetIdAndImageSequence(asset.getId(), 1)
                                      .orElseThrow(ImageNotFoundException::new);
         ElasticProduct elasticProduct = new ElasticProduct(product, label, image);
@@ -126,9 +134,9 @@ public class DefaultProductService implements ProductService {
     @Override
     public void restoreProduct(final Long id) {
         Product product =
-            this.productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+                this.productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
         Label label =
-            labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);
+                labelRepository.findById(product.getId()).orElseThrow(LabelNotFoundException::new);
         Image image = imageRepository.findByAssetIdAndImageSequence(product.getAsset().getId(), 1)
                                      .orElseThrow(ImageNotFoundException::new);
         ElasticProduct elasticProduct = new ElasticProduct(product, label, image);
@@ -139,8 +147,8 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public List<ElasticProduct> searchProductByCategory(final Pageable pageable,
-                                                        final String categoryCode) {
+    public List<ElasticProduct> findProductByCategory(final Pageable pageable,
+                                                      final String categoryCode) {
         return this.elasticProductRepository.findAllByCategoryCode(pageable, categoryCode).getContent();
 
     }
@@ -150,6 +158,25 @@ public class DefaultProductService implements ProductService {
         imageFile.transferTo(dest);
 
         return this.assetRepository.save(Asset.create());
+    }
+
+    @Override
+    public List<SearchProductResponse> searchProductList(final String keyword, final Integer page) throws ParseException, JsonProcessingException {
+        return searchRepository.searchProductWithKeyword(new SearchRequest(keyword, page, PAGE_SIZE), null);
+    }
+
+    @Override
+    public List<SearchProductResponse> searchProductListByCategory(final String categoryId, final String keyword,
+                                                                   final Integer page) throws ParseException, JsonProcessingException {
+
+        return searchRepository.searchProductForCategory(categoryId, new SearchRequest(keyword, page, PAGE_SIZE), null);
+    }
+
+    @Override
+    public List<SearchProductResponse> searchProductListByPrice(final String categoryId, final String option,
+                                                                final String keyword, final Integer page) throws ParseException, JsonProcessingException {
+
+        return searchRepository.searchProductForCategory(categoryId, new SearchRequest(keyword, page, PAGE_SIZE), option);
     }
 
 }
