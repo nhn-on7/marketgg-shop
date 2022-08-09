@@ -3,12 +3,9 @@ package com.nhnacademy.marketgg.server.controller.product;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
-import com.nhnacademy.marketgg.server.exception.RequestParamIsNonNullException;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
-import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Pageable;
@@ -72,10 +69,6 @@ public class ProductController {
                                                                          @RequestParam final Integer page)
             throws ParseException, JsonProcessingException {
 
-        for (Serializable validContent : List.of(keyword, page)) {
-            this.checkRpAndPbIsNonNull(validContent);
-        }
-
         List<SearchProductResponse> productList =
                 productService.searchProductList(keyword, page);
 
@@ -97,14 +90,11 @@ public class ProductController {
      * @since 1.0.0
      */
     @GetMapping("/categories/{categoryId}/search")
-    public ResponseEntity<List<SearchProductResponse>> searchProductListByCategory(@PathVariable final String categoryId,
-                                                                                   @RequestParam final String keyword,
-                                                                                   @RequestParam final Integer page)
+    public ResponseEntity<List<SearchProductResponse>> searchProductListByCategory(
+            @PathVariable final String categoryId,
+            @RequestParam final String keyword,
+            @RequestParam final Integer page)
             throws ParseException, JsonProcessingException {
-
-        for (Serializable validContent : List.of(keyword, page)) {
-            this.checkRpAndPbIsNonNull(validContent);
-        }
 
         List<SearchProductResponse> productList =
                 productService.searchProductListByCategory(categoryId, keyword, page);
@@ -136,10 +126,6 @@ public class ProductController {
                                                                                 @RequestParam final Integer page)
             throws ParseException, JsonProcessingException {
 
-        for (Serializable validContent : List.of(option, keyword, page)) {
-            this.checkRpAndPbIsNonNull(validContent);
-        }
-
         List<SearchProductResponse> productList =
                 productService.searchProductListByPrice(categoryId, option, keyword, page);
 
@@ -149,12 +135,6 @@ public class ProductController {
                                              + "?keyword=" + keyword + "&page=" + page))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productList);
-    }
-
-    private <T> void checkRpAndPbIsNonNull(final T validContent) {
-        if (Objects.isNull(validContent)) {
-            throw new RequestParamIsNonNullException();
-        }
     }
 
 }

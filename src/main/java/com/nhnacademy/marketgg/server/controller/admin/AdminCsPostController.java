@@ -8,13 +8,10 @@ import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.exception.RequestParamIsNonNullException;
 import com.nhnacademy.marketgg.server.service.post.PostService;
-import java.io.Serializable;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -68,10 +65,6 @@ public class AdminCsPostController {
                                                                       @RequestParam final String keyword,
                                                                       @RequestParam final Integer page)
             throws ParseException, JsonProcessingException {
-
-        for (Serializable validContent : List.of(option, keyword, page)) {
-            this.checkRpAndPbIsNonNull(validContent);
-        }
 
         List<PostResponse> responses =
                 postService.searchForOption(categoryId, new SearchRequest(keyword, page, PAGE_SIZE), optionType,
@@ -140,12 +133,6 @@ public class AdminCsPostController {
                              .location(URI.create(DEFAULT_ADMIN_POST + "/" + postNo + "/status"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
-    }
-
-    private <T> void checkRpAndPbIsNonNull(final T validContent) {
-        if (Objects.isNull(validContent)) {
-            throw new RequestParamIsNonNullException();
-        }
     }
 
 }
