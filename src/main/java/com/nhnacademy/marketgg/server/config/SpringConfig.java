@@ -1,0 +1,27 @@
+package com.nhnacademy.marketgg.server.config;
+
+import com.nhnacademy.marketgg.server.service.storage.LocalStorageService;
+import com.nhnacademy.marketgg.server.service.storage.NhnStorageService;
+import com.nhnacademy.marketgg.server.service.storage.StorageService;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * Spring Configuration을 설정합니다.
+ *
+ * @author 조현진
+ */
+@Configuration
+public class SpringConfig {
+
+    @Bean
+    public StorageService localStorageService() {
+        return new LocalStorageService();
+    }
+
+    @Bean
+    public StorageService nhnStorageService() {
+        return new NhnStorageService();
+    }
+
+}

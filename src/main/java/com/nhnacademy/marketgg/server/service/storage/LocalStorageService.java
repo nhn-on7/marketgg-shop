@@ -30,13 +30,13 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Component
 @Primary
-public class LocalStorageService implements FileService {
+public class LocalStorageService implements StorageService {
 
-    private static final String DIR =
-        "https://api-storage.cloud.toast.com/v1/AUTH_8a2dd42738a0427180466a56561b5eef/on7_storage/";
-    private final StorageService storageService;
-    private final ImageRepository imageRepository;
-    private final AssetRepository assetRepository;
+    // private static final String DIR =
+    //     "https://api-storage.cloud.toast.com/v1/AUTH_8a2dd42738a0427180466a56561b5eef/on7_storage/";
+    // private final StorageService storageService;
+    // private final ImageRepository imageRepository;
+    // private final AssetRepository assetRepository;
 
     @Override
     public List<Image> parseImages(List<MultipartFile> multipartFiles, Asset asset) throws IOException {
