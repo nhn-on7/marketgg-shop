@@ -144,11 +144,6 @@ public class NhnStorageService implements StorageService {
         return new ByteArrayInputStream(Objects.requireNonNull(response.getBody()));
     }
 
-    @Override
-    public ImageResponse retrieveImage(final Long id) {
-        return imageRepository.findByAssetId(id);
-    }
-
     private String getUrl(String containerName, String objectName) {
         return this.storageUrl + "/" + containerName + "/" + objectName;
     }

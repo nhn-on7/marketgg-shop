@@ -49,6 +49,11 @@ public class DefaultFileService implements FileService {
     }
 
     @Override
+    public ImageResponse retrieveImage(final Long id) {
+        return imageRepository.findByAssetId(id);
+    }
+
+    @Override
     public List<Image> parseImages(List<MultipartFile> multipartFiles, Asset asset) throws IOException {
 
         List<Image> images = new ArrayList<>();

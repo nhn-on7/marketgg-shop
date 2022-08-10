@@ -21,10 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  *
  */
-@Slf4j
 @RestController
-@RequestMapping("/storage")
 @RequiredArgsConstructor
+@RequestMapping("/storage")
+@Slf4j
 public class FileController {
 
     private final FileService fileService;
@@ -32,7 +32,7 @@ public class FileController {
     @GetMapping("/{assetId}")
     public ResponseEntity<ImageResponse> retrieveImage(@PathVariable final Long assetId) {
 
-        ImageResponse imageResponse = storageService.retrieveImage(assetId);
+        ImageResponse imageResponse = fileService.retrieveImage(assetId);
 
         return new ResponseEntity<>(imageResponse, HttpStatus.OK);
     }
@@ -41,8 +41,10 @@ public class FileController {
     @PostMapping
     public ResponseEntity<ImageResponse> uploadAndRetrieveImage(@RequestBody final MultipartFile image) throws IOException {
         Image uploadImage = fileService.uploadImage(image, Asset.create());
+        ImageResponse imageResponse = fileService.retrieveImage(uploadImage.getAsset().getId());
 
         return new ResponseEntity<>(imageResponse, HttpStatus.OK);
     }
 
 }
+
