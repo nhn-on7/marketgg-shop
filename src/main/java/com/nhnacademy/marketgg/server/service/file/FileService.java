@@ -13,4 +13,6 @@ public interface FileService {
 
     ImageResponse uploadImage(MultipartFile image) throws IOException;
 
+    void uploadFile(final MultipartFile image, final Asset asset);
+
 }

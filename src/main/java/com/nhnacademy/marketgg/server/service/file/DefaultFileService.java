@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,9 +28,12 @@ import org.springframework.web.multipart.MultipartFile;
  */
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class DefaultFileService implements FileService {
 
     private static final String DIR = System.getProperty("user.home");
+    private String option = "local";
 
     /**
      * 다음과 같은 기능을 합니다.
@@ -80,6 +85,11 @@ public class DefaultFileService implements FileService {
     public ImageResponse uploadImage(MultipartFile image) {
 
         return null;
+    }
+
+    @Override
+    public void uploadFile(final MultipartFile image, final Asset asset) {
+
     }
 
     private Path returnDir() {
