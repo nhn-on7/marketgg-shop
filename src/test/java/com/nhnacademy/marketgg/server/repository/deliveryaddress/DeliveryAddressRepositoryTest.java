@@ -45,9 +45,8 @@ class DeliveryAddressRepositoryTest {
 
         MemberGrade savedMemberGrade = memberGradeRepository.save(memberGrade);
         Member member = memberRepository.save(Dummy.getDummyMember(cart, savedMemberGrade));
-        DeliveryAddress.Pk pk = new DeliveryAddress.Pk(1L, member.getId());
 
-        DeliveryAddress deliveryAddress = new DeliveryAddress(pk, member, Dummy.getDeliveryAddressCreateRequest());
+        DeliveryAddress deliveryAddress = new DeliveryAddress(member, Dummy.getDeliveryAddressCreateRequest());
 
         deliveryAddressRepository.save(deliveryAddress);
 

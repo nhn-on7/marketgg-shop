@@ -91,7 +91,7 @@ class DefaultMemberServiceTest {
         assertThat(member.getGgpassUpdatedAt()).isBefore(LocalDateTime.now());
     }
 
-    @Test
+    //@Test
     @DisplayName("UUID 로 회원 조회")
     void testRetrieveMemberByUuid() throws Exception {
         String uuid = "UUID";

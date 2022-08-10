@@ -19,8 +19,9 @@ public class DeliveryAddressRepositoryImpl extends QuerydslRepositorySupport imp
         QDeliveryAddress deliveryAddress = QDeliveryAddress.deliveryAddress;
 
         return from(deliveryAddress)
+                .where(deliveryAddress.member.id.eq(id))
                 .select(Projections.constructor(DeliveryAddressResponse.class,
-                        deliveryAddress.pk.id,
+                        deliveryAddress.id,
                         deliveryAddress.isDefaultAddress,
                         deliveryAddress.zipCode,
                         deliveryAddress.address,
