@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.service.image;
+package com.nhnacademy.marketgg.server.service.file;
 
 import com.nhnacademy.marketgg.server.dto.response.image.ImageResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
@@ -26,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 
 @Service
-public class LocalImageService implements ImageService {
+public class DefaultFileService implements FileService {
 
     private static final String DIR = System.getProperty("user.home");
 

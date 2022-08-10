@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.service.cloud;
+package com.nhnacademy.marketgg.server.service.storage;
 
 import static org.springframework.http.HttpMethod.PUT;
 

@@ -6,6 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
 
+/**
+ * 상품 repository입니다.
+ *
+ * @author 조현진
+ */
 @NoRepositoryBean
 public interface ProductRepositoryCustom {
 

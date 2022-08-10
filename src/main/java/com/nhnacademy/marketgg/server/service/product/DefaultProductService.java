@@ -18,7 +18,6 @@ import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.ProductLabel;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
-import com.nhnacademy.marketgg.server.exception.image.ImageNotFoundException;
 import com.nhnacademy.marketgg.server.exception.label.LabelNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
@@ -27,13 +26,12 @@ import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.label.LabelRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.productlabel.ProductLabelRepository;
-import com.nhnacademy.marketgg.server.service.image.ImageService;
+import com.nhnacademy.marketgg.server.service.file.FileService;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Page;
@@ -52,7 +50,7 @@ public class DefaultProductService implements ProductService {
     private final ImageRepository imageRepository;
     private final ProductLabelRepository productLabelRepository;
     private final LabelRepository labelRepository;
-    private final ImageService imageService;
+    private final FileService fileService;
 
     private final ElasticProductRepository elasticProductRepository;
     private final SearchRepository searchRepository;
@@ -63,12 +61,12 @@ public class DefaultProductService implements ProductService {
     @Transactional
     @Override
     public void createProduct(final ProductCreateRequest productRequest, MultipartFile imageFile)
-            throws IOException {
+        throws IOException {
 
         Asset asset = assetRepository.save(Asset.create());
         List<MultipartFile> images = new ArrayList<>();
         images.add(imageFile);
-        List<Image> parseImages = imageService.parseImages(images, asset);
+        List<Image> parseImages = fileService.parseImages(images, asset);
         imageRepository.saveAll(parseImages);
 
         Category category = categoryRepository.findById(productRequest.getCategoryCode())
@@ -76,7 +74,7 @@ public class DefaultProductService implements ProductService {
         Product product = productRepository.save(new Product(productRequest, asset, category));
         ProductLabel.Pk pk = new ProductLabel.Pk(product.getId(), productRequest.getLabelNo());
         Label label =
-                labelRepository.findById(pk.getLabelNo()).orElseThrow(LabelNotFoundException::new);
+            labelRepository.findById(pk.getLabelNo()).orElseThrow(LabelNotFoundException::new);
 
         productLabelRepository.save(new ProductLabel(pk, product, label));
     }
@@ -101,7 +99,7 @@ public class DefaultProductService implements ProductService {
                               final Long productId) throws IOException {
 
         Product product =
-                productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+            productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
         Asset asset = fileUpload(imageFile);
 
         Category category = categoryRepository.findById(productRequest.getCategoryCode())
@@ -125,7 +123,7 @@ public class DefaultProductService implements ProductService {
     @Override
     public void restoreProduct(final Long id) {
         Product product =
-                this.productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+            this.productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
 
         product.restoreProduct();
         productRepository.save(product);
@@ -146,22 +144,30 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public List<SearchProductResponse> searchProductList(final String keyword, final Integer page) throws ParseException, JsonProcessingException {
+    public List<SearchProductResponse> searchProductList(final String keyword, final Integer page)
+        throws ParseException, JsonProcessingException {
         return searchRepository.searchProductWithKeyword(new SearchRequest(keyword, page, PAGE_SIZE), null);
     }
 
     @Override
-    public List<SearchProductResponse> searchProductListByCategory(final String categoryId, final String keyword,
-                                                                   final Integer page) throws ParseException, JsonProcessingException {
+    public List<SearchProductResponse> searchProductListByCategory(final String categoryId,
+                                                                   final String keyword,
+                                                                   final Integer page)
+        throws ParseException, JsonProcessingException {
 
-        return searchRepository.searchProductForCategory(categoryId, new SearchRequest(keyword, page, PAGE_SIZE), null);
+        return searchRepository.searchProductForCategory(categoryId,
+                                                         new SearchRequest(keyword, page, PAGE_SIZE),
+                                                         null);
     }
 
     @Override
     public List<SearchProductResponse> searchProductListByPrice(final String categoryId, final String option,
-                                                                final String keyword, final Integer page) throws ParseException, JsonProcessingException {
+                                                                final String keyword, final Integer page)
+        throws ParseException, JsonProcessingException {
 
-        return searchRepository.searchProductForCategory(categoryId, new SearchRequest(keyword, page, PAGE_SIZE), option);
+        return searchRepository.searchProductForCategory(categoryId,
+                                                         new SearchRequest(keyword, page, PAGE_SIZE),
+                                                         option);
     }
 
 }
