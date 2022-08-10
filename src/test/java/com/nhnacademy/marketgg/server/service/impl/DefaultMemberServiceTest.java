@@ -1,12 +1,5 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
@@ -15,9 +8,6 @@ import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.member.DefaultMemberService;
-import java.lang.reflect.Constructor;
-import java.time.LocalDateTime;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +17,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.lang.reflect.Constructor;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -48,7 +49,7 @@ class DefaultMemberServiceTest {
         noPassMember = new Member(memberRequest, new Cart());
 
         ReflectionTestUtils.setField(member, "ggpassUpdatedAt",
-            LocalDateTime.of(2019, 3, 11, 7, 10));
+                LocalDateTime.of(2019, 3, 11, 7, 10));
     }
 
     @Test
@@ -91,7 +92,7 @@ class DefaultMemberServiceTest {
         assertThat(member.getGgpassUpdatedAt()).isBefore(LocalDateTime.now());
     }
 
-    //@Test
+    @Test
     @DisplayName("UUID 로 회원 조회")
     void testRetrieveMemberByUuid() throws Exception {
         String uuid = "UUID";
@@ -117,8 +118,14 @@ class DefaultMemberServiceTest {
         given(memberRepository.findByUuid(uuid)).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> memberService.retrieveMember(uuid))
-            .isInstanceOf(MemberNotFoundException.class);
+                .isInstanceOf(MemberNotFoundException.class);
+
         verify(memberRepository, times(1)).findByUuid(uuid);
     }
 
+    @Test
+    @DisplayName("회원가입")
+    void testSignUp() {
+
+    }
 }

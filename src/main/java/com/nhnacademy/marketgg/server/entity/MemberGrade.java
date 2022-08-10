@@ -37,8 +37,8 @@ public class MemberGrade {
     @Size(min = 6, max = 20)
     private String grade;
 
-    public MemberGrade(MemberGradeCreateRequest memberRequest) {
-        this.grade = memberRequest.getGrade();
+    public MemberGrade(MemberGradeCreateRequest memberGradeCreateRequest) {
+        this.grade = memberGradeCreateRequest.getGrade();
     }
 
 }
