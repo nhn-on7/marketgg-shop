@@ -42,7 +42,6 @@ public class OrderDeliveryAddress implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "delivery_address_no")
-    @JoinColumn(name = "member_no")
     @NotNull
     private DeliveryAddress deliveryAddress;
 
@@ -50,10 +49,10 @@ public class OrderDeliveryAddress implements Serializable {
     @NotNull
     private Integer zipCode;
 
-    @Column(name = "road_name_address")
+    @Column(name = "address")
     @NotNull
     @Size(min = 1, max = 255)
-    private String roadNameAddress;
+    private String address;
 
     @Column(name = "detail_address")
     @NotNull

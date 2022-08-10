@@ -57,7 +57,7 @@ public class Dummy {
 
     public static Member getDummyMember(String uuid, Cart cart) {
         Member member = new Member(getDummyMemberCreateRequest(uuid), cart);
-        ReflectionTestUtils.setField(member, "memberGrade", new MemberGrade(null));
+        ReflectionTestUtils.setField(member, "memberGrade", new MemberGrade());
         return member;
     }
 

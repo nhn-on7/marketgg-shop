@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -28,9 +29,7 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
 
         Member member = getMember(memberInfo);
 
-        DeliveryAddress.Pk pk = new DeliveryAddress.Pk(member.getId());
-
-        DeliveryAddress deliveryAddress = new DeliveryAddress(pk, member, deliveryAddressRequest);
+        DeliveryAddress deliveryAddress = new DeliveryAddress(member, deliveryAddressRequest);
 
         deliveryAddressRepository.save(deliveryAddress);
     }
@@ -41,22 +40,23 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
 
         Member member = getMember(memberInfo);
 
-        DeliveryAddress.Pk pk = new DeliveryAddress.Pk(member.getId());
-
-        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(pk)
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(deliveryAddressUpdateRequest.getId())
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
 
         deliveryAddress.update(member, deliveryAddressUpdateRequest);
     }
 
     @Override
-    public void deleteDeliveryAddress(final MemberInfo memberInfo) {
-        DeliveryAddress.Pk pk = new DeliveryAddress.Pk(getMember(memberInfo).getId());
+    public void deleteDeliveryAddress(final MemberInfo memberInfo,
+                                      final Long delivery_no) {
 
-        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(pk)
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(delivery_no)
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
 
-        deliveryAddressRepository.delete(deliveryAddress);
+        if (Objects.equals(deliveryAddress.getMember().getId(), getMember(memberInfo).getId())) {
+            deliveryAddressRepository.delete(deliveryAddress);
+        }
+
     }
 
     @Override
