@@ -6,7 +6,9 @@ import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberGradeCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
@@ -34,13 +36,21 @@ public class Dummy {
     public static String DUMMY_UUID = "022db29c-d0e2-11e5-bb4c-60f81dca7676";
 
     public static MemberCreateRequest getDummyMemberCreateRequest(String uuid) {
+        MemberGradeCreateRequest memberGradeCreateRequest = new MemberGradeCreateRequest();
+        ReflectionTestUtils.setField(memberGradeCreateRequest, "grade", "memberGrade");
+        MemberGrade memberGrade = new MemberGrade(memberGradeCreateRequest);
+
         MemberCreateRequest memberCreateRequest = new MemberCreateRequest();
+        ReflectionTestUtils.setField(memberCreateRequest, "memberGrade", memberGrade);
         ReflectionTestUtils.setField(memberCreateRequest, "uuid", uuid);
         ReflectionTestUtils.setField(memberCreateRequest, "gender", 'M');
+
         LocalDate birthDate = LocalDate.of(1997, 4, 6);
         ReflectionTestUtils.setField(memberCreateRequest, "birthDate", birthDate);
+
         LocalDateTime now = LocalDateTime.now().withNano(0);
         ReflectionTestUtils.setField(memberCreateRequest, "ggpassUpdateAt", now);
+
         ReflectionTestUtils.setField(memberCreateRequest, "createdAt", now);
         ReflectionTestUtils.setField(memberCreateRequest, "updatedAt", now);
 
@@ -56,16 +66,7 @@ public class Dummy {
     }
 
     public static Member getDummyMember(String uuid, Cart cart) {
-        Member member = new Member(getDummyMemberCreateRequest(uuid), cart);
-        ReflectionTestUtils.setField(member, "memberGrade", new MemberGrade());
-        return member;
-    }
-
-    public static Member getDummyMember(String uuid, Long id, Cart cart) {
-        Member member = new Member(getDummyMemberCreateRequest(uuid), cart);
-        ReflectionTestUtils.setField(member, "id", id);
-
-        return member;
+        return new Member(getDummyMemberCreateRequest(uuid), cart);
     }
 
     public static ProductCreateRequest getDummyProductCreateRequest() {
@@ -211,4 +212,19 @@ public class Dummy {
         return createRequest;
     }
 
+    public static DeliveryAddressUpdateRequest getDeliveryAddressUpdateRequest() {
+        DeliveryAddressUpdateRequest updateRequest = new DeliveryAddressUpdateRequest();
+
+        ReflectionTestUtils.setField(updateRequest, "id", 1L);
+        ReflectionTestUtils.setField(updateRequest, "isDefaultAddress", true);
+        ReflectionTestUtils.setField(updateRequest, "zipCode", 50211);
+        ReflectionTestUtils.setField(updateRequest, "address", "이젠 부산시");
+        ReflectionTestUtils.setField(updateRequest, "detailAddress", "온천장 근처 허심청");
+
+        return updateRequest;
+    }
+
+    public static DeliveryAddress getDeliveryAddress() {
+        return new DeliveryAddress(getDummyMember(getDummyCart(1L)), getDeliveryAddressCreateRequest());
+    }
 }

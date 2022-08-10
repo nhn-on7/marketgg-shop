@@ -48,9 +48,9 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
 
     @Override
     public void deleteDeliveryAddress(final MemberInfo memberInfo,
-                                      final Long delivery_no) {
+                                      final Long deliveryNo) {
 
-        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(delivery_no)
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(deliveryNo)
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
 
         if (Objects.equals(deliveryAddress.getMember().getId(), getMember(memberInfo).getId())) {

@@ -17,7 +17,7 @@ public interface DeliveryAddressService {
                                final DeliveryAddressUpdateRequest deliveryAddressUpdateRequest);
 
     void deleteDeliveryAddress(final MemberInfo memberInfo,
-                               final Long delivery_no);
+                               final Long deliveryNo);
 
     List<DeliveryAddressResponse> retrieveDeliveryAddresses(final MemberInfo memberInfo);
 }

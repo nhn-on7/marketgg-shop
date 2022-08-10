@@ -41,7 +41,6 @@ public class Member {
     @Column(name = "member_no")
     private Long id;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "member_grade_no")
     private MemberGrade memberGrade;
