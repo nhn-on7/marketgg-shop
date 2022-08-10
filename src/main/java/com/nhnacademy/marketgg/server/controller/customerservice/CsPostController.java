@@ -125,9 +125,9 @@ public class CsPostController {
      */
 
     @GetMapping("/categories/{categoryId}/search")
-    public ResponseEntity<List<PostResponse>> searchPostListForCategory(@PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
-                                                                        @RequestParam @NotBlank @Size(min = 2, max = 30) final String keyword,
-                                                                        @RequestParam @NotNull final Integer page,
+    public ResponseEntity<List<PostResponse>> searchPostListForCategory(@PathVariable @Size(min = 1, max = 6) final String categoryId,
+                                                                        @RequestParam @Size(min = 1, max = 30) final String keyword,
+                                                                        @RequestParam @Min(0) final Integer page,
                                                                         final MemberInfo memberInfo)
             throws ParseException, JsonProcessingException {
 

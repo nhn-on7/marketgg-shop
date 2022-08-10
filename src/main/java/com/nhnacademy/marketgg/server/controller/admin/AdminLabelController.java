@@ -78,7 +78,7 @@ public class AdminLabelController {
      * @since 1.0.0
      */
     @DeleteMapping("/{labelId}")
-    public ResponseEntity<Void> deleteLabel(@PathVariable @NotNull @Min(1) final Long labelId) {
+    public ResponseEntity<Void> deleteLabel(@PathVariable @Min(1) final Long labelId) {
         labelService.deleteLabel(labelId);
 
         return ResponseEntity.status(HttpStatus.OK)

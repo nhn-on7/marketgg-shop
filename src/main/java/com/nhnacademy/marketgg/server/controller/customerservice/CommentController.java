@@ -44,7 +44,7 @@ public class CommentController {
      * @since 1.0.0
      */
     @PostMapping("/{postId}")
-    public ResponseEntity<Void> createComment(@PathVariable @NotNull @Min(1) final Long postId,
+    public ResponseEntity<Void> createComment(@PathVariable @Min(1) final Long postId,
                                               @Valid @RequestBody final CommentRequest commentRequest,
                                               final MemberInfo memberInfo) {
 
