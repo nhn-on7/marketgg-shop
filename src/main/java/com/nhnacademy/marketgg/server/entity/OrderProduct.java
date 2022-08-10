@@ -80,6 +80,13 @@ public class OrderProduct {
 
     }
 
-    // memo: 주문상품 생성자 만들고 order, product 받고 수량받아야함
+    public OrderProduct(Order order, Product product, Integer amount) {
+        this.order = order;
+        this.product = product;
+        this.pk = new Pk(order.getId(), product.getId());
+        this.name = product.getName();
+        this.price = product.getPrice();
+        this.amount = amount;
+    }
 
 }

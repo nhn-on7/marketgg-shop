@@ -2,6 +2,8 @@ package com.nhnacademy.marketgg.server.repository.product;
 
 import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import java.util.List;
+
+import com.nhnacademy.marketgg.server.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -43,5 +45,7 @@ public interface ProductRepositoryCustom {
      * @return - 상품 목록을 반환합니다.
      */
     List<ProductResponse> findByCategoryCode(final String categoryCode);
+
+    List<Product> findByIds(final List<Long> productIds);
 
 }
