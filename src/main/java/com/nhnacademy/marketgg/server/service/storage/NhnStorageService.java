@@ -32,7 +32,6 @@ import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
-@Service
 public class NhnStorageService implements StorageService {
 
 

@@ -3,6 +3,8 @@ package com.nhnacademy.marketgg.server.service.file;
 import com.nhnacademy.marketgg.server.dto.response.image.ImageResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
+import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
+import com.nhnacademy.marketgg.server.service.storage.StorageServiceFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+
 /**
  * 멀티 파일 업로드를 위한 유틸 클래스입니다.
  *
@@ -32,19 +35,18 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class DefaultFileService implements FileService {
 
-    private static final String DIR = System.getProperty("user.home");
-    private String option = "local";
+    private final StorageServiceFactory storageServiceFactory;
+    private final ImageRepository imageRepository;
 
-    /**
-     * 다음과 같은 기능을 합니다.
-     * - 날짜별 디렉터리 생성
-     * - 파일 이름 중복을 피하기 위해 UUID로 변경
-     *
-     * @param multipartFiles - 컨트롤러로부터 받은 여러장의 사진입니다.
-     * @param asset          - 사진을 저장할 자원입니다.
-     * @return - 사진 리스트를 반환합니다.
-     * @throws IOException - IOException을 발생시킵니다.
-     */
+    private static final String DIR = System.getProperty("user.home");
+    //FIXME: 하드코딩 -> 설정에 의해 바뀌도록 리팩토링
+    private final String option = "NhnStorageService";
+
+    @Override
+    public Image uploadImage(final MultipartFile image, final Asset asset) throws IOException {
+        Image imageEntity = storageServiceFactory.getService(option).uploadImage(image, asset);
+        return imageEntity;
+    }
 
     @Override
     public List<Image> parseImages(List<MultipartFile> multipartFiles, Asset asset) throws IOException {
@@ -79,17 +81,6 @@ public class DefaultFileService implements FileService {
         }
 
         return images;
-    }
-
-    @Override
-    public ImageResponse uploadImage(MultipartFile image) {
-
-        return null;
-    }
-
-    @Override
-    public void uploadFile(final MultipartFile image, final Asset asset) {
-
     }
 
     private Path returnDir() {

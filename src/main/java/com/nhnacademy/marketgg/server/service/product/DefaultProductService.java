@@ -64,10 +64,8 @@ public class DefaultProductService implements ProductService {
         throws IOException {
 
         Asset asset = assetRepository.save(Asset.create());
-        List<MultipartFile> images = new ArrayList<>();
-        images.add(imageFile);
-        List<Image> parseImages = fileService.parseImages(images, asset);
-        imageRepository.saveAll(parseImages);
+        Image image = fileService.uploadImage(imageFile, asset);
+        imageRepository.save(image);
 
         Category category = categoryRepository.findById(productRequest.getCategoryCode())
                                               .orElseThrow(CategoryNotFoundException::new);
