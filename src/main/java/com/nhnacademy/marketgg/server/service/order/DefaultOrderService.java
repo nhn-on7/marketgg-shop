@@ -40,15 +40,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class DefaultOrderService implements OrderService {
 
-    private final String orderPrefix = "GGORDER_";
+    private final String prefix = "GGORDER_";
 
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
@@ -66,13 +64,13 @@ public class DefaultOrderService implements OrderService {
     public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId) {
         int i = 0;
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Order order = new Order(member, orderRequest);
         DeliveryAddress deliveryAddress = deliveryRepository.findById(orderRequest.getDeliveryAddressId())
                                                             .orElseThrow(DeliveryAddressNotFoundException::new);
-        Order order = new Order(member, orderRequest);
         List<Long> productIds = orderRequest.getProducts().stream().map(ProductToOrder::getId)
                                             .collect(Collectors.toList());
         List<Integer> productAmounts = orderRequest.getProducts().stream().map(ProductToOrder::getAmount)
-                                                .collect(Collectors.toList());
+                                                   .collect(Collectors.toList());
         List<Product> products = productRepository.findByIds(productIds);
 
         // memo: 쿠폰 존재
@@ -101,7 +99,18 @@ public class DefaultOrderService implements OrderService {
         }
         orderDeliveryAddressRepository.save(new OrderDeliveryAddress(order, deliveryAddress));
 
-        // return new OrderToPayment();
+        return makeOrderToPayment(order, orderRequest);
+    }
+
+    // memo: 결제요청에 보낼 response 제작
+    private OrderToPayment makeOrderToPayment(Order order, OrderCreateRequest orderRequest) {
+        List<ProductToOrder> products = orderRequest.getProducts();
+        String orderId = prefix + order.getId();
+        String orderName = products.get(0).getName() + "외 " + products.size() + "건";
+
+        return new OrderToPayment(orderId, orderName, orderRequest.getName(), orderRequest.getEmail(),
+                                  orderRequest.getTotalAmount(), orderRequest.getCouponId(),
+                                  orderRequest.getUsedPoint(), orderRequest.getExpectedSavePoint());
     }
 
     @Override
