@@ -1,8 +1,9 @@
-package com.nhnacademy.marketgg.server.controller.cloud;
+package com.nhnacademy.marketgg.server.controller.file;
 
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.response.image.ImageResponse;
-import com.nhnacademy.marketgg.server.service.storage.StorageService;
+import com.nhnacademy.marketgg.server.entity.Asset;
+import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.service.file.FileService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/storage")
 @RequiredArgsConstructor
-public class StorageController {
+public class FileController {
 
-    private final StorageService storageService;
     private final FileService fileService;
 
     @GetMapping("/{assetId}")
@@ -39,8 +39,8 @@ public class StorageController {
 
     @RoleCheck
     @PostMapping
-    public ResponseEntity<ImageResponse> uploadImage(@RequestBody final MultipartFile image) throws IOException {
-        ImageResponse imageResponse = fileService.uploadImage(image);
+    public ResponseEntity<ImageResponse> uploadAndRetrieveImage(@RequestBody final MultipartFile image) throws IOException {
+        Image uploadImage = fileService.uploadImage(image, Asset.create());
 
         return new ResponseEntity<>(imageResponse, HttpStatus.OK);
     }

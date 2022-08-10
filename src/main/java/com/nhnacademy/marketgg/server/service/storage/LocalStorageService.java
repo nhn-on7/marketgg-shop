@@ -1,11 +1,7 @@
 package com.nhnacademy.marketgg.server.service.storage;
 
-import com.nhnacademy.marketgg.server.dto.response.image.ImageResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
-import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
-import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
-import com.nhnacademy.marketgg.server.service.file.FileService;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,22 +17,41 @@ import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component
-@Primary
 public class LocalStorageService implements StorageService {
 
-    // private static final String DIR =
-    //     "https://api-storage.cloud.toast.com/v1/AUTH_8a2dd42738a0427180466a56561b5eef/on7_storage/";
-    // private final StorageService storageService;
-    // private final ImageRepository imageRepository;
-    // private final AssetRepository assetRepository;
+    private static final String DIR = System.getProperty("user.home");
+
+    @Override
+    public Image uploadImage(final MultipartFile image, final Asset asset) throws IOException {
+        if (image.isEmpty()) {
+            throw new IllegalArgumentException("이미지가 없습니다.");
+        }
+
+        String dir = String.valueOf(Files.createDirectories(returnDir()));
+        String type = getContentType(image);
+        String fileName = UUID.randomUUID() + type;
+
+        File dest = new File(dir, fileName);
+        image.transferTo(dest);
+
+        Image localImage = Image.builder()
+                           .name(fileName)
+                           .imageAddress(dir)
+                           .classification("local")
+                           .asset(asset)
+                           .length(dest.length())
+                           .type(type)
+                           .build();
+
+        localImage.setImageSequence(1);
+
+        return localImage;
+    }
 
     @Override
     public List<Image> parseImages(List<MultipartFile> multipartFiles, Asset asset) throws IOException {
@@ -83,20 +98,20 @@ public class LocalStorageService implements StorageService {
         return images;
     }
 
-    @Override
-    public ImageResponse uploadImage(MultipartFile image) throws IOException {
-        List<MultipartFile> images = new ArrayList<>();
-        images.add(image);
-
-        Asset asset = assetRepository.save(Asset.create());
-
-        List<Image> parseImages = parseImages(images, asset);
-
-        imageRepository.saveAll(parseImages);
-        ImageResponse imageResponse = storageService.retrieveImage(asset.getId());
-
-        return imageResponse;
-    }
+    // @Override
+    // public ImageResponse uploadImage(MultipartFile image) throws IOException {
+    //     List<MultipartFile> images = new ArrayList<>();
+    //     images.add(image);
+    //
+    //     Asset asset = assetRepository.save(Asset.create());
+    //
+    //     List<Image> parseImages = parseImages(images, asset);
+    //
+    //     imageRepository.saveAll(parseImages);
+    //     ImageResponse imageResponse = storageService.retrieveImage(asset.getId());
+    //
+    //     return imageResponse;
+    // }
 
     private Path returnDir() {
         String format = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
@@ -107,6 +122,17 @@ public class LocalStorageService implements StorageService {
     private String uuidFilename(String filename) {
 
         return UUID.randomUUID() + "_" + filename;
+    }
+
+    private String getContentType(final MultipartFile image) {
+        if (image.getContentType().contains("image/jpeg")) {
+            return ".jpg";
+        }
+        if (image.getContentType().contains("image/png")) {
+            return ".png";
+        } else {
+            throw new IllegalArgumentException("이미지만 업로드할 수 있습니다.");
+        }
     }
 
 }
