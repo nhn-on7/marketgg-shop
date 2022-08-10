@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 리뷰 서비스입니다.
  *
+ * @author 조현진
  * @version 1.0.0
  */
 public interface ReviewService {

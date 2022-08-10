@@ -3,7 +3,6 @@ package com.nhnacademy.marketgg.server.service.impl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -40,7 +39,7 @@ import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.label.LabelRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.productlabel.ProductLabelRepository;
-import com.nhnacademy.marketgg.server.service.image.ImageService;
+import com.nhnacademy.marketgg.server.service.file.FileService;
 import com.nhnacademy.marketgg.server.service.product.DefaultProductService;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -84,7 +83,7 @@ class DefaultProductServiceTest {
     @Mock
     private ElasticProductRepository elasticProductRepository;
     @Mock
-    private ImageService imageService;
+    private FileService fileService;
     @Spy
     private ProductLabelRepository productLabelRepository;
 
@@ -194,7 +193,7 @@ class DefaultProductServiceTest {
             new MockMultipartFile("image", "test.png", "image/png",
                 new FileInputStream(filePath));
 
-        given(imageService.parseImages(any(List.class), any(Asset.class))).willReturn(images);
+        given(fileService.parseImages(any(List.class), any(Asset.class))).willReturn(images);
         given(assetRepository.save(any(Asset.class))).willReturn(asset);
         given(imageRepository.saveAll(any())).willReturn(List.of());
 

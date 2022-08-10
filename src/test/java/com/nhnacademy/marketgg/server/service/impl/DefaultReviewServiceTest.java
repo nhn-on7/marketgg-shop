@@ -23,7 +23,7 @@ import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.review.ReviewRepository;
-import com.nhnacademy.marketgg.server.service.image.ImageService;
+import com.nhnacademy.marketgg.server.service.file.FileService;
 import com.nhnacademy.marketgg.server.service.product.DefaultReviewService;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -72,7 +72,7 @@ class DefaultReviewServiceTest {
     ApplicationEventPublisher publisher;
 
     @Mock
-    ImageService imageService;
+    FileService fileService;
 
     @Autowired
     ObjectMapper objectMapper;

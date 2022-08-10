@@ -1,11 +1,11 @@
-package com.nhnacademy.marketgg.server.service.image;
+package com.nhnacademy.marketgg.server.service.storage;
 
 import com.nhnacademy.marketgg.server.dto.response.image.ImageResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
-import com.nhnacademy.marketgg.server.service.cloud.StorageService;
+import com.nhnacademy.marketgg.server.service.file.FileService;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Component
 @Primary
-public class StorageImageService implements ImageService {
+public class LocalStorageService implements FileService {
 
     private static final String DIR =
         "https://api-storage.cloud.toast.com/v1/AUTH_8a2dd42738a0427180466a56561b5eef/on7_storage/";
