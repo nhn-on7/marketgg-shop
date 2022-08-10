@@ -33,18 +33,6 @@ public class DefaultMemberService implements MemberService {
 
     private final ApplicationEventPublisher publisher;
 
-    @Override
-    public LocalDateTime retrievePassUpdatedAt(final Long id) {
-        Member member = memberRepository.findById(id)
-                                        .orElseThrow(MemberNotFoundException::new);
-
-        if (Objects.isNull(member.getGgpassUpdatedAt())) {
-            return LocalDateTime.of(1, 1, 1, 1, 1, 1);
-        }
-
-        return member.getGgpassUpdatedAt();
-    }
-
     @Transactional
     @Override
     public void subscribePass(final Long id) {

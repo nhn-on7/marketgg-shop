@@ -52,25 +52,6 @@ public class MemberController {
     private final GivenCouponService givenCouponService;
 
     /**
-     * 선택한 회원의 GG 패스 갱신일시를 반환하는 GET Mapping 을 지원합니다.
-     *
-     * @param memberInfo - 회원의 정보를 담은 객체입니다.
-     * @return 선택한 회원의 GG 패스 갱신일을 반환합니다.
-     * @since 1.0.0
-     */
-    @RoleCheck(accessLevel = Role.ROLE_USER)
-    @GetMapping("/ggpass")
-    public ResponseEntity<LocalDateTime> retrievePassUpdatedAt(final MemberInfo memberInfo) {
-
-        LocalDateTime check = memberService.retrievePassUpdatedAt(memberInfo.getId());
-
-        return ResponseEntity.status(OK)
-                             .location(URI.create(MEMBER_PREFIX + "/ggpass"))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .body(check);
-    }
-
-    /**
      * 선택한 회원을 GG 패스에 구독시키는 POST Mapping 을 지원합니다.
      *
      * @param memberInfo - 회원의 정보를 담은 객체입니다.

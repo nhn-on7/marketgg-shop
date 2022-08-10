@@ -66,17 +66,6 @@ class MemberControllerTest {
     GivenCouponService givenCouponService;
 
     @Test
-    @DisplayName("GG 패스 갱신일자 확인")
-    void testCheckPassUpdatedAt() throws Exception {
-        given(memberService.retrievePassUpdatedAt(any())).willReturn(LocalDateTime.now());
-
-        this.mockMvc.perform(get("/members/ggpass"))
-                    .andExpect(status().isOk());
-
-        then(memberService).should(times(1)).retrievePassUpdatedAt(any());
-    }
-
-    @Test
     @DisplayName("GG 패스 가입")
     void testJoinPass() throws Exception {
         willDoNothing().given(memberService).subscribePass(any());
