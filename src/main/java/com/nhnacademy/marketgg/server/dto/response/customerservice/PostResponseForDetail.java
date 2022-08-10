@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.dto.response.customerservice;
 
-import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

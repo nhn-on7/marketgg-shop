@@ -1,12 +1,14 @@
 package com.nhnacademy.marketgg.server.controller.product;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
+import com.nhnacademy.marketgg.server.dto.response.ProductInquiryByProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
 import java.net.URI;
 import javax.validation.Valid;
@@ -70,8 +72,10 @@ public class ProductInquiryPostController {
     @RoleCheck(accessLevel = Role.ROLE_USER)
     @GetMapping("/products/{productId}/inquiries")
     public ResponseEntity<CommonResponse> retrieveProductInquiry(@PathVariable final Long productId,
-                                                                 final Pageable pageable) {
-        Page<ProductInquiryResponse> productInquiryResponses
+                                                                 final Pageable pageable)
+        throws JsonProcessingException {
+
+        Page<ProductInquiryByProductResponse> productInquiryResponses
             = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -90,7 +94,7 @@ public class ProductInquiryPostController {
     @GetMapping("/members/product-inquiries")
     public ResponseEntity<CommonResponse> retrieveProductInquiry(final MemberInfo memberInfo,
                                                                  final Pageable pageable) {
-        Page<ProductInquiryResponse> productInquiryResponses
+        Page<ProductInquiryByMemberResponse> productInquiryResponses
             = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)

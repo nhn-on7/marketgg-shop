@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.repository.productinquirypost;
 
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
+import com.nhnacademy.marketgg.server.dto.response.ProductInquiryByProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -18,7 +19,7 @@ public interface ProductInquiryPostRepositoryCustom {
      * @param pageable - 요청하는 page 의 정보를 가지고 있습니다.
      * @return - 상품 문의 List 가 반환됩니다.
      */
-    Page<ProductInquiryResponse> findAllByProductNo(final Long id, Pageable pageable);
+    Page<ProductInquiryByProductResponse> findAllByProductNo(final Long id, Pageable pageable);
 
     /**
      * 회원 번호로 전체 상품 문의를 조회합니다.
@@ -27,5 +28,5 @@ public interface ProductInquiryPostRepositoryCustom {
      * @param pageable - 요청하는 page 의 정보를 가지고 있습니다.
      * @return - 상품 문의 List 가 반환됩니다.
      */
-    Page<ProductInquiryResponse> findAllByMemberNo(final Long id, Pageable pageable);
+    Page<ProductInquiryByMemberResponse> findAllByMemberNo(final Long id, Pageable pageable);
 }

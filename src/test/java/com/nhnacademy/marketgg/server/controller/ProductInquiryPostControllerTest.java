@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.product.ProductInquiryPostController;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ class ProductInquiryPostControllerTest {
     ProductInquiryPostService productInquiryPostService;
 
     Pageable pageable = PageRequest.of(0, 20);
-    Page<ProductInquiryResponse> responses = new PageImpl<>(List.of(), pageable, 0);
+    Page<ProductInquiryByMemberResponse> responses = new PageImpl<>(List.of(), pageable, 0);
 
     @Test
     @DisplayName("상품 문의 등록 테스트")

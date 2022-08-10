@@ -1,8 +1,10 @@
 package com.nhnacademy.marketgg.server.service.product;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
+import com.nhnacademy.marketgg.server.dto.response.ProductInquiryByProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -29,7 +31,7 @@ public interface ProductInquiryPostService {
      * @param id - 조회할 상품의 PK 입니다.
      * @return - 상품 문의 글을 List 로 반환합니다.
      */
-    Page<ProductInquiryResponse> retrieveProductInquiryByProductId(Long id, Pageable pageable);
+    Page<ProductInquiryByProductResponse> retrieveProductInquiryByProductId(Long id, Pageable pageable) throws JsonProcessingException;
 
     /**
      * 회원이 남긴 모든 상품 문의 글을 조회합니다.
@@ -37,7 +39,7 @@ public interface ProductInquiryPostService {
      * @param memberInfo - 조회할 회원의 정보입니다.
      * @return - 상품 문의 글을 List 로 반환합니다.
      */
-    Page<ProductInquiryResponse> retrieveProductInquiryByMemberId(MemberInfo memberInfo, Pageable pageable);
+    Page<ProductInquiryByMemberResponse> retrieveProductInquiryByMemberId(MemberInfo memberInfo, Pageable pageable);
 
     /**
      * 상품 문의 글에 대한 관리자의 답글을 상품 문의 글에 업데이트합니다.

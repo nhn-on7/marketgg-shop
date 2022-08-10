@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -51,7 +51,7 @@ class AdminProductInquiryPostControllerTest {
         String content = objectMapper.writeValueAsString(productInquiryRequest);
 
         doNothing().when(productInquiryPostService)
-                   .updateProductInquiryReply(any(ProductInquiryRequest.class), anyLong(), anyLong());
+                   .updateProductInquiryReply(anyString(), anyLong(), anyLong());
 
         this.mockMvc.perform(put("/admin/products/" + 1L + "/inquiries/" + 1L)
                 .headers(httpHeaders)
@@ -59,6 +59,6 @@ class AdminProductInquiryPostControllerTest {
                 .content(content))
                     .andExpect(status().isOk());
         verify(productInquiryPostService, times(1))
-            .updateProductInquiryReply(any(ProductInquiryRequest.class), anyLong(), anyLong());
+            .updateProductInquiryReply(anyString(), anyLong(), anyLong());
     }
 }

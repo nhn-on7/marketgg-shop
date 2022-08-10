@@ -1,6 +1,8 @@
 package com.nhnacademy.marketgg.server.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import java.util.List;
 
@@ -13,5 +15,7 @@ import java.util.List;
 public interface AuthRepository {
 
     List<MemberNameResponse> getNameListByUuid(final List<String> uuidList) throws JsonProcessingException;
+
+    MemberInfoResponse getNameByUuid(final MemberInfoRequest uuid) throws JsonProcessingException;
 
 }

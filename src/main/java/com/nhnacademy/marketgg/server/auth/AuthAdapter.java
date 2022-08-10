@@ -1,7 +1,10 @@
 package com.nhnacademy.marketgg.server.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import java.util.Collections;
 import java.util.List;
@@ -52,6 +55,20 @@ public class AuthAdapter implements AuthRepository {
             });
 
         return response.getBody();
+    }
+
+    @Override
+    public MemberInfoResponse getNameByUuid(final MemberInfoRequest uuid) throws JsonProcessingException {
+
+        String requestBody = objectMapper.writeValueAsString(uuid);
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, buildHeaders());
+        ResponseEntity<String> response = restTemplate.exchange(
+            gateway + DEFAULT_AUTH + "/person",
+            HttpMethod.POST,
+            requestEntity, String.class);
+
+        return objectMapper.readValue(response.getBody(), new TypeReference<>() {
+        });
     }
 
     private HttpHeaders buildHeaders() {
