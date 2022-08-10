@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
@@ -35,7 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 관리자의 고객센터 관리에 관련된 Rest Controller 입니다.
  *
- * @author 박세완, 김정민
+ * @author 박세완
+ * @author 김정민
  * @version 1.0.0
  */
 @RoleCheck(accessLevel = Role.ROLE_ADMIN)
@@ -86,20 +85,20 @@ public class AdminCsPostController {
      * 입력받은 정보로 지정한 게시글을 수정 할 수 있는 PUT Mapping 을 지원합니다.
      *
      * @param categoryId  - 수정할 게시글의 카테고리 번호입니다.
-     * @param postNo      - 수정할 게시글의 식별번호입니다.
+     * @param postId      - 수정할 게시글의 식별번호입니다.
      * @param postRequest - 수정할 게시글의 정보를 담은 객체입니다.
      * @return Mapping URI 를 담은 응답객체를 반환합니다.
      * @since 1.0.0
      */
-    @PutMapping("/categories/{categoryId}/{postNo}")
+    @PutMapping("/categories/{categoryId}/{postId}")
     public ResponseEntity<Void> updatePost(@PathVariable @Size(min = 1, max = 6) final String categoryId,
-                                           @PathVariable @Min(1) final Long postNo,
+                                           @PathVariable @Min(1) final Long postId,
                                            @Valid @RequestBody final PostRequest postRequest) {
 
-        postService.updatePost(categoryId, postNo, postRequest);
+        postService.updatePost(categoryId, postId, postRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/" + postNo))
+                             .location(URI.create(DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/" + postId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -124,19 +123,20 @@ public class AdminCsPostController {
     /**
      * 1:1 문의의 답변 상태를 변경할 수 있는 PATCH Mapping 을 지원합니다.
      *
-     * @param postNo              - 상태를 변경할 게시글의 식별번호입니다.
+     * @param postId              - 상태를 변경할 게시글의 식별번호입니다.
      * @param statusUpdateRequest - 변경할 상태 정보를 담고 있는 DTO 객체입니다.
      * @return Mapping URI 를 담은 응답객체를 반환합니다.
      * @since 1.0.0
      */
-    @PatchMapping("/{postNo}/status")
-    public ResponseEntity<Void> updateInquiryStatus(@PathVariable @Min(1) final Long postNo,
-                                                    @Valid @RequestBody final PostStatusUpdateRequest statusUpdateRequest) {
+    @PatchMapping("/{postId}/status")
+    public ResponseEntity<Void> updateInquiryStatus(@PathVariable @Min(1) final Long postId,
+                                                    @Valid @RequestBody
+                                                    final PostStatusUpdateRequest statusUpdateRequest) {
 
-        postService.updateOtoInquiryStatus(postNo, statusUpdateRequest);
+        postService.updateOtoInquiryStatus(postId, statusUpdateRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_POST + "/" + postNo + "/status"))
+                             .location(URI.create(DEFAULT_ADMIN_POST + "/" + postId + "/status"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
