@@ -5,6 +5,7 @@ import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
+import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
@@ -120,7 +121,7 @@ public class DefaultOrderService implements OrderService {
         Long memberId = memberInfo.getId();
         List<OrderGivenCoupon> orderGivenCoupons = givenCouponRepository.findOwnCouponsByMemberId(memberId);
         Integer totalPoint = pointRepository.findLastTotalPoints(memberId);
-        // memo: 배송지 조회
+        List<DeliveryAddressResponse> deliveryAddresses = deliveryRepository.findDeliveryAddressesByMemberId(memberId);
         List<String> paymentTypes = Arrays.stream(PaymentType.values())
                                           .map(PaymentType::getType)
                                           .collect(Collectors.toList());
@@ -132,11 +133,7 @@ public class DefaultOrderService implements OrderService {
                                 /*.haveGgpass()*/
                                 .givenCouponList(orderGivenCoupons)
                                 .totalPoint(totalPoint)
-                                .deliveryAddressId(null) // memo: 배송지 조회하고 수정하기
-                                .zipCode(null)
-                                .address(null)
-                                .detailAddress(null)
-                                .isDefault(true)
+                                .deliveryAddressList(deliveryAddresses)
                                 .paymentType(paymentTypes)
                                 .totalOrigin(calculateTotalOrigin(products))
                                 .build();

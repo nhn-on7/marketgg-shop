@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.dto.response.order;
 
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
+import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +25,7 @@ public class OrderFormResponse {
     private final List<OrderGivenCoupon> givenCouponList;
     private final Integer totalPoint; // 보유포인트
 
-    private final Long deliveryAddressId;
-    private final Integer zipCode;
-    private final String address;
-    private final String detailAddress;
-    private final boolean isDefault;
+    private final List<DeliveryAddressResponse> deliveryAddressList; // 회원의 배송지 목록
 
     private final List<String> paymentType; // 결제수단 목록
 

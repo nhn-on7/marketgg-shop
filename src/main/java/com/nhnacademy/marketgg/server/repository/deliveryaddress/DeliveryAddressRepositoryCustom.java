@@ -17,9 +17,9 @@ public interface DeliveryAddressRepositoryCustom {
     /**
      * 회원의 식별번호로 회원이 가지고 있는 모든 배송지를 반환합니다.
      *
-     * @param id - 전체 배송지를 조회하는 회원의 식별번호 입니다.
+     * @param memberId - 전체 배송지를 조회하는 회원의 식별번호 입니다.
      * @return 회원이 가지고 있는 모든 배송지를 담은 List 입니다.
      */
-    List<DeliveryAddressResponse> findDeliveryAddressesByMemberId(Long id);
+    List<DeliveryAddressResponse> findDeliveryAddressesByMemberId(final Long memberId);
 
 }
