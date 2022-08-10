@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
 import com.nhnacademy.marketgg.server.controller.admin.AdminLabelController;
 import com.nhnacademy.marketgg.server.dto.request.label.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.service.label.LabelService;
@@ -22,10 +23,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AdminLabelController.class)
+@Import({
+        RoleCheckAspect.class
+})
 class AdminLabelControllerTest {
 
     @Autowired
@@ -43,6 +49,8 @@ class AdminLabelControllerTest {
      @DisplayName("라벨 등록")
      void createLabel() throws Exception {
          LabelCreateRequest labelCreateRequest = new LabelCreateRequest();
+         ReflectionTestUtils.setField(labelCreateRequest, "labelNo", 1L);
+         ReflectionTestUtils.setField(labelCreateRequest, "name", "hello");
          String requestBody = objectMapper.writeValueAsString(labelCreateRequest);
 
          doNothing().when(labelService).createLabel(any(LabelCreateRequest.class));

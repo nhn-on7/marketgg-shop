@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 /**
  * 라벨을 생성하기 위한 요청 정보를 담고 있는 클래스입니다.
  *
+ * @author 박세완
  * @version 1.0
- * @since 1.0
  */
 @NoArgsConstructor
 @Getter

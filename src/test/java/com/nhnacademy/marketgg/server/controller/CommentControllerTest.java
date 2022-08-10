@@ -37,6 +37,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,10 +90,13 @@ class CommentControllerTest {
     @Test
     @DisplayName("고객센터 게시글에 댓글 등록")
     void testCreateComment() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(new CommentRequest());
+        CommentRequest commentRequest = new CommentRequest();
+        ReflectionTestUtils.setField(commentRequest, "content", "hello");
+        String requestBody = objectMapper.writeValueAsString(commentRequest);
 
         willDoNothing().given(otoInquiryCommentService)
                        .createComment(anyLong(), anyLong(), any(CommentRequest.class));
+
 
         this.mockMvc.perform(post(DEFAULT_CS_COMMENT + "/{postId}", 1L)
                 .headers(headers)

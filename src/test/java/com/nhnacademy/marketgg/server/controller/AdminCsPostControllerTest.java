@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -23,6 +24,8 @@ import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.service.post.PostService;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +34,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AdminCsPostController.class)
@@ -59,6 +63,11 @@ class AdminCsPostControllerTest {
         postRequest = new PostRequest();
         postResponse = new PostResponse(1L, "702", "hello", "배송", "종료", LocalDateTime.now());
         updateRequest = new PostStatusUpdateRequest();
+        ReflectionTestUtils.setField(postRequest, "categoryCode", "702");
+        ReflectionTestUtils.setField(postRequest, "title", "hello");
+        ReflectionTestUtils.setField(postRequest, "content", "hi");
+        ReflectionTestUtils.setField(postRequest, "reason", "환불");
+        ReflectionTestUtils.setField(updateRequest, "status", "hello");
     }
 
     @Test

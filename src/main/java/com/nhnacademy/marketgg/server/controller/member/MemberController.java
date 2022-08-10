@@ -17,7 +17,6 @@ import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.member.MemberService;
-import com.nhnacademy.marketgg.server.service.point.PointService;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,7 +28,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +36,9 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 회원관리에 관련된 RestController 입니다.
  *
+ * @author 박세완
+ * @author 김훈민
+ * @author 민아영
  * @version 1.0.0
  */
 @RestController
@@ -48,23 +49,23 @@ public class MemberController {
     private static final String MEMBER_PREFIX = "/member/";
 
     private final MemberService memberService;
-    private final PointService pointService;
     private final GivenCouponService givenCouponService;
 
     /**
      * 선택한 회원의 GG 패스 갱신일시를 반환하는 GET Mapping 을 지원합니다.
      *
-     * @param memberId - GG 패스 갱신일시를 확인 할 회원의 식별번호입니다.
+     * @param memberInfo - 회원의 정보를 담은 객체입니다.
      * @return 선택한 회원의 GG 패스 갱신일을 반환합니다.
-     * @author 박세완
      * @since 1.0.0
      */
-    @GetMapping("/{memberId}/ggpass")
-    public ResponseEntity<LocalDateTime> retrievePassUpdatedAt(@PathVariable final Long memberId) {
-        LocalDateTime check = memberService.retrievePassUpdatedAt(memberId);
+    @RoleCheck(accessLevel = Role.ROLE_USER)
+    @GetMapping("/ggpass")
+    public ResponseEntity<LocalDateTime> retrievePassUpdatedAt(final MemberInfo memberInfo) {
+
+        LocalDateTime check = memberService.retrievePassUpdatedAt(memberInfo.getId());
 
         return ResponseEntity.status(OK)
-                             .location(URI.create(MEMBER_PREFIX + memberId + "/ggpass"))
+                             .location(URI.create(MEMBER_PREFIX + "/ggpass"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(check);
     }
@@ -72,17 +73,17 @@ public class MemberController {
     /**
      * 선택한 회원을 GG 패스에 구독시키는 POST Mapping 을 지원합니다.
      *
-     * @param memberId - GG 패스를 구독할 회원의 식별번호입니다.
+     * @param memberInfo - 회원의 정보를 담은 객체입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
-     * @author 박세완
      * @since 1.0.0
      */
-    @PostMapping("/{memberId}/ggpass/subscribe")
-    public ResponseEntity<Void> subscribePass(@PathVariable final Long memberId) {
-        memberService.subscribePass(memberId);
+    @RoleCheck(accessLevel = Role.ROLE_USER)
+    @PostMapping("/ggpass/subscribe")
+    public ResponseEntity<Void> subscribePass(final MemberInfo memberInfo) {
+        memberService.subscribePass(memberInfo.getId());
 
         return ResponseEntity.status(OK)
-                             .location(URI.create(MEMBER_PREFIX + memberId + "/ggpass/subscribe"))
+                             .location(URI.create(MEMBER_PREFIX + "/ggpass/subscribe"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -90,16 +91,16 @@ public class MemberController {
     /**
      * 선택한 회원을 GG 패스에 구독해지시키는 POST Mapping 을 지원합니다.
      *
-     * @param memberId - GG 패스를 구독해지할 회원의 식별번호입니다.
+     * @param memberInfo - 회원의 정보를 담은 객체입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
-     * @author 박세완
      * @since 1.0.0
      */
-    @PostMapping("/{memberId}/ggpass/withdraw")
-    public ResponseEntity<Void> withdrawPass(@PathVariable final Long memberId) {
-        memberService.withdrawPass(memberId);
+    @RoleCheck(accessLevel = Role.ROLE_USER)
+    @PostMapping("/ggpass/withdraw")
+    public ResponseEntity<Void> withdrawPass(final MemberInfo memberInfo) {
+        memberService.withdrawPass(memberInfo.getId());
 
-        return ResponseEntity.status(OK).location(URI.create(MEMBER_PREFIX + memberId + "/ggpass/withdraw"))
+        return ResponseEntity.status(OK).location(URI.create(MEMBER_PREFIX + "/ggpass/withdraw"))
                              .contentType(MediaType.APPLICATION_JSON).build();
     }
 
@@ -165,7 +166,8 @@ public class MemberController {
     @RoleCheck(accessLevel = Role.ROLE_USER)
     @PostMapping("/coupons")
     public ResponseEntity<CommonResponse> createGivenCoupons(final MemberInfo memberInfo,
-                                                             @Valid @RequestBody final GivenCouponCreateRequest givenCouponRequest) {
+                                                             @Valid @RequestBody
+                                                             final GivenCouponCreateRequest givenCouponRequest) {
 
         givenCouponService.createGivenCoupons(memberInfo, givenCouponRequest);
 

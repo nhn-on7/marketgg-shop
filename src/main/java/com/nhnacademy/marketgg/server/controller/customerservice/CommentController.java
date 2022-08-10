@@ -6,6 +6,9 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.CommentRequest;
 import com.nhnacademy.marketgg.server.service.otoinquiry.OtoInquiryCommentService;
 import java.net.URI;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,8 +44,8 @@ public class CommentController {
      * @since 1.0.0
      */
     @PostMapping("/{postId}")
-    public ResponseEntity<Void> createComment(@PathVariable final Long postId,
-                                              @RequestBody final CommentRequest commentRequest,
+    public ResponseEntity<Void> createComment(@PathVariable @Min(1) final Long postId,
+                                              @Valid @RequestBody final CommentRequest commentRequest,
                                               final MemberInfo memberInfo) {
 
         otoInquiryCommentService.createComment(postId, memberInfo.getId(), commentRequest);

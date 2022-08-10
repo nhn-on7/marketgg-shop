@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
+import com.nhnacademy.marketgg.server.annotation.Role;
+import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.category.CategoryRetrieveResponse;
@@ -7,6 +9,7 @@ import com.nhnacademy.marketgg.server.service.category.CategoryService;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,9 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 카테고리 관리에 관련된 RestController 입니다.
  *
- * @author 박세완, 김정민
+ * @author 박세완
+ * @author 김정민
  * @version 1.0.0
  */
+@RoleCheck(accessLevel = Role.ROLE_ADMIN)
 @RestController
 @RequestMapping("/admin/categories")
 @RequiredArgsConstructor
@@ -60,7 +65,7 @@ public class AdminCategoryController {
      * @since 1.0.0
      */
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategoryRetrieveResponse> retrieveCategory(@PathVariable final String categoryId) {
+    public ResponseEntity<CategoryRetrieveResponse> retrieveCategory(@PathVariable @Size(min = 1, max = 6) final String categoryId) {
         CategoryRetrieveResponse categoryResponse = categoryService.retrieveCategory(categoryId);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -77,7 +82,7 @@ public class AdminCategoryController {
      */
     @GetMapping("/categorizations/{categorizationId}")
     public ResponseEntity<List<CategoryRetrieveResponse>> retrieveCategoriesByCategorization(
-        @PathVariable final String categorizationId) {
+        @PathVariable @Size(min = 1, max = 3)final String categorizationId) {
         List<CategoryRetrieveResponse> categoryResponses = categoryService.retrieveCategoriesByCategorization(
             categorizationId);
 
@@ -110,7 +115,7 @@ public class AdminCategoryController {
      * @since 1.0.0
      */
     @PutMapping("/{categoryId}")
-    public ResponseEntity<Void> updateCategory(@PathVariable final String categoryId,
+    public ResponseEntity<Void> updateCategory(@PathVariable @Size(min = 1, max = 6) final String categoryId,
                                                @Valid @RequestBody final CategoryUpdateRequest categoryRequest) {
         categoryService.updateCategory(categoryId, categoryRequest);
 
@@ -128,7 +133,7 @@ public class AdminCategoryController {
      * @since 1.0.0
      */
     @DeleteMapping("/{categoryId}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable final String categoryId) {
+    public ResponseEntity<Void> deleteCategory(@PathVariable @Size(min = 1, max = 6) final String categoryId) {
         categoryService.deleteCategory(categoryId);
 
         return ResponseEntity.status(HttpStatus.OK)

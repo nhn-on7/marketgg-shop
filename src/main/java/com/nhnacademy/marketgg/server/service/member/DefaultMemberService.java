@@ -22,6 +22,13 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 회원 서비스의 구현체입니다.
+ *
+ * @author 박세완
+ * @author 김훈민
+ * @version 1.0.0
+ */
 @Service
 @RequiredArgsConstructor
 public class DefaultMemberService implements MemberService {
