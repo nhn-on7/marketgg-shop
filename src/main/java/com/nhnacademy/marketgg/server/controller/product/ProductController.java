@@ -6,6 +6,10 @@ import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import java.net.URI;
 import java.util.List;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Pageable;
@@ -42,7 +46,7 @@ public class ProductController {
      * @since 1.0.0
      */
     @GetMapping("/categories/{categoryCode}")
-    public ResponseEntity<List<ElasticProduct>> findProductsByCategory(@PathVariable final String categoryCode,
+    public ResponseEntity<List<ElasticProduct>> findProductsByCategory(@PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryCode,
                                                                        final Pageable pageable) {
 
         List<ElasticProduct> productResponseList =
@@ -65,8 +69,8 @@ public class ProductController {
      * @since 1.0.0
      */
     @GetMapping("/search")
-    public ResponseEntity<List<SearchProductResponse>> searchProductList(@RequestParam final String keyword,
-                                                                         @RequestParam final Integer page)
+    public ResponseEntity<List<SearchProductResponse>> searchProductList(@RequestParam @NotBlank @Size(min = 2, max = 30) final String keyword,
+                                                                         @RequestParam @NotNull final Integer page)
             throws ParseException, JsonProcessingException {
 
         List<SearchProductResponse> productList =
@@ -91,9 +95,9 @@ public class ProductController {
      */
     @GetMapping("/categories/{categoryId}/search")
     public ResponseEntity<List<SearchProductResponse>> searchProductListByCategory(
-            @PathVariable final String categoryId,
-            @RequestParam final String keyword,
-            @RequestParam final Integer page)
+            @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
+            @RequestParam @NotBlank @Size(min = 2, max = 30) final String keyword,
+            @RequestParam @NotNull final Integer page)
             throws ParseException, JsonProcessingException {
 
         List<SearchProductResponse> productList =
@@ -120,10 +124,10 @@ public class ProductController {
      * @since 1.0.0
      */
     @GetMapping("/categories/{categoryId}/price/{option}/search")
-    public ResponseEntity<List<SearchProductResponse>> searchProductListByPrice(@PathVariable final String categoryId,
-                                                                                @PathVariable final String option,
-                                                                                @RequestParam final String keyword,
-                                                                                @RequestParam final Integer page)
+    public ResponseEntity<List<SearchProductResponse>> searchProductListByPrice(@PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
+                                                                                @PathVariable @NotBlank @Min(1) final String option,
+                                                                                @RequestParam @NotBlank @Size(min = 2, max = 30) final String keyword,
+                                                                                @RequestParam @NotNull final Integer page)
             throws ParseException, JsonProcessingException {
 
         List<SearchProductResponse> productList =

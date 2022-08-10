@@ -14,6 +14,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -59,11 +63,12 @@ public class AdminCsPostController {
      * @since 1.0.0
      */
     @GetMapping("/categories/{categoryId}/options/{optionType}/search")
-    public ResponseEntity<List<PostResponse>> searchPostListForOption(@PathVariable final String categoryId,
-                                                                      @PathVariable final String optionType,
-                                                                      @RequestParam final String option,
-                                                                      @RequestParam final String keyword,
-                                                                      @RequestParam final Integer page)
+    public ResponseEntity<List<PostResponse>> searchPostListForOption(
+            @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
+            @PathVariable @NotBlank @Min(1) final String optionType,
+            @RequestParam @NotBlank @Min(1) final String option,
+            @RequestParam @NotBlank @Size(min = 2, max = 30) final String keyword,
+            @RequestParam @NotNull final Integer page)
             throws ParseException, JsonProcessingException {
 
         List<PostResponse> responses =
@@ -87,7 +92,8 @@ public class AdminCsPostController {
      * @since 1.0.0
      */
     @PutMapping("/categories/{categoryId}/{postNo}")
-    public ResponseEntity<Void> updatePost(@PathVariable final String categoryId, @PathVariable final Long postNo,
+    public ResponseEntity<Void> updatePost(@PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
+                                           @PathVariable @NotNull @Min(1) final Long postNo,
                                            @Valid @RequestBody final PostRequest postRequest) {
 
         postService.updatePost(categoryId, postNo, postRequest);
@@ -124,8 +130,8 @@ public class AdminCsPostController {
      * @since 1.0.0
      */
     @PatchMapping("/{postNo}/status")
-    public ResponseEntity<Void> updateInquiryStatus(@PathVariable final Long postNo,
-                                                    @RequestBody final PostStatusUpdateRequest statusUpdateRequest) {
+    public ResponseEntity<Void> updateInquiryStatus(@PathVariable @NotNull @Min(1) final Long postNo,
+                                                    @Valid @RequestBody final PostStatusUpdateRequest statusUpdateRequest) {
 
         postService.updateOtoInquiryStatus(postNo, statusUpdateRequest);
 

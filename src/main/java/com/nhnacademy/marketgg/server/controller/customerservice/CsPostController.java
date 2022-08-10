@@ -15,6 +15,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -76,8 +80,8 @@ public class CsPostController {
      * @since 1.0.0
      */
     @GetMapping("/categories/{categoryId}")
-    public ResponseEntity<List<PostResponse>> retrievePostList(@PathVariable final String categoryId,
-                                                               @RequestParam final Integer page,
+    public ResponseEntity<List<PostResponse>> retrievePostList(@PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
+                                                               @RequestParam @NotNull final Integer page,
                                                                final MemberInfo memberInfo) {
 
         List<PostResponse> responses = postService.retrievePostList(categoryId, page, memberInfo);
@@ -96,7 +100,7 @@ public class CsPostController {
      * @since 1.0.0
      */
     @GetMapping("/{postId}")
-    public ResponseEntity<PostResponseForDetail> retrievePost(@PathVariable final Long postId,
+    public ResponseEntity<PostResponseForDetail> retrievePost(@PathVariable @NotNull @Min(1) final Long postId,
                                                               final MemberInfo memberInfo)
             throws JsonProcessingException {
 
@@ -121,9 +125,9 @@ public class CsPostController {
      */
 
     @GetMapping("/categories/{categoryId}/search")
-    public ResponseEntity<List<PostResponse>> searchPostListForCategory(@PathVariable final String categoryId,
-                                                                        @RequestParam final String keyword,
-                                                                        @RequestParam final Integer page,
+    public ResponseEntity<List<PostResponse>> searchPostListForCategory(@PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
+                                                                        @RequestParam @NotBlank @Size(min = 2, max = 30) final String keyword,
+                                                                        @RequestParam @NotNull final Integer page,
                                                                         final MemberInfo memberInfo)
             throws ParseException, JsonProcessingException {
 
@@ -145,7 +149,8 @@ public class CsPostController {
      * @since 1.0.0
      */
     @DeleteMapping("/categories/{categoryId}/{postId}")
-    public ResponseEntity<Void> deletePost(@PathVariable final String categoryId, @PathVariable final Long postId,
+    public ResponseEntity<Void> deletePost(@PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
+                                           @PathVariable @NotNull @Min(1) final Long postId,
                                            final MemberInfo memberInfo) {
 
         postService.deletePost(categoryId, postId, memberInfo);

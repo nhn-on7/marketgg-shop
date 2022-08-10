@@ -8,6 +8,8 @@ import com.nhnacademy.marketgg.server.service.label.LabelService;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -76,7 +78,7 @@ public class AdminLabelController {
      * @since 1.0.0
      */
     @DeleteMapping("/{labelId}")
-    public ResponseEntity<Void> deleteLabel(@PathVariable final Long labelId) {
+    public ResponseEntity<Void> deleteLabel(@PathVariable @NotNull @Min(1) final Long labelId) {
         labelService.deleteLabel(labelId);
 
         return ResponseEntity.status(HttpStatus.OK)
