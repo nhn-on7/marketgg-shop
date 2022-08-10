@@ -35,4 +35,6 @@ public interface PointHistoryRepositoryCustom {
      */
     Optional<PointHistory> findLastTotalPoint(final Long id);
 
+    Integer findLastTotalPoints(final Long memberId);
+
 }

@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 /**
  * 주문을 생성하기 위한 요청 정보를 담고 있는 DTO 클래스입니다.
  *
- * @author 김정민
  * @version 1.0.0
- * @since 1.0.0
+ * @author 김정민
  */
 @NoArgsConstructor
 @Getter
@@ -33,15 +32,6 @@ public class OrderCreateRequest {
     @NotNull
     private Long deliveryAddressId;
 
-    // @NotNull
-    // private Integer zipCode;
-    //
-    // @NotNull
-    // private String address;
-    //
-    // @NotNull
-    // private String detailAddress;
-
     // 장바구니에서 받아올 주문할 상품 목록
     @NotNull
     private List<ProductToOrder> products;
@@ -50,7 +40,10 @@ public class OrderCreateRequest {
     private Integer usedPoint;
 
     @NotNull
-    private Long totalAmount;
+    private Long totalOrigin; // 원가
+
+    @NotNull
+    private Long totalAmount; // 최종 결제 금액
 
     @NotBlank
     private String paymentType;

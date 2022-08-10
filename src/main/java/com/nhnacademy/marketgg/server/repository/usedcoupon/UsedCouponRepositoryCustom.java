@@ -5,4 +5,6 @@ import org.springframework.data.repository.NoRepositoryBean;
 @NoRepositoryBean
 public interface UsedCouponRepositoryCustom {
 
+    boolean existsCouponId(final Long couponId);
+
 }
