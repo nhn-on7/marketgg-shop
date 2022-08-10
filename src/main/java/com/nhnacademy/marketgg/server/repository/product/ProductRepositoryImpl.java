@@ -6,6 +6,8 @@ import com.nhnacademy.marketgg.server.entity.QProduct;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -59,6 +61,23 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
             .select(selectAllProductColumns())
             .where(product.category.id.eq(categoryCode))
             .fetch();
+    }
+
+    @Override
+    public List<Product> findByIds(List<Long> productIds) {
+        QProduct product = QProduct.product;
+        List<Product> result = new ArrayList<>();
+
+        for (Long id : productIds) {
+            Product prod = from(product)
+                    .select(product)
+                    .where(product.id.eq(id))
+                    .fetchOne();
+
+            result.add(prod);
+        }
+
+        return result;
     }
 
     private ConstructorExpression<ProductResponse> selectAllProductColumns() {

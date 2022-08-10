@@ -10,7 +10,6 @@ import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
-import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.OrderProduct;
@@ -30,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -49,15 +49,22 @@ public class DefaultOrderService implements OrderService {
     @Transactional(readOnly = true)
     @Override
     public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId) {
+        int i = 0;
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         Order order = new Order(member, orderRequest);
-        // Product product = productRepository.find
-        // OrderProduct orderProduct = new OrderProduct();
+        List<Long> productIds = orderRequest.getProducts().stream().map(ProductToOrder::getId)
+                                            .collect(Collectors.toList());
+        List<Integer> productAmounts = orderRequest.getProducts().stream().map(ProductToOrder::getAmount)
+                                                .collect(Collectors.toList());
+        List<Product> products = productRepository.findByIds(productIds);
+
         // memo: 배송지 조회
 
         orderRepository.save(order);
         // Memo: 주문배송지, 주문상품 save
-
+        for (Product product : products) {
+            orderProductRepository.save(new OrderProduct(order, product, productAmounts.get(i++)));
+        }
 
         // return new OrderToPayment();
         return null;
@@ -117,6 +124,7 @@ public class DefaultOrderService implements OrderService {
         return orderRepository.findOrderDetail(orderId, memberInfo.getId(), memberInfo.isUser());
     }
 
+    // memo: 소프트 삭제 구현, 주문배송지, 주문상품 삭제
     @Transactional(readOnly = true)
     @Override
     public void deleteOrder(final Long orderId) {
