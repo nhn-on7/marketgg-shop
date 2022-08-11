@@ -51,6 +51,14 @@ public interface ProductRepositoryCustom {
      */
     List<ProductResponse> findByCategoryCode(final String categoryCode);
 
+    /**
+     * 상품의 식별번호 목록으로 상품 목록을 조회합니다.
+     *
+     * @param productIds - 조회할 상품 식별번호 목록입니다.
+     * @return 상품 식별번호 목록으로 조회한 상품 목록을 반환합니다.
+     * @since 1.0.0
+     * @author 김정민
+     */
     List<Product> findByIds(final List<Long> productIds);
 
 }

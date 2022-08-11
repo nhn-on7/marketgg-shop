@@ -31,7 +31,7 @@ import java.util.List;
  * @author 김정민
  * @version 1.0.0
  */
-// @RoleCheck(accessLevel = Role.ROLE_USER)
+// todo: @RoleCheck(accessLevel = Role.ROLE_USER)
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
@@ -66,7 +66,7 @@ public class OrderController {
      *
      * @param products - 주문할 상품 목록입니다.
      * @param memberInfo - 주문하는 회원의 정보입니다.
-     * @param authInfo - 주문하는 회원의 정보입니다.
+     * @param authInfo - 주문하는 회원의 auth 정보입니다.
      * @return 회원의 정보를 토대로 주문서 작성에 필요한 값들과 상품목록을 취합하여 반환합니다.
      * @since 1.0.0
      */
