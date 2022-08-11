@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
  * @author 조현진
  */
 @Configuration
-public class SpringConfig {
+public class FileConfig {
 
     @Bean
     public StorageService localStorageService() {

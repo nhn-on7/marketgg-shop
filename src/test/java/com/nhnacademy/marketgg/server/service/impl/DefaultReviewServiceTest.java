@@ -9,18 +9,18 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
-import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
+import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Review;
 import com.nhnacademy.marketgg.server.entity.event.SavePointEvent;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
-import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.review.ReviewRepository;
 import com.nhnacademy.marketgg.server.service.file.FileService;
@@ -66,9 +66,6 @@ class DefaultReviewServiceTest {
     AssetRepository assetRepository;
 
     @Mock
-    ImageRepository imageRepository;
-
-    @Mock
     ApplicationEventPublisher publisher;
 
     @Mock
@@ -83,6 +80,7 @@ class DefaultReviewServiceTest {
     private ReviewCreateRequest reviewRequest;
     private ReviewResponse reviewResponse;
     private ReviewUpdateRequest reviewUpdateRequest;
+    private ImageResponse imageResponse;
 
     @BeforeEach
     void setUp() {
@@ -97,14 +95,14 @@ class DefaultReviewServiceTest {
         review = new Review(reviewRequest, member, asset);
 
         reviewResponse = new ReviewResponse(1L,
-            1L,
-            1L,
-            "content",
-            5L,
-            true,
-            LocalDateTime.now(),
-            LocalDateTime.now(),
-            null);
+                                            1L,
+                                            1L,
+                                            "content",
+                                            5L,
+                                            true,
+                                            LocalDateTime.now(),
+                                            LocalDateTime.now(),
+                                            null);
 
         reviewUpdateRequest = new ReviewUpdateRequest();
         ReflectionTestUtils.setField(reviewUpdateRequest, "reviewId", 1L);
@@ -112,6 +110,7 @@ class DefaultReviewServiceTest {
         ReflectionTestUtils.setField(reviewUpdateRequest, "content", "리뷰 수정합니다~");
         ReflectionTestUtils.setField(reviewUpdateRequest, "rating", 5L);
 
+        imageResponse = new ImageResponse("이미지 응답", 1L, "이미지 주소", 1, asset);
     }
 
     @Test
@@ -121,18 +120,15 @@ class DefaultReviewServiceTest {
         URL url = getClass().getClassLoader().getResource("lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
 
-        MockMultipartFile file =
+        MockMultipartFile image =
             new MockMultipartFile("images", "lee.png", "image/png", new FileInputStream(filePath));
-
-        MultipartFile images = List.of(file, file);
 
         given(memberRepository.findByUuid(anyString())).willReturn(Optional.ofNullable(member));
         given(reviewRepository.save(any(Review.class))).willReturn(review);
-        given(imageRepository.saveAll(any(List.class))).willReturn(images);
-        given(assetRepository.save(any(Asset.class))).willReturn(asset);
+        given(fileService.uploadImage(any(MultipartFile.class))).willReturn(imageResponse);
         willDoNothing().given(publisher).publishEvent(any(SavePointEvent.class));
 
-        this.reviewService.createReview(reviewRequest, images, "admin");
+        this.reviewService.createReview(reviewRequest, image, "admin");
 
         then(reviewRepository).should().save(any(Review.class));
         then(publisher).should().publishEvent(any(SavePointEvent.class));
@@ -158,7 +154,8 @@ class DefaultReviewServiceTest {
         Page<ReviewResponse> page = new PageImpl<>(list, PageRequest.of(0, 1), 1);
         given(reviewRepository.retrieveReviews(PageRequest.of(0, 1))).willReturn(page);
 
-        SingleResponse<Page<ReviewResponse>> reviewResponses = reviewService.retrieveReviews(page.getPageable());
+        SingleResponse<Page<ReviewResponse>> reviewResponses =
+            reviewService.retrieveReviews(page.getPageable());
 
         assertThat(reviewResponses).isNotNull();
         then(reviewRepository).should().retrieveReviews(page.getPageable());

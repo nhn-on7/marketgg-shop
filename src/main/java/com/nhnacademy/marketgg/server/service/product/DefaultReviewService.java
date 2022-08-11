@@ -39,7 +39,6 @@ public class DefaultReviewService implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
     private final AssetRepository assetRepository;
-    private final ImageRepository imageRepository;
     private final ApplicationEventPublisher publisher;
     private final FileService fileService;
 
@@ -50,11 +49,9 @@ public class DefaultReviewService implements ReviewService {
 
         Member member = memberRepository.findByUuid(uuid).orElseThrow(MemberNotFoundException::new);
 
-        Asset asset = assetRepository.save(Asset.create());
-
         ImageResponse imageResponse = fileService.uploadImage(image);
 
-        reviewRepository.save(new Review(reviewRequest, member, asset));
+        reviewRepository.save(new Review(reviewRequest, member, imageResponse.getAsset()));
 
         publisher.publishEvent(SavePointEvent.dispensePointForImageReview(member));
     }

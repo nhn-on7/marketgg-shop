@@ -25,6 +25,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
+import org.elasticsearch.client.ml.inference.preprocessing.Multi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.multipart.MultipartFile;
 
 @WebMvcTest(ReviewController.class)
 class ReviewControllerTest {
@@ -81,7 +83,7 @@ class ReviewControllerTest {
                                  .content(content))
                     .andExpect(status().isCreated());
 
-        then(reviewService).should().createReview(any(ReviewCreateRequest.class), any(List.class) , anyString());
+        then(reviewService).should().createReview(any(ReviewCreateRequest.class), any(MultipartFile.class) , anyString());
     }
 
     @Test
