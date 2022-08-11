@@ -16,8 +16,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+/**
+ * 고객센터 게시판의 Query DSL 사용처입니다.
+ *
+ * @author 박세완
+ * @version 1.0.0
+ */
 public class CustomerServicePostRepositoryImpl
-    extends QuerydslRepositorySupport implements CustomerServicePostRepositoryCustom {
+        extends QuerydslRepositorySupport implements CustomerServicePostRepositoryCustom {
 
     QCustomerServicePost csPost = QCustomerServicePost.customerServicePost;
     QCustomerServiceComment csComment = QCustomerServiceComment.customerServiceComment;
@@ -45,13 +51,14 @@ public class CustomerServicePostRepositoryImpl
     @Override
     public Page<PostResponse> findPostsByCategoryId(final Pageable pageable, final String categoryId) {
         QueryResults<PostResponse> result = from(csPost).where(csPost.category.id.eq(categoryId))
-                                                        .select(Projections.fields(PostResponse.class,
-                                                            csPost.id,
-                                                            csPost.category.id.as("categoryCode"),
-                                                            csPost.title,
-                                                            csPost.reason,
-                                                            csPost.status,
-                                                            csPost.createdAt))
+                                                        .select(Projections.constructor(PostResponse.class,
+                                                                                        csPost.id,
+                                                                                        csPost.category.id.as(
+                                                                                                "categoryCode"),
+                                                                                        csPost.title,
+                                                                                        csPost.reason,
+                                                                                        csPost.status,
+                                                                                        csPost.createdAt))
                                                         .offset(pageable.getOffset())
                                                         .limit(pageable.getPageSize())
                                                         .fetchResults();
@@ -64,14 +71,14 @@ public class CustomerServicePostRepositoryImpl
                                                           final Long memberId) {
         QueryResults<PostResponse> result = from(csPost).where(csPost.category.id.eq(categoryId))
                                                         .where(csPost.member.id.eq(memberId))
-                                                        .select(Projections.fields(PostResponse.class,
-                                                            csPost.id,
-                                                            csPost.category.id.as(
-                                                                "categoryCode"),
-                                                            csPost.title,
-                                                            csPost.reason,
-                                                            csPost.status,
-                                                            csPost.createdAt))
+                                                        .select(Projections.constructor(PostResponse.class,
+                                                                                        csPost.id,
+                                                                                        csPost.category.id.as(
+                                                                                                "categoryCode"),
+                                                                                        csPost.title,
+                                                                                        csPost.reason,
+                                                                                        csPost.status,
+                                                                                        csPost.createdAt))
                                                         .offset(pageable.getOffset())
                                                         .limit(pageable.getPageSize())
                                                         .fetchResults();
@@ -81,22 +88,22 @@ public class CustomerServicePostRepositoryImpl
 
     private QBean<PostResponseForReady> getDetailFields(final Long postNo) {
         return Projections.fields(PostResponseForReady.class,
-            csPost.id,
-            csPost.category.id.as("categoryCode"),
-            csPost.title,
-            csPost.content,
-            csPost.reason,
-            csPost.status,
-            csPost.createdAt,
-            csPost.updatedAt,
-            ExpressionUtils.as(JPAExpressions.select(Projections.constructor(
-                                                 CommentReady.class,
-                                                 csComment.content,
-                                                 csComment.member.uuid,
-                                                 csComment.createdAt))
-                                             .from(csComment)
-                                             .where(csComment.customerServicePost.id.eq(
-                                                 postNo)), "commentList"));
+                                  csPost.id,
+                                  csPost.category.id.as("categoryCode"),
+                                  csPost.title,
+                                  csPost.content,
+                                  csPost.reason,
+                                  csPost.status,
+                                  csPost.createdAt,
+                                  csPost.updatedAt,
+                                  ExpressionUtils.as(JPAExpressions.select(Projections.constructor(
+                                                                           CommentReady.class,
+                                                                           csComment.content,
+                                                                           csComment.member.uuid,
+                                                                           csComment.createdAt))
+                                                                   .from(csComment)
+                                                                   .where(csComment.customerServicePost.id.eq(
+                                                                           postNo)), "commentList"));
     }
 
 }
