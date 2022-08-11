@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,6 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 민아영
  * @version 1.0.0
  */
+@Slf4j
 @RestController
 @RequestMapping("/members")
 @RequiredArgsConstructor
@@ -115,6 +117,8 @@ public class MemberController {
     @GetMapping
     public ResponseEntity<CommonResponse> retrieveMember(final AuthInfo authInfo, final MemberInfo memberInfo) {
         MemberResponse memberResponse = new MemberResponse(authInfo, memberInfo);
+
+        log.info("MemberResponse = {}", memberResponse);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
