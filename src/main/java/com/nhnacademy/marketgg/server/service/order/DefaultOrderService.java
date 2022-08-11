@@ -11,6 +11,8 @@ import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
+import com.nhnacademy.marketgg.server.dto.response.orderdeliveryaddress.OrderDeliveryAddressResponse;
+import com.nhnacademy.marketgg.server.dto.response.orderproduct.OrderProductResponse;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -23,6 +25,7 @@ import com.nhnacademy.marketgg.server.exception.coupon.CouponNotOverMinimumMoney
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotValidException;
 import com.nhnacademy.marketgg.server.exception.deliveryaddresses.DeliveryAddressNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
+import com.nhnacademy.marketgg.server.exception.order.OrderNotFoundException;
 import com.nhnacademy.marketgg.server.exception.pointhistory.PointNotEnoughException;
 import com.nhnacademy.marketgg.server.exception.product.ProductStockNotEnoughException;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
@@ -150,22 +153,31 @@ public class DefaultOrderService implements OrderService {
         return result;
     }
 
-    // 주문 목록 조회 - 관리자(전체), 회원(본인)
+    // memo: 주문 목록 조회 - 관리자(전체), 회원(본인)
     @Override
     public List<OrderRetrieveResponse> retrieveOrderList(final MemberInfo memberinfo) {
-        // return (isUser ? orderRepository.findOrderListById(memberId) : orderRepository.findAllOrder());
         return orderRepository.findOrderList(memberinfo.getId(), memberinfo.isUser());
     }
 
     @Override
     public OrderDetailRetrieveResponse retrieveOrderDetail(final Long orderId, final MemberInfo memberInfo) {
-        return orderRepository.findOrderDetail(orderId, memberInfo.getId(), memberInfo.isUser());
+        OrderDetailRetrieveResponse detailResponse = orderRepository.findOrderDetail(orderId, memberInfo.getId(),
+                                                                                     memberInfo.isUser());
+        OrderDeliveryAddressResponse deliveryResponse = orderDeliveryAddressRepository.findByOrderId(orderId);
+        List<OrderProductResponse> productResponses = orderProductRepository.findByOrderId(orderId);
+        detailResponse.addOrderDetail(deliveryResponse, productResponses);
+
+        return detailResponse;
     }
 
-    // memo: 소프트 삭제 구현, 주문배송지, 주문상품 삭제
+    // memo: 소프트 삭제 구현, 하드삭제는 구현x? -> 하드삭제 생기면 주문상품, 주문배송지 삭제까지
     @Transactional(readOnly = true)
     @Override
     public void deleteOrder(final Long orderId) {
-        orderRepository.deleteById(orderId);
+        Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
+
+        order.delete();
+        orderRepository.save(order);
     }
+
 }

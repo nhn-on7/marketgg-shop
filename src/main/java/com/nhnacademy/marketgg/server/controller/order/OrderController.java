@@ -40,7 +40,7 @@ public class OrderController {
     private final OrderService orderService;
     private static final String ORDER_PREFIX = "/orders";
 
-    // 주문서 등록 , 결제요청 url 로 location 주기
+    // memo: 주문서 등록 , 결제요청 url 로 location 주기
     @PostMapping
     public ResponseEntity<OrderToPayment> createOrder(@RequestBody final OrderCreateRequest orderRequest,
                                                       final MemberInfo memberInfo) {
@@ -54,7 +54,7 @@ public class OrderController {
                              .body(response);
     }
 
-    // 주문서 작성폼 정보 조회
+    // memo: 주문서 작성폼 정보 조회
     @GetMapping("/order-form")
     public ResponseEntity<OrderFormResponse> retrieveOrderForm(@RequestBody final List<ProductToOrder> products,
                                                                final MemberInfo memberInfo, final AuthInfo authInfo) {
@@ -67,7 +67,7 @@ public class OrderController {
                              .body(response);
     }
 
-    // 주문 목록 조회 - 관리자는 모든 회원, 회원은 본인 것
+    // memo: 주문 목록 조회 - 관리자는 모든 회원, 회원은 본인 것
     @GetMapping
     public ResponseEntity<List<OrderRetrieveResponse>> retrieveOrderList(final MemberInfo memberInfo) {
         List<OrderRetrieveResponse> responses = orderService.retrieveOrderList(memberInfo);
@@ -78,7 +78,7 @@ public class OrderController {
                              .body(responses);
     }
 
-    // 주문 상세 조회
+    // memo: 주문 상세 조회
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderDetailRetrieveResponse> retrieveOrderDetail(@PathVariable final Long orderId,
                                                                            final MemberInfo memberInfo) {
@@ -91,6 +91,7 @@ public class OrderController {
                              .body(response);
     }
 
+    // memo: 주문 상태 변경
     @PatchMapping("/{orderId}/status")
     public ResponseEntity<Void> updateStatus(@PathVariable final Long orderId) {
 
@@ -100,7 +101,7 @@ public class OrderController {
                              .build();
     }
 
-    // 운송장 번호 생성된 후 주문서 수정, 배송파트 담당자분이 처리한다고 하심
+    // memo: 운송장 번호 생성된 후 주문서 수정, 배송파트 담당자분이 처리한다고 하심
     @PatchMapping("/{orderId}/delivery")
     public ResponseEntity<Void> createDeliveryNumber(@PathVariable final Long orderId) {
 
@@ -110,7 +111,7 @@ public class OrderController {
                              .build();
     }
 
-    // 주문 취소 -> 주문서 삭제
+    // memo: 주문 취소 -> 주문서 삭제
     @PutMapping("/{orderId}")
     public ResponseEntity<Void> deleteOrder(@PathVariable final Long orderId) {
         orderService.deleteOrder(orderId);
