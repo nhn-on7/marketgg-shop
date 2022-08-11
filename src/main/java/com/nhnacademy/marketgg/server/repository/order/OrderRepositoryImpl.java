@@ -7,8 +7,12 @@ import com.nhnacademy.marketgg.server.entity.QOrder;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import java.util.List;
+import com.querydsl.core.types.dsl.DateTimePath;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 
 public class OrderRepositoryImpl extends QuerydslRepositorySupport implements OrderRepositoryCustom {
 
@@ -22,6 +26,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
     public List<OrderRetrieveResponse> findOrderList(final Long memberId, final boolean isUser) {
         return from(order).select(selectOrderResponse())
                           .where(eqMemberId(memberId, isUser))
+                          .where(isDeleted(order.deletedAt))
                           .fetch();
     }
 
@@ -30,6 +35,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
         return from(order).select(selectOrderDetailResponse())
                           .where(order.id.eq(orderId))
                           .where(eqMemberId(memberId, isUser))
+                          .where(isDeleted(order.deletedAt))
                           .fetchOne();
     }
 
@@ -56,6 +62,13 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
     private BooleanExpression eqMemberId(final Long memberId, final boolean isUser) {
         if (isUser) {
             return order.member.id.eq(memberId);
+        }
+        return null;
+    }
+
+    private BooleanExpression isDeleted(final DateTimePath<LocalDateTime> deletedAt) {
+        if (Objects.nonNull(deletedAt)) {
+            return order.deletedAt.isNotNull();
         }
         return null;
     }
