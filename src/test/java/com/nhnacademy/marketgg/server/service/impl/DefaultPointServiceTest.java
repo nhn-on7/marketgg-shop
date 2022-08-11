@@ -69,6 +69,8 @@ class DefaultPointServiceTest {
         memberGradeCreateRequest = new MemberGradeCreateRequest();
         orderCreateRequest = new OrderCreateRequest();
         cart = cartRepository.save(new Cart());
+
+        ReflectionTestUtils.setField(orderCreateRequest, "paymentType", "신용카드");
     }
 
     @Test
