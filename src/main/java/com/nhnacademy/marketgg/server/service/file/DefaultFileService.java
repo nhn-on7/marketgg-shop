@@ -15,13 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 
-/**
- * 멀티 파일 업로드를 위한 유틸 클래스입니다.
- *
- * @author 조현진
- * @version 1.0.0
- */
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -41,13 +34,13 @@ public class DefaultFileService implements FileService {
         ImageCreateRequest imageCreateRequest = storageServiceFactory.getService(option).uploadImage(image);
         Asset asset = assetRepository.save(Asset.create());
         Image imageEntity = Image.builder()
-                           .name(imageCreateRequest.getName())
-                           .imageAddress(imageCreateRequest.getImageAddress())
-                           .type(imageCreateRequest.getType())
-                           .asset(asset)
-                           .classification(imageCreateRequest.getClassification())
-                           .length(imageCreateRequest.getLength())
-                           .build();
+                                 .name(imageCreateRequest.getName())
+                                 .imageAddress(imageCreateRequest.getImageAddress())
+                                 .type(imageCreateRequest.getType())
+                                 .asset(asset)
+                                 .classification(imageCreateRequest.getClassification())
+                                 .length(imageCreateRequest.getLength())
+                                 .build();
 
         imageEntity.setImageSequence(imageCreateRequest.getImageSequence());
 
