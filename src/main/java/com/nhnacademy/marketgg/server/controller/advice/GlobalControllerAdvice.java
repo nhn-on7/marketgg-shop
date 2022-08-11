@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.controller.advice;
 
 import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
 import com.nhnacademy.marketgg.server.exception.NotFoundException;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -39,21 +40,6 @@ public class GlobalControllerAdvice {
     }
 
     /**
-     * 전체 Exception 에 대해 관리하는 Handler 입니다.
-     *
-     * @param ex - 에러 정보를 담은 Exception 입니다.
-     * @return 해당 에러의 에러메세지를 반환합니다.
-     * @since 1.0.0
-     */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorEntity> handleException(final Exception ex) {
-        log.error("", ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .body(new ErrorEntity(ex.getMessage()));
-    }
-
-    /**
      * 유효성 검사 Exception 에 대해 관리하는 Handler 입니다.
      *
      * @param ex - 에러 정보를 담은 Exception 입니다.
@@ -70,24 +56,44 @@ public class GlobalControllerAdvice {
         StringBuilder builder = new StringBuilder();
         builder.append("[Valid Error]\n");
 
-        if (bindingResult.hasErrors()) {
-            builder.append("Reason: ")
-                   .append(bindingResult.getFieldError().getDefaultMessage())
-                   .append(System.lineSeparator())
-                   .append("At: ")
-                   .append(bindingResult.getObjectName())
-                   .append(System.lineSeparator())
-                   .append("Field: ")
-                   .append(bindingResult.getFieldError().getField())
-                   .append(System.lineSeparator())
-                   .append("Not valid input: ")
-                   .append(bindingResult.getFieldError().getRejectedValue())
-                   .append(System.lineSeparator());
+        try {
+            if (bindingResult.hasErrors()) {
+                builder.append("Reason: ")
+                       .append(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage())
+                       .append(System.lineSeparator())
+                       .append("At: ")
+                       .append(bindingResult.getObjectName())
+                       .append(System.lineSeparator())
+                       .append("Field: ")
+                       .append(Objects.requireNonNull(bindingResult.getFieldError()).getField())
+                       .append(System.lineSeparator())
+                       .append("Not valid input: ")
+                       .append(Objects.requireNonNull(bindingResult.getFieldError()).getRejectedValue())
+                       .append(System.lineSeparator());
+            }
+        } catch (NullPointerException e) {
+            log.info("Field Error Null");
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(new ErrorEntity(builder.toString()));
+    }
+
+    /**
+     * 전체 Exception 에 대해 관리하는 Handler 입니다.
+     *
+     * @param ex - 에러 정보를 담은 Exception 입니다.
+     * @return 해당 에러의 에러메세지를 반환합니다.
+     * @since 1.0.0
+     */
+    @Order
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorEntity> handleException(final Exception ex) {
+        log.error("", ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(new ErrorEntity(ex.getMessage()));
     }
 
 }

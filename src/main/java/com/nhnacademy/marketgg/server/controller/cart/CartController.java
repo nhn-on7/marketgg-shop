@@ -1,7 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.cart;
 
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
+import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dto.response.cart.CartProductResponse;
@@ -10,6 +9,7 @@ import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.cart.CartProductService;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 장바구니 관련 요청을 수행합니다.
  */
-@RoleCheck(accessLevel = Role.ROLE_USER)
+@Auth
 @RestController
 @RequestMapping("/cart")
 @RequiredArgsConstructor
@@ -43,7 +43,7 @@ public class CartController {
      */
     @PostMapping
     public ResponseEntity<CommonResponse> addProductToCart(MemberInfo member,
-                                                           @RequestBody @Validated
+                                                           @RequestBody @Valid
                                                            ProductToCartRequest productAddRequest) {
 
         cartProductService.addProduct(member, productAddRequest);

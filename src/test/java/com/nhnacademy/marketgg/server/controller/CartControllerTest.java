@@ -25,8 +25,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.aop.AuthInjectAspect;
 import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
-import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
-import com.nhnacademy.marketgg.server.aop.UuidAspect;
+import com.nhnacademy.marketgg.server.controller.advice.AuthControllerAdvice;
+import com.nhnacademy.marketgg.server.controller.advice.GlobalControllerAdvice;
+import com.nhnacademy.marketgg.server.controller.advice.MemberControllerAdvice;
+import com.nhnacademy.marketgg.server.controller.cart.CartController;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
@@ -52,15 +54,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 
 @Transactional
 @SpringBootTest
-@ActiveProfiles({"testdb", "common"})
+@ActiveProfiles({ "testdb", "common" })
 @Import({
-    RoleCheckAspect.class,
     AuthInjectAspect.class,
-    UuidAspect.class,
     MemberInfoAspect.class
 })
 class CartControllerTest {
@@ -68,7 +67,19 @@ class CartControllerTest {
     MockMvc mockMvc;
 
     @Autowired
+    CartController controller;
+
+    @Autowired
     ObjectMapper mapper;
+
+    @Autowired
+    GlobalControllerAdvice globalControllerAdvice;
+
+    @Autowired
+    AuthControllerAdvice authControllerAdvice;
+
+    @Autowired
+    MemberControllerAdvice memberControllerAdvice;
 
     @MockBean
     CartProductService cartProductService;
@@ -86,8 +97,10 @@ class CartControllerTest {
     Long productId = 1L;
 
     @BeforeEach
-    void setUp(WebApplicationContext wac) throws JsonProcessingException {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+    void setUp() throws JsonProcessingException {
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                                 .setControllerAdvice(globalControllerAdvice, authControllerAdvice,
+                                     memberControllerAdvice)
                                  .alwaysDo(print())
                                  .build();
 
@@ -182,8 +195,6 @@ class CartControllerTest {
     void testUpdateProductInCartAmountFail() throws Exception {
         ProductToCartRequest request = Dummy.getDummyProductToCartRequest(productId, 9999);
         String jsonRequest = mapper.writeValueAsString(request);
-
-        // willDoNothing().given(cartProductService).updateAmount(any(MemberInfo.class), any(request.getClass()));
 
         mockMvc.perform(patch(baseUri)
                    .headers(headers)
