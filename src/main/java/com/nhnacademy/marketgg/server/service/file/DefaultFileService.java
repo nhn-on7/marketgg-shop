@@ -68,49 +68,4 @@ public class DefaultFileService implements FileService {
         return imageRepository.findByAssetId(id);
     }
 
-    @Override
-    public List<Image> parseImages(List<MultipartFile> multipartFiles, Asset asset) throws IOException {
-
-        List<Image> images = new ArrayList<>();
-
-        if (!CollectionUtils.isEmpty(multipartFiles)) {
-            String dir = String.valueOf(Files.createDirectories(returnDir()));
-            Integer sequence = 1;
-
-            for (MultipartFile multipartFile : multipartFiles) {
-                String filename = uuidFilename(multipartFile.getOriginalFilename());
-
-                File dest = new File(dir, Objects.requireNonNull(filename));
-                multipartFile.transferTo(dest);
-
-                String originalFileExtension = "";
-                String contentType = multipartFile.getContentType();
-
-                if (contentType.contains("image/jpeg")) {
-                    originalFileExtension = ".jpg";
-                }
-                if (contentType.contains("image/png")) {
-                    originalFileExtension = ".png";
-                }
-                Image image = Image.builder().type(originalFileExtension).name(filename).imageAddress(dir)
-                                   .length(dest.length()).asset(asset).classification("local").build();
-                image.setImageSequence(sequence);
-                images.add(image);
-                sequence++;
-            }
-        }
-
-        return images;
-    }
-
-    private Path returnDir() {
-        String format = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
-
-        return Paths.get(DIR, format);
-    }
-
-    private String uuidFilename(String filename) {
-        return UUID.randomUUID() + "_" + filename;
-    }
-
 }

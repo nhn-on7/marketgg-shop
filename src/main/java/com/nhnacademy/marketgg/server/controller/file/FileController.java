@@ -38,8 +38,8 @@ public class FileController {
     @RoleCheck
     @PostMapping
     public ResponseEntity<ImageResponse> uploadAndRetrieveImage(@RequestBody final MultipartFile image) throws IOException {
-        ImageResponse uploadImage = fileService.uploadImage(image);
-        ImageResponse imageResponse = fileService.retrieveImage();
+
+        ImageResponse imageResponse = fileService.uploadImage(image);
 
         return new ResponseEntity<>(imageResponse, HttpStatus.OK);
     }
