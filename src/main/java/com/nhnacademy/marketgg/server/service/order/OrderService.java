@@ -29,7 +29,15 @@ public interface OrderService {
      */
     OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId);
 
-    // memo: javadoc
+    /**
+     * 주문서 작성에 필요한 정보를 취합하여 조회하는 메소드입니다.
+     *
+     * @param products - 주문할 상품 목록입니다.
+     * @param memberInfo - 주문하는 회원의 정보입니다.
+     * @param authInfo - 주문하는 회원의 auth 정보입니다.
+     * @return 취합한 정보를 반환합니다.
+     * @since 1.0.0
+     */
     OrderFormResponse retrieveOrderForm(final List<ProductToOrder> products, final MemberInfo memberInfo,
                                         final AuthInfo authInfo);
 
