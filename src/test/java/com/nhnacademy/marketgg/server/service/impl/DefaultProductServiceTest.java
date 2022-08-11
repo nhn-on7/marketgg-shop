@@ -197,9 +197,6 @@ class DefaultProductServiceTest {
     @Test
     @DisplayName("상품 목록 조회 테스트")
     void testRetrieveProducts() {
-        // List<ElasticProduct> list = List.of(elasticProduct);
-        // given(elasticProductRepository.findAll(PageRequest.of(0, 1))).willReturn(
-        //         new PageImpl<>(list, PageRequest.of(0, 1), 1));
         List<ProductResponse> list = List.of(productResponse);
         Page<ProductResponse> page = new PageImpl<>(list, PageRequest.of(0, 1), 1);
         given(productRepository.findAllProducts(PageRequest.of(0, 1))).willReturn(page);
@@ -208,7 +205,6 @@ class DefaultProductServiceTest {
             productService.retrieveProducts(PageRequest.of(0, 1));
 
         assertThat(productResponses).isNotNull();
-        // then(elasticProductRepository).should().findAll(any(PageRequest.class));
         then(productRepository).should().findAllProducts(any(PageRequest.class));
     }
 
