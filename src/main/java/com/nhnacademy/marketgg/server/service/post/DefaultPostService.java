@@ -84,7 +84,7 @@ public class DefaultPostService implements PostService {
             throws JsonProcessingException {
 
         CustomerServicePost post =
-                postRepository.findById(postNo).orElseThrow(CustomerServiceCommentNotFoundException::new);
+                postRepository.findById(postNo).orElseThrow(CustomerServicePostNotFoundException::new);
         if (post.getCategory().getId().compareTo(OTO_CODE) == 0 || !memberInfo.isAdmin()) {
             return this.convertToDetail(postRepository.findOwnOtoInquiry(postNo, memberInfo.getId()));
         }
