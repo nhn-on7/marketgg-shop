@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.service.storage;
 
+import com.nhnacademy.marketgg.server.dto.request.file.ImageCreateRequest;
 import com.nhnacademy.marketgg.server.entity.Asset;
-import com.nhnacademy.marketgg.server.entity.Image;
 import java.io.IOException;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +20,6 @@ public interface StorageService {
     //
     // ImageResponse retrieveImage(final Long id);
     //
-    Image uploadImage(final MultipartFile file, final Asset asset) throws IOException;
+    ImageCreateRequest uploadImage(final MultipartFile image) throws IOException;
 
 }
