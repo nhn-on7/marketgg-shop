@@ -21,10 +21,12 @@ import com.nhnacademy.marketgg.server.controller.member.MemberController;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.member.MemberService;
 import com.nhnacademy.marketgg.server.service.point.PointService;
+import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -34,6 +36,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -68,6 +73,9 @@ class MemberControllerTest {
         httpHeaders.add(AspectUtils.AUTH_ID, UUID.randomUUID().toString());
         httpHeaders.add(AspectUtils.WWW_AUTHENTICATE, "[\"ROLE_ADMIN\"]");
     }
+
+    @MockBean
+    ProductInquiryPostService inquiryPostService;
 
     @Test
     @DisplayName("GG 패스 갱신일자 확인")
@@ -125,6 +133,7 @@ class MemberControllerTest {
                     .andDo(print());
     }
 
+    @Test
     @DisplayName("회원에게 지급 쿠폰 생성")
     void testCreateGivenCoupons() throws Exception {
         doNothing().when(givenCouponService)
@@ -151,6 +160,23 @@ class MemberControllerTest {
                     .andExpect(status().isOk());
 
         verify(givenCouponService, times(1)).retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class));
+    }
+
+    @Test
+    @DisplayName("회원이 작성한 전체 상품 문의 조회 테스트")
+    void testRetrieveProductInquiryByMemberId() throws Exception {
+        Pageable pageable = PageRequest.of(0, 20);
+        Page<ProductInquiryByMemberResponse> responses = new PageImpl<>(List.of(), pageable, 0);
+
+        given(inquiryPostService.retrieveProductInquiryByMemberId(any(MemberInfo.class), any(PageRequest.class)))
+            .willReturn(responses);
+
+        this.mockMvc.perform(get("/members/product-inquiries")
+                .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+
+        verify(inquiryPostService, times(1))
+            .retrieveProductInquiryByMemberId(any(MemberInfo.class), any(PageRequest.class));
     }
 
 }

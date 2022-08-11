@@ -45,7 +45,6 @@ class ProductInquiryPostControllerTest {
     ProductInquiryPostService productInquiryPostService;
 
     Pageable pageable = PageRequest.of(0, 20);
-    Page<ProductInquiryByMemberResponse> responses = new PageImpl<>(List.of(), pageable, 0);
     Page<ProductInquiryByProductResponse> responses1 = new PageImpl<>(List.of(), pageable, 0);
 
     @Test
@@ -81,20 +80,6 @@ class ProductInquiryPostControllerTest {
 
         verify(productInquiryPostService, times(1))
             .retrieveProductInquiryByProductId(anyLong(), any(PageRequest.class));
-    }
-
-    @Test
-    @DisplayName("회원이 작성한 전체 상품 문의 조회 테스트")
-    void testRetrieveProductInquiryByMemberId() throws Exception {
-        given(productInquiryPostService.retrieveProductInquiryByMemberId(any(MemberInfo.class), any(PageRequest.class)))
-            .willReturn(responses);
-
-        this.mockMvc.perform(get("/members/product-inquiries")
-                .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk());
-
-        verify(productInquiryPostService, times(1))
-            .retrieveProductInquiryByMemberId(any(MemberInfo.class), any(PageRequest.class));
     }
 
     @Test
