@@ -38,7 +38,6 @@ public class AdminProductInquiryPostController {
      * @return - Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @PutMapping("/{productId}/inquiries/{inquiryId}")
     public ResponseEntity<CommonResponse> updateProductInquiryReply(@PathVariable final Long productId,
                                                                     @PathVariable final Long inquiryId,

@@ -1,7 +1,5 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.category.CategoryRetrieveResponse;
@@ -26,11 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 카테고리 관리에 관련된 RestController 입니다.
  *
- * @author 박세완
- * @author 김정민
+ * @author 김정민, 박세완
  * @version 1.0.0
  */
-@RoleCheck(accessLevel = Role.ROLE_ADMIN)
 @RestController
 @RequestMapping("/admin/categories")
 @RequiredArgsConstructor
@@ -65,7 +61,8 @@ public class AdminCategoryController {
      * @since 1.0.0
      */
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategoryRetrieveResponse> retrieveCategory(@PathVariable @Size(min = 1, max = 6) final String categoryId) {
+    public ResponseEntity<CategoryRetrieveResponse> retrieveCategory(
+        @PathVariable @Size(min = 1, max = 6) final String categoryId) {
         CategoryRetrieveResponse categoryResponse = categoryService.retrieveCategory(categoryId);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -82,7 +79,7 @@ public class AdminCategoryController {
      */
     @GetMapping("/categorizations/{categorizationId}")
     public ResponseEntity<List<CategoryRetrieveResponse>> retrieveCategoriesByCategorization(
-        @PathVariable @Size(min = 1, max = 3)final String categorizationId) {
+        @PathVariable @Size(min = 1, max = 3) final String categorizationId) {
         List<CategoryRetrieveResponse> categoryResponses = categoryService.retrieveCategoriesByCategorization(
             categorizationId);
 
