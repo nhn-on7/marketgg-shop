@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class PostResponse {
 
-    private final Long boardNo;
+    private final Long id;
 
     private final String categoryCode;
 
