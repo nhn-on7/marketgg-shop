@@ -11,7 +11,7 @@ import static org.mockito.Mockito.verify;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
-import com.nhnacademy.marketgg.server.dto.response.ProductInquiryByProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Product;

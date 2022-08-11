@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.product.ProductInquiryPostController;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
-import com.nhnacademy.marketgg.server.dto.response.ProductInquiryByProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.dto.response;
+package com.nhnacademy.marketgg.server.dto.response.product;
 
 import java.time.LocalDateTime;
 import lombok.Getter;

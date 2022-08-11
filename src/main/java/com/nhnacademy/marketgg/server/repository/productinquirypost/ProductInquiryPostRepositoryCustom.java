@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.productinquirypost;
 
-import com.nhnacademy.marketgg.server.dto.response.ProductInquiryByProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
