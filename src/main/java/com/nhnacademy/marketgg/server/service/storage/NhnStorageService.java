@@ -128,76 +128,15 @@ public class NhnStorageService implements StorageService {
                                  .build();
     }
 
-
-    @Override
-    public void uploadObject(final String containerName, String objectName, final InputStream inputStream)
-        throws JsonProcessingException {
-        String url = this.getUrl(containerName, objectName);
-        cloudResponse = objectMapper.readValue(requestToken(), CloudResponse.class);
-        String tokenId = cloudResponse.getAccess().getToken().getId();
-
-        final RequestCallback requestCallback = request -> {
-            request.getHeaders().add("X-Auth-Token", tokenId);
-            IOUtils.copy(inputStream, request.getBody());
-        };
-
-        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-        requestFactory.setBufferRequestBody(false);
-        RestTemplate restTemplate = new RestTemplate(requestFactory);
-
-        HttpMessageConverterExtractor<String> responseExtractor =
-            new HttpMessageConverterExtractor<>(String.class, restTemplate.getMessageConverters());
-
-        restTemplate.execute(url, PUT, requestCallback, responseExtractor);
-    }
-
-    @Override
-    public InputStream downloadObject(final String containerName, final String objectName)
-        throws JsonProcessingException {
-
-        String url = this.getUrl(containerName, objectName);
-
-        cloudResponse = objectMapper.readValue(requestToken(), CloudResponse.class);
-        String tokenId = cloudResponse.getAccess().getToken().getId();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HEADER_NAME, tokenId);
-        headers.setAccept(List.of(MediaType.APPLICATION_OCTET_STREAM));
-
-        HttpEntity<String> requestHttpEntity = new HttpEntity<>(null, headers);
-
-        ResponseEntity<byte[]> response
-            = this.restTemplate.exchange(url, HttpMethod.GET, requestHttpEntity, byte[].class);
-
-        return new ByteArrayInputStream(Objects.requireNonNull(response.getBody()));
-    }
-
-    private String getUrl(String containerName, String objectName) {
-        return this.storageUrl + "/" + containerName + "/" + objectName;
-    }
-
-    private String getUrl(String containerName) {
-        return this.storageUrl + "/" + containerName;
-    }
-
-
-    private Path returnDir() {
-        String format = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
-
-        return Paths.get(System.getProperty("user.home"), format);
-    }
-
-
-    private String uuidFilename(String filename) {
-
-        return UUID.randomUUID() + "_" + filename;
+    private String getUrl(String fileName) {
+        return this.storageUrl + "/" + fileName;
     }
 
     private String getContentType(final MultipartFile image) {
-        if (image.getContentType().contains("image/jpeg")) {
+        if (Objects.requireNonNull(image.getContentType()).contains("image/jpeg")) {
             return ".jpg";
         }
-        if (image.getContentType().contains("image/png")) {
+        if (Objects.requireNonNull(image.getContentType()).contains("image/png")) {
             return ".png";
         } else {
             throw new IllegalArgumentException("이미지만 업로드할 수 있습니다.");
