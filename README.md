@@ -120,24 +120,41 @@ Market GG Shop 서비스는 애플리케이션 이용에 필요한 API 를 제�
 - **결제 관리** (구현 중)
     - 결제 내역 추가 및 검증
     - 최종 결제 요청
+        - 카드
+        - 가상계좌
+        - 실시간 계좌이체
+        - 휴대폰 결제
     - 결제 내역 조회
     - 가상계좌 발급
+- **거래 관리** (구현 중)
+    - 거래 내역 조회
     - 결제 취소
 
 ### [@조현진](https://github.com/Com-Sun)
 
 - **상품 관리**
-    - Object Storage 를 이용한 파일 관리
-        - local/storage 를 구분하여 파일 업로드
-        - 조회시 storage 주소를 통해 이미지 다운르도
-    - 페이지네이션을 이용한 상품 조회
-    - 상품 등록, 수정 구현
-        - 로컬 업로드 고도화
-    - 상품 삭제기능 구현
+    - 상품 등록 기능 구현
+        - 상품 등록시 필요한 파일 관리 시스템 구현
+    - 상품 수정 기능 구현
+    - 상품 조회 기능 구현
+        - 상품 조회시 보이는 사진은 파일 관리 시스템으로부터 해당 사진이 저장된 URL 을 받는다.
+    - 상품 삭제 기능 구현
+    - 상품 복구 기능 구현
 - **후기 관리**
-    - Object Storage 를 이용한 파일 관리 (상품과 동일)
-        - local/storage 를 구분하여 파일 업로드
-        - 조회시 storage 주소를 통해 이미지 다운르도
+    - 후기 등록 기능 구현
+        - 후기 등록시 필요한 파일 관리 시스템 구현
+    - 후기 수정 기능 구현
+    - 후기 조회 기능 구현
+        - 후기 조회시 보이는 사진은 파일 관리 시스템으로부터 해당 사진이 저장된 URL 을 받는다.
+    - 후기 삭제 기능 구현
+- **파일 관리**
+    - 빈을 동적으로 주입받아 상황에 따라 로컬 / Object Storage 를 사용할 수 있다.
+        - Local
+            - 파일 업로드 기능 구현 (이미지)
+            - 이미지 조회 기능 구현
+        - Cloud
+            - NHN Cloud - Object Storage 를 사용한 파일 업로드 기능 구현 (이미지)
+            - 이미지 조회 기능 구현
 
 ## Technical Issue
 
@@ -227,11 +244,11 @@ Market GG Shop 서비스는 애플리케이션 이용에 필요한 API 를 제�
 - `feature/xxx`: 기능 개발 단계
 - `hotfix/xxx`: Merge 후 발생한 버그 및 수정사항 반영 시 사용
 
-**`git rebase` 활용**
+**`git merge` & `git rebase` 활용**
 
 작업 중인 `feature/xxx` 브랜치와 지속적 통합으로 인한 `develop` 브랜치 동기화를 효과적으로 하기 위함
 
-![git-rebase](https://user-images.githubusercontent.com/54662174/183855384-0dd2d1ee-0e77-4f23-84af-d845a0fb3ecc.png)
+![marketgg-shop - git-reabse](https://user-images.githubusercontent.com/38161720/184050358-3595dc5c-0492-458d-b885-3be2f98482cc.png)
 
 **칸반 보드 활용**
 
