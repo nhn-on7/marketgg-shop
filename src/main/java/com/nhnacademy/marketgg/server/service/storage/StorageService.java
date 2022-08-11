@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 마켓 GG의 파일을 관리하기 위한 Service입니다.
+ * 마켓 GG 운영에 필요한 파일을 관리하기 위한 '저장소' Service입니다.
  * 구현체는 로컬, Cloud 두 개가 있습니다.
  * 파일 업로드 단 하나의 기능을 수행합니다.
  * 이후 다운로드 기능이 필요해질 경우 메소드가 추가될 수 있습니다.
