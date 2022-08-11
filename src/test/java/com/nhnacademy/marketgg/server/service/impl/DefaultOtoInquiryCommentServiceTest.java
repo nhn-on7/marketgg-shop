@@ -16,7 +16,7 @@ import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.CustomerServiceComment;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
-import com.nhnacademy.marketgg.server.repository.customerservicecomment.CustomerServiceCommentRepository;
+import com.nhnacademy.marketgg.server.repository.cart.customerservicecomment.CustomerServiceCommentRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.otoinquiry.DefaultOtoInquiryCommentService;

@@ -10,7 +10,6 @@ import com.nhnacademy.marketgg.server.dto.response.customerservice.CommentReady;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForReady;
-import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticBoardRepository;
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
@@ -22,7 +21,7 @@ import com.nhnacademy.marketgg.server.exception.customerservicecomment.CustomerS
 import com.nhnacademy.marketgg.server.exception.customerservicepost.CustomerServicePostNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
-import com.nhnacademy.marketgg.server.repository.customerservicecomment.CustomerServiceCommentRepository;
+import com.nhnacademy.marketgg.server.repository.cart.customerservicecomment.CustomerServiceCommentRepository;
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import java.util.ArrayList;

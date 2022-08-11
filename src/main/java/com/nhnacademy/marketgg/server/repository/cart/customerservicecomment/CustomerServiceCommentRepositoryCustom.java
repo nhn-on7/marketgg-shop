@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.repository.customerservicecomment;
+package com.nhnacademy.marketgg.server.repository.cart.customerservicecomment;
 
 import org.springframework.data.repository.NoRepositoryBean;
 

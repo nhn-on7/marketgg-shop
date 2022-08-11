@@ -16,6 +16,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 배송지 관리 Service 구현체 입니다.
+ *
+ * @author 김훈민
+ * @version 1.0.0
+ */
 @Service
 @RequiredArgsConstructor
 public class DefaultDeliveryAddressService implements DeliveryAddressService {
@@ -23,6 +29,12 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
     private final DeliveryAddressRepository deliveryAddressRepository;
     private final MemberRepository memberRepository;
 
+    /**
+     * 회원이 회원가입 외 추가적으로 배송지를 등록하는 메소드 입니다.
+     *
+     * @param memberInfo             - 배송지를 등록하는 회원의 정보입니다.
+     * @param deliveryAddressRequest - 추가할 배송지를 담은 DTO 객체 입니다.
+     */
     @Override
     public void createDeliveryAddress(final MemberInfo memberInfo,
                                       final DeliveryAddressCreateRequest deliveryAddressRequest) {
@@ -34,6 +46,12 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
         deliveryAddressRepository.save(deliveryAddress);
     }
 
+    /**
+     * 회원이 배송지를 수정할 때 사용하는 메소드 입니다.
+     *
+     * @param memberInfo                   - 배송지를 수정하는 회원의 정보입니다.
+     * @param deliveryAddressUpdateRequest - 수정할 배송지를 담은 DTO 객체 입니다.
+     */
     @Override
     public void updateDeliveryAddress(final MemberInfo memberInfo,
                                       final DeliveryAddressUpdateRequest deliveryAddressUpdateRequest) {
@@ -46,11 +64,17 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
         deliveryAddress.update(member, deliveryAddressUpdateRequest);
     }
 
+    /**
+     * 회원이 배송지를 삭제할 때 사용하는 메소드 입니다.
+     *
+     * @param memberInfo        - 배송지를 삭제하는 회원의 정보입니다.
+     * @param deliveryAddressNo - 삭제할 배송지의 번호 입니다.
+     */
     @Override
     public void deleteDeliveryAddress(final MemberInfo memberInfo,
-                                      final Long deliveryNo) {
+                                      final Long deliveryAddressNo) {
 
-        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(deliveryNo)
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(deliveryAddressNo)
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
 
         if (Objects.equals(deliveryAddress.getMember().getId(), getMember(memberInfo).getId())) {
@@ -59,11 +83,23 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
 
     }
 
+    /**
+     * 회원의 모든 배송지를 보여주는 GetMapping 메소드 입니다.
+     *
+     * @param memberInfo - 모든 배송지를 조회하는 회원의 정보입니다.
+     * @return 조회하는 회원의 모든 배송정보를 담은 List 타입 입니다.
+     */
     @Override
     public List<DeliveryAddressResponse> retrieveDeliveryAddresses(final MemberInfo memberInfo) {
         return deliveryAddressRepository.findDeliveryAddressesByMemberId(getMember(memberInfo).getId());
     }
 
+    /**
+     * 배송지를 관리하는 회원의 정보 검증하기 위한 메소드 입니다.
+     *
+     * @param memberInfo - 배송지 관리하는 회원의 정보 입니다.
+     * @return 검증된 회원입니다.
+     */
     private Member getMember(MemberInfo memberInfo) {
         return memberRepository.findById(memberInfo.getId())
                                .orElseThrow(MemberNotFoundException::new);
