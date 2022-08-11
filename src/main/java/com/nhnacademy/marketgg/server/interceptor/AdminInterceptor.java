@@ -13,6 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+/**
+ * /admin/** 경로에 접근하는 사용자는 관리자 권한을 가진 사용자만 접근할 수 있도록 제한.
+ *
+ * @author 윤동열
+ */
 @Slf4j
 public class AdminInterceptor implements HandlerInterceptor {
 
