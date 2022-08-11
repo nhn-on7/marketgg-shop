@@ -4,46 +4,49 @@ import static org.springframework.http.HttpMethod.PUT;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.request.cloud.Auth;
-import com.nhnacademy.marketgg.server.dto.request.cloud.PasswordCredentials;
-import com.nhnacademy.marketgg.server.dto.request.cloud.TokenRequest;
-import com.nhnacademy.marketgg.server.dto.response.cloud.StorageResponse;
-import com.nhnacademy.marketgg.server.dto.response.image.ImageResponse;
-import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
+import com.nhnacademy.marketgg.server.dto.request.file.ImageCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.file.cloud.Auth;
+import com.nhnacademy.marketgg.server.dto.request.file.cloud.PasswordCredentials;
+import com.nhnacademy.marketgg.server.dto.request.file.cloud.TokenRequest;
+import com.nhnacademy.marketgg.server.dto.response.cloud.CloudResponse;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collections;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
+@Slf4j
 public class NhnStorageService implements StorageService {
 
-
-    private final ImageRepository imageRepository;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    private static final String HEADER_NAME = "X-Auth-Token";
     private PasswordCredentials passwordCredentials;
     private Auth auth;
     private TokenRequest tokenRequest;
-    private StorageResponse storageResponse;
+    private CloudResponse cloudResponse;
 
     @Value("${gg.storage.auth-url}")
     private String authUrl;
@@ -56,7 +59,9 @@ public class NhnStorageService implements StorageService {
     @Value("${gg.storage.storage-url}")
     private String storageUrl;
 
-    @Override
+    private static final String HEADER_NAME = "X-Auth-Token";
+    private static final String DIR = System.getProperty("java.io.tmpdir");
+
     public String requestToken() {
 
         passwordCredentials = new PasswordCredentials(userName, password);
@@ -79,34 +84,57 @@ public class NhnStorageService implements StorageService {
     }
 
     @Override
-    public List<String> getContainerList(final String url) {
+    public ImageCreateRequest uploadImage(final MultipartFile image) throws IOException {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("X-Auth-Token", requestToken());
+        String type = getContentType(image);
+        String fileName = UUID.randomUUID() + type;
+        File objFile = new File(DIR, Objects.requireNonNull(fileName));
+        String url = this.getUrl(fileName);
+        image.transferTo(objFile);
 
-        HttpEntity<String> requestHttpEntity = new HttpEntity<>(null, headers);
+        RequestCallback requestCallback;
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setBufferRequestBody(false);
 
-        ResponseEntity<String> response =
-            this.restTemplate.exchange(url, HttpMethod.GET, requestHttpEntity, String.class);
+        RestTemplate restTemplate = new RestTemplate(requestFactory);
 
-        if (response.getStatusCode() == HttpStatus.OK) {
-            return Arrays.asList(response.getBody().split("\\r?\\n"));
+        HttpMessageConverterExtractor<String> responseExtractor =
+            new HttpMessageConverterExtractor<>(String.class, restTemplate.getMessageConverters());
+
+        try (InputStream inputStream = new FileInputStream(objFile)) {
+            cloudResponse = objectMapper.readValue(requestToken(), CloudResponse.class);
+            String tokenId = cloudResponse.getAccess().getToken().getId();
+
+            requestCallback = request -> {
+                request.getHeaders().add(HEADER_NAME, tokenId);
+                IOUtils.copy(inputStream, request.getBody());
+            };
+
+            restTemplate.execute(url, PUT, requestCallback, responseExtractor);
+            log.info("업로드 성공");
+
+        } catch (IOException e) {
+            log.error("error: {}", e.getMessage());
+            throw e;
         }
 
-        return Collections.emptyList();
+        return ImageCreateRequest.builder()
+                                 .name(fileName)
+                                 .imageAddress(url)
+                                 .classification("cloud")
+                                 .imageSequence(1)
+                                 .length(objFile.length())
+                                 .type(type)
+                                 .build();
     }
 
-    @Override
-    public List<String> getObjectList(final String containerName) {
-        return this.getContainerList(this.getUrl(containerName));
-    }
 
     @Override
     public void uploadObject(final String containerName, String objectName, final InputStream inputStream)
         throws JsonProcessingException {
         String url = this.getUrl(containerName, objectName);
-        storageResponse = objectMapper.readValue(requestToken(), StorageResponse.class);
-        String tokenId = storageResponse.getAccess().getToken().getId();
+        cloudResponse = objectMapper.readValue(requestToken(), CloudResponse.class);
+        String tokenId = cloudResponse.getAccess().getToken().getId();
 
         final RequestCallback requestCallback = request -> {
             request.getHeaders().add("X-Auth-Token", tokenId);
@@ -129,8 +157,8 @@ public class NhnStorageService implements StorageService {
 
         String url = this.getUrl(containerName, objectName);
 
-        storageResponse = objectMapper.readValue(requestToken(), StorageResponse.class);
-        String tokenId = storageResponse.getAccess().getToken().getId();
+        cloudResponse = objectMapper.readValue(requestToken(), CloudResponse.class);
+        String tokenId = cloudResponse.getAccess().getToken().getId();
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HEADER_NAME, tokenId);
@@ -150,6 +178,30 @@ public class NhnStorageService implements StorageService {
 
     private String getUrl(String containerName) {
         return this.storageUrl + "/" + containerName;
+    }
+
+
+    private Path returnDir() {
+        String format = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
+
+        return Paths.get(System.getProperty("user.home"), format);
+    }
+
+
+    private String uuidFilename(String filename) {
+
+        return UUID.randomUUID() + "_" + filename;
+    }
+
+    private String getContentType(final MultipartFile image) {
+        if (image.getContentType().contains("image/jpeg")) {
+            return ".jpg";
+        }
+        if (image.getContentType().contains("image/png")) {
+            return ".png";
+        } else {
+            throw new IllegalArgumentException("이미지만 업로드할 수 있습니다.");
+        }
     }
 
 }

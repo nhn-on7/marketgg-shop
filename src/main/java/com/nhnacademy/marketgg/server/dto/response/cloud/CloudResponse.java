@@ -7,7 +7,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @ToString
-public class StorageResponse {
+public class CloudResponse {
 
     private Access access;
 }

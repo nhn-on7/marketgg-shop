@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.service.storage;
 
+import com.nhnacademy.marketgg.server.dto.request.file.ImageCreateRequest;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
 import java.io.File;
@@ -27,7 +28,7 @@ public class LocalStorageService implements StorageService {
     private static final String DIR = System.getProperty("user.home");
 
     @Override
-    public Image uploadImage(final MultipartFile image, final Asset asset) throws IOException {
+    public ImageCreateRequest uploadImage(final MultipartFile image) throws IOException {
         if (image.isEmpty()) {
             throw new IllegalArgumentException("이미지가 없습니다.");
         }
@@ -39,18 +40,14 @@ public class LocalStorageService implements StorageService {
         File dest = new File(dir, fileName);
         image.transferTo(dest);
 
-        Image localImage = Image.builder()
-                           .name(fileName)
-                           .imageAddress(dir)
-                           .classification("local")
-                           .asset(asset)
-                           .length(dest.length())
-                           .type(type)
-                           .build();
-
-        localImage.setImageSequence(1);
-
-        return localImage;
+        return ImageCreateRequest.builder()
+                                 .name(fileName)
+                                 .imageAddress(dir)
+                                 .classification("local")
+                                 .length(dest.length())
+                                 .type(type)
+                                 .imageSequence(1)
+                                 .build();
     }
 
     @Override

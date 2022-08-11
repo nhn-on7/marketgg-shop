@@ -5,6 +5,7 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.dto.response.image.ImageResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
@@ -13,7 +14,6 @@ import com.nhnacademy.marketgg.server.elastic.repository.ElasticProductRepositor
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
-import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.ProductLabel;
@@ -29,7 +29,6 @@ import com.nhnacademy.marketgg.server.repository.productlabel.ProductLabelReposi
 import com.nhnacademy.marketgg.server.service.file.FileService;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -63,13 +62,12 @@ public class DefaultProductService implements ProductService {
     public void createProduct(final ProductCreateRequest productRequest, MultipartFile imageFile)
         throws IOException {
 
-        Asset asset = assetRepository.save(Asset.create());
-        Image image = fileService.uploadImage(imageFile, asset);
-        imageRepository.save(image);
+        // Asset asset = assetRepository.save(Asset.create());
+        ImageResponse imageResponse = fileService.uploadImage(imageFile);
 
         Category category = categoryRepository.findById(productRequest.getCategoryCode())
                                               .orElseThrow(CategoryNotFoundException::new);
-        Product product = productRepository.save(new Product(productRequest, asset, category));
+        Product product = productRepository.save(new Product(productRequest, imageResponse.getAsset(), category));
         ProductLabel.Pk pk = new ProductLabel.Pk(product.getId(), productRequest.getLabelNo());
         Label label =
             labelRepository.findById(pk.getLabelNo()).orElseThrow(LabelNotFoundException::new);

@@ -2,8 +2,6 @@ package com.nhnacademy.marketgg.server.controller.file;
 
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.response.image.ImageResponse;
-import com.nhnacademy.marketgg.server.entity.Asset;
-import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.service.file.FileService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +38,8 @@ public class FileController {
     @RoleCheck
     @PostMapping
     public ResponseEntity<ImageResponse> uploadAndRetrieveImage(@RequestBody final MultipartFile image) throws IOException {
-        Image uploadImage = fileService.uploadImage(image, Asset.create());
-        ImageResponse imageResponse = fileService.retrieveImage(uploadImage.getAsset().getId());
+        ImageResponse uploadImage = fileService.uploadImage(image);
+        ImageResponse imageResponse = fileService.retrieveImage();
 
         return new ResponseEntity<>(imageResponse, HttpStatus.OK);
     }

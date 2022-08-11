@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.service.file;
 
+import com.nhnacademy.marketgg.server.dto.request.file.ImageCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.image.ImageResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Image;
@@ -40,12 +41,26 @@ public class DefaultFileService implements FileService {
 
     private static final String DIR = System.getProperty("user.home");
     //FIXME: 하드코딩 -> 설정에 의해 바뀌도록 리팩토링
-    private final String option = "NhnStorageService";
+    private final String option = "nhnStorageService";
 
     @Override
-    public Image uploadImage(final MultipartFile image, final Asset asset) throws IOException {
-        Image imageEntity = storageServiceFactory.getService(option).uploadImage(image, asset);
-        return imageEntity;
+    public ImageResponse uploadImage(final MultipartFile image) throws IOException {
+
+        ImageCreateRequest imageCreateRequest = storageServiceFactory.getService(option).uploadImage(image);
+        Image imageEntity = Image.builder()
+                           .name(imageCreateRequest.getName())
+                           .imageAddress(imageCreateRequest.getImageAddress())
+                           .type(imageCreateRequest.getType())
+                           .asset(Asset.create())
+                           .classification(imageCreateRequest.getClassification())
+                           .length(imageCreateRequest.getLength())
+                           .build();
+
+        imageEntity.setImageSequence(imageCreateRequest.getImageSequence());
+
+        Image saveImage = imageRepository.save(imageEntity);
+
+        return imageRepository.queryById(saveImage.getId());
     }
 
     @Override
