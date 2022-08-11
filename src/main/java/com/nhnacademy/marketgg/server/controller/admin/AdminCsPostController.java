@@ -33,11 +33,9 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 관리자의 고객센터 관리에 관련된 Rest Controller 입니다.
  *
- * @author 박세완
- * @author 김정민
+ * @author 김정민, 박세완
  * @version 1.0.0
  */
-@RoleCheck(accessLevel = Role.ROLE_ADMIN)
 @RestController
 @RequestMapping("/admin/customer-services")
 @RequiredArgsConstructor

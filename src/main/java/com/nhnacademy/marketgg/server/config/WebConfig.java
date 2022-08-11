@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.config;
 
+import com.nhnacademy.marketgg.server.interceptor.AdminInterceptor;
 import java.time.Duration;
 import javax.servlet.Filter;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -7,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Web Configuration 을 설정할 수 있습니다.
@@ -14,7 +17,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
  * @version 1.0.0
  */
 @Configuration
-public class WebConfig {
+public class WebConfig implements WebMvcConfigurer {
 
     /**
      * RestTemplate 을 원하는 값으로 설정 후 반환합니다.
@@ -34,6 +37,12 @@ public class WebConfig {
     @Bean
     public Filter utf8CharacterEncodingFilter() {
         return new CharacterEncodingFilter("UTF-8", true);
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new AdminInterceptor())
+                .addPathPatterns("/admin/**");
     }
 
 }

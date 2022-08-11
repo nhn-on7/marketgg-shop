@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 박세완
  * @version 1.0.0
  */
-@RoleCheck(accessLevel = Role.ROLE_ADMIN)
 @RestController
 @RequestMapping("/admin/labels")
 @RequiredArgsConstructor

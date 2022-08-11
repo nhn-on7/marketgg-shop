@@ -23,7 +23,6 @@ public class AdminReviewController {
     private final ReviewService reviewService;
     private static final String DEFAULT_REVIEW_URI = "/admin/products/";
 
-    // @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @PostMapping("/{productId}/reviews/{reviewId}/make-best")
     public ResponseEntity<CommonResponse> makeBestReview(@PathVariable final Long productId,
                                                          @PathVariable final Long reviewId) {
