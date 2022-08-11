@@ -127,7 +127,7 @@ public class NhnStorageService implements StorageService {
     }
 
     private String getUrl(String fileName) {
-        return this.storageUrl + "/" + fileName;
+        return this.storageUrl + "/on7_storage/" + fileName;
     }
 
     /**

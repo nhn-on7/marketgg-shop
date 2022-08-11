@@ -44,7 +44,6 @@ public class DefaultProductService implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final AssetRepository assetRepository;
     private final ProductLabelRepository productLabelRepository;
     private final LabelRepository labelRepository;
     private final FileService fileService;
@@ -52,7 +51,6 @@ public class DefaultProductService implements ProductService {
     private final ElasticProductRepository elasticProductRepository;
     private final SearchRepository searchRepository;
 
-    private static final String DIR = System.getProperty("user.home");
     private static final Integer PAGE_SIZE = 10;
 
     @Transactional
@@ -64,8 +62,11 @@ public class DefaultProductService implements ProductService {
 
         Category category = categoryRepository.findById(productRequest.getCategoryCode())
                                               .orElseThrow(CategoryNotFoundException::new);
+
         Product product = productRepository.save(new Product(productRequest, imageResponse.getAsset(), category));
+
         ProductLabel.Pk pk = new ProductLabel.Pk(product.getId(), productRequest.getLabelNo());
+
         Label label =
             labelRepository.findById(pk.getLabelNo()).orElseThrow(LabelNotFoundException::new);
 
@@ -74,7 +75,9 @@ public class DefaultProductService implements ProductService {
 
     @Override
     public DefaultPageResult<ProductResponse> retrieveProducts(final Pageable pageable) {
+
         Page<ProductResponse> allProducts = productRepository.findAllProducts(pageable);
+
         return new DefaultPageResult(allProducts.getContent(), allProducts.getTotalElements(),
                                      allProducts.getTotalPages(), allProducts.getNumber());
 
@@ -93,12 +96,12 @@ public class DefaultProductService implements ProductService {
         Product product =
             productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
 
-        Asset asset = fileUpload(imageFile);
+        ImageResponse imageResponse = fileService.uploadImage(imageFile);
 
         Category category = categoryRepository.findById(productRequest.getCategoryCode())
                                               .orElseThrow(CategoryNotFoundException::new);
 
-        product.updateProduct(productRequest, asset, category);
+        product.updateProduct(productRequest, imageResponse.getAsset(), category);
 
         productRepository.save(product);
     }
@@ -154,13 +157,6 @@ public class DefaultProductService implements ProductService {
         return searchRepository.searchProductForCategory(categoryId,
                                                          new SearchRequest(keyword, page, PAGE_SIZE),
                                                          option);
-    }
-
-    private Asset fileUpload(MultipartFile imageFile) throws IOException {
-        File dest = new File(DIR, Objects.requireNonNull(imageFile.getOriginalFilename()));
-        imageFile.transferTo(dest);
-
-        return this.assetRepository.save(Asset.create());
     }
 
 }
