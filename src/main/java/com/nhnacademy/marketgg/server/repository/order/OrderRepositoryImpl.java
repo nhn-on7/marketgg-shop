@@ -26,7 +26,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
     public List<OrderRetrieveResponse> findOrderList(final Long memberId, final boolean isUser) {
         return from(order).select(selectOrderResponse())
                           .where(eqMemberId(memberId, isUser))
-                          .where(isDeleted(order.deletedAt))
+                          .where(userNotSeeDeleted(isUser, order.deletedAt))
                           .fetch();
     }
 
@@ -35,7 +35,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
         return from(order).select(selectOrderDetailResponse())
                           .where(order.id.eq(orderId))
                           .where(eqMemberId(memberId, isUser))
-                          .where(isDeleted(order.deletedAt))
+                          .where(userNotSeeDeleted(isUser, order.deletedAt))
                           .fetchOne();
     }
 
@@ -66,9 +66,9 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
         return null;
     }
 
-    private BooleanExpression isDeleted(final DateTimePath<LocalDateTime> deletedAt) {
-        if (Objects.nonNull(deletedAt)) {
-            return order.deletedAt.isNotNull();
+    private BooleanExpression userNotSeeDeleted(final boolean isUser, final DateTimePath<LocalDateTime> deletedAt) {
+        if (isUser) {
+            return deletedAt.isNull();
         }
         return null;
     }
