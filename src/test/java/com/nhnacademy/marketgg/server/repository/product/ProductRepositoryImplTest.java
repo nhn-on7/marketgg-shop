@@ -17,6 +17,7 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
@@ -85,7 +86,7 @@ class ProductRepositoryImplTest {
         categoryRepository.save(category);
     }
 
-    // @Test
+    @Test
     @DisplayName("모든 상품이 제대로 Page에 담겨서 return되는지 테스트")
     void testFindAllProducts() {
         IntStream.rangeClosed(1, 10)
@@ -97,7 +98,7 @@ class ProductRepositoryImplTest {
         assertThat(productRepository.findAllProducts(PageRequest.of(0, 10))).hasSize(10);
     }
 
-    // @Test
+    @Test
     @DisplayName("아이디로 상품을 찾을 수 있는지 테스트")
     void testQueryById() {
         product = new Product(productRequest, asset, category);
@@ -108,7 +109,7 @@ class ProductRepositoryImplTest {
             .isEqualTo(product.getName());
     }
 
-    // @Test
+    @Test
     @DisplayName("상품 이름에 특정 문자가 들어간 경우, 해당 상품을 찾을 수 있는지 테스트")
     void testFindByNameContaining() {
         product = new Product(productRequest, asset, category);
@@ -118,7 +119,7 @@ class ProductRepositoryImplTest {
         assertThat(productRepository.findByNameContaining("자몽")).hasSize(1);
     }
 
-    // @Test
+    @Test
     @DisplayName("카테고리로 상품을 찾을 수 있는지 테스트")
     void testFindByCategoryCode() {
         IntStream.rangeClosed(1, 10)
