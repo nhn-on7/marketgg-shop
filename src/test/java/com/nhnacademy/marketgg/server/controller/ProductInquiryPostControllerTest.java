@@ -60,7 +60,7 @@ class ProductInquiryPostControllerTest {
         doNothing().when(productInquiryPostService)
                    .createProductInquiry(any(MemberInfo.class), any(ProductInquiryRequest.class), anyLong());
 
-        this.mockMvc.perform(post("/products/" + 1L + "/inquiries")
+        this.mockMvc.perform(post("/products/" + 1L + "/inquiry")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
                     .andExpect(status().isCreated());
@@ -88,7 +88,7 @@ class ProductInquiryPostControllerTest {
         doNothing().when(productInquiryPostService)
                    .deleteProductInquiry(anyLong(), anyLong());
 
-        this.mockMvc.perform(delete("/products/" + 1L + "/inquiries/" + 1L)
+        this.mockMvc.perform(delete("/products/" + 1L + "/inquiry/" + 1L)
                 .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNoContent());
         verify(productInquiryPostService, times(1)).deleteProductInquiry(anyLong(), anyLong());

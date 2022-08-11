@@ -50,7 +50,7 @@ public class ProductInquiryPostController {
      * @since 1.0.0
      */
     @RoleCheck(accessLevel = Role.LOGIN)
-    @PostMapping("/products/{productId}/inquiries")
+    @PostMapping("/products/{productId}/inquiry")
     public ResponseEntity<CommonResponse> createProductInquiry(final MemberInfo memberInfo,
                                                                @PathVariable final Long productId,
                                                                @Valid @RequestBody final
@@ -95,7 +95,7 @@ public class ProductInquiryPostController {
      * @since 1.0.0
      */
     @RoleCheck(accessLevel = Role.LOGIN)
-    @DeleteMapping("/products/{productId}/inquiries/{inquiryId}")
+    @DeleteMapping("/products/{productId}/inquiry/{inquiryId}")
     public ResponseEntity<CommonResponse> deleteProductInquiry(@PathVariable final Long productId,
                                                                @PathVariable final Long inquiryId) {
 
