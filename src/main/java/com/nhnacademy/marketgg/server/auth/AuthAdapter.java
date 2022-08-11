@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.auth;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +26,7 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class AuthAdapter implements AuthRepository {
 
-    @Value("{gg.gateway.origin}")
+    @Value("${gg.gateway.origin}")
     private String gateway;
 
     private final RestTemplate restTemplate;
@@ -36,6 +37,10 @@ public class AuthAdapter implements AuthRepository {
 
     @Override
     public List<MemberNameResponse> getNameListByUuid(final List<String> uuidList) throws JsonProcessingException {
+
+        if (uuidList.isEmpty()) {
+            return Collections.emptyList();
+        }
 
         String requestBody = objectMapper.writeValueAsString(uuidList);
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, buildHeaders());
