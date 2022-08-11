@@ -1,7 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.file;
 
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
-import com.nhnacademy.marketgg.server.dto.response.image.ImageResponse;
+import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
 import com.nhnacademy.marketgg.server.service.file.FileService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,7 @@ public class FileController {
         return new ResponseEntity<>(imageResponse, HttpStatus.OK);
     }
 
-    @RoleCheck
+    // @RoleCheck
     @PostMapping
     public ResponseEntity<ImageResponse> uploadAndRetrieveImage(@RequestBody final MultipartFile image) throws IOException {
 

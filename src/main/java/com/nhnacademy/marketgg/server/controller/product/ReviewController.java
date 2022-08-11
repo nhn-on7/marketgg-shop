@@ -9,7 +9,6 @@ import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.service.product.ReviewService;
 import java.io.IOException;
 import java.net.URI;
-import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +61,7 @@ public class ReviewController {
                                              @PathVariable(name = "memberUuid") final String uuid,
                                              @RequestPart @Valid final ReviewCreateRequest reviewRequest,
                                              BindingResult bindingResult,
-                                             @RequestPart(required = false) List<MultipartFile> images)
+                                             @RequestPart(required = false) MultipartFile images)
         throws IOException {
 
         if (bindingResult.hasErrors()) {
