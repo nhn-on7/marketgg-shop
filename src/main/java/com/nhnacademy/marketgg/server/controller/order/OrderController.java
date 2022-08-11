@@ -40,15 +40,16 @@ public class OrderController {
     private final OrderService orderService;
     private static final String ORDER_PREFIX = "/orders";
 
-    // 주문서 등록
+    // 주문서 등록 , 결제요청 url 로 location 주기
     @PostMapping
     public ResponseEntity<OrderToPayment> createOrder(@RequestBody final OrderCreateRequest orderRequest,
                                                       final MemberInfo memberInfo) {
 
         OrderToPayment response = orderService.createOrder(orderRequest, memberInfo.getId());
+        String orderId = response.getOrderId().substring(response.getOrderId().indexOf("_")+1);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create(ORDER_PREFIX))
+                             .location(URI.create(ORDER_PREFIX + "/" + orderId + "/request-payment"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(response);
     }
@@ -85,17 +86,26 @@ public class OrderController {
         OrderDetailRetrieveResponse response = orderService.retrieveOrderDetail(orderId, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(ORDER_PREFIX))
+                             .location(URI.create(ORDER_PREFIX + "/" + orderId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(response);
     }
 
-    // 운송장 번호 생성된 후 주문서 수정, 배송파트 담당자분이 처리한다고 하심
-    @PatchMapping("/{orderId}")
-    public ResponseEntity<Void> updateOrder() {
+    @PatchMapping("/{orderId}/status")
+    public ResponseEntity<Void> updateStatus(@PathVariable final Long orderId) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(ORDER_PREFIX))
+                             .location(URI.create(ORDER_PREFIX + "/" + orderId + "/status"))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .build();
+    }
+
+    // 운송장 번호 생성된 후 주문서 수정, 배송파트 담당자분이 처리한다고 하심
+    @PatchMapping("/{orderId}/delivery")
+    public ResponseEntity<Void> createDeliveryNumber(@PathVariable final Long orderId) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(ORDER_PREFIX + "/" + orderId + "/delivery"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -106,7 +116,7 @@ public class OrderController {
         orderService.deleteOrder(orderId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(ORDER_PREFIX))
+                             .location(URI.create(ORDER_PREFIX + "/" + orderId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
