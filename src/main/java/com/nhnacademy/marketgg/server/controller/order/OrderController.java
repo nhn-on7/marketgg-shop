@@ -40,7 +40,14 @@ public class OrderController {
     private final OrderService orderService;
     private static final String ORDER_PREFIX = "/orders";
 
-    // memo: 주문서 등록 , 결제요청 url 로 location 주기
+    /**
+     * 주문을 등록하는 POST Mapping 을 지원합니다.
+     *
+     * @param orderRequest - 주문을 등록하기 위한 정보입니다.
+     * @param memberInfo - 주문하는 회원의 정보입니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     * @since 1.0.0
+     */
     @PostMapping
     public ResponseEntity<OrderToPayment> createOrder(@RequestBody final OrderCreateRequest orderRequest,
                                                       final MemberInfo memberInfo) {
@@ -54,7 +61,15 @@ public class OrderController {
                              .body(response);
     }
 
-    // memo: 주문서 작성폼 정보 조회
+    /**
+     * 주문서 작성에 필요한 정보를 취합하여 제공하는 GET Mapping 을 지원합니다.
+     *
+     * @param products - 주문할 상품 목록입니다.
+     * @param memberInfo - 주문하는 회원의 정보입니다.
+     * @param authInfo - 주문하는 회원의 정보입니다.
+     * @return 회원의 정보를 토대로 주문서 작성에 필요한 값들과 상품목록을 취합하여 반환합니다.
+     * @since 1.0.0
+     */
     @GetMapping("/order-form")
     public ResponseEntity<OrderFormResponse> retrieveOrderForm(@RequestBody final List<ProductToOrder> products,
                                                                final MemberInfo memberInfo, final AuthInfo authInfo) {
@@ -67,7 +82,14 @@ public class OrderController {
                              .body(response);
     }
 
-    // memo: 주문 목록 조회 - 관리자는 모든 회원, 회원은 본인 것
+    /**
+     * 주문 내역에서 볼 수 있는 주문 목록을 조회하는 GET Mapping 을 지원합니다.
+     * 관리자는 모든 회원에 대한 주문, 삭제된 주문 내역도 볼 수 있습니다.
+     *
+     * @param memberInfo - 조회하는 회원의 정보입니다.
+     * @return 주문 목록을 List 로 반환합니다.
+     * @since 1.0.0
+     */
     @GetMapping
     public ResponseEntity<List<OrderRetrieveResponse>> retrieveOrderList(final MemberInfo memberInfo) {
         List<OrderRetrieveResponse> responses = orderService.retrieveOrderList(memberInfo);
@@ -78,7 +100,14 @@ public class OrderController {
                              .body(responses);
     }
 
-    // memo: 주문 상세 조회
+    /**
+     * 주문 상세 조회를 할 수 있는 GET Mapping 을 지원합니다.
+     *
+     * @param orderId - 상세 조회할 주문의 식별번호입니다.
+     * @param memberInfo - 조회하는 회원의 정보입니다.
+     * @return 상세 조회한 주문을 반환합니다.
+     * @since 1.0.0
+     */
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderDetailRetrieveResponse> retrieveOrderDetail(@PathVariable final Long orderId,
                                                                            final MemberInfo memberInfo) {
@@ -91,7 +120,13 @@ public class OrderController {
                              .body(response);
     }
 
-    // memo: 주문 상태 변경
+    /**
+     * 주문의 상태를 변경하는 PatchMapping 을 지원합니다.
+     *
+     * @param orderId - 상태를 변경할 주문의 식별번호입니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     * @since 1.0.0
+     */
     @PatchMapping("/{orderId}/status")
     public ResponseEntity<Void> updateStatus(@PathVariable final Long orderId) {
 
@@ -111,7 +146,13 @@ public class OrderController {
                              .build();
     }
 
-    // memo: 주문 취소 -> 주문서 삭제
+    /**
+     * 주문을 취소할 수 있는 Put Mapping 을 지원합니다.(실제 삭제가 아닙니다.)
+     *
+     * @param orderId - 취소할 주문의 식별번호입니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     * @since 1.0.0
+     */
     @PutMapping("/{orderId}")
     public ResponseEntity<Void> deleteOrder(@PathVariable final Long orderId) {
         orderService.deleteOrder(orderId);
