@@ -92,4 +92,11 @@ public class Order {
         return new Order();
     }
 
+    public void updateStatus(String status) {
+        this.orderStatus = status;
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }
