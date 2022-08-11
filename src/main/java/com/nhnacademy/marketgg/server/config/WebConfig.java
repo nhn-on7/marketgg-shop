@@ -17,7 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @version 1.0.0
  */
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class WebConfig {
 
     /**
      * RestTemplate 을 원하는 값으로 설정 후 반환합니다.
@@ -37,12 +37,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public Filter utf8CharacterEncodingFilter() {
         return new CharacterEncodingFilter("UTF-8", true);
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AdminInterceptor())
-                .addPathPatterns("/admin/**");
     }
 
 }
