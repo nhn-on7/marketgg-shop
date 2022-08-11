@@ -55,11 +55,11 @@ public class DeliveryAddressController {
                              .body(new SingleResponse<>("Update success"));
     }
 
-    @DeleteMapping("/delivery-address/{deliveryNo}")
+    @DeleteMapping("/delivery-address/{deliveryAddressNo}")
     public ResponseEntity<CommonResponse> deleteDeliveryAddress(MemberInfo memberInfo,
-                                                                @PathVariable Long deliveryNo) {
+                                                                @PathVariable Long deliveryAddressNo) {
 
-        deliveryAddressService.deleteDeliveryAddress(memberInfo, deliveryNo);
+        deliveryAddressService.deleteDeliveryAddress(memberInfo, deliveryAddressNo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
