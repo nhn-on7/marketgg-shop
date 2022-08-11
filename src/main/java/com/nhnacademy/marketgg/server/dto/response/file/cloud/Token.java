@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.dto.response.cloud;
+package com.nhnacademy.marketgg.server.dto.response.file.cloud;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

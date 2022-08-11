@@ -5,7 +5,7 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
-import com.nhnacademy.marketgg.server.dto.response.image.ImageResponse;
+import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
@@ -22,7 +22,6 @@ import com.nhnacademy.marketgg.server.exception.label.LabelNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
-import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.label.LabelRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.productlabel.ProductLabelRepository;
@@ -46,7 +45,6 @@ public class DefaultProductService implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final AssetRepository assetRepository;
-    private final ImageRepository imageRepository;
     private final ProductLabelRepository productLabelRepository;
     private final LabelRepository labelRepository;
     private final FileService fileService;
@@ -59,10 +57,9 @@ public class DefaultProductService implements ProductService {
 
     @Transactional
     @Override
-    public void createProduct(final ProductCreateRequest productRequest, MultipartFile imageFile)
+    public void createProduct(final ProductCreateRequest productRequest, final MultipartFile imageFile)
         throws IOException {
 
-        // Asset asset = assetRepository.save(Asset.create());
         ImageResponse imageResponse = fileService.uploadImage(imageFile);
 
         Category category = categoryRepository.findById(productRequest.getCategoryCode())
@@ -81,7 +78,6 @@ public class DefaultProductService implements ProductService {
         return new DefaultPageResult(allProducts.getContent(), allProducts.getTotalElements(),
                                      allProducts.getTotalPages(), allProducts.getNumber());
 
-        // return new SingleResponse<>(elasticProductRepository.findAll(pageable));
     }
 
     @Override
@@ -96,6 +92,7 @@ public class DefaultProductService implements ProductService {
 
         Product product =
             productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+
         Asset asset = fileUpload(imageFile);
 
         Category category = categoryRepository.findById(productRequest.getCategoryCode())
@@ -132,13 +129,6 @@ public class DefaultProductService implements ProductService {
         return this.elasticProductRepository.findAllByCategoryCode(pageable, categoryCode).getContent();
     }
 
-    private Asset fileUpload(MultipartFile imageFile) throws IOException {
-        File dest = new File(DIR, Objects.requireNonNull(imageFile.getOriginalFilename()));
-        imageFile.transferTo(dest);
-
-        return this.assetRepository.save(Asset.create());
-    }
-
     @Override
     public List<SearchProductResponse> searchProductList(final String keyword, final Integer page)
         throws ParseException, JsonProcessingException {
@@ -164,6 +154,13 @@ public class DefaultProductService implements ProductService {
         return searchRepository.searchProductForCategory(categoryId,
                                                          new SearchRequest(keyword, page, PAGE_SIZE),
                                                          option);
+    }
+
+    private Asset fileUpload(MultipartFile imageFile) throws IOException {
+        File dest = new File(DIR, Objects.requireNonNull(imageFile.getOriginalFilename()));
+        imageFile.transferTo(dest);
+
+        return this.assetRepository.save(Asset.create());
     }
 
 }

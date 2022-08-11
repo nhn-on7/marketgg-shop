@@ -124,7 +124,7 @@ class DefaultReviewServiceTest {
         MockMultipartFile file =
             new MockMultipartFile("images", "lee.png", "image/png", new FileInputStream(filePath));
 
-        List<MultipartFile> images = List.of(file, file);
+        MultipartFile images = List.of(file, file);
 
         given(memberRepository.findByUuid(anyString())).willReturn(Optional.ofNullable(member));
         given(reviewRepository.save(any(Review.class))).willReturn(review);

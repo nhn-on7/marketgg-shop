@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.dto.response.image;
+package com.nhnacademy.marketgg.server.dto.response.file;
 
 import com.nhnacademy.marketgg.server.entity.Asset;
 import lombok.Getter;
