@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.service.order;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
@@ -59,6 +60,15 @@ public interface OrderService {
      * @since 1.0.0
      */
     OrderDetailRetrieveResponse retrieveOrderDetail(final Long orderId, final MemberInfo memberInfo);
+
+    /**
+     * 주문 상태를 변경하는 메소드입니다.
+     *
+     * @param orderId - 변경할 주문의 식별번호입니다.
+     * @param status - 변경할 상태값입니다.
+     * @since 1.0.0
+     */
+    void updateStatus(Long orderId, OrderUpdateStatusRequest status);
 
     /**
      * 주문(내역)을 삭제하는 메소드입니다.

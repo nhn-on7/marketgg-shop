@@ -1,9 +1,8 @@
-package com.nhnacademy.marketgg.server.auth;
+package com.nhnacademy.marketgg.server.delivery;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
-import java.util.List;
+import com.nhnacademy.marketgg.server.dto.info.OrderInfoRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -14,32 +13,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
-public class AuthAdapter implements AuthRepository {
+public class DeliveryAdapter implements DeliveryRepository {
 
-    private String auth = "http://127.0.0.1:7070";
+    private String delivery = "http://127.0.0.1:7070";
 
     private final RestTemplate restTemplate;
 
     private final ObjectMapper objectMapper;
 
     @Override
-    public List<MemberNameResponse> getNameListByUuid(final List<String> uuidList) throws JsonProcessingException {
+    public ResponseEntity<Void> createTrackingNo(final OrderInfoRequestDto orderInfoRequestDto)
+            throws JsonProcessingException {
 
-        String requestBody = objectMapper.writeValueAsString(uuidList);
+        String requestBody = objectMapper.writeValueAsString(orderInfoRequestDto);
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, buildHeaders());
-        ResponseEntity<List<MemberNameResponse>> response = restTemplate.exchange(
-            auth + "/name",
-            HttpMethod.POST,
-            requestEntity,
-            new ParameterizedTypeReference<>() {
-            });
-
-        return response.getBody();
+        return restTemplate.exchange(
+                delivery + "/tracking-no",
+                HttpMethod.POST,
+                requestEntity,
+                new ParameterizedTypeReference<>() {
+                });
     }
-
-
 
     private HttpHeaders buildHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();

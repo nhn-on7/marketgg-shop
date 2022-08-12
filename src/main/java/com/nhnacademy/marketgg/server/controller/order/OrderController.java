@@ -1,8 +1,12 @@
 package com.nhnacademy.marketgg.server.controller.order;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.delivery.DeliveryRepository;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.info.OrderInfoRequestDto;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
@@ -37,6 +41,7 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final DeliveryRepository deliveryRepository;
     private static final String ORDER_PREFIX = "/orders";
 
     /**
@@ -123,11 +128,14 @@ public class OrderController {
      * 주문의 상태를 변경하는 PatchMapping 을 지원합니다.
      *
      * @param orderId - 상태를 변경할 주문의 식별번호입니다.
+     * @param status - 변경할 상태의 값입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
     @PatchMapping("/{orderId}/status")
-    public ResponseEntity<Void> updateStatus(@PathVariable final Long orderId) {
+    public ResponseEntity<Void> updateStatus(@PathVariable final Long orderId,
+                                             @RequestBody final OrderUpdateStatusRequest status) {
+        orderService.updateStatus(orderId, status);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/" + orderId + "/status"))
@@ -137,7 +145,9 @@ public class OrderController {
 
     // memo: 운송장 번호 생성된 후 주문서 수정
     @PatchMapping("/{orderId}/delivery")
-    public ResponseEntity<Void> createDeliveryNumber(@PathVariable final Long orderId) {
+    public ResponseEntity<Void> createDeliveryNumber(@PathVariable final Long orderId) throws JsonProcessingException {
+        // memo: 회원 정보 auth 서버에 요청해서 이름, 이메일, 휴대폰 번호 가져오고 orderInfoRequestDto에 박고 보내기
+        // deliveryRepository.createTrackingNo(orderInfoRequestDto);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/" + orderId + "/delivery"))
@@ -154,6 +164,7 @@ public class OrderController {
      */
     @PutMapping("/{orderId}")
     public ResponseEntity<Void> deleteOrder(@PathVariable final Long orderId) {
+        // memo: 주문 취소 -> 결제 취소 요청 -> 사용쿠폰 삭제 -> 포인트 차감 및 적립 내역 추가
         orderService.deleteOrder(orderId);
 
         return ResponseEntity.status(HttpStatus.OK)

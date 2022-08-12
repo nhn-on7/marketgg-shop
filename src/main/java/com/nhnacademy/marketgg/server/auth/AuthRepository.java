@@ -14,4 +14,6 @@ public interface AuthRepository {
 
     List<MemberNameResponse> getNameListByUuid(final List<String> uuidList) throws JsonProcessingException;
 
+
+
 }
