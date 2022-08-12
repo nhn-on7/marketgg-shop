@@ -135,6 +135,7 @@ public class OrderController {
     @PatchMapping("/{orderId}/status")
     public ResponseEntity<Void> updateStatus(@PathVariable final Long orderId,
                                              @RequestBody final OrderUpdateStatusRequest status) {
+
         orderService.updateStatus(orderId, status);
 
         return ResponseEntity.status(HttpStatus.OK)

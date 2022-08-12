@@ -10,6 +10,7 @@ import com.nhnacademy.marketgg.server.aop.UuidAspect;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
@@ -44,8 +45,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -163,4 +166,21 @@ public class OrderControllerTest {
         then(orderService).should(times(1))
                           .retrieveOrderDetail(anyLong(), any(MemberInfo.class));
     }
+
+    @Test
+    @DisplayName("주문 상태 변경")
+    public void testUpdateOrderStatus() throws Exception {
+        OrderUpdateStatusRequest updateStatus = new OrderUpdateStatusRequest();
+
+        willDoNothing().given(orderService).updateStatus(anyLong(), any(OrderUpdateStatusRequest.class));
+
+        mockMvc.perform(patch(baseUri + "/{orderId}/status", 1L)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(updateStatus)))
+               .andExpect(status().isOk());
+
+        then(orderService).should(times(1))
+                          .updateStatus(anyLong(), any(OrderUpdateStatusRequest.class));
+    }
+
 }
