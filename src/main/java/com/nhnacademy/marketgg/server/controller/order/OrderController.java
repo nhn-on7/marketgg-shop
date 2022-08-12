@@ -31,7 +31,6 @@ import java.util.List;
  * @author 김정민
  * @version 1.0.0
  */
-// @Auth
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor

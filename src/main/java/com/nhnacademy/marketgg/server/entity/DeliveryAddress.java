@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
+import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -49,16 +50,21 @@ public class DeliveryAddress {
     @Column(name = "detail_address")
     private String detailAddress;
 
-
-    public DeliveryAddress(final Member signUpMember,
-                           final ShopMemberSignUpRequest shopMemberSignUpRequest) {
-
-
+    public DeliveryAddress(final Member signUpMember, final ShopMemberSignUpRequest shopMemberSignUpRequest) {
         this.member = signUpMember;
         this.isDefaultAddress = true;
         this.zipCode = shopMemberSignUpRequest.getZipcode();
         this.address = shopMemberSignUpRequest.getAddress();
         this.detailAddress = shopMemberSignUpRequest.getDetailAddress();
+    }
+
+    public DeliveryAddress(final Member member, final DeliveryAddressCreateRequest createRequest) {
+
+        this.member = member;
+        this.isDefaultAddress = createRequest.isDefaultAddress();
+        this.zipCode = createRequest.getZipCode();
+        this.address = createRequest.getAddress();
+        this.detailAddress = createRequest.getDetailAddress();
 
     }
 

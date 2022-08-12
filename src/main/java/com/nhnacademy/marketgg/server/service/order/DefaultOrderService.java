@@ -162,6 +162,7 @@ public class DefaultOrderService implements OrderService {
 
         order.delete();
         orderRepository.save(order);
+        // memo: 주문 취소 시 결제 취소 요청 및 사용쿠폰 삭제, 포인트 차감, 적립 내역 삭제
     }
 
 }

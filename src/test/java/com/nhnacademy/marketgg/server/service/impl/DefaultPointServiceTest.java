@@ -7,12 +7,14 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberGradeCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Cart;
+import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.entity.Order;
@@ -108,9 +110,11 @@ class DefaultPointServiceTest {
     void testCreatePointHistoryForOrderIsMember(String value) {
         ReflectionTestUtils.setField(memberGradeCreateRequest, "grade", value);
         MemberGrade memberGrade = new MemberGrade(memberGradeCreateRequest);
+        DeliveryAddressCreateRequest deliveryAddressCreateRequest = new DeliveryAddressCreateRequest();
 
         Member member = new Member(memberCreateRequest, cart);
-        Order order = new Order(member, orderCreateRequest);
+        DeliveryAddress deliveryAddress = new DeliveryAddress(member, deliveryAddressCreateRequest);
+        Order order = new Order(member, deliveryAddress,orderCreateRequest);
 
         ReflectionTestUtils.setField(pointHistoryRequest, "point", 1000);
         ReflectionTestUtils.setField(member, "memberGrade", memberGrade);
@@ -129,9 +133,11 @@ class DefaultPointServiceTest {
     void testCreatePointHistoryForOrderIsMinus() {
         ReflectionTestUtils.setField(memberGradeCreateRequest, "grade", "G-VIP");
         MemberGrade memberGrade = new MemberGrade(memberGradeCreateRequest);
+        DeliveryAddressCreateRequest deliveryAddressCreateRequest = new DeliveryAddressCreateRequest();
 
         Member member = new Member(memberCreateRequest, cart);
-        Order order = new Order(member, orderCreateRequest);
+        DeliveryAddress deliveryAddress = new DeliveryAddress(member, deliveryAddressCreateRequest);
+        Order order = new Order(member, deliveryAddress, orderCreateRequest);
 
         ReflectionTestUtils.setField(pointHistoryRequest, "point", -1000);
         ReflectionTestUtils.setField(member, "memberGrade", memberGrade);
