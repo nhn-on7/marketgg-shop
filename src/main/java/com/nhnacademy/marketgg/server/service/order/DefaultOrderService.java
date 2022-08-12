@@ -4,6 +4,7 @@ import com.nhnacademy.marketgg.server.constant.PaymentType;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
@@ -153,6 +154,16 @@ public class DefaultOrderService implements OrderService {
         detailResponse.addOrderDetail(productResponses);
 
         return detailResponse;
+    }
+
+    @Transactional
+    @Override
+    public void updateStatus(Long orderId, OrderUpdateStatusRequest status) {
+        Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
+
+        order.updateStatus(status.getStatus());
+
+        orderRepository.save(order);
     }
 
     @Transactional(readOnly = true)
