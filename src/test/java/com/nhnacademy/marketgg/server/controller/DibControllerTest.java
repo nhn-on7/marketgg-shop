@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
 import com.nhnacademy.marketgg.server.controller.member.DibController;
 import com.nhnacademy.marketgg.server.service.dib.DibService;
 import org.junit.jupiter.api.DisplayName;
@@ -8,12 +9,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -24,6 +29,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(DibController.class)
+@Import({
+        RoleCheckAspect.class
+})
 class DibControllerTest {
 
     @Autowired
@@ -35,37 +43,39 @@ class DibControllerTest {
     @MockBean
     DibService dibService;
 
+    private static final String DEFAULT_DIB = "/members/dibs";
+
     @Test
     @DisplayName("찜 등록")
     void testCreateDib() throws Exception {
-        doNothing().when(dibService).createDib(anyLong(), anyLong());
+        willDoNothing().given(dibService).createDib(any(), anyLong());
 
-        mockMvc.perform(post("/members/1/dibs/1"))
+        mockMvc.perform(post(DEFAULT_DIB + "/{productId}", 1L))
                .andExpect(status().isCreated());
 
-        verify(dibService, times(1)).createDib(anyLong(), anyLong());
+        then(dibService).should(times(1)).createDib(any(), anyLong());
     }
 
     @Test
     @DisplayName("찜 조회")
     void testRetrieveDibs() throws Exception {
-        when(dibService.retrieveDibs(1L)).thenReturn(List.of());
+        given(dibService.retrieveDibs(any())).willReturn(List.of());
 
-        this.mockMvc.perform(get("/members/1/dibs"))
+        this.mockMvc.perform(get(DEFAULT_DIB))
                     .andExpect(status().isOk());
 
-        verify(dibService, times(1)).retrieveDibs(anyLong());
+        then(dibService).should(times(1)).retrieveDibs(any());
     }
 
     @Test
     @DisplayName("찜 삭제")
     void testDeleteDib() throws Exception {
-        doNothing().when(dibService).deleteDib(anyLong(), anyLong());
+        willDoNothing().given(dibService).deleteDib(any(), anyLong());
 
-        mockMvc.perform(delete("/members/1/dibs/1"))
+        mockMvc.perform(delete(DEFAULT_DIB + "/{productId}", 1L))
                .andExpect(status().isOk());
 
-        verify(dibService, times(1)).deleteDib(anyLong(), anyLong());
+        then(dibService).should(times(1)).deleteDib(any(), anyLong());
     }
 
 }
