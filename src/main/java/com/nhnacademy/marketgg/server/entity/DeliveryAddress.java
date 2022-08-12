@@ -6,6 +6,8 @@ import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -36,6 +38,7 @@ public class DeliveryAddress {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.REMOVE)
+    //@OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "member_no")
     private Member member;
 

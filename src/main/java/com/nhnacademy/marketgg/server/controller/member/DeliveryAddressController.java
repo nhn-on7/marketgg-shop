@@ -17,9 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,7 +49,7 @@ public class DeliveryAddressController {
      * @since 1.0.0
      */
     @PostMapping("/delivery-address")
-    public ResponseEntity<CommonResponse> createDeliveryAddress(MemberInfo memberInfo,
+    public ResponseEntity<CommonResponse> createDeliveryAddress(final MemberInfo memberInfo,
                                                                 @Validated @RequestBody final DeliveryAddressCreateRequest createRequest) {
 
         deliveryAddressService.createDeliveryAddress(memberInfo, createRequest);
@@ -67,8 +67,8 @@ public class DeliveryAddressController {
      * @return OK 상태 코드를 반환합니다.
      * @since 1.0.0
      */
-    @PatchMapping("/delivery-address")
-    public ResponseEntity<CommonResponse> updateDeliveryAddress(MemberInfo memberInfo,
+    @PutMapping("/delivery-address")
+    public ResponseEntity<CommonResponse> updateDeliveryAddress(final MemberInfo memberInfo,
                                                                 @Validated @RequestBody final DeliveryAddressUpdateRequest updateRequest) {
 
         deliveryAddressService.updateDeliveryAddress(memberInfo, updateRequest);
@@ -87,8 +87,8 @@ public class DeliveryAddressController {
      * @since 1.0.0
      */
     @DeleteMapping("/delivery-address/{deliveryAddressNo}")
-    public ResponseEntity<CommonResponse> deleteDeliveryAddress(MemberInfo memberInfo,
-                                                                @PathVariable Long deliveryAddressNo) {
+    public ResponseEntity<CommonResponse> deleteDeliveryAddress(final MemberInfo memberInfo,
+                                                                @PathVariable final Long deliveryAddressNo) {
 
         deliveryAddressService.deleteDeliveryAddress(memberInfo, deliveryAddressNo);
 
@@ -104,7 +104,7 @@ public class DeliveryAddressController {
      * @return OK 상태코드와 모든 배송정보를 담은 List 타입 입니다.
      */
     @GetMapping("/delivery-addresses")
-    public ResponseEntity<CommonResponse> retrieveDeliveryAddresses(MemberInfo memberInfo) {
+    public ResponseEntity<CommonResponse> retrieveDeliveryAddresses(final MemberInfo memberInfo) {
 
         List<DeliveryAddressResponse> deliveryAddresses = deliveryAddressService.retrieveDeliveryAddresses(memberInfo);
 
