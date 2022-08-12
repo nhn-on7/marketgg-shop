@@ -23,14 +23,13 @@ import lombok.NoArgsConstructor;
  */
 @Table(name = "member_grades")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
 public class MemberGrade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_grade_no")
-    @NotNull
     private Long id;
 
     @Column
@@ -38,7 +37,8 @@ public class MemberGrade {
     @Size(min = 6, max = 20)
     private String grade;
 
-    public MemberGrade(MemberGradeCreateRequest memberRequest) {
+    public MemberGrade(MemberGradeCreateRequest memberGradeCreateRequest) {
+        this.grade = memberGradeCreateRequest.getGrade();
     }
 
 }

@@ -2,7 +2,7 @@ package com.nhnacademy.marketgg.server.constant;
 
 public enum CouponsName {
 
-    SIGNUP("회원가입 쿠폰"),
+    SIGNUP("신규 가입 쿠폰"),
     GVIP("GVIP 쿠폰"),
     VIP("VIP 쿠폰"),
     BESTREVIEW("베스트 후기 쿠폰"),

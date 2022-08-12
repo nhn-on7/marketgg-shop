@@ -41,7 +41,6 @@ public class Member {
     @Column(name = "member_no")
     private Long id;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "member_grade_no")
     private MemberGrade memberGrade;
@@ -84,6 +83,24 @@ public class Member {
      */
     public Member(final MemberCreateRequest memberRequest, final Cart cart) {
         this.memberGrade = memberRequest.getMemberGrade();
+        this.cart = cart;
+        this.uuid = memberRequest.getUuid();
+        this.gender = memberRequest.getGender();
+        this.birthDate = memberRequest.getBirthDate();
+        this.ggpassUpdatedAt = memberRequest.getGgpassUpdateAt();
+        this.createdAt = memberRequest.getCreatedAt();
+        this.updatedAt = memberRequest.getUpdatedAt();
+        this.deletedAt = memberRequest.getDeletedAt();
+    }
+
+    /**
+     * 회원을 생성하기 위한 생성자입니다.
+     *
+     * @param memberRequest - 회원을 생성하기 위한 DTO 입니다.
+     * @since 1.0.0
+     */
+    public Member(final MemberCreateRequest memberRequest, final MemberGrade memberGrade, final Cart cart) {
+        this.memberGrade = memberGrade;
         this.cart = cart;
         this.uuid = memberRequest.getUuid();
         this.gender = memberRequest.getGender();
