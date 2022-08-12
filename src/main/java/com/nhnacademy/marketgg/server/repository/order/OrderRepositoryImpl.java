@@ -12,7 +12,6 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 public class OrderRepositoryImpl extends QuerydslRepositorySupport implements OrderRepositoryCustom {
 
@@ -56,6 +55,9 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
                                        order.orderStatus,
                                        order.usedPoint,
                                        order.trackingNo,
+                                       order.zipCode,
+                                       order.address,
+                                       order.detailAddress,
                                        order.createdAt);
     }
 

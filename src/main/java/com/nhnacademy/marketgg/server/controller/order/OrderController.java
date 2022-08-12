@@ -31,7 +31,7 @@ import java.util.List;
  * @author 김정민
  * @version 1.0.0
  */
-// todo: @RoleCheck(accessLevel = Role.ROLE_USER)
+// @Auth
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
@@ -136,7 +136,7 @@ public class OrderController {
                              .build();
     }
 
-    // memo: 운송장 번호 생성된 후 주문서 수정, 배송파트 담당자분이 처리한다고 하심
+    // memo: 운송장 번호 생성된 후 주문서 수정
     @PatchMapping("/{orderId}/delivery")
     public ResponseEntity<Void> createDeliveryNumber(@PathVariable final Long orderId) {
 
