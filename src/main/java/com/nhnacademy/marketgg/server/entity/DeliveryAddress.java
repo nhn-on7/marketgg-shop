@@ -54,11 +54,7 @@ public class DeliveryAddress {
     @Column(name = "detail_address")
     private String detailAddress;
 
-
-    public DeliveryAddress(final Member signUpMember,
-                           final ShopMemberSignUpRequest shopMemberSignUpRequest) {
-
-
+    public DeliveryAddress(final Member signUpMember, final ShopMemberSignUpRequest shopMemberSignUpRequest) {
         this.member = signUpMember;
         this.isDefaultAddress = true;
         this.zipCode = shopMemberSignUpRequest.getZipcode();
@@ -66,26 +62,20 @@ public class DeliveryAddress {
         this.detailAddress = shopMemberSignUpRequest.getDetailAddress();
     }
 
-    public DeliveryAddress(final Member member,
-                           final DeliveryAddressCreateRequest createRequest) {
-
+    public DeliveryAddress(final Member member, final DeliveryAddressCreateRequest createRequest) {
         this.member = member;
         this.isDefaultAddress = createRequest.isDefaultAddress();
         this.zipCode = createRequest.getZipCode();
         this.address = createRequest.getAddress();
         this.detailAddress = createRequest.getDetailAddress();
-
     }
 
-    public void update(final Member member,
-                       final DeliveryAddressUpdateRequest updateRequest) {
-
+    public void update(final Member member, final DeliveryAddressUpdateRequest updateRequest) {
         this.member = member;
         this.isDefaultAddress = updateRequest.isDefaultAddress();
         this.zipCode = updateRequest.getZipCode();
         this.address = updateRequest.getAddress();
         this.detailAddress = updateRequest.getDetailAddress();
-
     }
 
 }
