@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.member;
 
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.response.dib.DibRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.dib.DibService;
 import java.net.URI;
@@ -21,28 +22,30 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/members/dibs")
 @RequiredArgsConstructor
 public class DibController {
 
-    private static final String DEFAULT_DIB = "/members";
+    private static final String DEFAULT_DIB = "/members/dibs";
 
     private final DibService dibService;
 
     /**
      * 찜을 등록하는 POST Mapping 을 지원합니다.
      *
-     * @param memberId  - 찜을 등록할 회원의 식별번호입니다.
-     * @param productId - 찜으로 등록될 상품의 식별번호입니다.
+     * @param memberInfo - 찜을 등록할 회원의 정보입니다.
+     * @param productId  - 찜으로 등록될 상품의 식별번호입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @PostMapping("/{memberId}/dibs/{productId}")
-    public ResponseEntity<Void> createDib(@PathVariable final Long memberId, @PathVariable final Long productId) {
-        dibService.createDib(memberId, productId);
+    @PostMapping("/{productId}")
+    public ResponseEntity<Void> createDib(@PathVariable final Long productId,
+                                          final MemberInfo memberInfo) {
+
+        dibService.createDib(memberInfo.getId(), productId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create(DEFAULT_DIB + "/" + memberId))
+                             .location(URI.create(DEFAULT_DIB + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }
@@ -50,33 +53,33 @@ public class DibController {
     /**
      * 회원의 찜 목록을 조회하는 GET Mapping 을 지원합니다.
      *
-     * @param memberId - 찜 목록을 조회하는 회원의 식별번호입니다.
+     * @param memberInfo - 찜 목록을 조회할 회원의 정보입니다.
      * @return 회원의 찜 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    @GetMapping("/{memberId}/dibs")
-    public ResponseEntity<List<DibRetrieveResponse>> retrieveDibs(@PathVariable final Long memberId) {
-        List<DibRetrieveResponse> dibResponses = dibService.retrieveDibs(memberId);
+    @GetMapping
+    public ResponseEntity<List<DibRetrieveResponse>> retrieveDibs(final MemberInfo memberInfo) {
+        List<DibRetrieveResponse> dibResponses = dibService.retrieveDibs(memberInfo.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_DIB + "/" + memberId))
+                             .location(URI.create(DEFAULT_DIB))
                              .body(dibResponses);
     }
 
     /**
      * 찜을 삭제하는 DELETE Mapping 을 지원합니다.
      *
-     * @param memberId  - 찜을 삭제하는 회원의 식별번호입니다.
-     * @param productId - 찜 목록에서 삭제될 상품의 식별번호입니다.
+     * @param memberInfo - 찜을 삭제하는 회원의 정보입니다.
+     * @param productId  - 찜 목록에서 삭제될 상품의 식별번호입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @DeleteMapping("/{memberId}/dibs/{productId}")
-    public ResponseEntity<Void> deleteDib(@PathVariable final Long memberId, @PathVariable final Long productId) {
-        dibService.deleteDib(memberId, productId);
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteDib(@PathVariable final Long productId, final MemberInfo memberInfo) {
+        dibService.deleteDib(memberInfo.getId(), productId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_DIB + "/" + memberId))
+                             .location(URI.create(DEFAULT_DIB + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
     }

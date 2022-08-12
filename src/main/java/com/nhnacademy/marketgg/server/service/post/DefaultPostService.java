@@ -17,7 +17,6 @@ import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
-import com.nhnacademy.marketgg.server.exception.customerservicecomment.CustomerServiceCommentNotFoundException;
 import com.nhnacademy.marketgg.server.exception.customerservicepost.CustomerServicePostNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
@@ -61,7 +60,7 @@ public class DefaultPostService implements PostService {
         if (this.isAccess(memberInfo, postRequest.getCategoryCode(), "create")) {
             Member member = memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
             Category category = categoryRepository.findById(postRequest.getCategoryCode()).orElseThrow(
-                CategoryNotFoundException::new);
+                    CategoryNotFoundException::new);
             CustomerServicePost post = new CustomerServicePost(member, category, postRequest);
 
             postRepository.save(post);
@@ -76,36 +75,35 @@ public class DefaultPostService implements PostService {
             return postRepository.findPostsByCategoryId(PageRequest.of(page, PAGE_SIZE), categoryCode).getContent();
         }
         return postRepository.findPostByCategoryAndMember(PageRequest.of(page, PAGE_SIZE), categoryCode,
-            memberInfo.getId()).getContent();
+                                                          memberInfo.getId()).getContent();
     }
 
     @Override
     public PostResponseForDetail retrievePost(final Long postNo, final MemberInfo memberInfo)
-        throws JsonProcessingException {
+            throws JsonProcessingException {
 
         CustomerServicePost post =
-            postRepository.findById(postNo).orElseThrow(CustomerServiceCommentNotFoundException::new);
-        if (post.getCategory().getId().compareTo(OTO_CODE) == 0 || !memberInfo.isAdmin()) {
-            return this.convertToDetail(postRepository.findOwnOtoInquiry(postNo, memberInfo.getId()));
-        }
-        return this.convertToDetail(postRepository.findByBoardNo(postNo));
+                postRepository.findById(postNo).orElseThrow(CustomerServicePostNotFoundException::new);
+
+        return this.retrievePostDetail(post, memberInfo);
     }
 
     @Override
     public List<PostResponse> searchForCategory(final String categoryCode, final SearchRequest searchRequest,
                                                 final MemberInfo memberInfo)
-        throws ParseException, JsonProcessingException {
+            throws ParseException, JsonProcessingException {
 
         if (this.isAccess(memberInfo, categoryCode, "search")) {
             return searchRepository.searchBoardWithCategoryCode(categoryCode, searchRequest, "board");
         }
+
         return List.of();
     }
 
     @Override
     public List<PostResponse> searchForOption(final String categoryCode, final SearchRequest searchRequest,
                                               final String optionType, final String option)
-        throws JsonProcessingException, ParseException {
+            throws JsonProcessingException, ParseException {
 
         return searchRepository.searchBoardWithOption(categoryCode, option, searchRequest, optionType);
     }
@@ -114,7 +112,7 @@ public class DefaultPostService implements PostService {
     public void updatePost(final String categoryCode, final Long postNo, final PostRequest postRequest) {
         if (categoryCode.compareTo(OTO_CODE) != 0) {
             CustomerServicePost post = postRepository.findById(postNo).orElseThrow(
-                CustomerServicePostNotFoundException::new);
+                    CustomerServicePostNotFoundException::new);
             post.updatePost(postRequest);
 
             postRepository.save(post);
@@ -124,7 +122,7 @@ public class DefaultPostService implements PostService {
     @Override
     public void updateOtoInquiryStatus(final Long postNo, final PostStatusUpdateRequest statusUpdateRequest) {
         CustomerServicePost post =
-            postRepository.findById(postNo).orElseThrow(CustomerServicePostNotFoundException::new);
+                postRepository.findById(postNo).orElseThrow(CustomerServicePostNotFoundException::new);
         post.updatePostStatus(statusUpdateRequest.getStatus());
 
         postRepository.save(post);
@@ -133,7 +131,7 @@ public class DefaultPostService implements PostService {
     @Override
     public void deletePost(final String categoryCode, final Long postNo, final MemberInfo memberInfo) {
         if (this.isAccess(memberInfo, categoryCode, "memberDelete")
-            || this.isAccess(memberInfo, categoryCode, "adminDelete")) {
+                || this.isAccess(memberInfo, categoryCode, "adminDelete")) {
             postRepository.deleteById(postNo);
             elasticBoardRepository.deleteById(postNo);
             commentRepository.deleteAllByCustomerServicePost_Id(postNo);
@@ -154,6 +152,16 @@ public class DefaultPostService implements PostService {
             default:
                 return memberInfo.isAdmin() || !otoExistList.contains(categoryCode);
         }
+    }
+
+    private PostResponseForDetail retrievePostDetail(final CustomerServicePost post, final MemberInfo memberInfo)
+            throws JsonProcessingException {
+
+        if (post.getCategory().getId().compareTo(OTO_CODE) == 0 && !memberInfo.isAdmin()) {
+            return this.convertToDetail(postRepository.findOwnOtoInquiry(post.getId(), memberInfo.getId()));
+        }
+
+        return this.convertToDetail(postRepository.findByBoardNo(post.getId()));
     }
 
     private PostResponseForDetail convertToDetail(final PostResponseForReady response) throws JsonProcessingException {
