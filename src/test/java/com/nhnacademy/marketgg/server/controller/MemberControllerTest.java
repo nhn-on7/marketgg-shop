@@ -1,9 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import static com.nhnacademy.marketgg.server.annotation.Role.ROLE_USER;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -18,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
+import com.nhnacademy.marketgg.server.aop.AspectUtils;
 import com.nhnacademy.marketgg.server.controller.member.MemberController;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
@@ -28,23 +26,20 @@ import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.member.MemberService;
 import com.nhnacademy.marketgg.server.service.point.PointService;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(MemberController.class)
-@Import({
-    RoleCheckAspect.class
-})
 class MemberControllerTest {
 
     @Autowired
@@ -65,12 +60,22 @@ class MemberControllerTest {
     @MockBean
     GivenCouponService givenCouponService;
 
+    HttpHeaders httpHeaders;
+
+    @BeforeEach
+    void setUp() {
+        httpHeaders = new HttpHeaders();
+        httpHeaders.add(AspectUtils.AUTH_ID, UUID.randomUUID().toString());
+        httpHeaders.add(AspectUtils.WWW_AUTHENTICATE, "[\"ROLE_ADMIN\"]");
+    }
+
     @Test
     @DisplayName("GG 패스 갱신일자 확인")
     void testCheckPassUpdatedAt() throws Exception {
         given(memberService.retrievePassUpdatedAt(any())).willReturn(LocalDateTime.now());
 
-        this.mockMvc.perform(get("/members/ggpass"))
+        this.mockMvc.perform(get("/members/ggpass")
+                .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(memberService).should(times(1)).retrievePassUpdatedAt(any());
@@ -81,7 +86,8 @@ class MemberControllerTest {
     void testJoinPass() throws Exception {
         willDoNothing().given(memberService).subscribePass(any());
 
-        this.mockMvc.perform(post("/members/ggpass/subscribe", 1L))
+        this.mockMvc.perform(post("/members/ggpass/subscribe", 1L)
+                .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(memberService).should(times(1)).subscribePass(any());
@@ -92,7 +98,8 @@ class MemberControllerTest {
     void testWithdrawPass() throws Exception {
         willDoNothing().given(memberService).withdrawPass(any());
 
-        this.mockMvc.perform(post("/members/ggpass/withdraw", 1L))
+        this.mockMvc.perform(post("/members/ggpass/withdraw", 1L)
+                .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(memberService).should(times(1)).withdrawPass(any());
@@ -101,8 +108,6 @@ class MemberControllerTest {
     @Test
     @DisplayName("사용자 조회")
     void testRetrieveMember() throws Exception {
-        String uuid = "UUID";
-        String roles = objectMapper.writeValueAsString(Collections.singleton(ROLE_USER));
 
         LocalDateTime now = LocalDateTime.now();
         MemberResponse memberResponse = MemberResponse.builder()
@@ -113,8 +118,7 @@ class MemberControllerTest {
                                                       .build();
 
         this.mockMvc.perform(get("/members")
-                .header("AUTH-ID", uuid)
-                .header("WWW-Authentication", roles)
+                .headers(httpHeaders)
                 .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.success", equalTo(true)))
@@ -128,11 +132,13 @@ class MemberControllerTest {
         String content = objectMapper.writeValueAsString(new GivenCouponCreateRequest());
 
         this.mockMvc.perform(post("/members/{memberId}/coupons", 1L)
+                .headers(httpHeaders)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
                     .andExpect(status().isCreated());
 
-        verify(givenCouponService, times(1)).createGivenCoupons(any(MemberInfo.class), any(GivenCouponCreateRequest.class));
+        verify(givenCouponService, times(1)).createGivenCoupons(any(MemberInfo.class),
+            any(GivenCouponCreateRequest.class));
     }
 
     @Test
@@ -140,7 +146,8 @@ class MemberControllerTest {
     void testRetrieveGivenCoupons() throws Exception {
         when(givenCouponService.retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class))).thenReturn(List.of());
 
-        this.mockMvc.perform(get("/members/coupons"))
+        this.mockMvc.perform(get("/members/coupons")
+                .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         verify(givenCouponService, times(1)).retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class));

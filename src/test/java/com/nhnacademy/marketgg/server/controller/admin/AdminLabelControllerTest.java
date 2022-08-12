@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.controller;
+package com.nhnacademy.marketgg.server.controller.admin;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyLong;
@@ -13,24 +13,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.aop.AspectUtils;
 import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
-import com.nhnacademy.marketgg.server.controller.admin.AdminLabelController;
 import com.nhnacademy.marketgg.server.dto.request.label.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.service.label.LabelService;
 import java.util.ArrayList;
+import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AdminLabelController.class)
 @Import({
-        RoleCheckAspect.class
+    RoleCheckAspect.class
 })
 class AdminLabelControllerTest {
 
@@ -45,23 +48,33 @@ class AdminLabelControllerTest {
 
     private static final String DEFAULT_LABEL = "/admin/labels";
 
-     @Test
-     @DisplayName("라벨 등록")
-     void createLabel() throws Exception {
-         LabelCreateRequest labelCreateRequest = new LabelCreateRequest();
-         ReflectionTestUtils.setField(labelCreateRequest, "labelNo", 1L);
-         ReflectionTestUtils.setField(labelCreateRequest, "name", "hello");
-         String requestBody = objectMapper.writeValueAsString(labelCreateRequest);
+    HttpHeaders httpHeaders;
 
-         doNothing().when(labelService).createLabel(any(LabelCreateRequest.class));
+    @BeforeEach
+    void setUp() {
+        httpHeaders = new HttpHeaders();
+        httpHeaders.add(AspectUtils.AUTH_ID, UUID.randomUUID().toString());
+        httpHeaders.add(AspectUtils.WWW_AUTHENTICATE, "[\"ROLE_ADMIN\"]");
+    }
 
-         this.mockMvc.perform(post(DEFAULT_LABEL)
-                                      .contentType(MediaType.APPLICATION_JSON)
-                                      .content(requestBody))
-                     .andExpect(status().isCreated());
+    @Test
+    @DisplayName("라벨 등록")
+    void createLabel() throws Exception {
+        LabelCreateRequest labelCreateRequest = new LabelCreateRequest();
+        ReflectionTestUtils.setField(labelCreateRequest, "labelNo", 1L);
+        ReflectionTestUtils.setField(labelCreateRequest, "name", "hello");
+        String requestBody = objectMapper.writeValueAsString(labelCreateRequest);
 
-         verify(labelService, times(1)).createLabel(any(labelCreateRequest.getClass()));
-     }
+        doNothing().when(labelService).createLabel(any(LabelCreateRequest.class));
+
+        this.mockMvc.perform(post(DEFAULT_LABEL)
+                .headers(httpHeaders)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+                    .andExpect(status().isCreated());
+
+        verify(labelService, times(1)).createLabel(any(labelCreateRequest.getClass()));
+    }
 
     @Test
     @DisplayName("라벨 조회")
@@ -69,7 +82,7 @@ class AdminLabelControllerTest {
 
         when(labelService.retrieveLabels()).thenReturn(new ArrayList<>());
 
-        this.mockMvc.perform(get(DEFAULT_LABEL))
+        this.mockMvc.perform(get(DEFAULT_LABEL).headers(httpHeaders))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andReturn();
@@ -82,7 +95,7 @@ class AdminLabelControllerTest {
     void deleteLabel() throws Exception {
         doNothing().when(labelService).deleteLabel(anyLong());
 
-        this.mockMvc.perform(delete(DEFAULT_LABEL + "/{labelId}", 1L))
+        this.mockMvc.perform(delete(DEFAULT_LABEL + "/{labelId}", 1L).headers(httpHeaders))
                     .andExpect(status().isOk());
 
         verify(labelService, times(1)).deleteLabel(1L);
