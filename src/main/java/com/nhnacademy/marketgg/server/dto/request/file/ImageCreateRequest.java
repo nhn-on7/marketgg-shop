@@ -3,7 +3,16 @@ package com.nhnacademy.marketgg.server.dto.request.file;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * Image 엔티티를 만들기 위한 Request DTO입니다.
+ * <p>
+ * {@link com.nhnacademy.marketgg.server.service.storage.LocalStorageService#uploadImage(MultipartFile)}
+ * {@link com.nhnacademy.marketgg.server.service.storage.NhnStorageService#uploadImage(MultipartFile)}
+ *
+ * @author 조현진
+ */
 @NoArgsConstructor
 @Getter
 public class ImageCreateRequest {
