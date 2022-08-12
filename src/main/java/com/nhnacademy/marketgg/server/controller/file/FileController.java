@@ -20,10 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author 조현진
  */
-@RestController
-@RequiredArgsConstructor
-@RequestMapping("/storage")
 @Slf4j
+@RestController
+@RequestMapping("/storage")
+@RequiredArgsConstructor
 public class FileController {
 
     private final FileService fileService;
@@ -51,7 +51,6 @@ public class FileController {
      * @return - 이미지의 메타데이터를 담은 응답객체를 반환합니다.
      * @throws IOException - IOException을 던집니다.
      */
-    // @RoleCheck
     @PostMapping
     public ResponseEntity<ImageResponse> uploadAndRetrieveImage(@RequestBody final MultipartFile image)
         throws IOException {

@@ -8,6 +8,7 @@ import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpda
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
+import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
@@ -75,6 +76,30 @@ public class Dummy {
         ReflectionTestUtils.setField(productRequest, "origin", "인도네시아");
         ReflectionTestUtils.setField(productRequest, "packageType", "냉장");
         ReflectionTestUtils.setField(productRequest, "allergyInfo", "새우알러지");
+        ReflectionTestUtils.setField(productRequest, "expirationDate", LocalDate.now());
+        ReflectionTestUtils.setField(productRequest, "capacity", "20개");
+        ReflectionTestUtils.setField(productRequest, "labelNo", 1L);
+
+        return productRequest;
+    }
+
+    public static ProductUpdateRequest getDummyProductUpdateRequest() {
+        ProductUpdateRequest productRequest = new ProductUpdateRequest();
+        ReflectionTestUtils.setField(productRequest, "categoryCode", "001");
+        ReflectionTestUtils.setField(productRequest, "name", "자몽");
+        ReflectionTestUtils.setField(productRequest, "content", "아침에 자몽 쥬스");
+        ReflectionTestUtils.setField(productRequest, "totalStock", 100L);
+        ReflectionTestUtils.setField(productRequest, "price", 2000L);
+        ReflectionTestUtils.setField(productRequest, "description", "자몽주스 설명");
+        ReflectionTestUtils.setField(productRequest, "unit", "1박스");
+        ReflectionTestUtils.setField(productRequest, "deliveryType", "샛별배송");
+        ReflectionTestUtils.setField(productRequest, "origin", "인도네시아");
+        ReflectionTestUtils.setField(productRequest, "packageType", "냉장");
+        ReflectionTestUtils.setField(productRequest, "allergyInfo", "새우알러지");
+        ReflectionTestUtils.setField(productRequest, "expirationDate", LocalDate.now());
+        ReflectionTestUtils.setField(productRequest, "capacity", "20개");
+        ReflectionTestUtils.setField(productRequest, "labelNo", 1L);
+        ReflectionTestUtils.setField(productRequest, "assetNo", 1L);
 
         return productRequest;
     }

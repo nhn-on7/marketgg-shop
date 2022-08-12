@@ -19,6 +19,7 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import java.io.FileInputStream;
 import java.net.URL;
@@ -55,12 +56,13 @@ class AdminProductControllerTest {
     private static final String DEFAULT_PRODUCT = "/admin/products";
     private ProductCreateRequest productRequest;
     private ProductResponse productResponse;
+    private ProductUpdateRequest productUpdateRequest;
 
 
     @BeforeEach
     void setUp() {
-        productRequest = new ProductCreateRequest();
-        ReflectionTestUtils.setField(productRequest, "categoryCode", "001");
+        productRequest = Dummy.getDummyProductCreateRequest();
+        productUpdateRequest = Dummy.getDummyProductUpdateRequest();
         productResponse =
             new ProductResponse(null, null, null, null, null, null, null, null, null, null,
                 null, null, null,
@@ -124,9 +126,6 @@ class AdminProductControllerTest {
     @Test
     @DisplayName("상품 정보 수정하는 테스트")
     void testUpdateProduct() throws Exception {
-        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest();
-        ReflectionTestUtils.setField(productUpdateRequest, "categoryCode", "001");
-
         String content = this.objectMapper.writeValueAsString(productUpdateRequest);
         MockMultipartFile dto =
             new MockMultipartFile("productRequest", "jsondata", "application/json",
