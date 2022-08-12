@@ -14,7 +14,6 @@ import com.nhnacademy.marketgg.server.exception.asset.AssetNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.review.ReviewNotFoundException;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
-import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.review.ReviewRepository;
 import com.nhnacademy.marketgg.server.service.file.FileService;
