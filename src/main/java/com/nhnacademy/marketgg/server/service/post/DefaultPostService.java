@@ -17,7 +17,6 @@ import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
-import com.nhnacademy.marketgg.server.exception.customerservicecomment.CustomerServiceCommentNotFoundException;
 import com.nhnacademy.marketgg.server.exception.customerservicepost.CustomerServicePostNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
@@ -85,10 +84,8 @@ public class DefaultPostService implements PostService {
 
         CustomerServicePost post =
                 postRepository.findById(postNo).orElseThrow(CustomerServicePostNotFoundException::new);
-        if (post.getCategory().getId().compareTo(OTO_CODE) == 0 && !memberInfo.isAdmin()) {
-            return this.convertToDetail(postRepository.findOwnOtoInquiry(postNo, memberInfo.getId()));
-        }
-        return this.convertToDetail(postRepository.findByBoardNo(postNo));
+
+        return this.retrievePostDetail(post, memberInfo);
     }
 
     @Override
@@ -99,6 +96,7 @@ public class DefaultPostService implements PostService {
         if (this.isAccess(memberInfo, categoryCode, "search")) {
             return searchRepository.searchBoardWithCategoryCode(categoryCode, searchRequest, "board");
         }
+
         return List.of();
     }
 
@@ -154,6 +152,16 @@ public class DefaultPostService implements PostService {
             default:
                 return memberInfo.isAdmin() || !otoExistList.contains(categoryCode);
         }
+    }
+
+    private PostResponseForDetail retrievePostDetail(final CustomerServicePost post, final MemberInfo memberInfo)
+            throws JsonProcessingException {
+
+        if (post.getCategory().getId().compareTo(OTO_CODE) == 0 && !memberInfo.isAdmin()) {
+            return this.convertToDetail(postRepository.findOwnOtoInquiry(post.getId(), memberInfo.getId()));
+        }
+
+        return this.convertToDetail(postRepository.findByBoardNo(post.getId()));
     }
 
     private PostResponseForDetail convertToDetail(final PostResponseForReady response) throws JsonProcessingException {
