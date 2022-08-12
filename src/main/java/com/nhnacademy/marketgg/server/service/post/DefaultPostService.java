@@ -85,7 +85,7 @@ public class DefaultPostService implements PostService {
 
         CustomerServicePost post =
                 postRepository.findById(postNo).orElseThrow(CustomerServicePostNotFoundException::new);
-        if (post.getCategory().getId().compareTo(OTO_CODE) == 0 || !memberInfo.isAdmin()) {
+        if (post.getCategory().getId().compareTo(OTO_CODE) == 0 && !memberInfo.isAdmin()) {
             return this.convertToDetail(postRepository.findOwnOtoInquiry(postNo, memberInfo.getId()));
         }
         return this.convertToDetail(postRepository.findByBoardNo(postNo));
