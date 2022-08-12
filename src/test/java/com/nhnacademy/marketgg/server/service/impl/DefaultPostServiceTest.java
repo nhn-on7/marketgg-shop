@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -37,6 +38,7 @@ import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerSer
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.post.DefaultPostService;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -167,11 +169,17 @@ class DefaultPostServiceTest {
     @DisplayName("게시글 상세 조회")
     void testRetrievePost() throws Exception {
         ReflectionTestUtils.setField(memberInfo, "roles", Set.of("ROLE_ADMIN"));
-        ReflectionTestUtils.setField(categoryCreateRequest, "categoryCode", FAQ_CODE);
-        ReflectionTestUtils.setField(postRequest, "categoryCode", FAQ_CODE);
-        ReflectionTestUtils.setField(ready, "categoryCode", FAQ_CODE);
-        ReflectionTestUtils.setField(category, "id", FAQ_CODE);
+
+        ReflectionTestUtils.setField(post, "id", 1L);
         ReflectionTestUtils.setField(post, "category", category);
+
+        ReflectionTestUtils.setField(categoryCreateRequest, "categoryCode", FAQ_CODE);
+        ReflectionTestUtils.setField(category, "id", FAQ_CODE);
+
+        ReflectionTestUtils.setField(postRequest, "categoryCode", FAQ_CODE);
+
+        ReflectionTestUtils.setField(ready, "categoryCode", FAQ_CODE);
+
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postRepository.findByBoardNo(anyLong())).willReturn(ready);
         given(authRepository.getNameListByUuid(any())).willReturn(
@@ -180,15 +188,22 @@ class DefaultPostServiceTest {
         PostResponseForDetail postResponseForDetail = postService.retrievePost(1L, memberInfo);
 
         assertThat(postResponseForDetail.getCategoryCode()).isEqualTo(FAQ_CODE);
+        then(postRepository).should(times(1)).findById(anyLong());
+        then(postRepository).should(times(1)).findByBoardNo(anyLong());
+        then(authRepository).should(times(1)).getNameListByUuid(anyList());
     }
 
     @Test
     @DisplayName("게시글 상세 조회 (1:1)")
     void testRetrievePostForOto() throws Exception {
-        ReflectionTestUtils.setField(categoryCreateRequest, "categoryCode", OTO_CODE);
-        ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
-        ReflectionTestUtils.setField(category, "id", OTO_CODE);
         ReflectionTestUtils.setField(post, "category", category);
+        ReflectionTestUtils.setField(post, "id", 1L);
+
+        ReflectionTestUtils.setField(categoryCreateRequest, "categoryCode", OTO_CODE);
+        ReflectionTestUtils.setField(category, "id", OTO_CODE);
+
+        ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
+
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postRepository.findOwnOtoInquiry(anyLong(), anyLong())).willReturn(ready2);
         given(authRepository.getNameListByUuid(any())).willReturn(
@@ -197,6 +212,9 @@ class DefaultPostServiceTest {
         PostResponseForDetail postResponseForDetail = postService.retrievePost(1L, memberInfo);
 
         assertThat(postResponseForDetail.getCategoryCode()).isEqualTo(OTO_CODE);
+        then(postRepository).should(times(1)).findById(anyLong());
+        then(postRepository).should(times(1)).findOwnOtoInquiry(anyLong(), anyLong());
+        then(authRepository).should(times(1)).getNameListByUuid(anyList());
     }
 
     @Test
