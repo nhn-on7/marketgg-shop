@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.info.OrderInfoRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DeliveryAdapter implements DeliveryRepository {
 
-    private final String delivery = "http://133.186.218.28:9090";
+    @Value("${gg.delivery.origin}")
+    private final String delivery;
 
     private final RestTemplate restTemplate;
 
