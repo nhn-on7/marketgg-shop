@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.controller;
+package com.nhnacademy.marketgg.server.controller.admin;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -7,14 +7,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.controller.admin.AdminReviewController;
+import com.nhnacademy.marketgg.server.aop.AspectUtils;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.product.ReviewService;
+import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -30,6 +33,14 @@ class AdminReviewControllerTest {
     @MockBean
     ReviewService reviewService;
 
+    HttpHeaders httpHeaders;
+
+    @BeforeEach
+    void setUp() {
+        httpHeaders = new HttpHeaders();
+        httpHeaders.add(AspectUtils.AUTH_ID, UUID.randomUUID().toString());
+        httpHeaders.add(AspectUtils.WWW_AUTHENTICATE, "[\"ROLE_ADMIN\"]");
+    }
 
     @Test
     @DisplayName("베스트 후기 선정 테스트")
@@ -37,7 +48,8 @@ class AdminReviewControllerTest {
         given(reviewService.makeBestReview(anyLong())).willReturn(new SingleResponse<>());
 
         this.mockMvc.perform(post("/admin/products/{productId}/reviews/{reviewId}/make-best", 1L, 1L)
-                                 .contentType(MediaType.APPLICATION_JSON))
+                .headers(httpHeaders)
+                .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
 
         then(reviewService).should().makeBestReview(anyLong());

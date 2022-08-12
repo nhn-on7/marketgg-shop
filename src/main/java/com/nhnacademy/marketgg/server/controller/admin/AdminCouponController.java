@@ -42,7 +42,6 @@ public class AdminCouponController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @PostMapping
     public ResponseEntity<CommonResponse> createCoupon(@Valid @RequestBody final CouponDto couponDto) {
         couponService.createCoupon(couponDto);
@@ -59,7 +58,6 @@ public class AdminCouponController {
      * @return 조회한 쿠폰의 정보를 담은 객체를 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @GetMapping("/{couponId}")
     public ResponseEntity<CommonResponse> retrieveCoupon(@PathVariable final Long couponId) {
         CouponDto couponResponse = couponService.retrieveCoupon(couponId);
@@ -74,7 +72,6 @@ public class AdminCouponController {
      * @return 전체 쿠폰 목록 DTO 를 List 로 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @GetMapping
     public ResponseEntity<CommonResponse> retrieveCoupons(final Pageable pageable) {
         List<CouponDto> couponResponses = couponService.retrieveCoupons(pageable);
@@ -91,7 +88,6 @@ public class AdminCouponController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @PutMapping("/{couponId}")
     public ResponseEntity<CommonResponse> updateCoupon(@PathVariable final Long couponId,
                                                        @Valid @RequestBody final CouponDto couponDto) {
@@ -110,7 +106,6 @@ public class AdminCouponController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_ADMIN)
     @DeleteMapping("/{couponId}")
     public ResponseEntity<CommonResponse> deleteCoupon(@PathVariable final Long couponId) {
         couponService.deleteCoupon(couponId);

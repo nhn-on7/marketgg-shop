@@ -25,6 +25,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -54,8 +56,8 @@ public class AuthInjectAspect {
      * @return 메서드 정보
      * @throws Throwable 메서드를 실행시킬 때 발생할 수 있는 예외입니다.
      */
-    @Around("execution(* com.nhnacademy.marketgg.server.controller.*.*(.., com.nhnacademy.marketgg.server.dto.info.AuthInfo, ..))")
-    public Object authInject(ProceedingJoinPoint pjp) throws Throwable {
+    @Around("@within(restController) && execution(* *.*(.., com.nhnacademy.marketgg.server.dto.info.AuthInfo, ..))")
+    public Object authInject(ProceedingJoinPoint pjp, RestController restController) throws Throwable {
         log.info("Method: {}", pjp.getSignature().getName());
 
         ServletRequestAttributes requestAttributes
@@ -63,7 +65,7 @@ public class AuthInjectAspect {
         HttpServletRequest request = requestAttributes.getRequest();
 
         String jwt = request.getHeader(AUTHORIZATION);
-        String uuid = request.getHeader("WWW-Authentication");
+        String uuid = request.getHeader(AspectUtils.WWW_AUTHENTICATE);
 
         if (Objects.isNull(jwt) || Objects.isNull(uuid)) {
             throw new IllegalArgumentException();
@@ -76,9 +78,10 @@ public class AuthInjectAspect {
         HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
 
         ResponseEntity<String> exchange =
-            restTemplate.exchange(gateway + "/auth/info", GET, httpEntity, String.class);
+            restTemplate.exchange(gateway + "/auth/v1/info", GET, httpEntity, String.class);
 
         AuthInfo authInfo = validCheck(exchange);
+        log.info("AuthInfo = {}", authInfo);
 
         Object[] args = Arrays.stream(pjp.getArgs())
                               .map(arg -> {

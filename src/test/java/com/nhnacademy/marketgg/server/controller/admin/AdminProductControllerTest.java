@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.controller;
+package com.nhnacademy.marketgg.server.controller.admin;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -14,18 +14,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.controller.admin.AdminProductController;
+import com.nhnacademy.marketgg.server.aop.AspectUtils;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
+<<<<<<< HEAD
 import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
+=======
+import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
+>>>>>>> 4bac3ae (Test: 테스트 코드 수정)
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +39,11 @@ import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+<<<<<<< HEAD
 import org.springframework.data.domain.PageRequest;
+=======
+import org.springframework.http.HttpHeaders;
+>>>>>>> 4bac3ae (Test: 테스트 코드 수정)
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
@@ -60,11 +70,21 @@ class AdminProductControllerTest {
     private ProductResponse productResponse;
     private ProductUpdateRequest productUpdateRequest;
 
+    HttpHeaders httpHeaders;
 
     @BeforeEach
     void setUp() {
+<<<<<<< HEAD
         productRequest = Dummy.getDummyProductCreateRequest();
         productUpdateRequest = Dummy.getDummyProductUpdateRequest();
+=======
+        httpHeaders = new HttpHeaders();
+        httpHeaders.add(AspectUtils.AUTH_ID, UUID.randomUUID().toString());
+        httpHeaders.add(AspectUtils.WWW_AUTHENTICATE, "[\"ROLE_ADMIN\"]");
+
+        productRequest = new ProductCreateRequest();
+        ReflectionTestUtils.setField(productRequest, "categoryCode", "001");
+>>>>>>> 4bac3ae (Test: 테스트 코드 수정)
         productResponse =
             new ProductResponse(null, null, null, null, null, null, null, null, null, null,
                 null, null, null,
@@ -89,6 +109,7 @@ class AdminProductControllerTest {
 
         this.mockMvc.perform(multipart(DEFAULT_PRODUCT).file(dto)
                                                        .file(file)
+                                                       .headers(httpHeaders)
                                                        .contentType(
                                                            MediaType.APPLICATION_JSON_VALUE)
                                                        .contentType(
@@ -119,7 +140,9 @@ class AdminProductControllerTest {
     void testRetrieveProductDetails() throws Exception {
         given(productService.retrieveProductDetails(anyLong())).willReturn(new SingleResponse<>());
 
-        this.mockMvc.perform(get(DEFAULT_PRODUCT + "/1").contentType(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(get(DEFAULT_PRODUCT + "/1")
+                .headers(httpHeaders)
+                .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
 
         then(this.productService).should().retrieveProductDetails(anyLong());
@@ -151,6 +174,7 @@ class AdminProductControllerTest {
 
         this.mockMvc.perform(builder.file(dto)
                                     .file(file)
+                                    .headers(httpHeaders)
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .contentType(MediaType.MULTIPART_FORM_DATA)
                                     .characterEncoding(StandardCharsets.UTF_8))
@@ -163,7 +187,8 @@ class AdminProductControllerTest {
     void testDeleteProduct() throws Exception {
         doNothing().when(this.productService).deleteProduct(anyLong());
 
-        this.mockMvc.perform(delete(DEFAULT_PRODUCT + "/{productId}", 1L))
+        this.mockMvc.perform(delete(DEFAULT_PRODUCT + "/{productId}", 1L)
+                .headers(httpHeaders))
                     .andExpect(status().isOk());
         verify(this.productService, times(1)).deleteProduct(anyLong());
     }

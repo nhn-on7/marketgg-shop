@@ -7,10 +7,12 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @RequiredArgsConstructor
 @Builder
 @Getter
+@ToString
 public class MemberResponse {
 
     private final String email;

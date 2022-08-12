@@ -47,9 +47,7 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @ActiveProfiles({"testdb", "common"})
 @Import({
-    RoleCheckAspect.class,
     AuthInjectAspect.class,
-    UuidAspect.class,
     MemberInfoAspect.class
 })
 class CommentControllerTest {

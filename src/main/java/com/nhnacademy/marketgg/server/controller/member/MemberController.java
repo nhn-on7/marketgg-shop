@@ -2,8 +2,7 @@ package com.nhnacademy.marketgg.server.controller.member;
 
 import static org.springframework.http.HttpStatus.OK;
 
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
+import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.annotation.UUID;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
@@ -22,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,11 +36,11 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 회원관리에 관련된 RestController 입니다.
  *
- * @author 박세완
- * @author 김훈민
- * @author 민아영
+ * @author 김훈민, 민아영, 박세완
  * @version 1.0.0
  */
+@Slf4j
+@Auth
 @RestController
 @RequestMapping("/members")
 @RequiredArgsConstructor
@@ -58,7 +58,6 @@ public class MemberController {
      * @return 선택한 회원의 GG 패스 갱신일을 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_USER)
     @GetMapping("/ggpass")
     public ResponseEntity<LocalDateTime> retrievePassUpdatedAt(final MemberInfo memberInfo) {
 
@@ -77,7 +76,6 @@ public class MemberController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_USER)
     @PostMapping("/ggpass/subscribe")
     public ResponseEntity<Void> subscribePass(final MemberInfo memberInfo) {
         memberService.subscribePass(memberInfo.getId());
@@ -95,7 +93,6 @@ public class MemberController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_USER)
     @PostMapping("/ggpass/withdraw")
     public ResponseEntity<Void> withdrawPass(final MemberInfo memberInfo) {
         memberService.withdrawPass(memberInfo.getId());
@@ -111,10 +108,11 @@ public class MemberController {
      * @param memberInfo - Shop Server 의 사용자 정보
      * @return - 사용자 정보를 반환합니다.
      */
-    @RoleCheck(accessLevel = Role.ROLE_USER)
     @GetMapping
     public ResponseEntity<CommonResponse> retrieveMember(final AuthInfo authInfo, final MemberInfo memberInfo) {
         MemberResponse memberResponse = new MemberResponse(authInfo, memberInfo);
+
+        log.info("MemberResponse = {}", memberResponse);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -163,7 +161,6 @@ public class MemberController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_USER)
     @PostMapping("/coupons")
     public ResponseEntity<CommonResponse> createGivenCoupons(final MemberInfo memberInfo,
                                                              @Valid @RequestBody
@@ -183,7 +180,6 @@ public class MemberController {
      * @return 회원에게 지급된 쿠폰 목록을 가진 DTO 객체를 반환합니다.
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_USER)
     @GetMapping("/coupons")
     public ResponseEntity<CommonResponse> retrieveGivenCoupons(final MemberInfo memberInfo, final Pageable pageable) {
         List<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(memberInfo, pageable);

@@ -7,13 +7,17 @@ import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.exception.auth.UnAuthenticException;
 import com.nhnacademy.marketgg.server.exception.auth.UnAuthorizationException;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -38,9 +42,10 @@ public class RoleCheckAspect {
      * @throws IOException            - JSON 역 직렬화 시 발생할 수 있는 예외입니다.
      * @throws IllegalAccessException - 권한이 불충분할 시 발생할 수 있는 예외입니다.
      */
-    @Before(value = "@annotation(roleCheck) || @within(roleCheck)")
-    public void checkRole(RoleCheck roleCheck)
+    @Before(value = "@annotation(roleCheck) || @within(roleCheck)", argNames = "jp, roleCheck")
+    public void checkRole(final JoinPoint jp, RoleCheck roleCheck)
         throws IOException, IllegalAccessException {
+        log.info("Method = {}", jp.getSignature().getName());
 
         log.debug("Role Check AOP");
 
@@ -58,7 +63,13 @@ public class RoleCheckAspect {
         });
         log.info("roles = {}", roles.toString());
 
-        if (Objects.equals(roleCheck.accessLevel(), Role.ROLE_USER)) {
+        MethodSignature methodSignature = (MethodSignature) jp.getSignature();
+        Method method = methodSignature.getMethod();
+
+        RoleCheck check = method.getAnnotation(RoleCheck.class);
+        log.info("accessLevel = {}", check.accessLevel());
+
+        if (Objects.equals(check.accessLevel(), Role.ROLE_USER)) {
             this.isUser(roles);
             return;
         }

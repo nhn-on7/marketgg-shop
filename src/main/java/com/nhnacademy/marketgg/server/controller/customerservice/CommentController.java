@@ -1,14 +1,12 @@
 package com.nhnacademy.marketgg.server.controller.customerservice;
 
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
+import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.CommentRequest;
 import com.nhnacademy.marketgg.server.service.otoinquiry.OtoInquiryCommentService;
 import java.net.URI;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 박세완
  * @version 1.0.0
  */
-@RoleCheck(accessLevel = Role.ROLE_USER)
+@Auth
 @RestController
 @RequestMapping("/customer-services")
 @RequiredArgsConstructor

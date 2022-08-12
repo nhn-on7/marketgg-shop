@@ -1,6 +1,5 @@
-package com.nhnacademy.marketgg.server.controller;
+package com.nhnacademy.marketgg.server.controller.admin;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -10,13 +9,12 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.aop.AspectUtils;
 import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
-import com.nhnacademy.marketgg.server.controller.admin.AdminCsPostController;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
@@ -24,8 +22,7 @@ import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.service.post.PostService;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
-
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -58,8 +56,14 @@ class AdminCsPostControllerTest {
 
     private static final String DEFAULT_ADMIN_POST = "/admin/customer-services";
 
+    HttpHeaders httpHeaders;
+
     @BeforeEach
     void setUp() {
+        httpHeaders = new HttpHeaders();
+        httpHeaders.add(AspectUtils.AUTH_ID, UUID.randomUUID().toString());
+        httpHeaders.add(AspectUtils.WWW_AUTHENTICATE, "[\"ROLE_ADMIN\"]");
+
         postRequest = new PostRequest();
         postResponse = new PostResponse(1L, "702", "hello", "배송", "종료", LocalDateTime.now());
         updateRequest = new PostStatusUpdateRequest();
@@ -78,6 +82,7 @@ class AdminCsPostControllerTest {
 
         this.mockMvc.perform(
                 get(DEFAULT_ADMIN_POST + "/categories/{categoryId}/options/{optionType}/search", "702", "reason")
+                    .headers(httpHeaders)
                     .param("option", "배송")
                     .param("keyword", "hi")
                     .param("page", "0"))
@@ -93,6 +98,7 @@ class AdminCsPostControllerTest {
         willDoNothing().given(postService).updatePost(anyString(), anyLong(), any(PostRequest.class));
 
         this.mockMvc.perform(put(DEFAULT_ADMIN_POST + "/categories/{categoryId}/{postId}", "701", 1L)
+                .headers(httpHeaders)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(postRequest)))
                     .andExpect(status().isOk());
@@ -103,7 +109,8 @@ class AdminCsPostControllerTest {
     @Test
     @DisplayName("1:1 문의 상태 목록 조회")
     void testRetrieveStatusList() throws Exception {
-        this.mockMvc.perform(get(DEFAULT_ADMIN_POST + "/status"))
+        this.mockMvc.perform(get(DEFAULT_ADMIN_POST + "/status")
+                .headers(httpHeaders))
                     .andExpect(status().isOk());
     }
 
@@ -113,6 +120,7 @@ class AdminCsPostControllerTest {
         willDoNothing().given(postService).updateOtoInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
 
         this.mockMvc.perform(patch(DEFAULT_ADMIN_POST + "/{postId}/status", 1L)
+                .headers(httpHeaders)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateRequest)))
                     .andExpect(status().isOk());
