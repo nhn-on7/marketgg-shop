@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -37,6 +38,7 @@ import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerSer
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.post.DefaultPostService;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -99,12 +101,12 @@ class DefaultPostServiceTest {
         postResponse = new PostResponse(1L, FAQ_CODE, "Hello", " ", " ", LocalDateTime.now());
         CommentReady commentReady = new CommentReady("hello", "99990000111122223333444455556666", LocalDateTime.now());
         ready = new PostResponseForReady(2L, FAQ_CODE, "Hello", "hi", "환불", "미답변",
-                                         LocalDateTime.now(), LocalDateTime.now(),
-                                         List.of(commentReady));
+            LocalDateTime.now(), LocalDateTime.now(),
+            List.of(commentReady));
 
         ready2 = new PostResponseForReady(3L, OTO_CODE, "Hello", "hi", "환불", "미답변",
-                                          LocalDateTime.now(), LocalDateTime.now(),
-                                          List.of(commentReady));
+            LocalDateTime.now(), LocalDateTime.now(),
+            List.of(commentReady));
 
         searchRequest = new SearchRequest("hello", 0, PAGE_SIZE);
         memberInfo = Dummy.getDummyMemberInfo(1L, cart);
@@ -124,7 +126,7 @@ class DefaultPostServiceTest {
         ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(new Member(createRequest, cart)));
         given(categoryRepository.findById(anyString())).willReturn(
-                Optional.of(new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest))));
+            Optional.of(new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest))));
         given(postRepository.save(any(CustomerServicePost.class))).willReturn(post);
 
         postService.createPost(postRequest, memberInfo);
@@ -146,7 +148,7 @@ class DefaultPostServiceTest {
     void testRetrievePostList() {
         ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
         given(postRepository.findPostByCategoryAndMember(any(PageRequest.class), anyString(), anyLong())).willReturn(
-                Page.empty());
+            Page.empty());
 
         List<PostResponse> list = postService.retrievePostList(OTO_CODE, 0, memberInfo);
 
@@ -167,36 +169,52 @@ class DefaultPostServiceTest {
     @DisplayName("게시글 상세 조회")
     void testRetrievePost() throws Exception {
         ReflectionTestUtils.setField(memberInfo, "roles", Set.of("ROLE_ADMIN"));
-        ReflectionTestUtils.setField(categoryCreateRequest, "categoryCode", FAQ_CODE);
-        ReflectionTestUtils.setField(postRequest, "categoryCode", FAQ_CODE);
-        ReflectionTestUtils.setField(ready, "categoryCode", FAQ_CODE);
-        ReflectionTestUtils.setField(category, "id", FAQ_CODE);
+
+        ReflectionTestUtils.setField(post, "id", 1L);
         ReflectionTestUtils.setField(post, "category", category);
+
+        ReflectionTestUtils.setField(categoryCreateRequest, "categoryCode", FAQ_CODE);
+        ReflectionTestUtils.setField(category, "id", FAQ_CODE);
+
+        ReflectionTestUtils.setField(postRequest, "categoryCode", FAQ_CODE);
+
+        ReflectionTestUtils.setField(ready, "categoryCode", FAQ_CODE);
+
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postRepository.findByBoardNo(anyLong())).willReturn(ready);
         given(authRepository.getNameListByUuid(any())).willReturn(
-                List.of(new MemberNameResponse("99990000111122223333444455556666", "박세완")));
+            List.of(new MemberNameResponse("99990000111122223333444455556666", "박세완")));
 
         PostResponseForDetail postResponseForDetail = postService.retrievePost(1L, memberInfo);
 
         assertThat(postResponseForDetail.getCategoryCode()).isEqualTo(FAQ_CODE);
+        then(postRepository).should(times(1)).findById(anyLong());
+        then(postRepository).should(times(1)).findByBoardNo(anyLong());
+        then(authRepository).should(times(1)).getNameListByUuid(anyList());
     }
 
     @Test
     @DisplayName("게시글 상세 조회 (1:1)")
     void testRetrievePostForOto() throws Exception {
-        ReflectionTestUtils.setField(categoryCreateRequest, "categoryCode", OTO_CODE);
-        ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
-        ReflectionTestUtils.setField(category, "id", OTO_CODE);
         ReflectionTestUtils.setField(post, "category", category);
+        ReflectionTestUtils.setField(post, "id", 1L);
+
+        ReflectionTestUtils.setField(categoryCreateRequest, "categoryCode", OTO_CODE);
+        ReflectionTestUtils.setField(category, "id", OTO_CODE);
+
+        ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
+
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postRepository.findOwnOtoInquiry(anyLong(), anyLong())).willReturn(ready2);
         given(authRepository.getNameListByUuid(any())).willReturn(
-                List.of(new MemberNameResponse("99990000111122223333444455556666", "박세완")));
+            List.of(new MemberNameResponse("99990000111122223333444455556666", "박세완")));
 
         PostResponseForDetail postResponseForDetail = postService.retrievePost(1L, memberInfo);
 
         assertThat(postResponseForDetail.getCategoryCode()).isEqualTo(OTO_CODE);
+        then(postRepository).should(times(1)).findById(anyLong());
+        then(postRepository).should(times(1)).findOwnOtoInquiry(anyLong(), anyLong());
+        then(authRepository).should(times(1)).getNameListByUuid(anyList());
     }
 
     @Test
@@ -204,7 +222,7 @@ class DefaultPostServiceTest {
     void testSearchForCategory() throws Exception {
         ReflectionTestUtils.setField(postRequest, "categoryCode", NOTICE_CODE);
         given(searchRepository.searchBoardWithCategoryCode(anyString(), any(SearchRequest.class),
-                                                           anyString())).willReturn(List.of(postResponse));
+            anyString())).willReturn(List.of(postResponse));
 
         List<PostResponse> responses = postService.searchForCategory(NOTICE_CODE, searchRequest, memberInfo);
 
@@ -226,7 +244,7 @@ class DefaultPostServiceTest {
     void testSearchForOption() throws Exception {
         ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
         given(searchRepository.searchBoardWithOption(anyString(), anyString(), any(SearchRequest.class),
-                                                     anyString())).willReturn(List.of(postResponse));
+            anyString())).willReturn(List.of(postResponse));
         List<PostResponse> responses = postService.searchForOption(OTO_CODE, searchRequest, "reason", "배송");
 
         assertThat(responses).hasSize(1);
