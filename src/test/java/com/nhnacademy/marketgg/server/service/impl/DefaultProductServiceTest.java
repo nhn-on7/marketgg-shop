@@ -3,7 +3,6 @@ package com.nhnacademy.marketgg.server.service.impl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -22,6 +21,7 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
@@ -40,7 +40,7 @@ import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.label.LabelRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.productlabel.ProductLabelRepository;
-import com.nhnacademy.marketgg.server.service.image.ImageService;
+import com.nhnacademy.marketgg.server.service.file.FileService;
 import com.nhnacademy.marketgg.server.service.product.DefaultProductService;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -76,15 +76,11 @@ class DefaultProductServiceTest {
     @Mock
     private ProductRepository productRepository;
     @Mock
-    private AssetRepository assetRepository;
-    @Mock
-    private ImageRepository imageRepository;
-    @Mock
     private LabelRepository labelRepository;
     @Mock
     private ElasticProductRepository elasticProductRepository;
     @Mock
-    private ImageService imageService;
+    private FileService fileService;
     @Spy
     private ProductLabelRepository productLabelRepository;
 
@@ -102,6 +98,7 @@ class DefaultProductServiceTest {
     private static Image image;
     private static Product product;
     private static SearchProductResponse searchProductResponse;
+    private static ImageResponse imageResponse;
 
     @BeforeAll
     static void beforeAll() {
@@ -155,10 +152,12 @@ class DefaultProductServiceTest {
         ReflectionTestUtils.setField(product, "id", 1L);
 
         searchProductResponse = new SearchProductResponse();
+
+        imageResponse = new ImageResponse("이미지 응답", 1L, "이미지 주소", 1, asset);
     }
 
     @Test
-    @DisplayName("상품 등록시 의존관계가 있는 asset, image, category repository 에서 모든 행위가 이루어지는지 검증 ")
+    @DisplayName("상품 등록시 의존관계가 있는 모든 repository에서 행위가 이루어지는지 검증 ")
     void testProductCreation() throws IOException {
         URL url = getClass().getClassLoader().getResource("lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
@@ -169,17 +168,14 @@ class DefaultProductServiceTest {
 
 
         given(categoryRepository.findById(any())).willReturn(Optional.ofNullable(category));
-        given(assetRepository.save(any(Asset.class))).willReturn(asset);
         given(productRepository.save(any(Product.class))).willReturn(product);
         given(labelRepository.findById(anyLong())).willReturn(Optional.ofNullable(label));
-
+        given(fileService.uploadImage(any(MockMultipartFile.class))).willReturn(imageResponse);
 
         productService.createProduct(productRequest, file);
 
         verify(productRepository, atLeastOnce()).save(any());
         verify(categoryRepository, atLeastOnce()).findById(any());
-        verify(imageRepository, atLeastOnce()).saveAll(any());
-        verify(assetRepository, atLeastOnce()).save(any());
     }
 
     @Test
@@ -188,16 +184,10 @@ class DefaultProductServiceTest {
 
         URL url = getClass().getClassLoader().getResource("lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
-        List<Image> images = List.of(image);
 
         MockMultipartFile file =
             new MockMultipartFile("image", "test.png", "image/png",
                 new FileInputStream(filePath));
-
-        given(imageService.parseImages(any(List.class), any(Asset.class))).willReturn(images);
-        given(assetRepository.save(any(Asset.class))).willReturn(asset);
-        given(imageRepository.saveAll(any())).willReturn(List.of());
-
 
         assertThatThrownBy(
             () -> productService.createProduct(productRequest, file)).hasMessageContaining(
@@ -207,9 +197,6 @@ class DefaultProductServiceTest {
     @Test
     @DisplayName("상품 목록 조회 테스트")
     void testRetrieveProducts() {
-        // List<ElasticProduct> list = List.of(elasticProduct);
-        // given(elasticProductRepository.findAll(PageRequest.of(0, 1))).willReturn(
-        //         new PageImpl<>(list, PageRequest.of(0, 1), 1));
         List<ProductResponse> list = List.of(productResponse);
         Page<ProductResponse> page = new PageImpl<>(list, PageRequest.of(0, 1), 1);
         given(productRepository.findAllProducts(PageRequest.of(0, 1))).willReturn(page);
@@ -218,7 +205,6 @@ class DefaultProductServiceTest {
             productService.retrieveProducts(PageRequest.of(0, 1));
 
         assertThat(productResponses).isNotNull();
-        // then(elasticProductRepository).should().findAll(any(PageRequest.class));
         then(productRepository).should().findAllProducts(any(PageRequest.class));
     }
 
@@ -253,15 +239,14 @@ class DefaultProductServiceTest {
         ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest();
         ReflectionTestUtils.setField(productUpdateRequest, "categoryCode", "001");
 
-        given(assetRepository.save(any(Asset.class))).willReturn(asset);
         given(categoryRepository.findById(any())).willReturn(Optional.ofNullable(category));
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
+        given(fileService.uploadImage(any(MockMultipartFile.class))).willReturn(imageResponse);
 
         productService.updateProduct(productUpdateRequest, file, 1L);
 
         then(productRepository).should().save(any());
         then(categoryRepository).should().findById(any());
-        then(assetRepository).should().save(any());
     }
 
     @Test

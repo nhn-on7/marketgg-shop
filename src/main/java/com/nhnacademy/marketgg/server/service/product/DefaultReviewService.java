@@ -3,9 +3,9 @@ package com.nhnacademy.marketgg.server.service.product;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
-import com.nhnacademy.marketgg.server.entity.Image;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Review;
 import com.nhnacademy.marketgg.server.entity.event.GivenCouponEvent;
@@ -14,12 +14,10 @@ import com.nhnacademy.marketgg.server.exception.asset.AssetNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.review.ReviewNotFoundException;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
-import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.review.ReviewRepository;
-import com.nhnacademy.marketgg.server.service.image.ImageService;
+import com.nhnacademy.marketgg.server.service.file.FileService;
 import java.io.IOException;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -40,24 +38,19 @@ public class DefaultReviewService implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
     private final AssetRepository assetRepository;
-    private final ImageRepository imageRepository;
     private final ApplicationEventPublisher publisher;
-    private final ImageService imageService;
+    private final FileService fileService;
 
     @Transactional
     @Override
-    public void createReview(final ReviewCreateRequest reviewRequest, List<MultipartFile> images,
+    public void createReview(final ReviewCreateRequest reviewRequest, MultipartFile image,
                              final String uuid) throws IOException {
 
         Member member = memberRepository.findByUuid(uuid).orElseThrow(MemberNotFoundException::new);
 
-        Asset asset = assetRepository.save(Asset.create());
+        ImageResponse imageResponse = fileService.uploadImage(image);
 
-        List<Image> parseImages = imageService.parseImages(images, asset);
-
-        imageRepository.saveAll(parseImages);
-
-        reviewRepository.save(new Review(reviewRequest, member, asset));
+        reviewRepository.save(new Review(reviewRequest, member, imageResponse.getAsset()));
 
         publisher.publishEvent(SavePointEvent.dispensePointForImageReview(member));
     }

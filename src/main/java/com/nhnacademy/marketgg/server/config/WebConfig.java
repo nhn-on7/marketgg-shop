@@ -1,5 +1,8 @@
 package com.nhnacademy.marketgg.server.config;
 
+import com.nhnacademy.marketgg.server.service.storage.LocalStorageService;
+import com.nhnacademy.marketgg.server.service.storage.NhnStorageService;
+import com.nhnacademy.marketgg.server.service.storage.StorageService;
 import java.time.Duration;
 import javax.servlet.Filter;
 import org.springframework.boot.web.client.RestTemplateBuilder;

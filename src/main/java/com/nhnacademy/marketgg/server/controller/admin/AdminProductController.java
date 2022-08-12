@@ -10,10 +10,12 @@ import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import java.io.IOException;
 import java.net.URI;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,8 +51,13 @@ public class AdminProductController {
      * @since 1.0.0
      */
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Void> createProduct(@RequestPart final ProductCreateRequest productRequest,
+    public ResponseEntity<Void> createProduct(@RequestPart @Valid final ProductCreateRequest productRequest,
+                                              BindingResult bindingResult,
                                               @RequestPart final MultipartFile image) throws IOException {
+
+        if (bindingResult.hasErrors()) {
+            throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
+        }
 
         this.productService.createProduct(productRequest, image);
 
@@ -106,9 +113,15 @@ public class AdminProductController {
      * @since 1.0.0
      */
     @PutMapping("/{productId}")
-    public ResponseEntity<Void> updateProduct(@RequestPart final ProductUpdateRequest productRequest,
+    public ResponseEntity<Void> updateProduct(@RequestPart @Valid final ProductUpdateRequest productRequest,
+                                              BindingResult bindingResult,
                                               @RequestPart final MultipartFile image,
                                               @PathVariable final Long productId) throws IOException {
+
+        if (bindingResult.hasErrors()) {
+            throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
+        }
+
         this.productService.updateProduct(productRequest, image, productId);
 
         return ResponseEntity.status(HttpStatus.OK)
