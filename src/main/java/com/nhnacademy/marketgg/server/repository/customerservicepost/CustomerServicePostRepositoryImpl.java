@@ -44,8 +44,6 @@ public class CustomerServicePostRepositoryImpl
                                                                         csPost.status,
                                                                         csPost.createdAt,
                                                                         csPost.updatedAt))
-                                                    .innerJoin(csComment)
-                                                    .on(csComment.customerServicePost.id.eq(csPost.id))
                                                     .fetchOne(), getCommentList(postNo));
     }
 
