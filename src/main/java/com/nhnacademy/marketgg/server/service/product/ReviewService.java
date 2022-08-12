@@ -23,7 +23,7 @@ public interface ReviewService {
      * @param reviewRequest - 리뷰 생성을 위한 dto입니다.
      * @param uuid          - 회원을 찾기 위한 uuid값입니다.
      */
-    void createReview(final ReviewCreateRequest reviewRequest, final  MultipartFile image, final String uuid)
+    void createReview(final ReviewCreateRequest reviewRequest, final MultipartFile image, final String uuid)
         throws IOException;
 
     /**
