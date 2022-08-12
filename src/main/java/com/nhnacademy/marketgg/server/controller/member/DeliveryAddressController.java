@@ -1,8 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.member;
 
 import com.nhnacademy.marketgg.server.annotation.Auth;
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressUpdateRequest;
@@ -11,6 +9,7 @@ import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.service.deliveryaddress.DeliveryAddressService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,8 +23,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 
 /**
@@ -51,7 +48,8 @@ public class DeliveryAddressController {
      */
     @PostMapping("/delivery-address")
     public ResponseEntity<CommonResponse> createDeliveryAddress(final MemberInfo memberInfo,
-                                                                @Validated @RequestBody final DeliveryAddressCreateRequest createRequest) {
+                                                                @Validated @RequestBody
+                                                                final DeliveryAddressCreateRequest createRequest) {
 
         deliveryAddressService.createDeliveryAddress(memberInfo, createRequest);
 
@@ -70,7 +68,8 @@ public class DeliveryAddressController {
      */
     @PutMapping("/delivery-address")
     public ResponseEntity<CommonResponse> updateDeliveryAddress(final MemberInfo memberInfo,
-                                                                @Validated @RequestBody final DeliveryAddressUpdateRequest updateRequest) {
+                                                                @Validated @RequestBody
+                                                                final DeliveryAddressUpdateRequest updateRequest) {
 
         deliveryAddressService.updateDeliveryAddress(memberInfo, updateRequest);
 

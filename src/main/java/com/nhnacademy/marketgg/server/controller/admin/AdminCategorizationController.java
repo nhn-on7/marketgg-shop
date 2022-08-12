@@ -1,7 +1,5 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.response.category.CategorizationRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.category.CategorizationService;
 import java.net.URI;

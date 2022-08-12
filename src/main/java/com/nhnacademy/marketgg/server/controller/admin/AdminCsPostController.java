@@ -1,8 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.constant.OtoStatus;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
@@ -61,21 +59,21 @@ public class AdminCsPostController {
      */
     @GetMapping("/categories/{categoryId}/options/{optionType}/search")
     public ResponseEntity<List<PostResponse>> searchPostListForOption(
-            @PathVariable @Size(min = 1, max = 6) final String categoryId,
-            @PathVariable @Min(1) final String optionType,
-            @RequestParam @Min(1) final String option,
-            @RequestParam @Size(min = 1, max = 30) final String keyword,
-            @RequestParam @Min(0) final Integer page)
-            throws ParseException, JsonProcessingException {
+        @PathVariable @Size(min = 1, max = 6) final String categoryId,
+        @PathVariable @Min(1) final String optionType,
+        @RequestParam @Min(1) final String option,
+        @RequestParam @Size(min = 1, max = 30) final String keyword,
+        @RequestParam @Min(0) final Integer page)
+        throws ParseException, JsonProcessingException {
 
         List<PostResponse> responses =
-                postService.searchForOption(categoryId, new SearchRequest(keyword, page, PAGE_SIZE), optionType,
-                                            option);
+            postService.searchForOption(categoryId, new SearchRequest(keyword, page, PAGE_SIZE), optionType,
+                option);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/options/" + optionType
-                                             + "/search?option=" + option))
+                                 DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/options/" + optionType
+                                     + "/search?option=" + option))
                              .body(responses);
     }
 

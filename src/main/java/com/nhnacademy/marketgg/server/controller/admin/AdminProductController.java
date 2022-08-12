@@ -50,7 +50,7 @@ public class AdminProductController {
      * @throws IOException - IOException 을 던집니다.
      * @since 1.0.0
      */
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<Void> createProduct(@RequestPart @Valid final ProductCreateRequest productRequest,
                                               BindingResult bindingResult,
                                               @RequestPart final MultipartFile image) throws IOException {
@@ -75,7 +75,8 @@ public class AdminProductController {
      */
     @GetMapping
     public ResponseEntity<CommonResponse> retrieveProducts(DefaultPageRequest pageRequest) {
-        DefaultPageResult<ProductResponse> productList = this.productService.retrieveProducts(pageRequest.getPageable());
+        DefaultPageResult<ProductResponse> productList =
+            this.productService.retrieveProducts(pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT))
