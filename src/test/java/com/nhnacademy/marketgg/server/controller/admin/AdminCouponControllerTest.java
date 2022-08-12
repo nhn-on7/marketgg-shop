@@ -12,10 +12,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.aop.AspectUtils;
 import com.nhnacademy.marketgg.server.controller.admin.AdminCouponController;
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.service.coupon.CouponService;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +26,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -45,8 +48,14 @@ class AdminCouponControllerTest {
     Pageable pageable = PageRequest.of(0, 20);
     CouponDto couponDto;
 
+    HttpHeaders httpHeaders;
+
     @BeforeEach
     void setUp() {
+        httpHeaders = new HttpHeaders();
+        httpHeaders.add(AspectUtils.AUTH_ID, UUID.randomUUID().toString());
+        httpHeaders.add(AspectUtils.WWW_AUTHENTICATE, "[\"ROLE_ADMIN\"]");
+
         couponDto = new CouponDto();
         ReflectionTestUtils.setField(couponDto, "id", 1L);
         ReflectionTestUtils.setField(couponDto, "name", "신규 쿠폰");
@@ -64,6 +73,7 @@ class AdminCouponControllerTest {
         willDoNothing().given(couponService).createCoupon(couponDto);
 
         this.mockMvc.perform(post(DEFAULT_COUPON)
+                .headers(httpHeaders)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
                     .andExpect(status().isCreated());
@@ -76,7 +86,8 @@ class AdminCouponControllerTest {
     void testRetrieveCoupon() throws Exception {
         given(couponService.retrieveCoupon(anyLong())).willReturn(null);
 
-        this.mockMvc.perform(get(DEFAULT_COUPON + "/" + 1L))
+        this.mockMvc.perform(get(DEFAULT_COUPON + "/" + 1L)
+                .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(couponService).should().retrieveCoupon(anyLong());
@@ -87,7 +98,8 @@ class AdminCouponControllerTest {
     void testRetrieveCoupons() throws Exception {
         given(couponService.retrieveCoupons(pageable)).willReturn(List.of());
 
-        this.mockMvc.perform(get(DEFAULT_COUPON))
+        this.mockMvc.perform(get(DEFAULT_COUPON)
+                .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(couponService).should().retrieveCoupons(pageable);
@@ -101,8 +113,9 @@ class AdminCouponControllerTest {
         willDoNothing().given(couponService).updateCoupon(1L, couponDto);
 
         this.mockMvc.perform(put(DEFAULT_COUPON + "/" + 1L)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(requestBody))
+                .headers(httpHeaders)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
                     .andExpect(status().isOk());
 
         then(couponService).should().updateCoupon(anyLong(), any(CouponDto.class));
@@ -113,7 +126,8 @@ class AdminCouponControllerTest {
     void testDeleteCoupon() throws Exception {
         willDoNothing().given(couponService).deleteCoupon(anyLong());
 
-        this.mockMvc.perform(delete(DEFAULT_COUPON + "/" + 1L))
+        this.mockMvc.perform(delete(DEFAULT_COUPON + "/" + 1L)
+                .headers(httpHeaders))
                     .andExpect(status().isNoContent());
 
         then(couponService).should().deleteCoupon(anyLong());
