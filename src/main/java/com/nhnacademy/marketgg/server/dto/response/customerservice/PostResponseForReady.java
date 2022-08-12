@@ -36,8 +36,9 @@ public class PostResponseForReady {
     /**
      * Query DSL 을 통해 받아온 DTO 값으로 원하는 Response DTO 를 생성합니다.
      *
-     * @param dto -
-     * @param commentList -
+     * @param dto - 게시글 상세내용을 담은 DTO 입니다.
+     * @param commentList - 해당 1:1 문의의 댓글 목록입니다.
+     * @since 1.0.0
      */
     public PostResponseForReady(final PostResponseDto dto, final List<CommentReady> commentList) {
         this.id = dto.getId();
