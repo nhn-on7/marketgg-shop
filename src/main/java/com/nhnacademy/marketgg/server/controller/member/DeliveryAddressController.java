@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.member;
 
+import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
@@ -33,7 +34,7 @@ import java.util.List;
  * @author 김훈민
  * @version 1.0.0
  */
-@RoleCheck(accessLevel = Role.ROLE_USER)
+@Auth
 @RestController
 @RequestMapping("/members")
 @RequiredArgsConstructor
