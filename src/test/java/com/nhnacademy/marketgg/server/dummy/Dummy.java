@@ -1,14 +1,19 @@
 package com.nhnacademy.marketgg.server.dummy;
 
+import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.entity.Asset;
@@ -22,6 +27,9 @@ import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.entity.Product;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -147,6 +155,14 @@ public class Dummy {
         return new MemberInfo(id, cart, null, 'M', birthDate, ggpassUpdatedAt);
     }
 
+    public static AuthInfo getDummyAuthInfo() {
+        AuthInfo authInfo = new AuthInfo();
+        ReflectionTestUtils.setField(authInfo, "email", "dummy@dooray.com");
+        ReflectionTestUtils.setField(authInfo, "name", "김더미");
+        ReflectionTestUtils.setField(authInfo, "phoneNumber", "010-1111-1111");
+        return authInfo;
+    }
+
     public static Cart getDummyCart(Long id) {
         Cart cart = new Cart();
         ReflectionTestUtils.setField(cart, "id", id);
@@ -194,4 +210,17 @@ public class Dummy {
         return new SearchRequest("hi", 0, 10);
     }
 
+    public static OrderFormResponse getDummyOrderFormResponse() {
+        MemberInfo memberInfo = getDummyMemberInfo(1L, new Cart());
+        AuthInfo authInfo = getDummyAuthInfo();
+        return new OrderFormResponse(List.of(), memberInfo.getId(), authInfo.getName(), authInfo.getEmail(),
+                                     memberInfo.getMemberGrade(), true, List.of(), 10000,
+                                     List.of(), List.of(), 50_000L);
+    }
+
+    public static OrderDetailRetrieveResponse getDummyOrderDetailResponse() {
+        return new OrderDetailRetrieveResponse(1L, 1L, 50_000L, "결제대기",
+                                               1000, null, 12345, "주소",
+                                               "상세주소", LocalDateTime.now());
+    }
 }
