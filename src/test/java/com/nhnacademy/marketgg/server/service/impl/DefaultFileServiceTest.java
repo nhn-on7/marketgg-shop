@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 
 import com.nhnacademy.marketgg.server.dto.request.file.ImageCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
@@ -87,7 +88,7 @@ class DefaultFileServiceTest {
 
         fileService.uploadImage(imageFile);
 
-        then(storageService).should().uploadImage(any(MockMultipartFile.class));
+        then(storageService).should(times(1)).uploadImage(any(MockMultipartFile.class));
 
     }
 
@@ -103,7 +104,7 @@ class DefaultFileServiceTest {
 
         fileService.uploadImage(imageFile);
 
-        then(storageService).should().uploadImage(any(MockMultipartFile.class));
+        then(storageService).should(times(1)).uploadImage(any(MockMultipartFile.class));
 
     }
 
@@ -114,6 +115,6 @@ class DefaultFileServiceTest {
 
         fileService.retrieveImage(1L);
 
-        then(imageRepository).should().queryById(anyLong());
+        then(imageRepository).should(times(1)).queryById(anyLong());
     }
 }

@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.file.ImageCreateRequest;
@@ -59,7 +60,7 @@ class NhnStorageServiceTest {
         assertThat(token).isNotNull();
 
 
-        then(restTemplate).should().exchange(anyString(), any(), any(HttpEntity.class), any(Class.class));
+        then(restTemplate).should(times(1)).exchange(anyString(), any(), any(HttpEntity.class), any(Class.class));
     }
 
     @Test

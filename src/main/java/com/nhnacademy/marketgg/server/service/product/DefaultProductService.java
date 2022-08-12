@@ -12,7 +12,6 @@ import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticProductRepository;
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
-import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.entity.Product;
@@ -20,16 +19,13 @@ import com.nhnacademy.marketgg.server.entity.ProductLabel;
 import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundException;
 import com.nhnacademy.marketgg.server.exception.label.LabelNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
-import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
 import com.nhnacademy.marketgg.server.repository.label.LabelRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.productlabel.ProductLabelRepository;
 import com.nhnacademy.marketgg.server.service.file.FileService;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Page;
@@ -63,7 +59,8 @@ public class DefaultProductService implements ProductService {
         Category category = categoryRepository.findById(productRequest.getCategoryCode())
                                               .orElseThrow(CategoryNotFoundException::new);
 
-        Product product = productRepository.save(new Product(productRequest, imageResponse.getAsset(), category));
+        Product product =
+            productRepository.save(new Product(productRequest, imageResponse.getAsset(), category));
 
         ProductLabel.Pk pk = new ProductLabel.Pk(product.getId(), productRequest.getLabelNo());
 
@@ -78,7 +75,7 @@ public class DefaultProductService implements ProductService {
 
         Page<ProductResponse> allProducts = productRepository.findAllProducts(pageable);
 
-        return new DefaultPageResult(allProducts.getContent(), allProducts.getTotalElements(),
+        return new DefaultPageResult<>(allProducts.getContent(), allProducts.getTotalElements(),
                                      allProducts.getTotalPages(), allProducts.getNumber());
 
     }
