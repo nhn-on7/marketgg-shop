@@ -61,7 +61,8 @@ public class SearchAdapter implements SearchRepository {
 
         Map<String, String> sort = this.buildSort(priceSortType);
         HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
-                new SearchRequestBodyForBool<>(categoryCode, sort, request, translator.converter(request.getRequest()), PRODUCT)), this.buildHeaders());
+                new SearchRequestBodyForBool<>(categoryCode, sort, request, translator.converter(request.getRequest()),
+                                               PRODUCT)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, PRODUCT).getBody());
     }
@@ -87,7 +88,8 @@ public class SearchAdapter implements SearchRepository {
 
         Map<String, String> sort = this.buildSort(null);
         HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
-                new SearchRequestBodyForBool<>(categoryCode, sort, request, translator.converter(request.getRequest()), option)), this.buildHeaders());
+                new SearchRequestBodyForBool<>(categoryCode, sort, request, translator.converter(request.getRequest()),
+                                               option)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, BOARD).getBody());
     }
