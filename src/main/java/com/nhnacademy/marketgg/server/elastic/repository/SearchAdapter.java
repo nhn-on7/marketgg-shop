@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequestBody;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequestBodyForBool;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
 import com.nhnacademy.marketgg.server.util.KoreanToEnglishTranslator;
@@ -74,7 +73,7 @@ public class SearchAdapter implements SearchRepository {
 
         Map<String, String> sort = this.buildSort(priceSortType);
         HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
-                new SearchRequestBody<>(sort, request, translator.converter(request.getRequest()))),
+                new SearchRequestBodyForBool<>(sort, request, translator.converter(request.getRequest()))),
                                                             this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, PRODUCT).getBody());
