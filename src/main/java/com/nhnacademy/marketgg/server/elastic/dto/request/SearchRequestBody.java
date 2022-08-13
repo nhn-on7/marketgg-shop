@@ -49,11 +49,12 @@ public class SearchRequestBody<T> {
      */
     private final Query query;
 
-    public SearchRequestBody(final T sortMap, final SearchRequest request) {
+    public SearchRequestBody(final T sortMap, final SearchRequest request, final String convertString) {
         this.sort = Collections.singletonList(sortMap);
         this.from = request.getPage();
         this.size = request.getSize();
-        this.query = new Query(new MultiMatch(request.getRequest(), FUZZINESS, DEFAULT_PRODUCT_FIELD));
+        this.query = new Query(List.of(new MultiMatch(request.getRequest(), FUZZINESS, DEFAULT_PRODUCT_FIELD),
+                               new MultiMatch(convertString, FUZZINESS, DEFAULT_PRODUCT_FIELD)));
     }
 
 }

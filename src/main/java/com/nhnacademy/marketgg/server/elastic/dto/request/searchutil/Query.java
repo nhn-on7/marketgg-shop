@@ -3,6 +3,8 @@ package com.nhnacademy.marketgg.server.elastic.dto.request.searchutil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+
 /**
  * 일반적인 쿼리 질의어를 지정할 수 있습니다..
  *
@@ -13,6 +15,6 @@ import lombok.Getter;
 @Getter
 public class Query {
 
-    private MultiMatch multi_match;
+    private List<MultiMatch> multi_match;
 
 }
