@@ -129,5 +129,4 @@ public class SearchRequestBodyForBool<T> {
         return document.compareTo("board") == 0;
     }
 
-
 }
