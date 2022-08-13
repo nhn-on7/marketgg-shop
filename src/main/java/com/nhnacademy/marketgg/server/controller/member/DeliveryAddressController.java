@@ -82,15 +82,15 @@ public class DeliveryAddressController {
      * 회원이 배송지를 삭제할 때 사용하는 DeleteMapping 메소드 입니다.
      *
      * @param memberInfo        - 배송지를 삭제하는 회원의 정보입니다.
-     * @param deliveryAddressNo - 삭제할 배송지의 번호 입니다.
+     * @param deliveryAddressId - 삭제할 배송지의 번호 입니다.
      * @return OK 상태 코드를 반환합니다.
      * @since 1.0.0
      */
-    @DeleteMapping("/delivery-address/{deliveryAddressNo}")
+    @DeleteMapping("/delivery-address/{deliveryAddressId}")
     public ResponseEntity<CommonResponse> deleteDeliveryAddress(final MemberInfo memberInfo,
-                                                                @PathVariable final Long deliveryAddressNo) {
+                                                                @PathVariable final Long deliveryAddressId) {
 
-        deliveryAddressService.deleteDeliveryAddress(memberInfo, deliveryAddressNo);
+        deliveryAddressService.deleteDeliveryAddress(memberInfo, deliveryAddressId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
