@@ -45,7 +45,7 @@ class ProductInquiryPostControllerTest {
     ProductInquiryPostService productInquiryPostService;
 
     Pageable pageable = PageRequest.of(0, 20);
-    Page<ProductInquiryByProductResponse> responses1 = new PageImpl<>(List.of(), pageable, 0);
+    Page<ProductInquiryByProductResponse> responses = new PageImpl<>(List.of(), pageable, 0);
 
     @Test
     @DisplayName("상품 문의 등록 테스트")
@@ -72,7 +72,7 @@ class ProductInquiryPostControllerTest {
     @DisplayName("상품에 대한 전체 문의 조회 테스트")
     void testRetrieveProductInquiryByProductId() throws Exception {
         given(productInquiryPostService.retrieveProductInquiryByProductId(anyLong(), any(PageRequest.class)))
-            .willReturn(responses1);
+            .willReturn(responses);
 
         this.mockMvc.perform(get("/products/" + 1L + "/inquiries")
                 .contentType(MediaType.APPLICATION_JSON))

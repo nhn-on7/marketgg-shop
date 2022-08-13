@@ -3,8 +3,6 @@ package com.nhnacademy.marketgg.server.controller.member;
 import static org.springframework.http.HttpStatus.OK;
 
 import com.nhnacademy.marketgg.server.annotation.Auth;
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.annotation.UUID;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
@@ -25,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -169,7 +168,8 @@ public class MemberController {
      */
     @PostMapping("/coupons")
     public ResponseEntity<CommonResponse> createGivenCoupons(final MemberInfo memberInfo,
-                                                             @Valid @RequestBody final GivenCouponCreateRequest givenCouponRequest) {
+                                                             @Valid @RequestBody final
+                                                             GivenCouponCreateRequest givenCouponRequest) {
 
         givenCouponService.createGivenCoupons(memberInfo, givenCouponRequest);
 
@@ -199,11 +199,10 @@ public class MemberController {
      * 한 회원이 상품에 대해 문의한 전체 상품 문의 글을 조회하는 GET Mapping 을 지원합니다.
      *
      * @param memberInfo - 상품 문의 글을 조회할 회원의 정보 입니다.
-     * @return - List<ProductInquiryResponse> 를 담은 응답 객체를 반환 합니다.
+     * @return - List<ProductInquiryByMemberResponse> 를 담은 응답 객체를 반환 합니다.
      * @author 민아영
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.LOGIN)
     @GetMapping("/product-inquiries")
     public ResponseEntity<CommonResponse> retrieveProductInquiry(final MemberInfo memberInfo,
                                                                  final Pageable pageable) {
@@ -211,7 +210,6 @@ public class MemberController {
             = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create("/members/product-inquiries"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(new SingleResponse<>(productInquiryResponses));
     }
