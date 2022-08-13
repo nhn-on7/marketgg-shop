@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -47,12 +48,12 @@ public class ProductInquiryPost {
     private Member member;
 
     @Column
-    @NotNull(message = "제목은 필수 입력값입니다.")
+    @NotBlank(message = "제목은 필수 입력값입니다.")
     @Size(max = 50)
     private String title;
 
     @Column
-    @NotNull(message = "내용은 필수 입력값입니다.")
+    @NotBlank(message = "내용은 필수 입력값입니다.")
     @Size(max = 200)
     private String content;
 
@@ -97,8 +98,8 @@ public class ProductInquiryPost {
         this.createdDate = LocalDateTime.now();
     }
 
-    public void updateInquiry(ProductInquiryRequest inquiryReply) {
-        this.adminReply = inquiryReply.getAdminReply();
+    public void updateInquiry(String inquiryReply) {
+        this.adminReply = inquiryReply;
     }
 
 }

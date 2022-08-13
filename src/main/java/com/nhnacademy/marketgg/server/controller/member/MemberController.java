@@ -14,14 +14,17 @@ import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
 import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.member.MemberService;
+import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -50,6 +53,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final GivenCouponService givenCouponService;
+    private final ProductInquiryPostService productInquiryPostService;
 
     /**
      * 선택한 회원의 GG 패스 갱신일시를 반환하는 GET Mapping 을 지원합니다.
@@ -159,12 +163,13 @@ public class MemberController {
      * @param memberInfo         - 쿠폰을 등록할 회원의 정보입니다.
      * @param givenCouponRequest - 등록할 쿠폰 번호 정보를 가진 요청 객체입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     * @author 민아영
      * @since 1.0.0
      */
     @PostMapping("/coupons")
     public ResponseEntity<CommonResponse> createGivenCoupons(final MemberInfo memberInfo,
-                                                             @Valid @RequestBody
-                                                             final GivenCouponCreateRequest givenCouponRequest) {
+                                                             @Valid @RequestBody final
+                                                             GivenCouponCreateRequest givenCouponRequest) {
 
         givenCouponService.createGivenCoupons(memberInfo, givenCouponRequest);
 
@@ -178,6 +183,7 @@ public class MemberController {
      *
      * @param memberInfo - 쿠폰을 등록할 회원의 정보입니다.
      * @return 회원에게 지급된 쿠폰 목록을 가진 DTO 객체를 반환합니다.
+     * @author 민아영
      * @since 1.0.0
      */
     @GetMapping("/coupons")
@@ -187,6 +193,25 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(new ListResponse<>(givenCouponResponses));
+    }
+
+    /**
+     * 한 회원이 상품에 대해 문의한 전체 상품 문의 글을 조회하는 GET Mapping 을 지원합니다.
+     *
+     * @param memberInfo - 상품 문의 글을 조회할 회원의 정보 입니다.
+     * @return - List<ProductInquiryByMemberResponse> 를 담은 응답 객체를 반환 합니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
+    @GetMapping("/product-inquiries")
+    public ResponseEntity<CommonResponse> retrieveProductInquiry(final MemberInfo memberInfo,
+                                                                 final Pageable pageable) {
+        Page<ProductInquiryByMemberResponse> productInquiryResponses
+            = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(new SingleResponse<>(productInquiryResponses));
     }
 
 }

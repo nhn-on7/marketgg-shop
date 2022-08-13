@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.repository.productinquirypost;
 
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import com.nhnacademy.marketgg.server.entity.QProductInquiryPost;
 import com.querydsl.core.types.Projections;
@@ -19,12 +20,12 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Page<ProductInquiryResponse> findAllByProductNo(final Long id, final Pageable pageable) {
+    public Page<ProductInquiryByProductResponse> findAllByProductNo(final Long id, final Pageable pageable) {
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
-        List<ProductInquiryResponse> result = from(productInquiryPost)
-            .select(Projections.constructor(ProductInquiryResponse.class,
-                productInquiryPost.member,
+        List<ProductInquiryByProductResponse> result = from(productInquiryPost)
+            .select(Projections.constructor(ProductInquiryByProductResponse.class,
+                productInquiryPost.member.uuid,
                 productInquiryPost.title,
                 productInquiryPost.content,
                 productInquiryPost.isSecret,
@@ -39,15 +40,15 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Page<ProductInquiryResponse> findAllByMemberNo(final Long id, final Pageable pageable) {
+    public Page<ProductInquiryByMemberResponse> findAllByMemberNo(final Long id, final Pageable pageable) {
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
-        List<ProductInquiryResponse> result = from(productInquiryPost)
-            .select(Projections.constructor(ProductInquiryResponse.class,
-                productInquiryPost.member,
+        List<ProductInquiryByMemberResponse> result = from(productInquiryPost)
+            .select(Projections.constructor(ProductInquiryByMemberResponse.class,
+                productInquiryPost.member.uuid,
+                productInquiryPost.pk.productNo,
                 productInquiryPost.title,
                 productInquiryPost.content,
-                productInquiryPost.isSecret,
                 productInquiryPost.adminReply,
                 productInquiryPost.createdDate))
             .where(productInquiryPost.member.id.eq(id))

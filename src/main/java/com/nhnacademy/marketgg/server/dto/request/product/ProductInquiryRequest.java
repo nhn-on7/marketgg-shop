@@ -24,6 +24,4 @@ public class ProductInquiryRequest {
     @NotNull
     private Boolean isSecret;
 
-    private String adminReply;
-
 }

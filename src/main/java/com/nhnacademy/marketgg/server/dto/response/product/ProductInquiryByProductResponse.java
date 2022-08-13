@@ -1,18 +1,17 @@
 package com.nhnacademy.marketgg.server.dto.response.product;
 
-import com.nhnacademy.marketgg.server.entity.Member;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 상품 문의 응답 DTO 입니다.
+ * 한 상품에 대한 상품 문의 조회 결과 DTO 입니다.
  */
 @RequiredArgsConstructor
 @Getter
-public class ProductInquiryResponse {
+public class ProductInquiryByProductResponse {
 
-    private final Member member;
+    private final String uuid;
 
     private final String title;
 
@@ -23,5 +22,11 @@ public class ProductInquiryResponse {
     private final String adminReply;
 
     private final LocalDateTime createdAt;
+
+    private String name;
+
+    public void memberName(final String name) {
+        this.name = name;
+    }
 
 }

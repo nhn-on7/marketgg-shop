@@ -34,7 +34,8 @@ public class AdminInterceptor implements HandlerInterceptor {
 
         // 권한 목록은 Gateway 에서 JSON List 타입으로 매핑해서 Http Header 로 전달함.
 
-        List<String> roles = new ObjectMapper().readValue(roleHeader, new TypeReference<>() {});
+        List<String> roles = new ObjectMapper().readValue(roleHeader, new TypeReference<>() {
+        });
 
         log.info("roles = {}", roles.toString());
 
