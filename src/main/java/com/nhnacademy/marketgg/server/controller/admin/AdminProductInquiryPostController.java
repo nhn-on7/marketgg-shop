@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 관리자 상품 문의 답글 등록을 위한 RestController 입니다.
  *
+ * @author 민아영
  * @version 1.0.0
  */
 @RestController
@@ -35,6 +36,7 @@ public class AdminProductInquiryPostController {
      *
      * @param replyRequest - 상품 문의에 대한 관리자의 답글을 담은 DTO 입니다.
      * @return - Mapping URI 를 담은 응답 객체를 반환합니다.
+     * @author 민아영
      * @since 1.0.0
      */
 

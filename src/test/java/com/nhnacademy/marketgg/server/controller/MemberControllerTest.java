@@ -175,8 +175,9 @@ class MemberControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
 
-        verify(inquiryPostService, times(1))
-            .retrieveProductInquiryByMemberId(any(MemberInfo.class), any(PageRequest.class));
+        then(inquiryPostService).should(times(1))
+                                .retrieveProductInquiryByMemberId(any(MemberInfo.class), any(PageRequest.class));
+
     }
 
 }
