@@ -22,10 +22,19 @@ public class MultiMatch {
     private String query;
 
     /**
+     * 검색 시 오타 교정 장치입니다.
+     *
+     * @since 1.0.0
+     */
+    private String fuzziness;
+
+    /**
      * 검색을 할 필드들입니다.
      *
      * @since 1.0.0
      */
     private List<String> fields;
+
+
 
 }

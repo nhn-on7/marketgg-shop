@@ -19,6 +19,8 @@ public class SearchRequestBody<T> {
         List.of("productName", "productName.forSyno", "content", "content.forSyno",
             "description", "description.forSyno");
 
+    private static final String FUZZINESS = "AUTO";
+
     /**
      * 검색 결과 목록의 정렬 기준을 지정합니다.
      *
@@ -51,7 +53,7 @@ public class SearchRequestBody<T> {
         this.sort = Collections.singletonList(sortMap);
         this.from = request.getPage();
         this.size = request.getSize();
-        this.query = new Query(new MultiMatch(request.getRequest(), DEFAULT_PRODUCT_FIELD));
+        this.query = new Query(new MultiMatch(request.getRequest(), FUZZINESS, DEFAULT_PRODUCT_FIELD));
     }
 
 }
