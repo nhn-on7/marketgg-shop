@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.product;
 
 import com.nhnacademy.marketgg.server.dto.ShopResult;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
@@ -35,6 +36,8 @@ import org.springframework.web.multipart.MultipartFile;
  * 리뷰 관리를 위한 컨트롤러입니다.
  *
  * @version 1.0.0
+ *
+ * @author 조현진
  */
 @Slf4j
 @RestController
@@ -51,20 +54,19 @@ public class ReviewController {
      * 리뷰를 생성합니다. 추후 사진 기능이 추가될 예정입니다.
      *
      * @param productId     - 후기가 달릴 상품의 PK입니다.
-     * @param uuid          - 후기를 작성한 회원을 구별하기 위한 고유값입니다.
      * @param reviewRequest - 후기 생성을 위한 dto 입니다.
      * @param bindingResult - validation 적용을 위한 파라미터입니다.
      * @param images        - 후기 생성시 첨부된 사진들입니다.
      * @return Void를 담은 응답객체를 반환합니다.
      */
-    @PostMapping(value = "/{productId}/reviews/{memberUuid}", consumes = { MediaType.APPLICATION_JSON_VALUE,
-        MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<ShopResult<Void>> createReview(@PathVariable final Long productId,
-                                                         @PathVariable(name = "memberUuid") final String uuid,
-                                                         @RequestPart @Valid
-                                                         final ReviewCreateRequest reviewRequest,
-                                                         BindingResult bindingResult,
-                                                         @RequestPart(required = false) MultipartFile images)
+
+    @PostMapping(value = "/{productId}/reviews", consumes = {MediaType.APPLICATION_JSON_VALUE,
+        MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Void> createReview(@PathVariable final Long productId,
+                                             final MemberInfo memberInfo,
+                                             @RequestPart@Valid final ReviewCreateRequest reviewRequest,
+                                             BindingResult bindingResult,
+                                             @RequestPart(required = false) MultipartFile images)
         throws IOException {
 
         if (bindingResult.hasErrors()) {
@@ -73,17 +75,17 @@ public class ReviewController {
 
         ResponseEntity<ShopResult<Void>> returnResponseEntity =
             ResponseEntity.status(HttpStatus.CREATED)
-                          .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH + uuid))
+                          .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH))
                           .contentType(MediaType.APPLICATION_JSON)
                           .body(ShopResult.success());
 
         if (Objects.isNull(images)) {
-            reviewService.createReview(reviewRequest, uuid);
+            reviewService.createReview(reviewRequest, memberInfo);
 
             return returnResponseEntity;
         }
 
-        reviewService.createReview(reviewRequest, images, uuid);
+        reviewService.createReview(reviewRequest, images, memberInfo);
 
         return returnResponseEntity;
     }

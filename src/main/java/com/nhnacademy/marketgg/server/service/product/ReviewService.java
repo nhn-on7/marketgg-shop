@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.service.product;
 
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
@@ -22,18 +23,18 @@ public interface ReviewService {
      * 사진이 첨부된 리뷰를 생성합니다.
      *
      * @param reviewRequest - 리뷰 생성을 위한 dto입니다.
-     * @param uuid          - 회원을 찾기 위한 uuid값입니다.
+     * @param memberInfo - 리뷰를 작성한 회원의 정보입니다.
      */
-    void createReview(final ReviewCreateRequest reviewRequest, final MultipartFile image, final String uuid)
+    void createReview(final ReviewCreateRequest reviewRequest, final MultipartFile image, final MemberInfo memberInfo)
         throws IOException;
 
     /**
      * 글로만 이루어진 리뷰를 생성합니다.
      *
      * @param reviewRequest - 리뷰 생성을 위한 dto입니다.
-     * @param uuid          - 회원을 찾기 위한 uuid 값입니다.
+     * @param memberInfo - 리뷰를 작성한 회원의 정보입니다.
      */
-    void createReview(final ReviewCreateRequest reviewRequest, final String uuid);
+    void createReview(final ReviewCreateRequest reviewRequest, final MemberInfo memberInfo);
 
     /**
      * 모든 리뷰를 조회합니다.
