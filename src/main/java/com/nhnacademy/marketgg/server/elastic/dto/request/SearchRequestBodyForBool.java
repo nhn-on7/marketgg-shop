@@ -21,6 +21,8 @@ public class SearchRequestBodyForBool<T> {
     private static final List<String> DEFAULT_PRODUCT_FIELD =
         List.of("productName", "productName.forSyno", "content", "content.forSyno",
             "description", "description.forSyno");
+    private static final String NO_FUZZINESS = "0";
+    private static final String FUZZINESS = "AUTO";
 
     private static final List<String> DEFAULT_BOARD_FIELD =
         List.of("title", "title.forSyno");
@@ -74,8 +76,8 @@ public class SearchRequestBodyForBool<T> {
             requestOption = DEFAULT_BOARD_FIELD;
         }
         this.query = new BoolQuery(
-            new Bool(List.of(new Must(new MultiMatch(optionCode, CATEGORY_FIELD)),
-                new Must(new MultiMatch(request.getRequest(), requestOption)))));
+            new Bool(List.of(new Must(new MultiMatch(optionCode,NO_FUZZINESS, CATEGORY_FIELD)),
+                new Must(new MultiMatch(request.getRequest(),FUZZINESS, requestOption)))));
     }
 
     /**
@@ -94,9 +96,9 @@ public class SearchRequestBodyForBool<T> {
         this.sort = Collections.singletonList(sortMap);
         this.from = request.getPage();
         this.size = request.getSize();
-        this.query = new BoolQuery(new Bool(List.of(new Must(new MultiMatch(categoryCode, CATEGORY_FIELD)),
-            new Must(new MultiMatch(optionCode, List.of(option))),
-            new Must(new MultiMatch(request.getRequest(), DEFAULT_BOARD_FIELD)))));
+        this.query = new BoolQuery(new Bool(List.of(new Must(new MultiMatch(categoryCode, NO_FUZZINESS, CATEGORY_FIELD)),
+            new Must(new MultiMatch(optionCode,NO_FUZZINESS, List.of(option))),
+            new Must(new MultiMatch(request.getRequest(),FUZZINESS, DEFAULT_BOARD_FIELD)))));
     }
 
     private Boolean isBoard(final String document) {
