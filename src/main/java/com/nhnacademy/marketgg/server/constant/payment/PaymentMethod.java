@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.constant.payment;
 
+import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -20,5 +21,12 @@ public enum PaymentMethod {
     MOBILE_PHONE("휴대폰");
 
     private final String name;
+
+    public static PaymentMethod of(String method) {
+        return Arrays.stream(PaymentMethod.values())
+                     .filter(v -> v.getName().equals(method))
+                     .findAny()
+                     .orElseThrow(IllegalArgumentException::new);
+    }
 
 }

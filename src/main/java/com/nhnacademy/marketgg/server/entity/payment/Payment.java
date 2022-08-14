@@ -1,10 +1,12 @@
 package com.nhnacademy.marketgg.server.entity.payment;
 
 import com.nhnacademy.marketgg.server.constant.payment.PaymentMethod;
+import com.nhnacademy.marketgg.server.constant.payment.PaymentMethodConverter;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentStatus;
 import com.nhnacademy.marketgg.server.entity.Order;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -51,7 +53,7 @@ public class Payment {
 
     @OneToOne
     @JoinColumn(name = "order_no")
-    @NotNull
+    // @NotNull
     private Order order;
 
     @Column(name = "order_name")
@@ -65,9 +67,8 @@ public class Payment {
     private String paymentKey;
 
     @Column
-    @Enumerated(EnumType.STRING)
-    @NotBlank
-    @Size(max = 20)
+    @Convert(converter = PaymentMethodConverter.class)
+    @NotNull
     private PaymentMethod method;
 
     @Column(name = "total_amount")
@@ -81,7 +82,7 @@ public class Payment {
     private Long discountAmount;
 
     @Column
-    @Enumerated(EnumType.STRING)
+    @NotNull
     private PaymentStatus status;
 
     @Column
@@ -98,7 +99,6 @@ public class Payment {
     private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
-    @NotNull
     private LocalDateTime deletedAt;
 
 }

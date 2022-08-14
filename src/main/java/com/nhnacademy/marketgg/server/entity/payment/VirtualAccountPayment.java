@@ -19,6 +19,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +41,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "virtual_account_payments")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Getter
 public class VirtualAccountPayment {
 
@@ -67,6 +71,7 @@ public class VirtualAccountPayment {
     private Payment payment;
 
     @Column(name = "account_type")
+    @Enumerated(EnumType.STRING)
     @NotNull
     private AccountType accountType;
 
