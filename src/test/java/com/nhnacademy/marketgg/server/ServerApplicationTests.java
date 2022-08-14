@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-@ActiveProfiles("common")
+@ActiveProfiles({ "common", "local" })
 class ServerApplicationTests {
 
     @Test

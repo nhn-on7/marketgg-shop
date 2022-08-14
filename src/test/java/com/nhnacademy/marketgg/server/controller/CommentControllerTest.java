@@ -16,8 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.aop.AuthInjectAspect;
 import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
-import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
-import com.nhnacademy.marketgg.server.aop.UuidAspect;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.CommentRequest;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
@@ -45,7 +43,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @Transactional
 @SpringBootTest
-@ActiveProfiles({"testdb", "common"})
+@ActiveProfiles({ "testdb", "common", "local" })
 @Import({
     AuthInjectAspect.class,
     MemberInfoAspect.class

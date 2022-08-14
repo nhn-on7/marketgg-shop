@@ -57,7 +57,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SpringBootTest
-@ActiveProfiles({ "testdb", "common" })
+@ActiveProfiles({ "testdb", "common", "local" })
 @Import({
     AuthInjectAspect.class,
     MemberInfoAspect.class
