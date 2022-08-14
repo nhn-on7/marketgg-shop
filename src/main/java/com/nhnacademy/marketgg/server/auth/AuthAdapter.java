@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import java.util.List;
+
+import com.nhnacademy.marketgg.server.dto.request.member.MemberInfoRequest;
+import com.nhnacademy.marketgg.server.dto.response.member.MemberInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -39,7 +42,19 @@ public class AuthAdapter implements AuthRepository {
         return response.getBody();
     }
 
+    @Override
+    public MemberInfoResponse getMemberInfo(MemberInfoRequest memberInfoRequest) throws JsonProcessingException {
+        String requestBody = objectMapper.writeValueAsString(memberInfoRequest);
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, buildHeaders());
+        ResponseEntity<MemberInfoResponse> response = restTemplate.exchange(
+                auth + "/person",
+                HttpMethod.POST,
+                requestEntity,
+                new ParameterizedTypeReference<MemberInfoResponse>() {
+                });
 
+        return response.getBody();
+    }
 
     private HttpHeaders buildHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();

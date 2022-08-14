@@ -2,7 +2,7 @@ package com.nhnacademy.marketgg.server.delivery;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.marketgg.server.dto.info.OrderInfoRequestDto;
+import com.nhnacademy.marketgg.server.dto.request.order.OrderInfoRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;

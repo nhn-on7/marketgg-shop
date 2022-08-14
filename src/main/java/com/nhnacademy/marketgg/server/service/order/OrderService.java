@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.service.order;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
@@ -71,10 +72,20 @@ public interface OrderService {
     void updateStatus(Long orderId, OrderUpdateStatusRequest status);
 
     /**
+     * 주문의 운송장 번호를 발급받기 위한 메소드입니다.
+     *
+     * @param orderId - 운송장 번호를 발급받을 주문의 식별번호입니다.
+     * @throws JsonProcessingException - Json 컨텐츠를 처리할 때 발생하는 모든 문제에 대한 예외처리입니다.
+     * @since 1.0.0
+     */
+    void createTrackingNo(Long orderId) throws JsonProcessingException;
+
+    /**
      * 주문(내역)을 삭제하는 메소드입니다.
      *
      * @param orderId - 삭제할 주문의 식별번호입니다.
      * @since 1.0.0
      */
     void deleteOrder(final Long orderId);
+
 }
