@@ -173,6 +173,7 @@ public class OrderController {
         orderService.deleteOrder(orderId);
 
         return ResponseEntity.status(HttpStatus.OK)
+                             // memo: 결제 취소 요청할 페이지 미정
                              .location(URI.create(ORDER_PREFIX + "/" + orderId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();

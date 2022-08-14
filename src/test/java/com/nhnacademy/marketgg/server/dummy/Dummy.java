@@ -4,8 +4,10 @@ import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
@@ -21,7 +23,9 @@ import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.CartProduct;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
+import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
+import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.entity.Product;
@@ -223,4 +227,27 @@ public class Dummy {
                                                1000, null, 12345, "주소",
                                                "상세주소", LocalDateTime.now());
     }
+
+    public static DeliveryAddress getDummyDeliveryAddress() {
+        DeliveryAddressCreateRequest request = new DeliveryAddressCreateRequest();
+        ReflectionTestUtils.setField(request, "isDefaultAddress", true);
+        ReflectionTestUtils.setField(request, "zipCode", "50948");
+        ReflectionTestUtils.setField(request, "address", "경남 김해시 내외중앙로 55");
+        ReflectionTestUtils.setField(request, "detailAddress", "정우빌딩 5층");
+
+        return new DeliveryAddress(Dummy.getDummyMember(Dummy.getDummyCart(1L)), request);
+    }
+
+    public static Coupon getDummyCoupon() {
+        CouponDto couponDto = new CouponDto();
+        ReflectionTestUtils.setField(couponDto, "id", 1L);
+        ReflectionTestUtils.setField(couponDto, "name", "2022 썸머 이벤트");
+        ReflectionTestUtils.setField(couponDto, "type", "정액할인");
+        ReflectionTestUtils.setField(couponDto, "expiredDate", 30);
+        ReflectionTestUtils.setField(couponDto, "minimumMoney", 10000);
+        ReflectionTestUtils.setField(couponDto, "discountAmount", 1000);
+
+        return new Coupon(couponDto);
+    }
+
 }
