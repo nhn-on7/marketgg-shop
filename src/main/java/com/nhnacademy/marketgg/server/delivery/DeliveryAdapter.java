@@ -20,8 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DeliveryAdapter implements DeliveryRepository {
 
-    @Value("${gg.delivery.origin}")
-    private final String delivery;
+    // @Value("${gg.delivery.origin}")
+    private final String delivery = "http://133.186.218.28/9090";
 
     private final RestTemplate restTemplate;
 
