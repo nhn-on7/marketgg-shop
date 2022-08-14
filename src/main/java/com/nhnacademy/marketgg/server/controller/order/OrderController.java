@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.delivery.DeliveryRepository;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.info.OrderInfoRequestDto;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
@@ -41,7 +40,6 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
-    private final DeliveryRepository deliveryRepository;
     private static final String ORDER_PREFIX = "/orders";
 
     /**
@@ -125,7 +123,7 @@ public class OrderController {
     }
 
     /**
-     * 주문의 상태를 변경하는 PatchMapping 을 지원합니다.
+     * 주문의 상태를 변경하는 PATCH Mapping 을 지원합니다.
      *
      * @param orderId - 상태를 변경할 주문의 식별번호입니다.
      * @param status - 변경할 상태의 값입니다.
@@ -144,11 +142,17 @@ public class OrderController {
                              .build();
     }
 
-    // memo: 운송장 번호 생성된 후 주문서 수정
+    /**
+     * 주문에 운송장 번호 발급을 요청하는 PATCH Mapping 을 지원합니다.
+     *
+     * @param orderId - 운송장 번호를 발급하려는 주문의 식별번호입니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     * @throws JsonProcessingException - Json 컨텐츠를 처리할 때 발생하는 모든 문제에 대한 예외처리입니다.
+     * @since 1.0.0
+     */
     @PatchMapping("/{orderId}/delivery")
-    public ResponseEntity<Void> createDeliveryNumber(@PathVariable final Long orderId) throws JsonProcessingException {
-        // memo: 회원 정보 auth 서버에 요청해서 이름, 이메일, 휴대폰 번호 가져오고 orderInfoRequestDto에 박고 보내기
-        // deliveryRepository.createTrackingNo(orderInfoRequestDto);
+    public ResponseEntity<Void> createTrackingNo(@PathVariable final Long orderId) throws JsonProcessingException {
+        orderService.createTrackingNo(orderId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/" + orderId + "/delivery"))
@@ -157,7 +161,7 @@ public class OrderController {
     }
 
     /**
-     * 주문을 취소할 수 있는 Put Mapping 을 지원합니다.(실제 삭제가 아닙니다.)
+     * 주문을 취소할 수 있는 PUT Mapping 을 지원합니다.(소프트 삭제)
      *
      * @param orderId - 취소할 주문의 식별번호입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.

@@ -8,6 +8,7 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import java.util.Collections;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -23,6 +24,8 @@ import org.springframework.web.client.RestTemplate;
  * auth 서버에서 uuid 목록을 전송해 이름목록을 가져옵니다.
  *
  * @author 박세완
+ * @author 민아영
+ * @author 김정민
  * @version 1.0.0
  */
 @Component
@@ -58,17 +61,17 @@ public class AuthAdapter implements AuthRepository {
     }
 
     @Override
-    public MemberInfoResponse getNameByUuid(final MemberInfoRequest uuid) throws JsonProcessingException {
-
-        String requestBody = objectMapper.writeValueAsString(uuid);
+    public MemberInfoResponse getMemberInfo(final MemberInfoRequest memberInfoRequest) throws JsonProcessingException {
+        String requestBody = objectMapper.writeValueAsString(memberInfoRequest);
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, buildHeaders());
-        ResponseEntity<String> response = restTemplate.exchange(
-            gateway + DEFAULT_AUTH + "/person",
-            HttpMethod.POST,
-            requestEntity, String.class);
+        ResponseEntity<MemberInfoResponse> response = restTemplate.exchange(
+                gateway + DEFAULT_AUTH + "/person",
+                HttpMethod.POST,
+                requestEntity,
+                new ParameterizedTypeReference<MemberInfoResponse>() {
+                });
 
-        return objectMapper.readValue(response.getBody(), new TypeReference<>() {
-        });
+        return response.getBody();
     }
 
     private HttpHeaders buildHeaders() {

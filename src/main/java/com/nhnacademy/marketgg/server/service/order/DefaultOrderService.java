@@ -1,9 +1,15 @@
 package com.nhnacademy.marketgg.server.service.order;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.constant.PaymentType;
+import com.nhnacademy.marketgg.server.delivery.DeliveryRepository;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.order.OrderInfoRequestDto;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
@@ -52,8 +58,10 @@ public class DefaultOrderService implements OrderService {
 
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
+    private final AuthRepository authRepository;
     private final OrderProductRepository orderProductRepository;
-    private final DeliveryAddressRepository deliveryRepository;
+    private final DeliveryAddressRepository deliveryAddressRepository;
+    private final DeliveryRepository deliveryRepository;
     private final PointHistoryRepository pointRepository;
     private final CouponRepository couponRepository;
     private final UsedCouponRepository usedCouponRepository;
@@ -65,8 +73,8 @@ public class DefaultOrderService implements OrderService {
     public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId) {
         int i = 0;
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        DeliveryAddress deliveryAddress = deliveryRepository.findById(orderRequest.getDeliveryAddressId())
-                                                            .orElseThrow(DeliveryAddressNotFoundException::new);
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(orderRequest.getDeliveryAddressId())
+                                                                   .orElseThrow(DeliveryAddressNotFoundException::new);
         Order order = new Order(member, deliveryAddress, orderRequest);
         List<Long> productIds = orderRequest.getProducts().stream().map(ProductToOrder::getId)
                                             .collect(Collectors.toList());
@@ -96,7 +104,7 @@ public class DefaultOrderService implements OrderService {
         return makeOrderToPayment(order, orderRequest);
     }
 
-    private OrderToPayment makeOrderToPayment(Order order, OrderCreateRequest orderRequest) {
+    private OrderToPayment makeOrderToPayment(final Order order, final OrderCreateRequest orderRequest) {
         List<ProductToOrder> products = orderRequest.getProducts();
         String orderId = prefix + order.getId();
         String orderName = products.get(0).getName() + "외 " + products.size() + "건";
@@ -113,7 +121,8 @@ public class DefaultOrderService implements OrderService {
         Long memberId = memberInfo.getId();
         List<OrderGivenCoupon> orderGivenCoupons = givenCouponRepository.findOwnCouponsByMemberId(memberId);
         Integer totalPoint = pointRepository.findLastTotalPoints(memberId);
-        List<DeliveryAddressResponse> deliveryAddresses = deliveryRepository.findDeliveryAddressesByMemberId(memberId);
+        List<DeliveryAddressResponse> deliveryAddresses = deliveryAddressRepository.findDeliveryAddressesByMemberId(
+                memberId);
         List<String> paymentTypes = Arrays.stream(PaymentType.values())
                                           .map(PaymentType::getType)
                                           .collect(Collectors.toList());
@@ -131,7 +140,7 @@ public class DefaultOrderService implements OrderService {
                                 .build();
     }
 
-    private Long calculateTotalOrigin(List<ProductToOrder> products) {
+    private Long calculateTotalOrigin(final List<ProductToOrder> products) {
         Long result = 0L;
 
         for (ProductToOrder product : products) {
@@ -158,12 +167,27 @@ public class DefaultOrderService implements OrderService {
 
     @Transactional
     @Override
-    public void updateStatus(Long orderId, OrderUpdateStatusRequest status) {
+    public void updateStatus(final Long orderId, final OrderUpdateStatusRequest status) {
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
         order.updateStatus(status.getStatus());
 
         orderRepository.save(order);
+    }
+
+    @Override
+    public void createTrackingNo(final Long orderId) throws JsonProcessingException {
+        Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        String uuid = memberRepository.findUuidByOrderId(orderId);
+        MemberInfoResponse memberResponse = authRepository.getMemberInfo(new MemberInfoRequest(uuid));
+
+        OrderInfoRequestDto orderRequest = new OrderInfoRequestDto(memberResponse.getName(),
+                                                                   order.getAddress(),
+                                                                   order.getDetailAddress(),
+                                                                   memberResponse.getPhoneNumber(),
+                                                                   String.valueOf(orderId));
+
+        deliveryRepository.createTrackingNo(orderRequest);
     }
 
     @Transactional(readOnly = true)

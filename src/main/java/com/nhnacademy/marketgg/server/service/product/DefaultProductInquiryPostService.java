@@ -61,7 +61,7 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
 
         for (ProductInquiryByProductResponse inquiry : inquiryByProduct) {
             MemberInfoRequest request = new MemberInfoRequest(inquiry.getUuid());
-            MemberInfoResponse nameByUuid = authRepository.getNameByUuid(request);
+            MemberInfoResponse nameByUuid = authRepository.getMemberInfo(request);
             inquiry.memberName(nameByUuid.getName());
         }
 
