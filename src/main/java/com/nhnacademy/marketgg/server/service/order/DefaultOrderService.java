@@ -68,7 +68,7 @@ public class DefaultOrderService implements OrderService {
     private final GivenCouponRepository givenCouponRepository;
     private final ProductRepository productRepository;
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
     public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId) {
         int i = 0;
@@ -189,7 +189,7 @@ public class DefaultOrderService implements OrderService {
         deliveryRepository.createTrackingNo(orderRequest);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
     public void deleteOrder(final Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);

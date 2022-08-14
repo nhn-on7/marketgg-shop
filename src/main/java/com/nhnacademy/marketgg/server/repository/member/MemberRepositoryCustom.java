@@ -19,7 +19,7 @@ public interface MemberRepositoryCustom {
      * @return 회원의 정보를 반환합니다.
      * @since 1.0.0
      */
-    Optional<MemberInfo> findMemberInfoByUuid(String uuid);
+    Optional<MemberInfo> findMemberInfoByUuid(final String uuid);
 
     /**
      * 해당 주문의 회원 uuid 를 조회하기 위한 메소드입니다.
@@ -27,6 +27,6 @@ public interface MemberRepositoryCustom {
      * @return 주문을 한 회원의 uuid 를 반환합니다.
      * @since 1.0.0
      */
-    String findUuidByOrderId(Long orderId);
+    String findUuidByOrderId(final Long orderId);
 
 }

@@ -15,6 +15,6 @@ public interface OrderProductRepositoryCustom {
      * @return 조회한 주문 상품 목록을 반환합니다.
      * @since 1.0.0
      */
-    List<OrderProductResponse> findByOrderId(Long orderId);
+    List<OrderProductResponse> findByOrderId(final Long orderId);
 
 }

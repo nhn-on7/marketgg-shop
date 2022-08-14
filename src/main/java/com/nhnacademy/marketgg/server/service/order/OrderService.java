@@ -69,7 +69,7 @@ public interface OrderService {
      * @param status - 변경할 상태값입니다.
      * @since 1.0.0
      */
-    void updateStatus(Long orderId, OrderUpdateStatusRequest status);
+    void updateStatus(final Long orderId, final OrderUpdateStatusRequest status);
 
     /**
      * 주문의 운송장 번호를 발급받기 위한 메소드입니다.
@@ -78,7 +78,7 @@ public interface OrderService {
      * @throws JsonProcessingException - Json 컨텐츠를 처리할 때 발생하는 모든 문제에 대한 예외처리입니다.
      * @since 1.0.0
      */
-    void createTrackingNo(Long orderId) throws JsonProcessingException;
+    void createTrackingNo(final Long orderId) throws JsonProcessingException;
 
     /**
      * 주문(내역)을 삭제하는 메소드입니다.
