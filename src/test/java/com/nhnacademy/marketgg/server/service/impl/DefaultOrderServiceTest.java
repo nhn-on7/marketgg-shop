@@ -60,6 +60,6 @@ public class DefaultOrderServiceTest {
     //     given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
     //     given(productRepository.findByIds(List.of(1L))).willReturn(List.of(product));
     //     given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
-    //    
+    //
     // }
 }

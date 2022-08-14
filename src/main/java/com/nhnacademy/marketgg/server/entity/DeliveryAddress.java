@@ -69,7 +69,7 @@ public class DeliveryAddress {
         this.address = createRequest.getAddress();
         this.detailAddress = createRequest.getDetailAddress();
     }
-
+    
     public void update(final Member member, final DeliveryAddressUpdateRequest updateRequest) {
         this.member = member;
         this.isDefaultAddress = updateRequest.isDefaultAddress();

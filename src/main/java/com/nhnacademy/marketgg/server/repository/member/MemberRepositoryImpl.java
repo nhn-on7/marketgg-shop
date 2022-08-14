@@ -16,7 +16,7 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
     }
 
     @Override
-    public Optional<MemberInfo> findMemberInfoByUuid(String uuid) {
+    public Optional<MemberInfo> findMemberInfoByUuid(final String uuid) {
         QMember member = QMember.member;
 
         MemberInfo memberInfo = from(member)
@@ -31,7 +31,7 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
     }
 
     @Override
-    public String findUuidByOrderId(Long orderId) {
+    public String findUuidByOrderId(final Long orderId) {
         QMember member = QMember.member;
         QOrder order = QOrder.order;
 

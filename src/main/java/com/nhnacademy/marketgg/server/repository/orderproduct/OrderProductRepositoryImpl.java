@@ -15,7 +15,7 @@ public class OrderProductRepositoryImpl extends QuerydslRepositorySupport implem
     }
 
     @Override
-    public List<OrderProductResponse> findByOrderId(Long orderId) {
+    public List<OrderProductResponse> findByOrderId(final Long orderId) {
         QOrderProduct orderProduct = QOrderProduct.orderProduct;
 
         return from(orderProduct)

@@ -14,6 +14,6 @@ import java.util.List;
 @NoRepositoryBean
 public interface GivenCouponRepositoryCustom {
 
-    List<OrderGivenCoupon> findOwnCouponsByMemberId(Long memberId);
+    List<OrderGivenCoupon> findOwnCouponsByMemberId(final Long memberId);
 
 }
