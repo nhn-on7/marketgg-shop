@@ -6,7 +6,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.entity.Coupon;
@@ -57,9 +59,11 @@ class DefaultCouponServiceTest {
     @Test
     @DisplayName("쿠폰 등록 성공")
     void testCreateCouponSuccess() {
+        willDoNothing().given(couponService).createCoupon(any());
+
         couponService.createCoupon(couponDto);
 
-        then(couponRepository).should().save(any());
+        then(couponRepository).should(times(1)).save(any());
     }
 
     @Test
@@ -72,7 +76,7 @@ class DefaultCouponServiceTest {
 
         List<CouponDto> couponResponses = couponService.retrieveCoupons(pageable);
 
-        then(couponRepository).should().findAllCoupons(pageable);
+        then(couponRepository).should(times(1)).findAllCoupons(pageable);
         assertThat(couponResponses).isNotNull();
     }
 
@@ -83,8 +87,8 @@ class DefaultCouponServiceTest {
 
         couponService.updateCoupon(1L, couponDto);
 
-        then(couponRepository).should().findById(anyLong());
-        then(couponRepository).should().save(any(Coupon.class));
+        then(couponRepository).should(times(1)).findById(anyLong());
+        then(couponRepository).should(times(1)).save(any(Coupon.class));
     }
 
     @Test
@@ -103,8 +107,8 @@ class DefaultCouponServiceTest {
 
         couponService.deleteCoupon(1L);
 
-        then(couponRepository).should().findById(anyLong());
-        then(couponRepository).should().delete(any(Coupon.class));
+        then(couponRepository).should(times(1)).findById(anyLong());
+        then(couponRepository).should(times(1)).delete(any(Coupon.class));
     }
 
     @Test

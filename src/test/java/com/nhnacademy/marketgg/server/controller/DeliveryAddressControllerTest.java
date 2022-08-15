@@ -3,6 +3,8 @@ package com.nhnacademy.marketgg.server.controller;
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATE;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -90,6 +92,8 @@ class DeliveryAddressControllerTest {
         headers = new HttpHeaders();
         headers.set(AUTH_ID, uuid);
         headers.set(WWW_AUTHENTICATE, roles);
+
+        then(memberRepository).should(times(1)).findMemberInfoByUuid(uuid);
     }
 
     @Test

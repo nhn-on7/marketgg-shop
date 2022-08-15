@@ -5,10 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -146,7 +143,7 @@ class MemberControllerTest {
     @Test
     @DisplayName("회원에게 지급 쿠폰 생성")
     void testCreateGivenCoupons() throws Exception {
-        doNothing().when(givenCouponService)
+        willDoNothing().given(givenCouponService)
                    .createGivenCoupons(any(MemberInfo.class), any(GivenCouponCreateRequest.class));
         String content = objectMapper.writeValueAsString(givenCouponCreateRequest);
 
@@ -156,22 +153,23 @@ class MemberControllerTest {
                 .content(content))
                     .andExpect(status().isCreated());
 
-        verify(givenCouponService, times(1)).createGivenCoupons(any(MemberInfo.class),
+        then(givenCouponService).should(times(1)).createGivenCoupons(any(MemberInfo.class),
             any(GivenCouponCreateRequest.class));
     }
 
     @Test
     @DisplayName("회원에게 지급된 쿠폰 전체 조회")
     void testRetrieveGivenCoupons() throws Exception {
-        when(givenCouponService.retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class))).thenReturn(List.of());
+        given(givenCouponService.retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class))).willReturn(List.of());
 
         this.mockMvc.perform(get("/members/coupons")
                 .headers(httpHeaders))
                     .andExpect(status().isOk());
 
-        verify(givenCouponService, times(1)).retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class));
+        then(givenCouponService).should(times(1)).retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class));
     }
 
+    // FIXME: 테스트 어노테이션 활성화 후 수정부탁 @Coalong
     // @Test
     @DisplayName("회원이 작성한 전체 상품 문의 조회 테스트")
     void testRetrieveProductInquiryByMemberId() throws Exception {
