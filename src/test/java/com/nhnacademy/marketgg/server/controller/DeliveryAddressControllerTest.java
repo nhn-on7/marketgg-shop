@@ -92,8 +92,6 @@ class DeliveryAddressControllerTest {
         headers = new HttpHeaders();
         headers.set(AUTH_ID, uuid);
         headers.set(WWW_AUTHENTICATE, roles);
-
-        then(memberRepository).should(times(1)).findMemberInfoByUuid(uuid);
     }
 
     @Test
