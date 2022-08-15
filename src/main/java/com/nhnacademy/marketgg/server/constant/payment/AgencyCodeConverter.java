@@ -10,7 +10,7 @@ import javax.persistence.Converter;
  * @version 1.0
  * @since 1.0
  */
-@Converter
+@Converter(autoApply = true)
 public class AgencyCodeConverter implements AttributeConverter<AgencyCode, String> {
 
     @Override
