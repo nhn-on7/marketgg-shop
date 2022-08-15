@@ -4,12 +4,13 @@ import com.nhnacademy.marketgg.server.constant.payment.PaymentMethod;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentMethodConverter;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentStatus;
 import com.nhnacademy.marketgg.server.entity.Order;
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,7 +45,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class Payment {
+public class Payment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,7 +54,7 @@ public class Payment {
 
     @OneToOne
     @JoinColumn(name = "order_no")
-    // @NotNull
+    @NotNull
     private Order order;
 
     @Column(name = "order_name")

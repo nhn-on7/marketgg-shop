@@ -3,13 +3,13 @@ package com.nhnacademy.marketgg.server.entity.payment;
 import com.nhnacademy.marketgg.server.constant.payment.AcquireStatus;
 import com.nhnacademy.marketgg.server.constant.payment.AgencyCode;
 import com.nhnacademy.marketgg.server.constant.payment.CardType;
+import com.nhnacademy.marketgg.server.constant.payment.CardTypeConverter;
 import com.nhnacademy.marketgg.server.constant.payment.OwnerType;
+import com.nhnacademy.marketgg.server.constant.payment.OwnerTypeConverter;
 import java.io.Serializable;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
@@ -21,7 +21,6 @@ import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -44,29 +43,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class CardPayment {
-
-    /**
-     * 결제 테이블의 키를 정의합니다.
-     *
-     * @author 이제훈
-     */
-    @Embeddable
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @Getter
-    @EqualsAndHashCode
-    public static class Pk implements Serializable {
-
-        @Column(name = "payment_no")
-        @NotNull
-        private Long paymentId;
-
-    }
+public class CardPayment implements Serializable {
 
     @Id
-    private Pk pk;
+    private Long paymentId;
 
-    @MapsId(value = "paymentId")
+    @MapsId
     @OneToOne
     @JoinColumn(name = "payment_no")
     @NotNull
@@ -77,28 +59,26 @@ public class CardPayment {
     private Long amount;
 
     @Column
-    @Enumerated(EnumType.STRING)
-    @NotBlank
-    @Size(min = 2, max = 10)
+    @Convert(converter = AgencyCodeConverter.class)
+    @NotNull
     private AgencyCode companyCode;
 
     @Column
     @NotBlank
-    @Size(min = 2, max = 10)
+    @Size(min = 2, max = 20)
     private String number;
 
     @Column
+    @NotNull
     private Integer installmentPlanMonths;
 
     @Column
-    @Enumerated(EnumType.STRING)
-    @NotBlank
-    @Size(min = 2, max = 10)
+    @Convert(converter = CardTypeConverter.class)
+    @NotNull
     private CardType cardType;
 
     @Column
-    @NotBlank
-    @Size(min = 2, max = 10)
+    @Convert(converter = OwnerTypeConverter.class)
     private OwnerType ownerType;
 
     @Column
@@ -107,8 +87,7 @@ public class CardPayment {
     private String receiptUrl;
 
     @Column
-    @NotBlank
-    @Size(min = 2, max = 20)
+    @NotNull
     private AcquireStatus acquireStatus;
 
 }
