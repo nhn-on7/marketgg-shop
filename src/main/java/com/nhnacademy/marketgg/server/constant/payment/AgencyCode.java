@@ -1,10 +1,15 @@
 package com.nhnacademy.marketgg.server.constant.payment;
 
+import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
  * 기관 코드입니다.
+ *
+ * @author 이제훈
+ * @version 1.0
+ * @since 1.0
  */
 @RequiredArgsConstructor
 @Getter
@@ -40,5 +45,18 @@ public enum AgencyCode {
     private final String name;
     private final String code;
     private final String cardCompany;
+
+    /**
+     * 문자열로 구성된 기관 종류 구분을 통해 열거형을 추출합니다.
+     *
+     * @param companyCode - 문자열로 구성된 기관 코드
+     * @return 열거형 타입의 기관 코드 {@link CardType}
+     */
+    public static AgencyCode of(String companyCode) {
+        return Arrays.stream(AgencyCode.values())
+                     .filter(v -> v.getName().equals(companyCode))
+                     .findAny()
+                     .orElseThrow(IllegalArgumentException::new);
+    }
 
 }

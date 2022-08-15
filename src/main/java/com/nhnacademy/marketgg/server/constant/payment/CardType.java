@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.constant.payment;
 
+import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -19,5 +20,18 @@ public enum CardType {
     GIFT("기프트");
 
     private final String name;
+
+    /**
+     * 문자열로 구성된 카드 종류 구분을 통해 열거형을 추출합니다.
+     *
+     * @param cardType - 문자열로 구성된 카드 종류
+     * @return 문자열로 받은 카드 종류 {@link CardType}
+     */
+    public static CardType of(String cardType) {
+        return Arrays.stream(CardType.values())
+                     .filter(v -> v.getName().equals(cardType))
+                     .findAny()
+                     .orElseThrow(IllegalArgumentException::new);
+    }
 
 }
