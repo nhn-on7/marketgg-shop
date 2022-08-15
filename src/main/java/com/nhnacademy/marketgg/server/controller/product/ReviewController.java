@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.product;
 
 import com.nhnacademy.marketgg.server.dto.ShopResult;
+import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
@@ -35,9 +36,8 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 리뷰 관리를 위한 컨트롤러입니다.
  *
- * @version 1.0.0
- *
  * @author 조현진
+ * @version 1.0.0
  */
 @Slf4j
 @RestController
@@ -46,7 +46,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ReviewController {
 
     private static final String DEFAULT_REVIEW_URI = "/products/";
-    private static final String REVIEW_PATH = "/review/";
+    private static final String REVIEW_PATH = "/reviews/";
 
     private final ReviewService reviewService;
 
@@ -54,17 +54,22 @@ public class ReviewController {
      * 리뷰를 생성합니다. 추후 사진 기능이 추가될 예정입니다.
      *
      * @param productId     - 후기가 달릴 상품의 PK입니다.
+<<<<<<< HEAD
+=======
+     * @param memberInfo    - 후기를 작성한 회원의 정보입니다.
+>>>>>>> 704b1c34 (Fix: typo)
      * @param reviewRequest - 후기 생성을 위한 dto 입니다.
      * @param bindingResult - validation 적용을 위한 파라미터입니다.
      * @param images        - 후기 생성시 첨부된 사진들입니다.
      * @return Void를 담은 응답객체를 반환합니다.
      */
 
-    @PostMapping(value = "/{productId}/reviews", consumes = {MediaType.APPLICATION_JSON_VALUE,
-        MediaType.MULTIPART_FORM_DATA_VALUE})
+    @Auth
+    @PostMapping(value = "/{productId}/reviews", consumes = { MediaType.APPLICATION_JSON_VALUE,
+        MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<Void> createReview(@PathVariable final Long productId,
                                              final MemberInfo memberInfo,
-                                             @RequestPart@Valid final ReviewCreateRequest reviewRequest,
+                                             @RequestPart @Valid final ReviewCreateRequest reviewRequest,
                                              BindingResult bindingResult,
                                              @RequestPart(required = false) MultipartFile images)
         throws IOException {
@@ -137,6 +142,8 @@ public class ReviewController {
      * @param bindingResult - validation을 체크합니다.
      * @return - Void 타입 응답객체를 반환합니다.
      */
+
+    @Auth
     @PutMapping("/{productId}/reviews/{reviewId}")
     public ResponseEntity<ShopResult<Void>> updateReview(@PathVariable final Long productId,
                                              @PathVariable final Long reviewId,

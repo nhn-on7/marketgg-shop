@@ -6,6 +6,10 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 상품 수정을 위한 DTO 입니다.
+ *
+ * @author 조현진 */
 @NoArgsConstructor
 @Getter
 public class ProductUpdateRequest {

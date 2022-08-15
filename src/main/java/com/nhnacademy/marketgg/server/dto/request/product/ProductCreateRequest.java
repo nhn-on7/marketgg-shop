@@ -7,6 +7,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+/**
+ * 상품 생성을 위한 DTO 입니다.
+ *
+ * @author  조현진, 민아영
+ */
 @NoArgsConstructor
 @Getter
 public class ProductCreateRequest {
