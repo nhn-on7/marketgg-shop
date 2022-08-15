@@ -31,8 +31,7 @@ class DefaultCategorizationServiceTest {
         given(categorizationRepository.findAllCategorization()).willReturn(
                 List.of(new CategorizationRetrieveResponse("001", "hello")));
 
-        List<CategorizationRetrieveResponse> responses =
-                categorizationService.retrieveCategorizations();
+        List<CategorizationRetrieveResponse> responses = categorizationService.retrieveCategorizations();
 
         assertThat(responses.get(0).getName()).isEqualTo("hello");
     }

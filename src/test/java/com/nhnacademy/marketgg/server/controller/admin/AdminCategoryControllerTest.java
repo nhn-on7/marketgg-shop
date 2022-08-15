@@ -5,10 +5,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -121,7 +118,7 @@ class AdminCategoryControllerTest {
                                      .headers(httpHeaders))
                     .andExpect(status().isOk());
 
-        then(categoryService).should().retrieveCategoriesByCategorization(anyString());
+        then(categoryService).should(times(1)).retrieveCategoriesByCategorization(anyString());
     }
 
     @Test

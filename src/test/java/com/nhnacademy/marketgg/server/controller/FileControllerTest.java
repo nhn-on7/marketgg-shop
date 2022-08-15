@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -58,6 +59,7 @@ class FileControllerTest {
         mockMvc.perform(get("/storage/1"))
                .andExpect(status().isOk());
 
+        then(fileService).should(times(1)).retrieveImage(anyLong());
     }
 
     @Test
@@ -74,7 +76,7 @@ class FileControllerTest {
                             .contentType(MediaType.MULTIPART_FORM_DATA))
             .andExpect(status().isOk());
 
-        then(fileService).should().uploadImage(any(MultipartFile.class));
+        then(fileService).should(times(1)).uploadImage(any(MultipartFile.class));
     }
 
 }

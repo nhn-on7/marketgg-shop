@@ -1,11 +1,11 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.anyLong;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -17,8 +17,10 @@ import com.nhnacademy.marketgg.server.aop.AspectUtils;
 import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
 import com.nhnacademy.marketgg.server.dto.request.label.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.service.label.LabelService;
+
 import java.util.ArrayList;
 import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +35,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AdminLabelController.class)
 @Import({
-    RoleCheckAspect.class
+        RoleCheckAspect.class
 })
 class AdminLabelControllerTest {
 
@@ -65,40 +67,40 @@ class AdminLabelControllerTest {
         ReflectionTestUtils.setField(labelCreateRequest, "name", "hello");
         String requestBody = objectMapper.writeValueAsString(labelCreateRequest);
 
-        doNothing().when(labelService).createLabel(any(LabelCreateRequest.class));
+        willDoNothing().given(labelService).createLabel(any(LabelCreateRequest.class));
 
         this.mockMvc.perform(post(DEFAULT_LABEL)
-                .headers(httpHeaders)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
+                                     .headers(httpHeaders)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
                     .andExpect(status().isCreated());
 
-        verify(labelService, times(1)).createLabel(any(labelCreateRequest.getClass()));
+        then(labelService).should(times(1)).createLabel(any(labelCreateRequest.getClass()));
     }
 
     @Test
     @DisplayName("라벨 조회")
     void retrieveLabels() throws Exception {
 
-        when(labelService.retrieveLabels()).thenReturn(new ArrayList<>());
+        given(labelService.retrieveLabels()).willReturn(new ArrayList<>());
 
         this.mockMvc.perform(get(DEFAULT_LABEL).headers(httpHeaders))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andReturn();
 
-        verify(labelService, times(1)).retrieveLabels();
+        then(labelService).should(times(1)).retrieveLabels();
     }
 
     @Test
     @DisplayName("라벨 삭제")
     void deleteLabel() throws Exception {
-        doNothing().when(labelService).deleteLabel(anyLong());
+        willDoNothing().given(labelService).deleteLabel(anyLong());
 
         this.mockMvc.perform(delete(DEFAULT_LABEL + "/{labelId}", 1L).headers(httpHeaders))
                     .andExpect(status().isOk());
 
-        verify(labelService, times(1)).deleteLabel(1L);
+        then(labelService).should(times(1)).deleteLabel(1L);
     }
 
 }

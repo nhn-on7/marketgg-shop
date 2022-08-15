@@ -41,6 +41,8 @@ class ProductControllerTest {
     @Test
     @DisplayName("카테고리로 상품 조회 테스트")
     void testFindProductsByCategory() throws Exception {
+        given(productService.findProductByCategory(any(PageRequest.class), anyString())).willReturn(List.of());
+
         this.mockMvc.perform(
                     get(DEFAULT_PRODUCT + "/categories/{categoryCode}", "100")
                             .param("page", "1")
@@ -48,7 +50,7 @@ class ProductControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-        then(productService).should().findProductByCategory(any(PageRequest.class), anyString());
+        then(productService).should(times(1)).findProductByCategory(any(PageRequest.class), anyString());
     }
 
     @Test

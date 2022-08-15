@@ -20,9 +20,11 @@ import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpda
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.service.post.PostService;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,7 +39,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AdminCsPostController.class)
 @Import({
-    RoleCheckAspect.class
+        RoleCheckAspect.class
 })
 class AdminCsPostControllerTest {
 
@@ -78,14 +80,14 @@ class AdminCsPostControllerTest {
     @DisplayName("옵션에 따른 게시글 검색")
     void testSearchPostListForOption() throws Exception {
         given(postService.searchForOption(anyString(), any(SearchRequest.class), anyString(), anyString())).willReturn(
-            List.of(postResponse));
+                List.of(postResponse));
 
         this.mockMvc.perform(
-                get(DEFAULT_ADMIN_POST + "/categories/{categoryId}/options/{optionType}/search", "702", "reason")
-                    .headers(httpHeaders)
-                    .param("option", "배송")
-                    .param("keyword", "hi")
-                    .param("page", "0"))
+                    get(DEFAULT_ADMIN_POST + "/categories/{categoryId}/options/{optionType}/search", "702", "reason")
+                            .headers(httpHeaders)
+                            .param("option", "배송")
+                            .param("keyword", "hi")
+                            .param("page", "0"))
                     .andExpect(status().isOk());
 
         then(postService).should(times(1))
@@ -98,9 +100,9 @@ class AdminCsPostControllerTest {
         willDoNothing().given(postService).updatePost(anyString(), anyLong(), any(PostRequest.class));
 
         this.mockMvc.perform(put(DEFAULT_ADMIN_POST + "/categories/{categoryId}/{postId}", "701", 1L)
-                .headers(httpHeaders)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(postRequest)))
+                                     .headers(httpHeaders)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(postRequest)))
                     .andExpect(status().isOk());
 
         then(postService).should(times(1)).updatePost(anyString(), anyLong(), any(PostRequest.class));
@@ -110,7 +112,7 @@ class AdminCsPostControllerTest {
     @DisplayName("1:1 문의 상태 목록 조회")
     void testRetrieveStatusList() throws Exception {
         this.mockMvc.perform(get(DEFAULT_ADMIN_POST + "/status")
-                .headers(httpHeaders))
+                                     .headers(httpHeaders))
                     .andExpect(status().isOk());
     }
 
@@ -120,9 +122,9 @@ class AdminCsPostControllerTest {
         willDoNothing().given(postService).updateOtoInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
 
         this.mockMvc.perform(patch(DEFAULT_ADMIN_POST + "/{postId}/status", 1L)
-                .headers(httpHeaders)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updateRequest)))
+                                     .headers(httpHeaders)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(updateRequest)))
                     .andExpect(status().isOk());
 
         then(postService).should(times(1)).updateOtoInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));

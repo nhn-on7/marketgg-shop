@@ -1,18 +1,14 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.aop.AspectUtils;
 import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
-import com.nhnacademy.marketgg.server.dto.response.category.CategorizationRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.category.CategorizationService;
 
 import java.util.List;
@@ -26,9 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 @WebMvcTest(AdminCategorizationController.class)
 @Import({
@@ -57,16 +51,12 @@ class AdminCategorizationControllerTest {
     @Test
     @DisplayName("카테고리 분류표 조회")
     void retrieveCategorization() throws Exception {
-        CategorizationRetrieveResponse response = new CategorizationRetrieveResponse("700", "상품");
+        given(categorizationService.retrieveCategorizations()).willReturn(List.of());
 
-        given(categorizationService.retrieveCategorizations()).willReturn(List.of(response));
-
-        MvcResult mvcResult = this.mockMvc.perform(get("/admin/categorizations")
+        this.mockMvc.perform(get("/admin/categorizations")
                                      .headers(httpHeaders))
-                    .andExpect(status().isOk())
-                                          .andReturn();
+                    .andExpect(status().isOk());
 
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo(List.of(response).toString());
         then(categorizationService).should(times(1)).retrieveCategorizations();
     }
 
