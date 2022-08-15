@@ -64,7 +64,6 @@ public class DeliveryAddress {
         this.zipCode = shopMemberSignUpRequest.getZipcode();
         this.address = shopMemberSignUpRequest.getAddress();
         this.detailAddress = shopMemberSignUpRequest.getDetailAddress();
-
     }
 
     public DeliveryAddress(final Member member,

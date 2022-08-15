@@ -54,7 +54,7 @@ public class OrderController {
     }
 
     // 주문서 작성폼 정보 조회
-    @GetMapping("/orderForm")
+    @GetMapping("/order-form")
     public ResponseEntity<OrderFormResponse> retrieveOrderForm(@RequestBody final List<ProductToOrder> products,
                                                                final MemberInfo memberInfo, final AuthInfo authInfo) {
 

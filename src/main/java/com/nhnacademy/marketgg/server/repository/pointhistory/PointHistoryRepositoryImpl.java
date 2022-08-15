@@ -66,4 +66,15 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport
             .fetchFirst());
     }
 
+    @Override
+    public Integer findLastTotalPoints(Long memberId) {
+        QPointHistory pointHistory = QPointHistory.pointHistory;
+
+        return from(pointHistory)
+                .where(pointHistory.member.id.eq(memberId))
+                .orderBy(pointHistory.updatedAt.desc())
+                .select(pointHistory.totalPoint)
+                .fetchFirst();
+    }
+
 }

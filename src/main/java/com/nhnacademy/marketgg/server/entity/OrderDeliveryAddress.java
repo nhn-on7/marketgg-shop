@@ -69,6 +69,18 @@ public class OrderDeliveryAddress implements Serializable {
         @NotNull
         private Long orderNo;
 
+        public Pk(final Long orderId) {
+            this.orderNo = orderId;
+        }
+    }
+
+    public OrderDeliveryAddress(Order order, DeliveryAddress deliveryAddress) {
+        this.order = order;
+        this.deliveryAddress = deliveryAddress;
+        this.pk = new Pk(order.getId());
+        this.zipCode = deliveryAddress.getZipCode();
+        this.address = deliveryAddress.getAddress();;
+        this.detailAddress = deliveryAddress.getDetailAddress();
     }
 
 }
