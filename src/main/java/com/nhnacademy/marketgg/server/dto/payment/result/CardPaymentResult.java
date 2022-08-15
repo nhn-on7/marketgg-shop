@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.dto.payment.request;
+package com.nhnacademy.marketgg.server.dto.payment.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotBlank;
@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 카드 결제에 대한 응답 결과 객체입니다.
+ * 카드 결제 시 제공되는 카드 관련 정보입니다.
  *
  * @author 이제훈
  * @version 1.0
