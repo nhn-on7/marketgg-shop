@@ -169,7 +169,7 @@ class MemberControllerTest {
         then(givenCouponService).should(times(1)).retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class));
     }
 
-    // FIXME: 테스트 어노테이션 활성화 후 수정부탁 @Coalong
+    // FIXME: 테스트 어노테이션 활성화 후 수정부탁 @민아영
     // @Test
     @DisplayName("회원이 작성한 전체 상품 문의 조회 테스트")
     void testRetrieveProductInquiryByMemberId() throws Exception {

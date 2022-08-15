@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
@@ -24,9 +24,11 @@ import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
 import com.nhnacademy.marketgg.server.service.point.DefaultPointService;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,7 +67,7 @@ class DefaultPointServiceTest {
     @BeforeEach
     void setUp() {
         pointRetrieveResponse =
-            new PointRetrieveResponse(1L, 1L, 1000, 1000, "결제", LocalDateTime.now());
+                new PointRetrieveResponse(1L, 1L, 1000, 1000, "결제", LocalDateTime.now());
         pointHistoryRequest = new PointHistoryRequest();
         memberCreateRequest = new MemberCreateRequest();
         memberGradeCreateRequest = new MemberGradeCreateRequest();
@@ -79,6 +81,7 @@ class DefaultPointServiceTest {
     @DisplayName("사용자 포인트 내역 목록 조회")
     void testRetrievePointHistories() {
         given(pointHistoryRepository.findAllByMemberId(anyLong())).willReturn(List.of(pointRetrieveResponse));
+
         List<PointRetrieveResponse> responses = pointService.retrievePointHistories(1L);
 
         assertThat(responses.get(0).getPoint()).isEqualTo(1000);
@@ -88,6 +91,7 @@ class DefaultPointServiceTest {
     @DisplayName("관리자의 사용자 포인트 내역 목록 조회")
     void testAdminRetrievePointHistories() {
         given(pointHistoryRepository.findAllForAdmin()).willReturn(List.of(pointRetrieveResponse));
+
         List<PointRetrieveResponse> responses = pointService.adminRetrievePointHistories();
 
         assertThat(responses.get(0).getPoint()).isEqualTo(1000);
@@ -101,7 +105,7 @@ class DefaultPointServiceTest {
 
         pointService.createPointHistory(1L, pointHistoryRequest);
 
-        verify(pointHistoryRepository, times(1)).save(any(PointHistory.class));
+        then(pointHistoryRepository).should(times(1)).save(any(PointHistory.class));
     }
 
     @ParameterizedTest
@@ -114,7 +118,7 @@ class DefaultPointServiceTest {
 
         Member member = new Member(memberCreateRequest, cart);
         DeliveryAddress deliveryAddress = new DeliveryAddress(member, deliveryAddressCreateRequest);
-        Order order = new Order(member, deliveryAddress,orderCreateRequest);
+        Order order = new Order(member, deliveryAddress, orderCreateRequest);
 
         ReflectionTestUtils.setField(pointHistoryRequest, "point", 1000);
         ReflectionTestUtils.setField(member, "memberGrade", memberGrade);
@@ -125,7 +129,7 @@ class DefaultPointServiceTest {
 
         pointService.createPointHistoryForOrder(1L, 1L, pointHistoryRequest);
 
-        verify(pointHistoryRepository, times(1)).save(any(PointHistory.class));
+        then(pointHistoryRepository).should(times(1)).save(any(PointHistory.class));
     }
 
     @Test
@@ -148,7 +152,7 @@ class DefaultPointServiceTest {
 
         pointService.createPointHistoryForOrder(1L, 1L, pointHistoryRequest);
 
-        verify(pointHistoryRepository, times(1)).save(any(PointHistory.class));
+        then(pointHistoryRepository).should(times(1)).save(any(PointHistory.class));
     }
 
 }

@@ -1,30 +1,16 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import com.nhnacademy.marketgg.server.dummy.Dummy;
-import com.nhnacademy.marketgg.server.entity.Cart;
-import com.nhnacademy.marketgg.server.entity.Coupon;
-import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
-import com.nhnacademy.marketgg.server.entity.Member;
-import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.service.order.DefaultOrderService;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -48,6 +34,8 @@ public class DefaultOrderServiceTest {
     @Mock
     CouponRepository couponRepository;
 
+    //FIXME: 주문 등록에 대한 테스트 코드 작성이 필요해보입니다. @김정민
+
     // @Test
     // @DisplayName("주문 등록")
     // void testCreateOrder() {
@@ -62,4 +50,5 @@ public class DefaultOrderServiceTest {
     //     given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
     //
     // }
+
 }

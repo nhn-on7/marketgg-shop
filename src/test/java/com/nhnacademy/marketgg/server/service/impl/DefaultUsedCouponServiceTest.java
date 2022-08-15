@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,21 +55,21 @@ class DefaultUsedCouponServiceTest {
 
     @Test
     void testCreateUsedCouponsSuccess() {
-        when(orderRepository.findById(any())).thenReturn(Optional.ofNullable(order));
-        when(givenCouponRepository.findById(any())).thenReturn(Optional.ofNullable(givenCoupon));
+        given(orderRepository.findById(any())).willReturn(Optional.ofNullable(order));
+        given(givenCouponRepository.findById(any())).willReturn(Optional.ofNullable(givenCoupon));
 
         usedCouponService.createUsedCoupons(usedCouponDto);
 
-        verify(usedCouponRepository, times(1)).save(any(UsedCoupon.class));
+        then(usedCouponRepository).should(times(1)).save(any(UsedCoupon.class));
     }
 
     @Test
     void deleteUsedCoupons() {
-        when(usedCouponRepository.findById(any())).thenReturn(Optional.ofNullable(usedCoupon));
+        given(usedCouponRepository.findById(any())).willReturn(Optional.ofNullable(usedCoupon));
 
         usedCouponService.deleteUsedCoupons(usedCouponDto);
 
-        verify(usedCouponRepository, times(1)).delete(any(UsedCoupon.class));
+        then(usedCouponRepository).should(times(1)).delete(any(UsedCoupon.class));
     }
 
 }
