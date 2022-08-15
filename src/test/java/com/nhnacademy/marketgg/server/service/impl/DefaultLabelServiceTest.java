@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
 
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
@@ -57,7 +58,7 @@ class DefaultLabelServiceTest {
 
         labelService.createLabel(labelRequest);
 
-        then(labelRepository).should().save(any(Label.class));
+        then(labelRepository).should(times(1)).save(any(Label.class));
     }
 
     @Test
@@ -94,7 +95,7 @@ class DefaultLabelServiceTest {
 
         labelService.deleteLabel(1L);
 
-        then(labelRepository).should().delete(any(Label.class));
+        then(labelRepository).should(times(1)).delete(any(Label.class));
     }
 
     @Test

@@ -5,10 +5,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.nhnacademy.marketgg.server.dto.request.file.ImageCreateRequest;
 import com.nhnacademy.marketgg.server.service.storage.LocalStorageService;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
@@ -25,7 +27,7 @@ class LocalStorageServiceTest {
         URL url = getClass().getClassLoader().getResource("lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile imageFile =
-            new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));
+                new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));
 
         ImageCreateRequest imageCreateRequest = localStorageService.uploadImage(imageFile);
 
@@ -39,7 +41,7 @@ class LocalStorageServiceTest {
         URL url = getClass().getClassLoader().getResource("lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile imageFile =
-            new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream(filePath));
+                new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream(filePath));
 
         ImageCreateRequest imageCreateRequest = localStorageService.uploadImage(imageFile);
 
@@ -53,9 +55,10 @@ class LocalStorageServiceTest {
         URL url = getClass().getClassLoader().getResource("lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile imageFile =
-            new MockMultipartFile("image", "test.png", "text", new FileInputStream(filePath));
+                new MockMultipartFile("image", "test.png", "text", new FileInputStream(filePath));
 
-        assertThatThrownBy(() -> localStorageService.uploadImage(imageFile)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> localStorageService.uploadImage(imageFile)).isInstanceOf(
+                IllegalArgumentException.class);
     }
 
 }

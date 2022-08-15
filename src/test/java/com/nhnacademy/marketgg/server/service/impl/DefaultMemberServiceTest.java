@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -49,7 +50,7 @@ class DefaultMemberServiceTest {
         noPassMember = new Member(memberRequest, new Cart());
 
         ReflectionTestUtils.setField(member, "ggpassUpdatedAt",
-                LocalDateTime.of(2019, 3, 11, 7, 10));
+                                     LocalDateTime.of(2019, 3, 11, 7, 10));
     }
 
     @Test
@@ -107,7 +108,7 @@ class DefaultMemberServiceTest {
         MemberResponse memberResponse = memberService.retrieveMember(uuid);
 
         assertThat(memberResponse).isNotNull();
-        verify(memberRepository, times(1)).findByUuid(uuid);
+        then(memberRepository).should(times(1)).findByUuid(uuid);
     }
 
     @Test
@@ -120,9 +121,10 @@ class DefaultMemberServiceTest {
         assertThatThrownBy(() -> memberService.retrieveMember(uuid))
                 .isInstanceOf(MemberNotFoundException.class);
 
-        verify(memberRepository, times(1)).findByUuid(uuid);
+        then(memberRepository).should(times(1)).findByUuid(uuid);
     }
 
+    //FIXME: 회원가입에 대한 테스트 코드를 작성해주세요 @김훈민
     @Test
     @DisplayName("회원가입")
     void testSignUp() {
