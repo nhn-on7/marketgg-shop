@@ -60,8 +60,6 @@ class DefaultCouponServiceTest {
     @Test
     @DisplayName("쿠폰 등록 성공")
     void testCreateCouponSuccess() {
-        willDoNothing().given(couponService).createCoupon(any());
-
         couponService.createCoupon(couponDto);
 
         then(couponRepository).should(times(1)).save(any());
