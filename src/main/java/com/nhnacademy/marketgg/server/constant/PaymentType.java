@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum OrderType {
+public enum PaymentType {
 
     CARD("신용카드"),
     TRANSFER("계좌이체"),

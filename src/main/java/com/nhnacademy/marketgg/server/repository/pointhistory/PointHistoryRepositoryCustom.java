@@ -27,12 +27,22 @@ public interface PointHistoryRepositoryCustom {
     List<PointRetrieveResponse> findAllForAdmin();
 
     /**
-     * 지정한 회원의 누적 포인트를 반환합니다.
+     * 지정한 회원의 가장 최근 포인트 내역을 반환합니다.
      *
      * @param id - 지정한 회원의 식별번호입니다.
-     * @return 지정한 회원의 누적 포인트를 반환합니다.
+     * @return 지정한 회원의 가장 최근 포인트 내역을 반환합니다.
      * @since 1.0.0
      */
     Optional<PointHistory> findLastTotalPoint(final Long id);
+
+    /**
+     * 지정한 회원의 누적 포인트를 반환합니다.
+     *
+     * @param memberId - 지정한 회원의 식별번호입니다.
+     * @return 지정한 회원의 누적 포인트를 반환합니다.
+     * @since 1.0.0
+     * @author 김정민
+     */
+    Integer findLastTotalPoints(final Long memberId);
 
 }

@@ -73,6 +73,20 @@ public class OrderProduct {
         @NotNull
         private Long productNo;
 
+        public Pk(Long orderId, Long productId) {
+            this.orderNo = orderId;
+            this.productNo = productId;
+        }
+
+    }
+
+    public OrderProduct(Order order, Product product, Integer amount) {
+        this.order = order;
+        this.product = product;
+        this.pk = new Pk(order.getId(), product.getId());
+        this.name = product.getName();
+        this.price = product.getPrice();
+        this.amount = amount;
     }
 
 }

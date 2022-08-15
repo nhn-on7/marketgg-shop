@@ -1,8 +1,12 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.constant.OrderStatus;
+import com.nhnacademy.marketgg.server.constant.PaymentType;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
-import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,9 +18,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 /**
  * 주문 개체입니다.
@@ -59,6 +61,18 @@ public class Order {
     @Column(name = "tracking_no")
     private Integer trackingNo;
 
+    @Column(name = "zip_code")
+    @NotNull
+    private Integer zipCode;
+
+    @Column(name = "address")
+    @NotNull
+    private String address;
+
+    @Column(name = "detail_address")
+    @NotNull
+    private String detailAddress;
+
     @Column(name = "created_at")
     @NotNull
     private LocalDateTime createdAt;
@@ -76,11 +90,15 @@ public class Order {
      * @param member       - 주문을 한 회원 객체
      * @param orderRequest - 주문 요청 객체
      */
-    public Order(final Member member, final OrderCreateRequest orderRequest) {
+    public Order(final Member member, final DeliveryAddress deliveryAddress, final OrderCreateRequest orderRequest) {
         this.member = member;
         this.totalAmount = orderRequest.getTotalAmount();
-        this.orderStatus = OrderStatus.PAY_WAITING.getStatus();
+        this.orderStatus = orderRequest.getPaymentType().equals(PaymentType.VIRTUAL.getType())
+                ? OrderStatus.DEPOSIT_WAITING.getStatus() : OrderStatus.PAY_WAITING.getStatus();
         this.usedPoint = orderRequest.getUsedPoint();
+        this.zipCode = deliveryAddress.getZipCode();
+        this.address = deliveryAddress.getAddress();
+        this.detailAddress = deliveryAddress.getDetailAddress();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
@@ -89,4 +107,11 @@ public class Order {
         return new Order();
     }
 
+    public void updateStatus(String status) {
+        this.orderStatus = status;
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
+
 import java.util.List;
 
 /**
@@ -11,26 +12,29 @@ import java.util.List;
  *
  * @author 박세완
  * @author 민아영
+ * @author 김정민
  * @version 1.0.0
  */
 public interface AuthRepository {
 
     /**
-     * auth 서버에서 uuid 목록을 전송해 이름 목록을 가져옵니다.
+     * 회원의 uuid 목록을 전송하여 이름 목록을 조회하기 위한 메소드입니다.
      *
-     * @param uuidList
-     * @return
-     * @throws JsonProcessingException
+     * @param uuidList - 회원의 uuid 목록입니다.
+     * @return uuid 목록에 해당하는 회원의 이름 목록을 반환합니다.
+     * @throws JsonProcessingException - Json 컨텐츠를 처리할 때 발생하는 모든 문제에 대한 예외처리입니다.
+     * @since 1.0.0
      */
     List<MemberNameResponse> getNameListByUuid(final List<String> uuidList) throws JsonProcessingException;
 
-    /**
-     * auth 서버에서 uuid 을 전송해 사용자 정보를 가져옵니다.
+    /*
+     * 회원의 uuid 를 통해 회원의 정보를 얻기 위한 메소드입니다.
      *
-     * @param uuid
-     * @return
-     * @throws JsonProcessingException
+     * @param memberInfoRequest - 회원의 정보를 요청하기 위한 DTO 객체입니다.
+     * @return 회원의 정보를 반환합니다.
+     * @throws JsonProcessingException - Json 컨텐츠를 처리할 때 발생하는 모든 문제에 대한 예외처리입니다.
+     * @since 1.0.0
      */
-    MemberInfoResponse getNameByUuid(final MemberInfoRequest uuid) throws JsonProcessingException;
+    MemberInfoResponse getMemberInfo(final MemberInfoRequest memberInfoRequest) throws JsonProcessingException;
 
 }
