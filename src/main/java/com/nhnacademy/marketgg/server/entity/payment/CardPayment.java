@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.entity.payment;
 
 import com.nhnacademy.marketgg.server.constant.payment.AcquireStatus;
 import com.nhnacademy.marketgg.server.constant.payment.AgencyCode;
+import com.nhnacademy.marketgg.server.constant.payment.AgencyCodeConverter;
 import com.nhnacademy.marketgg.server.constant.payment.CardType;
 import com.nhnacademy.marketgg.server.constant.payment.CardTypeConverter;
 import com.nhnacademy.marketgg.server.constant.payment.OwnerType;
