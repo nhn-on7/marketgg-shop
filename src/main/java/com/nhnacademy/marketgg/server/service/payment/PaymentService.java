@@ -1,5 +1,9 @@
 package com.nhnacademy.marketgg.server.service.payment;
 
+import com.nhnacademy.marketgg.server.constant.payment.AcquireStatus;
+import com.nhnacademy.marketgg.server.constant.payment.AgencyCode;
+import com.nhnacademy.marketgg.server.constant.payment.CardType;
+import com.nhnacademy.marketgg.server.constant.payment.OwnerType;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentMethod;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentStatus;
 import com.nhnacademy.marketgg.server.dto.payment.MobilePhonePaymentResult;
@@ -10,6 +14,7 @@ import com.nhnacademy.marketgg.server.dto.payment.request.CardPaymentResult;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentVerifyRequest;
+import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.payment.CardPayment;
 import com.nhnacademy.marketgg.server.entity.payment.MobilePhonePayment;
 import com.nhnacademy.marketgg.server.entity.payment.Payment;
@@ -28,20 +33,21 @@ public interface PaymentService {
 
     PaymentResponse verifyRequest(final PaymentVerifyRequest paymentRequest);
 
-    PaymentResponse pay(final PaymentRequest paymentRequest);
+    void pay(final PaymentRequest paymentRequest);
 
     PaymentResponse cancelPayment(Long paymentKey, PaymentCancelRequest paymentRequest);
 
     /**
      * 결제대행사로부터 받아온 결제 정보를 통해 결제 엔티티를 생성합니다.
      *
+     * @param order
      * @param response - 결제대행사로부터 받아온 결제 요청에 대한 응답 정보
      * @return 결제 개체
      */
-    default Payment toEntity(final PaymentResponse response) {
+    default Payment toEntity(Order order, final PaymentResponse response) {
         return Payment.builder()
                       .orderName(response.getOrderName())
-                      // .order(new Order(new Member(new MemberCreateRequest(), new Cart()), new OrderCreateRequest()))
+                      .order(order)
                       .paymentKey(response.getPaymentKey())
                       .method(PaymentMethod.of(response.getMethod()))
                       .totalAmount(response.getTotalAmount())
@@ -55,8 +61,18 @@ public interface PaymentService {
                       .build();
     }
 
-    default CardPayment toEntity(CardPaymentResult cardPaymentRequest) {
-        return null;
+    default CardPayment toEntity(Payment payment, CardPaymentResult cardPaymentRequest) {
+        return CardPayment.builder()
+                          .payment(payment)
+                          .amount(cardPaymentRequest.getAmount())
+                          .companyCode(AgencyCode.of(cardPaymentRequest.getCompanyCode()))
+                          .number(cardPaymentRequest.getNumber())
+                          .installmentPlanMonths(0)
+                          .cardType(CardType.of(cardPaymentRequest.getCardType()))
+                          .ownerType(OwnerType.of(cardPaymentRequest.getOwnerType()))
+                          .receiptUrl(cardPaymentRequest.getReceiptUrl())
+                          .acquireStatus(AcquireStatus.valueOf(cardPaymentRequest.getAcquireStatus()))
+                          .build();
     }
 
     default VirtualAccountPayment toEntity(VirtualAccountPaymentResult virtualAccountResult) {

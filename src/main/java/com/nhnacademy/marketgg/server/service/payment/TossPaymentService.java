@@ -7,6 +7,10 @@ import com.nhnacademy.marketgg.server.dto.payment.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentVerifyRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
+import com.nhnacademy.marketgg.server.entity.Cart;
+import com.nhnacademy.marketgg.server.entity.Member;
+import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.payment.CardPayment;
 import com.nhnacademy.marketgg.server.entity.payment.MobilePhonePayment;
 import com.nhnacademy.marketgg.server.entity.payment.Payment;
@@ -20,16 +24,18 @@ import com.nhnacademy.marketgg.server.repository.payment.PaymentRepository;
 import com.nhnacademy.marketgg.server.repository.payment.TransferPaymentRepository;
 import com.nhnacademy.marketgg.server.repository.payment.VirtualAccountPaymentRepository;
 import java.io.UncheckedIOException;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 @RequiredArgsConstructor
 public class TossPaymentService implements PaymentService {
 
@@ -53,8 +59,9 @@ public class TossPaymentService implements PaymentService {
      * @param paymentRequest - 결제 요청 정보
      * @return PaymentResponse
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
-    public PaymentResponse pay(final PaymentRequest paymentRequest) {
+    public void pay(final PaymentRequest paymentRequest) {
         ResponseEntity<String> response = paymentAdapter.confirm(paymentRequest);
 
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -66,11 +73,14 @@ public class TossPaymentService implements PaymentService {
             throw new UncheckedIOException(ex);
         }
 
-        Payment payment = this.toEntity(paymentResponse);
+        Order order = orderRepository.findById(1L)
+                                     .orElseThrow();
+
+        Payment payment = this.toEntity(order, paymentResponse);
         Payment savedPayment = paymentRepository.save(payment);
 
         if (Objects.nonNull(paymentResponse.getCard())) {
-            CardPayment cardPayment = this.toEntity(paymentResponse.getCard());
+            CardPayment cardPayment = this.toEntity(savedPayment, paymentResponse.getCard());
             cardPaymentRepository.save(cardPayment);
         }
 
@@ -88,8 +98,6 @@ public class TossPaymentService implements PaymentService {
             MobilePhonePayment mobilePhonePayment = this.toEntity(paymentResponse.getMobilePhone());
             mobilePhonePaymentRepository.save(mobilePhonePayment);
         }
-
-        return null;
     }
 
     @Override
