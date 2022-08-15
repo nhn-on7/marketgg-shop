@@ -30,6 +30,9 @@ public class CardPaymentResult {
     @Size(min = 2, max = 10)
     private String number;
 
+    @NotNull
+    private Integer installmentPlanMonths;
+
     @NotBlank
     @Size(min = 2, max = 10)
     private String cardType;

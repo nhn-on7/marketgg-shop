@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -14,7 +15,7 @@ import lombok.ToString;
  * @version 1.0
  * @since 1.0
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @ToString
 public class PaymentRequest {
