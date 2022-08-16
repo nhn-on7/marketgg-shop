@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.controller.payment;
 
-import com.nhnacademy.marketgg.server.dto.payment.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentVerifyRequest;
@@ -33,7 +32,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     /**
-     * 회원의 결제 요청에 대한 검증을 처리합니다.
+     * {@inheritDoc}
      *
      * @param paymentRequest - 결제 요청 정보
      * @return 성공 여부 응답 결과 반환
@@ -72,12 +71,12 @@ public class PaymentController {
      * @param paymentRequest - 결제 요청 정보
      * @return 결제대행사에서 결제 승인 처리로 인한 응답 정보 객체
      */
-    @PostMapping("{paymentKey}/cancel")
-    public ResponseEntity<CommonResponse> cancelPayment(@PathVariable Long paymentKey,
+    @PostMapping("/payments/{paymentKey}/cancel")
+    public ResponseEntity<CommonResponse> cancelPayment(@PathVariable String paymentKey,
                                                         @RequestBody @Valid final PaymentCancelRequest paymentRequest) {
         log.info("cancelPayment: {}", paymentRequest);
 
-        PaymentResponse response = paymentService.cancelPayment(paymentKey, paymentRequest);
+        paymentService.cancelPayment(paymentKey, paymentRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
