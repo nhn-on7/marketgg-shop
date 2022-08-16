@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.service.payment;
 
-import com.nhnacademy.marketgg.server.dto.payment.TransferPaymentResult;
+import com.nhnacademy.marketgg.server.dto.payment.result.TransferPaymentResult;
 import com.nhnacademy.marketgg.server.entity.payment.TransferPayment;
 
 /**

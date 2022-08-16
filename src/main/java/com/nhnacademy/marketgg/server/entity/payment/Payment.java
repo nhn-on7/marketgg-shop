@@ -3,14 +3,13 @@ package com.nhnacademy.marketgg.server.entity.payment;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentMethod;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentMethodConverter;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentStatus;
+import com.nhnacademy.marketgg.server.constant.payment.PaymentStatusConverter;
 import com.nhnacademy.marketgg.server.entity.Order;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -83,6 +82,7 @@ public class Payment implements Serializable {
     private Long discountAmount;
 
     @Column
+    @Convert(converter = PaymentStatusConverter.class)
     @NotNull
     private PaymentStatus status;
 
@@ -102,4 +102,7 @@ public class Payment implements Serializable {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    public void changePaymentStatusToCanceled() {
+        this.status = PaymentStatus.CANCELED;
+    }
 }
