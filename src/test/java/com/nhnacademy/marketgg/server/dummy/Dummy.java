@@ -2,6 +2,9 @@ package com.nhnacademy.marketgg.server.dummy;
 
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
+import com.nhnacademy.marketgg.server.dto.payment.request.PaymentRequest;
+import com.nhnacademy.marketgg.server.dto.payment.request.PaymentVerifyRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
@@ -157,7 +160,7 @@ public class Dummy {
 
     public static Product getDummyProduct(Long productId, Long assetId) {
         Product product =
-                new Product(getDummyProductCreateRequest(), getDummyAsset(assetId), getDummyCategory());
+            new Product(getDummyProductCreateRequest(), getDummyAsset(assetId), getDummyCategory());
         ReflectionTestUtils.setField(product, "id", productId);
 
         return product;
@@ -302,6 +305,22 @@ public class Dummy {
         ReflectionTestUtils.setField(couponDto, "discountAmount", 1000);
 
         return new Coupon(couponDto);
+    }
+
+    public static Object getPaymentVerifyRequest() {
+        return new PaymentVerifyRequest("GGORDER_1", "orderName", "name",
+                                        "email", 30_000L, 1L,
+                                        2_000, 300);
+    }
+
+    public static PaymentRequest getPaymentRequest() {
+        return new PaymentRequest("GGORDER_1",
+                                  "EAK6k75XwlOyL0qZ4G1VOP4xk47qOroWb2MQYgmBDPdR9pxz",
+                                  3200L);
+    }
+
+    public static PaymentCancelRequest getPaymentCancelRequest() {
+        return new PaymentCancelRequest("단순 변심", "신한", "110377904929", "강태풍");
     }
 
 }
