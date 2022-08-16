@@ -1,16 +1,15 @@
 package com.nhnacademy.marketgg.server.entity.payment;
 
+import com.nhnacademy.marketgg.server.constant.payment.BankCodeConverter;
 import com.nhnacademy.marketgg.server.constant.payment.AccountType;
+import com.nhnacademy.marketgg.server.constant.payment.AccountTypeConverter;
 import com.nhnacademy.marketgg.server.constant.payment.BankCode;
 import com.nhnacademy.marketgg.server.constant.payment.RefundStatus;
 import com.nhnacademy.marketgg.server.constant.payment.SettlementStatus;
-import java.io.Serializable;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
@@ -21,7 +20,6 @@ import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -46,32 +44,17 @@ import lombok.NoArgsConstructor;
 @Getter
 public class VirtualAccountPayment {
 
-    /**
-     * 결제 테이블의 키를 정의합니다.
-     */
-    @Embeddable
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @Getter
-    @EqualsAndHashCode
-    public static class Pk implements Serializable {
+    @Id
+    private Long paymentId;
 
-        @Column(name = "payment_no")
-        @NotNull
-        private Long paymentId;
-
-    }
-
-    @EmbeddedId
-    private Pk pk;
-
-    @MapsId(value = "paymentId")
+    @MapsId
     @OneToOne
     @JoinColumn(name = "payment_no")
     @NotNull
     private Payment payment;
 
     @Column(name = "account_type")
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = AccountTypeConverter.class)
     @NotNull
     private AccountType accountType;
 
@@ -81,9 +64,8 @@ public class VirtualAccountPayment {
     private String accountNumber;
 
     @Column
-    @Enumerated(EnumType.STRING)
-    @NotBlank
-    @Size(max = 20)
+    @Convert(converter = BankCodeConverter.class)
+    @NotNull
     private BankCode bank;
 
     @Column(name = "customer_name")
@@ -93,15 +75,15 @@ public class VirtualAccountPayment {
 
     @Column(name = "due_date")
     @NotBlank
-    @Size(max = 20)
+    // @Size(min = 3, max = 21)
     private String dueDate;
 
     @Column(name = "refund_status")
     @NotNull
     private RefundStatus refundStatus;
 
-    @Column
-    private String expired;
+    @Column(columnDefinition = "TINYINT", length = 1)
+    private boolean expired;
 
     @Column(name = "settlement_status")
     @NotNull
