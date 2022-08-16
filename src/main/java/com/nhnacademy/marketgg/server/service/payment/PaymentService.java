@@ -35,6 +35,12 @@ import java.time.LocalDateTime;
  */
 public interface PaymentService {
 
+    /**
+     * 회원의 결제 요청에 대한 검증을 처리합니다.
+     *
+     * @param paymentRequest - 결제 요청 정보
+     * @return 성공 여부 응답 결과 반환
+     */
     PaymentResponse verifyRequest(final PaymentVerifyRequest paymentRequest);
 
     /**
@@ -44,16 +50,22 @@ public interface PaymentService {
      */
     void pay(final PaymentRequest paymentRequest);
 
+    /**
+     * 승인된 결제를 취소합니다.
+     *
+     * @param paymentKey     - 결제 건에 대한 고유 키 값
+     * @param paymentRequest - 결제 취소 요청 정보
+     */
     void cancelPayment(final String paymentKey, final PaymentCancelRequest paymentRequest);
 
     /**
      * 결제대행사로부터 받아온 결제 정보를 통해 결제 엔티티를 생성합니다.
      *
-     * @param order
+     * @param order    - 주문 개체
      * @param response - 결제대행사로부터 받아온 결제 요청에 대한 응답 정보
      * @return 결제 개체
      */
-    default Payment toEntity(Order order, final PaymentResponse response) {
+    default Payment toEntity(final Order order, final PaymentResponse response) {
         return Payment.builder()
                       .orderName(response.getOrderName())
                       .order(order)
@@ -61,7 +73,7 @@ public interface PaymentService {
                       .method(PaymentMethod.of(response.getMethod()))
                       .totalAmount(response.getTotalAmount())
                       .balanceAmount(response.getBalanceAmount())
-                      // FIXME
+                      // FIXME: 할인금액 연동
                       .discountAmount(1_000L)
                       .status(PaymentStatus.valueOf(response.getStatus()))
                       .transactionKey(response.getTransactionKey())
@@ -77,7 +89,7 @@ public interface PaymentService {
      * @param cardPaymentRequest - 카드 결제 생성 정보
      * @return 카드 결제 개체
      */
-    default CardPayment toEntity(Payment payment, CardPaymentResult cardPaymentRequest) {
+    default CardPayment toEntity(final Payment payment, final CardPaymentResult cardPaymentRequest) {
         return CardPayment.builder()
                           .payment(payment)
                           .amount(cardPaymentRequest.getAmount())
@@ -98,7 +110,7 @@ public interface PaymentService {
      * @param result  - 가상계좌 결제 생성 정보
      * @return 가상계좌 개체
      */
-    default VirtualAccountPayment toEntity(Payment payment, VirtualAccountPaymentResult result) {
+    default VirtualAccountPayment toEntity(final Payment payment, final VirtualAccountPaymentResult result) {
         return VirtualAccountPayment.builder()
                                     .payment(payment)
                                     .accountType(AccountType.of(result.getAccountType()))
@@ -112,11 +124,11 @@ public interface PaymentService {
                                     .build();
     }
 
-    default TransferPayment toEntity(TransferPaymentResult transferResult) {
+    default TransferPayment toEntity(final TransferPaymentResult transferResult) {
         return null;
     }
 
-    default MobilePhonePayment toEntity(MobilePhonePaymentResult mobilePhoneResult) {
+    default MobilePhonePayment toEntity(final MobilePhonePaymentResult mobilePhoneResult) {
         return null;
     }
 
