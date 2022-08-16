@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -60,8 +59,8 @@ class DefaultFileServiceTest {
     @BeforeEach
     void setUp() throws IOException {
         imageCreateRequest =
-            ImageCreateRequest.builder().type(".png").imageSequence(1).length(123L).classification("cloud")
-                              .imageAddress("url").name("image name").build();
+                ImageCreateRequest.builder().type(".png").imageSequence(1).length(123L).classification("cloud")
+                                  .imageAddress("url").name("image name").build();
 
         URL url = getClass().getClassLoader().getResource("lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
@@ -117,4 +116,5 @@ class DefaultFileServiceTest {
 
         then(imageRepository).should(times(1)).queryById(anyLong());
     }
+
 }

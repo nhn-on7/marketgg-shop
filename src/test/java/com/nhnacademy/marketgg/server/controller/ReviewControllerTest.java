@@ -5,10 +5,11 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,13 +24,10 @@ import com.nhnacademy.marketgg.server.service.product.ReviewService;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Objects;
-import org.elasticsearch.client.ml.inference.preprocessing.Multi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -69,21 +67,22 @@ class ReviewControllerTest {
         String filePath = Objects.requireNonNull(url).getPath();
 
         MockMultipartFile file =
-            new MockMultipartFile("images", "lee.png", "image/png", new FileInputStream(filePath));
+                new MockMultipartFile("images", "lee.png", "image/png", new FileInputStream(filePath));
 
         MockMultipartFile dto = new MockMultipartFile("reviewRequest", "jsondata", "application/json",
                                                       content.getBytes(StandardCharsets.UTF_8));
 
         this.mockMvc.perform(multipart("/products/{productId}/reviews/{memberUuid}", 1L, "admin")
-                                 .file(dto)
-                                 .file(file)
-                                 .file(file)
-                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                                 .content(content))
+                                     .file(dto)
+                                     .file(file)
+                                     .file(file)
+                                     .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                     .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                                     .content(content))
                     .andExpect(status().isCreated());
 
-        then(reviewService).should().createReview(any(ReviewCreateRequest.class), any(MultipartFile.class) , anyString());
+        then(reviewService).should(times(1))
+                           .createReview(any(ReviewCreateRequest.class), any(MultipartFile.class), anyString());
     }
 
     @Test
@@ -95,7 +94,7 @@ class ReviewControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-        then(reviewService).should().retrieveReviews(any(Pageable.class));
+        then(reviewService).should(times(1)).retrieveReviews(any(Pageable.class));
     }
 
     @Test
@@ -107,27 +106,29 @@ class ReviewControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-        then(reviewService).should().retrieveReviewDetails(anyLong());
+        then(reviewService).should(times(1)).retrieveReviewDetails(anyLong());
     }
 
     @Test
     @DisplayName("후기 수정 테스트")
     void testUpdateReview() throws Exception {
         String content = objectMapper.writeValueAsString(reviewUpdateRequest);
-        BDDMockito.willDoNothing().given(reviewService)
-                  .updateReview(any(ReviewUpdateRequest.class), anyLong());
+        willDoNothing().given(reviewService)
+                       .updateReview(any(ReviewUpdateRequest.class), anyLong());
 
         this.mockMvc.perform(put("/products/{productId}/reviews/{reviewId}", 1L, 1L)
-                                 .contentType(MediaType.APPLICATION_JSON)
-                                 .content(content))
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(content))
                     .andExpect(status().isOk());
 
-        then(reviewService).should().updateReview(any(ReviewUpdateRequest.class), anyLong());
+        then(reviewService).should(times(1)).updateReview(any(ReviewUpdateRequest.class), anyLong());
     }
 
     @Test
     @DisplayName("후기 삭제 테스트")
     void testDeleteReview() throws Exception {
+        willDoNothing().given(reviewService).deleteReview(anyLong());
+
         this.mockMvc.perform(delete("/products/{productId}/reviews/{reviewId}", 1L, 1L))
                     .andExpect(status().isOk());
 

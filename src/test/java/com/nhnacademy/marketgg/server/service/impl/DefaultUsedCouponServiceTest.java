@@ -1,5 +1,10 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
+
 import com.nhnacademy.marketgg.server.dto.request.coupon.UsedCouponDto;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import com.nhnacademy.marketgg.server.entity.Order;
@@ -8,6 +13,7 @@ import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponReposito
 import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.coupon.DefaultUsedCouponService;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,11 +21,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -53,21 +54,21 @@ class DefaultUsedCouponServiceTest {
 
     @Test
     void testCreateUsedCouponsSuccess() {
-        when(orderRepository.findById(any())).thenReturn(Optional.ofNullable(order));
-        when(givenCouponRepository.findById(any())).thenReturn(Optional.ofNullable(givenCoupon));
+        given(orderRepository.findById(any())).willReturn(Optional.ofNullable(order));
+        given(givenCouponRepository.findById(any())).willReturn(Optional.ofNullable(givenCoupon));
 
         usedCouponService.createUsedCoupons(usedCouponDto);
 
-        verify(usedCouponRepository, times(1)).save(any(UsedCoupon.class));
+        then(usedCouponRepository).should(times(1)).save(any(UsedCoupon.class));
     }
 
     @Test
     void deleteUsedCoupons() {
-        when(usedCouponRepository.findById(any())).thenReturn(Optional.ofNullable(usedCoupon));
+        given(usedCouponRepository.findById(any())).willReturn(Optional.ofNullable(usedCoupon));
 
         usedCouponService.deleteUsedCoupons(usedCouponDto);
 
-        verify(usedCouponRepository, times(1)).delete(any(UsedCoupon.class));
+        then(usedCouponRepository).should(times(1)).delete(any(UsedCoupon.class));
     }
 
 }

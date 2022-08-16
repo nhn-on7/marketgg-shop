@@ -79,7 +79,7 @@ class DefaultCartProductServiceTest {
         given(productRepository.findById(productId)).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> cartProductService.addProduct(member, productAddRequest))
-            .isInstanceOf(ProductNotFoundException.class);
+                .isInstanceOf(ProductNotFoundException.class);
 
         then(productRepository).should(times(1)).findById(productId);
     }
@@ -126,10 +126,10 @@ class DefaultCartProductServiceTest {
         MemberInfo member = Dummy.getDummyMemberInfo(memberId, cart);
 
         given(cartProductRepository.findById(any(CartProduct.Pk.class)))
-            .willReturn(Optional.ofNullable(any(CartProduct.class)));
+                .willReturn(Optional.ofNullable(any(CartProduct.class)));
 
         assertThatThrownBy(() -> cartProductService.updateAmount(member, productUpdateRequest))
-            .isInstanceOf(CartNotFoundException.ProductInCartNotFoundException.class);
+                .isInstanceOf(CartNotFoundException.ProductInCartNotFoundException.class);
 
         then(cartProductRepository).should(times(1)).findById(any(CartProduct.Pk.class));
     }

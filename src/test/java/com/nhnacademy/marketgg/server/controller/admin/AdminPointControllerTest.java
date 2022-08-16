@@ -1,6 +1,8 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -21,7 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AdminPointController.class)
 @Import({
-    RoleCheckAspect.class
+        RoleCheckAspect.class
 })
 class AdminPointControllerTest {
 
@@ -46,9 +48,12 @@ class AdminPointControllerTest {
     @DisplayName("관리자의 사용자 전체 포인트 내역 조회")
     void testAdminRetrievePointHistory() throws Exception {
         given(pointService.adminRetrievePointHistories()).willReturn(List.of());
+
         mockMvc.perform(get(DEFAULT_ADMIN + "/points")
-                   .headers(httpHeaders))
+                                .headers(httpHeaders))
                .andExpect(status().isOk());
+
+        then(pointService).should(times(1)).adminRetrievePointHistories();
     }
 
 }

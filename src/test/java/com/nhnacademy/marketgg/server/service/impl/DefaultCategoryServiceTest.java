@@ -2,13 +2,12 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
@@ -88,8 +87,8 @@ class DefaultCategoryServiceTest {
 
         categoryService.createCategory(categoryCreateRequest);
 
-        then(categorizationRepository).should().findById(anyString());
-        then(categoryRepository).should().save(any(Category.class));
+        then(categorizationRepository).should(times(1)).findById(anyString());
+        then(categoryRepository).should(times(1)).save(any(Category.class));
     }
 
     @Test
@@ -108,7 +107,7 @@ class DefaultCategoryServiceTest {
 
         categoryService.retrieveCategory("001");
 
-        then(categoryRepository).should().findByCode(anyString());
+        then(categoryRepository).should(times(1)).findByCode(anyString());
     }
 
     @Test
@@ -145,7 +144,7 @@ class DefaultCategoryServiceTest {
 
         categoryService.updateCategory("001", categoryUpdateRequest);
 
-        then(categoryRepository).should().save(any(Category.class));
+        then(categoryRepository).should(times(1)).save(any(Category.class));
     }
 
     @Test
@@ -171,9 +170,9 @@ class DefaultCategoryServiceTest {
 
         categoryService.deleteCategory("001001");
 
-        then(categoryRepository).should().delete(any(Category.class));
-        then(elasticBoardRepository).should().deleteAllByCategoryCode(anyString());
-        then(elasticProductRepository).should().deleteAllByCategoryCode(anyString());
+        then(categoryRepository).should(times(1)).delete(any(Category.class));
+        then(elasticBoardRepository).should(times(1)).deleteAllByCategoryCode(anyString());
+        then(elasticProductRepository).should(times(1)).deleteAllByCategoryCode(anyString());
     }
 
     @Test
@@ -186,8 +185,8 @@ class DefaultCategoryServiceTest {
 
         categoryService.deleteCategory("001001");
 
-        then(categoryRepository).should().findById(anyString());
-        then(productRepository).should().existsByCategory(any(Category.class));
+        then(categoryRepository).should(times(1)).findById(anyString());
+        then(productRepository).should(times(1)).existsByCategory(any(Category.class));
     }
 
     @Test

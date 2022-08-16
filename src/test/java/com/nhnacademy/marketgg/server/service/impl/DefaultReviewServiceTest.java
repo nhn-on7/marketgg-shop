@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
@@ -121,7 +122,7 @@ class DefaultReviewServiceTest {
         String filePath = Objects.requireNonNull(url).getPath();
 
         MockMultipartFile image =
-            new MockMultipartFile("images", "lee.png", "image/png", new FileInputStream(filePath));
+                new MockMultipartFile("images", "lee.png", "image/png", new FileInputStream(filePath));
 
         given(memberRepository.findByUuid(anyString())).willReturn(Optional.ofNullable(member));
         given(reviewRepository.save(any(Review.class))).willReturn(review);
@@ -130,8 +131,8 @@ class DefaultReviewServiceTest {
 
         this.reviewService.createReview(reviewRequest, image, "admin");
 
-        then(reviewRepository).should().save(any(Review.class));
-        then(publisher).should().publishEvent(any(SavePointEvent.class));
+        then(reviewRepository).should(times(1)).save(any(Review.class));
+        then(publisher).should(times(1)).publishEvent(any(SavePointEvent.class));
     }
 
     @Test
@@ -143,8 +144,8 @@ class DefaultReviewServiceTest {
 
         this.reviewService.createReview(reviewRequest, "admin");
 
-        then(reviewRepository).should().save(any(Review.class));
-        then(publisher).should().publishEvent(any(SavePointEvent.class));
+        then(reviewRepository).should(times(1)).save(any(Review.class));
+        then(publisher).should(times(1)).publishEvent(any(SavePointEvent.class));
     }
 
     @Test
@@ -155,10 +156,10 @@ class DefaultReviewServiceTest {
         given(reviewRepository.retrieveReviews(PageRequest.of(0, 1))).willReturn(page);
 
         SingleResponse<Page<ReviewResponse>> reviewResponses =
-            reviewService.retrieveReviews(page.getPageable());
+                reviewService.retrieveReviews(page.getPageable());
 
         assertThat(reviewResponses).isNotNull();
-        then(reviewRepository).should().retrieveReviews(page.getPageable());
+        then(reviewRepository).should(times(1)).retrieveReviews(page.getPageable());
     }
 
     @Test
@@ -169,7 +170,7 @@ class DefaultReviewServiceTest {
         SingleResponse<ReviewResponse> response = reviewService.retrieveReviewDetails(1L);
 
         assertThat(response.getData().getContent()).isEqualTo("content");
-        then(reviewRepository).should().queryById(anyLong());
+        then(reviewRepository).should(times(1)).queryById(anyLong());
     }
 
     @Test
@@ -180,8 +181,8 @@ class DefaultReviewServiceTest {
 
         this.reviewService.updateReview(reviewUpdateRequest, 1L);
 
-        then(reviewRepository).should().findById(anyLong());
-        then(reviewRepository).should().save(any(Review.class));
+        then(reviewRepository).should(times(1)).findById(anyLong());
+        then(reviewRepository).should(times(1)).save(any(Review.class));
     }
 
     @Test
@@ -191,7 +192,7 @@ class DefaultReviewServiceTest {
 
         this.reviewService.deleteReview(1L);
 
-        then(reviewRepository).should().delete(any(Review.class));
+        then(reviewRepository).should(times(1)).delete(any(Review.class));
     }
 
     @Test
@@ -202,8 +203,8 @@ class DefaultReviewServiceTest {
         SingleResponse<Boolean> response = this.reviewService.makeBestReview(1L);
 
         assertThat(response.getData()).isTrue();
-        then(reviewRepository).should().findById(anyLong());
-        then(reviewRepository).should().save(any(Review.class));
+        then(reviewRepository).should(times(1)).findById(anyLong());
+        then(reviewRepository).should(times(1)).save(any(Review.class));
     }
 
 }

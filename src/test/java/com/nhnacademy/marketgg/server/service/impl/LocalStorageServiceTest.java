@@ -25,7 +25,7 @@ class LocalStorageServiceTest {
         URL url = getClass().getClassLoader().getResource("lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile imageFile =
-            new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));
+                new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));
 
         ImageCreateRequest imageCreateRequest = localStorageService.uploadImage(imageFile);
 
@@ -39,7 +39,7 @@ class LocalStorageServiceTest {
         URL url = getClass().getClassLoader().getResource("lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile imageFile =
-            new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream(filePath));
+                new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream(filePath));
 
         ImageCreateRequest imageCreateRequest = localStorageService.uploadImage(imageFile);
 
@@ -53,9 +53,10 @@ class LocalStorageServiceTest {
         URL url = getClass().getClassLoader().getResource("lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile imageFile =
-            new MockMultipartFile("image", "test.png", "text", new FileInputStream(filePath));
+                new MockMultipartFile("image", "test.png", "text", new FileInputStream(filePath));
 
-        assertThatThrownBy(() -> localStorageService.uploadImage(imageFile)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> localStorageService.uploadImage(imageFile)).isInstanceOf(
+                IllegalArgumentException.class);
     }
 
 }

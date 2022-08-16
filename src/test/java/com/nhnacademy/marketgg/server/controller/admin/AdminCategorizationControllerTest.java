@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -49,13 +49,13 @@ class AdminCategorizationControllerTest {
     @Test
     @DisplayName("카테고리 분류표 조회")
     void retrieveCategorization() throws Exception {
-        when(categorizationService.retrieveCategorizations()).thenReturn(List.of());
+        given(categorizationService.retrieveCategorizations()).willReturn(List.of());
 
         this.mockMvc.perform(get("/admin/categorizations")
-                .headers(httpHeaders))
-                .andExpect(status().isOk());
+                                     .headers(httpHeaders))
+                    .andExpect(status().isOk());
 
-        verify(categorizationService, times(1)).retrieveCategorizations();
+        then(categorizationService).should(times(1)).retrieveCategorizations();
     }
 
 }

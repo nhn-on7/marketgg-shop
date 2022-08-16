@@ -4,10 +4,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -37,7 +35,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AdminCategoryController.class)
 @Import({
-    RoleCheckAspect.class
+        RoleCheckAspect.class
 })
 class AdminCategoryControllerTest {
 
@@ -86,27 +84,27 @@ class AdminCategoryControllerTest {
     void testCreateCategory() throws Exception {
         String requestBody = objectMapper.writeValueAsString(categoryCreateRequest);
 
-        doNothing().when(categoryService).createCategory(any(CategoryCreateRequest.class));
+        willDoNothing().given(categoryService).createCategory(any(CategoryCreateRequest.class));
 
-        mockMvc.perform(post(DEFAULT_CATEGORY)
-                   .headers(httpHeaders)
-                   .contentType(MediaType.APPLICATION_JSON)
-                   .content(requestBody))
-               .andExpect(status().isCreated());
+        this.mockMvc.perform(post(DEFAULT_CATEGORY)
+                                     .headers(httpHeaders)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
+                    .andExpect(status().isCreated());
 
-        verify(categoryService, times(1)).createCategory(any(CategoryCreateRequest.class));
+        then(categoryService).should(times(1)).createCategory(any(CategoryCreateRequest.class));
     }
 
     @Test
     @DisplayName("카테고리 단건 조회")
     void testRetrieveCategory() throws Exception {
-        when(categoryService.retrieveCategory(anyString())).thenReturn(null);
+        given(categoryService.retrieveCategory(anyString())).willReturn(null);
 
         this.mockMvc.perform(get(DEFAULT_CATEGORY + "/{categoryId}", "011")
-                .headers(httpHeaders))
+                                     .headers(httpHeaders))
                     .andExpect(status().isOk());
 
-        verify(categoryService, times(1)).retrieveCategory(anyString());
+        then(categoryService).should(times(1)).retrieveCategory(anyString());
     }
 
     @Test
@@ -115,22 +113,22 @@ class AdminCategoryControllerTest {
         given(categoryService.retrieveCategoriesByCategorization(anyString())).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_CATEGORY + "/categorizations/{categorizationId}", "100")
-                .headers(httpHeaders))
+                                     .headers(httpHeaders))
                     .andExpect(status().isOk());
 
-        then(categoryService).should().retrieveCategoriesByCategorization(anyString());
+        then(categoryService).should(times(1)).retrieveCategoriesByCategorization(anyString());
     }
 
     @Test
     @DisplayName("카테고리 목록 조회")
     void testRetrieveCategories() throws Exception {
-        when(categoryService.retrieveCategories()).thenReturn(List.of());
+        given(categoryService.retrieveCategories()).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_CATEGORY)
-                .headers(httpHeaders))
+                                     .headers(httpHeaders))
                     .andExpect(status().isOk());
 
-        verify(categoryService, times(1)).retrieveCategories();
+        then(categoryService).should(times(1)).retrieveCategories();
     }
 
 
@@ -139,29 +137,28 @@ class AdminCategoryControllerTest {
     void testUpdateCategory() throws Exception {
         String requestBody = objectMapper.writeValueAsString(categoryUpdateRequest);
 
-        doNothing().when(categoryService)
-                   .updateCategory(anyString(), any(CategoryUpdateRequest.class));
+        willDoNothing().given(categoryService).updateCategory(anyString(), any(CategoryUpdateRequest.class));
 
-        mockMvc.perform(put(DEFAULT_CATEGORY + "/{categoryId}", "001")
-                   .headers(httpHeaders)
-                   .contentType(MediaType.APPLICATION_JSON)
-                   .content(requestBody))
-               .andExpect(status().isOk());
+        this.mockMvc.perform(put(DEFAULT_CATEGORY + "/{categoryId}", "001")
+                                     .headers(httpHeaders)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
+                    .andExpect(status().isOk());
 
-        verify(categoryService, times(1)).updateCategory(anyString(),
-            any(CategoryUpdateRequest.class));
+        then(categoryService).should(times(1)).updateCategory(anyString(),
+                                                              any(CategoryUpdateRequest.class));
     }
 
     @Test
     @DisplayName("카테고리 삭제")
     void testDeleteCategory() throws Exception {
-        doNothing().when(categoryService).deleteCategory(anyString());
+        willDoNothing().given(categoryService).deleteCategory(anyString());
 
         this.mockMvc.perform(delete(DEFAULT_CATEGORY + "/{categoryId}", "001")
-                .headers(httpHeaders))
+                                     .headers(httpHeaders))
                     .andExpect(status().isOk());
 
-        verify(categoryService, times(1)).deleteCategory(anyString());
+        then(categoryService).should(times(1)).deleteCategory(anyString());
     }
 
 }

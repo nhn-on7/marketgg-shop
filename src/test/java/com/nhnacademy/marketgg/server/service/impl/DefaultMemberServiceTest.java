@@ -1,5 +1,12 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
+
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
@@ -8,6 +15,9 @@ import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.member.DefaultMemberService;
+import java.lang.reflect.Constructor;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,17 +27,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.lang.reflect.Constructor;
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -49,7 +48,7 @@ class DefaultMemberServiceTest {
         noPassMember = new Member(memberRequest, new Cart());
 
         ReflectionTestUtils.setField(member, "ggpassUpdatedAt",
-                LocalDateTime.of(2019, 3, 11, 7, 10));
+                                     LocalDateTime.of(2019, 3, 11, 7, 10));
     }
 
     @Test
@@ -107,7 +106,7 @@ class DefaultMemberServiceTest {
         MemberResponse memberResponse = memberService.retrieveMember(uuid);
 
         assertThat(memberResponse).isNotNull();
-        verify(memberRepository, times(1)).findByUuid(uuid);
+        then(memberRepository).should(times(1)).findByUuid(uuid);
     }
 
     @Test
@@ -120,9 +119,10 @@ class DefaultMemberServiceTest {
         assertThatThrownBy(() -> memberService.retrieveMember(uuid))
                 .isInstanceOf(MemberNotFoundException.class);
 
-        verify(memberRepository, times(1)).findByUuid(uuid);
+        then(memberRepository).should(times(1)).findByUuid(uuid);
     }
 
+    // FIXME: 회원가입에 대한 테스트 코드를 작성해주세요 @김훈민
     @Test
     @DisplayName("회원가입")
     void testSignUp() {

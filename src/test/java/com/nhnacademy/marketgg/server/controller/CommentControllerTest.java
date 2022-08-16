@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,8 +46,8 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @ActiveProfiles({ "testdb", "common", "local" })
 @Import({
-    AuthInjectAspect.class,
-    MemberInfoAspect.class
+        AuthInjectAspect.class,
+        MemberInfoAspect.class
 })
 class CommentControllerTest {
 
@@ -95,14 +96,14 @@ class CommentControllerTest {
 
 
         this.mockMvc.perform(post(DEFAULT_CS_COMMENT + "/{postId}", 1L)
-                .headers(headers)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
+                                     .headers(headers)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
                     .andExpect(status().isCreated());
 
-        then(otoInquiryCommentService).should()
+        then(otoInquiryCommentService).should(times(1))
                                       .createComment(anyLong(), anyLong(),
-                                          any(CommentRequest.class));
+                                                     any(CommentRequest.class));
     }
 
 }

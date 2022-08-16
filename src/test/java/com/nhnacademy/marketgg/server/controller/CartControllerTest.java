@@ -59,8 +59,8 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @ActiveProfiles({ "testdb", "common", "local" })
 @Import({
-    AuthInjectAspect.class,
-    MemberInfoAspect.class
+        AuthInjectAspect.class,
+        MemberInfoAspect.class
 })
 class CartControllerTest {
 
@@ -100,7 +100,7 @@ class CartControllerTest {
     void setUp() throws JsonProcessingException {
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
                                  .setControllerAdvice(globalControllerAdvice, authControllerAdvice,
-                                     memberControllerAdvice)
+                                                      memberControllerAdvice)
                                  .alwaysDo(print())
                                  .build();
 
@@ -127,9 +127,9 @@ class CartControllerTest {
         String jsonRequest = mapper.writeValueAsString(request);
 
         mockMvc.perform(post(baseUri)
-                   .headers(headers)
-                   .contentType(APPLICATION_JSON)
-                   .content(jsonRequest))
+                                .headers(headers)
+                                .contentType(APPLICATION_JSON)
+                                .content(jsonRequest))
                .andExpect(status().isCreated())
                .andExpect(jsonPath("$.success", equalTo(true)));
 
@@ -143,14 +143,16 @@ class CartControllerTest {
         String jsonRequest = mapper.writeValueAsString(request);
 
         willThrow(ProductNotFoundException.class)
-            .given(cartProductService).addProduct(any(MemberInfo.class), any(request.getClass()));
+                .given(cartProductService).addProduct(any(MemberInfo.class), any(request.getClass()));
 
         mockMvc.perform(post(baseUri)
-                   .headers(headers)
-                   .contentType(APPLICATION_JSON)
-                   .content(jsonRequest))
+                                .headers(headers)
+                                .contentType(APPLICATION_JSON)
+                                .content(jsonRequest))
                .andExpect(status().isNotFound())
                .andExpect(jsonPath("$.success", equalTo(false)));
+
+        then(cartProductService).should(times(1)).addProduct(any(MemberInfo.class), any(request.getClass()));
     }
 
     @Test
@@ -161,17 +163,20 @@ class CartControllerTest {
         mockMvc.perform(get(baseUri).headers(headers))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.success", equalTo(true)));
+
+        then(cartProductService).should(times(0)).retrieveCarts(member);
     }
 
     @Test
     @DisplayName("잘못된 회원의 장바구니 조회")
     void testRetrieveCartFail() throws Exception {
-
         given(cartProductService.retrieveCarts(member)).willReturn(new ArrayList<>());
 
         mockMvc.perform(get(baseUri))
                .andExpect(status().isUnauthorized())
                .andExpect(jsonPath("$.success", equalTo(false)));
+
+        then(cartProductService).should(times(0)).retrieveCarts(member);
     }
 
     @Test
@@ -183,11 +188,13 @@ class CartControllerTest {
         willDoNothing().given(cartProductService).updateAmount(any(MemberInfo.class), any(request.getClass()));
 
         mockMvc.perform(patch(baseUri)
-                   .headers(headers)
-                   .contentType(APPLICATION_JSON)
-                   .content(jsonRequest))
+                                .headers(headers)
+                                .contentType(APPLICATION_JSON)
+                                .content(jsonRequest))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.success", equalTo(true)));
+
+        then(cartProductService).should(times(1)).updateAmount(any(MemberInfo.class), any(request.getClass()));
     }
 
     @Test
@@ -197,9 +204,9 @@ class CartControllerTest {
         String jsonRequest = mapper.writeValueAsString(request);
 
         mockMvc.perform(patch(baseUri)
-                   .headers(headers)
-                   .contentType(APPLICATION_JSON)
-                   .content(jsonRequest))
+                                .headers(headers)
+                                .contentType(APPLICATION_JSON)
+                                .content(jsonRequest))
                .andExpect(status().isBadRequest())
                .andExpect(jsonPath("$.success", equalTo(false)));
     }
@@ -216,11 +223,13 @@ class CartControllerTest {
         willDoNothing().given(cartProductService).deleteProducts(any(MemberInfo.class), anyList());
 
         mockMvc.perform(delete(baseUri)
-                   .headers(headers)
-                   .contentType(APPLICATION_JSON)
-                   .content(jsonRequest))
+                                .headers(headers)
+                                .contentType(APPLICATION_JSON)
+                                .content(jsonRequest))
                .andExpect(status().isNoContent())
                .andExpect(jsonPath("$.success", equalTo(true)));
+
+        then(cartProductService).should(times(1)).deleteProducts(any(MemberInfo.class), anyList());
     }
 
 }

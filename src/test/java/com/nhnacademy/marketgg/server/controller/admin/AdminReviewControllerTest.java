@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.controller.admin;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,11 +49,11 @@ class AdminReviewControllerTest {
         given(reviewService.makeBestReview(anyLong())).willReturn(new SingleResponse<>());
 
         this.mockMvc.perform(post("/admin/products/{productId}/reviews/{reviewId}/make-best", 1L, 1L)
-                .headers(httpHeaders)
-                .contentType(MediaType.APPLICATION_JSON))
+                                     .headers(httpHeaders)
+                                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
 
-        then(reviewService).should().makeBestReview(anyLong());
+        then(reviewService).should(times(1)).makeBestReview(anyLong());
     }
 
 }

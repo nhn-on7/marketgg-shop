@@ -23,7 +23,6 @@ import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForReady;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
-import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticBoardRepository;
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
@@ -38,7 +37,6 @@ import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerSer
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.post.DefaultPostService;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -92,7 +90,6 @@ class DefaultPostServiceTest {
     private PostRequest postRequest;
     private Cart cart;
     private CustomerServicePost post;
-    private ElasticBoard board;
     private Category category;
 
     @BeforeEach
@@ -101,12 +98,12 @@ class DefaultPostServiceTest {
         postResponse = new PostResponse(1L, FAQ_CODE, "Hello", " ", " ", LocalDateTime.now());
         CommentReady commentReady = new CommentReady("hello", "99990000111122223333444455556666", LocalDateTime.now());
         ready = new PostResponseForReady(2L, FAQ_CODE, "Hello", "hi", "환불", "미답변",
-            LocalDateTime.now(), LocalDateTime.now(),
-            List.of(commentReady));
+                                         LocalDateTime.now(), LocalDateTime.now(),
+                                         List.of(commentReady));
 
         ready2 = new PostResponseForReady(3L, OTO_CODE, "Hello", "hi", "환불", "미답변",
-            LocalDateTime.now(), LocalDateTime.now(),
-            List.of(commentReady));
+                                          LocalDateTime.now(), LocalDateTime.now(),
+                                          List.of(commentReady));
 
         searchRequest = new SearchRequest("hello", 0, PAGE_SIZE);
         memberInfo = Dummy.getDummyMemberInfo(1L, cart);
@@ -117,16 +114,16 @@ class DefaultPostServiceTest {
         Member member = new Member(createRequest, cart);
         category = new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest));
         post = new CustomerServicePost(member, category, postRequest);
-        board = new ElasticBoard(post);
     }
 
     @Test
     @DisplayName("게시글 등록")
     void testCreatePost() {
         ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
+
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(new Member(createRequest, cart)));
         given(categoryRepository.findById(anyString())).willReturn(
-            Optional.of(new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest))));
+                Optional.of(new Category(categoryCreateRequest, new Categorization(categorizationCreateRequest))));
         given(postRepository.save(any(CustomerServicePost.class))).willReturn(post);
 
         postService.createPost(postRequest, memberInfo);
@@ -138,6 +135,7 @@ class DefaultPostServiceTest {
     @DisplayName("게시글 등록 실패(권한 이슈)")
     void testCreatePostNoAccess() {
         ReflectionTestUtils.setField(postRequest, "categoryCode", NOTICE_CODE);
+
         postService.createPost(postRequest, memberInfo);
 
         then(postRepository).should(times(0)).save(any(CustomerServicePost.class));
@@ -147,8 +145,9 @@ class DefaultPostServiceTest {
     @DisplayName("게시글 목록 조회(1:1 문의)")
     void testRetrievePostList() {
         ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
+
         given(postRepository.findPostByCategoryAndMember(any(PageRequest.class), anyString(), anyLong())).willReturn(
-            Page.empty());
+                Page.empty());
 
         List<PostResponse> list = postService.retrievePostList(OTO_CODE, 0, memberInfo);
 
@@ -183,7 +182,7 @@ class DefaultPostServiceTest {
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postRepository.findByBoardNo(anyLong())).willReturn(ready);
         given(authRepository.getNameListByUuid(any())).willReturn(
-            List.of(new MemberNameResponse("99990000111122223333444455556666", "박세완")));
+                List.of(new MemberNameResponse("99990000111122223333444455556666", "박세완")));
 
         PostResponseForDetail postResponseForDetail = postService.retrievePost(1L, memberInfo);
 
@@ -207,7 +206,7 @@ class DefaultPostServiceTest {
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postRepository.findOwnOtoInquiry(anyLong(), anyLong())).willReturn(ready2);
         given(authRepository.getNameListByUuid(any())).willReturn(
-            List.of(new MemberNameResponse("99990000111122223333444455556666", "박세완")));
+                List.of(new MemberNameResponse("99990000111122223333444455556666", "박세완")));
 
         PostResponseForDetail postResponseForDetail = postService.retrievePost(1L, memberInfo);
 
@@ -221,8 +220,9 @@ class DefaultPostServiceTest {
     @DisplayName("카테고리 별 검색")
     void testSearchForCategory() throws Exception {
         ReflectionTestUtils.setField(postRequest, "categoryCode", NOTICE_CODE);
+
         given(searchRepository.searchBoardWithCategoryCode(anyString(), any(SearchRequest.class),
-            anyString())).willReturn(List.of(postResponse));
+                                                           anyString())).willReturn(List.of(postResponse));
 
         List<PostResponse> responses = postService.searchForCategory(NOTICE_CODE, searchRequest, memberInfo);
 
@@ -243,8 +243,9 @@ class DefaultPostServiceTest {
     @DisplayName("옵션 별 검색")
     void testSearchForOption() throws Exception {
         ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
+
         given(searchRepository.searchBoardWithOption(anyString(), anyString(), any(SearchRequest.class),
-            anyString())).willReturn(List.of(postResponse));
+                                                     anyString())).willReturn(List.of(postResponse));
         List<PostResponse> responses = postService.searchForOption(OTO_CODE, searchRequest, "reason", "배송");
 
         assertThat(responses).hasSize(1);
@@ -254,6 +255,7 @@ class DefaultPostServiceTest {
     @DisplayName("게시글 수정")
     void testUpdatePost() {
         ReflectionTestUtils.setField(postRequest, "categoryCode", NOTICE_CODE);
+
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postRepository.save(any(CustomerServicePost.class))).willReturn(post);
         postService.updatePost(NOTICE_CODE, 1L, postRequest);
@@ -265,8 +267,10 @@ class DefaultPostServiceTest {
     @DisplayName("1:1 문의 상태 변경")
     void testUpdateOtoInquiryStatus() {
         PostStatusUpdateRequest updateRequest = new PostStatusUpdateRequest();
+
         ReflectionTestUtils.setField(updateRequest, "status", "hi");
         ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
+
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postRepository.save(any(CustomerServicePost.class))).willReturn(post);
 
@@ -279,6 +283,7 @@ class DefaultPostServiceTest {
     @DisplayName("게시글 삭제")
     void testDeletePost() {
         ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
+
         willDoNothing().given(postRepository).deleteById(anyLong());
         willDoNothing().given(elasticBoardRepository).deleteById(anyLong());
         willDoNothing().given(commentRepository).deleteAllByCustomerServicePost_Id(anyLong());
@@ -295,6 +300,7 @@ class DefaultPostServiceTest {
     void testDeletePostForAdmin() {
         ReflectionTestUtils.setField(memberInfo, "roles", Set.of("ROLE_ADMIN"));
         ReflectionTestUtils.setField(postRequest, "categoryCode", FAQ_CODE);
+
         willDoNothing().given(postRepository).deleteById(anyLong());
         willDoNothing().given(elasticBoardRepository).deleteById(anyLong());
         willDoNothing().given(commentRepository).deleteAllByCustomerServicePost_Id(anyLong());

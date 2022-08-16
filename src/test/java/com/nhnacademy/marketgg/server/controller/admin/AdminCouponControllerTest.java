@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -72,12 +73,12 @@ class AdminCouponControllerTest {
         willDoNothing().given(couponService).createCoupon(couponDto);
 
         this.mockMvc.perform(post(DEFAULT_COUPON)
-                .headers(httpHeaders)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
+                                     .headers(httpHeaders)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
                     .andExpect(status().isCreated());
 
-        then(couponService).should().createCoupon(any(CouponDto.class));
+        then(couponService).should(times(1)).createCoupon(any(CouponDto.class));
     }
 
     @Test
@@ -86,10 +87,10 @@ class AdminCouponControllerTest {
         given(couponService.retrieveCoupon(anyLong())).willReturn(null);
 
         this.mockMvc.perform(get(DEFAULT_COUPON + "/" + 1L)
-                .headers(httpHeaders))
+                                     .headers(httpHeaders))
                     .andExpect(status().isOk());
 
-        then(couponService).should().retrieveCoupon(anyLong());
+        then(couponService).should(times(1)).retrieveCoupon(anyLong());
     }
 
     @Test
@@ -98,10 +99,10 @@ class AdminCouponControllerTest {
         given(couponService.retrieveCoupons(pageable)).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_COUPON)
-                .headers(httpHeaders))
+                                     .headers(httpHeaders))
                     .andExpect(status().isOk());
 
-        then(couponService).should().retrieveCoupons(pageable);
+        then(couponService).should(times(1)).retrieveCoupons(pageable);
     }
 
     @Test
@@ -112,12 +113,12 @@ class AdminCouponControllerTest {
         willDoNothing().given(couponService).updateCoupon(1L, couponDto);
 
         this.mockMvc.perform(put(DEFAULT_COUPON + "/" + 1L)
-                .headers(httpHeaders)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
+                                     .headers(httpHeaders)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
                     .andExpect(status().isOk());
 
-        then(couponService).should().updateCoupon(anyLong(), any(CouponDto.class));
+        then(couponService).should(times(1)).updateCoupon(anyLong(), any(CouponDto.class));
     }
 
     @Test
@@ -126,10 +127,10 @@ class AdminCouponControllerTest {
         willDoNothing().given(couponService).deleteCoupon(anyLong());
 
         this.mockMvc.perform(delete(DEFAULT_COUPON + "/" + 1L)
-                .headers(httpHeaders))
+                                     .headers(httpHeaders))
                     .andExpect(status().isNoContent());
 
-        then(couponService).should().deleteCoupon(anyLong());
+        then(couponService).should(times(1)).deleteCoupon(anyLong());
     }
 
 }

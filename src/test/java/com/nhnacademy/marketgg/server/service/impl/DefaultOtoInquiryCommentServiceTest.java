@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
@@ -66,7 +67,7 @@ class DefaultOtoInquiryCommentServiceTest {
 
         commentService.createComment(1L, 1L, new CommentRequest());
 
-        then(commentRepository).should().save(any(CustomerServiceComment.class));
+        then(commentRepository).should(times(1)).save(any(CustomerServiceComment.class));
     }
 
 }

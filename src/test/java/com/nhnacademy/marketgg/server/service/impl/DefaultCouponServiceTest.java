@@ -6,7 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.entity.Coupon;
@@ -59,7 +59,7 @@ class DefaultCouponServiceTest {
     void testCreateCouponSuccess() {
         couponService.createCoupon(couponDto);
 
-        then(couponRepository).should().save(any());
+        then(couponRepository).should(times(1)).save(any());
     }
 
     @Test
@@ -68,11 +68,11 @@ class DefaultCouponServiceTest {
         Page<CouponDto> pages = new PageImpl<>(List.of(), pageable, 1L);
 
         given(couponRepository.findAllCoupons(pageable))
-            .willReturn(pages);
+                .willReturn(pages);
 
         List<CouponDto> couponResponses = couponService.retrieveCoupons(pageable);
 
-        then(couponRepository).should().findAllCoupons(pageable);
+        then(couponRepository).should(times(1)).findAllCoupons(pageable);
         assertThat(couponResponses).isNotNull();
     }
 
@@ -83,8 +83,8 @@ class DefaultCouponServiceTest {
 
         couponService.updateCoupon(1L, couponDto);
 
-        then(couponRepository).should().findById(anyLong());
-        then(couponRepository).should().save(any(Coupon.class));
+        then(couponRepository).should(times(1)).findById(anyLong());
+        then(couponRepository).should(times(1)).save(any(Coupon.class));
     }
 
     @Test
@@ -93,7 +93,7 @@ class DefaultCouponServiceTest {
         given(couponRepository.findById(anyLong())).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> couponService.updateCoupon(1L, couponDto))
-            .isInstanceOf(CouponNotFoundException.class);
+                .isInstanceOf(CouponNotFoundException.class);
     }
 
     @Test
@@ -103,8 +103,8 @@ class DefaultCouponServiceTest {
 
         couponService.deleteCoupon(1L);
 
-        then(couponRepository).should().findById(anyLong());
-        then(couponRepository).should().delete(any(Coupon.class));
+        then(couponRepository).should(times(1)).findById(anyLong());
+        then(couponRepository).should(times(1)).delete(any(Coupon.class));
     }
 
     @Test
@@ -113,7 +113,7 @@ class DefaultCouponServiceTest {
         given(couponRepository.findById(anyLong())).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> couponService.deleteCoupon(1L))
-            .isInstanceOf(CouponNotFoundException.class);
+                .isInstanceOf(CouponNotFoundException.class);
     }
 
 }

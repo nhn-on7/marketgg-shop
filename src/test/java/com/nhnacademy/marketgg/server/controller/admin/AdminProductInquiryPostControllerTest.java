@@ -2,9 +2,9 @@ package com.nhnacademy.marketgg.server.controller.admin;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AdminProductInquiryPostController.class)
 @Import({
-    RoleCheckAspect.class
+        RoleCheckAspect.class
 })
 class AdminProductInquiryPostControllerTest {
 
@@ -59,15 +59,15 @@ class AdminProductInquiryPostControllerTest {
         ReflectionTestUtils.setField(replyRequest, "adminReply", "고객님 안녕하세요 재입고 예정은 없습니다.");
         String content = objectMapper.writeValueAsString(replyRequest);
 
-        doNothing().when(productInquiryPostService)
-                   .updateProductInquiryReply(anyString(), anyLong(), anyLong());
+        willDoNothing().given(productInquiryPostService).updateProductInquiryReply(anyString(), anyLong(), anyLong());
 
         this.mockMvc.perform(put("/admin/products/inquiry-reply")
-                .headers(httpHeaders)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content))
+                                     .headers(httpHeaders)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(content))
                     .andExpect(status().isOk());
-        verify(productInquiryPostService, times(1))
-            .updateProductInquiryReply(anyString(), anyLong(), anyLong());
+
+        then(productInquiryPostService).should(times(1)).updateProductInquiryReply(anyString(), anyLong(), anyLong());
     }
+
 }

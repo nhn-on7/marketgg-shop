@@ -47,10 +47,10 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @ActiveProfiles({ "testdb", "common", "local" })
 @Import({
-    RoleCheckAspect.class,
-    AuthInjectAspect.class,
-    UuidAspect.class,
-    MemberInfoAspect.class
+        RoleCheckAspect.class,
+        AuthInjectAspect.class,
+        UuidAspect.class,
+        MemberInfoAspect.class
 })
 class DeliveryAddressControllerTest {
 
@@ -138,9 +138,8 @@ class DeliveryAddressControllerTest {
         headers.set(WWW_AUTHENTICATE, roles);
 
         mockMvc.perform(delete(baseUri + "/{deliveryNo}", deliveryAddressNo)
-                   .headers(headers))
+                                .headers(headers))
                .andExpect(status().isOk());
-
     }
 
     @Test
@@ -153,9 +152,8 @@ class DeliveryAddressControllerTest {
         headers.set(WWW_AUTHENTICATE, roles);
 
         mockMvc.perform(get("/members/delivery-addresses")
-                   .headers(headers))
+                                .headers(headers))
                .andExpect(status().isOk());
-
     }
 
 }
