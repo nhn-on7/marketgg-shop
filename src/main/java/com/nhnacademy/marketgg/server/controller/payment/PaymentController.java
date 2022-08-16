@@ -78,7 +78,7 @@ public class PaymentController {
 
         paymentService.cancelPayment(paymentKey, paymentRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(new SingleResponse<>());
     }
