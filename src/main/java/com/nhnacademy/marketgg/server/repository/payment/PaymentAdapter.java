@@ -19,6 +19,8 @@ import org.springframework.web.client.RestTemplate;
  * 결제대행사에 요청을 담당합니다.
  *
  * @author 이제훈
+ * @version 1.0
+ * @since 1.0
  */
 @Component
 @RequiredArgsConstructor
@@ -29,18 +31,18 @@ public class PaymentAdapter {
     @Value("${gg.tosspayments.test.secret-key}")
     private String testSecretKey;
 
+    @Value("${gg.tosspayments.origin}")
+    private String tosspaymentsOrigin;
+
     /**
      * 결제대행사에 결제 승인 요청을 전송합니다.
      *
      * @param paymentRequest - 결제 요청 정보
      * @return 결제 승인 응답 정보
      */
-    public ResponseEntity<String> confirm(PaymentRequest paymentRequest) {
-        Base64.Encoder encoder = Base64.getEncoder();
-        String encodedKey = new String(encoder.encode((this.testSecretKey + ":").getBytes(StandardCharsets.UTF_8)));
-
+    public ResponseEntity<String> confirm(final PaymentRequest paymentRequest) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBasicAuth(encodedKey);
+        headers.setBasicAuth(this.getEncodedPaymentKey());
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
@@ -49,24 +51,32 @@ public class PaymentAdapter {
         param.put("amount", paymentRequest.getAmount());
         param.put("paymentKey", paymentRequest.getPaymentKey());
 
-        return restTemplate.postForEntity("https://api.tosspayments.com/v1/payments/confirm",
+        return restTemplate.postForEntity(tosspaymentsOrigin + "/payments/confirm",
                                           new HttpEntity<>(param, headers), String.class);
     }
 
-    public ResponseEntity<String> cancel(String paymentKey, PaymentCancelRequest paymentRequest) {
-        Base64.Encoder encoder = Base64.getEncoder();
-        String encodedKey = new String(encoder.encode((this.testSecretKey + ":").getBytes(StandardCharsets.UTF_8)));
-
+    /**
+     * 결제대행사에 결제 취소 요청을 전송합니다.
+     *
+     * @param paymentKey     - 결제 건에 대한 고유 키 값
+     * @param paymentRequest - 결제 취소 요청 정보
+     * @return 결제 취소 응답 정보
+     */
+    public ResponseEntity<String> cancel(final String paymentKey, final PaymentCancelRequest paymentRequest) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBasicAuth(encodedKey);
+        headers.setBasicAuth(this.getEncodedPaymentKey());
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         JSONObject param = new JSONObject();
         param.put("cancelReason", paymentRequest.getCancelReason());
 
-        return restTemplate.postForEntity("https://api.tosspayments.com/v1/payments/" + paymentKey + "/cancel",
+        return restTemplate.postForEntity(tosspaymentsOrigin + "/payments/" + paymentKey + "/cancel",
                                           new HttpEntity<>(param, headers), String.class);
+    }
+
+    private String getEncodedPaymentKey() {
+        return new String(Base64.getEncoder().encode((this.testSecretKey + ":").getBytes(StandardCharsets.UTF_8)));
     }
 
 }
