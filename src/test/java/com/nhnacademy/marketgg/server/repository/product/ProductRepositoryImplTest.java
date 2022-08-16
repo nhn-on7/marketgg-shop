@@ -106,7 +106,7 @@ class ProductRepositoryImplTest {
         productRepository.save(product);
 
         assertThat(productRepository.queryById(product.getId()).getName())
-            .isEqualTo(product.getName());
+                .isEqualTo(product.getName());
     }
 
     @Test

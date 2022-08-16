@@ -76,7 +76,7 @@ class ProductInquiryPostRepositoryImplTest {
             productInquiryPostRepository.save(productInquiryPost);
         }
         assertThat(productInquiryPostRepository.findAllByProductNo(2L, PageRequest.of(0, 10)))
-            .hasSize(5);
+                .hasSize(5);
     }
 
     // @Test
@@ -88,7 +88,7 @@ class ProductInquiryPostRepositoryImplTest {
             productInquiryPostRepository.save(productInquiryPost);
         }
         assertThat(productInquiryPostRepository.findAllByMemberNo(1L, PageRequest.of(0, 10)))
-            .hasSize(5);
+                .hasSize(5);
     }
 
 }
