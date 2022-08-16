@@ -24,12 +24,10 @@ import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponReposito
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.coupon.DefaultGivenCouponService;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

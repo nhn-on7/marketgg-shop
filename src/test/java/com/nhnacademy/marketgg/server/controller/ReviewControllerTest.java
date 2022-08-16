@@ -67,21 +67,22 @@ class ReviewControllerTest {
         String filePath = Objects.requireNonNull(url).getPath();
 
         MockMultipartFile file =
-            new MockMultipartFile("images", "lee.png", "image/png", new FileInputStream(filePath));
+                new MockMultipartFile("images", "lee.png", "image/png", new FileInputStream(filePath));
 
         MockMultipartFile dto = new MockMultipartFile("reviewRequest", "jsondata", "application/json",
                                                       content.getBytes(StandardCharsets.UTF_8));
 
         this.mockMvc.perform(multipart("/products/{productId}/reviews/{memberUuid}", 1L, "admin")
-                                 .file(dto)
-                                 .file(file)
-                                 .file(file)
-                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                                 .content(content))
+                                     .file(dto)
+                                     .file(file)
+                                     .file(file)
+                                     .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                     .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                                     .content(content))
                     .andExpect(status().isCreated());
 
-        then(reviewService).should(times(1)).createReview(any(ReviewCreateRequest.class), any(MultipartFile.class) , anyString());
+        then(reviewService).should(times(1))
+                           .createReview(any(ReviewCreateRequest.class), any(MultipartFile.class), anyString());
     }
 
     @Test
@@ -113,11 +114,11 @@ class ReviewControllerTest {
     void testUpdateReview() throws Exception {
         String content = objectMapper.writeValueAsString(reviewUpdateRequest);
         willDoNothing().given(reviewService)
-                  .updateReview(any(ReviewUpdateRequest.class), anyLong());
+                       .updateReview(any(ReviewUpdateRequest.class), anyLong());
 
         this.mockMvc.perform(put("/products/{productId}/reviews/{reviewId}", 1L, 1L)
-                                 .contentType(MediaType.APPLICATION_JSON)
-                                 .content(content))
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(content))
                     .andExpect(status().isOk());
 
         then(reviewService).should(times(1)).updateReview(any(ReviewUpdateRequest.class), anyLong());

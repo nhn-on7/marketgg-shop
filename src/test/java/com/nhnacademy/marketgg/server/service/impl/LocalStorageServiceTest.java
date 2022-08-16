@@ -5,12 +5,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.nhnacademy.marketgg.server.dto.request.file.ImageCreateRequest;
 import com.nhnacademy.marketgg.server.service.storage.LocalStorageService;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;

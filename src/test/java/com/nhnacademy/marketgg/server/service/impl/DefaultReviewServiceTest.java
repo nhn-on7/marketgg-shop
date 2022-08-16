@@ -26,7 +26,6 @@ import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.review.ReviewRepository;
 import com.nhnacademy.marketgg.server.service.file.FileService;
 import com.nhnacademy.marketgg.server.service.product.DefaultReviewService;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -34,7 +33,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

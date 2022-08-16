@@ -49,8 +49,8 @@ class AdminReviewControllerTest {
         given(reviewService.makeBestReview(anyLong())).willReturn(new SingleResponse<>());
 
         this.mockMvc.perform(post("/admin/products/{productId}/reviews/{reviewId}/make-best", 1L, 1L)
-                .headers(httpHeaders)
-                .contentType(MediaType.APPLICATION_JSON))
+                                     .headers(httpHeaders)
+                                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
 
         then(reviewService).should(times(1)).makeBestReview(anyLong());

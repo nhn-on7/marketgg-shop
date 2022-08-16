@@ -1,5 +1,13 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.coupon.UsedCouponController;
 import com.nhnacademy.marketgg.server.dto.request.coupon.UsedCouponDto;
@@ -13,14 +21,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.times;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UsedCouponController.class)
 class UsedAdminCouponControllerTest {
@@ -54,8 +54,8 @@ class UsedAdminCouponControllerTest {
         willDoNothing().given(usedCouponService).createUsedCoupons(any(UsedCouponDto.class));
 
         this.mockMvc.perform(post(DEFAULT_USED_COUPONS)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(requestBody))
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
                     .andExpect(status().isCreated());
 
         then(usedCouponService).should(times(1)).createUsedCoupons(any(UsedCouponDto.class));
@@ -69,8 +69,8 @@ class UsedAdminCouponControllerTest {
         willDoNothing().given(usedCouponService).deleteUsedCoupons(any(UsedCouponDto.class));
 
         this.mockMvc.perform(delete(DEFAULT_USED_COUPONS)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(requestBody))
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(requestBody))
                     .andExpect(status().isNoContent());
 
         then(usedCouponService).should(times(1)).deleteUsedCoupons(any(UsedCouponDto.class));

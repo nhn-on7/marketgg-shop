@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
@@ -14,10 +13,8 @@ import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import com.nhnacademy.marketgg.server.service.coupon.DefaultCouponService;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
