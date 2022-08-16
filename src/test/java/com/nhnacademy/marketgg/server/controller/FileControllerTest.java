@@ -5,10 +5,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,19 +15,16 @@ import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.service.file.FileService;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
 @WebMvcTest(FileController.class)
@@ -67,14 +62,14 @@ class FileControllerTest {
         URL url = getClass().getClassLoader().getResource("lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile imageFile =
-            new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));
+                new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));
 
         given(fileService.uploadImage(any(MultipartFile.class))).willReturn(imageResponse);
 
         mockMvc.perform(multipart("/storage")
-                            .file(imageFile)
-                            .contentType(MediaType.MULTIPART_FORM_DATA))
-            .andExpect(status().isOk());
+                                .file(imageFile)
+                                .contentType(MediaType.MULTIPART_FORM_DATA))
+               .andExpect(status().isOk());
 
         then(fileService).should(times(1)).uploadImage(any(MultipartFile.class));
     }

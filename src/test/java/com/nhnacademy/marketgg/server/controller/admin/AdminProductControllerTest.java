@@ -20,13 +20,11 @@ import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
-
 import java.io.FileInputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.UUID;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -96,7 +94,7 @@ class AdminProductControllerTest {
                     .andExpect(header().string("Location", DEFAULT_PRODUCT));
 
         then(productService).should(times(1))
-                .createProduct(any(ProductCreateRequest.class), any(MockMultipartFile.class));
+                            .createProduct(any(ProductCreateRequest.class), any(MockMultipartFile.class));
     }
 
     @Test

@@ -3,8 +3,6 @@ package com.nhnacademy.marketgg.server.controller;
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATE;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -49,10 +47,10 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @ActiveProfiles({ "testdb", "common", "local" })
 @Import({
-    RoleCheckAspect.class,
-    AuthInjectAspect.class,
-    UuidAspect.class,
-    MemberInfoAspect.class
+        RoleCheckAspect.class,
+        AuthInjectAspect.class,
+        UuidAspect.class,
+        MemberInfoAspect.class
 })
 class DeliveryAddressControllerTest {
 
@@ -140,9 +138,8 @@ class DeliveryAddressControllerTest {
         headers.set(WWW_AUTHENTICATE, roles);
 
         mockMvc.perform(delete(baseUri + "/{deliveryNo}", deliveryAddressNo)
-                   .headers(headers))
+                                .headers(headers))
                .andExpect(status().isOk());
-
     }
 
     @Test
@@ -155,9 +152,8 @@ class DeliveryAddressControllerTest {
         headers.set(WWW_AUTHENTICATE, roles);
 
         mockMvc.perform(get("/members/delivery-addresses")
-                   .headers(headers))
+                                .headers(headers))
                .andExpect(status().isOk());
-
     }
 
 }

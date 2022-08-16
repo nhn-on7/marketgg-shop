@@ -34,7 +34,7 @@ public class DefaultOrderServiceTest {
     @Mock
     CouponRepository couponRepository;
 
-    //FIXME: 주문 등록에 대한 테스트 코드 작성이 필요해보입니다. @김정민
+    // FIXME: 주문 등록에 대한 테스트 코드 작성이 필요해보입니다. @김정민
 
     // @Test
     // @DisplayName("주문 등록")

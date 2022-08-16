@@ -16,12 +16,10 @@ import com.nhnacademy.marketgg.server.repository.image.ImageRepository;
 import com.nhnacademy.marketgg.server.service.file.DefaultFileService;
 import com.nhnacademy.marketgg.server.service.storage.StorageService;
 import com.nhnacademy.marketgg.server.service.storage.StorageServiceFactory;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

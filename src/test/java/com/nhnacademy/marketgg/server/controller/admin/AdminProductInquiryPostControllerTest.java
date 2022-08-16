@@ -13,9 +13,7 @@ import com.nhnacademy.marketgg.server.aop.AspectUtils;
 import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryReplyRequest;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
-
 import java.util.UUID;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

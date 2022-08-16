@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AdminPointController.class)
 @Import({
-    RoleCheckAspect.class
+        RoleCheckAspect.class
 })
 class AdminPointControllerTest {
 
@@ -50,7 +50,7 @@ class AdminPointControllerTest {
         given(pointService.adminRetrievePointHistories()).willReturn(List.of());
 
         mockMvc.perform(get(DEFAULT_ADMIN + "/points")
-                   .headers(httpHeaders))
+                                .headers(httpHeaders))
                .andExpect(status().isOk());
 
         then(pointService).should(times(1)).adminRetrievePointHistories();

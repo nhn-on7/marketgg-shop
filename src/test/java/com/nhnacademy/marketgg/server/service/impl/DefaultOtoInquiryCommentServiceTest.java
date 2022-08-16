@@ -21,9 +21,7 @@ import com.nhnacademy.marketgg.server.repository.customerservicecomment.Customer
 import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerServicePostRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.otoinquiry.DefaultOtoInquiryCommentService;
-
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,19 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
+import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATE;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.annotation.Role;
@@ -11,14 +25,16 @@ import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
-import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
-import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.order.OrderService;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,35 +50,16 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
-import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATE;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.times;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @Transactional
 @SpringBootTest
-@ActiveProfiles({ "testdb", "common", "local"})
+@ActiveProfiles({ "testdb", "common", "local" })
 @Import({
         RoleCheckAspect.class,
         AuthInjectAspect.class,
         UuidAspect.class,
         MemberInfoAspect.class
 })
-public class OrderControllerTest {
+class OrderControllerTest {
 
     MockMvc mockMvc;
 
@@ -103,7 +100,7 @@ public class OrderControllerTest {
 
     @Test
     @DisplayName("주문 등록")
-    public void testCreateOrder() throws Exception {
+    void testCreateOrder() throws Exception {
         OrderCreateRequest orderCreateRequest = new OrderCreateRequest();
         OrderToPayment orderToPayment = new OrderToPayment("GGORDER_1", "orderName", "name",
                                                            "email", 30000L, 1L,
@@ -143,7 +140,7 @@ public class OrderControllerTest {
 
     @Test
     @DisplayName("주문서 목록 조회")
-    public void testRetrieveOrderList() throws Exception {
+    void testRetrieveOrderList() throws Exception {
         given(orderService.retrieveOrderList(any(MemberInfo.class))).willReturn(List.of());
 
         mockMvc.perform(get(baseUri)
@@ -156,7 +153,7 @@ public class OrderControllerTest {
 
     @Test
     @DisplayName("주문 상세 조회")
-    public void testRetrieveOrderDetail() throws Exception {
+    void testRetrieveOrderDetail() throws Exception {
         OrderDetailRetrieveResponse orderDetail = Dummy.getDummyOrderDetailResponse();
 
         given(orderService.retrieveOrderDetail(anyLong(), any(MemberInfo.class))).willReturn(orderDetail);
@@ -172,7 +169,7 @@ public class OrderControllerTest {
 
     @Test
     @DisplayName("주문 상태 변경")
-    public void testUpdateOrderStatus() throws Exception {
+    void testUpdateOrderStatus() throws Exception {
         OrderUpdateStatusRequest updateStatus = new OrderUpdateStatusRequest();
 
         willDoNothing().given(orderService).updateStatus(anyLong(), any(OrderUpdateStatusRequest.class));

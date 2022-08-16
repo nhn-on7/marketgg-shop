@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.product.ProductController;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
 
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
@@ -61,8 +60,8 @@ class ProductControllerTest {
         this.mockMvc.perform(get(DEFAULT_PRODUCT + "/search")
                                      .param("keyword", "hi")
                                      .param("page", "1"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         then(productService).should(times(1)).searchProductList(anyString(), anyInt());
     }
@@ -84,7 +83,8 @@ class ProductControllerTest {
     @Test
     @DisplayName("카테고리 목록 내에서 선택한 옵션별로 정렬 하는 상품 검색 테스트")
     void testSearchProductListByPrice() throws Exception {
-        given(productService.searchProductListByPrice(anyString(), anyString(), anyString(), anyInt())).willReturn(List.of());
+        given(productService.searchProductListByPrice(anyString(), anyString(), anyString(), anyInt())).willReturn(
+                List.of());
 
         this.mockMvc.perform(get(DEFAULT_PRODUCT + "/categories/{categoryId}/price/{option}/search", "100", "desc")
                                      .param("keyword", "hi")

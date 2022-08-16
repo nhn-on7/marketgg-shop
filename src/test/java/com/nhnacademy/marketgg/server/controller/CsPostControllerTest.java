@@ -37,7 +37,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(CsPostController.class)
 @Import({
-    RoleCheckAspect.class
+        RoleCheckAspect.class
 })
 class CsPostControllerTest {
 
@@ -61,7 +61,7 @@ class CsPostControllerTest {
         postRequest = new PostRequest();
         postResponse = new PostResponse(1L, "702", "hello", "배송", "종료", LocalDateTime.now());
         postResponseForDetail = new PostResponseForDetail(1L, "702", "hello", "hi", "배송", "종료",
-            LocalDateTime.now(), LocalDateTime.now(), List.of());
+                                                          LocalDateTime.now(), LocalDateTime.now(), List.of());
 
         ReflectionTestUtils.setField(postRequest, "categoryCode", "702");
         ReflectionTestUtils.setField(postRequest, "title", "hello");
@@ -75,8 +75,8 @@ class CsPostControllerTest {
         willDoNothing().given(postService).createPost(any(PostRequest.class), any(MemberInfo.class));
 
         this.mockMvc.perform(post(DEFAULT_POST)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(postRequest)))
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(postRequest)))
                     .andExpect(status().isCreated());
 
         then(postService).should(times(1)).createPost(any(PostRequest.class), any(MemberInfo.class));
@@ -86,10 +86,10 @@ class CsPostControllerTest {
     @DisplayName("게시글 목록 조회")
     void testRetrievePostList() throws Exception {
         given(postService.retrievePostList(anyString(), anyInt(), any(MemberInfo.class))).willReturn(
-            List.of(postResponse));
+                List.of(postResponse));
 
         this.mockMvc.perform(get(DEFAULT_POST + "/categories/{categoryId}", "702")
-                .param("page", "0"))
+                                     .param("page", "0"))
                     .andExpect(status().isOk());
 
         then(postService).should(times(1)).retrievePostList(anyString(), anyInt(), any(MemberInfo.class));
@@ -109,11 +109,12 @@ class CsPostControllerTest {
     @Test
     @DisplayName("카테고리 별 게시글 검색")
     void testSearchPostListForCategory() throws Exception {
-        given(postService.searchForCategory(anyString(), any(SearchRequest.class), any(MemberInfo.class))).willReturn(List.of(postResponse));
+        given(postService.searchForCategory(anyString(), any(SearchRequest.class), any(MemberInfo.class))).willReturn(
+                List.of(postResponse));
 
         this.mockMvc.perform(get(DEFAULT_POST + "/categories/{categoryId}/search", "703")
-                .param("keyword", "op")
-                .param("page", "0"))
+                                     .param("keyword", "op")
+                                     .param("page", "0"))
                     .andExpect(status().isOk());
 
         then(postService).should(times(1))
