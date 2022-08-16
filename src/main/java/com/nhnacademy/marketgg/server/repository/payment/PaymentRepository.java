@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.repository.payment;
 
 import com.nhnacademy.marketgg.server.entity.payment.Payment;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -9,4 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author 이제훈
  */
 public interface PaymentRepository extends JpaRepository<Payment, Long>, PaymentRepositoryCustom {
+
+    Optional<Payment> findByPaymentKey(String paymentKey);
+
 }

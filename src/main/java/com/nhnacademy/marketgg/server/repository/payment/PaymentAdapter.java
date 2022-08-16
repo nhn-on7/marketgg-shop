@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.payment;
 
+import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -49,6 +50,22 @@ public class PaymentAdapter {
         param.put("paymentKey", paymentRequest.getPaymentKey());
 
         return restTemplate.postForEntity("https://api.tosspayments.com/v1/payments/confirm",
+                                          new HttpEntity<>(param, headers), String.class);
+    }
+
+    public ResponseEntity<String> cancel(String paymentKey, PaymentCancelRequest paymentRequest) {
+        Base64.Encoder encoder = Base64.getEncoder();
+        String encodedKey = new String(encoder.encode((this.testSecretKey + ":").getBytes(StandardCharsets.UTF_8)));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBasicAuth(encodedKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        JSONObject param = new JSONObject();
+        param.put("cancelReason", paymentRequest.getCancelReason());
+
+        return restTemplate.postForEntity("https://api.tosspayments.com/v1/payments/" + paymentKey + "/cancel",
                                           new HttpEntity<>(param, headers), String.class);
     }
 
