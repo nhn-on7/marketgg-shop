@@ -95,7 +95,7 @@ public class TossPaymentService implements PaymentService {
     }
 
     @Override
-    public void cancelPayment(String paymentKey, PaymentCancelRequest paymentRequest) {
+    public void cancelPayment(final String paymentKey, final PaymentCancelRequest paymentRequest) {
         ResponseEntity<String> response = paymentAdapter.cancel(paymentKey, paymentRequest);
 
         Payment foundPayment = paymentRepository.findByPaymentKey(paymentKey)

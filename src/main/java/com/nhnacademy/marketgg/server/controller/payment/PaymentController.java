@@ -32,7 +32,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     /**
-     * 회원의 결제 요청에 대한 검증을 처리합니다.
+     * {@inheritDoc}
      *
      * @param paymentRequest - 결제 요청 정보
      * @return 성공 여부 응답 결과 반환
