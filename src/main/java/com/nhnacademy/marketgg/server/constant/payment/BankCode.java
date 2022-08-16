@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.constant.payment;
 
+import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -43,5 +44,18 @@ public enum BankCode {
     private final String koreanName;
     private final String code;
     private final String bankCompany;
+
+    /**
+     * 문자열로 구성된 가상계좌 발급 은행을 통해 열거형을 추출합니다.
+     *
+     * @param bankCode - 문자열로 구성된 가상계좌 발급 은행 코드
+     * @return 열거형 타입의 가상계좌 발급 은행 코드 {@link BankCode}
+     */
+    public static BankCode of(String bankCode) {
+        return Arrays.stream(BankCode.values())
+                     .filter(v -> v.getKoreanName().equals(bankCode))
+                     .findAny()
+                     .orElseThrow(IllegalArgumentException::new);
+    }
 
 }
