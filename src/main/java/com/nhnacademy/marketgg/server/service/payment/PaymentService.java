@@ -38,7 +38,7 @@ public interface PaymentService {
     /**
      * 회원의 결제 요청에 대한 검증을 처리합니다.
      *
-     * @param paymentRequest - 결제 요청 정보
+     * @param paymentRequest - 결제 검증 요청 정보
      * @return 성공 여부 응답 결과 반환
      */
     PaymentResponse verifyRequest(final PaymentVerifyRequest paymentRequest);
@@ -46,7 +46,7 @@ public interface PaymentService {
     /**
      * 최종 결제 승인을 처리합니다.
      *
-     * @param paymentRequest - 결제 요청 정보
+     * @param paymentRequest - 결제 승인 요청 정보
      */
     void pay(final PaymentRequest paymentRequest);
 
