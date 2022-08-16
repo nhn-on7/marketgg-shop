@@ -6,6 +6,13 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 카드 결제에 대한 응답 결과 객체입니다.
+ *
+ * @author 이제훈
+ * @version 1.0
+ * @since 1.0
+ */
 @NoArgsConstructor
 @Getter
 public class CardResponse {
