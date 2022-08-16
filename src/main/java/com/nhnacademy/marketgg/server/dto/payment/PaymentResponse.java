@@ -1,6 +1,10 @@
 package com.nhnacademy.marketgg.server.dto.payment;
 
-import com.nhnacademy.marketgg.server.dto.payment.request.CardPaymentResult;
+import com.nhnacademy.marketgg.server.dto.payment.result.CardPaymentResult;
+import com.nhnacademy.marketgg.server.dto.payment.result.MobilePhonePaymentResult;
+import com.nhnacademy.marketgg.server.dto.payment.result.PaymentCancelResult;
+import com.nhnacademy.marketgg.server.dto.payment.result.TransferPaymentResult;
+import com.nhnacademy.marketgg.server.dto.payment.result.VirtualAccountPaymentResult;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

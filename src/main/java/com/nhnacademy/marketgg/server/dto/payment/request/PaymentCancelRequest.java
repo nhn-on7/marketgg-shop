@@ -28,6 +28,4 @@ public class PaymentCancelRequest {
 
     private final String holderName;
 
-    private final String status;
-
 }
