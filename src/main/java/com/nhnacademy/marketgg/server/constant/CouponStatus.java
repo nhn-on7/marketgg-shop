@@ -1,19 +1,19 @@
 package com.nhnacademy.marketgg.server.constant;
 
-public enum CouponState {
+public enum CouponStatus {
 
     EXPIRED("기간만료"),
     USED("사용완료"),
     VALID("사용가능");
 
-    private final String state;
+    private final String status;
 
-    CouponState(String state) {
-        this.state = state;
+    CouponStatus(String status) {
+        this.status = status;
     }
 
     public String state() {
-        return this.state;
+        return this.status;
     }
 
 }
