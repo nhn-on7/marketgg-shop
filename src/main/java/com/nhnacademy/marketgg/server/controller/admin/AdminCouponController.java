@@ -1,9 +1,9 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.coupon.CouponService;
 import java.util.List;
 import javax.validation.Valid;
@@ -41,12 +41,12 @@ public class AdminCouponController {
      * @since 1.0.0
      */
     @PostMapping
-    public ResponseEntity<CommonResponse> createCoupon(@Valid @RequestBody final CouponDto couponDto) {
+    public ResponseEntity<ShopResult<Void>> createCoupon(@Valid @RequestBody final CouponDto couponDto) {
         couponService.createCoupon(couponDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Add success"));
+                             .body(ShopResult.success());
     }
 
     /**
@@ -57,11 +57,11 @@ public class AdminCouponController {
      * @since 1.0.0
      */
     @GetMapping("/{couponId}")
-    public ResponseEntity<CommonResponse> retrieveCoupon(@PathVariable final Long couponId) {
+    public ResponseEntity<ShopResult<CouponDto>> retrieveCoupon(@PathVariable final Long couponId) {
         CouponDto couponResponse = couponService.retrieveCoupon(couponId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .body(new SingleResponse<>(couponResponse));
+                             .body(ShopResult.success(couponResponse));
     }
 
     /**
@@ -87,14 +87,14 @@ public class AdminCouponController {
      * @since 1.0.0
      */
     @PutMapping("/{couponId}")
-    public ResponseEntity<CommonResponse> updateCoupon(@PathVariable final Long couponId,
-                                                       @Valid @RequestBody final CouponDto couponDto) {
+    public ResponseEntity<ShopResult<Void>> updateCoupon(@PathVariable final Long couponId,
+                                                         @Valid @RequestBody final CouponDto couponDto) {
 
         couponService.updateCoupon(couponId, couponDto);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Update success"));
+                             .body(ShopResult.success());
     }
 
     /**
@@ -105,12 +105,12 @@ public class AdminCouponController {
      * @since 1.0.0
      */
     @DeleteMapping("/{couponId}")
-    public ResponseEntity<CommonResponse> deleteCoupon(@PathVariable final Long couponId) {
+    public ResponseEntity<ShopResult<Void>> deleteCoupon(@PathVariable final Long couponId) {
         couponService.deleteCoupon(couponId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Delete success"));
+                             .body(ShopResult.success());
     }
 
 }

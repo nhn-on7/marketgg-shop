@@ -1,8 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.coupon;
 
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.coupon.UsedCouponDto;
-import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.coupon.UsedCouponService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UsedCouponController {
 
     private final UsedCouponService usedCouponService;
-    private static final String DEFAULT_USED_COUPONS = "/system/used-coupons";
 
     /**
      * 주문번호, 회원번호, 쿠폰번호를 DTO 에 담아서 오면 사용 쿠폰을 생성하는 PostMapping 을 지원합니다.
@@ -38,12 +36,12 @@ public class UsedCouponController {
      * @since 1.0.0
      */
     @PostMapping
-    public ResponseEntity<CommonResponse> createUsedCoupons(@Valid @RequestBody final UsedCouponDto usedCouponDto) {
+    public ResponseEntity<ShopResult<Void>> createUsedCoupons(@Valid @RequestBody final UsedCouponDto usedCouponDto) {
         usedCouponService.createUsedCoupons(usedCouponDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Add success"));
+                             .body(ShopResult.success());
     }
 
     /**
@@ -54,12 +52,12 @@ public class UsedCouponController {
      * @since 1.0.0
      */
     @DeleteMapping
-    public ResponseEntity<CommonResponse> deleteUsedCoupons(@Valid @RequestBody final UsedCouponDto usedCouponDto) {
+    public ResponseEntity<ShopResult<Void>> deleteUsedCoupons(@Valid @RequestBody final UsedCouponDto usedCouponDto) {
         usedCouponService.deleteUsedCoupons(usedCouponDto);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Delete success"));
+                             .body(ShopResult.success());
     }
 
 }

@@ -11,7 +11,6 @@ import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateReques
 import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
@@ -168,15 +167,15 @@ public class MemberController {
      * @since 1.0.0
      */
     @PostMapping("/coupons")
-    public ResponseEntity<CommonResponse> createGivenCoupons(final MemberInfo memberInfo,
-                                                             @Valid @RequestBody final
-                                                             GivenCouponCreateRequest givenCouponRequest) {
+    public ResponseEntity<ShopResult<Void>> createGivenCoupons(final MemberInfo memberInfo,
+                                                               @Valid @RequestBody final
+                                                               GivenCouponCreateRequest givenCouponRequest) {
 
         givenCouponService.createGivenCoupons(memberInfo, givenCouponRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Add success"));
+                             .body(ShopResult.success());
     }
 
     /**
@@ -188,12 +187,12 @@ public class MemberController {
      * @since 1.0.0
      */
     @GetMapping("/coupons")
-    public ResponseEntity<CommonResponse> retrieveGivenCoupons(final MemberInfo memberInfo, final Pageable pageable) {
+    public ResponseEntity<ShopResult<List<GivenCouponResponse>>> retrieveGivenCoupons(final MemberInfo memberInfo, final Pageable pageable) {
         List<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new ListResponse<>(givenCouponResponses));
+                             .body(ShopResult.success(givenCouponResponses));
     }
 
     /**
