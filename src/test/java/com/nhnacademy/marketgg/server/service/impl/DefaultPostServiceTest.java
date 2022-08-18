@@ -105,7 +105,7 @@ class DefaultPostServiceTest {
                                           LocalDateTime.now(), LocalDateTime.now(),
                                           List.of(commentReady));
 
-        searchRequest = new SearchRequest("701","hello", 0, PAGE_SIZE);
+        searchRequest = new SearchRequest();
         memberInfo = Dummy.getDummyMemberInfo(1L, cart);
         createRequest = new MemberCreateRequest();
         categoryCreateRequest = new CategoryCreateRequest();
@@ -220,6 +220,11 @@ class DefaultPostServiceTest {
     @DisplayName("카테고리 별 검색")
     void testSearchForCategory() throws Exception {
         ReflectionTestUtils.setField(postRequest, "categoryCode", NOTICE_CODE);
+        ReflectionTestUtils.setField(searchRequest, "categoryCode", NOTICE_CODE);
+        ReflectionTestUtils.setField(searchRequest, "keyword", "hi");
+        ReflectionTestUtils.setField(searchRequest, "page", 0);
+        ReflectionTestUtils.setField(searchRequest, "size", 10);
+
 
         given(searchRepository.searchBoardWithCategoryCode(any(SearchRequest.class),
                                                            anyString())).willReturn(List.of(postResponse));

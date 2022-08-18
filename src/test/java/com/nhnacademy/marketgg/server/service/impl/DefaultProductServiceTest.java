@@ -281,7 +281,7 @@ class DefaultProductServiceTest {
         given(searchRepository.searchProductWithKeyword(any(SearchRequest.class), any())).willReturn(
                 List.of(searchProductResponse));
 
-        productService.searchProductList(new SearchRequest("100", "hi", 0, 10));
+        productService.searchProductList(new SearchRequest());
 
         then(searchRepository).should(times(1)).searchProductWithKeyword(any(SearchRequest.class), any());
     }
@@ -292,7 +292,7 @@ class DefaultProductServiceTest {
         given(searchRepository.searchProductForCategory(any(SearchRequest.class), any())).willReturn(
                 List.of(searchProductResponse));
 
-        productService.searchProductListByCategory(new SearchRequest("100", "hi", 0, 10));
+        productService.searchProductListByCategory(new SearchRequest());
 
         then(searchRepository).should(times(1)).searchProductForCategory(any(SearchRequest.class), any());
     }
@@ -303,7 +303,7 @@ class DefaultProductServiceTest {
         given(searchRepository.searchProductForCategory(any(SearchRequest.class), anyString())).willReturn(
                 List.of(searchProductResponse));
 
-        productService.searchProductListByPrice("ASC", new SearchRequest("100", "hi", 1, 10));
+        productService.searchProductListByPrice("asc", new SearchRequest());
 
         then(searchRepository).should(times(1))
                               .searchProductForCategory(any(SearchRequest.class), anyString());

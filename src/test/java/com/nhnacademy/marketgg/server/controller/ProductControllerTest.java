@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -14,12 +15,14 @@ import com.nhnacademy.marketgg.server.controller.product.ProductController;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(ProductController.class)
@@ -34,18 +37,28 @@ class ProductControllerTest {
     @MockBean
     ProductService productService;
 
+    private SearchRequest searchRequest;
+
     private static final String DEFAULT_PRODUCT = "/products";
+
+    @BeforeEach
+    void setUp() {
+        searchRequest = new SearchRequest();
+
+        ReflectionTestUtils.setField(searchRequest, "categoryCode", "702");
+        ReflectionTestUtils.setField(searchRequest, "keyword", "hi");
+        ReflectionTestUtils.setField(searchRequest, "page", 0);
+        ReflectionTestUtils.setField(searchRequest, "size", 10);
+    }
 
     @Test
     @DisplayName("전체 목록에서 상품 검색 테스트")
     void testSearchProductList() throws Exception {
         given(productService.searchProductList(any(SearchRequest.class))).willReturn(List.of());
 
-        this.mockMvc.perform(get(DEFAULT_PRODUCT + "/search")
-                                     .param("keyword", "hi")
-                                     .param("categoryCode", "001")
-                                     .param("page", "1")
-                                     .param("size", "10"))
+        this.mockMvc.perform(post(DEFAULT_PRODUCT + "/search")
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(searchRequest)))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
@@ -57,11 +70,9 @@ class ProductControllerTest {
     void testSearchProductListByCategory() throws Exception {
         given(productService.searchProductListByCategory(any(SearchRequest.class))).willReturn(List.of());
 
-        this.mockMvc.perform(get(DEFAULT_PRODUCT + "/categories/{categoryId}/search", "100")
-                                     .param("keyword", "hi")
-                                     .param("categoryCode", "100")
-                                     .param("page", "1")
-                                     .param("size", "10"))
+        this.mockMvc.perform(post(DEFAULT_PRODUCT + "/categories/{categoryId}/search", "100")
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(searchRequest)))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
@@ -74,11 +85,9 @@ class ProductControllerTest {
         given(productService.searchProductListByPrice(anyString(), any(SearchRequest.class))).willReturn(
                 List.of());
 
-        this.mockMvc.perform(get(DEFAULT_PRODUCT + "/categories/{categoryId}/price/{option}/search", "100", "desc")
-                                     .param("keyword", "hi")
-                                     .param("categoryCode", "100")
-                                     .param("page", "1")
-                                     .param("size", "10"))
+        this.mockMvc.perform(post(DEFAULT_PRODUCT + "/categories/{categoryId}/sort_price/{option}/search", "100", "desc")
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(searchRequest)))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 

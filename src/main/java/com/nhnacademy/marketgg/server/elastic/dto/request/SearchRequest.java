@@ -4,8 +4,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * 사용자의 검색 및 반환 할 페이지를 표시합니다.
@@ -13,7 +13,7 @@ import lombok.Getter;
  * @author 박세완
  * @version 1.0.0
  */
-@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class SearchRequest {
 
@@ -33,7 +33,7 @@ public class SearchRequest {
      */
     @NotBlank
     @Size(min = 1)
-    private String request;
+    private String keyword;
 
     /**
      * 반환 할 페이지 정보입니다.

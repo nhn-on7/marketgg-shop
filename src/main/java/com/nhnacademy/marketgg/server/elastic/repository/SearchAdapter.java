@@ -59,7 +59,7 @@ public class SearchAdapter implements SearchRepository {
         Map<String, String> sort = this.buildSort(priceSortType);
         HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
                 new SearchRequestBodyForBool<>(request.getCategoryCode(), sort, request,
-                                               translator.converter(request.getRequest()),
+                                               translator.converter(request.getKeyword()),
                                                PRODUCT)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, PRODUCT).getBody());
@@ -72,7 +72,7 @@ public class SearchAdapter implements SearchRepository {
 
         Map<String, String> sort = this.buildSort(priceSortType);
         HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
-                new SearchRequestBodyForBool<>(sort, request, translator.converter(request.getRequest()))),
+                new SearchRequestBodyForBool<>(sort, request, translator.converter(request.getKeyword()))),
                                                             this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, PRODUCT).getBody());
@@ -86,7 +86,7 @@ public class SearchAdapter implements SearchRepository {
         Map<String, String> sort = this.buildSort(null);
         HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
                 new SearchRequestBodyForBool<>(request.getCategoryCode(), sort, request,
-                                               translator.converter(request.getRequest()),
+                                               translator.converter(request.getKeyword()),
                                                option)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, BOARD).getBody());
@@ -101,7 +101,7 @@ public class SearchAdapter implements SearchRepository {
         Map<String, String> sort = this.buildSort(null);
         HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
                 new SearchRequestBodyForBool<>(request.getCategoryCode(), sort, request,
-                                               translator.converter(request.getRequest()),
+                                               translator.converter(request.getKeyword()),
                                                optionCode, option)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, BOARD).getBody());

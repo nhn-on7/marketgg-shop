@@ -78,7 +78,7 @@ public class SearchRequestBodyForBool<T> {
         }
         this.query = new BoolQuery(
                 new Bool(new Must(List.of(new MultiMatch(optionCode, NO_FUZZINESS, CATEGORY_FIELD),
-                                          new MultiMatch(request.getRequest(), FUZZINESS, requestOption),
+                                          new MultiMatch(request.getKeyword(), FUZZINESS, requestOption),
                                           new MultiMatch(convertString, NO_FUZZINESS, requestOption)))));
     }
 
@@ -102,7 +102,7 @@ public class SearchRequestBodyForBool<T> {
         this.query = new BoolQuery(
                 new Bool(new Must(List.of(new MultiMatch(categoryCode, NO_FUZZINESS, CATEGORY_FIELD),
                                           new MultiMatch(optionCode, NO_FUZZINESS, List.of(option)),
-                                          new MultiMatch(request.getRequest(), FUZZINESS, DEFAULT_BOARD_FIELD),
+                                          new MultiMatch(request.getKeyword(), FUZZINESS, DEFAULT_BOARD_FIELD),
                                           new MultiMatch(convertString, NO_FUZZINESS, DEFAULT_BOARD_FIELD)))));
     }
 
@@ -119,7 +119,7 @@ public class SearchRequestBodyForBool<T> {
         this.from = request.getPage();
         this.size = request.getSize();
         this.query = new BoolQuery(
-                new Bool(new Must(List.of(new MultiMatch(request.getRequest(), FUZZINESS, DEFAULT_PRODUCT_FIELD),
+                new Bool(new Must(List.of(new MultiMatch(request.getKeyword(), FUZZINESS, DEFAULT_PRODUCT_FIELD),
                                           new MultiMatch(convertString, NO_FUZZINESS, DEFAULT_BOARD_FIELD)))));
     }
 

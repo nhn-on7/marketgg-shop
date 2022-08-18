@@ -237,7 +237,7 @@ public class Dummy {
     }
 
     public static SearchRequest getSearchRequest() {
-        return new SearchRequest("hi", 0, 10);
+        return new SearchRequest();
     }
 
     public static DeliveryAddressCreateRequest getDeliveryAddressCreateRequest() {

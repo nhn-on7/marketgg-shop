@@ -112,11 +112,16 @@ class CsPostControllerTest {
         given(postService.searchForCategory(any(SearchRequest.class), any(MemberInfo.class))).willReturn(
                 List.of(postResponse));
 
-        this.mockMvc.perform(get(DEFAULT_POST + "/categories/{categoryId}/search", "703")
-                                     .param("keyword", "op")
-                                     .param("page", "0")
-                                     .param("categoryCode", "703")
-                                     .param("size", "10"))
+        SearchRequest searchRequest = new SearchRequest();
+
+        ReflectionTestUtils.setField(searchRequest, "categoryCode", "703");
+        ReflectionTestUtils.setField(searchRequest, "keyword", "hi");
+        ReflectionTestUtils.setField(searchRequest, "page", 0);
+        ReflectionTestUtils.setField(searchRequest, "size", 10);
+
+        this.mockMvc.perform(post(DEFAULT_POST + "/categories/{categoryId}/search", "703")
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(searchRequest)))
                     .andExpect(status().isOk());
 
         then(postService).should(times(1)).searchForCategory(any(SearchRequest.class), any(MemberInfo.class));

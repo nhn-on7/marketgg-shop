@@ -81,14 +81,19 @@ class AdminCsPostControllerTest {
         given(postService.searchForOption(any(SearchRequest.class), anyString(), anyString())).willReturn(
                 List.of(postResponse));
 
+        SearchRequest searchRequest = new SearchRequest();
+
+        ReflectionTestUtils.setField(searchRequest, "categoryCode", "702");
+        ReflectionTestUtils.setField(searchRequest, "keyword", "hi");
+        ReflectionTestUtils.setField(searchRequest, "page", 0);
+        ReflectionTestUtils.setField(searchRequest, "size", 10);
+
         this.mockMvc.perform(
                     post(DEFAULT_ADMIN_POST + "/categories/{categoryId}/options/{optionType}/search", "702", "reason")
                             .headers(httpHeaders)
-                            .param("categoryCode", "702")
-                            .param("option", "배송")
-                            .param("keyword", "hi")
-                            .param("page", "0")
-                            .param("size", "10"))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(searchRequest))
+                            .param("option", "배송"))
                     .andExpect(status().isOk());
 
         then(postService).should(times(1)).searchForOption(any(SearchRequest.class), anyString(), anyString());
