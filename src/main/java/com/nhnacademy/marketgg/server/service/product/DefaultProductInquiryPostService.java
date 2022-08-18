@@ -7,8 +7,7 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
@@ -48,20 +47,20 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
                                            .orElseThrow(ProductInquiryPostNotFoundException
                                                             .ProductAtInquiryNotFoundException::new);
 
-        ProductInquiryPost inquiryPost = new ProductInquiryPost(product, member, productInquiryRequest);
+        ProductInquiryPost inquiryPost = this.toEntity(product, member, productInquiryRequest);
 
         productInquiryPostRepository.save(inquiryPost);
     }
 
     @Override
-    public List<ProductInquiryByProductResponse> retrieveProductInquiryByProductId(final Long id,
-                                                                                   final Pageable pageable)
+    public List<ProductInquiryResponse> retrieveProductInquiryByProductId(final Long id,
+                                                                          final Pageable pageable)
         throws JsonProcessingException {
 
-        List<ProductInquiryByProductResponse> inquiryByProduct
+        List<ProductInquiryResponse> inquiryByProduct
             = productInquiryPostRepository.findAllByProductNo(id, pageable).getContent();
 
-        for (ProductInquiryByProductResponse inquiry : inquiryByProduct) {
+        for (ProductInquiryResponse inquiry : inquiryByProduct) {
             MemberInfoRequest request = new MemberInfoRequest(inquiry.getUuid());
             MemberInfoResponse nameByUuid = checkResult(authRepository.getMemberInfo(request));
             inquiry.memberName(nameByUuid.getName());
@@ -71,9 +70,9 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     }
 
     @Override
-    public List<ProductInquiryByMemberResponse> retrieveProductInquiryByMemberId(final MemberInfo memberInfo,
-                                                                                 final Pageable pageable) {
-        return productInquiryPostRepository.findAllByMemberNo(memberInfo.getId(), pageable).getContent();
+    public List<ProductInquiryPost> retrieveProductInquiryByMemberId(final MemberInfo memberInfo,
+                                                                     final Pageable pageable) {
+        return productInquiryPostRepository.findAllByMemberNo(memberInfo.getId(), pageable);
     }
 
     @Override

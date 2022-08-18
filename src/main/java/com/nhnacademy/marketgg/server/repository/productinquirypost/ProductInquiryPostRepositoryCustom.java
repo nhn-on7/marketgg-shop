@@ -1,7 +1,8 @@
 package com.nhnacademy.marketgg.server.repository.productinquirypost;
 
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
+import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -25,7 +26,7 @@ public interface ProductInquiryPostRepositoryCustom {
      * @author 민아영
      * @since 1.0.0
      */
-    Page<ProductInquiryByProductResponse> findAllByProductNo(final Long id, Pageable pageable);
+    Page<ProductInquiryResponse> findAllByProductNo(final Long id, Pageable pageable);
 
     /**
      * 회원 번호로 전체 상품 문의를 조회합니다.
@@ -36,5 +37,5 @@ public interface ProductInquiryPostRepositoryCustom {
      * @author 민아영
      * @since 1.0.0
      */
-    Page<ProductInquiryByMemberResponse> findAllByMemberNo(final Long id, Pageable pageable);
+    List<ProductInquiryPost> findAllByMemberNo(final Long id, Pageable pageable);
 }

@@ -12,7 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
@@ -61,7 +61,7 @@ class DefaultProductInquiryPostServiceTest {
 
     Pageable pageable = PageRequest.of(0, 20);
     Page<ProductInquiryByMemberResponse> inquiryPosts = new PageImpl<>(List.of(), pageable, 0);
-    Page<ProductInquiryByProductResponse> inquiryPosts1 = new PageImpl<>(List.of(), pageable, 0);
+    Page<ProductInquiryResponse> inquiryPosts1 = new PageImpl<>(List.of(), pageable, 0);
 
     @Test
     @DisplayName("상품 문의 등록 성공 테스트")

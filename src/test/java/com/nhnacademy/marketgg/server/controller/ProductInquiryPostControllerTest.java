@@ -16,7 +16,7 @@ import com.nhnacademy.marketgg.server.aop.AspectUtils;
 import com.nhnacademy.marketgg.server.controller.product.ProductInquiryPostController;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
 import java.util.List;
 import java.util.UUID;
@@ -48,7 +48,7 @@ class ProductInquiryPostControllerTest {
     ProductInquiryPostService productInquiryPostService;
 
     Pageable pageable = PageRequest.of(0, 20);
-    Page<ProductInquiryByProductResponse> responses = new PageImpl<>(List.of(), pageable, 0);
+    Page<ProductInquiryResponse> responses = new PageImpl<>(List.of(), pageable, 0);
 
     HttpHeaders httpHeaders;
 

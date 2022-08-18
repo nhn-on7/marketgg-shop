@@ -9,9 +9,11 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 @Getter
-public class ProductInquiryByProductResponse {
+public class ProductInquiryResponse {
 
     private final String uuid;
+
+    private final Long productId;
 
     private final String title;
 
