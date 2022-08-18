@@ -192,12 +192,12 @@ public class DefaultOrderService implements OrderService {
 
     @Transactional
     @Override
-    public void deleteOrder(final Long orderId) {
+    public void cancelOrder(final Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
-        order.delete();
+        order.cancel();
         orderRepository.save(order);
-        // memo: 주문 취소 시 결제 취소 요청 및 사용쿠폰 삭제, 포인트 차감, 적립 내역 삭제
+        // memo: 주문 취소 시 사용쿠폰 삭제, 포인트 차감, 적립 내역 삭제
     }
 
 }

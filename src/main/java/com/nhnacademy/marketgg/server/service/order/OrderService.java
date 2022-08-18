@@ -81,11 +81,11 @@ public interface OrderService {
     void createTrackingNo(final Long orderId) throws JsonProcessingException;
 
     /**
-     * 주문(내역)을 삭제하는 메소드입니다.
+     * 주문(내역)을 취소하는 메소드입니다.
      *
-     * @param orderId - 삭제할 주문의 식별번호입니다.
+     * @param orderId - 취소할 주문의 식별번호입니다.
      * @since 1.0.0
      */
-    void deleteOrder(final Long orderId);
+    void cancelOrder(final Long orderId);
 
 }

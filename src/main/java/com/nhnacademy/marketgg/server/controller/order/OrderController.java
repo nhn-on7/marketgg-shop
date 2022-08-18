@@ -167,12 +167,11 @@ public class OrderController {
      * @since 1.0.0
      */
     @PutMapping("/{orderId}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable final Long orderId) {
-        // memo: 주문 취소 -> 결제 취소 요청 -> 사용쿠폰 삭제 -> 포인트 차감 및 적립 내역 추가
-        orderService.deleteOrder(orderId);
+    public ResponseEntity<Void> cancelOrder(@PathVariable final Long orderId) {
+        // memo: 결제 취소 -> 주문 취소 -> 사용쿠폰 삭제 -> 포인트 차감 및 적립 내역 추가
+        orderService.cancelOrder(orderId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             // memo: 결제 취소 요청할 페이지 미정
                              .location(URI.create(ORDER_PREFIX + "/" + orderId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .build();
