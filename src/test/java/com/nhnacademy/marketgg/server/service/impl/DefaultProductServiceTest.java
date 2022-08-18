@@ -153,7 +153,7 @@ class DefaultProductServiceTest {
     @Test
     @DisplayName("상품 등록시 의존관계가 있는 모든 repository에서 행위가 이루어지는지 검증 ")
     void testProductCreation() throws IOException {
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
 
         MockMultipartFile file =
@@ -175,7 +175,7 @@ class DefaultProductServiceTest {
     @Test
     @DisplayName("상품 등록 실패 테스트")
     void testProductCreationFailException() throws IOException {
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
 
         MockMultipartFile file =
@@ -217,7 +217,7 @@ class DefaultProductServiceTest {
 
         ReflectionTestUtils.setField(product, "id", 1L);
 
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
 
 

@@ -2,7 +2,6 @@ package com.nhnacademy.marketgg.server.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -17,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.product.ReviewController;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
@@ -56,12 +56,14 @@ class ReviewControllerTest {
     private ReviewCreateRequest reviewRequest;
     private ReviewUpdateRequest reviewUpdateRequest;
     private ReviewResponse reviewResponse;
+    private MemberInfo memberInfo;
 
     @BeforeEach
     void setUp() {
         reviewRequest = new ReviewCreateRequest();
         reviewUpdateRequest = new ReviewUpdateRequest();
         reviewResponse = Dummy.getDummyReviewResponse();
+        memberInfo = Dummy.getDummyMemberInfo(1L, Dummy.getDummyCart(1L));
     }
 
     @Test
@@ -69,18 +71,17 @@ class ReviewControllerTest {
     void testCreateReview() throws Exception {
         String content = objectMapper.writeValueAsString(reviewRequest);
 
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
 
         MockMultipartFile file =
-                new MockMultipartFile("images", "lee.png", "image/png", new FileInputStream(filePath));
+                new MockMultipartFile("images", "img/lee.png", "image/png", new FileInputStream(filePath));
 
         MockMultipartFile dto = new MockMultipartFile("reviewRequest", "jsondata", "application/json",
                                                       content.getBytes(StandardCharsets.UTF_8));
 
-        this.mockMvc.perform(multipart("/products/{productId}/reviews/{memberUuid}", 1L, "admin")
+        this.mockMvc.perform(multipart("/products/{productId}/reviews}", 1L)
                                      .file(dto)
-                                     .file(file)
                                      .file(file)
                                      .contentType(MediaType.APPLICATION_JSON_VALUE)
                                      .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -88,7 +89,7 @@ class ReviewControllerTest {
                     .andExpect(status().isCreated());
 
         then(reviewService).should(times(1))
-                           .createReview(any(ReviewCreateRequest.class), any(MultipartFile.class), anyString());
+                           .createReview(any(ReviewCreateRequest.class), any(MultipartFile.class), any(MemberInfo.class));
     }
 
     @Test

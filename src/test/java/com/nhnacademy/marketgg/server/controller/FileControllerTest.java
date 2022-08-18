@@ -59,7 +59,7 @@ class FileControllerTest {
 
     @Test
     void testUploadAndRetrieveImage() throws Exception {
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile imageFile =
                 new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));

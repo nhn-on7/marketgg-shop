@@ -21,9 +21,11 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AdminInterceptor())
+                .excludePathPatterns("classpath:/resources/**")
                 .addPathPatterns("/admin/**");
         registry.addInterceptor(new AuthInterceptor())
-                .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui/**", "/api/**");
+                .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui/**", "/api/**")
+                .excludePathPatterns("classpath:/resources/**");
     }
 
     @Override
@@ -32,6 +34,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("**/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+
     }
 
 }

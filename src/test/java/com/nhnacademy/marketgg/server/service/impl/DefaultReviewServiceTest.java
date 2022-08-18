@@ -10,12 +10,14 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
+import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -82,6 +84,7 @@ class DefaultReviewServiceTest {
     private ReviewResponse reviewResponse;
     private ReviewUpdateRequest reviewUpdateRequest;
     private ImageResponse imageResponse;
+    private MemberInfo memberInfo;
 
     @BeforeEach
     void setUp() {
@@ -112,24 +115,26 @@ class DefaultReviewServiceTest {
         ReflectionTestUtils.setField(reviewUpdateRequest, "rating", 5L);
 
         imageResponse = new ImageResponse("이미지 응답", 1L, "이미지 주소", 1, asset);
+
+        memberInfo = Dummy.getDummyMemberInfo(1L, Dummy.getDummyCart(1L));
     }
 
     @Test
     @DisplayName("이미지 리뷰 생성 성공 테스트")
     void testCreateReview() throws IOException {
 
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
 
         MockMultipartFile image =
-                new MockMultipartFile("images", "lee.png", "image/png", new FileInputStream(filePath));
+                new MockMultipartFile("images", "img/lee.png", "image/png", new FileInputStream(filePath));
 
         given(memberRepository.findByUuid(anyString())).willReturn(Optional.ofNullable(member));
         given(reviewRepository.save(any(Review.class))).willReturn(review);
         given(fileService.uploadImage(any(MultipartFile.class))).willReturn(imageResponse);
         willDoNothing().given(publisher).publishEvent(any(SavePointEvent.class));
 
-        this.reviewService.createReview(reviewRequest, image, "admin");
+        this.reviewService.createReview(reviewRequest, image, memberInfo);
 
         then(reviewRepository).should(times(1)).save(any(Review.class));
         then(publisher).should(times(1)).publishEvent(any(SavePointEvent.class));
@@ -142,7 +147,7 @@ class DefaultReviewServiceTest {
         given(reviewRepository.save(any(Review.class))).willReturn(review);
         willDoNothing().given(publisher).publishEvent(any(SavePointEvent.class));
 
-        this.reviewService.createReview(reviewRequest, "admin");
+        this.reviewService.createReview(reviewRequest, memberInfo);
 
         then(reviewRepository).should(times(1)).save(any(Review.class));
         then(publisher).should(times(1)).publishEvent(any(SavePointEvent.class));

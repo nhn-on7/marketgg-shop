@@ -75,11 +75,11 @@ class AdminProductControllerTest {
     void testCreateProduct() throws Exception {
         String content = objectMapper.writeValueAsString(productRequest);
 
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
 
         MockMultipartFile file =
-                new MockMultipartFile("image", "lee.png", "image/png",
+                new MockMultipartFile("image", "img/lee.png", "image/png",
                                       new FileInputStream(filePath));
 
         MockMultipartFile dto =
@@ -137,10 +137,10 @@ class AdminProductControllerTest {
                 new MockMultipartFile("productRequest", "jsondata", "application/json",
                                       content.getBytes(StandardCharsets.UTF_8));
 
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile file =
-                new MockMultipartFile("image", "lee.png", "image/png",
+                new MockMultipartFile("image", "img/lee.png", "image/png",
                                       new FileInputStream(filePath));
 
         MockMultipartHttpServletRequestBuilder builder =
