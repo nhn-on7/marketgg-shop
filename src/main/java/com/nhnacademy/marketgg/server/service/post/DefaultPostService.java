@@ -89,23 +89,21 @@ public class DefaultPostService implements PostService {
     }
 
     @Override
-    public List<PostResponse> searchForCategory(final String categoryCode, final SearchRequest searchRequest,
-                                                final MemberInfo memberInfo)
+    public List<PostResponse> searchForCategory(final SearchRequest searchRequest, final MemberInfo memberInfo)
             throws ParseException, JsonProcessingException {
 
-        if (this.isAccess(memberInfo, categoryCode, "search")) {
-            return searchRepository.searchBoardWithCategoryCode(categoryCode, searchRequest, "board");
+        if (this.isAccess(memberInfo, searchRequest.getCategoryCode(), "search")) {
+            return searchRepository.searchBoardWithCategoryCode(searchRequest, "board");
         }
 
         return List.of();
     }
 
     @Override
-    public List<PostResponse> searchForOption(final String categoryCode, final SearchRequest searchRequest,
-                                              final String optionType, final String option)
+    public List<PostResponse> searchForOption(final SearchRequest searchRequest, final String optionType, final String option)
             throws JsonProcessingException, ParseException {
 
-        return searchRepository.searchBoardWithOption(categoryCode, option, searchRequest, optionType);
+        return searchRepository.searchBoardWithOption(option, searchRequest, optionType);
     }
 
     @Override

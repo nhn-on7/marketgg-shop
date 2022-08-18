@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -19,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -38,28 +36,15 @@ class ProductControllerTest {
     private static final String DEFAULT_PRODUCT = "/products";
 
     @Test
-    @DisplayName("카테고리로 상품 조회 테스트")
-    void testFindProductsByCategory() throws Exception {
-        given(productService.findProductByCategory(any(PageRequest.class), anyString())).willReturn(List.of());
-
-        this.mockMvc.perform(
-                    get(DEFAULT_PRODUCT + "/categories/{categoryCode}", "100")
-                            .param("page", "1")
-                            .param("size", "0"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-
-        then(productService).should(times(1)).findProductByCategory(any(PageRequest.class), anyString());
-    }
-
-    @Test
     @DisplayName("전체 목록에서 상품 검색 테스트")
     void testSearchProductList() throws Exception {
         given(productService.searchProductList(anyString(), anyInt())).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_PRODUCT + "/search")
                                      .param("keyword", "hi")
-                                     .param("page", "1"))
+                                     .param("categoryCode", "001")
+                                     .param("page", "1")
+                                     .param("size", "10"))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
@@ -73,7 +58,9 @@ class ProductControllerTest {
 
         this.mockMvc.perform(get(DEFAULT_PRODUCT + "/categories/{categoryId}/search", "100")
                                      .param("keyword", "hi")
-                                     .param("page", "1"))
+                                     .param("categoryCode", "100")
+                                     .param("page", "1")
+                                     .param("size", "10"))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
@@ -88,7 +75,9 @@ class ProductControllerTest {
 
         this.mockMvc.perform(get(DEFAULT_PRODUCT + "/categories/{categoryId}/price/{option}/search", "100", "desc")
                                      .param("keyword", "hi")
-                                     .param("page", "1"))
+                                     .param("categoryCode", "100")
+                                     .param("page", "1")
+                                     .param("size", "10"))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 

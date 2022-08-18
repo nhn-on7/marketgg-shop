@@ -123,37 +123,23 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public List<ElasticProduct> findProductByCategory(final Pageable pageable,
-                                                      final String categoryCode) {
-
-        return this.elasticProductRepository.findAllByCategoryCode(pageable, categoryCode).getContent();
+    public List<SearchProductResponse> searchProductList(final SearchRequest searchRequest)
+        throws ParseException, JsonProcessingException {
+        return searchRepository.searchProductWithKeyword(searchRequest, null);
     }
 
     @Override
-    public List<SearchProductResponse> searchProductList(final String keyword, final Integer page)
+    public List<SearchProductResponse> searchProductListByCategory(final SearchRequest searchRequest)
         throws ParseException, JsonProcessingException {
-        return searchRepository.searchProductWithKeyword(new SearchRequest(keyword, page, PAGE_SIZE), null);
+
+        return searchRepository.searchProductForCategory(searchRequest, null);
     }
 
     @Override
-    public List<SearchProductResponse> searchProductListByCategory(final String categoryId,
-                                                                   final String keyword,
-                                                                   final Integer page)
+    public List<SearchProductResponse> searchProductListByPrice(final String option, final SearchRequest searchRequest)
         throws ParseException, JsonProcessingException {
 
-        return searchRepository.searchProductForCategory(categoryId,
-                                                         new SearchRequest(keyword, page, PAGE_SIZE),
-                                                         null);
-    }
-
-    @Override
-    public List<SearchProductResponse> searchProductListByPrice(final String categoryId, final String option,
-                                                                final String keyword, final Integer page)
-        throws ParseException, JsonProcessingException {
-
-        return searchRepository.searchProductForCategory(categoryId,
-                                                         new SearchRequest(keyword, page, PAGE_SIZE),
-                                                         option);
+        return searchRepository.searchProductForCategory(searchRequest, option);
     }
 
 }
