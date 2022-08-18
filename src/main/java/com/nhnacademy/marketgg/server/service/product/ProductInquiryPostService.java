@@ -3,9 +3,9 @@ package com.nhnacademy.marketgg.server.service.product;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
-import org.springframework.data.domain.Page;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByProductResponse;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -20,9 +20,9 @@ public interface ProductInquiryPostService {
      * 상품에 대한 상품 문의 글을 생성합니다.
      * 상품 문의 글에는 제목, 내용, 비밀 문의 글 여부가 있습니다.
      *
-     * @author 민아영
      * @param productInquiryRequest - 상품 문의 글을 생성하기 위한 DTO 입니다.
      * @param id                    - 상품 문의 글을 남길 상품의 PK 입니다.
+     * @author 민아영
      * @since 1.0.0
      */
     void createProductInquiry(MemberInfo memberInfo, ProductInquiryRequest productInquiryRequest, Long id);
@@ -30,28 +30,28 @@ public interface ProductInquiryPostService {
     /**
      * 상품에 대한 모든 상품 문의 글을 조회합니다.
      *
-     * @author 민아영
      * @param id - 조회할 상품의 PK 입니다.
      * @return - 상품 문의 글을 List 로 반환합니다.
+     * @author 민아영
      */
-    Page<ProductInquiryByProductResponse> retrieveProductInquiryByProductId(Long id, Pageable pageable) throws JsonProcessingException;
+    List<ProductInquiryByProductResponse> retrieveProductInquiryByProductId(Long id, Pageable pageable) throws JsonProcessingException;
 
     /**
      * 회원이 남긴 모든 상품 문의 글을 조회합니다.
      *
-     * @author 민아영
      * @param memberInfo - 조회할 회원의 정보입니다.
      * @return - 상품 문의 글을 List 로 반환합니다.
+     * @author 민아영
      */
-    Page<ProductInquiryByMemberResponse> retrieveProductInquiryByMemberId(MemberInfo memberInfo, Pageable pageable);
+    List<ProductInquiryByMemberResponse> retrieveProductInquiryByMemberId(MemberInfo memberInfo, Pageable pageable);
 
     /**
      * 상품 문의 글에 대한 관리자의 답글을 상품 문의 글에 업데이트합니다.
      *
-     * @author 민아영
      * @param inquiryReply - 상품 문의 글에 대한 답글이 답긴 DTO 입니다.
      * @param inquiryId    - 상품 문의 글의 PK 입니다.
      * @param productId    - 상품의 PK 입니다.
+     * @author 민아영
      * @since 1.0.0
      */
     void updateProductInquiryReply(String inquiryReply, Long inquiryId, Long productId);
@@ -59,9 +59,9 @@ public interface ProductInquiryPostService {
     /**
      * 상품 문의 글을 삭제합니다.
      *
-     * @author 민아영
      * @param inquiryId - 삭제할 상품 문의 글의 PK 입나다.
      * @param productId - 상품의 PK 입니다.
+     * @author 민아영
      */
     void deleteProductInquiry(Long inquiryId, Long productId);
 }

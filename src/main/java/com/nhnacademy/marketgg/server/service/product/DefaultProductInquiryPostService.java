@@ -17,9 +17,9 @@ import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.productinquirypost.ProductInquiryPostRepository;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,12 +54,12 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     }
 
     @Override
-    public Page<ProductInquiryByProductResponse> retrieveProductInquiryByProductId(final Long id,
+    public List<ProductInquiryByProductResponse> retrieveProductInquiryByProductId(final Long id,
                                                                                    final Pageable pageable)
         throws JsonProcessingException {
 
-        Page<ProductInquiryByProductResponse> inquiryByProduct
-            = productInquiryPostRepository.findAllByProductNo(id, pageable);
+        List<ProductInquiryByProductResponse> inquiryByProduct
+            = productInquiryPostRepository.findAllByProductNo(id, pageable).getContent();
 
         for (ProductInquiryByProductResponse inquiry : inquiryByProduct) {
             MemberInfoRequest request = new MemberInfoRequest(inquiry.getUuid());
@@ -71,9 +71,9 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     }
 
     @Override
-    public Page<ProductInquiryByMemberResponse> retrieveProductInquiryByMemberId(final MemberInfo memberInfo,
+    public List<ProductInquiryByMemberResponse> retrieveProductInquiryByMemberId(final MemberInfo memberInfo,
                                                                                  final Pageable pageable) {
-        return productInquiryPostRepository.findAllByMemberNo(memberInfo.getId(), pageable);
+        return productInquiryPostRepository.findAllByMemberNo(memberInfo.getId(), pageable).getContent();
     }
 
     @Override

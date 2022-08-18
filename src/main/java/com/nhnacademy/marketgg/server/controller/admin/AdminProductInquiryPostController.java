@@ -1,9 +1,8 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
 
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryReplyRequest;
-import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +36,8 @@ public class AdminProductInquiryPostController {
      * @since 1.0.0
      */
     @PutMapping("/inquiry-reply")
-    public ResponseEntity<CommonResponse> updateProductInquiryReply(@RequestBody @Valid final
-                                                                    ProductInquiryReplyRequest replyRequest) {
+    public ResponseEntity<ShopResult<Void>> updateProductInquiryReply(@RequestBody @Valid final
+                                                                      ProductInquiryReplyRequest replyRequest) {
 
         productInquiryPostService.updateProductInquiryReply(replyRequest.getAdminReply()
             , replyRequest.getInquiryId()
@@ -46,7 +45,7 @@ public class AdminProductInquiryPostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Add success"));
+                             .body(ShopResult.success());
     }
 
 }

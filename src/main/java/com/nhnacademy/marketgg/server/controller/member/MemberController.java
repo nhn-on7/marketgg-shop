@@ -26,10 +26,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -230,14 +230,16 @@ public class MemberController {
      * @since 1.0.0
      */
     @GetMapping("/product-inquiries")
-    public ResponseEntity<CommonResponse> retrieveProductInquiry(final MemberInfo memberInfo,
-                                                                 @PageableDefault final Pageable pageable) {
-        Page<ProductInquiryByMemberResponse> productInquiryResponses
+    public ResponseEntity<ShopResult<List<ProductInquiryByMemberResponse>>> retrieveProductInquiry(
+        final MemberInfo memberInfo,
+        final Pageable pageable) {
+
+        List<ProductInquiryByMemberResponse> productInquiryResponses
             = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>(productInquiryResponses));
+                             .body(ShopResult.success(productInquiryResponses));
     }
 
 }
