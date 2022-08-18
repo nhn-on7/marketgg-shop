@@ -114,7 +114,7 @@ class OrderControllerTest {
             "email", 30000L, 1L,
             2000, 300);
 
-        given(orderService.createOrder(any(OrderCreateRequest.class), anyLong())).willReturn(orderToPayment);
+        given(orderService.createOrder(any(OrderCreateRequest.class), any(MemberInfo.class))).willReturn(orderToPayment);
 
         mockMvc.perform(post(baseUri)
                    .headers(headers)
@@ -122,7 +122,7 @@ class OrderControllerTest {
                    .content(mapper.writeValueAsString(orderCreateRequest)))
                .andExpect(status().isCreated());
 
-        then(orderService).should(times(1)).createOrder(any(OrderCreateRequest.class), anyLong());
+        then(orderService).should(times(1)).createOrder(any(OrderCreateRequest.class), any(MemberInfo.class));
     }
 
     @Test

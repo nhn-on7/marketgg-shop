@@ -43,6 +43,7 @@ import com.nhnacademy.marketgg.server.repository.orderproduct.OrderProductReposi
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
+import com.nhnacademy.marketgg.server.service.cart.CartProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,8 +56,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DefaultOrderService implements OrderService {
 
-    private final String prefix = "GGORDER_";
-
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final AuthRepository authRepository;
@@ -68,12 +67,13 @@ public class DefaultOrderService implements OrderService {
     private final UsedCouponRepository usedCouponRepository;
     private final GivenCouponRepository givenCouponRepository;
     private final ProductRepository productRepository;
+    private final CartProductService cartProductService;
 
     @Transactional
     @Override
-    public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId) throws JsonProcessingException {
+    public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final MemberInfo memberInfo) throws JsonProcessingException {
         int i = 0;
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
         MemberInfoResponse memberResponse = authRepository.getMemberInfo(new MemberInfoRequest(member.getUuid()));
         DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(orderRequest.getDeliveryAddressId())
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
@@ -85,15 +85,19 @@ public class DefaultOrderService implements OrderService {
         List<Product> products = productRepository.findByIds(productIds);
         Coupon coupon = couponRepository.findById(orderRequest.getCouponId()).orElseThrow(CouponNotFoundException::new);
 
-        checkOrderValid(orderRequest, memberResponse, coupon, memberId);
+        checkOrderValid(orderRequest, memberResponse, coupon, member.getId());
         orderRepository.save(order);
 
         for (Product product : products) {
-            if (product.getTotalStock() < productAmounts.get(i)) {
+            long remain = product.getTotalStock() - productAmounts.get(i);
+            if (remain < 0) {
                 throw new ProductStockNotEnoughException();
             }
+            product.updateTotalStock(remain);
+            productRepository.save(product);
             orderProductRepository.save(new OrderProduct(order, product, productAmounts.get(i++)));
         }
+        cartProductService.deleteProducts(memberInfo, productIds);
 
         return makeOrderToPayment(order, orderRequest);
     }

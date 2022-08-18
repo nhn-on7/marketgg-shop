@@ -23,7 +23,6 @@ public class OrderCreateRequest {
     @NotBlank
     private String email;
 
-    @NotNull
     private Long couponId;
 
     @NotNull

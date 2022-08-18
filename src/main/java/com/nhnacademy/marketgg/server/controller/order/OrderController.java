@@ -52,9 +52,9 @@ public class OrderController {
      */
     @PostMapping
     public ResponseEntity<OrderToPayment> createOrder(@RequestBody final OrderCreateRequest orderRequest,
-                                                      final MemberInfo memberInfo) {
+                                                      final MemberInfo memberInfo) throws JsonProcessingException {
 
-        OrderToPayment response = orderService.createOrder(orderRequest, memberInfo.getId());
+        OrderToPayment response = orderService.createOrder(orderRequest, memberInfo);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create("/payments/verify"))
