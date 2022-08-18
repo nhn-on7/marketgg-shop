@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.controller.order;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.delivery.DeliveryRepository;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
@@ -51,15 +52,15 @@ public class OrderController {
      * @since 1.0.0
      */
     @PostMapping
-    public ResponseEntity<OrderToPayment> createOrder(@RequestBody final OrderCreateRequest orderRequest,
-                                                      final MemberInfo memberInfo) throws JsonProcessingException {
+    public ResponseEntity<ShopResult<OrderToPayment>> createOrder(@RequestBody final OrderCreateRequest orderRequest,
+                                                                  final MemberInfo memberInfo) throws JsonProcessingException {
 
         OrderToPayment response = orderService.createOrder(orderRequest, memberInfo);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create("/payments/verify"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(response);
+                             .body(ShopResult.success(response));
     }
 
     /**
@@ -72,7 +73,7 @@ public class OrderController {
      * @since 1.0.0
      */
     @GetMapping("/order-form")
-    public ResponseEntity<OrderFormResponse> retrieveOrderForm(@RequestBody final List<ProductToOrder> products,
+    public ResponseEntity<ShopResult<OrderFormResponse>> retrieveOrderForm(@RequestBody final List<ProductToOrder> products,
                                                                final MemberInfo memberInfo, final AuthInfo authInfo) {
 
         OrderFormResponse response = orderService.retrieveOrderForm(products, memberInfo, authInfo);
@@ -80,7 +81,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/orderForm"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(response);
+                             .body(ShopResult.success(response));
     }
 
     /**
@@ -92,13 +93,13 @@ public class OrderController {
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<List<OrderRetrieveResponse>> retrieveOrderList(final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<List<OrderRetrieveResponse>>> retrieveOrderList(final MemberInfo memberInfo) {
         List<OrderRetrieveResponse> responses = orderService.retrieveOrderList(memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(responses);
+                             .body(ShopResult.success(responses));
     }
 
     /**
@@ -110,7 +111,7 @@ public class OrderController {
      * @since 1.0.0
      */
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderDetailRetrieveResponse> retrieveOrderDetail(@PathVariable final Long orderId,
+    public ResponseEntity<ShopResult<OrderDetailRetrieveResponse>> retrieveOrderDetail(@PathVariable final Long orderId,
                                                                            final MemberInfo memberInfo) {
 
         OrderDetailRetrieveResponse response = orderService.retrieveOrderDetail(orderId, memberInfo);
@@ -118,7 +119,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/" + orderId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(response);
+                             .body(ShopResult.success(response));
     }
 
     /**
@@ -130,7 +131,7 @@ public class OrderController {
      * @since 1.0.0
      */
     @PatchMapping("/{orderId}/status")
-    public ResponseEntity<Void> updateStatus(@PathVariable final Long orderId,
+    public ResponseEntity<ShopResult<Void>> updateStatus(@PathVariable final Long orderId,
                                              @RequestBody final OrderUpdateStatusRequest status) {
 
         orderService.updateStatus(orderId, status);
@@ -138,7 +139,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/" + orderId + "/status"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
     /**
@@ -150,13 +151,13 @@ public class OrderController {
      * @since 1.0.0
      */
     @PatchMapping("/{orderId}/delivery")
-    public ResponseEntity<Void> createTrackingNo(@PathVariable final Long orderId) throws JsonProcessingException {
+    public ResponseEntity<ShopResult<Void>> createTrackingNo(@PathVariable final Long orderId) throws JsonProcessingException {
         orderService.createTrackingNo(orderId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/" + orderId + "/delivery"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
     /**
@@ -167,14 +168,14 @@ public class OrderController {
      * @since 1.0.0
      */
     @PutMapping("/{orderId}")
-    public ResponseEntity<Void> cancelOrder(@PathVariable final Long orderId) {
+    public ResponseEntity<ShopResult<Void>> cancelOrder(@PathVariable final Long orderId) {
         // memo: 결제 취소 -> 주문 취소 -> 사용쿠폰 삭제 -> 포인트 차감 및 적립 내역 추가
         orderService.cancelOrder(orderId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/" + orderId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
 }
