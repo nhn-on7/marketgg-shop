@@ -55,10 +55,9 @@ public class OrderController {
                                                       final MemberInfo memberInfo) {
 
         OrderToPayment response = orderService.createOrder(orderRequest, memberInfo.getId());
-        String orderId = response.getOrderId().substring(response.getOrderId().indexOf("_")+1);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .location(URI.create(ORDER_PREFIX + "/" + orderId + "/request-payment"))
+                             .location(URI.create("/payments/verify"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(response);
     }
