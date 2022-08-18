@@ -75,18 +75,16 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public DefaultPageResult<ProductDetailResponse> retrieveProducts(final Pageable pageable) {
+    public List<ProductResponse> retrieveProducts(final Pageable pageable) {
 
         Page<ProductDetailResponse> allProducts = productRepository.findAllProducts(pageable);
 
-        return new DefaultPageResult<>(allProducts.getContent(), allProducts.getTotalElements(),
-                                       allProducts.getTotalPages(), allProducts.getNumber());
-
+        return allProducts.getContent();
     }
 
     @Override
-    public SingleResponse<ProductDetailResponse> retrieveProductDetails(final Long productId) {
-        return new SingleResponse<>(productRepository.queryById(productId));
+    public ProductResponse retrieveProductDetails(final Long productId) {
+        return productRepository.queryById(productId);
     }
 
     @Transactional

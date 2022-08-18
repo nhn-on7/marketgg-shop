@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
@@ -10,6 +11,7 @@ import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -51,7 +53,7 @@ public class AdminProductController {
      * @since 1.0.0
      */
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<Void> createProduct(@RequestPart @Valid final ProductCreateRequest productRequest,
+    public ResponseEntity<ShopResult<Void>> createProduct(@RequestPart @Valid final ProductCreateRequest productRequest,
                                               BindingResult bindingResult,
                                               @RequestPart final MultipartFile image) throws IOException {
 
@@ -64,7 +66,7 @@ public class AdminProductController {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
     /**
@@ -74,14 +76,14 @@ public class AdminProductController {
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<CommonResponse> retrieveProducts(DefaultPageRequest pageRequest) {
-        DefaultPageResult<ProductDetailResponse> productList =
+    public ResponseEntity<ShopResult<List<ProductResponse>>> retrieveProducts(DefaultPageRequest pageRequest) {
+        List<ProductResponse> productResponses =
             this.productService.retrieveProducts(pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(productList);
+                             .body(ShopResult.success(productResponses));
     }
 
     /**
@@ -92,15 +94,15 @@ public class AdminProductController {
      * @since 1.0.0
      */
     @GetMapping("/{productId}")
-    public ResponseEntity<CommonResponse> retrieveProductDetails(
+    public ResponseEntity<ShopResult<ProductResponse>> retrieveProductDetails(
         @PathVariable final Long productId) {
 
-        SingleResponse<ProductDetailResponse> response = this.productService.retrieveProductDetails(productId);
+        ProductResponse productResponse = this.productService.retrieveProductDetails(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(response);
+                             .body(ShopResult.success(productResponse));
     }
 
     /**
@@ -114,7 +116,7 @@ public class AdminProductController {
      * @since 1.0.0
      */
     @PutMapping("/{productId}")
-    public ResponseEntity<Void> updateProduct(@RequestPart @Valid final ProductUpdateRequest productRequest,
+    public ResponseEntity<ShopResult<Void>> updateProduct(@RequestPart @Valid final ProductUpdateRequest productRequest,
                                               BindingResult bindingResult,
                                               @RequestPart final MultipartFile image,
                                               @PathVariable final Long productId) throws IOException {
@@ -128,7 +130,7 @@ public class AdminProductController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
     /**
@@ -140,13 +142,13 @@ public class AdminProductController {
      * @since 1.0.0
      */
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable final Long productId) {
+    public ResponseEntity<ShopResult<Void>> deleteProduct(@PathVariable final Long productId) {
         this.productService.deleteProduct(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
     /**
@@ -156,13 +158,13 @@ public class AdminProductController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      */
     @PostMapping("/{productId}/restore")
-    public ResponseEntity<Void> restoreProduct(@PathVariable final Long productId) {
+    public ResponseEntity<ShopResult<Void>> restoreProduct(@PathVariable final Long productId) {
         this.productService.restoreProduct(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
 }

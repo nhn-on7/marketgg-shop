@@ -18,11 +18,13 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,6 +56,7 @@ class AdminProductControllerTest {
     private static final String DEFAULT_PRODUCT = "/admin/products";
     private ProductCreateRequest productRequest;
     private ProductUpdateRequest productUpdateRequest;
+    private ProductResponse productResponse;
 
     HttpHeaders httpHeaders;
 
@@ -64,6 +67,7 @@ class AdminProductControllerTest {
         httpHeaders = new HttpHeaders();
         httpHeaders.add(AspectUtils.AUTH_ID, UUID.randomUUID().toString());
         httpHeaders.add(AspectUtils.WWW_AUTHENTICATE, "[\"ROLE_ADMIN\"]");
+        productResponse = Dummy.getDummyProductResponse();
     }
 
     @Test
@@ -102,7 +106,7 @@ class AdminProductControllerTest {
     void testRetrieveProducts() throws Exception {
         PageRequest request = PageRequest.of(0, 5);
 
-        given(productService.retrieveProducts(request)).willReturn(new DefaultPageResult<>());
+        given(productService.retrieveProducts(request)).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_PRODUCT)
                                      .contentType(MediaType.APPLICATION_JSON)
@@ -115,7 +119,7 @@ class AdminProductControllerTest {
     @Test
     @DisplayName("상품 상세 조회 테스트")
     void testRetrieveProductDetails() throws Exception {
-        given(productService.retrieveProductDetails(anyLong())).willReturn(new SingleResponse<>());
+        given(productService.retrieveProductDetails(anyLong())).willReturn(productResponse);
 
         this.mockMvc.perform(get(DEFAULT_PRODUCT + "/1")
                                      .headers(httpHeaders)

@@ -22,6 +22,7 @@ import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResp
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.entity.Asset;
@@ -123,6 +124,13 @@ public class Dummy {
         ReflectionTestUtils.setField(productRequest, "assetNo", 1L);
 
         return productRequest;
+    }
+
+    public static ProductResponse getDummyProductResponse() {
+        ProductResponse productResponse = new ProductResponse(1L, Asset.create(), 1L, "001", "채소", "자몽", "아침에 자몽 쥬스", 100L, 2000L, "자몽쥬스 설명",
+                                                              "1박스", "샛별 배송", "인도네시아", "냉장", LocalDate.now(), "새우알러지", "20개", LocalDateTime.now(), LocalDateTime.now(), null);
+
+        return productResponse;
     }
 
     public static Asset getDummyAsset(Long id) {

@@ -40,8 +40,7 @@ public interface ProductService {
      * @return - 상품 리스트를 반환합니다.
      * @since 1.0.0
      */
-
-    DefaultPageResult<ProductDetailResponse> retrieveProducts(Pageable pageable);
+    List<ProductResponse> retrieveProducts(Pageable pageable);
 
     /**
      * 상품 Id를 통해 상세 정보를 조회합니다.
@@ -50,7 +49,7 @@ public interface ProductService {
      * @return - PK에 해당하는 상품을 반환합니다.
      * @since 1.0.0
      */
-    SingleResponse<ProductDetailResponse> retrieveProductDetails(final Long productId);
+    ProductResponse retrieveProductDetails(final Long productId);
 
     /**
      * 상품 id를 인자로 받아 해당 상품이 존재할 경우 수정합니다.
