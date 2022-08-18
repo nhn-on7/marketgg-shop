@@ -45,6 +45,7 @@ import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.cart.CartProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,6 +73,7 @@ public class DefaultOrderService implements OrderService {
     private final GivenCouponRepository givenCouponRepository;
     private final ProductRepository productRepository;
     private final CartProductService cartProductService;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     @Override
@@ -225,6 +227,7 @@ public class DefaultOrderService implements OrderService {
         order.cancel();
         orderRepository.save(order);
         // memo: 주문 취소 시 사용쿠폰 삭제, 포인트 차감, 적립 내역 삭제
+        // publisher.publishEvent();
     }
 
 }
