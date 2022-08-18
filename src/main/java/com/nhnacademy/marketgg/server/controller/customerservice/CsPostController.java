@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
 import com.nhnacademy.marketgg.server.constant.OtoReason;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
@@ -48,7 +49,6 @@ public class CsPostController {
     private final PostService postService;
 
     private static final String DEFAULT_POST = "/customer-services";
-    private static final Integer PAGE_SIZE = 10;
 
     /**
      * 게시글을 등록하는 POST Mapping 을 지원합니다.
@@ -59,15 +59,14 @@ public class CsPostController {
      * @since 1.0.0
      */
     @PostMapping
-    public ResponseEntity<Void> createPost(@Valid @RequestBody final PostRequest postRequest,
-                                           final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<Void>> createPost(@Valid @RequestBody final PostRequest postRequest,
+                                                      final MemberInfo memberInfo) {
 
         postService.createPost(postRequest, memberInfo);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_POST))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
     /**
@@ -80,16 +79,16 @@ public class CsPostController {
      * @since 1.0.0
      */
     @GetMapping("/categories/{categoryId}")
-    public ResponseEntity<List<PostResponse>> retrievePostList(
+    public ResponseEntity<ShopResult<List<PostResponse>>> retrievePostList(
             @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
             @RequestParam @NotNull final Integer page,
             final MemberInfo memberInfo) {
 
-        List<PostResponse> responses = postService.retrievePostList(categoryId, page, memberInfo);
+        List<PostResponse> data = postService.retrievePostList(categoryId, page, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/categories/" + categoryId))
-                             .body(responses);
+                             .body(ShopResult.success(data));
     }
 
     /**
@@ -101,23 +100,23 @@ public class CsPostController {
      * @since 1.0.0
      */
     @GetMapping("/{postId}")
-    public ResponseEntity<PostResponseForDetail> retrievePost(@PathVariable @NotNull @Min(1) final Long postId,
+    public ResponseEntity<ShopResult<PostResponseForDetail>> retrievePost(@PathVariable @NotNull @Min(1) final Long postId,
                                                               final MemberInfo memberInfo)
             throws JsonProcessingException {
 
-        PostResponseForDetail response = postService.retrievePost(postId, memberInfo);
+        PostResponseForDetail data = postService.retrievePost(postId, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/" + postId))
-                             .body(response);
+                             .body(ShopResult.success(data));
     }
 
     /**
      * 지정한 게시판 타입의 전체 목록에서 검색한 결과를 반환합니다.
      *
-     * @param categoryId - 검색을 진행 할 게시판 타입입니다.
+     * @param categoryId    - 검색을 진행 할 게시판 타입입니다.
      * @param searchRequest - 검색을 진행할 정보입니다.
-     * @param memberInfo - 검색을 진행 할 회원의 정보입니다.
+     * @param memberInfo    - 검색을 진행 할 회원의 정보입니다.
      * @return 검색정보로 검색한 결과 목록 응답객체를 반환합니다.
      * @throws ParseException          파싱도중 예외처리입니다.
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
@@ -125,17 +124,17 @@ public class CsPostController {
      */
 
     @PostMapping("/categories/{categoryId}/search")
-    public ResponseEntity<List<PostResponse>> searchPostListForCategory(
+    public ResponseEntity<ShopResult<List<PostResponse>>> searchPostListForCategory(
             @PathVariable @Size(min = 1, max = 6) final String categoryId,
             @Valid @RequestBody final SearchRequest searchRequest,
             final MemberInfo memberInfo)
             throws ParseException, JsonProcessingException {
 
-        List<PostResponse> responses = postService.searchForCategory(searchRequest, memberInfo);
+        List<PostResponse> data = postService.searchForCategory(searchRequest, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/categories/" + categoryId + "/search"))
-                             .body(responses);
+                             .body(ShopResult.success(data));
     }
 
     /**
@@ -148,7 +147,7 @@ public class CsPostController {
      * @since 1.0.0
      */
     @DeleteMapping("/categories/{categoryId}/{postId}")
-    public ResponseEntity<Void> deletePost(@PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
+    public ResponseEntity<ShopResult<Void>> deletePost(@PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
                                            @PathVariable @NotNull @Min(1) final Long postId,
                                            final MemberInfo memberInfo) {
 
@@ -156,8 +155,7 @@ public class CsPostController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .location(URI.create(DEFAULT_POST + postId))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
     /**
@@ -167,14 +165,14 @@ public class CsPostController {
      * @since 1.0.0
      */
     @GetMapping("/reasons")
-    public ResponseEntity<List<String>> retrieveReasonList() {
-        List<String> reasons = Arrays.stream(OtoReason.values())
+    public ResponseEntity<ShopResult<List<String>>> retrieveReasonList() {
+        List<String> data = Arrays.stream(OtoReason.values())
                                      .map(OtoReason::reason)
                                      .collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/reasons"))
-                             .body(reasons);
+                             .body(ShopResult.success(data));
     }
 
 }

@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.controller.admin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.constant.OtoStatus;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
@@ -58,20 +59,20 @@ public class AdminCsPostController {
      * @since 1.0.0
      */
     @PostMapping("/categories/{categoryId}/options/{optionType}/search")
-    public ResponseEntity<List<PostResponse>> searchPostListForOption(
+    public ResponseEntity<ShopResult<List<PostResponse>>> searchPostListForOption(
             @PathVariable @Size(min = 1, max = 6) final String categoryId,
             @PathVariable @Min(1) final String optionType,
             @RequestParam @Min(1) final String option,
             @Valid @RequestBody final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
-        List<PostResponse> responses = postService.searchForOption(searchRequest, optionType, option);
+        List<PostResponse> data = postService.searchForOption(searchRequest, optionType, option);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
                                      DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/options/" + optionType
                                              + "/search?option=" + option))
-                             .body(responses);
+                             .body(ShopResult.success(data));
     }
 
     /**
@@ -84,7 +85,7 @@ public class AdminCsPostController {
      * @since 1.0.0
      */
     @PutMapping("/categories/{categoryId}/{postId}")
-    public ResponseEntity<Void> updatePost(@PathVariable @Size(min = 1, max = 6) final String categoryId,
+    public ResponseEntity<ShopResult<Void>> updatePost(@PathVariable @Size(min = 1, max = 6) final String categoryId,
                                            @PathVariable @Min(1) final Long postId,
                                            @Valid @RequestBody final PostRequest postRequest) {
 
@@ -92,8 +93,7 @@ public class AdminCsPostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/" + postId))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
     /**
@@ -103,14 +103,14 @@ public class AdminCsPostController {
      * @since 1.0.0
      */
     @GetMapping("/status")
-    public ResponseEntity<List<String>> retrieveStatusList() {
-        List<String> status = Arrays.stream(OtoStatus.values())
+    public ResponseEntity<ShopResult<List<String>>> retrieveStatusList() {
+        List<String> data = Arrays.stream(OtoStatus.values())
                                     .map(OtoStatus::status)
                                     .collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_POST + "/status"))
-                             .body(status);
+                             .body(ShopResult.success(data));
     }
 
     /**
@@ -122,7 +122,7 @@ public class AdminCsPostController {
      * @since 1.0.0
      */
     @PatchMapping("/{postId}/status")
-    public ResponseEntity<Void> updateInquiryStatus(@PathVariable @Min(1) final Long postId,
+    public ResponseEntity<ShopResult<Void>> updateInquiryStatus(@PathVariable @Min(1) final Long postId,
                                                     @Valid @RequestBody
                                                     final PostStatusUpdateRequest statusUpdateRequest) {
 
@@ -130,8 +130,7 @@ public class AdminCsPostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_POST + "/" + postId + "/status"))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
 }

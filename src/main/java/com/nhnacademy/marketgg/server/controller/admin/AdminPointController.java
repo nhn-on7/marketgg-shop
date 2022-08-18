@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.point.PointService;
 import java.net.URI;
@@ -33,12 +34,12 @@ public class AdminPointController {
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<List<PointRetrieveResponse>> adminRetrievePointHistory() {
-        List<PointRetrieveResponse> responses = pointService.adminRetrievePointHistories();
+    public ResponseEntity<ShopResult<List<PointRetrieveResponse>>> adminRetrievePointHistory() {
+        List<PointRetrieveResponse> data = pointService.adminRetrievePointHistories();
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN + "/points"))
-                             .body(responses);
+                             .body(ShopResult.success(data));
     }
 
 }

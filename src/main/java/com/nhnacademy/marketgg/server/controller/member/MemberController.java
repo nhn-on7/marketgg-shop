@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.annotation.UUID;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
@@ -63,14 +64,14 @@ public class MemberController {
      * @since 1.0.0
      */
     @GetMapping("/ggpass")
-    public ResponseEntity<LocalDateTime> retrievePassUpdatedAt(final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<LocalDateTime>> retrievePassUpdatedAt(final MemberInfo memberInfo) {
 
-        LocalDateTime check = memberService.retrievePassUpdatedAt(memberInfo.getId());
+        LocalDateTime data = memberService.retrievePassUpdatedAt(memberInfo.getId());
 
         return ResponseEntity.status(OK)
                              .location(URI.create(MEMBER_PREFIX + "/ggpass"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(check);
+                             .body(ShopResult.success(data));
     }
 
     /**
@@ -81,13 +82,12 @@ public class MemberController {
      * @since 1.0.0
      */
     @PostMapping("/ggpass/subscribe")
-    public ResponseEntity<Void> subscribePass(final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<Void>> subscribePass(final MemberInfo memberInfo) {
         memberService.subscribePass(memberInfo.getId());
 
         return ResponseEntity.status(OK)
                              .location(URI.create(MEMBER_PREFIX + "/ggpass/subscribe"))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
     /**
@@ -98,11 +98,12 @@ public class MemberController {
      * @since 1.0.0
      */
     @PostMapping("/ggpass/withdraw")
-    public ResponseEntity<Void> withdrawPass(final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<Void>> withdrawPass(final MemberInfo memberInfo) {
         memberService.withdrawPass(memberInfo.getId());
 
-        return ResponseEntity.status(OK).location(URI.create(MEMBER_PREFIX + "/ggpass/withdraw"))
-                             .contentType(MediaType.APPLICATION_JSON).build();
+        return ResponseEntity.status(OK)
+                             .location(URI.create(MEMBER_PREFIX + "/ggpass/withdraw"))
+                             .body(ShopResult.success());
     }
 
     /**

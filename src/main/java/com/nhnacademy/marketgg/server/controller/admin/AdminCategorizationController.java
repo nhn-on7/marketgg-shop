@@ -1,6 +1,8 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.response.category.CategorizationRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.service.category.CategorizationService;
 import java.net.URI;
 import java.util.List;
@@ -31,13 +33,12 @@ public class AdminCategorizationController {
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<List<CategorizationRetrieveResponse>> retrieveCategorization() {
-        List<CategorizationRetrieveResponse> categorizationResponses =
-            categorizationService.retrieveCategorizations();
+    public ResponseEntity<ShopResult<List<CategorizationRetrieveResponse>>> retrieveCategorization() {
+        List<CategorizationRetrieveResponse> categorizationResponses = categorizationService.retrieveCategorizations();
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create("/admin/categorizations"))
-                             .body(categorizationResponses);
+                             .body(ShopResult.success(categorizationResponses));
     }
 
 }

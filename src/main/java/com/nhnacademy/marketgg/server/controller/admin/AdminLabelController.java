@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.label.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.label.LabelRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.label.LabelService;
@@ -42,13 +43,12 @@ public class AdminLabelController {
      * @since 1.0.0
      */
     @PostMapping
-    public ResponseEntity<Void> registerLabel(@Valid @RequestBody final LabelCreateRequest labelCreateRequest) {
+    public ResponseEntity<ShopResult<Void>> registerLabel(@Valid @RequestBody final LabelCreateRequest labelCreateRequest) {
         labelService.createLabel(labelCreateRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_LABEL))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
     /**
@@ -58,12 +58,12 @@ public class AdminLabelController {
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<List<LabelRetrieveResponse>> retrieveLabels() {
-        List<LabelRetrieveResponse> labelResponse = labelService.retrieveLabels();
+    public ResponseEntity<ShopResult<List<LabelRetrieveResponse>>> retrieveLabels() {
+        List<LabelRetrieveResponse> data = labelService.retrieveLabels();
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_LABEL))
-                             .body(labelResponse);
+                             .body(ShopResult.success(data));
     }
 
     /**
@@ -74,12 +74,12 @@ public class AdminLabelController {
      * @since 1.0.0
      */
     @DeleteMapping("/{labelId}")
-    public ResponseEntity<Void> deleteLabel(@PathVariable @Min(1) final Long labelId) {
+    public ResponseEntity<ShopResult<Void>> deleteLabel(@PathVariable @Min(1) final Long labelId) {
         labelService.deleteLabel(labelId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_LABEL + "/" + labelId))
-                             .build();
+                             .body(ShopResult.success());
     }
 
 }

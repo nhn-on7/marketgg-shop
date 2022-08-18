@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.controller.member;
 
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.annotation.RoleCheck;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.point.PointService;
@@ -40,12 +41,12 @@ public class PointController {
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<List<PointRetrieveResponse>> retrievePointHistory(final MemberInfo memberInfo) {
-        List<PointRetrieveResponse> responses = pointService.retrievePointHistories(memberInfo.getId());
+    public ResponseEntity<ShopResult<List<PointRetrieveResponse>>> retrievePointHistory(final MemberInfo memberInfo) {
+        List<PointRetrieveResponse> data = pointService.retrievePointHistories(memberInfo.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_MEMBER + "/points"))
-                             .body(responses);
+                             .body(ShopResult.success(data));
     }
 
 }

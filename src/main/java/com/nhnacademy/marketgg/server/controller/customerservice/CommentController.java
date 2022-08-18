@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.customerservice;
 
 import com.nhnacademy.marketgg.server.annotation.Auth;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.CommentRequest;
 import com.nhnacademy.marketgg.server.service.otoinquiry.OtoInquiryCommentService;
@@ -42,16 +43,15 @@ public class CommentController {
      * @since 1.0.0
      */
     @PostMapping("/{postId}")
-    public ResponseEntity<Void> createComment(@PathVariable @Min(1) final Long postId,
-                                              @Valid @RequestBody final CommentRequest commentRequest,
-                                              final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<Void>> createComment(@PathVariable @Min(1) final Long postId,
+                                                         @Valid @RequestBody final CommentRequest commentRequest,
+                                                         final MemberInfo memberInfo) {
 
         otoInquiryCommentService.createComment(postId, memberInfo.getId(), commentRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_CS + "/" + postId))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
 }

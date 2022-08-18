@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.category.CategoryRetrieveResponse;
@@ -44,13 +45,12 @@ public class AdminCategoryController {
      * @since 1.0.0
      */
     @PostMapping
-    public ResponseEntity<Void> createCategory(@Valid @RequestBody final CategoryCreateRequest categoryCreateRequest) {
+    public ResponseEntity<ShopResult<Void>> createCategory(@Valid @RequestBody final CategoryCreateRequest categoryCreateRequest) {
         categoryService.createCategory(categoryCreateRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_CATEGORY))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
     /**
@@ -61,13 +61,13 @@ public class AdminCategoryController {
      * @since 1.0.0
      */
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategoryRetrieveResponse> retrieveCategory(
+    public ResponseEntity<ShopResult<CategoryRetrieveResponse>> retrieveCategory(
         @PathVariable @Size(min = 1, max = 6) final String categoryId) {
-        CategoryRetrieveResponse categoryResponse = categoryService.retrieveCategory(categoryId);
+        CategoryRetrieveResponse data = categoryService.retrieveCategory(categoryId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_CATEGORY + "/" + categoryId))
-                             .body(categoryResponse);
+                             .body(ShopResult.success(data));
     }
 
     /**
@@ -78,14 +78,14 @@ public class AdminCategoryController {
      * @since 1.0.0
      */
     @GetMapping("/categorizations/{categorizationId}")
-    public ResponseEntity<List<CategoryRetrieveResponse>> retrieveCategoriesByCategorization(
+    public ResponseEntity<ShopResult<List<CategoryRetrieveResponse>>> retrieveCategoriesByCategorization(
         @PathVariable @Size(min = 1, max = 3) final String categorizationId) {
-        List<CategoryRetrieveResponse> categoryResponses = categoryService.retrieveCategoriesByCategorization(
+        List<CategoryRetrieveResponse> data = categoryService.retrieveCategoriesByCategorization(
             categorizationId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_CATEGORY + "/" + categorizationId))
-                             .body(categoryResponses);
+                             .body(ShopResult.success(data));
     }
 
     /**
@@ -95,12 +95,12 @@ public class AdminCategoryController {
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<List<CategoryRetrieveResponse>> retrieveCategories() {
-        List<CategoryRetrieveResponse> categoryResponses = categoryService.retrieveCategories();
+    public ResponseEntity<ShopResult<List<CategoryRetrieveResponse>>> retrieveCategories() {
+        List<CategoryRetrieveResponse> data = categoryService.retrieveCategories();
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_CATEGORY))
-                             .body(categoryResponses);
+                             .body(ShopResult.success(data));
     }
 
     /**
@@ -112,14 +112,13 @@ public class AdminCategoryController {
      * @since 1.0.0
      */
     @PutMapping("/{categoryId}")
-    public ResponseEntity<Void> updateCategory(@PathVariable @Size(min = 1, max = 6) final String categoryId,
+    public ResponseEntity<ShopResult<Void>> updateCategory(@PathVariable @Size(min = 1, max = 6) final String categoryId,
                                                @Valid @RequestBody final CategoryUpdateRequest categoryRequest) {
         categoryService.updateCategory(categoryId, categoryRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_CATEGORY + "/" + categoryId))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
     /**
@@ -130,13 +129,12 @@ public class AdminCategoryController {
      * @since 1.0.0
      */
     @DeleteMapping("/{categoryId}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable @Size(min = 1, max = 6) final String categoryId) {
+    public ResponseEntity<ShopResult<Void>> deleteCategory(@PathVariable @Size(min = 1, max = 6) final String categoryId) {
         categoryService.deleteCategory(categoryId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_CATEGORY + "/" + categoryId))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.success());
     }
 
 }
