@@ -9,7 +9,6 @@ import com.querydsl.core.types.Projections;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport
@@ -72,16 +71,12 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport
     public Integer findLastTotalPoints(Long memberId) {
         QPointHistory pointHistory = QPointHistory.pointHistory;
 
-        Integer result = from(pointHistory)
-                .where(pointHistory.member.id.eq(memberId))
-                .orderBy(pointHistory.updatedAt.desc())
-                .select(pointHistory.totalPoint)
-                .fetchFirst();
+        return Optional.ofNullable(from(pointHistory)
+                                           .where(pointHistory.member.id.eq(memberId))
+                                           .orderBy(pointHistory.updatedAt.desc())
+                                           .select(pointHistory.totalPoint)
+                                           .fetchFirst()).orElse(0);
 
-        if (Objects.isNull(result))
-            return 0;
-
-        return result;
     }
 
 }

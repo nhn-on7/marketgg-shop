@@ -17,9 +17,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class OrderCreateRequest {
 
-    @NotNull
-    private Long memberId;
-
     @NotBlank
     private String name;
 

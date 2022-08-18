@@ -42,4 +42,14 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
                 .fetchOne();
     }
 
+    @Override
+    public Optional<String> findUuidByMemberId(final Long memberId) {
+        QMember member = QMember.member;
+
+        return Optional.ofNullable(from(member)
+                                           .where(member.id.eq(memberId))
+                                           .select(member.uuid)
+                                           .fetchOne());
+    }
+
 }

@@ -29,7 +29,7 @@ public interface OrderService {
      * @return - 주문 등록 후 결제에 넘겨줄 정보를 담은 DTO 를 반환합니다.
      * @since 1.0.0
      */
-    OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId);
+    OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId) throws JsonProcessingException;
 
     /**
      * 주문서 작성에 필요한 정보를 취합하여 조회하는 메소드입니다.

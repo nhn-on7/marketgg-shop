@@ -30,6 +30,7 @@ import com.nhnacademy.marketgg.server.exception.coupon.CouponNotOverMinimumMoney
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotValidException;
 import com.nhnacademy.marketgg.server.exception.deliveryaddresses.DeliveryAddressNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
+import com.nhnacademy.marketgg.server.exception.order.OrderMemberNotMatchedException;
 import com.nhnacademy.marketgg.server.exception.order.OrderNotFoundException;
 import com.nhnacademy.marketgg.server.exception.pointhistory.PointNotEnoughException;
 import com.nhnacademy.marketgg.server.exception.product.ProductStockNotEnoughException;
@@ -70,9 +71,14 @@ public class DefaultOrderService implements OrderService {
 
     @Transactional
     @Override
-    public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId) {
+    public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId) throws JsonProcessingException {
         int i = 0;
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        String uuid = memberRepository.findUuidByMemberId(memberId).orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findByUuid(uuid).orElseThrow(MemberNotFoundException::new);
+        MemberInfoResponse memberResponse = authRepository.getMemberInfo(new MemberInfoRequest(uuid));
+        if (!memberResponse.getEmail().equals(orderRequest.getEmail())) {
+            throw new OrderMemberNotMatchedException();
+        }
         DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(orderRequest.getDeliveryAddressId())
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
         Order order = new Order(member, deliveryAddress, orderRequest);
