@@ -4,6 +4,7 @@ import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -23,7 +24,10 @@ import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
+import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
+import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
@@ -40,12 +44,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
 @Transactional
@@ -67,6 +76,9 @@ class OrderControllerTest {
 
     @MockBean
     MemberRepository memberRepository;
+
+    @MockBean
+    RestTemplate restTemplate;
 
     String baseUri = "/orders";
 
@@ -113,26 +125,29 @@ class OrderControllerTest {
         then(orderService).should(times(1)).createOrder(any(OrderCreateRequest.class), anyLong());
     }
 
-    // memo: I/O error on GET request for "http://127.0.0.1:6060/auth/v1/info" connection error -> gateway, auth 켜야함
-    // memo: 500 Internal Server Error: "{"success":false,"message":null}" -> authInfo 받는 과정 오류 jwt 때문?
-    // @Test
-    // @DisplayName("주문서 폼 필요정보 조회")
-    // public void testRetrieveOrderForm() throws Exception {
-    //     OrderFormResponse orderFormResponse = Dummy.getDummyOrderFormResponse();
-    //     List<ProductToOrder> list = List.of(new ProductToOrder());
-    //
-    //     given(orderService.retrieveOrderForm(any(List.class), any(MemberInfo.class), any(AuthInfo.class)))
-    //             .willReturn(orderFormResponse);
-    //
-    //     mockMvc.perform(get(baseUri + "/order-form")
-    //                             .headers(headers)
-    //                             .contentType(MediaType.APPLICATION_JSON)
-    //                             .content(mapper.writeValueAsString(list)))
-    //            .andExpect(status().isOk());
-    //
-    //     then(orderService).should(times(1))
-    //                       .retrieveOrderForm(any(List.class), any(MemberInfo.class), any(AuthInfo.class));
-    // }
+    @Test
+    @DisplayName("주문서 폼 필요정보 조회")
+    public void testRetrieveOrderForm() throws Exception {
+        OrderFormResponse orderFormResponse = Dummy.getDummyOrderFormResponse();
+        List<ProductToOrder> list = List.of(new ProductToOrder());
+        SingleResponse<AuthInfo> authInfoSingleResponse = new SingleResponse<>(new AuthInfo());
+        String response = mapper.writeValueAsString(authInfoSingleResponse);
+        ResponseEntity<String> authInfoResponse = new ResponseEntity<>(response, HttpStatus.OK);
+
+        given(orderService.retrieveOrderForm(any(List.class), any(MemberInfo.class), any(AuthInfo.class)))
+                .willReturn(orderFormResponse);
+        given(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), any(Class.class)))
+                .willReturn(authInfoResponse);
+
+        mockMvc.perform(get(baseUri + "/order-form")
+                                .headers(headers)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(list)))
+               .andExpect(status().isOk());
+
+        then(orderService).should(times(1))
+                          .retrieveOrderForm(any(List.class), any(MemberInfo.class), any(AuthInfo.class));
+    }
 
     @Test
     @DisplayName("주문서 목록 조회")
