@@ -6,10 +6,8 @@ import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.point.PointService;
-
 import java.net.URI;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
