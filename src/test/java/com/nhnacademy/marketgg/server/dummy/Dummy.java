@@ -23,6 +23,7 @@ import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.entity.Asset;
@@ -127,10 +128,11 @@ public class Dummy {
     }
 
     public static ProductResponse getDummyProductResponse() {
-        ProductResponse productResponse = new ProductResponse(1L, Asset.create(), 1L, "001", "채소", "자몽", "아침에 자몽 쥬스", 100L, 2000L, "자몽쥬스 설명",
-                                                              "1박스", "샛별 배송", "인도네시아", "냉장", LocalDate.now(), "새우알러지", "20개", LocalDateTime.now(), LocalDateTime.now(), null);
 
-        return productResponse;
+        return new ProductResponse(1L, Asset.create(), 1L, "001", "채소", "자몽",
+                                   "아침에 자몽 쥬스", 100L, 2000L, "자몽쥬스 설명",
+                                   "1박스", "샛별 배송", "인도네시아", "냉장", LocalDate.now(),
+                                   "새우알러지", "20개", LocalDateTime.now(), LocalDateTime.now(), null);
     }
 
     public static Asset getDummyAsset(Long id) {
@@ -173,7 +175,7 @@ public class Dummy {
 
     public static Product getDummyProduct(Long productId, Long assetId) {
         Product product =
-                new Product(getDummyProductCreateRequest(), getDummyAsset(assetId), getDummyCategory());
+            new Product(getDummyProductCreateRequest(), getDummyAsset(assetId), getDummyCategory());
         ReflectionTestUtils.setField(product, "id", productId);
 
         return product;
@@ -336,6 +338,7 @@ public class Dummy {
         return new Coupon(couponDto);
     }
 
+<<<<<<< HEAD
     public static ProductToOrder getDummyProductToOrder() {
         ProductToOrder productToOrder = new ProductToOrder();
 
@@ -384,4 +387,13 @@ public class Dummy {
         return new OrderRetrieveResponse(1L, 1L, 10000L,
                                          "결제 대기", LocalDateTime.now());
     }
+=======
+
+    public static ReviewResponse getDummyReviewResponse() {
+
+        return new ReviewResponse(1L, 1L, 1L, "후기 내용입니다. 더미입니다.", 5L,
+                                  Boolean.FALSE, LocalDateTime.now(), LocalDateTime.now(), null);
+    }
+
+>>>>>>> afbf21d2 (Refactor: 후기 공통응답객체 적용)
 }

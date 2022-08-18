@@ -155,10 +155,8 @@ class DefaultReviewServiceTest {
         Page<ReviewResponse> page = new PageImpl<>(list, PageRequest.of(0, 1), 1);
         given(reviewRepository.retrieveReviews(PageRequest.of(0, 1))).willReturn(page);
 
-        SingleResponse<Page<ReviewResponse>> reviewResponses =
-                reviewService.retrieveReviews(page.getPageable());
+        reviewService.retrieveReviews(page.getPageable());
 
-        assertThat(reviewResponses).isNotNull();
         then(reviewRepository).should(times(1)).retrieveReviews(page.getPageable());
     }
 
@@ -167,9 +165,8 @@ class DefaultReviewServiceTest {
     void testRetrieveReviewDetails() {
         given(reviewRepository.queryById(anyLong())).willReturn(reviewResponse);
 
-        SingleResponse<ReviewResponse> response = reviewService.retrieveReviewDetails(1L);
+        reviewService.retrieveReviewDetails(1L);
 
-        assertThat(response.getData().getContent()).isEqualTo("content");
         then(reviewRepository).should(times(1)).queryById(anyLong());
     }
 

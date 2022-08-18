@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.product;
 
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
@@ -9,6 +10,7 @@ import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.service.product.ReviewService;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -55,24 +57,25 @@ public class ReviewController {
      * @param images        - 후기 생성시 첨부된 사진들입니다.
      * @return Void를 담은 응답객체를 반환합니다.
      */
-    @PostMapping(value = "/{productId}/reviews/{memberUuid}", consumes = {MediaType.APPLICATION_JSON_VALUE,
-        MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Void> createReview(@PathVariable final Long productId,
-                                             @PathVariable(name = "memberUuid") final String uuid,
-                                             @RequestPart @Valid final ReviewCreateRequest reviewRequest,
-                                             BindingResult bindingResult,
-                                             @RequestPart(required = false) MultipartFile images)
+    @PostMapping(value = "/{productId}/reviews/{memberUuid}", consumes = { MediaType.APPLICATION_JSON_VALUE,
+        MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<ShopResult<Void>> createReview(@PathVariable final Long productId,
+                                                         @PathVariable(name = "memberUuid") final String uuid,
+                                                         @RequestPart @Valid
+                                                         final ReviewCreateRequest reviewRequest,
+                                                         BindingResult bindingResult,
+                                                         @RequestPart(required = false) MultipartFile images)
         throws IOException {
 
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
 
-        ResponseEntity<Void> returnResponseEntity =
+        ResponseEntity<ShopResult<Void>> returnResponseEntity =
             ResponseEntity.status(HttpStatus.CREATED)
                           .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH + uuid))
                           .contentType(MediaType.APPLICATION_JSON)
-                          .build();
+                          .body(ShopResult.success());
 
         if (Objects.isNull(images)) {
             reviewService.createReview(reviewRequest, uuid);
@@ -93,15 +96,15 @@ public class ReviewController {
      * @return - 페이지 정보가 담긴 공통 응답 객체를 반환합니다.
      */
     @GetMapping("/{productId}/reviews")
-    public ResponseEntity<CommonResponse> retrieveReviews(@PathVariable final Long productId,
+    public ResponseEntity<ShopResult<List<ReviewResponse>>> retrieveReviews(@PathVariable final Long productId,
                                                           final DefaultPageRequest pageRequest) {
 
-        SingleResponse<Page<ReviewResponse>> response =
-            reviewService.retrieveReviews(pageRequest.getPageable());
+        List<ReviewResponse> reviewResponses = reviewService.retrieveReviews(pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_REVIEW_URI + productId + "/review"))
-                             .contentType(MediaType.APPLICATION_JSON).body(response);
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(ShopResult.success(reviewResponses));
     }
 
     /**
@@ -112,14 +115,15 @@ public class ReviewController {
      * @return - ReviewResponse가 담긴 공통 응답객체를 반환합니다.
      */
     @GetMapping("/{productId}/reviews/{reviewId}")
-    public ResponseEntity<CommonResponse> retrieveReviewDetails(@PathVariable final Long productId,
+    public ResponseEntity<ShopResult<ReviewResponse>> retrieveReviewDetails(@PathVariable final Long productId,
                                                                 @PathVariable final Long reviewId) {
 
-        SingleResponse<ReviewResponse> response = reviewService.retrieveReviewDetails(reviewId);
+        ReviewResponse reviewResponse = reviewService.retrieveReviewDetails(reviewId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH + reviewId))
-                             .contentType(MediaType.APPLICATION_JSON).body(response);
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(ShopResult.success(reviewResponse));
     }
 
     /**
@@ -132,7 +136,7 @@ public class ReviewController {
      * @return - Void 타입 응답객체를 반환합니다.
      */
     @PutMapping("/{productId}/reviews/{reviewId}")
-    public ResponseEntity<Void> updateReview(@PathVariable final Long productId,
+    public ResponseEntity<ShopResult<Void>> updateReview(@PathVariable final Long productId,
                                              @PathVariable final Long reviewId,
                                              @RequestBody @Valid final ReviewUpdateRequest reviewRequest,
                                              BindingResult bindingResult) {
@@ -145,7 +149,8 @@ public class ReviewController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH + reviewId))
-                             .contentType(MediaType.APPLICATION_JSON).build();
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(ShopResult.success());
     }
 
     /**
@@ -156,13 +161,14 @@ public class ReviewController {
      * @return - Void 타입 응답객체를 반환합니다.
      */
     @DeleteMapping("/{productId}/reviews/{reviewId}")
-    public ResponseEntity<Void> deleteReview(@PathVariable final Long productId,
+    public ResponseEntity<ShopResult<Void>> deleteReview(@PathVariable final Long productId,
                                              @PathVariable final Long reviewId) {
         reviewService.deleteReview(reviewId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH + reviewId))
-                             .contentType(MediaType.APPLICATION_JSON).build();
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(ShopResult.success());
     }
 
 }

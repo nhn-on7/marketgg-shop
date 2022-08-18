@@ -23,6 +23,7 @@ import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.review.ReviewRepository;
 import com.nhnacademy.marketgg.server.service.file.FileService;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -72,18 +73,16 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
-    public SingleResponse<Page<ReviewResponse>> retrieveReviews(final Pageable pageable) {
+    public List<ReviewResponse> retrieveReviews(final Pageable pageable) {
         Page<ReviewResponse> response = reviewRepository.retrieveReviews(pageable);
 
-        return new SingleResponse<>(response);
+        return response.getContent();
     }
 
 
     @Override
-    public SingleResponse<ReviewResponse> retrieveReviewDetails(final Long id) {
-        ReviewResponse response = reviewRepository.queryById(id);
-
-        return new SingleResponse<>(response);
+    public ReviewResponse retrieveReviewDetails(final Long id) {
+        return reviewRepository.queryById(id);
     }
 
     @Transactional

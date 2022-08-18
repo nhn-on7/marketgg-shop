@@ -16,14 +16,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.product.ReviewController;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
+import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
+import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.service.product.ReviewService;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -51,11 +55,13 @@ class ReviewControllerTest {
 
     private ReviewCreateRequest reviewRequest;
     private ReviewUpdateRequest reviewUpdateRequest;
+    private ReviewResponse reviewResponse;
 
     @BeforeEach
     void setUp() {
         reviewRequest = new ReviewCreateRequest();
         reviewUpdateRequest = new ReviewUpdateRequest();
+        reviewResponse = Dummy.getDummyReviewResponse();
     }
 
     @Test
@@ -88,7 +94,7 @@ class ReviewControllerTest {
     @Test
     @DisplayName("후기 전체 조회 테스트")
     void testRetrieveReviews() throws Exception {
-        given(reviewService.retrieveReviews(new DefaultPageRequest().getPageable())).willReturn(new SingleResponse<>());
+        given(reviewService.retrieveReviews(new DefaultPageRequest().getPageable())).willReturn(List.of());
 
         this.mockMvc.perform(get("/products/{productId}/reviews/", 1L))
                     .andExpect(status().isOk())
@@ -100,7 +106,7 @@ class ReviewControllerTest {
     @Test
     @DisplayName("후기 상세 조회 테스트")
     void testRetrieveReviewDetails() throws Exception {
-        given(reviewService.retrieveReviewDetails(anyLong())).willReturn(new SingleResponse<>());
+        given(reviewService.retrieveReviewDetails(anyLong())).willReturn(reviewResponse);
 
         this.mockMvc.perform(get("/products/{productId}/reviews/{reviewId}", 1L, 1L))
                     .andExpect(status().isOk())
