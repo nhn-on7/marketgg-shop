@@ -2,12 +2,15 @@ package com.nhnacademy.marketgg.server.repository.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
+import com.nhnacademy.marketgg.server.exception.member.MemberInfoNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -38,7 +41,7 @@ public class AuthAdapter implements AuthRepository {
 
     private final ObjectMapper objectMapper;
 
-    private static final String DEFAULT_AUTH = "/auth/v1/info";
+    private static final String DEFAULT_AUTH = "/auth/v1/members/info";
 
     @Override
     public List<MemberNameResponse> getNameListByUuid(final List<String> uuidList) throws JsonProcessingException {
@@ -60,10 +63,10 @@ public class AuthAdapter implements AuthRepository {
     }
 
     @Override
-    public MemberInfoResponse getMemberInfo(final MemberInfoRequest memberInfoRequest) throws JsonProcessingException {
+    public ShopResult<MemberInfoResponse> getMemberInfo(final MemberInfoRequest memberInfoRequest) throws JsonProcessingException {
         String requestBody = objectMapper.writeValueAsString(memberInfoRequest);
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, buildHeaders());
-        ResponseEntity<MemberInfoResponse> response = restTemplate.exchange(
+        ResponseEntity<ShopResult<MemberInfoResponse>> response = restTemplate.exchange(
                 gateway + DEFAULT_AUTH + "/person",
                 HttpMethod.POST,
                 requestEntity,
@@ -79,6 +82,14 @@ public class AuthAdapter implements AuthRepository {
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         return httpHeaders;
+    }
+
+    // memo: 주문뿐 아니라 상품문의에서도 쓰이고 있어서 우선 static 메소드로 만들어놓음
+    public static MemberInfoResponse checkResult(final ShopResult<MemberInfoResponse> shopResult) {
+        if (shopResult.isSuccess() && Objects.nonNull(shopResult.getData())) {
+            return shopResult.getData();
+        }
+        throw new MemberInfoNotFoundException(shopResult.getError().getMessage());
     }
 
 }

@@ -1,7 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.order;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.delivery.DeliveryRepository;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
@@ -47,7 +46,7 @@ public class OrderController {
      * 주문을 등록하는 POST Mapping 을 지원합니다.
      *
      * @param orderRequest - 주문을 등록하기 위한 정보입니다.
-     * @param memberInfo - 주문하는 회원의 정보입니다.
+     * @param memberInfo   - 주문하는 회원의 정보입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
@@ -66,15 +65,15 @@ public class OrderController {
     /**
      * 주문서 작성에 필요한 정보를 취합하여 제공하는 GET Mapping 을 지원합니다.
      *
-     * @param products - 주문할 상품 목록입니다.
+     * @param products   - 주문할 상품 목록입니다.
      * @param memberInfo - 주문하는 회원의 정보입니다.
-     * @param authInfo - 주문하는 회원의 auth 정보입니다.
+     * @param authInfo   - 주문하는 회원의 auth 정보입니다.
      * @return 회원의 정보를 토대로 주문서 작성에 필요한 값들과 상품목록을 취합하여 반환합니다.
      * @since 1.0.0
      */
     @GetMapping("/order-form")
     public ResponseEntity<ShopResult<OrderFormResponse>> retrieveOrderForm(@RequestBody final List<ProductToOrder> products,
-                                                               final MemberInfo memberInfo, final AuthInfo authInfo) {
+                                                                           final MemberInfo memberInfo, final AuthInfo authInfo) {
 
         OrderFormResponse response = orderService.retrieveOrderForm(products, memberInfo, authInfo);
 
@@ -105,14 +104,14 @@ public class OrderController {
     /**
      * 주문 상세 조회를 할 수 있는 GET Mapping 을 지원합니다.
      *
-     * @param orderId - 상세 조회할 주문의 식별번호입니다.
+     * @param orderId    - 상세 조회할 주문의 식별번호입니다.
      * @param memberInfo - 조회하는 회원의 정보입니다.
      * @return 상세 조회한 주문을 반환합니다.
      * @since 1.0.0
      */
     @GetMapping("/{orderId}")
     public ResponseEntity<ShopResult<OrderDetailRetrieveResponse>> retrieveOrderDetail(@PathVariable final Long orderId,
-                                                                           final MemberInfo memberInfo) {
+                                                                                       final MemberInfo memberInfo) {
 
         OrderDetailRetrieveResponse response = orderService.retrieveOrderDetail(orderId, memberInfo);
 
@@ -126,13 +125,13 @@ public class OrderController {
      * 주문의 상태를 변경하는 PATCH Mapping 을 지원합니다.
      *
      * @param orderId - 상태를 변경할 주문의 식별번호입니다.
-     * @param status - 변경할 상태의 값입니다.
+     * @param status  - 변경할 상태의 값입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
     @PatchMapping("/{orderId}/status")
     public ResponseEntity<ShopResult<Void>> updateStatus(@PathVariable final Long orderId,
-                                             @RequestBody final OrderUpdateStatusRequest status) {
+                                                         @RequestBody final OrderUpdateStatusRequest status) {
 
         orderService.updateStatus(orderId, status);
 

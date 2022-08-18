@@ -50,7 +50,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.nhnacademy.marketgg.server.auth.AuthAdapter.checkResult;
 
 @Service
 @RequiredArgsConstructor
@@ -74,7 +78,8 @@ public class DefaultOrderService implements OrderService {
     public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final MemberInfo memberInfo) throws JsonProcessingException {
         int i = 0;
         Member member = memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
-        MemberInfoResponse memberResponse = authRepository.getMemberInfo(new MemberInfoRequest(member.getUuid()));
+        MemberInfoResponse memberResponse = checkResult(
+                authRepository.getMemberInfo(new MemberInfoRequest(member.getUuid())));
         DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(orderRequest.getDeliveryAddressId())
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
         Order order = new Order(member, deliveryAddress, orderRequest);
@@ -83,9 +88,8 @@ public class DefaultOrderService implements OrderService {
         List<Integer> productAmounts = orderRequest.getProducts().stream().map(ProductToOrder::getAmount)
                                                    .collect(Collectors.toList());
         List<Product> products = productRepository.findByIds(productIds);
-        Coupon coupon = couponRepository.findById(orderRequest.getCouponId()).orElseThrow(CouponNotFoundException::new);
 
-        checkOrderValid(orderRequest, memberResponse, coupon, member.getId());
+        checkOrderValid(orderRequest, memberResponse, member.getId());
         orderRepository.save(order);
 
         for (Product product : products) {
@@ -113,19 +117,28 @@ public class DefaultOrderService implements OrderService {
     }
 
     private void checkOrderValid(final OrderCreateRequest orderRequest, final MemberInfoResponse memberResponse,
-                                 final Coupon coupon, final Long memberId) {
+                                 final Long memberId) {
         if (!memberResponse.getEmail().equals(orderRequest.getEmail())) {
             throw new OrderMemberNotMatchedException();
         }
-        if (usedCouponRepository.existsCouponId(coupon.getId())) {
-            throw new CouponNotValidException();
-        }
-        if (coupon.getMinimumMoney() > orderRequest.getTotalOrigin()) {
+        Optional<Coupon> coupon = checkCouponValid(orderRequest.getCouponId());
+        if (coupon.isPresent() && coupon.get().getMinimumMoney() > orderRequest.getTotalOrigin()) {
             throw new CouponNotOverMinimumMoneyException();
         }
         if (pointRepository.findLastTotalPoints(memberId) < orderRequest.getUsedPoint()) {
             throw new PointNotEnoughException();
         }
+    }
+
+    private Optional<Coupon> checkCouponValid(final Long couponId) {
+        if (Objects.isNull(couponId)) {
+            return Optional.empty();
+        }
+        Coupon coupon = couponRepository.findById(couponId).orElseThrow(CouponNotFoundException::new);
+        if (usedCouponRepository.existsCouponId(couponId)) {
+            throw new CouponNotValidException();
+        }
+        return Optional.of(coupon);
     }
 
     @Override
@@ -193,7 +206,7 @@ public class DefaultOrderService implements OrderService {
     public void createTrackingNo(final Long orderId) throws JsonProcessingException {
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
         String uuid = memberRepository.findUuidByOrderId(orderId);
-        MemberInfoResponse memberResponse = authRepository.getMemberInfo(new MemberInfoRequest(uuid));
+        MemberInfoResponse memberResponse = checkResult(authRepository.getMemberInfo(new MemberInfoRequest(uuid)));
 
         OrderInfoRequestDto orderRequest = new OrderInfoRequestDto(memberResponse.getName(),
                                                                    order.getAddress(),

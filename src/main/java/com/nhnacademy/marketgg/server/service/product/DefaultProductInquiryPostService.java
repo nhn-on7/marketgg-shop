@@ -22,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.nhnacademy.marketgg.server.auth.AuthAdapter.checkResult;
+
 @Service
 @RequiredArgsConstructor
 public class DefaultProductInquiryPostService implements ProductInquiryPostService {
@@ -61,7 +63,7 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
 
         for (ProductInquiryByProductResponse inquiry : inquiryByProduct) {
             MemberInfoRequest request = new MemberInfoRequest(inquiry.getUuid());
-            MemberInfoResponse nameByUuid = authRepository.getMemberInfo(request);
+            MemberInfoResponse nameByUuid = checkResult(authRepository.getMemberInfo(request));
             inquiry.memberName(nameByUuid.getName());
         }
 
