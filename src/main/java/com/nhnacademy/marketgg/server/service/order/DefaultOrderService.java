@@ -87,6 +87,7 @@ public class DefaultOrderService implements OrderService {
 
         checkOrderValid(orderRequest, memberResponse, coupon, memberId);
         orderRepository.save(order);
+
         for (Product product : products) {
             if (product.getTotalStock() < productAmounts.get(i)) {
                 throw new ProductStockNotEnoughException();
@@ -99,7 +100,7 @@ public class DefaultOrderService implements OrderService {
 
     private OrderToPayment makeOrderToPayment(final Order order, final OrderCreateRequest orderRequest) {
         List<ProductToOrder> products = orderRequest.getProducts();
-        String orderId = prefix + order.getId();
+        String orderId = attachPrefix(order.getId());
         String orderName = products.get(0).getName() + " 외 " + products.size() + "건";
 
         return new OrderToPayment(orderId, orderName, orderRequest.getName(), orderRequest.getEmail(),
