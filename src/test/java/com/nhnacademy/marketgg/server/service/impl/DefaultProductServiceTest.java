@@ -276,23 +276,12 @@ class DefaultProductServiceTest {
     }
 
     @Test
-    @DisplayName("카테고리 코드로 상품 목록 조회 테스트")
-    void testFindProductsByCategoryCode() {
-        given(elasticProductRepository.findAllByCategoryCode(any(PageRequest.class), anyString()))
-                .willReturn(new PageImpl<>(List.of(elasticProduct)));
-
-        productService.findProductByCategory(PageRequest.of(0, 1), "101");
-
-        then(elasticProductRepository).should(times(1)).findAllByCategoryCode(any(PageRequest.class), anyString());
-    }
-
-    @Test
     @DisplayName("전체 목록 내 상품 검색")
     void testSearchProductList() throws ParseException, JsonProcessingException {
         given(searchRepository.searchProductWithKeyword(any(SearchRequest.class), any())).willReturn(
                 List.of(searchProductResponse));
 
-        productService.searchProductList("hi", 0);
+        productService.searchProductList(new SearchRequest("100", "hi", 0, 10));
 
         then(searchRepository).should(times(1)).searchProductWithKeyword(any(SearchRequest.class), any());
     }
@@ -300,24 +289,24 @@ class DefaultProductServiceTest {
     @Test
     @DisplayName("카테고리 내 상품 목록 검색")
     void testSearchProductListByCategory() throws ParseException, JsonProcessingException {
-        given(searchRepository.searchProductForCategory(anyString(), any(SearchRequest.class), any())).willReturn(
+        given(searchRepository.searchProductForCategory(any(SearchRequest.class), any())).willReturn(
                 List.of(searchProductResponse));
 
-        productService.searchProductListByCategory("100", "hi", 0);
+        productService.searchProductListByCategory(new SearchRequest("100", "hi", 0, 10));
 
-        then(searchRepository).should(times(1)).searchProductForCategory(anyString(), any(SearchRequest.class), any());
+        then(searchRepository).should(times(1)).searchProductForCategory(any(SearchRequest.class), any());
     }
 
     @Test
     @DisplayName("카테고리 내 지정한 가격 옵션별 상품 목록 검색")
     void testSearchProductListByPrice() throws ParseException, JsonProcessingException {
-        given(searchRepository.searchProductForCategory(anyString(), any(SearchRequest.class), anyString())).willReturn(
+        given(searchRepository.searchProductForCategory(any(SearchRequest.class), anyString())).willReturn(
                 List.of(searchProductResponse));
 
-        productService.searchProductListByPrice("100", "desc", "hi", 0);
+        productService.searchProductListByPrice("ASC", new SearchRequest("100", "hi", 1, 10));
 
         then(searchRepository).should(times(1))
-                              .searchProductForCategory(anyString(), any(SearchRequest.class), anyString());
+                              .searchProductForCategory(any(SearchRequest.class), anyString());
     }
 
 }

@@ -6,7 +6,6 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
-import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
 import java.io.IOException;
@@ -104,7 +103,7 @@ public interface ProductService {
     /**
      * 카테고리 목록내에서 선택한 가격 정렬 옵션으로 정렬된 상품 목록을 반환합니다.
      *
-     * @param option     - 검색한 목록을 정렬할 가격옵션을 정렬 값입니다.
+     * @param option        - 검색한 목록을 정렬할 가격옵션을 정렬 값입니다.
      * @param searchRequest - 검색을 진행할 정보입니다.
      * @return 카테고리 목록내에서 선택한 가격 정렬 옵션으로 정렬된 상품 목록을 반환합니다.
      * @throws ParseException          파싱 도중 예외 처리입니다.

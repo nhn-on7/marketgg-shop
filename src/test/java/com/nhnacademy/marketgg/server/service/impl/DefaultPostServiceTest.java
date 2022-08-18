@@ -105,7 +105,7 @@ class DefaultPostServiceTest {
                                           LocalDateTime.now(), LocalDateTime.now(),
                                           List.of(commentReady));
 
-        searchRequest = new SearchRequest("hello", 0, PAGE_SIZE);
+        searchRequest = new SearchRequest("701","hello", 0, PAGE_SIZE);
         memberInfo = Dummy.getDummyMemberInfo(1L, cart);
         createRequest = new MemberCreateRequest();
         categoryCreateRequest = new CategoryCreateRequest();
@@ -221,10 +221,10 @@ class DefaultPostServiceTest {
     void testSearchForCategory() throws Exception {
         ReflectionTestUtils.setField(postRequest, "categoryCode", NOTICE_CODE);
 
-        given(searchRepository.searchBoardWithCategoryCode(anyString(), any(SearchRequest.class),
+        given(searchRepository.searchBoardWithCategoryCode(any(SearchRequest.class),
                                                            anyString())).willReturn(List.of(postResponse));
 
-        List<PostResponse> responses = postService.searchForCategory(NOTICE_CODE, searchRequest, memberInfo);
+        List<PostResponse> responses = postService.searchForCategory(searchRequest, memberInfo);
 
         assertThat(responses).hasSize(1);
     }
@@ -233,8 +233,9 @@ class DefaultPostServiceTest {
     @DisplayName("카테고리 별 검색 (사용자의 1:1 문의 검색 시)")
     void testSearchForCategoryForOto() throws Exception {
         ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
+        ReflectionTestUtils.setField(searchRequest, "categoryCode", OTO_CODE);
 
-        List<PostResponse> responses = postService.searchForCategory(OTO_CODE, searchRequest, memberInfo);
+        List<PostResponse> responses = postService.searchForCategory(searchRequest, memberInfo);
 
         assertThat(responses).isEmpty();
     }
@@ -243,10 +244,11 @@ class DefaultPostServiceTest {
     @DisplayName("옵션 별 검색")
     void testSearchForOption() throws Exception {
         ReflectionTestUtils.setField(postRequest, "categoryCode", OTO_CODE);
+        ReflectionTestUtils.setField(searchRequest, "categoryCode", OTO_CODE);
 
-        given(searchRepository.searchBoardWithOption(anyString(), anyString(), any(SearchRequest.class),
+        given(searchRepository.searchBoardWithOption(anyString(), any(SearchRequest.class),
                                                      anyString())).willReturn(List.of(postResponse));
-        List<PostResponse> responses = postService.searchForOption(OTO_CODE, searchRequest, "reason", "배송");
+        List<PostResponse> responses = postService.searchForOption(searchRequest, "reason", "배송");
 
         assertThat(responses).hasSize(1);
     }

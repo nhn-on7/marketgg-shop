@@ -78,7 +78,7 @@ class AdminCsPostControllerTest {
     @Test
     @DisplayName("옵션에 따른 게시글 검색")
     void testSearchPostListForOption() throws Exception {
-        given(postService.searchForOption(anyString(), any(SearchRequest.class), anyString(), anyString())).willReturn(
+        given(postService.searchForOption(any(SearchRequest.class), anyString(), anyString())).willReturn(
                 List.of(postResponse));
 
         this.mockMvc.perform(
@@ -91,8 +91,7 @@ class AdminCsPostControllerTest {
                             .param("size", "10"))
                     .andExpect(status().isOk());
 
-        then(postService).should(times(1))
-                         .searchForOption(anyString(), any(SearchRequest.class), anyString(), anyString());
+        then(postService).should(times(1)).searchForOption(any(SearchRequest.class), anyString(), anyString());
     }
 
     @Test

@@ -109,7 +109,7 @@ class CsPostControllerTest {
     @Test
     @DisplayName("카테고리 별 게시글 검색")
     void testSearchPostListForCategory() throws Exception {
-        given(postService.searchForCategory(anyString(), any(SearchRequest.class), any(MemberInfo.class))).willReturn(
+        given(postService.searchForCategory(any(SearchRequest.class), any(MemberInfo.class))).willReturn(
                 List.of(postResponse));
 
         this.mockMvc.perform(get(DEFAULT_POST + "/categories/{categoryId}/search", "703")
@@ -119,8 +119,7 @@ class CsPostControllerTest {
                                      .param("size", "10"))
                     .andExpect(status().isOk());
 
-        then(postService).should(times(1))
-                         .searchForCategory(anyString(), any(SearchRequest.class), any(MemberInfo.class));
+        then(postService).should(times(1)).searchForCategory(any(SearchRequest.class), any(MemberInfo.class));
     }
 
     @Test

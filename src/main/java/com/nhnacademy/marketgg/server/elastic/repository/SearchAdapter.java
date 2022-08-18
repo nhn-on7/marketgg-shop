@@ -8,13 +8,11 @@ import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequestBodyForBool;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
 import com.nhnacademy.marketgg.server.util.KoreanToEnglishTranslator;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
@@ -60,7 +58,8 @@ public class SearchAdapter implements SearchRepository {
 
         Map<String, String> sort = this.buildSort(priceSortType);
         HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
-                new SearchRequestBodyForBool<>(sort, request, translator.converter(request.getRequest()),
+                new SearchRequestBodyForBool<>(request.getCategoryCode(), sort, request,
+                                               translator.converter(request.getRequest()),
                                                PRODUCT)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, PRODUCT).getBody());
@@ -86,7 +85,8 @@ public class SearchAdapter implements SearchRepository {
 
         Map<String, String> sort = this.buildSort(null);
         HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
-                new SearchRequestBodyForBool<>(sort, request, translator.converter(request.getRequest()),
+                new SearchRequestBodyForBool<>(request.getCategoryCode(), sort, request,
+                                               translator.converter(request.getRequest()),
                                                option)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, BOARD).getBody());
@@ -100,7 +100,8 @@ public class SearchAdapter implements SearchRepository {
 
         Map<String, String> sort = this.buildSort(null);
         HttpEntity<String> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(
-                new SearchRequestBodyForBool<>(sort, request, translator.converter(request.getRequest()),
+                new SearchRequestBodyForBool<>(request.getCategoryCode(), sort, request,
+                                               translator.converter(request.getRequest()),
                                                optionCode, option)), this.buildHeaders());
 
         return this.parsingResponseBody(this.doRequest(requestEntity, BOARD).getBody());
