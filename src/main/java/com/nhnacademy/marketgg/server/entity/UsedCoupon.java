@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.coupon.UsedCouponDto;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -12,6 +11,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "used_coupons")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Getter
 public class UsedCoupon {
 
@@ -43,6 +46,7 @@ public class UsedCoupon {
 
     @Embeddable
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
     @Getter
     @EqualsAndHashCode
     public static class Pk implements Serializable {
@@ -59,18 +63,6 @@ public class UsedCoupon {
         @NotNull
         private Long memberId;
 
-        public Pk(Long orderId, Long couponId, Long memberId) {
-            this.orderId = orderId;
-            this.couponId = couponId;
-            this.memberId = memberId;
-        }
-
-    }
-
-    public UsedCoupon(UsedCouponDto usedCouponDto, Order order, GivenCoupon givenCoupon) {
-        this.pk = new Pk(usedCouponDto.getOrderId(), usedCouponDto.getCouponId(), usedCouponDto.getMemberId());
-        this.order = order;
-        this.givenCoupon = givenCoupon;
     }
 
 }

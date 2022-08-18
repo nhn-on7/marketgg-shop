@@ -31,7 +31,7 @@ public class DefaultUsedCouponService implements UsedCouponService {
                                                        .orElseThrow(UsedCouponNotFoundException
                                                            .GivenCouponInMemberNotFoundException::new);
 
-        UsedCoupon usedCoupon = new UsedCoupon(usedCouponDto, order, givenCoupon);
+        UsedCoupon usedCoupon = this.toEntity(usedCouponDto, order, givenCoupon);
         usedCouponRepository.save(usedCoupon);
     }
 
