@@ -1,11 +1,12 @@
 package com.nhnacademy.marketgg.server.dto.response.coupon;
 
-import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 @Getter
 public class GivenCouponResponse {
 
@@ -23,20 +24,6 @@ public class GivenCouponResponse {
 
     private final LocalDateTime expiredDate;
 
-    private final String state;
-
-    public GivenCouponResponse(final GivenCoupon givenCoupon,
-                               final String state,
-                               final LocalDateTime expiredDate) {
-
-        this.memberId = givenCoupon.getMember().getId();
-        this.couponId = givenCoupon.getPk().getCouponId();
-        this.name = givenCoupon.getCoupon().getName();
-        this.type = givenCoupon.getCoupon().getType();
-        this.minimumMoney = givenCoupon.getCoupon().getMinimumMoney();
-        this.discountAmount = givenCoupon.getCoupon().getDiscountAmount();
-        this.expiredDate = expiredDate;
-        this.state = state;
-    }
+    private final String status;
 
 }

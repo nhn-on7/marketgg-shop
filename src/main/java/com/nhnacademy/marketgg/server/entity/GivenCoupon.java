@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +28,8 @@ import org.springframework.data.annotation.CreatedDate;
 @Table(name = "given_coupons")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Getter
 public class GivenCoupon {
 
@@ -53,6 +57,7 @@ public class GivenCoupon {
      */
     @Embeddable
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
     @Getter
     @EqualsAndHashCode
     public static class Pk implements Serializable {
@@ -63,22 +68,6 @@ public class GivenCoupon {
         @Column(name = "member_no")
         private Long memberNo;
 
-        public Pk(Long couponId, Long memberNo) {
-            this.couponId = couponId;
-            this.memberNo = memberNo;
-        }
-
-    }
-
-    public GivenCoupon(final Coupon coupon, final Member member) {
-        this.pk = new Pk(coupon.getId(), member.getId());
-        this.coupon = coupon;
-        this.member = member;
-        this.createdAt = LocalDateTime.now();
-    }
-
-    public static GivenCoupon test() {
-        return new GivenCoupon();
     }
 
 }

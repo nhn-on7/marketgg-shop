@@ -1,10 +1,10 @@
 package com.nhnacademy.marketgg.server.service.coupon;
 
-import static com.nhnacademy.marketgg.server.constant.CouponState.EXPIRED;
-import static com.nhnacademy.marketgg.server.constant.CouponState.USED;
-import static com.nhnacademy.marketgg.server.constant.CouponState.VALID;
+import static com.nhnacademy.marketgg.server.constant.CouponStatus.EXPIRED;
+import static com.nhnacademy.marketgg.server.constant.CouponStatus.USED;
+import static com.nhnacademy.marketgg.server.constant.CouponStatus.VALID;
 
-import com.nhnacademy.marketgg.server.constant.CouponState;
+import com.nhnacademy.marketgg.server.constant.CouponStatus;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
@@ -49,7 +49,7 @@ public class DefaultGivenCouponService implements GivenCouponService {
         Coupon coupon = couponRepository.findCouponByName(givenCouponRequest.getName())
                                         .orElseThrow(GivenCouponNotFoundException.CouponInfoNotFoundException::new);
 
-        givenCouponRepository.save(new GivenCoupon(coupon, member));
+        givenCouponRepository.save(this.toEntity(coupon, member));
     }
 
     @Override
@@ -66,19 +66,19 @@ public class DefaultGivenCouponService implements GivenCouponService {
 
     private GivenCouponResponse checkAvailability(final GivenCoupon givenCoupons) {
 
-        CouponState state;
+        CouponStatus status;
         Integer expiredDate = givenCoupons.getCoupon().getExpiredDate();
         LocalDateTime expirationPeriod = givenCoupons.getCreatedAt().plusDays(expiredDate);
 
         if (!usedCouponRepository.findAllByGivenCoupon(givenCoupons).isEmpty()) {
-            state = USED;
+            status = USED;
         } else if (expirationPeriod.isBefore(LocalDateTime.now())) {
-            state = EXPIRED;
+            status = EXPIRED;
         } else {
-            state = VALID;
+            status = VALID;
         }
 
-        return new GivenCouponResponse(givenCoupons, state.state(), expirationPeriod);
+        return this.toDto(givenCoupons, status.state(), expirationPeriod);
     }
 
     @Async
@@ -86,7 +86,7 @@ public class DefaultGivenCouponService implements GivenCouponService {
     public void createGivenCoupon(final GivenCouponEvent coupon) {
         Coupon signUpCoupon = couponRepository.findCouponByName(coupon.getCouponName())
                                               .orElseThrow(CouponNotFoundException::new);
-        GivenCoupon givenCoupon = new GivenCoupon(signUpCoupon, coupon.getMember());
+        GivenCoupon givenCoupon = this.toEntity(signUpCoupon, coupon.getMember());
         givenCouponRepository.save(givenCoupon);
     }
 

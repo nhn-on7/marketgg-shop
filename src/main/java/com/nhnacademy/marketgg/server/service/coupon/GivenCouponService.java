@@ -3,6 +3,10 @@ package com.nhnacademy.marketgg.server.service.coupon;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
+import com.nhnacademy.marketgg.server.entity.Coupon;
+import com.nhnacademy.marketgg.server.entity.GivenCoupon;
+import com.nhnacademy.marketgg.server.entity.Member;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
@@ -36,4 +40,42 @@ public interface GivenCouponService {
      */
     List<GivenCouponResponse> retrieveGivenCoupons(MemberInfo memberInfo, Pageable pageable);
 
+    /**
+     * 회원 정보와 쿠폰 정보를 가지고 GivenCoupon 을 생성합니다.
+     *
+     * @param coupon - 지급할 쿠폰의 정보입니다.
+     * @param member - 쿠폰을 지급할 회원입니다.
+     * @return 생성한 지급 쿠폰 Entity 를 반환합니다.
+     */
+    default GivenCoupon toEntity(final Coupon coupon, final Member member) {
+        return GivenCoupon.builder()
+                          .pk(new GivenCoupon.Pk(coupon.getId(), member.getId()))
+                          .coupon(coupon)
+                          .member(member)
+                          .createdAt(LocalDateTime.now())
+                          .build();
+    }
+
+    /**
+     * 회원에게 지급된 쿠폰 중에 (사용가능, 기간만료, 사용완료) 상태값을 포함하여 Dto 로 변환한다.
+     *
+     * @param givenCoupon - 회원에게 지급된 지급 쿠폰 Entity 객체
+     * @param status - 지급 쿠폰의 상태
+     * @param expiredDate - 쿠폰이 발급된 일자부터 유효한 유효회간
+     * @return
+     */
+    default GivenCouponResponse toDto(final GivenCoupon givenCoupon,
+                                      final String status,
+                                      final LocalDateTime expiredDate) {
+        return GivenCouponResponse.builder()
+                                  .memberId(givenCoupon.getMember().getId())
+                                  .couponId(givenCoupon.getCoupon().getId())
+                                  .name(givenCoupon.getCoupon().getName())
+                                  .type(givenCoupon.getCoupon().getType())
+                                  .minimumMoney(givenCoupon.getCoupon().getMinimumMoney())
+                                  .discountAmount(givenCoupon.getCoupon().getDiscountAmount())
+                                  .expiredDate(expiredDate)
+                                  .status(status)
+                                  .build();
+    }
 }
