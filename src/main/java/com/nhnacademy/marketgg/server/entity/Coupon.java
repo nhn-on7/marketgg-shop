@@ -11,6 +11,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +25,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "coupons")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Getter
 public class Coupon {
 
@@ -53,14 +57,6 @@ public class Coupon {
     @NotNull
     @Positive
     private Double discountAmount;
-
-    public Coupon(final CouponDto couponRequest) {
-        this.name = couponRequest.getName();
-        this.type = couponRequest.getType();
-        this.expiredDate = couponRequest.getExpiredDate();
-        this.minimumMoney = couponRequest.getMinimumMoney();
-        this.discountAmount = couponRequest.getDiscountAmount();
-    }
 
     public void updateCoupon(final CouponDto couponRequest) {
         this.name = couponRequest.getName();

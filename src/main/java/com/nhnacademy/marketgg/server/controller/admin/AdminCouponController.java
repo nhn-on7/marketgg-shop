@@ -2,8 +2,6 @@ package com.nhnacademy.marketgg.server.controller.admin;
 
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
-import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
 import com.nhnacademy.marketgg.server.service.coupon.CouponService;
 import java.util.List;
 import javax.validation.Valid;
@@ -71,11 +69,11 @@ public class AdminCouponController {
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<CommonResponse> retrieveCoupons(final Pageable pageable) {
+    public ResponseEntity<ShopResult<List<CouponDto>>> retrieveCoupons(final Pageable pageable) {
         List<CouponDto> couponResponses = couponService.retrieveCoupons(pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .body(new ListResponse<>(couponResponses));
+                             .body(ShopResult.success(couponResponses));
     }
 
     /**

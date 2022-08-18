@@ -20,7 +20,7 @@ public class DefaultCouponService implements CouponService {
     @Transactional
     @Override
     public void createCoupon(@Valid final CouponDto couponDto) {
-        Coupon coupon = new Coupon(couponDto);
+        Coupon coupon = this.toEntity(couponDto);
         couponRepository.save(coupon);
     }
 

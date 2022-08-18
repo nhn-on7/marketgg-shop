@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.service.coupon;
 
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
+import com.nhnacademy.marketgg.server.entity.Coupon;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
@@ -63,5 +64,21 @@ public interface CouponService {
      * @since 1.0.0
      */
     void deleteCoupon(Long couponId);
+
+    /**
+     * CouponDto 를 파라미터로 받아 Coupon Entity 로 변환해주는 Default 메서드
+     *
+     * @param couponDto - 생성, 수정할 쿠폰 정보 담고 있는 Dto
+     * @return - Dto 를 Coupon Entity 로 변환하여 반환한다.
+     */
+    default Coupon toEntity(final CouponDto couponDto) {
+        return Coupon.builder()
+                     .name(couponDto.getName())
+                     .type(couponDto.getType())
+                     .expiredDate(couponDto.getExpiredDate())
+                     .minimumMoney(couponDto.getMinimumMoney())
+                     .discountAmount(couponDto.getDiscountAmount())
+                     .build();
+    }
 
 }
