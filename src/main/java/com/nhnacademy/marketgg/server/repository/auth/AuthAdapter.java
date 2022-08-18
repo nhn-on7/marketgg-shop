@@ -67,7 +67,7 @@ public class AuthAdapter implements AuthRepository {
                 gateway + DEFAULT_AUTH + "/person",
                 HttpMethod.POST,
                 requestEntity,
-                new ParameterizedTypeReference<MemberInfoResponse>() {
+                new ParameterizedTypeReference<>() {
                 });
 
         return response.getBody();

@@ -73,12 +73,8 @@ public class DefaultOrderService implements OrderService {
     @Override
     public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId) throws JsonProcessingException {
         int i = 0;
-        String uuid = memberRepository.findUuidByMemberId(memberId).orElseThrow(MemberNotFoundException::new);
-        Member member = memberRepository.findByUuid(uuid).orElseThrow(MemberNotFoundException::new);
-        MemberInfoResponse memberResponse = authRepository.getMemberInfo(new MemberInfoRequest(uuid));
-        if (!memberResponse.getEmail().equals(orderRequest.getEmail())) {
-            throw new OrderMemberNotMatchedException();
-        }
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        MemberInfoResponse memberResponse = authRepository.getMemberInfo(new MemberInfoRequest(member.getUuid()));
         DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(orderRequest.getDeliveryAddressId())
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
         Order order = new Order(member, deliveryAddress, orderRequest);
@@ -87,18 +83,9 @@ public class DefaultOrderService implements OrderService {
         List<Integer> productAmounts = orderRequest.getProducts().stream().map(ProductToOrder::getAmount)
                                                    .collect(Collectors.toList());
         List<Product> products = productRepository.findByIds(productIds);
-
         Coupon coupon = couponRepository.findById(orderRequest.getCouponId()).orElseThrow(CouponNotFoundException::new);
-        if (usedCouponRepository.existsCouponId(coupon.getId())) {
-            throw new CouponNotValidException();
-        }
-        if (coupon.getMinimumMoney() > orderRequest.getTotalOrigin()) {
-            throw new CouponNotOverMinimumMoneyException();
-        }
-        if (pointRepository.findLastTotalPoints(memberId) < orderRequest.getUsedPoint()) {
-            throw new PointNotEnoughException();
-        }
 
+        checkOrderValid(orderRequest, memberResponse, coupon, memberId);
         orderRepository.save(order);
         for (Product product : products) {
             if (product.getTotalStock() < productAmounts.get(i)) {
@@ -118,6 +105,22 @@ public class DefaultOrderService implements OrderService {
         return new OrderToPayment(orderId, orderName, orderRequest.getName(), orderRequest.getEmail(),
                                   orderRequest.getTotalAmount(), orderRequest.getCouponId(),
                                   orderRequest.getUsedPoint(), orderRequest.getExpectedSavePoint());
+    }
+
+    private void checkOrderValid(final OrderCreateRequest orderRequest, final MemberInfoResponse memberResponse,
+                                 final Coupon coupon, final Long memberId) {
+        if (!memberResponse.getEmail().equals(orderRequest.getEmail())) {
+            throw new OrderMemberNotMatchedException();
+        }
+        if (usedCouponRepository.existsCouponId(coupon.getId())) {
+            throw new CouponNotValidException();
+        }
+        if (coupon.getMinimumMoney() > orderRequest.getTotalOrigin()) {
+            throw new CouponNotOverMinimumMoneyException();
+        }
+        if (pointRepository.findLastTotalPoints(memberId) < orderRequest.getUsedPoint()) {
+            throw new PointNotEnoughException();
+        }
     }
 
     @Override
