@@ -80,9 +80,10 @@ public class CsPostController {
      * @since 1.0.0
      */
     @GetMapping("/categories/{categoryId}")
-    public ResponseEntity<List<PostResponse>> retrievePostList(@PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
-                                                               @RequestParam @NotNull final Integer page,
-                                                               final MemberInfo memberInfo) {
+    public ResponseEntity<List<PostResponse>> retrievePostList(
+            @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
+            @RequestParam @NotNull final Integer page,
+            final MemberInfo memberInfo) {
 
         List<PostResponse> responses = postService.retrievePostList(categoryId, page, memberInfo);
 
@@ -115,8 +116,7 @@ public class CsPostController {
      * 지정한 게시판 타입의 전체 목록에서 검색한 결과를 반환합니다.
      *
      * @param categoryId - 검색을 진행 할 게시판 타입입니다.
-     * @param keyword    - 검색을 진행 할 키워드입니다.
-     * @param page       - 검색을 진행 할 페이지 정보입니다.
+     * @param searchRequest - 검색을 진행할 정보입니다.
      * @param memberInfo - 검색을 진행 할 회원의 정보입니다.
      * @return 검색정보로 검색한 결과 목록 응답객체를 반환합니다.
      * @throws ParseException          파싱도중 예외처리입니다.
@@ -124,15 +124,14 @@ public class CsPostController {
      * @since 1.0.0
      */
 
-    @GetMapping("/categories/{categoryId}/search")
-    public ResponseEntity<List<PostResponse>> searchPostListForCategory(@PathVariable @Size(min = 1, max = 6) final String categoryId,
-                                                                        @RequestParam @Size(min = 1, max = 30) final String keyword,
-                                                                        @RequestParam @Min(0) final Integer page,
-                                                                        final MemberInfo memberInfo)
+    @PostMapping("/categories/{categoryId}/search")
+    public ResponseEntity<List<PostResponse>> searchPostListForCategory(
+            @PathVariable @Size(min = 1, max = 6) final String categoryId,
+            @Valid @RequestBody final SearchRequest searchRequest,
+            final MemberInfo memberInfo)
             throws ParseException, JsonProcessingException {
 
-        List<PostResponse> responses =
-                postService.searchForCategory(categoryId, new SearchRequest(keyword, page, PAGE_SIZE), memberInfo);
+        List<PostResponse> responses = postService.searchForCategory(searchRequest, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/categories/" + categoryId + "/search"))

@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,33 +48,29 @@ public class AdminCsPostController {
     /**
      * 지정한 게시판 타입의 Reason 옵션으로 검색한 결과를 반환합니다.
      *
-     * @param categoryId - 검색을 진행 할 게시판 타입입니다.
-     * @param option     - 검색을 진행 할 필터의 값입니다.
-     * @param optionType - 검색을 진행 할 옵션 타입입니다.
-     * @param keyword    - 검색을 진행 할 검색정보입니다.
-     * @param page       - 검색을 진행 할 페이지 정보입니다.
+     * @param categoryId    - 검색을 진행 할 게시판 타입입니다.
+     * @param option        - 검색을 진행 할 필터의 값입니다.
+     * @param optionType    - 검색을 진행 할 옵션 타입입니다.
+     * @param searchRequest - 검색을 진행할 정보입니다.
      * @return 검색정보로 검색한 결과 목록 응답객체를 반환합니다.
      * @throws ParseException          파싱도중 예외처리입니다.
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */
-    @GetMapping("/categories/{categoryId}/options/{optionType}/search")
+    @PostMapping("/categories/{categoryId}/options/{optionType}/search")
     public ResponseEntity<List<PostResponse>> searchPostListForOption(
-        @PathVariable @Size(min = 1, max = 6) final String categoryId,
-        @PathVariable @Min(1) final String optionType,
-        @RequestParam @Min(1) final String option,
-        @RequestParam @Size(min = 1, max = 30) final String keyword,
-        @RequestParam @Min(0) final Integer page)
-        throws ParseException, JsonProcessingException {
+            @PathVariable @Size(min = 1, max = 6) final String categoryId,
+            @PathVariable @Min(1) final String optionType,
+            @RequestParam @Min(1) final String option,
+            @Valid @RequestBody final SearchRequest searchRequest)
+            throws ParseException, JsonProcessingException {
 
-        List<PostResponse> responses =
-            postService.searchForOption(categoryId, new SearchRequest(keyword, page, PAGE_SIZE), optionType,
-                option);
+        List<PostResponse> responses = postService.searchForOption(searchRequest, optionType, option);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                 DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/options/" + optionType
-                                     + "/search?option=" + option))
+                                     DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/options/" + optionType
+                                             + "/search?option=" + option))
                              .body(responses);
     }
 

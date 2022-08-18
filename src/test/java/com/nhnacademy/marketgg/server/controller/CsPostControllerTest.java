@@ -114,7 +114,9 @@ class CsPostControllerTest {
 
         this.mockMvc.perform(get(DEFAULT_POST + "/categories/{categoryId}/search", "703")
                                      .param("keyword", "op")
-                                     .param("page", "0"))
+                                     .param("page", "0")
+                                     .param("categoryCode", "703")
+                                     .param("size", "10"))
                     .andExpect(status().isOk());
 
         then(postService).should(times(1))

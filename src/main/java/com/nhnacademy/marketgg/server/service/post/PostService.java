@@ -52,7 +52,6 @@ public interface PostService {
     /**
      * 게시판 타입별로 검색을 진행 할 수 있습니다.
      *
-     * @param categoryCode  - 검색을 진행 할 게시판 타입입니다.
      * @param searchRequest - 검색을 진행 할 검색 정보입니다.
      * @param memberInfo    - 등록을 진행할 회원정보입니다.
      * @return 검색정보로 검색한 결과목록을 반환합니다.
@@ -60,14 +59,12 @@ public interface PostService {
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */
-    List<PostResponse> searchForCategory(final String categoryCode, final SearchRequest searchRequest,
-                                         final MemberInfo memberInfo)
+    List<PostResponse> searchForCategory(final SearchRequest searchRequest, final MemberInfo memberInfo)
         throws ParseException, JsonProcessingException;
 
     /**
      * Reason, Status 와 같은 옵션으로 검색을 진행 할 수 있습니다.
      *
-     * @param categoryCode  - 검색을 진행 할 게시판 타입입니다.
      * @param searchRequest - 검색을 진행할 검색 정보입니다.
      * @param optionType    - 게시글을 진행 할 필터 타입입니다.
      * @param option        - 검색을 진행 할 필터 값입니다.
@@ -76,8 +73,7 @@ public interface PostService {
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */
-    List<PostResponse> searchForOption(final String categoryCode, final SearchRequest searchRequest,
-                                       final String optionType, final String option)
+    List<PostResponse> searchForOption(final SearchRequest searchRequest, final String optionType, final String option)
         throws JsonProcessingException, ParseException;
 
     /**

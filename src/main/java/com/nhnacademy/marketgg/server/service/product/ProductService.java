@@ -7,6 +7,7 @@ import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
+import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
 import java.io.IOException;
 import java.util.List;
@@ -77,55 +78,40 @@ public interface ProductService {
     void restoreProduct(final Long id);
 
     /**
-     * 카테고리로 상품 목록을 조회합니다.
-     *
-     * @param categoryCode - 카테고리 2차 분류입니다.
-     * @return - 해당하는 카테고리의 상품 리스트를 반환합니다.
-     */
-    List<ElasticProduct> findProductByCategory(final Pageable pageable, final String categoryCode);
-
-    /**
      * 전체 목록에서 검색한 상품 목록을 반환합니다.
      *
-     * @param keyword - 검색어입니다.
-     * @param page    - 조회 할 페이지 정보입니다.
+     * @param searchRequest - 검색을 진행할 정보입니다.
      * @return 전체 목록에서 검색한 상품 목록을 반환합니다.
      * @throws ParseException          파싱 도중 예외 처리입니다.
      * @throws JsonProcessingException Json 과 관련된 예외 처리입니다.
      * @since 1.0.0
      */
-    List<SearchProductResponse> searchProductList(final String keyword, final Integer page)
+    List<SearchProductResponse> searchProductList(final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException;
 
     /**
      * 카테고리 목록에서 검색한 상품 목록을 반환합니다.
      *
-     * @param categoryId - 지정한 카테고리 식별번호입니다.
-     * @param keyword    - 검색어입니다.
-     * @param page       - 조회 할 페이지 정보입니다.
+     * @param searchRequest - 검색을 진행할 정보입니다.
      * @return 카테고리 목록에서 검색한 상품 목록을 반환합니다.
      * @throws ParseException          파싱 도중 예외 처리입니다.
      * @throws JsonProcessingException Json 과 관련된 예외 처리입니다.
      * @since 1.0.0
      */
-    List<SearchProductResponse> searchProductListByCategory(final String categoryId, final String keyword,
-                                                            final Integer page)
+    List<SearchProductResponse> searchProductListByCategory(final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException;
 
     /**
      * 카테고리 목록내에서 선택한 가격 정렬 옵션으로 정렬된 상품 목록을 반환합니다.
      *
-     * @param categoryId - 지정한 카테고리 식별번호입니다.
      * @param option     - 검색한 목록을 정렬할 가격옵션을 정렬 값입니다.
-     * @param keyword    - 검색어입니다.
-     * @param page       - 조회 할 페이지 정보입니다.
+     * @param searchRequest - 검색을 진행할 정보입니다.
      * @return 카테고리 목록내에서 선택한 가격 정렬 옵션으로 정렬된 상품 목록을 반환합니다.
      * @throws ParseException          파싱 도중 예외 처리입니다.
      * @throws JsonProcessingException Json 과 관련된 예외 처리입니다.
      * @since 1.0.0
      */
-    List<SearchProductResponse> searchProductListByPrice(final String categoryId, final String option,
-                                                         final String keyword, final Integer page)
+    List<SearchProductResponse> searchProductListByPrice(final String option, final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException;
 
 }

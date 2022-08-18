@@ -9,6 +9,7 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -81,11 +82,13 @@ class AdminCsPostControllerTest {
                 List.of(postResponse));
 
         this.mockMvc.perform(
-                    get(DEFAULT_ADMIN_POST + "/categories/{categoryId}/options/{optionType}/search", "702", "reason")
+                    post(DEFAULT_ADMIN_POST + "/categories/{categoryId}/options/{optionType}/search", "702", "reason")
                             .headers(httpHeaders)
+                            .param("categoryCode", "702")
                             .param("option", "배송")
                             .param("keyword", "hi")
-                            .param("page", "0"))
+                            .param("page", "0")
+                            .param("size", "10"))
                     .andExpect(status().isOk());
 
         then(postService).should(times(1))
