@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.service.coupon;
 
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.entity.Coupon;
-import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -44,7 +44,7 @@ public interface CouponService {
      * @author 김정민
      * @since 1.0.0
      */
-    List<CouponDto> retrieveCoupons(Pageable pageable);
+    PageEntity<CouponDto> retrieveCoupons(Pageable pageable);
 
     /**
      * 입력받은 정보로 쿠폰을 수정합니다.
@@ -70,6 +70,7 @@ public interface CouponService {
      *
      * @param couponDto - 생성, 수정할 쿠폰 정보 담고 있는 Dto
      * @return - Dto 를 Coupon Entity 로 변환하여 반환한다.
+     * @author 민아영
      */
     default Coupon toEntity(final CouponDto couponDto) {
         return Coupon.builder()

@@ -1,12 +1,13 @@
 package com.nhnacademy.marketgg.server.service.coupon;
 
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
-import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,9 +32,11 @@ public class DefaultCouponService implements CouponService {
     }
 
     @Override
-    public List<CouponDto> retrieveCoupons(final Pageable pageable) {
+    public PageEntity<CouponDto> retrieveCoupons(final Pageable pageable) {
+        Page<CouponDto> allCoupons = couponRepository.findAllCoupons(pageable);
 
-        return couponRepository.findAllCoupons(pageable).getContent();
+        return new PageEntity<>(allCoupons.getNumber(), allCoupons.getSize(),
+            allCoupons.getTotalPages(), allCoupons.getContent());
     }
 
     @Transactional
