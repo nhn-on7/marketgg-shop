@@ -36,7 +36,7 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
         QOrder order = QOrder.order;
 
         return from(member)
-                .innerJoin(member, order.member)
+                .innerJoin(order).on(order.member.id.eq(member.id))
                 .where(order.id.eq(orderId))
                 .select(member.uuid)
                 .fetchOne();

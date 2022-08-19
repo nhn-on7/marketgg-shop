@@ -13,7 +13,7 @@ public class OrderInfoRequestDto {
 
     private final String receiverDetailAddress;
 
-    private final String receiverPhoneNumber;
+    private final String receiverPhone;
 
     private final String orderNo;
 
