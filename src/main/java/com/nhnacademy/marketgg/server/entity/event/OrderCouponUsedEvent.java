@@ -1,7 +1,5 @@
 package com.nhnacademy.marketgg.server.entity.event;
 
-import com.nhnacademy.marketgg.server.entity.Coupon;
-import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

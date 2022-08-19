@@ -24,7 +24,6 @@ import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.OrderProduct;
-import com.nhnacademy.marketgg.server.entity.PointHistory;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.event.OrderCouponCanceledEvent;
 import com.nhnacademy.marketgg.server.entity.event.OrderPointCanceledEvent;
@@ -51,7 +50,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.Arrays;
 import java.util.List;
