@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
+import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -13,7 +15,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.controller.product.ReviewController;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
@@ -27,8 +31,10 @@ import com.nhnacademy.marketgg.server.service.product.ReviewService;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,6 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
@@ -57,13 +64,21 @@ class ReviewControllerTest {
     private ReviewUpdateRequest reviewUpdateRequest;
     private ReviewResponse reviewResponse;
     private MemberInfo memberInfo;
+    private HttpHeaders headers;
+    String uuid;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws JsonProcessingException {
         reviewRequest = new ReviewCreateRequest();
         reviewUpdateRequest = new ReviewUpdateRequest();
         reviewResponse = Dummy.getDummyReviewResponse();
         memberInfo = Dummy.getDummyMemberInfo(1L, Dummy.getDummyCart(1L));
+
+        String roles = objectMapper.writeValueAsString(Collections.singletonList(Role.ROLE_USER));
+        uuid = UUID.randomUUID().toString();
+        headers = new HttpHeaders();
+        headers.set(AUTH_ID, uuid);
+        headers.set(WWW_AUTHENTICATE, roles);
     }
 
     @Test
@@ -81,11 +96,11 @@ class ReviewControllerTest {
                                                       content.getBytes(StandardCharsets.UTF_8));
 
         this.mockMvc.perform(multipart("/products/{productId}/reviews", 1L)
-                                     .file(dto)
-                                     .file(file)
-                                     .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                     .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                                     .content(content))
+                                 .file(dto)
+                                 .file(file)
+                                 .headers(headers)
+                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
                     .andExpect(status().isCreated());
 
         then(reviewService).should(times(1))
@@ -124,8 +139,9 @@ class ReviewControllerTest {
                        .updateReview(any(ReviewUpdateRequest.class), anyLong());
 
         this.mockMvc.perform(put("/products/{productId}/reviews/{reviewId}", 1L, 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(content))
+                                 .contentType(MediaType.APPLICATION_JSON)
+                                 .content(content)
+                                 .headers(headers))
                     .andExpect(status().isOk());
 
         then(reviewService).should(times(1)).updateReview(any(ReviewUpdateRequest.class), anyLong());
