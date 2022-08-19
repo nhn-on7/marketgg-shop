@@ -4,6 +4,10 @@ import com.nhnacademy.marketgg.server.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import static com.nhnacademy.marketgg.server.constant.PointContent.IMAGE_REVIEW;
+import static com.nhnacademy.marketgg.server.constant.PointContent.NORMAL_REVIEW;
+import static com.nhnacademy.marketgg.server.constant.PointContent.REFERRED;
+
 /**
  * 포인트 적립에 필요한 Data 를 가진 이벤트 입니다.
  *
@@ -35,7 +39,7 @@ public class SavePointEvent {
      * @since 1.0.0
      */
     public static SavePointEvent dispensePointForNormalReview(Member member) {
-        return new SavePointEvent(member, NORMAL_REVIEW_POINT, "일반 리뷰 적립");
+        return new SavePointEvent(member, NORMAL_REVIEW_POINT, NORMAL_REVIEW.getContent());
     }
 
     /**
@@ -47,7 +51,7 @@ public class SavePointEvent {
      * @since 1.0.0
      */
     public static SavePointEvent dispensePointForImageReview(Member member) {
-        return new SavePointEvent(member, IMAGE_REVIEW_POINT, "포토 리뷰 적립");
+        return new SavePointEvent(member, IMAGE_REVIEW_POINT, IMAGE_REVIEW.getContent());
     }
 
     /**
@@ -59,7 +63,7 @@ public class SavePointEvent {
      * @since 1.0.0
      */
     public static SavePointEvent dispensePointForReferred(Member member) {
-        return new SavePointEvent(member, REFERRED_POINT, "추천인 적립");
+        return new SavePointEvent(member, REFERRED_POINT, REFERRED.getContent());
     }
 
 }

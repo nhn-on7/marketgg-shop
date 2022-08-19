@@ -41,8 +41,16 @@ public interface PointHistoryRepositoryCustom {
      * @param memberId - 지정한 회원의 식별번호입니다.
      * @return 지정한 회원의 누적 포인트를 반환합니다.
      * @since 1.0.0
-     * @author 김정민
      */
     Integer findLastTotalPoints(final Long memberId);
+
+    /**
+     * 특정 주문에 대한 포인트 이력 목록을 반환합니다.
+     *
+     * @param orderId - 포인트 이력을 조회할 주문의 식별번호입니다.
+     * @return 조회한 포인트 이력 목록을 반환합니다.
+     * @since 1.0.0
+     */
+    List<PointHistory> findByOrderId(final Long orderId);
 
 }

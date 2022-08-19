@@ -68,7 +68,7 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Integer findLastTotalPoints(Long memberId) {
+    public Integer findLastTotalPoints(final Long memberId) {
         QPointHistory pointHistory = QPointHistory.pointHistory;
 
         return Optional.ofNullable(from(pointHistory)
@@ -77,6 +77,16 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport
                                            .select(pointHistory.totalPoint)
                                            .fetchFirst()).orElse(0);
 
+    }
+
+    @Override
+    public List<PointHistory> findByOrderId(final Long orderId) {
+        QPointHistory pointHistory = QPointHistory.pointHistory;
+
+        return from(pointHistory)
+                .where(pointHistory.order.id.eq(orderId))
+                .select(pointHistory)
+                .fetch();
     }
 
 }

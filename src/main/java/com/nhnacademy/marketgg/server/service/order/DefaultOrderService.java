@@ -24,7 +24,9 @@ import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.OrderProduct;
+import com.nhnacademy.marketgg.server.entity.PointHistory;
 import com.nhnacademy.marketgg.server.entity.Product;
+import com.nhnacademy.marketgg.server.entity.event.OrderPointCanceledEvent;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotOverMinimumMoneyException;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotValidException;
@@ -48,6 +50,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.Arrays;
 import java.util.List;
@@ -223,11 +226,13 @@ public class DefaultOrderService implements OrderService {
     @Override
     public void cancelOrder(final Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        List<PointHistory> pointHistoryList = pointRepository.findByOrderId(orderId);
 
         order.cancel();
         orderRepository.save(order);
-        // memo: 주문 취소 시 사용쿠폰 삭제, 포인트 차감, 적립 내역 삭제
-        // publisher.publishEvent();
+
+        publisher.publishEvent(OrderPointCanceledEvent.restorePointHistory(order, pointHistoryList));
+        // memo: 주문 취소 시 사용쿠폰 삭제
     }
 
 }
