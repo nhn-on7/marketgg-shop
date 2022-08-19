@@ -4,6 +4,8 @@ import com.nhnacademy.marketgg.server.entity.UsedCoupon;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.Optional;
@@ -14,6 +16,7 @@ public class OrderCouponCanceledEventHandler {
 
     private final UsedCouponRepository usedCouponRepository;
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
     public void deleteUsedCoupon(OrderCouponCanceledEvent event) {
         Long orderId = event.getOrder().getId();

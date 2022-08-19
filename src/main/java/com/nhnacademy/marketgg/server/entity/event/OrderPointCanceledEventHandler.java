@@ -6,6 +6,8 @@ import com.nhnacademy.marketgg.server.entity.PointHistory;
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class OrderPointCanceledEventHandler {
 
     private final PointHistoryRepository pointRepository;
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
     public void restorePoint(OrderPointCanceledEvent event) {
         Member member = event.getOrder().getMember();
