@@ -14,6 +14,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 사용 쿠폰 관리 서비스 입니다.
+ *
+ * @author 민아영
+ * @version 1.0.0
+ */
 @Service
 @RequiredArgsConstructor
 public class DefaultUsedCouponService implements UsedCouponService {
@@ -22,6 +28,13 @@ public class DefaultUsedCouponService implements UsedCouponService {
     private final OrderRepository orderRepository;
     private final GivenCouponRepository givenCouponRepository;
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param usedCouponDto - 사용 쿠폰 생성을 위한 DTO 입니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
     @Override
     @Transactional
     public void createUsedCoupons(@Valid final UsedCouponDto usedCouponDto) {
@@ -35,6 +48,13 @@ public class DefaultUsedCouponService implements UsedCouponService {
         usedCouponRepository.save(usedCoupon);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param usedCouponDto - 삭제할 사용 쿠폰의 DTO 입니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
     @Override
     @Transactional
     public void deleteUsedCoupons(@Valid final UsedCouponDto usedCouponDto) {
