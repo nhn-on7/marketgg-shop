@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.annotation.UUID;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
@@ -20,12 +21,12 @@ import com.nhnacademy.marketgg.server.service.member.MemberService;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -187,8 +188,8 @@ public class MemberController {
      * @since 1.0.0
      */
     @GetMapping("/coupons")
-    public ResponseEntity<ShopResult<List<GivenCouponResponse>>> retrieveGivenCoupons(final MemberInfo memberInfo, final Pageable pageable) {
-        List<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
+    public ResponseEntity<ShopResult<PageEntity<GivenCouponResponse>>> retrieveGivenCoupons(final MemberInfo memberInfo, final Pageable pageable) {
+        PageEntity<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -199,13 +200,15 @@ public class MemberController {
      * 한 회원이 상품에 대해 문의한 전체 상품 문의 글을 조회하는 GET Mapping 을 지원합니다.
      *
      * @param memberInfo - 상품 문의 글을 조회할 회원의 정보 입니다.
-     * @return - List<ProductInquiryByMemberResponse> 를 담은 응답 객체를 반환 합니다.
+     * @param pageable 조회하려는 페이지 정보입니다.
+     *(@PageableDefault - 기본값과 추가 설정을 할 수 있습니다.)
+     * @return - List&lt;ProductInquiryByMemberResponse&gt; 를 담은 응답 객체를 반환 합니다.
      * @author 민아영
      * @since 1.0.0
      */
     @GetMapping("/product-inquiries")
     public ResponseEntity<CommonResponse> retrieveProductInquiry(final MemberInfo memberInfo,
-                                                                 final Pageable pageable) {
+                                                                 @PageableDefault final Pageable pageable) {
         Page<ProductInquiryByMemberResponse> productInquiryResponses
             = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
 
