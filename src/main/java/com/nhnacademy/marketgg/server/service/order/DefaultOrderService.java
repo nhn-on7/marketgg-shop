@@ -26,6 +26,7 @@ import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.OrderProduct;
 import com.nhnacademy.marketgg.server.entity.PointHistory;
 import com.nhnacademy.marketgg.server.entity.Product;
+import com.nhnacademy.marketgg.server.entity.event.OrderCouponCanceledEvent;
 import com.nhnacademy.marketgg.server.entity.event.OrderPointCanceledEvent;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotOverMinimumMoneyException;
@@ -213,8 +214,7 @@ public class DefaultOrderService implements OrderService {
         String uuid = memberRepository.findUuidByOrderId(orderId);
         MemberInfoResponse memberResponse = checkResult(authRepository.getMemberInfo(new MemberInfoRequest(uuid)));
 
-        OrderInfoRequestDto orderRequest = new OrderInfoRequestDto(memberResponse.getName(),
-                                                                   order.getAddress(),
+        OrderInfoRequestDto orderRequest = new OrderInfoRequestDto(memberResponse.getName(), order.getAddress(),
                                                                    order.getDetailAddress(),
                                                                    memberResponse.getPhoneNumber(),
                                                                    String.valueOf(orderId));
@@ -226,13 +226,12 @@ public class DefaultOrderService implements OrderService {
     @Override
     public void cancelOrder(final Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
-        List<PointHistory> pointHistoryList = pointRepository.findByOrderId(orderId);
 
         order.cancel();
         orderRepository.save(order);
 
-        publisher.publishEvent(OrderPointCanceledEvent.restorePointHistory(order, pointHistoryList));
-        // memo: 주문 취소 시 사용쿠폰 삭제
+        publisher.publishEvent(new OrderPointCanceledEvent(order));
+        publisher.publishEvent(new OrderCouponCanceledEvent(order));
     }
 
 }

@@ -2,6 +2,8 @@ package com.nhnacademy.marketgg.server.repository.usedcoupon;
 
 import org.springframework.data.repository.NoRepositoryBean;
 
+import java.util.Optional;
+
 @NoRepositoryBean
 public interface UsedCouponRepositoryCustom {
 
@@ -11,8 +13,15 @@ public interface UsedCouponRepositoryCustom {
      * @param couponId - 확인할 쿠폰의 식별번호입니다.
      * @return 등록되어 있다면 true(사용불가), 등록되어 있지 않다면 false(사용가능)를 반환합니다.
      * @since 1.0.0
-     * @author 김정민
      */
     boolean existsCouponId(final Long couponId);
 
+    /**
+     * 특정 주문에 사용한 쿠폰 번호를 조회하는 메소드입니다.
+     *
+     * @param orderId - 쿠폰 번호를 조회할 주문의 식별번호입니다.
+     * @return 사용한 쿠폰의 식별번호를 반환합니다.
+     * @since 1.0.0
+     */
+    Optional<Long> findByOrderId(final Long orderId);
 }

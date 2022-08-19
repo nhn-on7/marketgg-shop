@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.util.List;
+
 import static com.nhnacademy.marketgg.server.constant.PointContent.ORDER;
 import static com.nhnacademy.marketgg.server.constant.PointContent.ORDER_CANCEL;
 
@@ -20,9 +22,10 @@ public class OrderPointCanceledEventHandler {
     @TransactionalEventListener
     public void restorePoint(OrderPointCanceledEvent event) {
         Member member = event.getOrder().getMember();
+        List<PointHistory> pointHistoryList = pointRepository.findByOrderId(event.getOrder().getId());
         Integer point;
 
-        for (PointHistory pointHistory : event.getPointHistoryList()) {
+        for (PointHistory pointHistory : pointHistoryList) {
             point = pointHistory.getPoint();
             Integer totalPoint = pointHistory.getContent().equals(ORDER.getContent())
                     ? pointHistory.getTotalPoint() - point

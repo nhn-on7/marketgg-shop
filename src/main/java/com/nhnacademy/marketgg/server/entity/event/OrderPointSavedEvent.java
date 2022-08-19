@@ -15,9 +15,7 @@ import static com.nhnacademy.marketgg.server.constant.PointContent.ORDER;
 public class OrderPointSavedEvent {
 
     private Order order;
-
     private Integer point;
-
     private String content;
 
     private OrderPointSavedEvent(final Order order, final Integer point, final String content) {
