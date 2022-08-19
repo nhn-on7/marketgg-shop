@@ -80,7 +80,7 @@ class ReviewControllerTest {
         MockMultipartFile dto = new MockMultipartFile("reviewRequest", "jsondata", "application/json",
                                                       content.getBytes(StandardCharsets.UTF_8));
 
-        this.mockMvc.perform(multipart("/products/{productId}/reviews}", 1L)
+        this.mockMvc.perform(multipart("/products/{productId}/reviews", 1L)
                                      .file(dto)
                                      .file(file)
                                      .contentType(MediaType.APPLICATION_JSON_VALUE)

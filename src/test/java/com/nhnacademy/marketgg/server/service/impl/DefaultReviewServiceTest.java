@@ -129,7 +129,7 @@ class DefaultReviewServiceTest {
         MockMultipartFile image =
                 new MockMultipartFile("images", "img/lee.png", "image/png", new FileInputStream(filePath));
 
-        given(memberRepository.findByUuid(anyString())).willReturn(Optional.ofNullable(member));
+        given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(member));
         given(reviewRepository.save(any(Review.class))).willReturn(review);
         given(fileService.uploadImage(any(MultipartFile.class))).willReturn(imageResponse);
         willDoNothing().given(publisher).publishEvent(any(SavePointEvent.class));
@@ -143,7 +143,7 @@ class DefaultReviewServiceTest {
     @Test
     @DisplayName("일반 리뷰 생성 성공 테스트")
     void testTextReview() {
-        given(memberRepository.findByUuid(anyString())).willReturn(Optional.ofNullable(member));
+        given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(member));
         given(reviewRepository.save(any(Review.class))).willReturn(review);
         willDoNothing().given(publisher).publishEvent(any(SavePointEvent.class));
 
