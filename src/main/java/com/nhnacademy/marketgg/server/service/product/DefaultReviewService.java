@@ -1,5 +1,9 @@
 package com.nhnacademy.marketgg.server.service.product;
 
+import static com.nhnacademy.marketgg.server.constant.CouponsName.BESTREVIEW;
+import static com.nhnacademy.marketgg.server.constant.PointContent.IMAGE_REVIEW;
+import static com.nhnacademy.marketgg.server.constant.PointContent.NORMAL_REVIEW;
+
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
@@ -8,8 +12,9 @@ import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Review;
-import com.nhnacademy.marketgg.server.entity.event.GivenCouponEvent;
-import com.nhnacademy.marketgg.server.entity.event.SavePointEvent;
+import com.nhnacademy.marketgg.server.eventlistener.event.givencoupon.BestReviewedEvent;
+import com.nhnacademy.marketgg.server.eventlistener.event.savepoint.NormalReviewedEvent;
+import com.nhnacademy.marketgg.server.eventlistener.event.savepoint.PhotoReviewEvent;
 import com.nhnacademy.marketgg.server.exception.asset.AssetNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.review.ReviewNotFoundException;
@@ -52,7 +57,7 @@ public class DefaultReviewService implements ReviewService {
 
         reviewRepository.save(new Review(reviewRequest, member, imageResponse.getAsset()));
 
-        publisher.publishEvent(SavePointEvent.dispensePointForImageReview(member));
+        publisher.publishEvent(new PhotoReviewEvent(member, IMAGE_REVIEW.getContent()));
     }
 
     @Override
@@ -63,7 +68,7 @@ public class DefaultReviewService implements ReviewService {
 
         reviewRepository.save(new Review(reviewRequest, member, asset));
 
-        publisher.publishEvent(SavePointEvent.dispensePointForNormalReview(member));
+        publisher.publishEvent(new NormalReviewedEvent(member, NORMAL_REVIEW.getContent()));
     }
 
     @Override
@@ -107,7 +112,7 @@ public class DefaultReviewService implements ReviewService {
 
         if (Boolean.TRUE.equals(review.getIsBest())) {
             reviewRepository.save(review);
-            publisher.publishEvent(GivenCouponEvent.bestReviewCoupon(review.getMember()));
+            publisher.publishEvent(new BestReviewedEvent(BESTREVIEW.couponName(), review.getMember()));
             return new SingleResponse<>(true);
         }
 

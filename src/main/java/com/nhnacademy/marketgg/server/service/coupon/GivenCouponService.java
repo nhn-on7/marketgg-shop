@@ -64,9 +64,9 @@ public interface GivenCouponService {
      * @param givenCoupon - 회원에게 지급된 지급 쿠폰 Entity 객체
      * @param status      - 지급 쿠폰의 상태
      * @param expiredDate - 쿠폰이 발급된 일자부터 유효한 유효회간
+     * @return 변환한 지급 쿠폰 Dto 를 반환합니다.
      * @author 민아영
      * @since 1.0.0
-     * @return 변환한 지급 쿠폰 Dto 를 반환합니다.
      */
     default GivenCouponResponse toDto(final GivenCoupon givenCoupon,
                                       final String status,
@@ -82,4 +82,5 @@ public interface GivenCouponService {
                                   .status(status)
                                   .build();
     }
+
 }
