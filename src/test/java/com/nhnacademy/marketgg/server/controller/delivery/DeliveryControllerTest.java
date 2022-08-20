@@ -62,7 +62,7 @@ class DeliveryControllerTest {
     @DisplayName("배송 번호 추가")
     void testCreatedTrackingNo() throws Exception {
         CreatedTrackingNoRequest testTrackingNoRequest = CreatedTrackingNoRequest.builder()
-                                                                                 .trackingNo("3636-3636-3636-3636-3636-3636-3636")
+                                                                                 .trackingNo("서른여섯자리-서른여섯자리-서른여섯자리-서른여섯자리-서른여섯자리^^")
                                                                                  .orderNo("1234")
                                                                                  .build();
 
