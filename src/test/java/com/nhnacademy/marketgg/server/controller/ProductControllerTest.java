@@ -84,7 +84,7 @@ class ProductControllerTest {
         given(productService.searchProductListByPrice(anyString(), any(SearchRequest.class))).willReturn(
                 List.of());
 
-        this.mockMvc.perform(post(DEFAULT_PRODUCT + "/categories/{categoryId}/sort_price/{option}/search", "100", "desc")
+        this.mockMvc.perform(post(DEFAULT_PRODUCT + "/categories/{categoryId}/sort-price/{option}/search", "100", "desc")
                                      .contentType(MediaType.APPLICATION_JSON)
                                      .content(objectMapper.writeValueAsString(searchRequest)))
                     .andExpect(status().isOk())

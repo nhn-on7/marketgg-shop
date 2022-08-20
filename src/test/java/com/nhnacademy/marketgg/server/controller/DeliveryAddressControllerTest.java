@@ -13,10 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.aop.AuthInjectAspect;
+import com.nhnacademy.marketgg.server.aop.AuthInfoAspect;
 import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
-import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
-import com.nhnacademy.marketgg.server.aop.UuidAspect;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressUpdateRequest;
@@ -47,10 +45,8 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @ActiveProfiles({ "testdb", "common", "local" })
 @Import({
-        RoleCheckAspect.class,
-        AuthInjectAspect.class,
-        UuidAspect.class,
-        MemberInfoAspect.class
+    AuthInfoAspect.class,
+    MemberInfoAspect.class
 })
 class DeliveryAddressControllerTest {
 
@@ -138,7 +134,7 @@ class DeliveryAddressControllerTest {
         headers.set(WWW_AUTHENTICATE, roles);
 
         mockMvc.perform(delete(baseUri + "/{deliveryNo}", deliveryAddressNo)
-                                .headers(headers))
+                   .headers(headers))
                .andExpect(status().isOk());
     }
 
@@ -152,7 +148,7 @@ class DeliveryAddressControllerTest {
         headers.set(WWW_AUTHENTICATE, roles);
 
         mockMvc.perform(get("/members/delivery-addresses")
-                                .headers(headers))
+                   .headers(headers))
                .andExpect(status().isOk());
     }
 

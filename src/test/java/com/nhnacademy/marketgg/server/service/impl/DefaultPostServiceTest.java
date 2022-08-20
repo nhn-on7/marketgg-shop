@@ -10,7 +10,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 
-import com.nhnacademy.marketgg.server.auth.AuthRepository;
+import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
