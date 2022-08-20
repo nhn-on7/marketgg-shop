@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
 
@@ -41,6 +42,10 @@ public class MemberInfo {
 
     public boolean isUser() {
         return this.roles.contains(Role.ROLE_USER.name()) || this.roles.contains(Role.ROLE_ADMIN.name());
+    }
+
+    public boolean isNull() {
+        return Objects.isNull(id) || Objects.isNull(cart) || Objects.isNull(memberGrade);
     }
 
 }
