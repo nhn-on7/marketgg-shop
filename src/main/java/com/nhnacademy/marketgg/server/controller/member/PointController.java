@@ -1,7 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.member;
 
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
+import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 박세완
  * @version 1.0.0
  */
-@RoleCheck(accessLevel = Role.ROLE_USER)
+@Auth
 @RestController
 @RequestMapping("/members/points")
 @RequiredArgsConstructor

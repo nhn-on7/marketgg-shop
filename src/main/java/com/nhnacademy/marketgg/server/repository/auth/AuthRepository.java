@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.auth;
+package com.nhnacademy.marketgg.server.repository.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;

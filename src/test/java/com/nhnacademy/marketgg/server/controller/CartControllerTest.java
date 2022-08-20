@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.aop.AuthInjectAspect;
+import com.nhnacademy.marketgg.server.aop.AuthInfoAspect;
 import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
 import com.nhnacademy.marketgg.server.controller.advice.AuthControllerAdvice;
 import com.nhnacademy.marketgg.server.controller.advice.GlobalControllerAdvice;
@@ -59,7 +59,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @ActiveProfiles({ "testdb", "common", "local" })
 @Import({
-        AuthInjectAspect.class,
+        AuthInfoAspect.class,
         MemberInfoAspect.class
 })
 class CartControllerTest {

@@ -17,10 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.aop.AuthInjectAspect;
+import com.nhnacademy.marketgg.server.aop.AuthInfoAspect;
 import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
-import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
-import com.nhnacademy.marketgg.server.aop.UuidAspect;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
@@ -54,10 +52,8 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @ActiveProfiles({ "testdb", "common", "local" })
 @Import({
-        RoleCheckAspect.class,
-        AuthInjectAspect.class,
-        UuidAspect.class,
-        MemberInfoAspect.class
+    AuthInfoAspect.class,
+    MemberInfoAspect.class
 })
 class OrderControllerTest {
 
@@ -103,15 +99,15 @@ class OrderControllerTest {
     void testCreateOrder() throws Exception {
         OrderCreateRequest orderCreateRequest = new OrderCreateRequest();
         OrderToPayment orderToPayment = new OrderToPayment("GGORDER_1", "orderName", "name",
-                                                           "email", 30000L, 1L,
-                                                           2000, 300);
+            "email", 30000L, 1L,
+            2000, 300);
 
         given(orderService.createOrder(any(OrderCreateRequest.class), anyLong())).willReturn(orderToPayment);
 
         mockMvc.perform(post(baseUri)
-                                .headers(headers)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(orderCreateRequest)))
+                   .headers(headers)
+                   .contentType(MediaType.APPLICATION_JSON)
+                   .content(mapper.writeValueAsString(orderCreateRequest)))
                .andExpect(status().isCreated());
 
         then(orderService).should(times(1)).createOrder(any(OrderCreateRequest.class), anyLong());
@@ -144,8 +140,8 @@ class OrderControllerTest {
         given(orderService.retrieveOrderList(any(MemberInfo.class))).willReturn(List.of());
 
         mockMvc.perform(get(baseUri)
-                                .headers(headers)
-                                .contentType(MediaType.APPLICATION_JSON))
+                   .headers(headers)
+                   .contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk());
 
         then(orderService).should(times(1)).retrieveOrderList(any(MemberInfo.class));
@@ -159,8 +155,8 @@ class OrderControllerTest {
         given(orderService.retrieveOrderDetail(anyLong(), any(MemberInfo.class))).willReturn(orderDetail);
 
         mockMvc.perform(get(baseUri + "/{orderId}", 1L)
-                                .headers(headers)
-                                .contentType(MediaType.APPLICATION_JSON))
+                   .headers(headers)
+                   .contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk());
 
         then(orderService).should(times(1))
@@ -175,8 +171,8 @@ class OrderControllerTest {
         willDoNothing().given(orderService).updateStatus(anyLong(), any(OrderUpdateStatusRequest.class));
 
         mockMvc.perform(patch(baseUri + "/{orderId}/status", 1L)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(updateStatus)))
+                   .contentType(MediaType.APPLICATION_JSON)
+                   .content(mapper.writeValueAsString(updateStatus)))
                .andExpect(status().isOk());
 
         then(orderService).should(times(1))

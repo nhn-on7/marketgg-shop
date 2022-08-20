@@ -1,8 +1,9 @@
 package com.nhnacademy.marketgg.server.config;
 
+import com.nhnacademy.marketgg.server.filter.AdminFilter;
 import java.time.Duration;
-import javax.servlet.Filter;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -32,8 +33,23 @@ public class WebConfig {
     }
 
     @Bean
-    public Filter utf8CharacterEncodingFilter() {
-        return new CharacterEncodingFilter("UTF-8", true);
+    public FilterRegistrationBean<AdminFilter> adminFilter() {
+        FilterRegistrationBean<AdminFilter> filter = new FilterRegistrationBean<>();
+        filter.setFilter(new AdminFilter());
+        filter.setOrder(100);
+        filter.addUrlPatterns("/admin/*");
+
+        return filter;
+    }
+
+    @Bean
+    public FilterRegistrationBean<CharacterEncodingFilter> utf8CharacterEncodingFilter() {
+        FilterRegistrationBean<CharacterEncodingFilter> filter = new FilterRegistrationBean<>();
+        filter.setFilter(new CharacterEncodingFilter("UTF-8", true));
+        filter.setOrder(1);
+        filter.addUrlPatterns("/*");
+
+        return filter;
     }
 
 }

@@ -93,7 +93,7 @@ public class ProductController {
      * @throws JsonProcessingException Json 과 관련된 예외 처리입니다.
      * @since 1.0.0
      */
-    @PostMapping("/categories/{categoryId}/sort_price/{option}/search")
+    @PostMapping("/categories/{categoryId}/sort-price/{option}/search")
     public ResponseEntity<List<SearchProductResponse>> searchProductListByPrice(
             @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
             @PathVariable @NotBlank @Min(1) final String option,
@@ -105,7 +105,7 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/sort_price/" + option))
+                                     DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/sort-price/" + option))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productList);
     }

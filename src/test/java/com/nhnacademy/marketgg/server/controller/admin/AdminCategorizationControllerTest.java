@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.aop.AspectUtils;
-import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
 import com.nhnacademy.marketgg.server.service.category.CategorizationService;
 import java.util.List;
 import java.util.UUID;
@@ -18,14 +17,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AdminCategorizationController.class)
-@Import({
-        RoleCheckAspect.class
-})
 class AdminCategorizationControllerTest {
 
     @Autowired
@@ -52,7 +47,7 @@ class AdminCategorizationControllerTest {
         given(categorizationService.retrieveCategorizations()).willReturn(List.of());
 
         this.mockMvc.perform(get("/admin/categorizations")
-                                     .headers(httpHeaders))
+                .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(categorizationService).should(times(1)).retrieveCategorizations();
