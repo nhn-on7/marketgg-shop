@@ -110,7 +110,7 @@ class ReviewControllerTest {
     @Test
     @DisplayName("후기 전체 조회 테스트")
     void testRetrieveReviews() throws Exception {
-        given(reviewService.retrieveReviews(new DefaultPageRequest().getPageable())).willReturn(List.of());
+        given(reviewService.retrieveReviews(new DefaultPageRequest(1).getPageable())).willReturn(List.of());
 
         this.mockMvc.perform(get("/products/{productId}/reviews/", 1L))
                     .andExpect(status().isOk())

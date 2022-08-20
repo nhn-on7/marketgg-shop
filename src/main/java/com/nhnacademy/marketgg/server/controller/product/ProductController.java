@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -101,9 +102,10 @@ public class ProductController {
         PageEntity<List<ProductListResponse>> productList =
                 productService.searchProductListByCategory(searchRequest);
 
+
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/search"))
+                                 DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/search"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(ShopResult.successWith(productList));
     }
@@ -138,6 +140,7 @@ public class ProductController {
         PageEntity<List<ProductListResponse>> productList =
                 productService.searchProductListByPrice(option, searchRequest);
 
+
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
                                      DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/sort-price/" + option))
@@ -151,11 +154,22 @@ public class ProductController {
      * @return - List&lt;ProductResponse&gt; 를 담은 응답 객체를 반환 합니다.
      * @since 1.0.0
      */
+
+    @Operation(summary = "상품목록 전체 조회",
+               description = "마켓 GG에 입장하는 순간 보여야하는 상품들의 목록입니다.",
+               parameters = @Parameter(name = "page", description = "현재 페이지. 기본값은 0", required = true),
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
+
     @GetMapping
     public ResponseEntity<ShopResult<List<ProductResponse>>> retrieveProducts(
-        DefaultPageRequest pageRequest) {
-        List<ProductResponse> productResponses =
-            this.productService.retrieveProducts(pageRequest.getPageable());
+        @RequestParam(value = "page", defaultValue = "0") final Integer page) {
+
+        DefaultPageRequest pageRequest = new DefaultPageRequest(page);
+
+        List<ProductResponse> productResponses = this.productService.retrieveProducts(pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI))
@@ -170,9 +184,16 @@ public class ProductController {
      * @return - ProductResponse 를 담은 응답 객체를 반환 합니다.
      * @since 1.0.0
      */
+
+    @Operation(summary = "상품 상세 조회",
+               description = "상품을 클릭했을 때 보이는 상품의 상세정보입니다.",
+               parameters = @Parameter(name = "productId", description = "조회하려는 상품의 상품 번호", required = true),
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @GetMapping("/{productId}")
-    public ResponseEntity<ShopResult<ProductResponse>> retrieveProductDetails(
-        @PathVariable final Long productId) {
+    public ResponseEntity<ShopResult<ProductResponse>> retrieveProductDetails(@PathVariable final Long productId) {
 
         ProductResponse productResponse = this.productService.retrieveProductDetails(productId);
 
