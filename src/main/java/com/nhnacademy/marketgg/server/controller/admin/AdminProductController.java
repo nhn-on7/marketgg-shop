@@ -6,6 +6,11 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -49,6 +54,17 @@ public class AdminProductController {
      * @throws IOException - IOException 을 던집니다.
      * @since 1.0.0
      */
+
+    @Operation(summary = "관리자의 상품 관리",
+               description = "상품에 관한 정보를 받고, 데이터베이스에 해당 정보를 영속화합니다.",
+               parameters = {
+                   @Parameter(name = "productRequest", description = "상품 등록에 필요한 정보를 담은 객체", required = true),
+                   @Parameter(name = "image", description = "상품 목록에 보이는 썸네일용 이미지", required = true) },
+               responses = @ApiResponse(responseCode = "201",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
+
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<ShopResult<Void>> createProduct(
         @RequestPart @Valid final ProductCreateRequest productRequest,
@@ -114,6 +130,17 @@ public class AdminProductController {
      * @throws IOException - 입출력에서 문제 발생 시 예외를 던집니다.
      * @since 1.0.0
      */
+
+    @Operation(summary = "관리자의 상품 관리",
+               description = "상품에 관한 정보를 받고, 데이터베이스에 해당 정보를 영속화합니다.",
+               parameters = {
+                   @Parameter(name = "productRequest", description = "상품 수정에 필요한 정보를 담은 객체", required = true),
+                   @Parameter(name = "image", description = "상품 목록에 보이는 썸네일용 이미지", required = true) },
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
+
     @PutMapping("/{productId}")
     public ResponseEntity<ShopResult<Void>> updateProduct(
         @RequestPart @Valid final ProductUpdateRequest productRequest,
@@ -141,6 +168,15 @@ public class AdminProductController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
+
+    @Operation(summary = "관리자의 상품 관리",
+               description = "상품 번호를 받아서 해당 번호에 해당하는 상품을 소프트 삭제합니다.",
+               parameters = @Parameter(name = "productId", description = "상품 번호", required = true),
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
+
     @DeleteMapping("/{productId}")
     public ResponseEntity<ShopResult<Void>> deleteProduct(@PathVariable final Long productId) {
         this.productService.deleteProduct(productId);
@@ -157,6 +193,15 @@ public class AdminProductController {
      * @param productId - 상품 복구를 위한 기본키입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      */
+
+    @Operation(summary = "관리자의 상품 관리",
+               description = "상품 번호를 받아서 해당 번호에 해당하는 상품을 복원합니다.",
+               parameters = @Parameter(name = "productId", description = "상품 번호", required = true),
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
+
     @PostMapping("/{productId}/restore")
     public ResponseEntity<ShopResult<Void>> restoreProduct(@PathVariable final Long productId) {
         this.productService.restoreProduct(productId);

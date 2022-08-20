@@ -19,12 +19,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.controller.product.ReviewController;
-import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.service.product.ReviewService;
@@ -90,7 +88,7 @@ class ReviewControllerTest {
         String filePath = Objects.requireNonNull(url).getPath();
 
         MockMultipartFile file =
-                new MockMultipartFile("images", "img/lee.png", "image/png", new FileInputStream(filePath));
+            new MockMultipartFile("images", "img/lee.png", "image/png", new FileInputStream(filePath));
 
         MockMultipartFile dto = new MockMultipartFile("reviewRequest", "jsondata", "application/json",
                                                       content.getBytes(StandardCharsets.UTF_8));
@@ -104,7 +102,9 @@ class ReviewControllerTest {
                     .andExpect(status().isCreated());
 
         then(reviewService).should(times(1))
-                           .createReview(any(ReviewCreateRequest.class), any(MultipartFile.class), any(MemberInfo.class));
+                           .createReview(any(ReviewCreateRequest.class),
+                                         any(MultipartFile.class),
+                                         any(MemberInfo.class));
     }
 
     @Test
