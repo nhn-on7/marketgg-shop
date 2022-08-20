@@ -45,7 +45,7 @@ public class CouponRepositoryImpl extends QuerydslRepositorySupport implements C
     }
 
     @Override
-    public Optional<Coupon> findCouponByName(String name) {
+    public Optional<Coupon> findCouponByName(final String name) {
 
         Coupon result = from(coupon)
             .where(coupon.name.eq(name))
