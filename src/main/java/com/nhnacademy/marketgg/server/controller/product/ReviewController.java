@@ -67,7 +67,7 @@ public class ReviewController {
     @Auth
     @PostMapping(value = "/{productId}/reviews", consumes = { MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<Void> createReview(@PathVariable final Long productId,
+    public ResponseEntity<ShopResult<Void>> createReview(@PathVariable final Long productId,
                                              final MemberInfo memberInfo,
                                              @RequestPart @Valid final ReviewCreateRequest reviewRequest,
                                              BindingResult bindingResult,
