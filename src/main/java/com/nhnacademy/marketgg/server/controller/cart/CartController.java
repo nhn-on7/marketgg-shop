@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.cart;
 
 import com.nhnacademy.marketgg.server.annotation.Auth;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dto.response.cart.CartProductResponse;
@@ -42,7 +43,7 @@ public class CartController {
      * @return - 성공여부 반환
      */
     @PostMapping
-    public ResponseEntity<CommonResponse> addProductToCart(MemberInfo member,
+    public ResponseEntity<ShopResult<String>> addProductToCart(MemberInfo member,
                                                            @RequestBody @Valid
                                                            ProductToCartRequest productAddRequest) {
 
@@ -50,7 +51,7 @@ public class CartController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Add Success"));
+                             .body(ShopResult.success("Add Success"));
     }
 
     /**
@@ -60,12 +61,12 @@ public class CartController {
      * @return - 성공여부 반환
      */
     @GetMapping
-    public ResponseEntity<CommonResponse> retrieveCart(MemberInfo member) {
-        List<CartProductResponse> cartProducts = cartProductService.retrieveCarts(member);
+    public ResponseEntity<ShopResult<List<CartProductResponse>>> retrieveCart(MemberInfo member) {
+        List<CartProductResponse> data = cartProductService.retrieveCarts(member);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new ListResponse<>(cartProducts));
+                             .body(ShopResult.success(data));
     }
 
     /**
@@ -76,7 +77,7 @@ public class CartController {
      * @return - 성공여부 반환
      */
     @PatchMapping
-    public ResponseEntity<CommonResponse> updateAmount(MemberInfo member,
+    public ResponseEntity<ShopResult<String>> updateAmount(MemberInfo member,
                                                        @RequestBody @Validated
                                                        ProductToCartRequest productUpdateRequest) {
 
@@ -84,7 +85,7 @@ public class CartController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Update Success"));
+                             .body(ShopResult.success("Update Success"));
     }
 
     /**
@@ -94,12 +95,12 @@ public class CartController {
      * @return - 성공여부 반환
      */
     @DeleteMapping
-    public ResponseEntity<CommonResponse> deleteProductInCart(MemberInfo member, @RequestBody List<Long> products) {
+    public ResponseEntity<ShopResult<String>> deleteProductInCart(MemberInfo member, @RequestBody List<Long> products) {
         cartProductService.deleteProducts(member, products);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Delete Success"));
+                             .body(ShopResult.success("Delete Success"));
     }
 
 }
