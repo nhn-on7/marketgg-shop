@@ -12,8 +12,6 @@ import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import com.nhnacademy.marketgg.server.entity.Member;
-import com.nhnacademy.marketgg.server.entity.event.GivenCouponEvent;
-import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
 import com.nhnacademy.marketgg.server.exception.givencoupon.GivenCouponNotFoundException;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponRepository;
@@ -26,11 +24,8 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionPhase;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 /**
  * 지급 쿠폰 관리 서비스입니다.
@@ -112,15 +107,6 @@ public class DefaultGivenCouponService implements GivenCouponService {
         }
 
         return this.toDto(givenCoupons, status.state(), expirationPeriod);
-    }
-
-    @Async
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void createGivenCoupon(final GivenCouponEvent coupon) {
-        Coupon signUpCoupon = couponRepository.findCouponByName(coupon.getCouponName())
-                                              .orElseThrow(CouponNotFoundException::new);
-        GivenCoupon givenCoupon = this.toEntity(signUpCoupon, coupon.getMember());
-        givenCouponRepository.save(givenCoupon);
     }
 
 }
