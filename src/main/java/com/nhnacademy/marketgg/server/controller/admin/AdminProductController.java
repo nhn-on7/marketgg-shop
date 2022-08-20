@@ -33,7 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 상품 관리를 위한 RestController 입니다.
  *
- * @author 박세완, 조현진
+ * @author 조현진
  * @version 1.0.0
  */
 @RestController
@@ -81,43 +81,6 @@ public class AdminProductController {
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(ShopResult.success());
-    }
-
-    /**
-     * 전체 상품 목록 조회를 위한 GET Mapping 을 지원합니다.
-     *
-     * @return - List&lt;ProductResponse&gt; 를 담은 응답 객체를 반환 합니다.
-     * @since 1.0.0
-     */
-    @GetMapping
-    public ResponseEntity<ShopResult<List<ProductResponse>>> retrieveProducts(
-        DefaultPageRequest pageRequest) {
-        List<ProductResponse> productResponses =
-            this.productService.retrieveProducts(pageRequest.getPageable());
-
-        return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_PRODUCT))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(productResponses));
-    }
-
-    /**
-     * 상품 상세 정보 조회를 위한 GET Mapping 을 지원합니다.
-     *
-     * @param productId - 상품의 PK로 조회합니다.
-     * @return - ProductResponse 를 담은 응답 객체를 반환 합니다.
-     * @since 1.0.0
-     */
-    @GetMapping("/{productId}")
-    public ResponseEntity<ShopResult<ProductResponse>> retrieveProductDetails(
-        @PathVariable final Long productId) {
-
-        ProductResponse productResponse = this.productService.retrieveProductDetails(productId);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_PRODUCT))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(productResponse));
     }
 
     /**

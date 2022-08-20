@@ -1,10 +1,12 @@
 package com.nhnacademy.marketgg.server.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -12,6 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.product.ProductController;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
+import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import java.util.List;
@@ -21,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -41,6 +46,7 @@ class ProductControllerTest {
 
     private static final String DEFAULT_PRODUCT = "/products";
 
+    private ProductResponse productResponse;
     @BeforeEach
     void setUp() {
         searchRequest = new SearchRequest();
@@ -49,6 +55,8 @@ class ProductControllerTest {
         ReflectionTestUtils.setField(searchRequest, "keyword", "hi");
         ReflectionTestUtils.setField(searchRequest, "page", 0);
         ReflectionTestUtils.setField(searchRequest, "size", 10);
+
+        productResponse = Dummy.getDummyProductResponse();
     }
 
     @Test
@@ -94,6 +102,32 @@ class ProductControllerTest {
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         then(productService).should(times(1)).searchProductListByPrice(anyString(), any(SearchRequest.class));
+    }
+
+    @Test
+    @DisplayName("상품 목록 전체 조회하는 테스트")
+    void testRetrieveProducts() throws Exception {
+        PageRequest request = PageRequest.of(0, 5);
+
+        given(productService.retrieveProducts(request)).willReturn(List.of());
+
+        this.mockMvc.perform(get(DEFAULT_PRODUCT)
+                                 .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+
+        then(productService).should(times(1)).retrieveProducts(any());
+    }
+
+    @Test
+    @DisplayName("상품 상세 조회 테스트")
+    void testRetrieveProductDetails() throws Exception {
+        given(productService.retrieveProductDetails(anyLong())).willReturn(productResponse);
+
+        this.mockMvc.perform(get(DEFAULT_PRODUCT + "/1")
+                                 .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+
+        then(productService).should(times(1)).retrieveProductDetails(anyLong());
     }
 
 }

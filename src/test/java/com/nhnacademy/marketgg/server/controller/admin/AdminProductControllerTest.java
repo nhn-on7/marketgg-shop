@@ -56,7 +56,7 @@ class AdminProductControllerTest {
     private static final String DEFAULT_PRODUCT = "/admin/products";
     private ProductCreateRequest productRequest;
     private ProductUpdateRequest productUpdateRequest;
-    private ProductResponse productResponse;
+
 
     HttpHeaders httpHeaders;
 
@@ -67,7 +67,6 @@ class AdminProductControllerTest {
         httpHeaders = new HttpHeaders();
         httpHeaders.add(AspectUtils.AUTH_ID, UUID.randomUUID().toString());
         httpHeaders.add(AspectUtils.WWW_AUTHENTICATE, "[\"ROLE_ADMIN\"]");
-        productResponse = Dummy.getDummyProductResponse();
     }
 
     @Test
@@ -99,34 +98,6 @@ class AdminProductControllerTest {
 
         then(productService).should(times(1))
                             .createProduct(any(ProductCreateRequest.class), any(MockMultipartFile.class));
-    }
-
-    @Test
-    @DisplayName("상품 목록 전체 조회하는 테스트")
-    void testRetrieveProducts() throws Exception {
-        PageRequest request = PageRequest.of(0, 5);
-
-        given(productService.retrieveProducts(request)).willReturn(List.of());
-
-        this.mockMvc.perform(get(DEFAULT_PRODUCT)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .headers(httpHeaders))
-                    .andExpect(status().isOk());
-
-        then(productService).should(times(1)).retrieveProducts(any());
-    }
-
-    @Test
-    @DisplayName("상품 상세 조회 테스트")
-    void testRetrieveProductDetails() throws Exception {
-        given(productService.retrieveProductDetails(anyLong())).willReturn(productResponse);
-
-        this.mockMvc.perform(get(DEFAULT_PRODUCT + "/1")
-                                     .headers(httpHeaders)
-                                     .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk());
-
-        then(productService).should(times(1)).retrieveProductDetails(anyLong());
     }
 
     @Test
