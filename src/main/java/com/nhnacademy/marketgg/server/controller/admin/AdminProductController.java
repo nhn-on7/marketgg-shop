@@ -4,10 +4,7 @@ import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
-import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import java.io.IOException;
 import java.net.URI;
@@ -53,9 +50,10 @@ public class AdminProductController {
      * @since 1.0.0
      */
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<ShopResult<Void>> createProduct(@RequestPart @Valid final ProductCreateRequest productRequest,
-                                              BindingResult bindingResult,
-                                              @RequestPart final MultipartFile image) throws IOException {
+    public ResponseEntity<ShopResult<Void>> createProduct(
+        @RequestPart @Valid final ProductCreateRequest productRequest,
+        BindingResult bindingResult,
+        @RequestPart final MultipartFile image) throws IOException {
 
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
@@ -76,7 +74,8 @@ public class AdminProductController {
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<ShopResult<List<ProductResponse>>> retrieveProducts(DefaultPageRequest pageRequest) {
+    public ResponseEntity<ShopResult<List<ProductResponse>>> retrieveProducts(
+        DefaultPageRequest pageRequest) {
         List<ProductResponse> productResponses =
             this.productService.retrieveProducts(pageRequest.getPageable());
 
@@ -116,10 +115,11 @@ public class AdminProductController {
      * @since 1.0.0
      */
     @PutMapping("/{productId}")
-    public ResponseEntity<ShopResult<Void>> updateProduct(@RequestPart @Valid final ProductUpdateRequest productRequest,
-                                              BindingResult bindingResult,
-                                              @RequestPart final MultipartFile image,
-                                              @PathVariable final Long productId) throws IOException {
+    public ResponseEntity<ShopResult<Void>> updateProduct(
+        @RequestPart @Valid final ProductUpdateRequest productRequest,
+        BindingResult bindingResult,
+        @RequestPart final MultipartFile image,
+        @PathVariable final Long productId) throws IOException {
 
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());

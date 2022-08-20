@@ -7,6 +7,7 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
 import java.io.IOException;
@@ -62,7 +63,7 @@ public interface ProductService {
      * @since 1.0.0
      */
     void updateProduct(final ProductUpdateRequest productRequest, MultipartFile image, final Long productId)
-            throws IOException;
+        throws IOException;
 
     /**
      * 상품 id를 인자로 받아 해당 상품이 존재할 경우 소프트 삭제합니다.
@@ -88,6 +89,7 @@ public interface ProductService {
     PageEntity<List<ProductListResponse>> searchProductList(final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException;
 
+
     /**
      * 카테고리 목록에서 검색한 상품 목록을 반환합니다.
      *
@@ -99,6 +101,7 @@ public interface ProductService {
      */
     PageEntity<List<ProductListResponse>> searchProductListByCategory(final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException;
+
 
     /**
      * 카테고리 목록내에서 선택한 가격 정렬 옵션으로 정렬된 상품 목록을 반환합니다.
@@ -112,5 +115,6 @@ public interface ProductService {
      */
     PageEntity<List<ProductListResponse>> searchProductListByPrice(final String option, final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException;
+
 
 }
