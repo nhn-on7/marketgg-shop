@@ -25,6 +25,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 상품 문의 서비스입니다.
+ *
+ * @author 민아영
+ * @version 1.0.0
+ */
 @Service
 @RequiredArgsConstructor
 public class DefaultProductInquiryPostService implements ProductInquiryPostService {
@@ -34,7 +40,15 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     private final ProductRepository productRepository;
     private final AuthRepository authRepository;
 
-
+    /**
+     * {@inheritDoc}
+     *
+     * @param memberInfo            상품 문의를 남기는 회원의 정보 입니다.
+     * @param productInquiryRequest 상품 문의 글을 생성하기 위한 DTO 입니다.
+     * @param id                    상품 문의 글을 남길 상품의 PK 입니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
     @Override
     @Transactional
     public void createProductInquiry(final MemberInfo memberInfo,
@@ -54,6 +68,16 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
         productInquiryPostRepository.save(inquiryPost);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param id - 조회할 상품의 PK 입니다.
+     * @param pageable 요청하는 page 의 정보를 담고 있습니다.
+     * @return - 상품 문의 List 와 페이지 정보를 PageEntity 에 담아 반환합니다.
+     * @throws JsonProcessingException Json 과 관련된 예외 처리입니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
     @Override
     public PageEntity<ProductInquiryResponse> retrieveProductInquiryByProductId(final Long id, final Pageable pageable)
         throws JsonProcessingException {
@@ -71,6 +95,15 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
                                 pageByProductNo.getTotalPages(), productInquiryResponses);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param memberInfo  조회할 회원의 정보입니다.
+     * @param pageable 요청하는 page 의 정보를 담고 있습니다.
+     * @return 상품 문의 List 와 페이지 정보를 PageEntity 에 담아 반환합니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
     @Override
     public PageEntity<ProductInquiryPost> retrieveProductInquiryByMemberId(final MemberInfo memberInfo,
                                                                            final Pageable pageable) {
@@ -81,6 +114,15 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
                                 allByMemberNo.getTotalPages(), allByMemberNo.getContent());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param inquiryReply  상품 문의 글에 대한 답글이 답긴 DTO 입니다.
+     * @param inquiryId     상품 문의 글의 PK 입니다.
+     * @param productId     상품의 PK 입니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
     @Override
     @Transactional
     public void updateProductInquiryReply(final String inquiryReply,
@@ -94,6 +136,14 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
         productInquiryPostRepository.save(inquiryPost);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param inquiryId - 삭제할 상품 문의 글의 PK 입나다.
+     * @param productId - 상품의 PK 입니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
     @Override
     @Transactional
     public void deleteProductInquiry(final Long inquiryId, final Long productId) {

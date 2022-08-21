@@ -20,6 +20,7 @@ import com.nhnacademy.marketgg.server.service.coupon.DefaultUsedCouponService;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -70,7 +71,7 @@ class DefaultUsedCouponServiceTest {
         usedCoupon = new UsedCoupon(new UsedCoupon.Pk(1L, 1L, 1L), order, givenCoupon);
     }
 
-
+    @DisplayName("사용 쿠폰 생성")
     @Test
     void testCreateUsedCouponsSuccess() {
         given(orderRepository.findById(any())).willReturn(Optional.ofNullable(order));
@@ -81,6 +82,7 @@ class DefaultUsedCouponServiceTest {
         then(usedCouponRepository).should(times(1)).save(any(UsedCoupon.class));
     }
 
+    @DisplayName("사용 쿠폰 삭제")
     @Test
     void deleteUsedCoupons() {
         given(usedCouponRepository.findById(any())).willReturn(Optional.ofNullable(usedCoupon));

@@ -24,8 +24,9 @@ public interface ProductInquiryPostService {
      * 상품에 대한 상품 문의 글을 생성합니다.
      * 상품 문의 글에는 제목, 내용, 비밀 문의 글 여부가 있습니다.
      *
-     * @param productInquiryRequest - 상품 문의 글을 생성하기 위한 DTO 입니다.
-     * @param id                    - 상품 문의 글을 남길 상품의 PK 입니다.
+     * @param memberInfo 상품 문의를 남기는 회원의 정보 입니다.
+     * @param productInquiryRequest 상품 문의 글을 생성하기 위한 DTO 입니다.
+     * @param id                    상품 문의 글을 남길 상품의 PK 입니다.
      * @author 민아영
      * @since 1.0.0
      */
@@ -35,8 +36,9 @@ public interface ProductInquiryPostService {
      * 상품에 대한 모든 상품 문의 글을 조회합니다.
      *
      * @param id - 조회할 상품의 PK 입니다.
-     * @return - 상품 문의 글을 List 로 반환합니다.
+     * @return - 상품 문의 List 와 페이지 정보를 PageEntity 에 담아 반환합니다.
      * @author 민아영
+     * @since 1.0.0
      */
     PageEntity<ProductInquiryResponse> retrieveProductInquiryByProductId(Long id, Pageable pageable) throws JsonProcessingException;
 
@@ -44,17 +46,19 @@ public interface ProductInquiryPostService {
      * 회원이 남긴 모든 상품 문의 글을 조회합니다.
      *
      * @param memberInfo - 조회할 회원의 정보입니다.
-     * @return - 상품 문의 글을 List 로 반환합니다.
+     * @param pageable 요청하는 page 의 정보를 담고 있습니다.
+     * @return - 상품 문의 List 와 페이지 정보를 PageEntity 에 담아 반환합니다.
      * @author 민아영
+     * @since 1.0.0
      */
     PageEntity<ProductInquiryPost> retrieveProductInquiryByMemberId(MemberInfo memberInfo, Pageable pageable);
 
     /**
      * 상품 문의 글에 대한 관리자의 답글을 상품 문의 글에 업데이트합니다.
      *
-     * @param inquiryReply - 상품 문의 글에 대한 답글이 답긴 DTO 입니다.
-     * @param inquiryId    - 상품 문의 글의 PK 입니다.
-     * @param productId    - 상품의 PK 입니다.
+     * @param inquiryReply  상품 문의 글에 대한 답글이 답긴 DTO 입니다.
+     * @param inquiryId     상품 문의 글의 PK 입니다.
+     * @param productId     상품의 PK 입니다.
      * @author 민아영
      * @since 1.0.0
      */
@@ -66,6 +70,7 @@ public interface ProductInquiryPostService {
      * @param inquiryId - 삭제할 상품 문의 글의 PK 입나다.
      * @param productId - 상품의 PK 입니다.
      * @author 민아영
+     * @since 1.0.0
      */
     void deleteProductInquiry(Long inquiryId, Long productId);
 
@@ -76,6 +81,7 @@ public interface ProductInquiryPostService {
      * @param member - 상품 문의를 남길 회원 Entity 입니다.
      * @param productInquiryRequest - 상품 문의 요청 데이터를 가진 Dto 입니다.
      * @return - 생성한 상품 문의 Entity 를 반환합니다.
+     * @since 1.0.0
      */
     default ProductInquiryPost toEntity(final Product product,
                                         final Member member,

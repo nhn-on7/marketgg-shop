@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * 상품 문의 DTO 입니다.
+ *
+ * @version 1.0.0
  */
 @NoArgsConstructor
 @Getter
