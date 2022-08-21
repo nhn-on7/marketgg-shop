@@ -1,7 +1,8 @@
 package com.nhnacademy.marketgg.server.service.order;
 
+import static com.nhnacademy.marketgg.server.repository.auth.AuthAdapter.checkResult;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.constant.PaymentType;
 import com.nhnacademy.marketgg.server.delivery.DeliveryRepository;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
@@ -36,6 +37,7 @@ import com.nhnacademy.marketgg.server.exception.order.OrderMemberNotMatchedExcep
 import com.nhnacademy.marketgg.server.exception.order.OrderNotFoundException;
 import com.nhnacademy.marketgg.server.exception.pointhistory.PointNotEnoughException;
 import com.nhnacademy.marketgg.server.exception.product.ProductStockNotEnoughException;
+import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
 import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponRepository;
@@ -46,18 +48,15 @@ import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryReposi
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.cart.CartProductService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.nhnacademy.marketgg.server.auth.AuthAdapter.checkResult;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -79,6 +78,7 @@ public class DefaultOrderService implements OrderService {
 
     /**
      * {@inheritDoc}
+     *
      * @param orderRequest - 주문을 등록하기 위한 정보를 담은 DTO 입니다.
      * @param memberInfo   - 주문을 등록하는 회원의 정보입니다.
      * @return 결제 요청시에 필요한 정보들을 담은 DTO 를 반환합니다.
@@ -86,11 +86,12 @@ public class DefaultOrderService implements OrderService {
      */
     @Transactional
     @Override
-    public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final MemberInfo memberInfo) throws JsonProcessingException {
+    public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final MemberInfo memberInfo)
+        throws JsonProcessingException {
         int i = 0;
         Member member = memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
         MemberInfoResponse memberResponse = checkResult(
-                authRepository.getMemberInfo(new MemberInfoRequest(member.getUuid())));
+            authRepository.getMemberInfo(new MemberInfoRequest(member.getUuid())));
         DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(orderRequest.getDeliveryAddressId())
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
         Order order = new Order(member, deliveryAddress, orderRequest);
@@ -154,6 +155,7 @@ public class DefaultOrderService implements OrderService {
 
     /**
      * {@inheritDoc}
+     *
      * @param products   - 주문할 상품 목록입니다.
      * @param memberInfo - 주문하는 회원의 정보입니다.
      * @param authInfo   - 주문하는 회원의 auth 정보입니다.
@@ -167,7 +169,7 @@ public class DefaultOrderService implements OrderService {
         List<OrderGivenCoupon> orderGivenCoupons = givenCouponRepository.findOwnCouponsByMemberId(memberId);
         Integer totalPoint = pointRepository.findLastTotalPoints(memberId);
         List<DeliveryAddressResponse> deliveryAddresses = deliveryAddressRepository.findDeliveryAddressesByMemberId(
-                memberId);
+            memberId);
         List<String> paymentTypes = Arrays.stream(PaymentType.values())
                                           .map(PaymentType::getType)
                                           .collect(Collectors.toList());
@@ -197,6 +199,7 @@ public class DefaultOrderService implements OrderService {
 
     /**
      * {@inheritDoc}
+     *
      * @param memberinfo - 주문 목록을 조회하는 회원의 정보입니다.
      * @return 조회하는 회원의 종류에 따라 목록을 List 로 반환합니다.
      */
@@ -207,6 +210,7 @@ public class DefaultOrderService implements OrderService {
 
     /**
      * {@inheritDoc}
+     *
      * @param orderId    - 조회할 주문의 식별번호입니다.
      * @param memberInfo - 주문 상세를 조회할 회원의 정보입니다.
      * @return 조회하는 회원의 종류에 따라 상세 조회 정보를 반환합니다.
@@ -223,6 +227,7 @@ public class DefaultOrderService implements OrderService {
 
     /**
      * {@inheritDoc}
+     *
      * @param orderId - 변경할 주문의 식별번호입니다.
      * @param status  - 변경할 상태값입니다.
      */
@@ -238,6 +243,7 @@ public class DefaultOrderService implements OrderService {
 
     /**
      * {@inheritDoc}
+     *
      * @param orderId - 운송장 번호를 발급받을 주문의 식별번호입니다.
      * @throws JsonProcessingException
      */
@@ -257,6 +263,7 @@ public class DefaultOrderService implements OrderService {
 
     /**
      * {@inheritDoc}
+     *
      * @param orderId - 취소할 주문의 식별번호입니다.
      */
     @Transactional
