@@ -26,4 +26,3 @@ public class ErrorEntity {
     private final String message;
 
 }
-
