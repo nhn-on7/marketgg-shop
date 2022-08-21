@@ -79,7 +79,9 @@ public class AuthInfoAspect {
             restTemplate.exchange(gateway + "/auth/v1/members/info", GET, httpEntity,
                                   new ParameterizedTypeReference<>() {
                                   });
+
         this.validCheck(exchange);
+
         AuthInfo authInfo = Objects.requireNonNull(exchange.getBody()).getData();
         log.info("AuthInfo = {}", authInfo);
 
@@ -101,4 +103,5 @@ public class AuthInfoAspect {
             throw new IllegalArgumentException(error.getMessage());
         }
     }
+
 }
