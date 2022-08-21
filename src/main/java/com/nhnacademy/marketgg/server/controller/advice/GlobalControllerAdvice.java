@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.advice;
 
-import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
+import com.nhnacademy.marketgg.server.dto.ErrorEntity;
 import com.nhnacademy.marketgg.server.exception.NotFoundException;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;

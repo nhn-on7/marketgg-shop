@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
-import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
+import com.nhnacademy.marketgg.server.dto.ErrorEntity;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import java.util.Arrays;
 import java.util.Collections;

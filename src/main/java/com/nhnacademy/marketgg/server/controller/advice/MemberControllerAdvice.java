@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.advice;
 
-import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
+import com.nhnacademy.marketgg.server.dto.ErrorEntity;
 import com.nhnacademy.marketgg.server.exception.auth.UnAuthenticException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import lombok.extern.slf4j.Slf4j;
