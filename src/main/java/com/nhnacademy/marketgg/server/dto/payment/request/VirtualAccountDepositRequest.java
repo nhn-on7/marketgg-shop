@@ -29,7 +29,7 @@ public class VirtualAccountDepositRequest {
     @Schema(title = "시크릿 값", example = "AQItPnF1QIJ_hQ1vt4BnI",
             description = "가상계좌 요청이 정상 요청인지 검증을 위한 값으로, 결제 승인 API 의 응답으로 돌아온 시크릿 값과 같으면 정상적인 요청입니다.")
     @NotBlank
-    @Max(50)
+    @Size(max = 50)
     private final String secret;
 
     @Schema(title = "입금 처리 상태", description = "회원이 가상계좌에 금액을 입금했는지 확인하기 위한 값입니다.", example = "DONE")

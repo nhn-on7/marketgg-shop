@@ -30,7 +30,7 @@ public class VirtualAccountCreateRequest {
 
     @Schema(title = "가상계좌 발급 고객 이름", description = "가상계좌를 발급한 회원(고객)의 이름입니다.", example = "강태풍")
     @NotBlank
-    @Max(100)
+    @Size(max = 100)
     private final String customerName;
 
     @Schema(title = "주문번호", description = "마켓 GG 에서 관리하며, 앞에 GGORDER_ 로 구성된 주문번호입니다.", example = "GGORDER_628")

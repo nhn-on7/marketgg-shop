@@ -32,13 +32,13 @@ public class OrderToPayment {
 
     @Schema(title = "고객 이름", description = "주문 및 결제 요청을 한 회원(고객)의 이름입니다.", example = "강태풍")
     @NotBlank
-    @Max(100)
+    @Size(max = 100)
     private final String memberName;
 
     @Schema(title = "고객 이메일 주소", description = "주문 및 결제 요청을 한 회원(고객)의 이메일 주소입니다.",
             example = "strong.storm@gmail.com")
     @NotBlank
-    @Max(100)
+    @Size(max = 100)
     private final String memberEmail;
 
     @Schema(title = "총 결제금액", description = "적립금 및 쿠폰 내역이 반영된 최종 결제 금액입니다.", example = "75600")

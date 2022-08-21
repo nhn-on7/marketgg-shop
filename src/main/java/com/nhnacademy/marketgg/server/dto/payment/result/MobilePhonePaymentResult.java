@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.dto.payment.result;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Getter;
@@ -18,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class MobilePhonePaymentResult {
 
     @NotBlank
-    @Max(20)
+    @Size(max = 20)
     private String customerMobilePhone;
 
     @NotBlank
@@ -26,7 +25,7 @@ public class MobilePhonePaymentResult {
     private String settlementStatus;
 
     @NotBlank
-    @Max(255)
+    @Size(max = 255)
     private String receiptUrl;
 
 }
