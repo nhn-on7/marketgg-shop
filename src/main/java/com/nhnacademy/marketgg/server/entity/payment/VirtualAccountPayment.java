@@ -6,6 +6,7 @@ import com.nhnacademy.marketgg.server.constant.payment.AccountTypeConverter;
 import com.nhnacademy.marketgg.server.constant.payment.BankCode;
 import com.nhnacademy.marketgg.server.constant.payment.RefundStatus;
 import com.nhnacademy.marketgg.server.constant.payment.SettlementStatus;
+import com.nhnacademy.marketgg.server.constant.payment.SettlementStatusConveter;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -86,6 +87,7 @@ public class VirtualAccountPayment {
     private boolean expired;
 
     @Column(name = "settlement_status")
+    @Convert(converter = SettlementStatusConveter.class)
     @NotNull
     private SettlementStatus settlementStatus;
 

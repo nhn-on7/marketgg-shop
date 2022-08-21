@@ -1,9 +1,9 @@
 package com.nhnacademy.marketgg.server.entity.payment;
 
-import com.nhnacademy.marketgg.server.constant.payment.PaymentMethod;
-import com.nhnacademy.marketgg.server.constant.payment.PaymentMethodConverter;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentStatus;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentStatusConverter;
+import com.nhnacademy.marketgg.server.constant.payment.PaymentType;
+import com.nhnacademy.marketgg.server.constant.payment.PaymentTypeConverter;
 import com.nhnacademy.marketgg.server.entity.Order;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -67,9 +67,9 @@ public class Payment implements Serializable {
     private String paymentKey;
 
     @Column
-    @Convert(converter = PaymentMethodConverter.class)
+    @Convert(converter = PaymentTypeConverter.class)
     @NotNull
-    private PaymentMethod method;
+    private PaymentType method;
 
     @Column(name = "total_amount")
     @NotNull

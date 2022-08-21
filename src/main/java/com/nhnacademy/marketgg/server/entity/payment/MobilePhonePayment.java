@@ -1,7 +1,10 @@
 package com.nhnacademy.marketgg.server.entity.payment;
 
+import com.nhnacademy.marketgg.server.constant.payment.SettlementStatus;
+import com.nhnacademy.marketgg.server.constant.payment.SettlementStatusConveter;
 import java.io.Serializable;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,6 +13,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,23 +33,13 @@ import lombok.NoArgsConstructor;
 @Getter
 public class MobilePhonePayment {
 
-    @Embeddable
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @Getter
-    @EqualsAndHashCode
-    public static class Pk implements Serializable {
-
-        @Column(name = "payment_no")
-        private Long paymentId;
-
-    }
-
     @Id
-    private Pk pk;
+    private Long paymentId;
 
-    @MapsId(value = "paymentId")
+    @MapsId
     @OneToOne
     @JoinColumn(name = "payment_no")
+    @NotNull
     private Payment payment;
 
     @Column(name = "customer_mobile_phone")
@@ -53,9 +47,9 @@ public class MobilePhonePayment {
     private String customerMobilePhone;
 
     @Column(name = "settlement_status")
-    @NotBlank
-    @Size(min = 2, max = 10)
-    private String settlementStatus;
+    @Convert(converter = SettlementStatusConveter.class)
+    @NotNull
+    private SettlementStatus settlementStatus;
 
     @Column(name = "receipt_url")
     private String receiptUrl;

@@ -1,9 +1,12 @@
 package com.nhnacademy.marketgg.server.entity.payment;
 
 import com.nhnacademy.marketgg.server.constant.payment.BankCode;
+import com.nhnacademy.marketgg.server.constant.payment.BankCodeConverter;
 import com.nhnacademy.marketgg.server.constant.payment.SettlementStatus;
+import com.nhnacademy.marketgg.server.constant.payment.SettlementStatusConveter;
 import java.io.Serializable;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -42,33 +45,22 @@ import lombok.NoArgsConstructor;
 @Getter
 public class TransferPayment {
 
-    @Embeddable
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @Getter
-    @EqualsAndHashCode
-    public static class Pk implements Serializable {
-
-        @Column(name = "payment_no")
-        @NotNull
-        private Long paymentId;
-
-    }
-
     @Id
-    private Pk pk;
+    private Long paymentId;
 
-    @MapsId(value = "paymentId")
+    @MapsId
     @OneToOne
     @JoinColumn(name = "payment_no")
+    @NotNull
     private Payment payment;
 
     @Column
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = BankCodeConverter.class)
     @NotNull
     private BankCode bank;
 
     @Column(name = "settlement_status")
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = SettlementStatusConveter.class)
     @NotNull
     private SettlementStatus settlementStatus;
 
