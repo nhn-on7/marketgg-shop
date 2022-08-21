@@ -59,7 +59,7 @@ public class Order {
     private Integer usedPoint;
 
     @Column(name = "tracking_no")
-    private Integer trackingNo;
+    private String trackingNo;
 
     @Column(name = "zip_code")
     @NotNull
@@ -113,5 +113,9 @@ public class Order {
 
     public void delete() {
         this.deletedAt = LocalDateTime.now();
+    }
+
+    public void insertTrackingNo(String trackingNo) {
+        this.trackingNo = trackingNo;
     }
 }
