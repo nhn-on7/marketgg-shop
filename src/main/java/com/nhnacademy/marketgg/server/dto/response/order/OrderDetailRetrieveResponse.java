@@ -7,6 +7,13 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * 주문 상세 조회시 필요한 정보를 전달하기 위한 DTO 입니다.
+ *
+ * @author 김정민
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 @RequiredArgsConstructor
 @Getter
 public class OrderDetailRetrieveResponse {

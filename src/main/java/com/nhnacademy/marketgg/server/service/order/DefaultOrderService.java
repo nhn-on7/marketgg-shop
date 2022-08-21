@@ -49,7 +49,6 @@ import com.nhnacademy.marketgg.server.service.cart.CartProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
@@ -78,6 +77,13 @@ public class DefaultOrderService implements OrderService {
     private final CartProductService cartProductService;
     private final ApplicationEventPublisher publisher;
 
+    /**
+     * {@inheritDoc}
+     * @param orderRequest - 주문을 등록하기 위한 정보를 담은 DTO 입니다.
+     * @param memberInfo   - 주문을 등록하는 회원의 정보입니다.
+     * @return 결제 요청시에 필요한 정보들을 담은 DTO 를 반환합니다.
+     * @throws JsonProcessingException - Json 컨텐츠를 처리할 때 발생하는 모든 문제에 대한 예외처리입니다.
+     */
     @Transactional
     @Override
     public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final MemberInfo memberInfo) throws JsonProcessingException {
@@ -146,6 +152,13 @@ public class DefaultOrderService implements OrderService {
         return Optional.of(coupon);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param products   - 주문할 상품 목록입니다.
+     * @param memberInfo - 주문하는 회원의 정보입니다.
+     * @param authInfo   - 주문하는 회원의 auth 정보입니다.
+     * @return 취합한 정보를 반환합니다.
+     */
     @Override
     public OrderFormResponse retrieveOrderForm(final List<ProductToOrder> products, final MemberInfo memberInfo,
                                                final AuthInfo authInfo) {
@@ -182,11 +195,22 @@ public class DefaultOrderService implements OrderService {
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param memberinfo - 주문 목록을 조회하는 회원의 정보입니다.
+     * @return 조회하는 회원의 종류에 따라 목록을 List 로 반환합니다.
+     */
     @Override
     public List<OrderRetrieveResponse> retrieveOrderList(final MemberInfo memberinfo) {
         return orderRepository.findOrderList(memberinfo.getId(), memberinfo.isUser());
     }
 
+    /**
+     * {@inheritDoc}
+     * @param orderId    - 조회할 주문의 식별번호입니다.
+     * @param memberInfo - 주문 상세를 조회할 회원의 정보입니다.
+     * @return 조회하는 회원의 종류에 따라 상세 조회 정보를 반환합니다.
+     */
     @Override
     public OrderDetailRetrieveResponse retrieveOrderDetail(final Long orderId, final MemberInfo memberInfo) {
         OrderDetailRetrieveResponse detailResponse = orderRepository.findOrderDetail(orderId, memberInfo.getId(),
@@ -197,6 +221,11 @@ public class DefaultOrderService implements OrderService {
         return detailResponse;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param orderId - 변경할 주문의 식별번호입니다.
+     * @param status  - 변경할 상태값입니다.
+     */
     @Transactional
     @Override
     public void updateStatus(final Long orderId, final OrderUpdateStatusRequest status) {
@@ -207,6 +236,11 @@ public class DefaultOrderService implements OrderService {
         orderRepository.save(order);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param orderId - 운송장 번호를 발급받을 주문의 식별번호입니다.
+     * @throws JsonProcessingException
+     */
     @Override
     public void createTrackingNo(final Long orderId) throws JsonProcessingException {
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
@@ -221,6 +255,10 @@ public class DefaultOrderService implements OrderService {
         deliveryRepository.createTrackingNo(orderRequest);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param orderId - 취소할 주문의 식별번호입니다.
+     */
     @Transactional
     @Override
     public void cancelOrder(final Long orderId) {

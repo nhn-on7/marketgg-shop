@@ -5,6 +5,13 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * 주문서 작성 시 회원이 보유한 쿠폰 정보를 전달하기 위한 DTO 입니다.
+ *
+ * @author 김정민
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 @RequiredArgsConstructor
 @Getter
 public class OrderGivenCoupon {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.request.order.CartResponse;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,11 +71,11 @@ public class OrderController {
      * @return 회원의 정보를 토대로 주문서 작성에 필요한 값들과 상품목록을 취합하여 반환합니다.
      * @since 1.0.0
      */
-    @GetMapping("/order-form")
-    public ResponseEntity<ShopResult<OrderFormResponse>> retrieveOrderForm(@RequestBody final List<ProductToOrder> products,
+    @PostMapping("/order-form")
+    public ResponseEntity<ShopResult<OrderFormResponse>> retrieveOrderForm(@RequestBody final CartResponse products,
                                                                            final MemberInfo memberInfo, final AuthInfo authInfo) {
 
-        OrderFormResponse response = orderService.retrieveOrderForm(products, memberInfo, authInfo);
+        OrderFormResponse response = orderService.retrieveOrderForm(products.getProducts(), memberInfo, authInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/orderForm"))
@@ -166,9 +166,8 @@ public class OrderController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @PutMapping("/{orderId}")
+    @PatchMapping("/{orderId}")
     public ResponseEntity<ShopResult<Void>> cancelOrder(@PathVariable final Long orderId) {
-        // memo: 결제 취소 -> 주문 취소 -> 사용쿠폰 삭제 -> 포인트 차감 및 적립 내역 추가
         orderService.cancelOrder(orderId);
 
         return ResponseEntity.status(HttpStatus.OK)

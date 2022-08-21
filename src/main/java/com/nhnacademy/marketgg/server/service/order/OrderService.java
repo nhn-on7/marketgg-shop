@@ -26,7 +26,7 @@ public interface OrderService {
      *
      * @param orderRequest - 주문을 등록하기 위한 정보를 담은 DTO 입니다.
      * @param memberInfo   - 주문을 등록하는 회원의 정보입니다.
-     * @return - 주문 등록 후 결제에 넘겨줄 정보를 담은 DTO 를 반환합니다.
+     * @return 주문 등록 후 결제에 넘겨줄 정보를 담은 DTO 를 반환합니다.
      * @since 1.0.0
      */
     OrderToPayment createOrder(final OrderCreateRequest orderRequest, final MemberInfo memberInfo) throws JsonProcessingException;
@@ -47,7 +47,7 @@ public interface OrderService {
      * 주문 목록을 조회하는 메소드입니다.
      *
      * @param memberInfo - 주문 목록을 조회하는 회원의 정보입니다.
-     * @return - 조회하는 회원의 종류에 따라 목록을 List 로 반환합니다.
+     * @return 조회하는 회원의 종류에 따라 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
     List<OrderRetrieveResponse> retrieveOrderList(final MemberInfo memberInfo);

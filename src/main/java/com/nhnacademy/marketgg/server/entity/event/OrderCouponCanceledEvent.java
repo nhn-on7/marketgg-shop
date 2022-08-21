@@ -9,6 +9,7 @@ import lombok.Getter;
  *
  * @author 김정민
  * @version 1.0.0
+ * @since 1.0.0
  */
 @AllArgsConstructor
 @Getter

@@ -6,6 +6,13 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * 장바구니로부터 주문할 상품에 대한 정보를 전달하기 위한 DTO 입니다.
+ *
+ * @author 김정민
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 @NoArgsConstructor
 @Getter
 public class ProductToOrder {
