@@ -28,6 +28,7 @@ import com.nhnacademy.marketgg.server.entity.payment.Payment;
 import com.nhnacademy.marketgg.server.entity.payment.TransferPayment;
 import com.nhnacademy.marketgg.server.entity.payment.VirtualAccountPayment;
 import java.time.LocalDateTime;
+import java.util.function.BooleanSupplier;
 
 /**
  * 결제와 관련된 비즈니스 처리를 담당합니다.
@@ -42,15 +43,15 @@ public interface PaymentService {
      * 회원의 결제 요청에 대한 검증을 처리합니다.
      *
      * @param paymentVerifyRequest - 결제 검증 요청 데이터
-     * @return 검증 여부 응답 결과
+     * @return 최종 결제 금액 일치 여부
      */
-    PaymentResponse verifyRequest(final OrderToPayment paymentVerifyRequest);
+    BooleanSupplier verifyRequest(final OrderToPayment paymentVerifyRequest);
 
     /**
-     * 최종 결제 승인을 처리합니다.
+     * 결제 승인 요청에 대해 확정 처리합니다.
      *
      * @param paymentRequest - 결제 승인 요청 데이터
-     * @return - 결제 응답 결과 데이터가 담겨 있는 PaymentResponse 객체
+     * @return - 결제 승인 응답 결과가 담겨 있는 {@link PaymentResponse} 객체
      */
     PaymentResponse pay(final PaymentConfirmRequest paymentRequest);
 
