@@ -18,7 +18,6 @@ import javax.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -60,18 +59,18 @@ public class AdminCsPostController {
      */
     @PostMapping("/categories/{categoryId}/options/{optionType}/search")
     public ResponseEntity<ShopResult<List<PostResponse>>> searchPostListForOption(
-            @PathVariable @Size(min = 1, max = 6) final String categoryId,
-            @PathVariable @Min(1) final String optionType,
-            @RequestParam @Min(1) final String option,
-            @Valid @RequestBody final SearchRequest searchRequest)
-            throws ParseException, JsonProcessingException {
+        @PathVariable @Size(min = 1, max = 6) final String categoryId,
+        @PathVariable @Min(1) final String optionType,
+        @RequestParam @Min(1) final String option,
+        @Valid @RequestBody final SearchRequest searchRequest)
+        throws ParseException, JsonProcessingException {
 
         List<PostResponse> data = postService.searchForOption(searchRequest, optionType, option);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/options/" + optionType
-                                             + "/search?option=" + option))
+                                 DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/options/" + optionType
+                                     + "/search?option=" + option))
                              .body(ShopResult.success(data));
     }
 
@@ -86,8 +85,8 @@ public class AdminCsPostController {
      */
     @PutMapping("/categories/{categoryId}/{postId}")
     public ResponseEntity<ShopResult<Void>> updatePost(@PathVariable @Size(min = 1, max = 6) final String categoryId,
-                                           @PathVariable @Min(1) final Long postId,
-                                           @Valid @RequestBody final PostRequest postRequest) {
+                                                       @PathVariable @Min(1) final Long postId,
+                                                       @Valid @RequestBody final PostRequest postRequest) {
 
         postService.updatePost(categoryId, postId, postRequest);
 
@@ -105,8 +104,8 @@ public class AdminCsPostController {
     @GetMapping("/status")
     public ResponseEntity<ShopResult<List<String>>> retrieveStatusList() {
         List<String> data = Arrays.stream(OtoStatus.values())
-                                    .map(OtoStatus::status)
-                                    .collect(Collectors.toList());
+                                  .map(OtoStatus::status)
+                                  .collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_POST + "/status"))
@@ -123,8 +122,8 @@ public class AdminCsPostController {
      */
     @PatchMapping("/{postId}/status")
     public ResponseEntity<ShopResult<Void>> updateInquiryStatus(@PathVariable @Min(1) final Long postId,
-                                                    @Valid @RequestBody
-                                                    final PostStatusUpdateRequest statusUpdateRequest) {
+                                                                @Valid @RequestBody
+                                                                final PostStatusUpdateRequest statusUpdateRequest) {
 
         postService.updateOtoInquiryStatus(postId, statusUpdateRequest);
 

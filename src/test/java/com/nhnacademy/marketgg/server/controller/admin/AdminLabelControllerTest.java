@@ -14,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.aop.AspectUtils;
-import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
 import com.nhnacademy.marketgg.server.dto.request.label.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.service.label.LabelService;
 import java.util.ArrayList;
@@ -25,16 +24,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AdminLabelController.class)
-@Import({
-        RoleCheckAspect.class
-})
 class AdminLabelControllerTest {
 
     @Autowired
@@ -68,9 +63,9 @@ class AdminLabelControllerTest {
         willDoNothing().given(labelService).createLabel(any(LabelCreateRequest.class));
 
         this.mockMvc.perform(post(DEFAULT_LABEL)
-                                     .headers(httpHeaders)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(requestBody))
+                .headers(httpHeaders)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
                     .andExpect(status().isCreated());
 
         then(labelService).should(times(1)).createLabel(any(labelCreateRequest.getClass()));

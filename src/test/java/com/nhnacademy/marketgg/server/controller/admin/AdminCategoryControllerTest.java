@@ -14,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.aop.AspectUtils;
-import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryUpdateRequest;
@@ -27,16 +26,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AdminCategoryController.class)
-@Import({
-        RoleCheckAspect.class
-})
 class AdminCategoryControllerTest {
 
     @Autowired
@@ -87,9 +82,9 @@ class AdminCategoryControllerTest {
         willDoNothing().given(categoryService).createCategory(any(CategoryCreateRequest.class));
 
         this.mockMvc.perform(post(DEFAULT_CATEGORY)
-                                     .headers(httpHeaders)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(requestBody))
+                .headers(httpHeaders)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
                     .andExpect(status().isCreated());
 
         then(categoryService).should(times(1)).createCategory(any(CategoryCreateRequest.class));
@@ -101,7 +96,7 @@ class AdminCategoryControllerTest {
         given(categoryService.retrieveCategory(anyString())).willReturn(null);
 
         this.mockMvc.perform(get(DEFAULT_CATEGORY + "/{categoryId}", "011")
-                                     .headers(httpHeaders))
+                .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(categoryService).should(times(1)).retrieveCategory(anyString());
@@ -113,7 +108,7 @@ class AdminCategoryControllerTest {
         given(categoryService.retrieveCategoriesByCategorization(anyString())).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_CATEGORY + "/categorizations/{categorizationId}", "100")
-                                     .headers(httpHeaders))
+                .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(categoryService).should(times(1)).retrieveCategoriesByCategorization(anyString());
@@ -125,7 +120,7 @@ class AdminCategoryControllerTest {
         given(categoryService.retrieveCategories()).willReturn(List.of());
 
         this.mockMvc.perform(get(DEFAULT_CATEGORY)
-                                     .headers(httpHeaders))
+                .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(categoryService).should(times(1)).retrieveCategories();
@@ -140,13 +135,13 @@ class AdminCategoryControllerTest {
         willDoNothing().given(categoryService).updateCategory(anyString(), any(CategoryUpdateRequest.class));
 
         this.mockMvc.perform(put(DEFAULT_CATEGORY + "/{categoryId}", "001")
-                                     .headers(httpHeaders)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(requestBody))
+                .headers(httpHeaders)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
                     .andExpect(status().isOk());
 
         then(categoryService).should(times(1)).updateCategory(anyString(),
-                                                              any(CategoryUpdateRequest.class));
+            any(CategoryUpdateRequest.class));
     }
 
     @Test
@@ -155,7 +150,7 @@ class AdminCategoryControllerTest {
         willDoNothing().given(categoryService).deleteCategory(anyString());
 
         this.mockMvc.perform(delete(DEFAULT_CATEGORY + "/{categoryId}", "001")
-                                     .headers(httpHeaders))
+                .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(categoryService).should(times(1)).deleteCategory(anyString());

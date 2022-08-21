@@ -1,8 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.product;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
+import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
@@ -48,7 +47,7 @@ public class ProductInquiryPostController {
      * @author 민아영
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.LOGIN)
+    @Auth
     @PostMapping("/products/{productId}/inquiry")
     public ResponseEntity<CommonResponse> createProductInquiry(@PathVariable final Long productId,
                                                                @Valid @RequestBody final
@@ -70,7 +69,7 @@ public class ProductInquiryPostController {
      * @author 민아영
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.ROLE_USER)
+    @Auth
     @GetMapping("/products/{productId}/inquiries")
     public ResponseEntity<CommonResponse> retrieveProductInquiry(@PathVariable final Long productId,
                                                                  final Pageable pageable)
@@ -93,7 +92,7 @@ public class ProductInquiryPostController {
      * @author 민아영
      * @since 1.0.0
      */
-    @RoleCheck(accessLevel = Role.LOGIN)
+    @Auth
     @DeleteMapping("/products/{productId}/inquiry/{inquiryId}")
     public ResponseEntity<CommonResponse> deleteProductInquiry(@PathVariable final Long productId,
                                                                @PathVariable final Long inquiryId) {

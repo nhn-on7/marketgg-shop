@@ -1,8 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.customerservice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.annotation.Role;
-import com.nhnacademy.marketgg.server.annotation.RoleCheck;
+import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.constant.OtoReason;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
@@ -40,7 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 박세완, 김정민
  * @version 1.0.0
  */
-@RoleCheck(accessLevel = Role.ROLE_USER)
+@Auth
 @RestController
 @RequestMapping("/customer-services")
 @RequiredArgsConstructor

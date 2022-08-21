@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.nhnacademy.marketgg.server.aop.AspectUtils;
-import com.nhnacademy.marketgg.server.aop.RoleCheckAspect;
 import com.nhnacademy.marketgg.server.service.point.PointService;
 import java.util.List;
 import java.util.UUID;
@@ -17,14 +16,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AdminPointController.class)
-@Import({
-        RoleCheckAspect.class
-})
 class AdminPointControllerTest {
 
     @Autowired
@@ -50,7 +45,7 @@ class AdminPointControllerTest {
         given(pointService.adminRetrievePointHistories()).willReturn(List.of());
 
         mockMvc.perform(get(DEFAULT_ADMIN + "/points")
-                                .headers(httpHeaders))
+                   .headers(httpHeaders))
                .andExpect(status().isOk());
 
         then(pointService).should(times(1)).adminRetrievePointHistories();
