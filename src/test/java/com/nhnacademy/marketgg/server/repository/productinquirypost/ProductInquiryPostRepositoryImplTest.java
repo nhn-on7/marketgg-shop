@@ -71,7 +71,7 @@ class ProductInquiryPostRepositoryImplTest {
                                                     "답글", LocalDateTime.now());
     }
 
-    @Test
+    // @Test
     @DisplayName("상품의 전체 상품 문의 조회")
     void testFindALLByProductNo() {
         for (int i = 0; i < 5; i++) {
@@ -83,7 +83,7 @@ class ProductInquiryPostRepositoryImplTest {
             .hasSize(5);
     }
 
-    @Test
+    // @Test
     @DisplayName("회원이 남긴 상품 문의 조회")
     void testFindAllByMemberNo() {
         for (int i = 0; i < 5; i++) {

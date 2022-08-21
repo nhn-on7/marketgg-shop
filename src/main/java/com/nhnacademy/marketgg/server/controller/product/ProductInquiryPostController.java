@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -90,7 +91,7 @@ public class ProductInquiryPostController {
     @Auth
     @GetMapping("/products/{productId}/inquiries")
     public ResponseEntity<ShopResult<PageEntity<ProductInquiryResponse>>> retrieveProductInquiry(@PathVariable final Long productId,
-                                                                                                 final Pageable pageable)
+                                                                                                 @PageableDefault final Pageable pageable)
         throws JsonProcessingException {
 
         PageEntity<ProductInquiryResponse> productInquiryResponses

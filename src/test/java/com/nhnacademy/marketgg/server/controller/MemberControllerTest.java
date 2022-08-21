@@ -20,6 +20,7 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
+import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.member.MemberService;
@@ -169,10 +170,12 @@ class MemberControllerTest {
     @Test
     @DisplayName("회원이 작성한 전체 상품 문의 조회 테스트")
     void testRetrieveProductInquiryByMemberId() throws Exception {
+        PageEntity<ProductInquiryPost> pageEntity = new PageEntity<>(1, 1, 1, List.of());
         given(inquiryPostService.retrieveProductInquiryByMemberId(any(MemberInfo.class), any(PageRequest.class)))
-            .willReturn(any());
+            .willReturn(pageEntity);
 
         this.mockMvc.perform(get("/members/product-inquiries")
+                                 .headers(httpHeaders)
                                  .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
     }

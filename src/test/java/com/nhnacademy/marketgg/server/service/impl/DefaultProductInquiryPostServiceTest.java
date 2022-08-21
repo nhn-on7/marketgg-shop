@@ -60,6 +60,7 @@ class DefaultProductInquiryPostServiceTest {
 
     Pageable pageable = PageRequest.of(0, 20);
     Page<ProductInquiryResponse> inquiryPosts1 = new PageImpl<>(List.of(), pageable, 0);
+    Page<ProductInquiryPost> inquiryPosts2 = new PageImpl<>(List.of(), pageable, 0);
 
     @Test
     @DisplayName("상품 문의 등록 성공 테스트")
@@ -99,7 +100,7 @@ class DefaultProductInquiryPostServiceTest {
     @DisplayName("특정 회원이 작성한 상품 문의 전체 조회 성공 테스트")
     void testRetrieveProductInquiryByMemberId() {
         given(productInquiryPostRepository.findAllByMemberNo(anyLong(), any(PageRequest.class)))
-                .willReturn(any());
+                .willReturn(inquiryPosts2);
         productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
 
         then(productInquiryPostRepository).should(times(1))

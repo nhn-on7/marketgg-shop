@@ -238,7 +238,7 @@ public class MemberController {
                                         useReturnTypeSchema = true))
     @GetMapping("/product-inquiries")
     public ResponseEntity<ShopResult<PageEntity<ProductInquiryPost>>> retrieveProductInquiry(
-        final MemberInfo memberInfo, final Pageable pageable) {
+        final MemberInfo memberInfo, @PageableDefault final Pageable pageable) {
 
         PageEntity<ProductInquiryPost> productInquiryResponses
             = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
