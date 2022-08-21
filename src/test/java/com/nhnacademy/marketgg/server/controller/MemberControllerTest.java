@@ -15,8 +15,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.aop.AspectUtils;
 import com.nhnacademy.marketgg.server.controller.member.MemberController;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
+import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
@@ -70,7 +72,7 @@ class MemberControllerTest {
 
     GivenCouponCreateRequest givenCouponCreateRequest;
 
-    Pageable pageable = PageRequest.of(0, 20);
+    Pageable pageable = PageRequest.of(0, 10);
     Page<ProductInquiryByMemberResponse> responses = new PageImpl<>(List.of(), pageable, 0);
 
 
@@ -160,8 +162,8 @@ class MemberControllerTest {
     @Test
     @DisplayName("회원에게 지급된 쿠폰 전체 조회")
     void testRetrieveGivenCoupons() throws Exception {
-        given(givenCouponService.retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class))).willReturn(
-                List.of());
+        PageEntity<GivenCouponResponse> pageEntity = new PageEntity<>(1, 1, 1, List.of());
+        given(givenCouponService.retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class))).willReturn(pageEntity);
 
         this.mockMvc.perform(get("/members/coupons")
                                      .headers(httpHeaders))

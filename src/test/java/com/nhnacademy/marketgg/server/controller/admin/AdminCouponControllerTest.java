@@ -45,7 +45,7 @@ class AdminCouponControllerTest {
 
     private static final String DEFAULT_COUPON = "/admin/coupons";
 
-    Pageable pageable = PageRequest.of(0, 20);
+    Pageable pageable = PageRequest.of(0, 10);
     CouponDto couponDto;
 
     HttpHeaders httpHeaders;
@@ -56,13 +56,8 @@ class AdminCouponControllerTest {
         httpHeaders.add(AspectUtils.AUTH_ID, UUID.randomUUID().toString());
         httpHeaders.add(AspectUtils.WWW_AUTHENTICATE, "[\"ROLE_ADMIN\"]");
 
-        couponDto = new CouponDto();
-        ReflectionTestUtils.setField(couponDto, "id", 1L);
-        ReflectionTestUtils.setField(couponDto, "name", "신규 쿠폰");
-        ReflectionTestUtils.setField(couponDto, "type", "정률할인");
-        ReflectionTestUtils.setField(couponDto, "expiredDate", 1);
-        ReflectionTestUtils.setField(couponDto, "minimumMoney", 1);
-        ReflectionTestUtils.setField(couponDto, "discountAmount", 0.5);
+        couponDto
+            = new CouponDto(1L, "신규쿠폰", "정률할인", 1, 1, 0.5);
     }
 
     @Test
@@ -96,7 +91,7 @@ class AdminCouponControllerTest {
     @Test
     @DisplayName("쿠폰 목록 조회")
     void testRetrieveCoupons() throws Exception {
-        given(couponService.retrieveCoupons(pageable)).willReturn(List.of());
+        given(couponService.retrieveCoupons(pageable)).willReturn(any());
 
         this.mockMvc.perform(get(DEFAULT_COUPON)
                                      .headers(httpHeaders))

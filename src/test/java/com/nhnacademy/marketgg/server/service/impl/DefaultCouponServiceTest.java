@@ -8,6 +8,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
@@ -40,18 +41,16 @@ class DefaultCouponServiceTest {
     CouponRepository couponRepository;
 
     private static CouponDto couponDto;
+    private static Coupon coupon;
 
     Pageable pageable = PageRequest.of(0, 20);
 
     @BeforeAll
     static void beforeAll() {
-        couponDto = new CouponDto();
-        ReflectionTestUtils.setField(couponDto, "id", 1L);
-        ReflectionTestUtils.setField(couponDto, "name", "신규 쿠폰");
-        ReflectionTestUtils.setField(couponDto, "type", "정률할인");
-        ReflectionTestUtils.setField(couponDto, "expiredDate", 1);
-        ReflectionTestUtils.setField(couponDto, "minimumMoney", 1);
-        ReflectionTestUtils.setField(couponDto, "discountAmount", 0.5);
+        couponDto
+            = new CouponDto(1L, "신규쿠폰", "정률할인", 1, 1, 0.5);
+        coupon
+            = new Coupon(1L, "신규쿠폰", "정률할인", 1, 1, 0.5);
     }
 
     @Test
@@ -70,7 +69,7 @@ class DefaultCouponServiceTest {
         given(couponRepository.findAllCoupons(pageable))
                 .willReturn(pages);
 
-        List<CouponDto> couponResponses = couponService.retrieveCoupons(pageable);
+        PageEntity<CouponDto> couponResponses = couponService.retrieveCoupons(pageable);
 
         then(couponRepository).should(times(1)).findAllCoupons(pageable);
         assertThat(couponResponses).isNotNull();
@@ -79,7 +78,7 @@ class DefaultCouponServiceTest {
     @Test
     @DisplayName("쿠폰 수정 성공")
     void testUpdateCouponSuccess() {
-        given(couponRepository.findById(anyLong())).willReturn(Optional.of(new Coupon(couponDto)));
+        given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
 
         couponService.updateCoupon(1L, couponDto);
 
@@ -99,7 +98,7 @@ class DefaultCouponServiceTest {
     @Test
     @DisplayName("쿠폰 삭제 성공")
     void testDeleteCouponSuccess() {
-        given(couponRepository.findById(anyLong())).willReturn(Optional.of(new Coupon(couponDto)));
+        given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
 
         couponService.deleteCoupon(1L);
 
