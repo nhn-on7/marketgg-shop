@@ -2,9 +2,8 @@ package com.nhnacademy.marketgg.server.eventlistener.handler;
 
 import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.entity.Member;
-import com.nhnacademy.marketgg.server.entity.PointHistory;
 import com.nhnacademy.marketgg.server.eventlistener.event.savepoint.SavePointEvent;
-import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
+import com.nhnacademy.marketgg.server.service.point.PointService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -21,7 +20,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 public class SavePointHandler {
 
-    private final PointHistoryRepository pointRepository;
+    private final PointService pointService;
 
     /**
      * 실제로 적립될 포인를을 생성하고 저장하는 EventListener 입니다.
@@ -33,17 +32,11 @@ public class SavePointHandler {
      */
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void savePointByEvent(SavePointEvent pointRequest) {
+    public void savePointByEvent(final SavePointEvent pointRequest) {
         Member member = pointRequest.getMember();
-        Integer totalPoint = pointRepository.findLastTotalPoints(member.getId());
-
         PointHistoryRequest pointHistoryRequest = pointRequest.getPointHistory();
 
-        PointHistory pointHistory =
-            new PointHistory(member, null,
-                totalPoint + pointHistoryRequest.getPoint(), pointHistoryRequest);
-
-        pointRepository.save(pointHistory);
+        pointService.createPointHistory(member.getId(), pointHistoryRequest);
     }
 
 }

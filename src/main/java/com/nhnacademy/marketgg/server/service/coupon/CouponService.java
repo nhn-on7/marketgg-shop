@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
  * 쿠폰 서비스입니다.
  *
  * @author 민아영
- * @author 감정민
+ * @author 김정민
  * @version 1.0.0
  * @since 1.0.0
  */

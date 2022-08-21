@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 쿠폰 서비스입니다.
  *
  * @author 민아영
- * @author 감정민
+ * @author 김정민
  * @version 1.0.0
  * @since 1.0.0
  */
@@ -31,7 +31,7 @@ public class DefaultCouponService implements CouponService {
      *
      * @param couponDto - 쿠폰 등록에 필요한 정보를 담은 DTO 입니다.
      * @author 민아영
-     * @author 감정민
+     * @author 김정민
      * @since 1.0.0
      */
     @Transactional
@@ -47,7 +47,7 @@ public class DefaultCouponService implements CouponService {
      * @param id 조회할 쿠폰의 식별번호 입니다.
      * @return 조회한 쿠폰 Dto 를 반환합니다.
      * @author 민아영
-     * @author 감정민
+     * @author 김정민
      * @since 1.0.0
      */
     @Override
@@ -62,7 +62,7 @@ public class DefaultCouponService implements CouponService {
      * @param pageable 조회할 페이지 정보입니다.
      * @return 조회한 쿠폰 Dto 목록을 반환합니다.
      * @author 민아영
-     * @author 감정민
+     * @author 김정민
      * @since 1.0.0
      */
     @Override
@@ -79,7 +79,7 @@ public class DefaultCouponService implements CouponService {
      * @param couponId  수정할 쿠폰의 식별번호입니다.
      * @param couponDto 쿠폰 수정에 필요한 정보를 담은 DTO 입니다.
      * @author 민아영
-     * @author 감정민
+     * @author 김정민
      * @since 1.0.0
      */
     @Transactional
@@ -97,7 +97,7 @@ public class DefaultCouponService implements CouponService {
      *
      * @param couponId 삭제할 쿠폰의 식별번호입니다.
      * @author 민아영
-     * @author 감정민
+     * @author 김정민
      * @since 1.0.0
      */
     @Transactional
