@@ -15,8 +15,10 @@ import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
@@ -64,10 +66,12 @@ class ProductInquiryPostRepositoryImplTest {
         product = new Product(productRequest, asset, category);
         productRepository.save(product);
 
-        productInquiryPost = new ProductInquiryPost(product, member, productInquiryRequest);
+        productInquiryPost = new ProductInquiryPost(new ProductInquiryPost.Pk(1L, 1L),
+                                                    product, member, "제목", "내용", false,
+                                                    "답글", LocalDateTime.now());
     }
 
-    // @Test
+    @Test
     @DisplayName("상품의 전체 상품 문의 조회")
     void testFindALLByProductNo() {
         for (int i = 0; i < 5; i++) {
@@ -76,10 +80,10 @@ class ProductInquiryPostRepositoryImplTest {
             productInquiryPostRepository.save(productInquiryPost);
         }
         assertThat(productInquiryPostRepository.findAllByProductNo(2L, PageRequest.of(0, 10)))
-                .hasSize(5);
+            .hasSize(5);
     }
 
-    // @Test
+    @Test
     @DisplayName("회원이 남긴 상품 문의 조회")
     void testFindAllByMemberNo() {
         for (int i = 0; i < 5; i++) {
@@ -88,7 +92,7 @@ class ProductInquiryPostRepositoryImplTest {
             productInquiryPostRepository.save(productInquiryPost);
         }
         assertThat(productInquiryPostRepository.findAllByMemberNo(1L, PageRequest.of(0, 10)))
-                .hasSize(5);
+            .hasSize(5);
     }
 
 }

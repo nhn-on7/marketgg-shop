@@ -20,7 +20,6 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.member.MemberService;
@@ -35,8 +34,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -72,10 +69,6 @@ class MemberControllerTest {
 
     GivenCouponCreateRequest givenCouponCreateRequest;
 
-    Pageable pageable = PageRequest.of(0, 10);
-    Page<ProductInquiryByMemberResponse> responses = new PageImpl<>(List.of(), pageable, 0);
-
-
     @BeforeEach
     void setUp() {
         httpHeaders = new HttpHeaders();
@@ -92,7 +85,7 @@ class MemberControllerTest {
         given(memberService.retrievePassUpdatedAt(any())).willReturn(LocalDateTime.now());
 
         this.mockMvc.perform(get("/members/ggpass")
-                                     .headers(httpHeaders))
+                                 .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(memberService).should(times(1)).retrievePassUpdatedAt(any());
@@ -104,7 +97,7 @@ class MemberControllerTest {
         willDoNothing().given(memberService).subscribePass(any());
 
         this.mockMvc.perform(post("/members/ggpass/subscribe", 1L)
-                                     .headers(httpHeaders))
+                                 .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(memberService).should(times(1)).subscribePass(any());
@@ -116,7 +109,7 @@ class MemberControllerTest {
         willDoNothing().given(memberService).withdrawPass(any());
 
         this.mockMvc.perform(post("/members/ggpass/withdraw", 1L)
-                                     .headers(httpHeaders))
+                                 .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(memberService).should(times(1)).withdrawPass(any());
@@ -135,8 +128,8 @@ class MemberControllerTest {
                                                       .build();
 
         this.mockMvc.perform(get("/members")
-                                     .headers(httpHeaders)
-                                     .accept(MediaType.APPLICATION_JSON))
+                                 .headers(httpHeaders)
+                                 .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.success", equalTo(true)))
                     .andDo(print());
@@ -150,9 +143,9 @@ class MemberControllerTest {
         String content = objectMapper.writeValueAsString(givenCouponCreateRequest);
 
         this.mockMvc.perform(post("/members/coupons")
-                                     .headers(httpHeaders)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(content))
+                                 .headers(httpHeaders)
+                                 .contentType(MediaType.APPLICATION_JSON)
+                                 .content(content))
                     .andExpect(status().isCreated());
 
         then(givenCouponService).should(times(1)).createGivenCoupons(any(MemberInfo.class),
@@ -163,24 +156,24 @@ class MemberControllerTest {
     @DisplayName("회원에게 지급된 쿠폰 전체 조회")
     void testRetrieveGivenCoupons() throws Exception {
         PageEntity<GivenCouponResponse> pageEntity = new PageEntity<>(1, 1, 1, List.of());
-        given(givenCouponService.retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class))).willReturn(pageEntity);
+        given(givenCouponService.retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class))).willReturn(
+            pageEntity);
 
         this.mockMvc.perform(get("/members/coupons")
-                                     .headers(httpHeaders))
+                                 .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(givenCouponService).should(times(1)).retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class));
     }
 
-    // FIXME: 테스트 어노테이션 활성화 후 수정부탁 @민아영
-    // @Test
+    @Test
     @DisplayName("회원이 작성한 전체 상품 문의 조회 테스트")
     void testRetrieveProductInquiryByMemberId() throws Exception {
         given(inquiryPostService.retrieveProductInquiryByMemberId(any(MemberInfo.class), any(PageRequest.class)))
-                .willReturn(responses);
+            .willReturn(any());
 
         this.mockMvc.perform(get("/members/product-inquiries")
-                                     .contentType(MediaType.APPLICATION_JSON))
+                                 .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
     }
 

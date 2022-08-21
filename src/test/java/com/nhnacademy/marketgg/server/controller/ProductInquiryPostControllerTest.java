@@ -87,7 +87,7 @@ class ProductInquiryPostControllerTest {
     @DisplayName("상품에 대한 전체 문의 조회 테스트")
     void testRetrieveProductInquiryByProductId() throws Exception {
         given(productInquiryPostService.retrieveProductInquiryByProductId(anyLong(), any(PageRequest.class)))
-            .willReturn(responses);
+            .willReturn(any());
 
         this.mockMvc.perform(get("/products/" + 1L + "/inquiries")
                 .headers(httpHeaders)
