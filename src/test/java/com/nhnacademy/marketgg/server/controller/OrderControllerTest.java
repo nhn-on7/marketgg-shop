@@ -22,6 +22,7 @@ import com.nhnacademy.marketgg.server.aop.AuthInfoAspect;
 import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.request.order.CartResponse;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
@@ -51,6 +52,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -129,7 +131,8 @@ class OrderControllerTest {
     @DisplayName("주문서 폼 필요정보 조회")
     public void testRetrieveOrderForm() throws Exception {
         OrderFormResponse orderFormResponse = Dummy.getDummyOrderFormResponse();
-        List<ProductToOrder> list = List.of(new ProductToOrder());
+        CartResponse cartResponse = new CartResponse();
+        ReflectionTestUtils.setField(cartResponse, "products", List.of(new ProductToOrder()));
         SingleResponse<AuthInfo> authInfoSingleResponse = new SingleResponse<>(new AuthInfo());
         String response = mapper.writeValueAsString(authInfoSingleResponse);
         ResponseEntity<String> authInfoResponse = new ResponseEntity<>(response, HttpStatus.OK);
@@ -139,10 +142,10 @@ class OrderControllerTest {
         given(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), any(Class.class)))
                 .willReturn(authInfoResponse);
 
-        mockMvc.perform(get(baseUri + "/order-form")
+        mockMvc.perform(post(baseUri + "/order-form")
                                 .headers(headers)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(list)))
+                                .content(mapper.writeValueAsString(cartResponse)))
                .andExpect(status().isOk());
 
         then(orderService).should(times(1))
