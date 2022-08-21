@@ -6,8 +6,6 @@ import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountCreateRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountDepositRequest;
-import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.service.payment.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -144,15 +142,16 @@ public class PaymentController {
      * @return 결제대행사에서 결제 승인 처리로 인한 응답 데이터
      */
     @PostMapping("/payments/{paymentKey}/cancel")
-    public ResponseEntity<CommonResponse> cancelPayment(@PathVariable String paymentKey,
-                                                        @RequestBody @Valid final PaymentCancelRequest paymentRequest) {
+    public ResponseEntity<ShopResult<Void>> cancelPayment(@PathVariable String paymentKey,
+                                                          @RequestBody @Valid final
+                                                          PaymentCancelRequest paymentRequest) {
         log.info("cancelPayment: {}", paymentRequest);
 
         paymentService.cancelPayment(paymentKey, paymentRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>());
+                             .body(ShopResult.success());
     }
 
 }
