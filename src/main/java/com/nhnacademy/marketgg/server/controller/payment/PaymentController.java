@@ -4,7 +4,6 @@ import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.payment.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
-import com.nhnacademy.marketgg.server.dto.payment.request.PaymentVerifyRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountCreateRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountDepositRequest;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
@@ -44,16 +43,16 @@ public class PaymentController {
     /**
      * 결제 요청에 대해 검증 수행 요청을 처리합니다.
      *
-     * @param paymentRequest - 결제 요청 정보
-     * @return 성공 여부 응답 결과 반환
+     * @param paymentVerifyRequest - 결제 검증 요청 데이터
+     * @return 검증 여부 응답 결과
      */
     @PostMapping("/payments/verify")
     public ResponseEntity<ShopResult<OrderToPayment>> verifyRequest(@RequestBody @Valid final
-                                                                    PaymentVerifyRequest paymentRequest) {
+                                                                    OrderToPayment paymentVerifyRequest) {
 
-        log.info("verifyRequest: {}", paymentRequest);
+        log.info("verifyRequest: {}", paymentVerifyRequest);
 
-        paymentService.verifyRequest(paymentRequest);
+        paymentService.verifyRequest(paymentVerifyRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -63,11 +62,11 @@ public class PaymentController {
     /**
      * 최종 결제를 요청합니다.
      *
-     * @param paymentRequest - 결제 요청 정보
-     * @return 결제대행사에서 결제 승인 처리로 인한 응답 정보 객체
+     * @param paymentRequest - 결제 요청 데이터
+     * @return 결제대행사에서 결제 승인 처리로 인한 응답 데이터 객체
      */
     @Operation(summary = "최종 결제 승인",
-               description = "결제대행사에 결제 승인 처리 요청을 하고 자체 데이터베이스에 결제 정보를 영속화합니다.",
+               description = "결제대행사에 결제 승인 처리 요청을 하고 자체 데이터베이스에 결제 데이터를 영속화합니다.",
                parameters = @Parameter(description = "결제 승인 요청 객체", required = true),
                responses = @ApiResponse(responseCode = "201",
                                         content = @Content(mediaType = "application/json",
@@ -89,8 +88,8 @@ public class PaymentController {
     /**
      * 회원이 희망하는 은행의 가상계좌 발급 요청을 처리합니다.
      *
-     * @param request - 가상계좌 발급 요청 정보
-     * @return 발급한 가상계좌 정보를 포함한 결과 정보
+     * @param request - 가상계좌 발급 요청 데이터
+     * @return 발급한 가상계좌 데이터를 포함한 결과 데이터
      */
     @PostMapping("/payments/virtual-accounts")
     public ResponseEntity<ShopResult<PaymentResponse>> createVirtualAccounts(@RequestBody @Valid final
@@ -107,12 +106,12 @@ public class PaymentController {
     /**
      * 회원이 주문한 건에 대해 가상계좌에 입금하게 되면 받는 알림을 처리합니다.
      *
-     * @param request - 가상계좌 입금 요청 정보
-     * @return - 결제대행사에서 가상계좌 입금 처리로 인한 응답 정보
+     * @param request - 가상계좌 입금 요청 데이터
+     * @return - 결제대행사에서 가상계좌 입금 처리로 인한 응답 데이터
      */
     @Operation(summary = "가상계좌 결제 입금 확인",
                description = "회원이 주문한 건에 대해 가상계좌에 입금하게 되면 받는 알림을 처리합니다.",
-               parameters = @Parameter(description = "가상계좌 입금 요청 정보", required = true),
+               parameters = @Parameter(description = "가상계좌 입금 요청 데이터", required = true),
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
@@ -131,8 +130,8 @@ public class PaymentController {
     /**
      * 승인된 결제에 대해 결제 취소 요청을 처리합니다.
      *
-     * @param paymentRequest - 결제 요청 정보
-     * @return 결제대행사에서 결제 승인 처리로 인한 응답 정보
+     * @param paymentRequest - 결제 요청 데이터
+     * @return 결제대행사에서 결제 승인 처리로 인한 응답 데이터
      */
     @PostMapping("/payments/{paymentKey}/cancel")
     public ResponseEntity<CommonResponse> cancelPayment(@PathVariable String paymentKey,

@@ -10,6 +10,7 @@ import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentVerifyRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountCreateRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountDepositRequest;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.payment.CardPayment;
 import com.nhnacademy.marketgg.server.entity.payment.MobilePhonePayment;
@@ -17,6 +18,7 @@ import com.nhnacademy.marketgg.server.entity.payment.Payment;
 import com.nhnacademy.marketgg.server.entity.payment.TransferPayment;
 import com.nhnacademy.marketgg.server.entity.payment.VirtualAccountPayment;
 import com.nhnacademy.marketgg.server.exception.payment.PaymentNotFoundException;
+import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.payment.CardPaymentRepository;
 import com.nhnacademy.marketgg.server.repository.payment.MobilePhonePaymentRepository;
@@ -24,6 +26,7 @@ import com.nhnacademy.marketgg.server.repository.payment.PaymentAdapter;
 import com.nhnacademy.marketgg.server.repository.payment.PaymentRepository;
 import com.nhnacademy.marketgg.server.repository.payment.TransferPaymentRepository;
 import com.nhnacademy.marketgg.server.repository.payment.VirtualAccountPaymentRepository;
+import com.nhnacademy.marketgg.server.service.order.OrderService;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -48,8 +51,10 @@ public class TossPaymentService implements PaymentService {
 
     private final PaymentAdapter paymentAdapter;
     private final ObjectMapper objectMapper;
+    private final OrderService orderService;
     private final OrderRepository orderRepository;
     private final PaymentRepository paymentRepository;
+    private final MemberRepository memberRepository;
     private final CardPaymentRepository cardPaymentRepository;
     private final VirtualAccountPaymentRepository virtualAccountPaymentRepository;
     private final TransferPaymentRepository transferPaymentRepository;
@@ -62,7 +67,7 @@ public class TossPaymentService implements PaymentService {
      * @return 결제 요청 데이터에 대한 응답 결과 데이터를 포함한 {@link PaymentResponse}
      */
     @Override
-    public PaymentResponse verifyRequest(final PaymentVerifyRequest paymentRequest) {
+    public PaymentResponse verifyRequest(final OrderToPayment paymentRequest) {
         return new PaymentResponse();
     }
 

@@ -20,6 +20,7 @@ import com.nhnacademy.marketgg.server.dto.payment.result.CardPaymentResult;
 import com.nhnacademy.marketgg.server.dto.payment.result.MobilePhonePaymentResult;
 import com.nhnacademy.marketgg.server.dto.payment.result.TransferPaymentResult;
 import com.nhnacademy.marketgg.server.dto.payment.result.VirtualAccountPaymentResult;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.payment.CardPayment;
 import com.nhnacademy.marketgg.server.entity.payment.MobilePhonePayment;
@@ -40,10 +41,10 @@ public interface PaymentService {
     /**
      * 회원의 결제 요청에 대한 검증을 처리합니다.
      *
-     * @param paymentRequest - 결제 검증 요청 데이터
-     * @return 성공 여부 응답 결과 반환
+     * @param paymentVerifyRequest - 결제 검증 요청 데이터
+     * @return 검증 여부 응답 결과
      */
-    PaymentResponse verifyRequest(final PaymentVerifyRequest paymentRequest);
+    PaymentResponse verifyRequest(final OrderToPayment paymentVerifyRequest);
 
     /**
      * 최종 결제 승인을 처리합니다.
