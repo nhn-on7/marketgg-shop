@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.payment.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
-import com.nhnacademy.marketgg.server.dto.payment.request.PaymentRequest;
+import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentVerifyRequest;
+import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountCreateRequest;
+import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountDepositRequest;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.payment.CardPayment;
 import com.nhnacademy.marketgg.server.entity.payment.MobilePhonePayment;
@@ -30,6 +32,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 토스 결제대행사를 통한 결제 기능을 수행하기 위한 서비스 클래스입니다.
+ *
+ * @author 이제훈
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 @Slf4j
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
@@ -45,6 +54,12 @@ public class TossPaymentService implements PaymentService {
     private final TransferPaymentRepository transferPaymentRepository;
     private final MobilePhonePaymentRepository mobilePhonePaymentRepository;
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param paymentRequest - 결제 검증 요청 데이터
+     * @return 결제 요청 데이터에 대한 응답 결과 데이터를 포함한 {@link PaymentResponse}
+     */
     @Override
     public PaymentResponse verifyRequest(final PaymentVerifyRequest paymentRequest) {
         return new PaymentResponse();
@@ -54,10 +69,11 @@ public class TossPaymentService implements PaymentService {
      * {@inheritDoc}
      *
      * @param paymentRequest - 결제 요청 정보
+     * @return 결제 요청 데이터에 대한 응답 결과 데이터를 포함한 {@link PaymentResponse}
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
-    public void pay(final PaymentRequest paymentRequest) {
+    public PaymentResponse pay(final PaymentConfirmRequest paymentRequest) {
         ResponseEntity<String> response = paymentAdapter.confirm(paymentRequest);
 
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -69,8 +85,7 @@ public class TossPaymentService implements PaymentService {
             throw new UncheckedIOException(ex);
         }
 
-        Order order = orderRepository.findById(1L)
-                                     .orElseThrow();
+        Order order = orderRepository.findById(1L).orElseThrow();
 
         Payment payment = this.toEntity(order, paymentResponse);
         Payment savedPayment = paymentRepository.save(payment);
@@ -78,22 +93,48 @@ public class TossPaymentService implements PaymentService {
         if (Objects.nonNull(paymentResponse.getCard())) {
             CardPayment cardPayment = this.toEntity(savedPayment, paymentResponse.getCard());
             cardPaymentRepository.save(cardPayment);
-        }
-        if (Objects.nonNull(paymentResponse.getVirtualAccount())) {
+        } else if (Objects.nonNull(paymentResponse.getVirtualAccount())) {
             VirtualAccountPayment virtualAccountPayment = this.toEntity(savedPayment,
                                                                         paymentResponse.getVirtualAccount());
             virtualAccountPaymentRepository.save(virtualAccountPayment);
-        }
-        if (Objects.nonNull(paymentResponse.getTransfer())) {
-            TransferPayment transferPayment = this.toEntity(paymentResponse.getTransfer());
+        } else if (Objects.nonNull(paymentResponse.getTransfer())) {
+            TransferPayment transferPayment = this.toEntity(payment, paymentResponse.getTransfer());
             transferPaymentRepository.save(transferPayment);
-        }
-        if (Objects.nonNull(paymentResponse.getMobilePhone())) {
-            MobilePhonePayment mobilePhonePayment = this.toEntity(paymentResponse.getMobilePhone());
+        } else if (Objects.nonNull(paymentResponse.getMobilePhone())) {
+            MobilePhonePayment mobilePhonePayment = this.toEntity(payment, paymentResponse.getMobilePhone());
             mobilePhonePaymentRepository.save(mobilePhonePayment);
         }
+
+        return paymentResponse;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param virtualAccountRequest - 가상계좌 발급을 위한 요청 데이터가 담겨있는 객체
+     * @return 결제 요청 데이터에 대한 응답 결과 데이터를 포함한 {@link PaymentResponse}
+     */
+    @Override
+    public PaymentResponse createVirtualAccounts(VirtualAccountCreateRequest virtualAccountRequest) {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param virtualAccountRequest - 가상계좌 입금 요청 데이터
+     */
+    @Override
+    public void putMoneyInVirtualAccount(VirtualAccountDepositRequest virtualAccountRequest) {
+        // STUB: 로직 수정 중
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param paymentKey     - 결제 건에 대한 고유 키 값
+     * @param paymentRequest - 결제 취소 요청 데이터
+     */
     @Override
     public void cancelPayment(final String paymentKey, final PaymentCancelRequest paymentRequest) {
         ResponseEntity<String> response = paymentAdapter.cancel(paymentKey, paymentRequest);
