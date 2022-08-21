@@ -29,4 +29,6 @@ public interface MemberRepositoryCustom {
      */
     String findUuidByOrderId(final Long orderId);
 
+    Optional<String> findUuidByMemberId(final Long memberId);
+
 }

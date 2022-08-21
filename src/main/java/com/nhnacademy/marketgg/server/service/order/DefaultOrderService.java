@@ -1,7 +1,8 @@
 package com.nhnacademy.marketgg.server.service.order;
 
+import static com.nhnacademy.marketgg.server.repository.auth.AuthAdapter.checkResult;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.constant.PaymentType;
 import com.nhnacademy.marketgg.server.delivery.DeliveryRepository;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
@@ -25,14 +26,18 @@ import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.OrderProduct;
 import com.nhnacademy.marketgg.server.entity.Product;
+import com.nhnacademy.marketgg.server.entity.event.OrderCouponCanceledEvent;
+import com.nhnacademy.marketgg.server.entity.event.OrderPointCanceledEvent;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotOverMinimumMoneyException;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotValidException;
 import com.nhnacademy.marketgg.server.exception.deliveryaddresses.DeliveryAddressNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
+import com.nhnacademy.marketgg.server.exception.order.OrderMemberNotMatchedException;
 import com.nhnacademy.marketgg.server.exception.order.OrderNotFoundException;
 import com.nhnacademy.marketgg.server.exception.pointhistory.PointNotEnoughException;
 import com.nhnacademy.marketgg.server.exception.product.ProductStockNotEnoughException;
+import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
 import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponRepository;
@@ -42,19 +47,20 @@ import com.nhnacademy.marketgg.server.repository.orderproduct.OrderProductReposi
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.nhnacademy.marketgg.server.service.cart.CartProductService;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class DefaultOrderService implements OrderService {
-
-    private final String prefix = "GGORDER_";
 
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
@@ -67,12 +73,25 @@ public class DefaultOrderService implements OrderService {
     private final UsedCouponRepository usedCouponRepository;
     private final GivenCouponRepository givenCouponRepository;
     private final ProductRepository productRepository;
+    private final CartProductService cartProductService;
+    private final ApplicationEventPublisher publisher;
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param orderRequest - 주문을 등록하기 위한 정보를 담은 DTO 입니다.
+     * @param memberInfo   - 주문을 등록하는 회원의 정보입니다.
+     * @return 결제 요청시에 필요한 정보들을 담은 DTO 를 반환합니다.
+     * @throws JsonProcessingException - Json 컨텐츠를 처리할 때 발생하는 모든 문제에 대한 예외처리입니다.
+     */
     @Transactional
     @Override
-    public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId) {
+    public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final MemberInfo memberInfo)
+        throws JsonProcessingException {
         int i = 0;
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
+        MemberInfoResponse memberResponse = checkResult(
+            authRepository.getMemberInfo(new MemberInfoRequest(member.getUuid())));
         DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(orderRequest.getDeliveryAddressId())
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
         Order order = new Order(member, deliveryAddress, orderRequest);
@@ -82,38 +101,66 @@ public class DefaultOrderService implements OrderService {
                                                    .collect(Collectors.toList());
         List<Product> products = productRepository.findByIds(productIds);
 
-        Coupon coupon = couponRepository.findById(orderRequest.getCouponId()).orElseThrow(CouponNotFoundException::new);
-        if (usedCouponRepository.existsCouponId(coupon.getId())) {
-            throw new CouponNotValidException();
-        }
-        if (coupon.getMinimumMoney() > orderRequest.getTotalOrigin()) {
-            throw new CouponNotOverMinimumMoneyException();
-        }
-        if (pointRepository.findLastTotalPoints(memberId) < orderRequest.getUsedPoint()) {
-            throw new PointNotEnoughException();
-        }
-
+        checkOrderValid(orderRequest, memberResponse, member.getId());
         orderRepository.save(order);
+
         for (Product product : products) {
-            if (product.getTotalStock() < productAmounts.get(i)) {
+            long remain = product.getTotalStock() - productAmounts.get(i);
+            if (remain < 0) {
                 throw new ProductStockNotEnoughException();
             }
+            product.updateTotalStock(remain);
+            productRepository.save(product);
             orderProductRepository.save(new OrderProduct(order, product, productAmounts.get(i++)));
         }
+        cartProductService.deleteProducts(memberInfo, productIds);
 
         return makeOrderToPayment(order, orderRequest);
     }
 
     private OrderToPayment makeOrderToPayment(final Order order, final OrderCreateRequest orderRequest) {
         List<ProductToOrder> products = orderRequest.getProducts();
-        String orderId = prefix + order.getId();
-        String orderName = products.get(0).getName() + "외 " + products.size() + "건";
+        String orderId = attachPrefix(order.getId());
+        String orderName = products.get(0).getName() + " 외 " + products.size() + "건";
 
         return new OrderToPayment(orderId, orderName, orderRequest.getName(), orderRequest.getEmail(),
                                   orderRequest.getTotalAmount(), orderRequest.getCouponId(),
                                   orderRequest.getUsedPoint(), orderRequest.getExpectedSavePoint());
     }
 
+    private void checkOrderValid(final OrderCreateRequest orderRequest, final MemberInfoResponse memberResponse,
+                                 final Long memberId) {
+        if (!memberResponse.getEmail().equals(orderRequest.getEmail())) {
+            throw new OrderMemberNotMatchedException();
+        }
+        Optional<Coupon> coupon = checkCouponValid(orderRequest.getCouponId());
+        if (coupon.isPresent() && coupon.get().getMinimumMoney() > orderRequest.getTotalOrigin()) {
+            throw new CouponNotOverMinimumMoneyException();
+        }
+        if (pointRepository.findLastTotalPoints(memberId) < orderRequest.getUsedPoint()) {
+            throw new PointNotEnoughException();
+        }
+    }
+
+    private Optional<Coupon> checkCouponValid(final Long couponId) {
+        if (Objects.isNull(couponId)) {
+            return Optional.empty();
+        }
+        Coupon coupon = couponRepository.findById(couponId).orElseThrow(CouponNotFoundException::new);
+        if (usedCouponRepository.existsCouponId(couponId)) {
+            throw new CouponNotValidException();
+        }
+        return Optional.of(coupon);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param products   - 주문할 상품 목록입니다.
+     * @param memberInfo - 주문하는 회원의 정보입니다.
+     * @param authInfo   - 주문하는 회원의 auth 정보입니다.
+     * @return 취합한 정보를 반환합니다.
+     */
     @Override
     public OrderFormResponse retrieveOrderForm(final List<ProductToOrder> products, final MemberInfo memberInfo,
                                                final AuthInfo authInfo) {
@@ -122,7 +169,7 @@ public class DefaultOrderService implements OrderService {
         List<OrderGivenCoupon> orderGivenCoupons = givenCouponRepository.findOwnCouponsByMemberId(memberId);
         Integer totalPoint = pointRepository.findLastTotalPoints(memberId);
         List<DeliveryAddressResponse> deliveryAddresses = deliveryAddressRepository.findDeliveryAddressesByMemberId(
-                memberId);
+            memberId);
         List<String> paymentTypes = Arrays.stream(PaymentType.values())
                                           .map(PaymentType::getType)
                                           .collect(Collectors.toList());
@@ -150,11 +197,24 @@ public class DefaultOrderService implements OrderService {
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param memberinfo - 주문 목록을 조회하는 회원의 정보입니다.
+     * @return 조회하는 회원의 종류에 따라 목록을 List 로 반환합니다.
+     */
     @Override
     public List<OrderRetrieveResponse> retrieveOrderList(final MemberInfo memberinfo) {
         return orderRepository.findOrderList(memberinfo.getId(), memberinfo.isUser());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param orderId    - 조회할 주문의 식별번호입니다.
+     * @param memberInfo - 주문 상세를 조회할 회원의 정보입니다.
+     * @return 조회하는 회원의 종류에 따라 상세 조회 정보를 반환합니다.
+     */
     @Override
     public OrderDetailRetrieveResponse retrieveOrderDetail(final Long orderId, final MemberInfo memberInfo) {
         OrderDetailRetrieveResponse detailResponse = orderRepository.findOrderDetail(orderId, memberInfo.getId(),
@@ -165,6 +225,12 @@ public class DefaultOrderService implements OrderService {
         return detailResponse;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param orderId - 변경할 주문의 식별번호입니다.
+     * @param status  - 변경할 상태값입니다.
+     */
     @Transactional
     @Override
     public void updateStatus(final Long orderId, final OrderUpdateStatusRequest status) {
@@ -175,14 +241,19 @@ public class DefaultOrderService implements OrderService {
         orderRepository.save(order);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param orderId - 운송장 번호를 발급받을 주문의 식별번호입니다.
+     * @throws JsonProcessingException
+     */
     @Override
     public void createTrackingNo(final Long orderId) throws JsonProcessingException {
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
         String uuid = memberRepository.findUuidByOrderId(orderId);
-        MemberInfoResponse memberResponse = authRepository.getMemberInfo(new MemberInfoRequest(uuid));
+        MemberInfoResponse memberResponse = checkResult(authRepository.getMemberInfo(new MemberInfoRequest(uuid)));
 
-        OrderInfoRequestDto orderRequest = new OrderInfoRequestDto(memberResponse.getName(),
-                                                                   order.getAddress(),
+        OrderInfoRequestDto orderRequest = new OrderInfoRequestDto(memberResponse.getName(), order.getAddress(),
                                                                    order.getDetailAddress(),
                                                                    memberResponse.getPhoneNumber(),
                                                                    String.valueOf(orderId));
@@ -190,14 +261,21 @@ public class DefaultOrderService implements OrderService {
         deliveryRepository.createTrackingNo(orderRequest);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param orderId - 취소할 주문의 식별번호입니다.
+     */
     @Transactional
     @Override
-    public void deleteOrder(final Long orderId) {
+    public void cancelOrder(final Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
-        order.delete();
+        order.cancel();
         orderRepository.save(order);
-        // memo: 주문 취소 시 결제 취소 요청 및 사용쿠폰 삭제, 포인트 차감, 적립 내역 삭제
+
+        publisher.publishEvent(new OrderPointCanceledEvent(order));
+        publisher.publishEvent(new OrderCouponCanceledEvent(order));
     }
 
 }

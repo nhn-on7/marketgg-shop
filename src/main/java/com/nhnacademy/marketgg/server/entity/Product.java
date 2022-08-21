@@ -170,4 +170,9 @@ public class Product {
         this.deletedAt = null;
     }
 
+    public void updateTotalStock(final Long totalStock) {
+        this.totalStock = totalStock;
+        this.updatedAt = LocalDateTime.now();
+    }
+
 }

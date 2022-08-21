@@ -8,6 +8,13 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+/**
+ * 주문서 입력 폼 출력을 위해 취합한 정보를 전달하기 위한 DTO 입니다.
+ *
+ * @author 김정민
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 @RequiredArgsConstructor
 @Builder
 @Getter
@@ -21,7 +28,7 @@ public class OrderFormResponse {
     private final String memberGrade;
     private final boolean haveGgpass; // GG패스 보유여부 - 배송비 무료 조건
 
-    // memo#1: 우선은 보유쿠폰목록, 보유포인트 담아보내고 나중에 비동기 처리하거나 하면 지워도 됨
+    // memo: 우선은 보유쿠폰목록, 보유포인트 담아보내고 나중에 비동기 처리하거나 하면 지워도 됨
     private final List<OrderGivenCoupon> givenCouponList;
     private final Integer totalPoint; // 보유포인트
 

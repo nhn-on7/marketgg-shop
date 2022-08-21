@@ -1,7 +1,8 @@
 package com.nhnacademy.marketgg.server.service.product;
 
+import static com.nhnacademy.marketgg.server.repository.auth.AuthAdapter.checkResult;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
@@ -12,6 +13,7 @@ import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import com.nhnacademy.marketgg.server.exception.productinquiry.ProductInquiryPostNotFoundException;
+import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.productinquirypost.ProductInquiryPostRepository;
@@ -40,11 +42,11 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
 
         Member member = memberRepository.findById(memberInfo.getId())
                                         .orElseThrow(ProductInquiryPostNotFoundException
-                                            .MemberWriteInquiryNotFoundException::new);
+                                                         .MemberWriteInquiryNotFoundException::new);
 
         Product product = productRepository.findById(id)
                                            .orElseThrow(ProductInquiryPostNotFoundException
-                                               .ProductAtInquiryNotFoundException::new);
+                                                            .ProductAtInquiryNotFoundException::new);
 
         ProductInquiryPost inquiryPost = new ProductInquiryPost(product, member, productInquiryRequest);
 
@@ -61,7 +63,7 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
 
         for (ProductInquiryByProductResponse inquiry : inquiryByProduct) {
             MemberInfoRequest request = new MemberInfoRequest(inquiry.getUuid());
-            MemberInfoResponse nameByUuid = authRepository.getMemberInfo(request);
+            MemberInfoResponse nameByUuid = checkResult(authRepository.getMemberInfo(request));
             inquiry.memberName(nameByUuid.getName());
         }
 

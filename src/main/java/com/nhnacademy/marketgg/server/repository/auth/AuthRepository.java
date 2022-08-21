@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.repository.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
@@ -27,7 +28,7 @@ public interface AuthRepository {
      */
     List<MemberNameResponse> getNameListByUuid(final List<String> uuidList) throws JsonProcessingException;
 
-    /*
+    /**
      * 회원의 uuid 를 통해 회원의 정보를 얻기 위한 메소드입니다.
      *
      * @param memberInfoRequest - 회원의 정보를 요청하기 위한 DTO 객체입니다.
@@ -35,6 +36,6 @@ public interface AuthRepository {
      * @throws JsonProcessingException - Json 컨텐츠를 처리할 때 발생하는 모든 문제에 대한 예외처리입니다.
      * @since 1.0.0
      */
-    MemberInfoResponse getMemberInfo(final MemberInfoRequest memberInfoRequest) throws JsonProcessingException;
+    ShopResult<MemberInfoResponse> getMemberInfo(final MemberInfoRequest memberInfoRequest) throws JsonProcessingException;
 
 }

@@ -37,7 +37,6 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_no")
-    @NotNull
     private Long id;
 
     @OneToOne
@@ -111,7 +110,9 @@ public class Order {
         this.orderStatus = status;
     }
 
-    public void delete() {
+    public void cancel() {
+        this.orderStatus = OrderStatus.CANCEL_COMPLETE.getStatus();
+        this.updatedAt = LocalDateTime.now();
         this.deletedAt = LocalDateTime.now();
     }
 

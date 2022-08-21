@@ -25,18 +25,18 @@ public interface OrderService {
      * 주문을 등록하는 메소드입니다.
      *
      * @param orderRequest - 주문을 등록하기 위한 정보를 담은 DTO 입니다.
-     * @param memberId     - 주문을 등록하는 회원의 식별번호입니다.
-     * @return - 주문 등록 후 결제에 넘겨줄 정보를 담은 DTO 를 반환합니다.
+     * @param memberInfo   - 주문을 등록하는 회원의 정보입니다.
+     * @return 주문 등록 후 결제에 넘겨줄 정보를 담은 DTO 를 반환합니다.
      * @since 1.0.0
      */
-    OrderToPayment createOrder(final OrderCreateRequest orderRequest, final Long memberId);
+    OrderToPayment createOrder(final OrderCreateRequest orderRequest, final MemberInfo memberInfo) throws JsonProcessingException;
 
     /**
      * 주문서 작성에 필요한 정보를 취합하여 조회하는 메소드입니다.
      *
-     * @param products - 주문할 상품 목록입니다.
+     * @param products   - 주문할 상품 목록입니다.
      * @param memberInfo - 주문하는 회원의 정보입니다.
-     * @param authInfo - 주문하는 회원의 auth 정보입니다.
+     * @param authInfo   - 주문하는 회원의 auth 정보입니다.
      * @return 취합한 정보를 반환합니다.
      * @since 1.0.0
      */
@@ -47,7 +47,7 @@ public interface OrderService {
      * 주문 목록을 조회하는 메소드입니다.
      *
      * @param memberInfo - 주문 목록을 조회하는 회원의 정보입니다.
-     * @return - 조회하는 회원의 종류에 따라 목록을 List 로 반환합니다.
+     * @return 조회하는 회원의 종류에 따라 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
     List<OrderRetrieveResponse> retrieveOrderList(final MemberInfo memberInfo);
@@ -66,7 +66,7 @@ public interface OrderService {
      * 주문 상태를 변경하는 메소드입니다.
      *
      * @param orderId - 변경할 주문의 식별번호입니다.
-     * @param status - 변경할 상태값입니다.
+     * @param status  - 변경할 상태값입니다.
      * @since 1.0.0
      */
     void updateStatus(final Long orderId, final OrderUpdateStatusRequest status);
@@ -81,11 +81,19 @@ public interface OrderService {
     void createTrackingNo(final Long orderId) throws JsonProcessingException;
 
     /**
-     * 주문(내역)을 삭제하는 메소드입니다.
+     * 주문(내역)을 취소하는 메소드입니다.
      *
-     * @param orderId - 삭제할 주문의 식별번호입니다.
+     * @param orderId - 취소할 주문의 식별번호입니다.
      * @since 1.0.0
      */
-    void deleteOrder(final Long orderId);
+    void cancelOrder(final Long orderId);
+
+    default String attachPrefix(final Long orderId) {
+        return "GGORDER_" + orderId;
+    }
+
+    default Long detachPrefix(final String orderId) {
+        return Long.valueOf(orderId.substring(orderId.indexOf("_") + 1));
+    }
 
 }

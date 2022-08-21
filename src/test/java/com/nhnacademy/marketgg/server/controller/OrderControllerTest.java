@@ -4,6 +4,7 @@ import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
 import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -19,11 +20,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.aop.AuthInfoAspect;
 import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.request.order.CartResponse;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
+import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
+import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
@@ -36,16 +42,24 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
 @Transactional
@@ -68,13 +82,16 @@ class OrderControllerTest {
     @MockBean
     MemberRepository memberRepository;
 
+    @MockBean
+    RestTemplate restTemplate;
+
     String baseUri = "/orders";
 
     MemberInfo memberInfo;
     AuthInfo authInfo;
     HttpHeaders headers;
     String uuid;
-    Long memberId = 1L;
+    ShopResult<AuthInfo> authInfoResponse;
 
     @BeforeEach
     void setUp(WebApplicationContext wac) throws JsonProcessingException {
@@ -83,7 +100,7 @@ class OrderControllerTest {
                                  .build();
 
         uuid = UUID.randomUUID().toString();
-        memberInfo = Dummy.getDummyMemberInfo(memberId, new Cart());
+        memberInfo = Dummy.getDummyMemberInfo(1L, new Cart());
         authInfo = Dummy.getDummyAuthInfo();
         given(memberRepository.findMemberInfoByUuid(uuid)).willReturn(Optional.of(memberInfo));
 
@@ -92,6 +109,7 @@ class OrderControllerTest {
         headers.set(HttpHeaders.AUTHORIZATION, "jwt");
         headers.set(AUTH_ID, uuid);
         headers.set(WWW_AUTHENTICATE, roles);
+        authInfoResponse = ShopResult.success(authInfo);
     }
 
     @Test
@@ -102,7 +120,7 @@ class OrderControllerTest {
             "email", 30000L, 1L,
             2000, 300);
 
-        given(orderService.createOrder(any(OrderCreateRequest.class), anyLong())).willReturn(orderToPayment);
+        given(orderService.createOrder(any(OrderCreateRequest.class), any(MemberInfo.class))).willReturn(orderToPayment);
 
         mockMvc.perform(post(baseUri)
                    .headers(headers)
@@ -110,29 +128,32 @@ class OrderControllerTest {
                    .content(mapper.writeValueAsString(orderCreateRequest)))
                .andExpect(status().isCreated());
 
-        then(orderService).should(times(1)).createOrder(any(OrderCreateRequest.class), anyLong());
+        then(orderService).should(times(1)).createOrder(any(OrderCreateRequest.class), any(MemberInfo.class));
     }
 
-    // memo: I/O error on GET request for "http://127.0.0.1:6060/auth/v1/info" connection error -> gateway, auth 켜야함
-    // memo: 500 Internal Server Error: "{"success":false,"message":null}" -> authInfo 받는 과정 오류 jwt 때문?
-    // @Test
-    // @DisplayName("주문서 폼 필요정보 조회")
-    // public void testRetrieveOrderForm() throws Exception {
-    //     OrderFormResponse orderFormResponse = Dummy.getDummyOrderFormResponse();
-    //     List<ProductToOrder> list = List.of(new ProductToOrder());
-    //
-    //     given(orderService.retrieveOrderForm(any(List.class), any(MemberInfo.class), any(AuthInfo.class)))
-    //             .willReturn(orderFormResponse);
-    //
-    //     mockMvc.perform(get(baseUri + "/order-form")
-    //                             .headers(headers)
-    //                             .contentType(MediaType.APPLICATION_JSON)
-    //                             .content(mapper.writeValueAsString(list)))
-    //            .andExpect(status().isOk());
-    //
-    //     then(orderService).should(times(1))
-    //                       .retrieveOrderForm(any(List.class), any(MemberInfo.class), any(AuthInfo.class));
-    // }
+    @Test
+    @DisplayName("주문서 폼 필요정보 조회")
+    public void testRetrieveOrderForm() throws Exception {
+        OrderFormResponse orderFormResponse = Dummy.getDummyOrderFormResponse();
+        CartResponse cartResponse = new CartResponse();
+        ReflectionTestUtils.setField(cartResponse, "products", List.of());
+        ResponseEntity<ShopResult<AuthInfo>> responseEntity = new ResponseEntity<>(authInfoResponse, HttpStatus.OK);
+
+        given(orderService.retrieveOrderForm(any(List.class), any(MemberInfo.class), any(AuthInfo.class)))
+                .willReturn(orderFormResponse);
+        given(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), any(
+            ParameterizedTypeReference.class)))
+                .willReturn(responseEntity);
+
+        mockMvc.perform(post(baseUri + "/order-form")
+                                .headers(headers)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(cartResponse)))
+               .andExpect(status().isOk());
+
+        then(orderService).should(times(1))
+                          .retrieveOrderForm(any(List.class), any(MemberInfo.class), any(AuthInfo.class));
+    }
 
     @Test
     @DisplayName("주문서 목록 조회")
