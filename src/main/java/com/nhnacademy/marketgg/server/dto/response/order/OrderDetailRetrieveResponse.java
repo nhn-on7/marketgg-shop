@@ -28,7 +28,7 @@ public class OrderDetailRetrieveResponse {
 
     private final Integer usedPoint;
 
-    private final Integer trackingNo;
+    private final String trackingNo;
 
     private final Integer zipCode;
 
