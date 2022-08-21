@@ -39,10 +39,10 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public List<ProductInquiryPost> findAllByMemberNo(final Long id, final Pageable pageable) {
+    public Page<ProductInquiryPost> findAllByMemberNo(final Long id, final Pageable pageable) {
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
-        return from(productInquiryPost)
+        List<ProductInquiryPost> result = from(productInquiryPost)
             .select(Projections.constructor(ProductInquiryPost.class,
                 productInquiryPost.member.uuid,
                 productInquiryPost.pk.productNo,
@@ -51,7 +51,10 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
                 productInquiryPost.adminReply,
                 productInquiryPost.createdDate))
             .where(productInquiryPost.member.id.eq(id))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
             .fetch();
 
+        return new PageImpl<>(result, pageable, result.size());
     }
 }

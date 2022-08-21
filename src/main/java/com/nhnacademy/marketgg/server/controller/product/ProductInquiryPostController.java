@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.controller.product;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.annotation.Auth;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
@@ -70,11 +71,11 @@ public class ProductInquiryPostController {
      */
     @Auth
     @GetMapping("/products/{productId}/inquiries")
-    public ResponseEntity<ShopResult<List<ProductInquiryResponse>>> retrieveProductInquiry(@PathVariable final Long productId,
-                                                                                           final Pageable pageable)
+    public ResponseEntity<ShopResult<PageEntity<ProductInquiryResponse>>> retrieveProductInquiry(@PathVariable final Long productId,
+                                                                                                 final Pageable pageable)
         throws JsonProcessingException {
 
-        List<ProductInquiryResponse> productInquiryResponses
+        PageEntity<ProductInquiryResponse> productInquiryResponses
             = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)

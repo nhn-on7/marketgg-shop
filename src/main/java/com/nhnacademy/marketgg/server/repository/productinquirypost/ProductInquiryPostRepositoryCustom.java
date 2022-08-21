@@ -37,5 +37,5 @@ public interface ProductInquiryPostRepositoryCustom {
      * @author 민아영
      * @since 1.0.0
      */
-    List<ProductInquiryPost> findAllByMemberNo(final Long id, Pageable pageable);
+    Page<ProductInquiryPost> findAllByMemberNo(final Long id, Pageable pageable);
 }

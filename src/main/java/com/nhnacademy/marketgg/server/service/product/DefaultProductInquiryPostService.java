@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.service.product;
 import static com.nhnacademy.marketgg.server.repository.auth.AuthAdapter.checkResult;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
@@ -19,6 +20,7 @@ import com.nhnacademy.marketgg.server.repository.productinquirypost.ProductInqui
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,26 +55,30 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     }
 
     @Override
-    public List<ProductInquiryResponse> retrieveProductInquiryByProductId(final Long id,
-                                                                          final Pageable pageable)
+    public PageEntity<ProductInquiryResponse> retrieveProductInquiryByProductId(final Long id, final Pageable pageable)
         throws JsonProcessingException {
 
-        List<ProductInquiryResponse> inquiryByProduct
-            = productInquiryPostRepository.findAllByProductNo(id, pageable).getContent();
+        Page<ProductInquiryResponse> pageByProductNo = productInquiryPostRepository.findAllByProductNo(id, pageable);
+        List<ProductInquiryResponse> productInquiryResponses = pageByProductNo.getContent();
 
-        for (ProductInquiryResponse inquiry : inquiryByProduct) {
+        for (ProductInquiryResponse inquiry : productInquiryResponses) {
             MemberInfoRequest request = new MemberInfoRequest(inquiry.getUuid());
             MemberInfoResponse nameByUuid = checkResult(authRepository.getMemberInfo(request));
             inquiry.memberName(nameByUuid.getName());
         }
 
-        return inquiryByProduct;
+        return new PageEntity<>(pageByProductNo.getNumber(), pageByProductNo.getSize(),
+                                pageByProductNo.getTotalPages(), productInquiryResponses);
     }
 
     @Override
-    public List<ProductInquiryPost> retrieveProductInquiryByMemberId(final MemberInfo memberInfo,
-                                                                     final Pageable pageable) {
-        return productInquiryPostRepository.findAllByMemberNo(memberInfo.getId(), pageable);
+    public PageEntity<ProductInquiryPost> retrieveProductInquiryByMemberId(final MemberInfo memberInfo,
+                                                                           final Pageable pageable) {
+
+        Page<ProductInquiryPost> allByMemberNo = productInquiryPostRepository.findAllByMemberNo(memberInfo.getId(),
+                                                                                                pageable);
+        return new PageEntity<>(allByMemberNo.getNumber(), allByMemberNo.getSize(),
+                                allByMemberNo.getTotalPages(), allByMemberNo.getContent());
     }
 
     @Override

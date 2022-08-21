@@ -231,11 +231,10 @@ public class MemberController {
      * @since 1.0.0
      */
     @GetMapping("/product-inquiries")
-    public ResponseEntity<ShopResult<List<ProductInquiryPost>>> retrieveProductInquiry(
-        final MemberInfo memberInfo,
-        final Pageable pageable) {
+    public ResponseEntity<ShopResult<PageEntity<ProductInquiryPost>>> retrieveProductInquiry(
+        final MemberInfo memberInfo, final Pageable pageable) {
 
-        List<ProductInquiryPost> productInquiryResponses
+        PageEntity<ProductInquiryPost> productInquiryResponses
             = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
