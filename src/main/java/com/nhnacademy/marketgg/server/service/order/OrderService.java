@@ -111,4 +111,12 @@ public interface OrderService {
         return Long.valueOf(orderId.substring(orderId.indexOf("_") + 1));
     }
 
+    default String attachPrefix(final Long orderId) {
+        return "GGORDER_" + orderId;
+    }
+
+    default Long detachPrefix(final String orderId) {
+        return Long.valueOf(orderId.substring(orderId.indexOf("_") + 1));
+    }
+
 }
