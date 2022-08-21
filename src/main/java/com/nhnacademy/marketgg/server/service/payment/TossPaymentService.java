@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.service.payment;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.constant.payment.PaymentStatus;
 import com.nhnacademy.marketgg.server.dto.payment.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
@@ -142,7 +143,7 @@ public class TossPaymentService implements PaymentService {
         Payment foundPayment = paymentRepository.findByPaymentKey(paymentKey)
                                                 .orElseThrow(PaymentNotFoundException::new);
 
-        foundPayment.changePaymentStatusToCanceled();
+        foundPayment.changePaymentStatus(PaymentStatus.CANCELED);
     }
 
 }

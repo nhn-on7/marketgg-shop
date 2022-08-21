@@ -1,9 +1,9 @@
 package com.nhnacademy.marketgg.server.entity.payment;
 
 import com.nhnacademy.marketgg.server.constant.payment.PaymentStatus;
-import com.nhnacademy.marketgg.server.constant.payment.PaymentStatusConverter;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentType;
-import com.nhnacademy.marketgg.server.constant.payment.PaymentTypeConverter;
+import com.nhnacademy.marketgg.server.constant.payment.converter.PaymentStatusConverter;
+import com.nhnacademy.marketgg.server.constant.payment.converter.PaymentTypeConverter;
 import com.nhnacademy.marketgg.server.entity.Order;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -102,7 +102,8 @@ public class Payment implements Serializable {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    public void changePaymentStatusToCanceled() {
-        this.status = PaymentStatus.CANCELED;
+    public void changePaymentStatus(PaymentStatus status) {
+        this.status = status;
     }
+
 }

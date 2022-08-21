@@ -1,5 +1,6 @@
-package com.nhnacademy.marketgg.server.constant.payment;
+package com.nhnacademy.marketgg.server.constant.payment.converter;
 
+import com.nhnacademy.marketgg.server.constant.payment.SettlementStatus;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 

@@ -1,16 +1,12 @@
 package com.nhnacademy.marketgg.server.entity.payment;
 
 import com.nhnacademy.marketgg.server.constant.payment.BankCode;
-import com.nhnacademy.marketgg.server.constant.payment.BankCodeConverter;
+import com.nhnacademy.marketgg.server.constant.payment.converter.BankCodeConverter;
 import com.nhnacademy.marketgg.server.constant.payment.SettlementStatus;
-import com.nhnacademy.marketgg.server.constant.payment.SettlementStatusConveter;
-import java.io.Serializable;
+import com.nhnacademy.marketgg.server.constant.payment.converter.SettlementStatusConveter;
 import javax.persistence.Column;
 import javax.persistence.Convert;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
@@ -20,7 +16,6 @@ import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
