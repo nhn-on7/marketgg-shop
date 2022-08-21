@@ -11,16 +11,16 @@ import javax.persistence.Converter;
  * @since 1.0
  */
 @Converter
-public class PaymentMethodConverter implements AttributeConverter<PaymentMethod, String> {
+public class PaymentTypeConverter implements AttributeConverter<PaymentType, String> {
 
     @Override
-    public String convertToDatabaseColumn(PaymentMethod attribute) {
+    public String convertToDatabaseColumn(PaymentType attribute) {
         return attribute.getName();
     }
 
     @Override
-    public PaymentMethod convertToEntityAttribute(String dbData) {
-        return PaymentMethod.of(dbData);
+    public PaymentType convertToEntityAttribute(String type) {
+        return PaymentType.of(type);
     }
 
 }
