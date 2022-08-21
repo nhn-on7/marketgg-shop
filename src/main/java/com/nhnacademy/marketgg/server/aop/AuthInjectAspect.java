@@ -6,6 +6,7 @@ import static org.springframework.http.HttpMethod.GET;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
@@ -19,6 +20,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -77,10 +79,14 @@ public class AuthInjectAspect {
 
         HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<String> exchange =
-            restTemplate.exchange(gateway + "/auth/v1/info", GET, httpEntity, String.class);
+        ResponseEntity<ShopResult<AuthInfo>> exchange =
+            restTemplate.exchange(gateway + "/auth/v1/members/info", GET, httpEntity,
+                new ParameterizedTypeReference<>() {
+                });
 
-        AuthInfo authInfo = validCheck(exchange);
+        this.validCheck(exchange);
+
+        AuthInfo authInfo = Objects.requireNonNull(exchange.getBody()).getData();
         log.info("AuthInfo = {}", authInfo);
 
         Object[] args = Arrays.stream(pjp.getArgs())
@@ -94,20 +100,12 @@ public class AuthInjectAspect {
         return pjp.proceed(args);
     }
 
-    private AuthInfo validCheck(ResponseEntity<String> response)
-        throws JsonProcessingException {
-
+    private void validCheck(ResponseEntity<ShopResult<AuthInfo>> response) {
         log.info("http status: {}", response.getStatusCode());
-        if (response.getStatusCode().is4xxClientError()) {
-            ErrorEntity error =
-                mapper.readValue(response.getBody(), ErrorEntity.class);
+        if (response.getStatusCode().is4xxClientError() && Objects.nonNull(response.getBody())) {
+            ErrorEntity error = Objects.requireNonNull(response.getBody()).getError();
             throw new IllegalArgumentException(error.getMessage());
         }
-
-        SingleResponse<AuthInfo> authInfo = mapper.readValue(response.getBody(), new TypeReference<>() {
-        });
-
-        return authInfo.getData();
     }
 
 }
