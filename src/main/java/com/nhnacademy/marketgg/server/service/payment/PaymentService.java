@@ -6,18 +6,21 @@ import com.nhnacademy.marketgg.server.constant.payment.AgencyCode;
 import com.nhnacademy.marketgg.server.constant.payment.BankCode;
 import com.nhnacademy.marketgg.server.constant.payment.CardType;
 import com.nhnacademy.marketgg.server.constant.payment.OwnerType;
-import com.nhnacademy.marketgg.server.constant.payment.PaymentMethod;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentStatus;
+import com.nhnacademy.marketgg.server.constant.payment.PaymentType;
 import com.nhnacademy.marketgg.server.constant.payment.RefundStatus;
 import com.nhnacademy.marketgg.server.constant.payment.SettlementStatus;
 import com.nhnacademy.marketgg.server.dto.payment.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
-import com.nhnacademy.marketgg.server.dto.payment.request.PaymentRequest;
+import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentVerifyRequest;
+import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountCreateRequest;
+import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountDepositRequest;
 import com.nhnacademy.marketgg.server.dto.payment.result.CardPaymentResult;
 import com.nhnacademy.marketgg.server.dto.payment.result.MobilePhonePaymentResult;
 import com.nhnacademy.marketgg.server.dto.payment.result.TransferPaymentResult;
 import com.nhnacademy.marketgg.server.dto.payment.result.VirtualAccountPaymentResult;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.payment.CardPayment;
 import com.nhnacademy.marketgg.server.entity.payment.MobilePhonePayment;
@@ -25,6 +28,7 @@ import com.nhnacademy.marketgg.server.entity.payment.Payment;
 import com.nhnacademy.marketgg.server.entity.payment.TransferPayment;
 import com.nhnacademy.marketgg.server.entity.payment.VirtualAccountPayment;
 import java.time.LocalDateTime;
+import java.util.function.BooleanSupplier;
 
 /**
  * 결제와 관련된 비즈니스 처리를 담당합니다.
@@ -38,31 +42,47 @@ public interface PaymentService {
     /**
      * 회원의 결제 요청에 대한 검증을 처리합니다.
      *
-     * @param paymentRequest - 결제 검증 요청 정보
-     * @return 성공 여부 응답 결과 반환
+     * @param paymentVerifyRequest - 결제 검증 요청 데이터
+     * @return 최종 결제 금액 일치 여부
      */
-    PaymentResponse verifyRequest(final PaymentVerifyRequest paymentRequest);
+    BooleanSupplier verifyRequest(final OrderToPayment paymentVerifyRequest);
 
     /**
-     * 최종 결제 승인을 처리합니다.
+     * 결제 승인 요청에 대해 확정 처리합니다.
      *
-     * @param paymentRequest - 결제 승인 요청 정보
+     * @param paymentRequest - 결제 승인 요청 데이터
+     * @return - 결제 승인 응답 결과가 담겨 있는 {@link PaymentResponse} 객체
      */
-    void pay(final PaymentRequest paymentRequest);
+    PaymentResponse pay(final PaymentConfirmRequest paymentRequest);
+
+    /**
+     * 결제 수단이 가상계좌인 경우, 가상계좌 발급을 요청합니다.
+     *
+     * @param virtualAccountRequest - 가상계좌 발급을 위한 요청 데이터가 담겨있는 객체
+     * @return 발급한 가상계좌 데이터를 포함한 결과 데이터
+     */
+    PaymentResponse createVirtualAccounts(final VirtualAccountCreateRequest virtualAccountRequest);
+
+    /**
+     * 회원이 주문한 건에 대해 가상계좌에 입금했을 때 결제 승인 처리를 수행합니다.
+     *
+     * @param virtualAccountRequest - 가상계좌 입금 요청 데이터
+     */
+    void putMoneyInVirtualAccount(final VirtualAccountDepositRequest virtualAccountRequest);
 
     /**
      * 승인된 결제를 취소합니다.
      *
      * @param paymentKey     - 결제 건에 대한 고유 키 값
-     * @param paymentRequest - 결제 취소 요청 정보
+     * @param paymentRequest - 결제 취소 요청 데이터
      */
     void cancelPayment(final String paymentKey, final PaymentCancelRequest paymentRequest);
 
     /**
-     * 결제대행사로부터 받아온 결제 정보를 통해 결제 엔티티를 생성합니다.
+     * 결제대행사로부터 받아온 결제 데이터를 통해 결제 엔티티를 생성합니다.
      *
      * @param order    - 주문 개체
-     * @param response - 결제대행사로부터 받아온 결제 요청에 대한 응답 정보
+     * @param response - 결제대행사로부터 받아온 결제 요청에 대한 응답 데이터
      * @return 결제 개체
      */
     default Payment toEntity(final Order order, final PaymentResponse response) {
@@ -70,7 +90,7 @@ public interface PaymentService {
                       .orderName(response.getOrderName())
                       .order(order)
                       .paymentKey(response.getPaymentKey())
-                      .method(PaymentMethod.of(response.getMethod()))
+                      .method(PaymentType.of(response.getMethod()))
                       .totalAmount(response.getTotalAmount())
                       .balanceAmount(response.getBalanceAmount())
                       // FIXME: 할인금액 연동
@@ -83,10 +103,10 @@ public interface PaymentService {
     }
 
     /**
-     * 결제대행사로부터 제공받은 카드 결제 정보를 바탕으로 개체를 생성합니다.
+     * 결제대행사로부터 제공받은 카드 결제 데이터를 바탕으로 카드결제 개체를 생성합니다.
      *
      * @param payment            - 결제 개체
-     * @param cardPaymentRequest - 카드 결제 생성 정보
+     * @param cardPaymentRequest - 카드 결제 생성 데이터
      * @return 카드 결제 개체
      */
     default CardPayment toEntity(final Payment payment, final CardPaymentResult cardPaymentRequest) {
@@ -104,10 +124,10 @@ public interface PaymentService {
     }
 
     /**
-     * 결제대행사로부터 제공받은 가상계좌 결제 정보를 바탕으로 개체를 생성합니다.
+     * 결제대행사로부터 제공받은 가상계좌 결제 데이터를 바탕으로 가상계좌 개체를 생성합니다.
      *
      * @param payment - 결제 개체
-     * @param result  - 가상계좌 결제 생성 정보
+     * @param result  - 가상계좌 결제 생성 데이터
      * @return 가상계좌 개체
      */
     default VirtualAccountPayment toEntity(final Payment payment, final VirtualAccountPaymentResult result) {
@@ -124,12 +144,35 @@ public interface PaymentService {
                                     .build();
     }
 
-    default TransferPayment toEntity(final TransferPaymentResult transferResult) {
-        return null;
+    /**
+     * 결제대행사로부터 제공받은 계좌이체 결제 데이터를 바탕으로 계좌이체 개체를 생성합니다.
+     *
+     * @param payment        - 결제 개체
+     * @param transferResult - 계좌이체 결제 생성 데이터
+     * @return 계좌이체 개체
+     */
+    default TransferPayment toEntity(final Payment payment, final TransferPaymentResult transferResult) {
+        return TransferPayment.builder()
+                              .payment(payment)
+                              .bank(BankCode.of(transferResult.getBank()))
+                              .settlementStatus(SettlementStatus.valueOf(transferResult.getSettlementStatus()))
+                              .build();
     }
 
-    default MobilePhonePayment toEntity(final MobilePhonePaymentResult mobilePhoneResult) {
-        return null;
+    /**
+     * 결제대행사로부터 제공받은 계좌이체 결제 데이터를 바탕으로 계좌이체 개체를 생성합니다.
+     *
+     * @param payment           - 결제 개체
+     * @param mobilePhoneResult - 계좌이체 결제 생성 데터이터
+     * @return 계좌이체 개체
+     */
+    default MobilePhonePayment toEntity(final Payment payment, final MobilePhonePaymentResult mobilePhoneResult) {
+        return MobilePhonePayment.builder()
+                                 .payment(payment)
+                                 .customerMobilePhone(mobilePhoneResult.getCustomerMobilePhone())
+                                 .settlementStatus(SettlementStatus.valueOf(mobilePhoneResult.getSettlementStatus()))
+                                 .receiptUrl(mobilePhoneResult.getReceiptUrl())
+                                 .build();
     }
 
 }

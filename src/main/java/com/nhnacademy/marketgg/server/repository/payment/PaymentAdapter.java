@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.repository.payment;
 
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
-import com.nhnacademy.marketgg.server.dto.payment.request.PaymentRequest;
+import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Collections;
@@ -40,7 +40,7 @@ public class PaymentAdapter {
      * @param paymentRequest - 결제 요청 정보
      * @return 결제 승인 응답 정보
      */
-    public ResponseEntity<String> confirm(final PaymentRequest paymentRequest) {
+    public ResponseEntity<String> confirm(final PaymentConfirmRequest paymentRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBasicAuth(this.getEncodedPaymentKey());
         headers.setContentType(MediaType.APPLICATION_JSON);

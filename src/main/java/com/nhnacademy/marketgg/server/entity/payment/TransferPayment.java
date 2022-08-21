@@ -1,13 +1,12 @@
 package com.nhnacademy.marketgg.server.entity.payment;
 
 import com.nhnacademy.marketgg.server.constant.payment.BankCode;
+import com.nhnacademy.marketgg.server.constant.payment.converter.BankCodeConverter;
 import com.nhnacademy.marketgg.server.constant.payment.SettlementStatus;
-import java.io.Serializable;
+import com.nhnacademy.marketgg.server.constant.payment.converter.SettlementStatusConveter;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
@@ -17,7 +16,6 @@ import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -42,33 +40,22 @@ import lombok.NoArgsConstructor;
 @Getter
 public class TransferPayment {
 
-    @Embeddable
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @Getter
-    @EqualsAndHashCode
-    public static class Pk implements Serializable {
-
-        @Column(name = "payment_no")
-        @NotNull
-        private Long paymentId;
-
-    }
-
     @Id
-    private Pk pk;
+    private Long paymentId;
 
-    @MapsId(value = "paymentId")
+    @MapsId
     @OneToOne
     @JoinColumn(name = "payment_no")
+    @NotNull
     private Payment payment;
 
     @Column
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = BankCodeConverter.class)
     @NotNull
     private BankCode bank;
 
     @Column(name = "settlement_status")
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = SettlementStatusConveter.class)
     @NotNull
     private SettlementStatus settlementStatus;
 

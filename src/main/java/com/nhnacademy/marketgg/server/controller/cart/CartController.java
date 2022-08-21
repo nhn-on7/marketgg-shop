@@ -5,9 +5,6 @@ import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dto.response.cart.CartProductResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.cart.CartProductService;
 import java.util.List;
 import javax.validation.Valid;
@@ -44,8 +41,8 @@ public class CartController {
      */
     @PostMapping
     public ResponseEntity<ShopResult<String>> addProductToCart(MemberInfo member,
-                                                           @RequestBody @Valid
-                                                           ProductToCartRequest productAddRequest) {
+                                                               @RequestBody @Valid
+                                                               ProductToCartRequest productAddRequest) {
 
         cartProductService.addProduct(member, productAddRequest);
 
@@ -78,8 +75,8 @@ public class CartController {
      */
     @PatchMapping
     public ResponseEntity<ShopResult<String>> updateAmount(MemberInfo member,
-                                                       @RequestBody @Validated
-                                                       ProductToCartRequest productUpdateRequest) {
+                                                           @RequestBody @Validated
+                                                           ProductToCartRequest productUpdateRequest) {
 
         cartProductService.updateAmount(member, productUpdateRequest);
 

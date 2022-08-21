@@ -3,13 +3,10 @@ package com.nhnacademy.marketgg.server.aop;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpMethod.GET;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.dto.ErrorEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
-import com.nhnacademy.marketgg.server.dto.response.common.ErrorEntity;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
@@ -80,9 +77,8 @@ public class AuthInfoAspect {
 
         ResponseEntity<ShopResult<AuthInfo>> exchange =
             restTemplate.exchange(gateway + "/auth/v1/members/info", GET, httpEntity,
-                new ParameterizedTypeReference<>() {
-                });
-
+                                  new ParameterizedTypeReference<>() {
+                                  });
         this.validCheck(exchange);
 
         AuthInfo authInfo = Objects.requireNonNull(exchange.getBody()).getData();
@@ -106,5 +102,4 @@ public class AuthInfoAspect {
             throw new IllegalArgumentException(error.getMessage());
         }
     }
-
 }

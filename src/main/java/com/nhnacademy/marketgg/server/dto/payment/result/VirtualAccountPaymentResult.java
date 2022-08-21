@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.dto.payment.result;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,15 +22,15 @@ public class VirtualAccountPaymentResult {
     private String accountType;
 
     @NotBlank
-    @Max(20)
+    @Size(max = 20)
     private String accountNumber;
 
     @NotBlank
-    @Max(20)
+    @Size(max = 20)
     private String bank;
 
     @NotBlank
-    @Max(100)
+    @Size(max = 100)
     private String customerName;
 
     @NotBlank
