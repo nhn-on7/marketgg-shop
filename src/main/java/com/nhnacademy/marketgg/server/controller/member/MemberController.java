@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.annotation.UUID;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
@@ -11,7 +12,6 @@ import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateReques
 import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
@@ -19,14 +19,19 @@ import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMembe
 import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.member.MemberService;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -167,16 +172,24 @@ public class MemberController {
      * @author 민아영
      * @since 1.0.0
      */
+    @Operation(summary = "지급 쿠폰 생성",
+               description = "회원이 쿠폰의 이름으로 쿠폰을 등록하면 지급 쿠폰이 생성됩니다.",
+               parameters = {@Parameter(name = "memberInfo", description = "쿠폰을 등록하는 회원의 정보", required = true),
+                   @Parameter(name = "givenCouponRequest", description = "등록할 쿠폰 이름을 가진 요청 객체", required = true)},
+               responses = @ApiResponse(responseCode = "201",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @PostMapping("/coupons")
-    public ResponseEntity<CommonResponse> createGivenCoupons(final MemberInfo memberInfo,
-                                                             @Valid @RequestBody final
-                                                             GivenCouponCreateRequest givenCouponRequest) {
+    public ResponseEntity<ShopResult<Void>> createGivenCoupons(final MemberInfo memberInfo,
+                                                               @Valid @RequestBody final
+                                                               GivenCouponCreateRequest givenCouponRequest) {
 
         givenCouponService.createGivenCoupons(memberInfo, givenCouponRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Add success"));
+                             .body(ShopResult.success());
     }
 
     /**
@@ -187,26 +200,38 @@ public class MemberController {
      * @author 민아영
      * @since 1.0.0
      */
+    @Operation(summary = "지급 쿠폰 조회",
+               description = "회원이 자신에게 지급된 쿠폰을 조회합니다.",
+               parameters = @Parameter(name = "memberInfo", description = "쿠폰을 등록하는 회원의 정보", required = true),
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @GetMapping("/coupons")
-    public ResponseEntity<CommonResponse> retrieveGivenCoupons(final MemberInfo memberInfo, final Pageable pageable) {
-        List<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
+    public ResponseEntity<ShopResult<PageEntity<GivenCouponResponse>>> retrieveGivenCoupons(final MemberInfo memberInfo,
+                                                                                            @PageableDefault final
+                                                                                            Pageable pageable) {
+        PageEntity<GivenCouponResponse> givenCouponResponses
+            = givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new ListResponse<>(givenCouponResponses));
+                             .body(ShopResult.success(givenCouponResponses));
     }
 
     /**
      * 한 회원이 상품에 대해 문의한 전체 상품 문의 글을 조회하는 GET Mapping 을 지원합니다.
      *
      * @param memberInfo - 상품 문의 글을 조회할 회원의 정보 입니다.
-     * @return - List<ProductInquiryByMemberResponse> 를 담은 응답 객체를 반환 합니다.
+     * @param pageable   조회하려는 페이지 정보입니다.
+     *                   (@PageableDefault - 기본값과 추가 설정을 할 수 있습니다.)
+     * @return - List&lt;ProductInquiryByMemberResponse&gt; 를 담은 응답 객체를 반환 합니다.
      * @author 민아영
      * @since 1.0.0
      */
     @GetMapping("/product-inquiries")
     public ResponseEntity<CommonResponse> retrieveProductInquiry(final MemberInfo memberInfo,
-                                                                 final Pageable pageable) {
+                                                                 @PageableDefault final Pageable pageable) {
         Page<ProductInquiryByMemberResponse> productInquiryResponses
             = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
 

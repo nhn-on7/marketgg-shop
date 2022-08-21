@@ -6,13 +6,18 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
 import com.nhnacademy.marketgg.server.dto.request.coupon.UsedCouponDto;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
+import com.nhnacademy.marketgg.server.entity.Cart;
+import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
+import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.UsedCoupon;
 import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponRepository;
 import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.coupon.DefaultUsedCouponService;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +25,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,13 +48,26 @@ class DefaultUsedCouponServiceTest {
     Order order;
     GivenCoupon givenCoupon;
     UsedCoupon usedCoupon;
+    Coupon coupon;
+    MemberCreateRequest memberRequest;
+    Member member;
 
     @BeforeEach
     void setUp() {
         order = Order.test();
-        givenCoupon = GivenCoupon.test();
         usedCouponDto = new UsedCouponDto();
-        usedCoupon = new UsedCoupon(usedCouponDto, order, givenCoupon);
+        ReflectionTestUtils.setField(usedCouponDto, "orderId", 1L);
+        ReflectionTestUtils.setField(usedCouponDto, "couponId", 1L);
+        ReflectionTestUtils.setField(usedCouponDto, "memberId", 1L);
+
+        memberRequest = new MemberCreateRequest();
+        member = new Member(memberRequest, new Cart());
+        coupon
+            = new Coupon(1L, "신규쿠폰", "정률할인", 1, 1, 0.5);
+        givenCoupon
+            = new GivenCoupon(new GivenCoupon.Pk(1L, 1L), coupon, member, LocalDateTime.now());
+
+        usedCoupon = new UsedCoupon(new UsedCoupon.Pk(1L, 1L, 1L), order, givenCoupon);
     }
 
 

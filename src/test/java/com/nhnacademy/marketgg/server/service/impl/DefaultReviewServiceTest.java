@@ -20,7 +20,7 @@ import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Review;
-import com.nhnacademy.marketgg.server.entity.event.SavePointEvent;
+import com.nhnacademy.marketgg.server.eventlistener.event.savepoint.SavePointEvent;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.review.ReviewRepository;

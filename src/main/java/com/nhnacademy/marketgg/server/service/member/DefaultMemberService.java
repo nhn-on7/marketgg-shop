@@ -1,5 +1,8 @@
 package com.nhnacademy.marketgg.server.service.member;
 
+import static com.nhnacademy.marketgg.server.constant.CouponsName.SIGNUP;
+import static com.nhnacademy.marketgg.server.constant.PointContent.REFERRED;
+
 import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
@@ -7,8 +10,8 @@ import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
-import com.nhnacademy.marketgg.server.entity.event.GivenCouponEvent;
-import com.nhnacademy.marketgg.server.entity.event.SavePointEvent;
+import com.nhnacademy.marketgg.server.eventlistener.event.givencoupon.SignedUpEvent;
+import com.nhnacademy.marketgg.server.eventlistener.event.savepoint.RecommendEvent;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.membergrade.MemberGradeNotFoundException;
 import com.nhnacademy.marketgg.server.repository.cart.CartRepository;
@@ -91,7 +94,6 @@ public class DefaultMemberService implements MemberService {
      * 회원가입시 회원정보를 DB 에 추가하는 메소드입니다.
      *
      * @param signUpRequest - 회원가입시 입력한 정보를 담고있는 객체입니다.
-     * @return ShopMemberSignUpResponse - 회원가입을 하는 회원과 추천을 받게되는 회원의 uuid 를 담은 객체 입니다.
      */
     @Transactional
     @Override
@@ -102,14 +104,14 @@ public class DefaultMemberService implements MemberService {
 
         deliveryAddressRepository.save(new DeliveryAddress(signUpMember, signUpRequest));
 
-        publisher.publishEvent(GivenCouponEvent.signUpCoupon(signUpMember));
+        publisher.publishEvent(new SignedUpEvent(SIGNUP.couponName(), signUpMember));
 
         if (referrerCheck(signUpRequest) != null) {
             Member referredMember = memberRepository.findByUuid(referrerCheck(signUpRequest))
                                                     .orElseThrow(MemberNotFoundException::new);
 
-            publisher.publishEvent(SavePointEvent.dispensePointForReferred(signUpMember));
-            publisher.publishEvent(SavePointEvent.dispensePointForReferred(referredMember));
+            publisher.publishEvent(new RecommendEvent(signUpMember, REFERRED.getContent()));
+            publisher.publishEvent(new RecommendEvent(referredMember, REFERRED.getContent()));
         }
     }
 

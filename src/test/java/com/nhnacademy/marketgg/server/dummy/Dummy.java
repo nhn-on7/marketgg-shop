@@ -292,16 +292,16 @@ public class Dummy {
         return new DeliveryAddress(Dummy.getDummyMember(Dummy.getDummyCart(1L)), request);
     }
 
-    public static Coupon getDummyCoupon() {
-        CouponDto couponDto = new CouponDto();
-        ReflectionTestUtils.setField(couponDto, "id", 1L);
-        ReflectionTestUtils.setField(couponDto, "name", "2022 썸머 이벤트");
-        ReflectionTestUtils.setField(couponDto, "type", "정액할인");
-        ReflectionTestUtils.setField(couponDto, "expiredDate", 30);
-        ReflectionTestUtils.setField(couponDto, "minimumMoney", 10000);
-        ReflectionTestUtils.setField(couponDto, "discountAmount", 1000);
-
-        return new Coupon(couponDto);
-    }
+    // public static Coupon getDummyCoupon() {
+    //     CouponDto couponDto = new CouponDto();
+    //     ReflectionTestUtils.setField(couponDto, "id", 1L);
+    //     ReflectionTestUtils.setField(couponDto, "name", "2022 썸머 이벤트");
+    //     ReflectionTestUtils.setField(couponDto, "type", "정액할인");
+    //     ReflectionTestUtils.setField(couponDto, "expiredDate", 30);
+    //     ReflectionTestUtils.setField(couponDto, "minimumMoney", 10000);
+    //     ReflectionTestUtils.setField(couponDto, "discountAmount", 1000);
+    //
+    //     return new Coupon();
+    // }
 
 }

@@ -65,6 +65,7 @@ class DefaultGivenCouponServiceTest {
     CartRepository cartRepository;
 
     CouponDto couponDto;
+    Coupon coupon;
     GivenCoupon givenCoupon;
     Cart cart;
     GivenCouponCreateRequest givenCouponRequest;
@@ -84,11 +85,11 @@ class DefaultGivenCouponServiceTest {
         ReflectionTestUtils.setField(member, "id", 1L);
         ReflectionTestUtils.setField(givenCouponRequest, "name", "name");
 
-        couponDto = new CouponDto();
-        ReflectionTestUtils.setField(couponDto, "expiredDate", 10);
         cart = cartRepository.save(new Cart());
-        givenCoupon = new GivenCoupon(new Coupon(couponDto),
-                                      new Member(memberCreateRequest, cart));
+        couponDto
+            = new CouponDto(1L, "신규쿠폰", "정률할인", 1, 1, 0.5);
+        coupon
+            = new Coupon(1L, "신규쿠폰", "정률할인", 1, 1, 0.5);
         memberInfo = Dummy.getDummyMemberInfo(1L, cart);
     }
 
@@ -96,7 +97,6 @@ class DefaultGivenCouponServiceTest {
     @DisplayName("지급 쿠폰 생성")
     void testCreateGivenCoupons() {
         given(memberRepository.findById(any())).willReturn(Optional.of(new Member(memberCreateRequest, cart)));
-        Coupon coupon = new Coupon(couponDto);
         given(memberRepository.findById(any())).willReturn(Optional.of(member));
         given(couponRepository.findCouponByName(anyString())).willReturn(Optional.of(coupon));
 
@@ -114,22 +114,6 @@ class DefaultGivenCouponServiceTest {
         givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
 
         then(givenCouponRepository).should(times(1)).findByMemberId(any(), any(Pageable.class));
-    }
-
-    @Test
-    @DisplayName("private method Test")
-    void testCheckAvailability() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        DefaultGivenCouponService defaultGivenCouponService = new DefaultGivenCouponService(givenCouponRepository,
-                                                                                            couponRepository,
-                                                                                            usedCouponRepository,
-                                                                                            memberRepository);
-
-        Method method = defaultGivenCouponService.getClass().getDeclaredMethod("checkAvailability", GivenCoupon.class);
-        method.setAccessible(true);
-
-        Object invoke = method.invoke(defaultGivenCouponService, givenCoupon);
-        then(usedCouponRepository).should(times(1)).findAllByGivenCoupon(any());
-        assertThat(invoke).isInstanceOf(GivenCouponResponse.class);
     }
 
 }
