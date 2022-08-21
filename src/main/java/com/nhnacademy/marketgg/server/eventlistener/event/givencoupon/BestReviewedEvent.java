@@ -10,12 +10,9 @@ import lombok.RequiredArgsConstructor;
  * @author 민아영
  * @since 1.0.0
  */
-@RequiredArgsConstructor
-@Getter
 public class BestReviewedEvent extends GiveCouponEvent {
 
-    private final String couponName;
-
-    private final Member member;
-
+    public BestReviewedEvent(String couponName, Member member) {
+        super(couponName, member);
+    }
 }

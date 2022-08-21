@@ -41,12 +41,12 @@ public class UsedCouponController {
      * @since 1.0.0
      */
     @Operation(summary = "사용 쿠폰 생성",
-        description = "쿠폰 사용이 완료되면 사용 쿠폰이 생성됩니다.",
-        parameters = @Parameter(name = "usedCouponDto", description = "생성할 사용 쿠폰 요청 객체", required = true),
-        responses = @ApiResponse(responseCode = "201",
-            content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = ShopResult.class)),
-            useReturnTypeSchema = true))
+               description = "쿠폰 사용이 완료되면 사용 쿠폰이 생성됩니다.",
+               parameters = @Parameter(name = "usedCouponDto", description = "생성할 사용 쿠폰 요청 객체", required = true),
+               responses = @ApiResponse(responseCode = "201",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @PostMapping
     public ResponseEntity<ShopResult<Void>> createUsedCoupons(@Valid @RequestBody final UsedCouponDto usedCouponDto) {
         usedCouponService.createUsedCoupons(usedCouponDto);
@@ -64,12 +64,12 @@ public class UsedCouponController {
      * @since 1.0.0
      */
     @Operation(summary = "사용 쿠폰 삭제",
-        description = "쿠폰 사용이 취소되면 사용 쿠폰이 삭제됩니다.",
-        parameters = @Parameter(name = "usedCouponDto",description = "삭제할 사용 쿠폰 요청 객체", required = true),
-        responses = @ApiResponse(responseCode = "204",
-            content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = ShopResult.class)),
-            useReturnTypeSchema = true))
+               description = "쿠폰 사용이 취소되면 사용 쿠폰이 삭제됩니다.",
+               parameters = @Parameter(name = "usedCouponDto", description = "삭제할 사용 쿠폰 요청 객체", required = true),
+               responses = @ApiResponse(responseCode = "204",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @DeleteMapping
     public ResponseEntity<ShopResult<Void>> deleteUsedCoupons(@Valid @RequestBody final UsedCouponDto usedCouponDto) {
         usedCouponService.deleteUsedCoupons(usedCouponDto);

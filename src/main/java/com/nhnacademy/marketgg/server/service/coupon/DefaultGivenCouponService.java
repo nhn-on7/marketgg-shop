@@ -82,7 +82,7 @@ public class DefaultGivenCouponService implements GivenCouponService {
                                                                 .collect(Collectors.toUnmodifiableList());
 
         return new PageEntity<>(givenCoupons.getNumber(), givenCoupons.getSize(),
-            givenCoupons.getTotalPages(), givenCouponList);
+                                givenCoupons.getTotalPages(), givenCouponList);
     }
 
     /**
@@ -106,7 +106,7 @@ public class DefaultGivenCouponService implements GivenCouponService {
             status = VALID;
         }
 
-        return this.toDto(givenCoupons, status.state(), expirationPeriod);
+        return this.toDto(givenCoupons, status.getStatus(), expirationPeriod);
     }
 
 }

@@ -2,8 +2,6 @@ package com.nhnacademy.marketgg.server.eventlistener.event.savepoint;
 
 import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.entity.Member;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * 회원가입 시 추천을 하면 발행하는 이벤트 구현체 입니다.
@@ -13,14 +11,13 @@ import lombok.RequiredArgsConstructor;
  * @version 1.0.0
  * @since 1.0.0
  */
-@RequiredArgsConstructor
-@Getter
 public class RecommendEvent extends SavePointEvent {
 
-    private static final int REFERRED_POINT = 5000;
+    private static final int REFERRED_POINT = 5_000;
 
-    private final Member member;
-    private final String content;
+    public RecommendEvent(Member member, String content) {
+        super(member, content);
+    }
 
     /**
      * {@inheritDoc}
@@ -31,7 +28,7 @@ public class RecommendEvent extends SavePointEvent {
      */
     @Override
     public PointHistoryRequest getPointHistory() {
-        return new PointHistoryRequest(REFERRED_POINT, content);
+        return new PointHistoryRequest(REFERRED_POINT, super.getContent());
     }
 
 }

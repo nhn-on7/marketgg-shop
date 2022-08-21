@@ -13,14 +13,13 @@ import lombok.RequiredArgsConstructor;
  * @version 1.0.0
  * @since 1.0.0
  */
-@RequiredArgsConstructor
-@Getter
 public class PhotoReviewEvent extends SavePointEvent {
 
     private static final int IMAGE_REVIEW_POINT = 500;
 
-    private final Member member;
-    private final String content;
+    public PhotoReviewEvent(Member member, String content) {
+        super(member, content);
+    }
 
     /**
      * {@inheritDoc}
@@ -31,7 +30,7 @@ public class PhotoReviewEvent extends SavePointEvent {
      */
     @Override
     public PointHistoryRequest getPointHistory() {
-        return new PointHistoryRequest(IMAGE_REVIEW_POINT, content);
+        return new PointHistoryRequest(IMAGE_REVIEW_POINT, super.getContent());
     }
 
 }

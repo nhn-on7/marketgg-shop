@@ -27,7 +27,7 @@ public class GivenCouponResponse {
     private final Integer minimumMoney;
 
     @Schema(title = "할인량",
-        description = "쿠폰의 할인량입니다. 정액할인이면 금액을 나타내고 정률할인이면 퍼센트를 나타냅니다.", example = "0.1")
+            description = "쿠폰의 할인량입니다. 정액할인이면 금액을 나타내고 정률할인이면 퍼센트를 나타냅니다.", example = "0.1")
     private final Double discountAmount;
 
     @Schema(title = "만료일자", description = "쿠폰의 만료일자 입니다.", example = "2022-08-20 20:00:00")

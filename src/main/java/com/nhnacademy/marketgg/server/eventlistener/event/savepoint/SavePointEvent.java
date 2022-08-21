@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.eventlistener.event.savepoint;
 
 import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.entity.Member;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -12,11 +13,12 @@ import lombok.Getter;
  * @version 1.0.0
  * @since 1.0.0
  */
+@AllArgsConstructor
 @Getter
 public abstract class SavePointEvent {
 
-    Member member;
-    String content;
+    private Member member;
+    private String content;
 
     /**
      * 적립할 포인트의 요청 Dto 를 반환하는 메소드 입니다.
