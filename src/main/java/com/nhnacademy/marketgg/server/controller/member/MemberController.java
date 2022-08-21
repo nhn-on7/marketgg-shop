@@ -230,6 +230,12 @@ public class MemberController {
      * @author 민아영
      * @since 1.0.0
      */
+    @Operation(summary = "회원의 상품 문의 조회",
+               description = "회원이 등록한 상품 문의에 대해 조회합니다.",
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @GetMapping("/product-inquiries")
     public ResponseEntity<ShopResult<PageEntity<ProductInquiryPost>>> retrieveProductInquiry(
         final MemberInfo memberInfo, final Pageable pageable) {

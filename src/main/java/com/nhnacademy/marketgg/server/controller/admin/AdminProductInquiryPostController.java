@@ -4,6 +4,11 @@ package com.nhnacademy.marketgg.server.controller.admin;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryReplyRequest;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,6 +40,14 @@ public class AdminProductInquiryPostController {
      * @author 민아영
      * @since 1.0.0
      */
+    @Operation(summary = "상품 문의 답글 등록",
+               description = "관리자가 상품 문의 글에 답글을 등록합니다.",
+               parameters = @Parameter(name = "replyRequest",
+                                       description = "관리자가 작성한 답글이 들어있는 요청 객체", required = true),
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @PutMapping("/inquiry-reply")
     public ResponseEntity<ShopResult<Void>> updateProductInquiryReply(@RequestBody @Valid final
                                                                       ProductInquiryReplyRequest replyRequest) {

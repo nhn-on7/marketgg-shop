@@ -8,7 +8,11 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
-import java.util.List;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -47,6 +51,14 @@ public class ProductInquiryPostController {
      * @author 민아영
      * @since 1.0.0
      */
+    @Operation(summary = "상품 문의 등록",
+               description = "회원이 특정 상품에 대해 상품 문의를 등록합니다.",
+               parameters = @Parameter(name = "inquiryRequest",
+                                       description = "회원이 작성한 상품 문의 요청 객체", required = true),
+               responses = @ApiResponse(responseCode = "201",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @Auth
     @PostMapping("/products/{productId}/inquiry")
     public ResponseEntity<ShopResult<Void>> createProductInquiry(@PathVariable final Long productId,
@@ -69,6 +81,12 @@ public class ProductInquiryPostController {
      * @author 민아영
      * @since 1.0.0
      */
+    @Operation(summary = "상품 문의 조회",
+               description = "특정 상품에 대한 상품 문의 조회",
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @Auth
     @GetMapping("/products/{productId}/inquiries")
     public ResponseEntity<ShopResult<PageEntity<ProductInquiryResponse>>> retrieveProductInquiry(@PathVariable final Long productId,
@@ -92,6 +110,12 @@ public class ProductInquiryPostController {
      * @author 민아영
      * @since 1.0.0
      */
+    @Operation(summary = "상품 문의 삭제",
+               description = "회원이 등록한 상품 문의를 삭제합니다.",
+               responses = @ApiResponse(responseCode = "204",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @Auth
     @DeleteMapping("/products/{productId}/inquiry/{inquiryId}")
     public ResponseEntity<ShopResult<Void>> deleteProductInquiry(@PathVariable final Long productId,
