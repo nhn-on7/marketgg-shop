@@ -19,6 +19,11 @@ import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMembe
 import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.member.MemberService;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.net.URI;
 import java.time.LocalDateTime;
 import javax.validation.Valid;
@@ -167,6 +172,14 @@ public class MemberController {
      * @author 민아영
      * @since 1.0.0
      */
+    @Operation(summary = "지급 쿠폰 생성",
+        description = "회원이 쿠폰의 이름으로 쿠폰을 등록하면 지급 쿠폰이 생성됩니다.",
+        parameters = {@Parameter(name = "memberInfo", description = "쿠폰을 등록하는 회원의 정보", required = true),
+            @Parameter(name = "givenCouponRequest", description = "등록할 쿠폰 이름을 가진 요청 객체", required = true)},
+        responses = @ApiResponse(responseCode = "201",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = ShopResult.class)),
+            useReturnTypeSchema = true))
     @PostMapping("/coupons")
     public ResponseEntity<ShopResult<Void>> createGivenCoupons(final MemberInfo memberInfo,
                                                                @Valid @RequestBody final
@@ -187,9 +200,19 @@ public class MemberController {
      * @author 민아영
      * @since 1.0.0
      */
+    @Operation(summary = "지급 쿠폰 조회",
+        description = "회원이 자신에게 지급된 쿠폰을 조회합니다.",
+        parameters = @Parameter(name = "memberInfo", description = "쿠폰을 등록하는 회원의 정보", required = true),
+        responses = @ApiResponse(responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = ShopResult.class)),
+            useReturnTypeSchema = true))
     @GetMapping("/coupons")
-    public ResponseEntity<ShopResult<PageEntity<GivenCouponResponse>>> retrieveGivenCoupons(final MemberInfo memberInfo, final Pageable pageable) {
-        PageEntity<GivenCouponResponse> givenCouponResponses = givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
+    public ResponseEntity<ShopResult<PageEntity<GivenCouponResponse>>> retrieveGivenCoupons(final MemberInfo memberInfo,
+                                                                                            @PageableDefault final
+                                                                                            Pageable pageable) {
+        PageEntity<GivenCouponResponse> givenCouponResponses
+            = givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -200,8 +223,8 @@ public class MemberController {
      * 한 회원이 상품에 대해 문의한 전체 상품 문의 글을 조회하는 GET Mapping 을 지원합니다.
      *
      * @param memberInfo - 상품 문의 글을 조회할 회원의 정보 입니다.
-     * @param pageable 조회하려는 페이지 정보입니다.
-     *(@PageableDefault - 기본값과 추가 설정을 할 수 있습니다.)
+     * @param pageable   조회하려는 페이지 정보입니다.
+     *                   (@PageableDefault - 기본값과 추가 설정을 할 수 있습니다.)
      * @return - List&lt;ProductInquiryByMemberResponse&gt; 를 담은 응답 객체를 반환 합니다.
      * @author 민아영
      * @since 1.0.0

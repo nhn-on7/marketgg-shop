@@ -4,6 +4,11 @@ import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.service.coupon.CouponService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +48,13 @@ public class AdminCouponController {
      * @author 김정민
      * @since 1.0.0
      */
+    @Operation(summary = "쿠폰 등록",
+        description = "관리자가 쿠폰 정보를 입력하여 새로운 쿠폰을 등록합니다.",
+        parameters = @Parameter(name = "couponDto", description = "등록할 쿠폰 요청 객체", required = true),
+        responses = @ApiResponse(responseCode = "201",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = ShopResult.class)),
+            useReturnTypeSchema = true))
     @PostMapping
     public ResponseEntity<ShopResult<Void>> createCoupon(@Valid @RequestBody final CouponDto couponDto) {
         couponService.createCoupon(couponDto);
@@ -61,11 +73,19 @@ public class AdminCouponController {
      * @author 김정민
      * @since 1.0.0
      */
+    @Operation(summary = "쿠폰 단건 조회",
+        description = "관리자가 조회할 쿠폰 번호를 입력하여 쿠폰을 조회합니다.",
+        parameters = @Parameter(name = "couponId", description = "조회할 쿠폰 번호", required = true),
+        responses = @ApiResponse(responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = ShopResult.class)),
+            useReturnTypeSchema = true))
     @GetMapping("/{couponId}")
     public ResponseEntity<ShopResult<CouponDto>> retrieveCoupon(@PathVariable final Long couponId) {
         CouponDto couponResponse = couponService.retrieveCoupon(couponId);
 
         return ResponseEntity.status(HttpStatus.OK)
+                             .contentType(MediaType.APPLICATION_JSON)
                              .body(ShopResult.success(couponResponse));
     }
 
@@ -79,13 +99,18 @@ public class AdminCouponController {
      * @author 김정민
      * @since 1.0.0
      */
+    @Operation(summary = "쿠폰 전체 조회",
+        description = "관리자가 등록되어 있는 쿠폰 목록을 전체 조회합니다.",
+        responses = @ApiResponse(responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = ShopResult.class)),
+            useReturnTypeSchema = true))
     @GetMapping
-    public ResponseEntity<ShopResult<PageEntity<CouponDto>>> retrieveCoupons(
-        @PageableDefault final Pageable pageable) {
-
+    public ResponseEntity<ShopResult<PageEntity<CouponDto>>> retrieveCoupons(@PageableDefault final Pageable pageable) {
         PageEntity<CouponDto> couponResponses = couponService.retrieveCoupons(pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
+                             .contentType(MediaType.APPLICATION_JSON)
                              .body(ShopResult.success(couponResponses));
     }
 
@@ -99,6 +124,14 @@ public class AdminCouponController {
      * @author 김정민
      * @since 1.0.0
      */
+    @Operation(summary = "쿠폰 수정",
+        description = "관리자가 수정할 쿠폰 정보를 입력하여 기존 쿠폰을 수정합니다.",
+        parameters = {@Parameter(name = "couponId", description = "수정할 쿠폰 번호", required = true),
+            @Parameter(name = "couponDto", description = "수정 내용을 담은 쿠폰 요청 객체", required = true)},
+        responses = @ApiResponse(responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = ShopResult.class)),
+            useReturnTypeSchema = true))
     @PutMapping("/{couponId}")
     public ResponseEntity<ShopResult<Void>> updateCoupon(@PathVariable final Long couponId,
                                                          @Valid @RequestBody final CouponDto couponDto) {
@@ -119,6 +152,13 @@ public class AdminCouponController {
      * @author 김정민
      * @since 1.0.0
      */
+    @Operation(summary = "쿠폰 삭제",
+        description = "관리자가 쿠폰 번호를 입력하여 쿠폰을 삭제합니다.",
+        parameters = @Parameter(name = "couponId", description = "삭제할 쿠폰 번호", required = true),
+        responses = @ApiResponse(responseCode = "204",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = ShopResult.class)),
+            useReturnTypeSchema = true))
     @DeleteMapping("/{couponId}")
     public ResponseEntity<ShopResult<Void>> deleteCoupon(@PathVariable final Long couponId) {
         couponService.deleteCoupon(couponId);
