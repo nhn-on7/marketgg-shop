@@ -96,10 +96,10 @@ class DefaultProductServiceTest {
 
     @BeforeAll
     static void beforeAll() {
-        productResponse =
-            new ProductResponse(null, null, null, null, null, null, null, null, null, null,
-                                null, null, null,
-                                null, null, null, null, null, null, null);
+        productDetailResponse =
+            new ProductDetailResponse(null, null, null, null, null, null, null, null, null, null,
+                                      null, null, null,
+                                      null, null, null, null, null, null, null);
 
         productRequest = new ProductCreateRequest();
         ReflectionTestUtils.setField(productRequest, "categoryCode", "001");
@@ -194,9 +194,9 @@ class DefaultProductServiceTest {
         Page<ProductDetailResponse> page = new PageImpl<>(list, PageRequest.of(0, 1), 1);
         given(productRepository.findAllProducts(PageRequest.of(0, 1))).willReturn(page);
 
-        List<ProductResponse> productResponses = productService.retrieveProducts(PageRequest.of(0, 1));
+        List<ProductDetailResponse> productDetailRespons = productService.retrieveProducts(PageRequest.of(0, 1));
 
-        assertThat(productResponses).isNotNull();
+        assertThat(productDetailRespons).isNotNull();
         then(productRepository).should(times(1)).findAllProducts(any(PageRequest.class));
     }
 

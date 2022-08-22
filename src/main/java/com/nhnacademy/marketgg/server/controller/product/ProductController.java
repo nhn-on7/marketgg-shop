@@ -5,7 +5,7 @@ import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
@@ -151,7 +151,7 @@ public class ProductController {
     /**
      * 전체 상품 목록 조회를 위한 GET Mapping 을 지원합니다.
      *
-     * @return - List&lt;ProductResponse&gt; 를 담은 응답 객체를 반환 합니다.
+     * @return - List&lt;ProductDetailResponse&gt; 를 담은 응답 객체를 반환 합니다.
      * @since 1.0.0
      */
 
@@ -164,24 +164,24 @@ public class ProductController {
                                         useReturnTypeSchema = true))
 
     @GetMapping
-    public ResponseEntity<ShopResult<List<ProductResponse>>> retrieveProducts(
+    public ResponseEntity<ShopResult<List<ProductDetailResponse>>> retrieveProducts(
         @RequestParam(value = "page", defaultValue = "0") final Integer page) {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page);
 
-        List<ProductResponse> productResponses = this.productService.retrieveProducts(pageRequest.getPageable());
+        List<ProductDetailResponse> productDetailRespons = this.productService.retrieveProducts(pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(productResponses));
+                             .body(ShopResult.success(productDetailRespons));
     }
 
     /**
      * 상품 상세 정보 조회를 위한 GET Mapping 을 지원합니다.
      *
      * @param productId - 상품의 PK로 조회합니다.
-     * @return - ProductResponse 를 담은 응답 객체를 반환 합니다.
+     * @return - ProductDetailResponse 를 담은 응답 객체를 반환 합니다.
      * @since 1.0.0
      */
 
@@ -193,14 +193,14 @@ public class ProductController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @GetMapping("/{productId}")
-    public ResponseEntity<ShopResult<ProductResponse>> retrieveProductDetails(@PathVariable final Long productId) {
+    public ResponseEntity<ShopResult<ProductDetailResponse>> retrieveProductDetails(@PathVariable final Long productId) {
 
-        ProductResponse productResponse = this.productService.retrieveProductDetails(productId);
+        ProductDetailResponse productDetailResponse = this.productService.retrieveProductDetails(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(productResponse));
+                             .body(ShopResult.success(productDetailResponse));
     }
 
 }

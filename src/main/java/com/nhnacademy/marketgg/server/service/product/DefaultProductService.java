@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
@@ -75,7 +73,7 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public List<ProductResponse> retrieveProducts(final Pageable pageable) {
+    public List<ProductDetailResponse> retrieveProducts(final Pageable pageable) {
 
         Page<ProductDetailResponse> allProducts = productRepository.findAllProducts(pageable);
 
@@ -83,7 +81,7 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public ProductResponse retrieveProductDetails(final Long productId) {
+    public ProductDetailResponse retrieveProductDetails(final Long productId) {
         return productRepository.queryById(productId);
     }
 

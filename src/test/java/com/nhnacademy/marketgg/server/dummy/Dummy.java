@@ -4,7 +4,6 @@ import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
@@ -22,7 +21,7 @@ import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResp
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
@@ -31,7 +30,6 @@ import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.CartProduct;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
-import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -127,12 +125,12 @@ public class Dummy {
         return productRequest;
     }
 
-    public static ProductResponse getDummyProductResponse() {
+    public static ProductDetailResponse getDummyProductResponse() {
 
-        return new ProductResponse(1L, Asset.create(), 1L, "001", "채소", "자몽",
-                                   "아침에 자몽 쥬스", 100L, 2000L, "자몽쥬스 설명",
-                                   "1박스", "샛별 배송", "인도네시아", "냉장", LocalDate.now(),
-                                   "새우알러지", "20개", LocalDateTime.now(), LocalDateTime.now(), null);
+        return new ProductDetailResponse(1L, Asset.create(), 1L, "001", "채소", "자몽",
+                                         "아침에 자몽 쥬스", 100L, 2000L, "자몽쥬스 설명",
+                                         "1박스", "샛별 배송", "인도네시아", "냉장", LocalDate.now(),
+                                         "새우알러지", "20개", LocalDateTime.now(), LocalDateTime.now(), null);
     }
 
     public static Asset getDummyAsset(Long id) {
@@ -387,7 +385,6 @@ public class Dummy {
         return new OrderRetrieveResponse(1L, 1L, 10000L,
                                          "결제 대기", LocalDateTime.now());
     }
-=======
 
     public static ReviewResponse getDummyReviewResponse() {
 
@@ -395,5 +392,4 @@ public class Dummy {
                                   Boolean.FALSE, LocalDateTime.now(), LocalDateTime.now(), null);
     }
 
->>>>>>> afbf21d2 (Refactor: 후기 공통응답객체 적용)
 }
