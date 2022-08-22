@@ -43,7 +43,7 @@ public class PointController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_MEMBER + "/points"))
-                             .body(ShopResult.success(data));
+                             .body(ShopResult.successWith(data));
     }
 
 }

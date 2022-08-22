@@ -15,7 +15,6 @@ import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.member.MemberService;
@@ -27,7 +26,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,7 +75,7 @@ public class MemberController {
         return ResponseEntity.status(OK)
                              .location(URI.create(MEMBER_PREFIX + "/ggpass"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(data));
+                             .body(ShopResult.successWith(data));
     }
 
     /**
@@ -93,7 +91,7 @@ public class MemberController {
 
         return ResponseEntity.status(OK)
                              .location(URI.create(MEMBER_PREFIX + "/ggpass/subscribe"))
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -109,7 +107,7 @@ public class MemberController {
 
         return ResponseEntity.status(OK)
                              .location(URI.create(MEMBER_PREFIX + "/ggpass/withdraw"))
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -190,7 +188,7 @@ public class MemberController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -217,7 +215,7 @@ public class MemberController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(givenCouponResponses));
+                             .body(ShopResult.successWith(givenCouponResponses));
     }
 
     /**
@@ -245,7 +243,7 @@ public class MemberController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(productInquiryResponses));
+                             .body(ShopResult.successWith(productInquiryResponses));
     }
 
 }

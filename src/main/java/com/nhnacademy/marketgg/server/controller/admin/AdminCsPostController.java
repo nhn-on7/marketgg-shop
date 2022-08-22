@@ -71,7 +71,7 @@ public class AdminCsPostController {
                              .location(URI.create(
                                  DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/options/" + optionType
                                      + "/search?option=" + option))
-                             .body(ShopResult.success(data));
+                             .body(ShopResult.successWith(data));
     }
 
     /**
@@ -92,7 +92,7 @@ public class AdminCsPostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/" + postId))
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -109,7 +109,7 @@ public class AdminCsPostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_POST + "/status"))
-                             .body(ShopResult.success(data));
+                             .body(ShopResult.successWith(data));
     }
 
     /**
@@ -129,7 +129,7 @@ public class AdminCsPostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_POST + "/" + postId + "/status"))
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
 }

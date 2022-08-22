@@ -7,7 +7,6 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.CartResponse;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
-import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
@@ -59,7 +58,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create("/payments/verify"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(response));
+                             .body(ShopResult.successWith(response));
     }
 
     /**
@@ -80,7 +79,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/orderForm"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(response));
+                             .body(ShopResult.successWith(response));
     }
 
     /**
@@ -98,7 +97,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(responses));
+                             .body(ShopResult.successWith(responses));
     }
 
     /**
@@ -118,7 +117,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/" + orderId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(response));
+                             .body(ShopResult.successWith(response));
     }
 
     /**
@@ -138,7 +137,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/" + orderId + "/status"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -156,7 +155,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/" + orderId + "/delivery"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -173,7 +172,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/" + orderId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
 }

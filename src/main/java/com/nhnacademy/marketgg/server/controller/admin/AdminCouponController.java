@@ -61,7 +61,7 @@ public class AdminCouponController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -86,7 +86,7 @@ public class AdminCouponController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(couponResponse));
+                             .body(ShopResult.successWith(couponResponse));
     }
 
     /**
@@ -111,7 +111,7 @@ public class AdminCouponController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(couponResponses));
+                             .body(ShopResult.successWith(couponResponses));
     }
 
     /**
@@ -140,7 +140,7 @@ public class AdminCouponController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -165,7 +165,7 @@ public class AdminCouponController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
 }

@@ -48,7 +48,7 @@ public class CartController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success("Add Success"));
+                             .body(ShopResult.successWith("Add Success"));
     }
 
     /**
@@ -63,7 +63,7 @@ public class CartController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(data));
+                             .body(ShopResult.successWith(data));
     }
 
     /**
@@ -82,7 +82,7 @@ public class CartController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success("Update Success"));
+                             .body(ShopResult.successWith("Update Success"));
     }
 
     /**
@@ -97,7 +97,7 @@ public class CartController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success("Delete Success"));
+                             .body(ShopResult.successWith("Delete Success"));
     }
 
 }
