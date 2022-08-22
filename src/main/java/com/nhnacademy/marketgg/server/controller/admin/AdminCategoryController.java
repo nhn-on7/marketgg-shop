@@ -44,7 +44,9 @@ public class AdminCategoryController {
      * @since 1.0.0
      */
     @PostMapping
-    public ResponseEntity<ShopResult<Void>> createCategory(@Valid @RequestBody final CategoryCreateRequest categoryCreateRequest) {
+    public ResponseEntity<ShopResult<String>> createCategory(@RequestBody
+                                                             @Valid final CategoryCreateRequest categoryCreateRequest) {
+
         categoryService.createCategory(categoryCreateRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -60,8 +62,10 @@ public class AdminCategoryController {
      * @since 1.0.0
      */
     @GetMapping("/{categoryId}")
-    public ResponseEntity<ShopResult<CategoryRetrieveResponse>> retrieveCategory(
-        @PathVariable @Size(min = 1, max = 6) final String categoryId) {
+    public ResponseEntity<ShopResult<CategoryRetrieveResponse>> retrieveCategory(@PathVariable
+                                                                                 @Size(min = 1, max = 6)
+                                                                                 final String categoryId) {
+
         CategoryRetrieveResponse data = categoryService.retrieveCategory(categoryId);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -79,6 +83,7 @@ public class AdminCategoryController {
     @GetMapping("/categorizations/{categorizationId}")
     public ResponseEntity<ShopResult<List<CategoryRetrieveResponse>>> retrieveCategoriesByCategorization(
         @PathVariable @Size(min = 1, max = 3) final String categorizationId) {
+
         List<CategoryRetrieveResponse> data = categoryService.retrieveCategoriesByCategorization(
             categorizationId);
 
@@ -111,8 +116,11 @@ public class AdminCategoryController {
      * @since 1.0.0
      */
     @PutMapping("/{categoryId}")
-    public ResponseEntity<ShopResult<Void>> updateCategory(@PathVariable @Size(min = 1, max = 6) final String categoryId,
-                                               @Valid @RequestBody final CategoryUpdateRequest categoryRequest) {
+    public ResponseEntity<ShopResult<String>> updateCategory(@PathVariable
+                                                             @Size(min = 1, max = 6) final String categoryId,
+                                                             @Valid @RequestBody
+                                                             final CategoryUpdateRequest categoryRequest) {
+
         categoryService.updateCategory(categoryId, categoryRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -128,7 +136,9 @@ public class AdminCategoryController {
      * @since 1.0.0
      */
     @DeleteMapping("/{categoryId}")
-    public ResponseEntity<ShopResult<Void>> deleteCategory(@PathVariable @Size(min = 1, max = 6) final String categoryId) {
+    public ResponseEntity<ShopResult<String>> deleteCategory(@PathVariable
+                                                             @Size(min = 1, max = 6) final String categoryId) {
+
         categoryService.deleteCategory(categoryId);
 
         return ResponseEntity.status(HttpStatus.OK)

@@ -56,7 +56,7 @@ public class AdminCouponController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping
-    public ResponseEntity<ShopResult<Void>> createCoupon(@Valid @RequestBody final CouponDto couponDto) {
+    public ResponseEntity<ShopResult<String>> createCoupon(@Valid @RequestBody final CouponDto couponDto) {
         couponService.createCoupon(couponDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -126,15 +126,15 @@ public class AdminCouponController {
      */
     @Operation(summary = "쿠폰 수정",
                description = "관리자가 수정할 쿠폰 정보를 입력하여 기존 쿠폰을 수정합니다.",
-               parameters = {@Parameter(name = "couponId", description = "수정할 쿠폰 번호", required = true),
-                   @Parameter(name = "couponDto", description = "수정 내용을 담은 쿠폰 요청 객체", required = true)},
+               parameters = { @Parameter(name = "couponId", description = "수정할 쿠폰 번호", required = true),
+                   @Parameter(name = "couponDto", description = "수정 내용을 담은 쿠폰 요청 객체", required = true) },
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PutMapping("/{couponId}")
-    public ResponseEntity<ShopResult<Void>> updateCoupon(@PathVariable final Long couponId,
-                                                         @Valid @RequestBody final CouponDto couponDto) {
+    public ResponseEntity<ShopResult<String>> updateCoupon(@PathVariable final Long couponId,
+                                                           @Valid @RequestBody final CouponDto couponDto) {
 
         couponService.updateCoupon(couponId, couponDto);
 
@@ -160,7 +160,7 @@ public class AdminCouponController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @DeleteMapping("/{couponId}")
-    public ResponseEntity<ShopResult<Void>> deleteCoupon(@PathVariable final Long couponId) {
+    public ResponseEntity<ShopResult<String>> deleteCoupon(@PathVariable final Long couponId) {
         couponService.deleteCoupon(couponId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)

@@ -125,8 +125,8 @@ public class PaymentController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping("/payments/virtual-accounts/deposit")
-    public ResponseEntity<ShopResult<Void>> putMoneyInVirtualAccount(@RequestBody @Valid final
-                                                                     VirtualAccountDepositRequest request) {
+    public ResponseEntity<ShopResult<String>> putMoneyInVirtualAccount(@RequestBody @Valid final
+                                                                       VirtualAccountDepositRequest request) {
 
         log.info("putMoneyInVirtualAccount: {}", request);
 
@@ -142,9 +142,9 @@ public class PaymentController {
      * @return 결제대행사에서 결제 승인 처리로 인한 응답 데이터
      */
     @PostMapping("/payments/{paymentKey}/cancel")
-    public ResponseEntity<ShopResult<Void>> cancelPayment(@PathVariable String paymentKey,
-                                                          @RequestBody @Valid final
-                                                          PaymentCancelRequest paymentRequest) {
+    public ResponseEntity<ShopResult<String>> cancelPayment(@PathVariable String paymentKey,
+                                                            @RequestBody @Valid final
+                                                            PaymentCancelRequest paymentRequest) {
         log.info("cancelPayment: {}", paymentRequest);
 
         paymentService.cancelPayment(paymentKey, paymentRequest);

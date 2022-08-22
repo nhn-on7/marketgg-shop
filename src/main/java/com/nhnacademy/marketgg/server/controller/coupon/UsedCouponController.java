@@ -48,7 +48,7 @@ public class UsedCouponController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping
-    public ResponseEntity<ShopResult<Void>> createUsedCoupons(@Valid @RequestBody final UsedCouponDto usedCouponDto) {
+    public ResponseEntity<ShopResult<String>> createUsedCoupons(@Valid @RequestBody final UsedCouponDto usedCouponDto) {
         usedCouponService.createUsedCoupons(usedCouponDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -71,7 +71,7 @@ public class UsedCouponController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @DeleteMapping
-    public ResponseEntity<ShopResult<Void>> deleteUsedCoupons(@Valid @RequestBody final UsedCouponDto usedCouponDto) {
+    public ResponseEntity<ShopResult<String>> deleteUsedCoupons(@Valid @RequestBody final UsedCouponDto usedCouponDto) {
         usedCouponService.deleteUsedCoupons(usedCouponDto);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)

@@ -12,6 +12,8 @@ import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.service.order.OrderService;
+import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,9 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.net.URI;
-import java.util.List;
 
 /**
  * 주문에 관련된 Rest Controller 입니다.
@@ -51,7 +50,8 @@ public class OrderController {
      */
     @PostMapping
     public ResponseEntity<ShopResult<OrderToPayment>> createOrder(@RequestBody final OrderCreateRequest orderRequest,
-                                                                  final MemberInfo memberInfo) throws JsonProcessingException {
+                                                                  final MemberInfo memberInfo)
+        throws JsonProcessingException {
 
         OrderToPayment response = orderService.createOrder(orderRequest, memberInfo);
 
@@ -72,7 +72,8 @@ public class OrderController {
      */
     @PostMapping("/order-form")
     public ResponseEntity<ShopResult<OrderFormResponse>> retrieveOrderForm(@RequestBody final CartResponse products,
-                                                                           final MemberInfo memberInfo, final AuthInfo authInfo) {
+                                                                           final MemberInfo memberInfo,
+                                                                           final AuthInfo authInfo) {
 
         OrderFormResponse response = orderService.retrieveOrderForm(products.getProducts(), memberInfo, authInfo);
 
@@ -129,8 +130,8 @@ public class OrderController {
      * @since 1.0.0
      */
     @PatchMapping("/{orderId}/status")
-    public ResponseEntity<ShopResult<Void>> updateStatus(@PathVariable final Long orderId,
-                                                         @RequestBody final OrderUpdateStatusRequest status) {
+    public ResponseEntity<ShopResult<String>> updateStatus(@PathVariable final Long orderId,
+                                                           @RequestBody final OrderUpdateStatusRequest status) {
 
         orderService.updateStatus(orderId, status);
 
@@ -149,7 +150,8 @@ public class OrderController {
      * @since 1.0.0
      */
     @PatchMapping("/{orderId}/delivery")
-    public ResponseEntity<ShopResult<Void>> createTrackingNo(@PathVariable final Long orderId) throws JsonProcessingException {
+    public ResponseEntity<ShopResult<String>> createTrackingNo(
+        @PathVariable final Long orderId) throws JsonProcessingException {
         orderService.createTrackingNo(orderId);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -166,7 +168,7 @@ public class OrderController {
      * @since 1.0.0
      */
     @PatchMapping("/{orderId}")
-    public ResponseEntity<ShopResult<Void>> cancelOrder(@PathVariable final Long orderId) {
+    public ResponseEntity<ShopResult<String>> cancelOrder(@PathVariable final Long orderId) {
         orderService.cancelOrder(orderId);
 
         return ResponseEntity.status(HttpStatus.OK)

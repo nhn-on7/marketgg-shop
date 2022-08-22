@@ -86,7 +86,7 @@ public class MemberController {
      * @since 1.0.0
      */
     @PostMapping("/ggpass/subscribe")
-    public ResponseEntity<ShopResult<Void>> subscribePass(final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<String>> subscribePass(final MemberInfo memberInfo) {
         memberService.subscribePass(memberInfo.getId());
 
         return ResponseEntity.status(OK)
@@ -102,7 +102,7 @@ public class MemberController {
      * @since 1.0.0
      */
     @PostMapping("/ggpass/withdraw")
-    public ResponseEntity<ShopResult<Void>> withdrawPass(final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<String>> withdrawPass(final MemberInfo memberInfo) {
         memberService.withdrawPass(memberInfo.getId());
 
         return ResponseEntity.status(OK)
@@ -173,16 +173,16 @@ public class MemberController {
      */
     @Operation(summary = "지급 쿠폰 생성",
                description = "회원이 쿠폰의 이름으로 쿠폰을 등록하면 지급 쿠폰이 생성됩니다.",
-               parameters = {@Parameter(name = "memberInfo", description = "쿠폰을 등록하는 회원의 정보", required = true),
-                   @Parameter(name = "givenCouponRequest", description = "등록할 쿠폰 이름을 가진 요청 객체", required = true)},
+               parameters = { @Parameter(name = "memberInfo", description = "쿠폰을 등록하는 회원의 정보", required = true),
+                   @Parameter(name = "givenCouponRequest", description = "등록할 쿠폰 이름을 가진 요청 객체", required = true) },
                responses = @ApiResponse(responseCode = "201",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping("/coupons")
-    public ResponseEntity<ShopResult<Void>> createGivenCoupons(final MemberInfo memberInfo,
-                                                               @Valid @RequestBody final
-                                                               GivenCouponCreateRequest givenCouponRequest) {
+    public ResponseEntity<ShopResult<String>> createGivenCoupons(final MemberInfo memberInfo,
+                                                                 @Valid @RequestBody final
+                                                                 GivenCouponCreateRequest givenCouponRequest) {
 
         givenCouponService.createGivenCoupons(memberInfo, givenCouponRequest);
 

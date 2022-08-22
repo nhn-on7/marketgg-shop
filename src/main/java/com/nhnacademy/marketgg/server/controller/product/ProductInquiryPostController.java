@@ -62,10 +62,10 @@ public class ProductInquiryPostController {
                                         useReturnTypeSchema = true))
     @Auth
     @PostMapping("/products/{productId}/inquiry")
-    public ResponseEntity<ShopResult<Void>> createProductInquiry(@PathVariable final Long productId,
-                                                                 @Valid @RequestBody final
-                                                                 ProductInquiryRequest inquiryRequest,
-                                                                 final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<String>> createProductInquiry(@PathVariable final Long productId,
+                                                                   @Valid @RequestBody final
+                                                                   ProductInquiryRequest inquiryRequest,
+                                                                   final MemberInfo memberInfo) {
 
         productInquiryPostService.createProductInquiry(memberInfo, inquiryRequest, productId);
 
@@ -90,8 +90,9 @@ public class ProductInquiryPostController {
                                         useReturnTypeSchema = true))
     @Auth
     @GetMapping("/products/{productId}/inquiries")
-    public ResponseEntity<ShopResult<PageEntity<ProductInquiryResponse>>> retrieveProductInquiry(@PathVariable final Long productId,
-                                                                                                 @PageableDefault final Pageable pageable)
+    public ResponseEntity<ShopResult<PageEntity<ProductInquiryResponse>>> retrieveProductInquiry(
+        @PathVariable final Long productId,
+        @PageableDefault final Pageable pageable)
         throws JsonProcessingException {
 
         PageEntity<ProductInquiryResponse> productInquiryResponses
@@ -119,8 +120,8 @@ public class ProductInquiryPostController {
                                         useReturnTypeSchema = true))
     @Auth
     @DeleteMapping("/products/{productId}/inquiry/{inquiryId}")
-    public ResponseEntity<ShopResult<Void>> deleteProductInquiry(@PathVariable final Long productId,
-                                                                 @PathVariable final Long inquiryId) {
+    public ResponseEntity<ShopResult<String>> deleteProductInquiry(@PathVariable final Long productId,
+                                                                   @PathVariable final Long inquiryId) {
 
         productInquiryPostService.deleteProductInquiry(inquiryId, productId);
 

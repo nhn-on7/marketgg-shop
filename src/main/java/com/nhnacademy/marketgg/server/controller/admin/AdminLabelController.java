@@ -42,7 +42,9 @@ public class AdminLabelController {
      * @since 1.0.0
      */
     @PostMapping
-    public ResponseEntity<ShopResult<Void>> registerLabel(@Valid @RequestBody final LabelCreateRequest labelCreateRequest) {
+    public ResponseEntity<ShopResult<String>> registerLabel(@RequestBody
+                                                            @Valid final LabelCreateRequest labelCreateRequest) {
+
         labelService.createLabel(labelCreateRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -73,7 +75,7 @@ public class AdminLabelController {
      * @since 1.0.0
      */
     @DeleteMapping("/{labelId}")
-    public ResponseEntity<ShopResult<Void>> deleteLabel(@PathVariable @Min(1) final Long labelId) {
+    public ResponseEntity<ShopResult<String>> deleteLabel(@PathVariable @Min(1) final Long labelId) {
         labelService.deleteLabel(labelId);
 
         return ResponseEntity.status(HttpStatus.OK)
