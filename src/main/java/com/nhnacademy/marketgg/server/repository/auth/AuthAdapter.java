@@ -6,10 +6,8 @@ import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
+import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
+import com.nhnacademy.marketgg.server.dto.response.member.SignupResponse;
 import com.nhnacademy.marketgg.server.exception.member.MemberInfoNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +19,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * auth 서버에서 uuid 목록을 전송해 이름목록을 가져옵니다.
@@ -42,6 +44,8 @@ public class AuthAdapter implements AuthRepository {
     private final ObjectMapper objectMapper;
 
     private static final String DEFAULT_AUTH = "/auth/v1/members/info";
+    private static final String DEFAULT_SIGNUP = "/auth/v1/members/signup";
+
 
     @Override
     public List<MemberNameResponse> getNameListByUuid(final List<String> uuidList) throws JsonProcessingException {
@@ -53,11 +57,11 @@ public class AuthAdapter implements AuthRepository {
         String requestBody = objectMapper.writeValueAsString(uuidList);
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, buildHeaders());
         ResponseEntity<List<MemberNameResponse>> response = restTemplate.exchange(
-            gateway + DEFAULT_AUTH + "/names",
-            HttpMethod.POST,
-            requestEntity,
-            new ParameterizedTypeReference<>() {
-            });
+                gateway + DEFAULT_AUTH + "/names",
+                HttpMethod.POST,
+                requestEntity,
+                new ParameterizedTypeReference<>() {
+                });
 
         return response.getBody();
     }
@@ -68,6 +72,20 @@ public class AuthAdapter implements AuthRepository {
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, buildHeaders());
         ResponseEntity<ShopResult<MemberInfoResponse>> response = restTemplate.exchange(
                 gateway + DEFAULT_AUTH + "/person",
+                HttpMethod.POST,
+                requestEntity,
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
+    }
+
+    @Override
+    public ShopResult<SignupResponse> signup(final SignupRequest signUpRequest) throws JsonProcessingException {
+        String requestBody = objectMapper.writeValueAsString(signUpRequest);
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, buildHeaders());
+        ResponseEntity<ShopResult<SignupResponse>> response = restTemplate.exchange(
+                gateway + DEFAULT_SIGNUP,
                 HttpMethod.POST,
                 requestEntity,
                 new ParameterizedTypeReference<>() {

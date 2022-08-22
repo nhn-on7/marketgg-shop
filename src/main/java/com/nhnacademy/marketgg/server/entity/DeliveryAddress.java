@@ -2,12 +2,10 @@ package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -54,12 +52,12 @@ public class DeliveryAddress {
     @Column(name = "detail_address")
     private String detailAddress;
 
-    public DeliveryAddress(final Member signUpMember, final ShopMemberSignUpRequest shopMemberSignUpRequest) {
+    public DeliveryAddress(final Member signUpMember, final SignupRequest signUpRequest) {
         this.member = signUpMember;
         this.isDefaultAddress = true;
-        this.zipCode = shopMemberSignUpRequest.getZipcode();
-        this.address = shopMemberSignUpRequest.getAddress();
-        this.detailAddress = shopMemberSignUpRequest.getDetailAddress();
+        this.zipCode = signUpRequest.getZipcode();
+        this.address = signUpRequest.getAddress();
+        this.detailAddress = signUpRequest.getDetailAddress();
     }
 
     public DeliveryAddress(final Member member, final DeliveryAddressCreateRequest createRequest) {
