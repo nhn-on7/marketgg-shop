@@ -8,6 +8,11 @@ import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpda
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.service.post.PostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
@@ -43,12 +48,10 @@ public class AdminCsPostController {
     private final PostService postService;
 
     private static final String DEFAULT_ADMIN_POST = "/admin/customer-services";
-    private static final Integer PAGE_SIZE = 10;
 
     /**
-     * 지정한 게시판 타입의 Reason 옵션으로 검색한 결과를 반환합니다.
+     * 지정한 게시판 타입의 지정한 옵션으로 검색한 결과를 반환합니다.
      *
-     * @param categoryId    - 검색을 진행 할 게시판 타입입니다.
      * @param option        - 검색을 진행 할 필터의 값입니다.
      * @param optionType    - 검색을 진행 할 옵션 타입입니다.
      * @param searchRequest - 검색을 진행할 정보입니다.
@@ -57,20 +60,30 @@ public class AdminCsPostController {
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */
+    @Operation(summary = "옵션에 따른 게시글 목록검색",
+               description = "지정한 카테고리 번호로 지정한 사유 또는 상태에 따른 검색을 진행합니다.",
+               parameters = { @Parameter(name = "categoryId", description = "카테고리 식별번호", required = true),
+                       @Parameter(name = "optionType", description = "사유 또는 상태", required = true),
+                       @Parameter(name = "option", description = "지정한 옵션의 값", required = true),
+                       @Parameter(name = "searchRequest", description = "검색 옵션 지정", required = true) },
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @PostMapping("/categories/{categoryId}/options/{optionType}/search")
     public ResponseEntity<ShopResult<List<PostResponse>>> searchPostListForOption(
-        @PathVariable @Size(min = 1, max = 6) final String categoryId,
-        @PathVariable @Min(1) final String optionType,
-        @RequestParam @Min(1) final String option,
-        @Valid @RequestBody final SearchRequest searchRequest) throws ParseException, JsonProcessingException {
-
+            @PathVariable @Size(min = 1, max = 6) final String categoryId,
+            @PathVariable @Min(1) final String optionType,
+            @RequestParam @Min(1) final String option,
+            @Valid @RequestBody final SearchRequest searchRequest)
+            throws ParseException, JsonProcessingException {
         List<PostResponse> data = postService.searchForOption(searchRequest, optionType, option);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                 DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/options/" + optionType
-                                     + "/search?option=" + option))
-                             .body(ShopResult.successWith(data));
+                                     DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/options/" + optionType
+                                             + "/search?option=" + option))
+                             .body(ShopResult.success(data));
     }
 
     /**
@@ -82,6 +95,15 @@ public class AdminCsPostController {
      * @return Mapping URI 를 담은 응답객체를 반환합니다.
      * @since 1.0.0
      */
+    @Operation(summary = "게시글 수정",
+               description = "지정한 게시글을 지정한 수정 값에 따라 수정합니다.",
+               parameters = { @Parameter(name = "categoryId", description = "카테고리 식별번호", required = true),
+                       @Parameter(name = "postId", description = "게시글 식별번호", required = true),
+                       @Parameter(name = "postRequest", description = "수정 할 값 지정", required = true) },
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @PutMapping("/categories/{categoryId}/{postId}")
     public ResponseEntity<ShopResult<String>> updatePost(@PathVariable @Size(min = 1, max = 6) final String categoryId,
                                                          @PathVariable @Min(1) final Long postId,
@@ -100,6 +122,12 @@ public class AdminCsPostController {
      * @return 1:1 문의의 상태목록을 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
+    @Operation(summary = "1:1문의 상태목록 반환",
+               description = "1:1 문의의 상태목록을 반환합니다.",
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @GetMapping("/status")
     public ResponseEntity<ShopResult<List<String>>> retrieveStatusList() {
         List<String> data = Arrays.stream(OtoStatus.values())
@@ -119,6 +147,14 @@ public class AdminCsPostController {
      * @return Mapping URI 를 담은 응답객체를 반환합니다.
      * @since 1.0.0
      */
+    @Operation(summary = "1:1문의 답변상태 변경",
+               description = "지정한 1:1문의 게시글의 지정한 상태로 답변 상태를 변경합니다.",
+               parameters = { @Parameter(name = "postId", description = "게시글 식별번호", required = true),
+                       @Parameter(name = "statusUpdateRequest", description = "상태 값", required = true) },
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @PatchMapping("/{postId}/status")
     public ResponseEntity<ShopResult<String>> updateInquiryStatus(@PathVariable @Min(1) final Long postId,
                                                                   @Valid @RequestBody

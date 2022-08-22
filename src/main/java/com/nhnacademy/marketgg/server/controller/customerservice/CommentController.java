@@ -5,6 +5,11 @@ import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.CommentRequest;
 import com.nhnacademy.marketgg.server.service.otoinquiry.OtoInquiryCommentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.net.URI;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -41,6 +46,15 @@ public class CommentController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
+    @Operation(summary = "1:1문의 댓글 등록",
+               description = "지정한 1:1 문의 게시글에 입력한 정보로 댓글을 등록합니다.",
+               parameters = { @Parameter(name = "postId", description = "게시글 식별번호", required = true),
+                       @Parameter(name = "commentRequest", description = "댓글 정보 입력값", required = true),
+                       @Parameter(name = "memberInfo", description = "멤버 정보", required = true) },
+               responses = @ApiResponse(responseCode = "201",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @PostMapping("/{postId}")
     public ResponseEntity<ShopResult<String>> createComment(@PathVariable @Min(1) final Long postId,
                                                             @Valid @RequestBody final CommentRequest commentRequest,
