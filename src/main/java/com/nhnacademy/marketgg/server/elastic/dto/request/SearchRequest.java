@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.elastic.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -22,6 +23,7 @@ public class SearchRequest {
      *
      * @since 1.0.0
      */
+    @Schema(title = "카테고리 식별번호", description = "검색을 진행 할 카테고리의 식별번호입니다.", example = "700")
     @NotBlank
     @Size(min = 1, max = 6)
     private String categoryCode;
@@ -31,6 +33,7 @@ public class SearchRequest {
      *
      * @since 1.0.0
      */
+    @Schema(title = "검색어", description = "검색을 진행 할 검색어입니다.", example = "계란")
     @NotBlank
     @Size(min = 1)
     private String keyword;
@@ -40,6 +43,7 @@ public class SearchRequest {
      *
      * @since 1.0.0
      */
+    @Schema(title = "페이지 번호", description = "조회할 페이지 번호입니다.", example = "0")
     @NotNull
     @Min(0)
     private Integer page;
@@ -49,6 +53,7 @@ public class SearchRequest {
      *
      * @since 1.0.0
      */
+    @Schema(title = "페이지 크기", description = "조회할 페이지 크기입니다.", example = "10")
     @NotNull
     private Integer size;
 

@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.dto.request.label;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,9 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class LabelCreateRequest {
 
-    @NotNull
-    private Long labelNo;
-
+    @Schema(name = "라벨 이름", description = "등록할 라벨의 이름입니다.", example = "10% 할인")
     @NotBlank
     @Size(min = 1, max = 30)
     private String name;

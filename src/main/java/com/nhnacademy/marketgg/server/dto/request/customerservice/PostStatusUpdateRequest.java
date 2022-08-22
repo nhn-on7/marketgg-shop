@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.dto.request.customerservice;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class PostStatusUpdateRequest {
 
+    @Schema(name = "상태", description = "1:1 게시글의 상태 값입니다.", example = "답변 완료")
     @NotBlank
     @Size(min = 1)
     private String status;
