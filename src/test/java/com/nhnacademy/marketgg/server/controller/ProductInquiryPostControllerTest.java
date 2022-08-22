@@ -14,9 +14,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.aop.AspectUtils;
 import com.nhnacademy.marketgg.server.controller.product.ProductInquiryPostController;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
+import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
 import java.util.List;
 import java.util.UUID;
@@ -46,9 +48,6 @@ class ProductInquiryPostControllerTest {
 
     @MockBean
     ProductInquiryPostService productInquiryPostService;
-
-    Pageable pageable = PageRequest.of(0, 20);
-    Page<ProductInquiryByProductResponse> responses = new PageImpl<>(List.of(), pageable, 0);
 
     HttpHeaders httpHeaders;
 
@@ -86,8 +85,9 @@ class ProductInquiryPostControllerTest {
     @Test
     @DisplayName("상품에 대한 전체 문의 조회 테스트")
     void testRetrieveProductInquiryByProductId() throws Exception {
+        PageEntity<ProductInquiryResponse> pageEntity = new PageEntity<>(1, 1, 1, List.of());
         given(productInquiryPostService.retrieveProductInquiryByProductId(anyLong(), any(PageRequest.class)))
-            .willReturn(responses);
+            .willReturn(pageEntity);
 
         this.mockMvc.perform(get("/products/" + 1L + "/inquiries")
                 .headers(httpHeaders)

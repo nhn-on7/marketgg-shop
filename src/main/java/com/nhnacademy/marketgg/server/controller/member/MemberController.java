@@ -15,7 +15,8 @@ import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByMemberResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
+import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.member.MemberService;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
@@ -26,10 +27,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -229,15 +230,22 @@ public class MemberController {
      * @author 민아영
      * @since 1.0.0
      */
+    @Operation(summary = "회원의 상품 문의 조회",
+               description = "회원이 등록한 상품 문의에 대해 조회합니다.",
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @GetMapping("/product-inquiries")
-    public ResponseEntity<CommonResponse> retrieveProductInquiry(final MemberInfo memberInfo,
-                                                                 @PageableDefault final Pageable pageable) {
-        Page<ProductInquiryByMemberResponse> productInquiryResponses
+    public ResponseEntity<ShopResult<PageEntity<ProductInquiryPost>>> retrieveProductInquiry(
+        final MemberInfo memberInfo, @PageableDefault final Pageable pageable) {
+
+        PageEntity<ProductInquiryPost> productInquiryResponses
             = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>(productInquiryResponses));
+                             .body(ShopResult.success(productInquiryResponses));
     }
 
 }

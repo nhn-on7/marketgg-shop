@@ -6,12 +6,16 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * 한 상품에 대한 상품 문의 조회 결과 DTO 입니다.
+ *
+ * @version 1.0.0
  */
 @RequiredArgsConstructor
 @Getter
-public class ProductInquiryByProductResponse {
+public class ProductInquiryResponse {
 
     private final String uuid;
+
+    private final Long productId;
 
     private final String title;
 

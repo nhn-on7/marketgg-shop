@@ -2,16 +2,21 @@ package com.nhnacademy.marketgg.server.controller.product;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.annotation.Auth;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
-import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryByProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -47,18 +52,26 @@ public class ProductInquiryPostController {
      * @author 민아영
      * @since 1.0.0
      */
+    @Operation(summary = "상품 문의 등록",
+               description = "회원이 특정 상품에 대해 상품 문의를 등록합니다.",
+               parameters = @Parameter(name = "inquiryRequest",
+                                       description = "회원이 작성한 상품 문의 요청 객체", required = true),
+               responses = @ApiResponse(responseCode = "201",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @Auth
     @PostMapping("/products/{productId}/inquiry")
-    public ResponseEntity<CommonResponse> createProductInquiry(@PathVariable final Long productId,
-                                                               @Valid @RequestBody final
-                                                               ProductInquiryRequest inquiryRequest,
-                                                               final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<Void>> createProductInquiry(@PathVariable final Long productId,
+                                                                 @Valid @RequestBody final
+                                                                 ProductInquiryRequest inquiryRequest,
+                                                                 final MemberInfo memberInfo) {
 
         productInquiryPostService.createProductInquiry(memberInfo, inquiryRequest, productId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Add Success"));
+                             .body(ShopResult.success());
     }
 
     /**
@@ -69,18 +82,24 @@ public class ProductInquiryPostController {
      * @author 민아영
      * @since 1.0.0
      */
+    @Operation(summary = "상품 문의 조회",
+               description = "특정 상품에 대한 상품 문의 조회",
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @Auth
     @GetMapping("/products/{productId}/inquiries")
-    public ResponseEntity<CommonResponse> retrieveProductInquiry(@PathVariable final Long productId,
-                                                                 final Pageable pageable)
+    public ResponseEntity<ShopResult<PageEntity<ProductInquiryResponse>>> retrieveProductInquiry(@PathVariable final Long productId,
+                                                                                                 @PageableDefault final Pageable pageable)
         throws JsonProcessingException {
 
-        Page<ProductInquiryByProductResponse> productInquiryResponses
+        PageEntity<ProductInquiryResponse> productInquiryResponses
             = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>(productInquiryResponses));
+                             .body(ShopResult.success(productInquiryResponses));
     }
 
     /**
@@ -92,16 +111,22 @@ public class ProductInquiryPostController {
      * @author 민아영
      * @since 1.0.0
      */
+    @Operation(summary = "상품 문의 삭제",
+               description = "회원이 등록한 상품 문의를 삭제합니다.",
+               responses = @ApiResponse(responseCode = "204",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @Auth
     @DeleteMapping("/products/{productId}/inquiry/{inquiryId}")
-    public ResponseEntity<CommonResponse> deleteProductInquiry(@PathVariable final Long productId,
-                                                               @PathVariable final Long inquiryId) {
+    public ResponseEntity<ShopResult<Void>> deleteProductInquiry(@PathVariable final Long productId,
+                                                                 @PathVariable final Long inquiryId) {
 
         productInquiryPostService.deleteProductInquiry(inquiryId, productId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Delete Success"));
+                             .body(ShopResult.success());
     }
 
 }

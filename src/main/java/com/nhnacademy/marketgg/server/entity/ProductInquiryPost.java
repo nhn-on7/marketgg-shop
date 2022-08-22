@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.entity;
 
-import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -18,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +32,8 @@ import org.springframework.data.annotation.CreatedDate;
 @Table(name = "product_inquires_post")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Getter
 public class ProductInquiryPost {
 
@@ -86,16 +88,6 @@ public class ProductInquiryPost {
         public Pk(Long productNo) {
             this.productNo = productNo;
         }
-    }
-
-    public ProductInquiryPost(Product product, Member member, ProductInquiryRequest productInquiryRequest) {
-        this.pk = new Pk(product.getId());
-        this.product = product;
-        this.member = member;
-        this.title = productInquiryRequest.getTitle();
-        this.content = productInquiryRequest.getContent();
-        this.isSecret = productInquiryRequest.getIsSecret();
-        this.createdDate = LocalDateTime.now();
     }
 
     public void updateInquiry(String inquiryReply) {
