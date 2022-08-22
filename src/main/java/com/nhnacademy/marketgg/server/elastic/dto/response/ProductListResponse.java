@@ -6,14 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * ES Server 에서 반환 할 상품 리스트 조회 시 보여줄 필드를 모아둔 객체입니다.
+ * 상품 리스트 조회 시 보여줄 필드를 모아둔 객체입니다.
  *
  * @version 1.0.0
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class SearchProductResponse {
+public class ProductListResponse {
 
     @Schema(title = "상품 번호", description = "검색한 상품의 식별번호입니다.", example = "1")
     private Long id;

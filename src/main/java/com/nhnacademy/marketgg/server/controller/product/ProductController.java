@@ -1,9 +1,10 @@
 package com.nhnacademy.marketgg.server.controller.product;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
+import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -57,16 +58,16 @@ public class ProductController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping("/search")
-    public ResponseEntity<List<SearchProductResponse>> searchProductList(
+    public ResponseEntity<ShopResult<PageEntity<List<ProductListResponse>>>> searchProductList(
             @Valid @RequestBody final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
-        List<SearchProductResponse> productList = productService.searchProductList(searchRequest);
+        PageEntity<List<ProductListResponse>> productList = productService.searchProductList(searchRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI + "/search"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(productList);
+                             .body(ShopResult.success(productList));
     }
 
     /**
@@ -88,19 +89,19 @@ public class ProductController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping("/categories/{categoryId}/search")
-    public ResponseEntity<List<SearchProductResponse>> searchProductListByCategory(
+    public ResponseEntity<ShopResult<PageEntity<List<ProductListResponse>>>> searchProductListByCategory(
             @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
             @Valid @RequestBody final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
-        List<SearchProductResponse> productList =
+        PageEntity<List<ProductListResponse>> productList =
                 productService.searchProductListByCategory(searchRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
                                      DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/search"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(productList);
+                             .body(ShopResult.success(productList));
     }
 
     /**
@@ -124,20 +125,20 @@ public class ProductController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping("/categories/{categoryId}/sort-price/{option}/search")
-    public ResponseEntity<List<SearchProductResponse>> searchProductListByPrice(
+    public ResponseEntity<ShopResult<PageEntity<List<ProductListResponse>>>> searchProductListByPrice(
             @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
             @PathVariable @NotBlank @Min(1) final String option,
             @Valid @RequestBody final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
-        List<SearchProductResponse> productList =
+        PageEntity<List<ProductListResponse>> productList =
                 productService.searchProductListByPrice(option, searchRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
                                      DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/sort-price/" + option))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(productList);
+                             .body(ShopResult.success(productList));
     }
 
 }

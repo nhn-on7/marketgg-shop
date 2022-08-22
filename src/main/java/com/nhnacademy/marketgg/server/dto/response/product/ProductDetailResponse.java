@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class ProductResponse {
+public class ProductDetailResponse {
 
     private final Long id;
 
