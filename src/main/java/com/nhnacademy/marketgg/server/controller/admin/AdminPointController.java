@@ -39,7 +39,7 @@ public class AdminPointController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN + "/points"))
-                             .body(ShopResult.success(data));
+                             .body(ShopResult.successWith(data));
     }
 
 }

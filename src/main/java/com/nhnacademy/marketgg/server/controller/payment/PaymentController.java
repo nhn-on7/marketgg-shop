@@ -63,7 +63,7 @@ public class PaymentController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(result.getAsBoolean()));
+                             .body(ShopResult.successWith(result.getAsBoolean()));
     }
 
     /**
@@ -90,7 +90,7 @@ public class PaymentController {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create("/"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(data));
+                             .body(ShopResult.successWith(data));
     }
 
     /**
@@ -108,7 +108,7 @@ public class PaymentController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(data));
+                             .body(ShopResult.successWith(data));
     }
 
     /**
@@ -151,7 +151,7 @@ public class PaymentController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
 }

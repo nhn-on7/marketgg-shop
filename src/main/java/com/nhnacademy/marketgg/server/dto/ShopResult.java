@@ -35,15 +35,15 @@ public class ShopResult<T> {
     /**
      * 주로 반환형이 Void 일 때 사용
      */
-    public static <T> ShopResult<T> success() {
-        return new ShopResult<>(true, null, null);
+    public static ShopResult<String> successWithDefaultMessage() {
+        return new ShopResult<>(true, "data successfully", null);
     }
 
     /**
      * 페이징 정보가 필요한 성공 응답을 내려줄 때 사용
      * 만약 페이징 정보가 필요한 경우 T 타입에 PageEntity<T> 로 설정
      */
-    public static <T> ShopResult<T> success(T data) {
+    public static <T> ShopResult<T> successWith(T data) {
         return new ShopResult<>(true, data, null);
     }
 

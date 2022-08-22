@@ -22,7 +22,6 @@ import javax.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,7 +64,7 @@ public class CsPostController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_POST))
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -87,7 +86,7 @@ public class CsPostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/categories/" + categoryId))
-                             .body(ShopResult.success(data));
+                             .body(ShopResult.successWith(data));
     }
 
     /**
@@ -107,7 +106,7 @@ public class CsPostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/" + postId))
-                             .body(ShopResult.success(data));
+                             .body(ShopResult.successWith(data));
     }
 
     /**
@@ -133,7 +132,7 @@ public class CsPostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/categories/" + categoryId + "/search"))
-                             .body(ShopResult.success(data));
+                             .body(ShopResult.successWith(data));
     }
 
     /**
@@ -154,7 +153,7 @@ public class CsPostController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .location(URI.create(DEFAULT_POST + postId))
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -171,7 +170,7 @@ public class CsPostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/reasons"))
-                             .body(ShopResult.success(data));
+                             .body(ShopResult.successWith(data));
     }
 
 }
