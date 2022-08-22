@@ -71,9 +71,9 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     /**
      * {@inheritDoc}
      *
-     * @param id - 조회할 상품의 PK 입니다.
+     * @param id  조회할 상품의 PK 입니다.
      * @param pageable 요청하는 page 의 정보를 담고 있습니다.
-     * @return - 상품 문의 List 와 페이지 정보를 PageEntity 에 담아 반환합니다.
+     * @return  상품 문의 List 와 페이지 정보를 PageEntity 에 담아 반환합니다.
      * @throws JsonProcessingException Json 과 관련된 예외 처리입니다.
      * @author 민아영
      * @since 1.0.0

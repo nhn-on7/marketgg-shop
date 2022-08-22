@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -52,6 +53,8 @@ class DefaultUsedCouponServiceTest {
     Coupon coupon;
     MemberCreateRequest memberRequest;
     Member member;
+    GivenCoupon.Pk givenCouponPk;
+    UsedCoupon.Pk usedCouponPk;
 
     @BeforeEach
     void setUp() {
@@ -61,31 +64,34 @@ class DefaultUsedCouponServiceTest {
         ReflectionTestUtils.setField(usedCouponDto, "couponId", 1L);
         ReflectionTestUtils.setField(usedCouponDto, "memberId", 1L);
 
+
         memberRequest = new MemberCreateRequest();
         member = new Member(memberRequest, new Cart());
         coupon
             = new Coupon(1L, "신규쿠폰", "정률할인", 1, 1, 0.5);
+        givenCouponPk = new GivenCoupon.Pk(1L, 1L);
         givenCoupon
-            = new GivenCoupon(new GivenCoupon.Pk(1L, 1L), coupon, member, LocalDateTime.now());
+            = new GivenCoupon(givenCouponPk, coupon, member, LocalDateTime.now());
 
-        usedCoupon = new UsedCoupon(new UsedCoupon.Pk(1L, 1L, 1L), order, givenCoupon);
+        usedCouponPk = new UsedCoupon.Pk(1L, 1L, 1L);
+        usedCoupon = new UsedCoupon(usedCouponPk, order, givenCoupon);
     }
 
-    @DisplayName("사용 쿠폰 생성")
     @Test
+    @DisplayName("사용 쿠폰 생성")
     void testCreateUsedCouponsSuccess() {
-        given(orderRepository.findById(any())).willReturn(Optional.ofNullable(order));
-        given(givenCouponRepository.findById(any())).willReturn(Optional.ofNullable(givenCoupon));
+        given(orderRepository.findById(anyLong())).willReturn(Optional.ofNullable(order));
+        given(givenCouponRepository.findById(givenCouponPk)).willReturn(Optional.ofNullable(givenCoupon));
 
         usedCouponService.createUsedCoupons(usedCouponDto);
 
         then(usedCouponRepository).should(times(1)).save(any(UsedCoupon.class));
     }
 
-    @DisplayName("사용 쿠폰 삭제")
     @Test
+    @DisplayName("사용 쿠폰 삭제")
     void deleteUsedCoupons() {
-        given(usedCouponRepository.findById(any())).willReturn(Optional.ofNullable(usedCoupon));
+        given(usedCouponRepository.findById(usedCouponPk)).willReturn(Optional.ofNullable(usedCoupon));
 
         usedCouponService.deleteUsedCoupons(usedCouponDto);
 
