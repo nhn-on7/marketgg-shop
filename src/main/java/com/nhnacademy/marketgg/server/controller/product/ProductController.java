@@ -67,7 +67,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI + "/search"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(productList));
+                             .body(ShopResult.successWith(productList));
     }
 
     /**
@@ -101,7 +101,7 @@ public class ProductController {
                              .location(URI.create(
                                      DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/search"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(productList));
+                             .body(ShopResult.successWith(productList));
     }
 
     /**
@@ -138,7 +138,7 @@ public class ProductController {
                              .location(URI.create(
                                      DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/sort-price/" + option))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(productList));
+                             .body(ShopResult.successWith(productList));
     }
 
 }

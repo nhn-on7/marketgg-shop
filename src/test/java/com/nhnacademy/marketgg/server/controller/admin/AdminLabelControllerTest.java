@@ -56,7 +56,6 @@ class AdminLabelControllerTest {
     @DisplayName("라벨 등록")
     void createLabel() throws Exception {
         LabelCreateRequest labelCreateRequest = new LabelCreateRequest();
-        ReflectionTestUtils.setField(labelCreateRequest, "labelNo", 1L);
         ReflectionTestUtils.setField(labelCreateRequest, "name", "hello");
         String requestBody = objectMapper.writeValueAsString(labelCreateRequest);
 

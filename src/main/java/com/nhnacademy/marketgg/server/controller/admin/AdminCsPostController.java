@@ -83,7 +83,7 @@ public class AdminCsPostController {
                              .location(URI.create(
                                      DEFAULT_ADMIN_POST + "/categories/" + categoryId + "/options/" + optionType
                                              + "/search?option=" + option))
-                             .body(ShopResult.success(data));
+                             .body(ShopResult.successWith(data));
     }
 
     /**
