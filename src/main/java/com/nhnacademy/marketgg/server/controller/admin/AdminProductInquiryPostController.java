@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
-
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryReplyRequest;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
@@ -36,7 +35,7 @@ public class AdminProductInquiryPostController {
      * 상품 문의에 대한 관리자의 답글을 등록하기 위한 PUT Mapping 을 지원합니다.
      *
      * @param replyRequest - 상품 문의에 대한 관리자의 답글을 담은 DTO 입니다.
-     * @return  Mapping URI 를 담은 응답 객체를 반환합니다.
+     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @author 민아영
      * @since 1.0.0
      */
@@ -49,8 +48,8 @@ public class AdminProductInquiryPostController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PutMapping("/inquiry-reply")
-    public ResponseEntity<ShopResult<Void>> updateProductInquiryReply(@RequestBody @Valid final
-                                                                      ProductInquiryReplyRequest replyRequest) {
+    public ResponseEntity<ShopResult<String>> updateProductInquiryReply(@RequestBody @Valid final
+                                                                        ProductInquiryReplyRequest replyRequest) {
 
         productInquiryPostService.updateProductInquiryReply(replyRequest.getAdminReply()
             , replyRequest.getInquiryId()

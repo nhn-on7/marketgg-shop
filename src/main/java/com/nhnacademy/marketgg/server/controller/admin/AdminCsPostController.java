@@ -62,8 +62,7 @@ public class AdminCsPostController {
         @PathVariable @Size(min = 1, max = 6) final String categoryId,
         @PathVariable @Min(1) final String optionType,
         @RequestParam @Min(1) final String option,
-        @Valid @RequestBody final SearchRequest searchRequest)
-        throws ParseException, JsonProcessingException {
+        @Valid @RequestBody final SearchRequest searchRequest) throws ParseException, JsonProcessingException {
 
         List<PostResponse> data = postService.searchForOption(searchRequest, optionType, option);
 
@@ -84,9 +83,9 @@ public class AdminCsPostController {
      * @since 1.0.0
      */
     @PutMapping("/categories/{categoryId}/{postId}")
-    public ResponseEntity<ShopResult<Void>> updatePost(@PathVariable @Size(min = 1, max = 6) final String categoryId,
-                                                       @PathVariable @Min(1) final Long postId,
-                                                       @Valid @RequestBody final PostRequest postRequest) {
+    public ResponseEntity<ShopResult<String>> updatePost(@PathVariable @Size(min = 1, max = 6) final String categoryId,
+                                                         @PathVariable @Min(1) final Long postId,
+                                                         @Valid @RequestBody final PostRequest postRequest) {
 
         postService.updatePost(categoryId, postId, postRequest);
 
@@ -121,9 +120,9 @@ public class AdminCsPostController {
      * @since 1.0.0
      */
     @PatchMapping("/{postId}/status")
-    public ResponseEntity<ShopResult<Void>> updateInquiryStatus(@PathVariable @Min(1) final Long postId,
-                                                                @Valid @RequestBody
-                                                                final PostStatusUpdateRequest statusUpdateRequest) {
+    public ResponseEntity<ShopResult<String>> updateInquiryStatus(@PathVariable @Min(1) final Long postId,
+                                                                  @Valid @RequestBody
+                                                                  final PostStatusUpdateRequest statusUpdateRequest) {
 
         postService.updateOtoInquiryStatus(postId, statusUpdateRequest);
 

@@ -42,9 +42,9 @@ public class CommentController {
      * @since 1.0.0
      */
     @PostMapping("/{postId}")
-    public ResponseEntity<ShopResult<Void>> createComment(@PathVariable @Min(1) final Long postId,
-                                                         @Valid @RequestBody final CommentRequest commentRequest,
-                                                         final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<String>> createComment(@PathVariable @Min(1) final Long postId,
+                                                            @Valid @RequestBody final CommentRequest commentRequest,
+                                                            final MemberInfo memberInfo) {
 
         otoInquiryCommentService.createComment(postId, memberInfo.getId(), commentRequest);
 

@@ -26,8 +26,6 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.CartResponse;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
-import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
@@ -42,7 +40,6 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -109,7 +106,7 @@ class OrderControllerTest {
         headers.set(HttpHeaders.AUTHORIZATION, "jwt");
         headers.set(AUTH_ID, uuid);
         headers.set(WWW_AUTHENTICATE, roles);
-        authInfoResponse = ShopResult.success(authInfo);
+        authInfoResponse = ShopResult.successWith(authInfo);
     }
 
     @Test

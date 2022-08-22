@@ -57,8 +57,8 @@ public class CsPostController {
      * @since 1.0.0
      */
     @PostMapping
-    public ResponseEntity<ShopResult<Void>> createPost(@Valid @RequestBody final PostRequest postRequest,
-                                                      final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<String>> createPost(@Valid @RequestBody final PostRequest postRequest,
+                                                         final MemberInfo memberInfo) {
 
         postService.createPost(postRequest, memberInfo);
 
@@ -78,9 +78,9 @@ public class CsPostController {
      */
     @GetMapping("/categories/{categoryId}")
     public ResponseEntity<ShopResult<List<PostResponse>>> retrievePostList(
-            @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
-            @RequestParam @NotNull final Integer page,
-            final MemberInfo memberInfo) {
+        @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
+        @RequestParam @NotNull final Integer page,
+        final MemberInfo memberInfo) {
 
         List<PostResponse> data = postService.retrievePostList(categoryId, page, memberInfo);
 
@@ -98,9 +98,10 @@ public class CsPostController {
      * @since 1.0.0
      */
     @GetMapping("/{postId}")
-    public ResponseEntity<ShopResult<PostResponseForDetail>> retrievePost(@PathVariable @NotNull @Min(1) final Long postId,
-                                                              final MemberInfo memberInfo)
-            throws JsonProcessingException {
+    public ResponseEntity<ShopResult<PostResponseForDetail>> retrievePost(
+        @PathVariable @NotNull @Min(1) final Long postId,
+        final MemberInfo memberInfo)
+        throws JsonProcessingException {
 
         PostResponseForDetail data = postService.retrievePost(postId, memberInfo);
 
@@ -123,10 +124,10 @@ public class CsPostController {
 
     @PostMapping("/categories/{categoryId}/search")
     public ResponseEntity<ShopResult<List<PostResponse>>> searchPostListForCategory(
-            @PathVariable @Size(min = 1, max = 6) final String categoryId,
-            @Valid @RequestBody final SearchRequest searchRequest,
-            final MemberInfo memberInfo)
-            throws ParseException, JsonProcessingException {
+        @PathVariable @Size(min = 1, max = 6) final String categoryId,
+        @Valid @RequestBody final SearchRequest searchRequest,
+        final MemberInfo memberInfo)
+        throws ParseException, JsonProcessingException {
 
         List<PostResponse> data = postService.searchForCategory(searchRequest, memberInfo);
 
@@ -145,9 +146,10 @@ public class CsPostController {
      * @since 1.0.0
      */
     @DeleteMapping("/categories/{categoryId}/{postId}")
-    public ResponseEntity<ShopResult<Void>> deletePost(@PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
-                                           @PathVariable @NotNull @Min(1) final Long postId,
-                                           final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<String>> deletePost(
+        @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
+        @PathVariable @NotNull @Min(1) final Long postId,
+        final MemberInfo memberInfo) {
 
         postService.deletePost(categoryId, postId, memberInfo);
 
@@ -165,8 +167,8 @@ public class CsPostController {
     @GetMapping("/reasons")
     public ResponseEntity<ShopResult<List<String>>> retrieveReasonList() {
         List<String> data = Arrays.stream(OtoReason.values())
-                                     .map(OtoReason::reason)
-                                     .collect(Collectors.toList());
+                                  .map(OtoReason::reason)
+                                  .collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/reasons"))
