@@ -26,7 +26,6 @@ class LabelRepositoryTest {
     static void beforeAll() {
         labelCreateRequest = new LabelCreateRequest();
 
-        ReflectionTestUtils.setField(labelCreateRequest, "labelNo", 1L);
         ReflectionTestUtils.setField(labelCreateRequest, "name", "labelName");
     }
 

@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.product.ProductController;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import java.util.List;
@@ -53,7 +54,8 @@ class ProductControllerTest {
     @Test
     @DisplayName("전체 목록에서 상품 검색 테스트")
     void testSearchProductList() throws Exception {
-        given(productService.searchProductList(any(SearchRequest.class))).willReturn(List.of());
+        given(productService.searchProductList(any(SearchRequest.class))).willReturn(
+                new PageEntity<>(0, 10, 1, List.of()));
 
         this.mockMvc.perform(post(DEFAULT_PRODUCT + "/search")
                                      .contentType(MediaType.APPLICATION_JSON)
@@ -67,7 +69,8 @@ class ProductControllerTest {
     @Test
     @DisplayName("카테고리 목록 내에서 상품 검색 테스트")
     void testSearchProductListByCategory() throws Exception {
-        given(productService.searchProductListByCategory(any(SearchRequest.class))).willReturn(List.of());
+        given(productService.searchProductListByCategory(any(SearchRequest.class))).willReturn(
+                new PageEntity<>(0, 10, 1, List.of()));
 
         this.mockMvc.perform(post(DEFAULT_PRODUCT + "/categories/{categoryId}/search", "100")
                                      .contentType(MediaType.APPLICATION_JSON)
@@ -82,7 +85,7 @@ class ProductControllerTest {
     @DisplayName("카테고리 목록 내에서 선택한 옵션별로 정렬 하는 상품 검색 테스트")
     void testSearchProductListByPrice() throws Exception {
         given(productService.searchProductListByPrice(anyString(), any(SearchRequest.class))).willReturn(
-                List.of());
+                new PageEntity<>(0, 10, 1, List.of()));
 
         this.mockMvc.perform(post(DEFAULT_PRODUCT + "/categories/{categoryId}/sort-price/{option}/search", "100", "desc")
                                      .contentType(MediaType.APPLICATION_JSON)

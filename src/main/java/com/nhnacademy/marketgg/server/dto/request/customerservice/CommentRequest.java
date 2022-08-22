@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.dto.request.customerservice;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class CommentRequest {
 
+    @Schema(name = "댓글 내용", description = "1:1문의의 댓글 내용입니다.", example = "싫은데요")
     @NotBlank
     @Size(min = 1, max = 255)
     private String content;

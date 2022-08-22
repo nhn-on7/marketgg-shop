@@ -4,6 +4,11 @@ import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.label.LabelCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.label.LabelRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.label.LabelService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
@@ -41,6 +46,13 @@ public class AdminLabelController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
+    @Operation(summary = "라벨 등록",
+               description = "지정한 값으로 라벨을 생성합니다.",
+               parameters = @Parameter(name = "labelCreateRequest", description = "등록할 라벨 정보", required = true),
+               responses = @ApiResponse(responseCode = "201",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @PostMapping
     public ResponseEntity<ShopResult<String>> registerLabel(@RequestBody
                                                             @Valid final LabelCreateRequest labelCreateRequest) {
@@ -58,6 +70,12 @@ public class AdminLabelController {
      * @return 전체 라벨 목록을 list 로 반환합니다.
      * @since 1.0.0
      */
+    @Operation(summary = "라벨 목록조회",
+               description = "라벨 목록을 조회합니다.",
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @GetMapping
     public ResponseEntity<ShopResult<List<LabelRetrieveResponse>>> retrieveLabels() {
         List<LabelRetrieveResponse> data = labelService.retrieveLabels();
@@ -74,6 +92,13 @@ public class AdminLabelController {
      * @return Mapping URI 를 담은 응답 객체입니다.
      * @since 1.0.0
      */
+    @Operation(summary = "라벨 삭제",
+               description = "지정한 라벨 번호를 삭제합니다.",
+               parameters = @Parameter(name = "labelId", description = "라벨 식별번호", required = true),
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @DeleteMapping("/{labelId}")
     public ResponseEntity<ShopResult<String>> deleteLabel(@PathVariable @Min(1) final Long labelId) {
         labelService.deleteLabel(labelId);

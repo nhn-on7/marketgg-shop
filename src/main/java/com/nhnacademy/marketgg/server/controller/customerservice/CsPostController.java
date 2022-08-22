@@ -10,6 +10,11 @@ import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponseForDetail;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.service.post.PostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
@@ -56,6 +61,14 @@ public class CsPostController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
+    @Operation(summary = "게시글 등록",
+               description = "입력한 정보를 기반으로 게시글을 등록합니다.",
+               parameters = { @Parameter(name = "postRequest", description = "등록할 게시글 정보", required = true),
+                       @Parameter(name = "memberInfo", description = "회원 정보", required = true) },
+               responses = @ApiResponse(responseCode = "201",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @PostMapping
     public ResponseEntity<ShopResult<String>> createPost(@Valid @RequestBody final PostRequest postRequest,
                                                          final MemberInfo memberInfo) {
@@ -76,6 +89,15 @@ public class CsPostController {
      * @return 게시글 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
+    @Operation(summary = "게시글 목록조회",
+               description = "지정한 카테고리 번호의 게시글 목록을 조회합니다.",
+               parameters = { @Parameter(name = "categoryId", description = "카테고리 식별번호", required = true),
+                       @Parameter(name = "page", description = "페이지 번호", required = true),
+                       @Parameter(name = "memberInfo", description = "회원 정보", required = true) },
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @GetMapping("/categories/{categoryId}")
     public ResponseEntity<ShopResult<List<PostResponse>>> retrievePostList(
         @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
@@ -97,11 +119,19 @@ public class CsPostController {
      * @return 지정한 게시글의 상세 정보를 담은 응답객체를 반환합니다.
      * @since 1.0.0
      */
+    @Operation(summary = "게시글 상세조회",
+               description = "지정한 게시글의 상세정보를 조회합니다.",
+               parameters = { @Parameter(name = "postId", description = "게시글 식별번호", required = true),
+                       @Parameter(name = "memberInfo", description = "회원 정보", required = true) },
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @GetMapping("/{postId}")
     public ResponseEntity<ShopResult<PostResponseForDetail>> retrievePost(
-        @PathVariable @NotNull @Min(1) final Long postId,
-        final MemberInfo memberInfo)
-        throws JsonProcessingException {
+            @PathVariable @NotNull @Min(1) final Long postId,
+            final MemberInfo memberInfo)
+            throws JsonProcessingException {
 
         PostResponseForDetail data = postService.retrievePost(postId, memberInfo);
 
@@ -121,7 +151,15 @@ public class CsPostController {
      * @throws JsonProcessingException JSON 관련 파싱처리 도중 예외처리입니다.
      * @since 1.0.0
      */
-
+    @Operation(summary = "지정한 카테고리 목록 내 게시글 검색",
+               description = "지정한 게시판 타입의 전체 목록에서 검색을 진행합니다.",
+               parameters = { @Parameter(name = "categoryId", description = "카테고리 식별번호", required = true),
+                       @Parameter(name = "searchRequest", description = "검색 옵션 값", required = true),
+                       @Parameter(name = "memberInfo", description = "회원 정보", required = true) },
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @PostMapping("/categories/{categoryId}/search")
     public ResponseEntity<ShopResult<List<PostResponse>>> searchPostListForCategory(
         @PathVariable @Size(min = 1, max = 6) final String categoryId,
@@ -145,6 +183,15 @@ public class CsPostController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
+    @Operation(summary = "1:1 문의 삭제",
+               description = "지정한 1:1문의 게시글을 삭제합니다.",
+               parameters = { @Parameter(name = "categoryId", description = "카테고리 식별번호", required = true),
+                       @Parameter(name = "postId", description = "게시글 식별번호", required = true),
+                       @Parameter(name = "memberInfo", description = "회원 정보", required = true) },
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @DeleteMapping("/categories/{categoryId}/{postId}")
     public ResponseEntity<ShopResult<String>> deletePost(
         @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
@@ -164,6 +211,12 @@ public class CsPostController {
      * @return 사유 목록을 반환합니다.
      * @since 1.0.0
      */
+    @Operation(summary = "1:1 문의 사유목록 반환",
+               description = "1:1 문의 사유목록을 반환합니다.",
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @GetMapping("/reasons")
     public ResponseEntity<ShopResult<List<String>>> retrieveReasonList() {
         List<String> data = Arrays.stream(OtoReason.values())

@@ -1,9 +1,10 @@
 package com.nhnacademy.marketgg.server.elastic.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
+import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
 import java.util.List;
 import org.json.simple.parser.ParseException;
 
@@ -25,8 +26,8 @@ public interface SearchRepository {
      * @throws ParseException          파싱 오류 발생 시 예외를 던집니다.
      * @since 1.0.0
      */
-    List<SearchProductResponse> searchProductForCategory(final SearchRequest request,
-                                                         final String priceSortType)
+    PageEntity<List<ProductListResponse>> searchProductForCategory(final SearchRequest request,
+                                        final String priceSortType)
         throws JsonProcessingException, ParseException;
 
     /**
@@ -39,8 +40,8 @@ public interface SearchRepository {
      * @throws ParseException          파싱 오류 발생 시 예외를 던집니다.
      * @since 1.0.0
      */
-    List<SearchProductResponse> searchProductWithKeyword(final SearchRequest request,
-                                                         final String priceSortType)
+    PageEntity<List<ProductListResponse>> searchProductWithKeyword(final SearchRequest request,
+                                                       final String priceSortType)
         throws JsonProcessingException, ParseException;
 
     /**

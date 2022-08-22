@@ -11,6 +11,7 @@ import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.times;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.label.LabelCreateRequest;
@@ -19,10 +20,10 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
+import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticProductRepository;
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.entity.Asset;
@@ -84,7 +85,7 @@ class DefaultProductServiceTest {
 
     private static ProductCreateRequest productRequest;
     private static ProductUpdateRequest productUpdateRequest;
-    private static ProductResponse productResponse;
+    private static ProductDetailResponse productDetailResponse;
     private static Asset asset;
     private static Category category;
     private static Label label;
@@ -92,15 +93,15 @@ class DefaultProductServiceTest {
     private static ElasticProduct elasticProduct;
     private static Image image;
     private static Product product;
-    private static SearchProductResponse searchProductResponse;
+    private static ProductListResponse productListResponse;
     private static ImageResponse imageResponse;
 
     @BeforeAll
     static void beforeAll() {
-        productResponse =
-                new ProductResponse(null, null, null, null, null, null, null, null, null, null,
-                                    null, null, null,
-                                    null, null, null, null, null, null, null);
+        productDetailResponse =
+                new ProductDetailResponse(null, null, null, null, null, null, null, null, null, null,
+                                          null, null, null,
+                                          null, null, null, null, null, null, null);
 
         productRequest = new ProductCreateRequest();
         ReflectionTestUtils.setField(productRequest, "categoryCode", "001");
@@ -146,7 +147,7 @@ class DefaultProductServiceTest {
         product = new Product(productRequest, asset, category);
         ReflectionTestUtils.setField(product, "id", 1L);
 
-        searchProductResponse = new SearchProductResponse();
+        productListResponse = new ProductListResponse();
 
         imageResponse = new ImageResponse("이미지 응답", 1L, "이미지 주소", 1, asset);
     }
@@ -191,11 +192,11 @@ class DefaultProductServiceTest {
     @Test
     @DisplayName("상품 목록 조회 테스트")
     void testRetrieveProducts() {
-        List<ProductResponse> list = List.of(productResponse);
-        Page<ProductResponse> page = new PageImpl<>(list, PageRequest.of(0, 1), 1);
+        List<ProductDetailResponse> list = List.of(productDetailResponse);
+        Page<ProductDetailResponse> page = new PageImpl<>(list, PageRequest.of(0, 1), 1);
         given(productRepository.findAllProducts(PageRequest.of(0, 1))).willReturn(page);
 
-        DefaultPageResult<ProductResponse> productResponses =
+        DefaultPageResult<ProductDetailResponse> productResponses =
                 productService.retrieveProducts(PageRequest.of(0, 1));
 
         assertThat(productResponses).isNotNull();
@@ -205,9 +206,9 @@ class DefaultProductServiceTest {
     @Test
     @DisplayName("상품 상세 조회 테스트")
     void testRetrieveProductDetails() {
-        given(productRepository.queryById(anyLong())).willReturn(productResponse);
+        given(productRepository.queryById(anyLong())).willReturn(productDetailResponse);
 
-        SingleResponse<ProductResponse> productResponse =
+        SingleResponse<ProductDetailResponse> productResponse =
                 productService.retrieveProductDetails(anyLong());
 
         assertThat(productResponse).isNotNull();
@@ -279,7 +280,7 @@ class DefaultProductServiceTest {
     @DisplayName("전체 목록 내 상품 검색")
     void testSearchProductList() throws ParseException, JsonProcessingException {
         given(searchRepository.searchProductWithKeyword(any(SearchRequest.class), any())).willReturn(
-                List.of(searchProductResponse));
+                new PageEntity<>(0, 10, 1, List.of()));
 
         productService.searchProductList(new SearchRequest());
 
@@ -290,7 +291,7 @@ class DefaultProductServiceTest {
     @DisplayName("카테고리 내 상품 목록 검색")
     void testSearchProductListByCategory() throws ParseException, JsonProcessingException {
         given(searchRepository.searchProductForCategory(any(SearchRequest.class), any())).willReturn(
-                List.of(searchProductResponse));
+                new PageEntity<>(0, 10, 1, List.of()));
 
         productService.searchProductListByCategory(new SearchRequest());
 
@@ -301,7 +302,7 @@ class DefaultProductServiceTest {
     @DisplayName("카테고리 내 지정한 가격 옵션별 상품 목록 검색")
     void testSearchProductListByPrice() throws ParseException, JsonProcessingException {
         given(searchRepository.searchProductForCategory(any(SearchRequest.class), anyString())).willReturn(
-                List.of(searchProductResponse));
+                new PageEntity<>(0, 10, 1, List.of()));
 
         productService.searchProductListByPrice("asc", new SearchRequest());
 

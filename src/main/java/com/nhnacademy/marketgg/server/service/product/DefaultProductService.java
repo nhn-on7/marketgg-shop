@@ -1,14 +1,15 @@
 package com.nhnacademy.marketgg.server.service.product;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
+import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticProductRepository;
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.entity.Category;
@@ -74,9 +75,9 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public DefaultPageResult<ProductResponse> retrieveProducts(final Pageable pageable) {
+    public DefaultPageResult<ProductDetailResponse> retrieveProducts(final Pageable pageable) {
 
-        Page<ProductResponse> allProducts = productRepository.findAllProducts(pageable);
+        Page<ProductDetailResponse> allProducts = productRepository.findAllProducts(pageable);
 
         return new DefaultPageResult<>(allProducts.getContent(), allProducts.getTotalElements(),
                                        allProducts.getTotalPages(), allProducts.getNumber());
@@ -84,7 +85,7 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public SingleResponse<ProductResponse> retrieveProductDetails(final Long productId) {
+    public SingleResponse<ProductDetailResponse> retrieveProductDetails(final Long productId) {
         return new SingleResponse<>(productRepository.queryById(productId));
     }
 
@@ -126,20 +127,20 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public List<SearchProductResponse> searchProductList(final SearchRequest searchRequest)
+    public PageEntity<List<ProductListResponse>> searchProductList(final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
         return searchRepository.searchProductWithKeyword(searchRequest, null);
     }
 
     @Override
-    public List<SearchProductResponse> searchProductListByCategory(final SearchRequest searchRequest)
+    public PageEntity<List<ProductListResponse>> searchProductListByCategory(final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
         return searchRepository.searchProductForCategory(searchRequest, null);
     }
 
     @Override
-    public List<SearchProductResponse> searchProductListByPrice(final String option, final SearchRequest searchRequest)
+    public PageEntity<List<ProductListResponse>> searchProductListByPrice(final String option, final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
         return searchRepository.searchProductForCategory(searchRequest, option);

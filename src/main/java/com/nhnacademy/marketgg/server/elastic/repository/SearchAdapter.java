@@ -3,10 +3,11 @@ package com.nhnacademy.marketgg.server.elastic.repository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequestBodyForBool;
-import com.nhnacademy.marketgg.server.elastic.dto.response.SearchProductResponse;
+import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
 import com.nhnacademy.marketgg.server.util.KoreanToEnglishTranslator;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -50,10 +51,11 @@ public class SearchAdapter implements SearchRepository {
     private static final String DEFAULT_ELASTIC_BOARD = "/boards/_search";
     private static final String PRODUCT = "product";
     private static final String BOARD = "board";
+    private static final Integer PAGE_SIZE = 10;
 
     @Override
-    public List<SearchProductResponse> searchProductForCategory(final SearchRequest request,
-                                                                final String priceSortType)
+    public PageEntity<List<ProductListResponse>> searchProductForCategory(final SearchRequest request,
+                                                                          final String priceSortType)
             throws ParseException, JsonProcessingException {
 
         Map<String, String> sort = this.buildSort(priceSortType);
@@ -62,12 +64,16 @@ public class SearchAdapter implements SearchRepository {
                                                translator.converter(request.getKeyword()),
                                                PRODUCT)), this.buildHeaders());
 
-        return this.parsingResponseBody(this.doRequest(requestEntity, PRODUCT).getBody());
+        String response = this.doRequest(requestEntity, PRODUCT).getBody();
+
+        return new PageEntity<>(
+                request.getPage(), request.getSize(),
+                this.parsingPageData(response), this.parsingResponseBody(response));
     }
 
     @Override
-    public List<SearchProductResponse> searchProductWithKeyword(final SearchRequest request,
-                                                                final String priceSortType)
+    public PageEntity<List<ProductListResponse>> searchProductWithKeyword(final SearchRequest request,
+                                                              final String priceSortType)
             throws ParseException, JsonProcessingException {
 
         Map<String, String> sort = this.buildSort(priceSortType);
@@ -75,7 +81,11 @@ public class SearchAdapter implements SearchRepository {
                 new SearchRequestBodyForBool<>(sort, request, translator.converter(request.getKeyword()))),
                                                             this.buildHeaders());
 
-        return this.parsingResponseBody(this.doRequest(requestEntity, PRODUCT).getBody());
+        String response = this.doRequest(requestEntity, PRODUCT).getBody();
+
+        return new PageEntity<>(
+                request.getPage(), request.getSize(),
+                this.parsingPageData(response), this.parsingResponseBody(response));
     }
 
     @Override
@@ -148,6 +158,15 @@ public class SearchAdapter implements SearchRepository {
         }
 
         return list;
+    }
+
+    private Integer parsingPageData(final String response) throws ParseException {
+        JSONObject jsonObject = (JSONObject) parser.parse(response);
+        JSONObject hits = (JSONObject) jsonObject.get("hits");
+        JSONObject total = (JSONObject) hits.get("total");
+        Integer totalValue = (Integer)total.get("value");
+
+        return totalValue / PAGE_SIZE + 1;
     }
 
     private HttpHeaders buildHeaders() {

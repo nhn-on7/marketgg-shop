@@ -3,6 +3,10 @@ package com.nhnacademy.marketgg.server.controller.admin;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.point.PointService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +37,12 @@ public class AdminPointController {
      * @return 전체 회원의 포인트 내역을 List 로 반환합니다.
      * @since 1.0.0
      */
+    @Operation(summary = "전체 회원 포인트 내역 조회",
+               description = "전제 회원의 포인트 내역목록을 반환합니다.",
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @GetMapping
     public ResponseEntity<ShopResult<List<PointRetrieveResponse>>> adminRetrievePointHistory() {
         List<PointRetrieveResponse> data = pointService.adminRetrievePointHistories();

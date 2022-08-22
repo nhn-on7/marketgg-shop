@@ -54,7 +54,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private static final String MEMBER_PREFIX = "/member/";
+    private static final String MEMBER_PREFIX = "/members/";
 
     private final MemberService memberService;
     private final GivenCouponService givenCouponService;
@@ -67,6 +67,13 @@ public class MemberController {
      * @return 선택한 회원의 GG 패스 갱신일을 반환합니다.
      * @since 1.0.0
      */
+    @Operation(summary = "회원 GG 패스 갱신일시 조회",
+               description = "지정한 회원의 GG 패스 갱신일시를 조회합니다.",
+               parameters = @Parameter(name = "memberInfo", description = "회원 정보", required = true),
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @GetMapping("/ggpass")
     public ResponseEntity<ShopResult<LocalDateTime>> retrievePassUpdatedAt(final MemberInfo memberInfo) {
 
@@ -85,6 +92,13 @@ public class MemberController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
+    @Operation(summary = "GG 패스 구독",
+               description = "지정한 회원을 GG 패스에 구독시킵니다.",
+               parameters = @Parameter(name = "memberInfo", description = "회원 정보", required = true),
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @PostMapping("/ggpass/subscribe")
     public ResponseEntity<ShopResult<String>> subscribePass(final MemberInfo memberInfo) {
         memberService.subscribePass(memberInfo.getId());
@@ -101,6 +115,13 @@ public class MemberController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
+    @Operation(summary = "GG 패스 해지",
+               description = "지정한 회원을 GG 패스에 구독해지 시킵니다.",
+               parameters = @Parameter(name = "memberInfo", description = "회원 정보", required = true),
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
     @PostMapping("/ggpass/withdraw")
     public ResponseEntity<ShopResult<String>> withdrawPass(final MemberInfo memberInfo) {
         memberService.withdrawPass(memberInfo.getId());
@@ -211,7 +232,7 @@ public class MemberController {
                                                                                             @PageableDefault final
                                                                                             Pageable pageable) {
         PageEntity<GivenCouponResponse> givenCouponResponses
-            = givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
+                = givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
