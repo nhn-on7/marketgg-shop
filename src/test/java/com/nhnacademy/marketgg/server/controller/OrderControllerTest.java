@@ -1,20 +1,5 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
-import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATE;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.times;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.annotation.Role;
@@ -33,10 +18,6 @@ import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.order.OrderService;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,12 +40,32 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
+import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATE;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @Transactional
 @SpringBootTest
 @ActiveProfiles({ "testdb", "common", "local" })
 @Import({
-    AuthInfoAspect.class,
-    MemberInfoAspect.class
+        AuthInfoAspect.class,
+        MemberInfoAspect.class
 })
 class OrderControllerTest {
 
@@ -114,15 +115,16 @@ class OrderControllerTest {
     void testCreateOrder() throws Exception {
         OrderCreateRequest orderCreateRequest = new OrderCreateRequest();
         OrderToPayment orderToPayment = new OrderToPayment("GGORDER_1", "orderName", "name",
-            "email", 30000L, 1L,
-            2000, 300);
+                                                           "email", 30000L, 1L,
+                                                           2000, 300);
 
-        given(orderService.createOrder(any(OrderCreateRequest.class), any(MemberInfo.class))).willReturn(orderToPayment);
+        given(orderService.createOrder(any(OrderCreateRequest.class), any(MemberInfo.class))).willReturn(
+                orderToPayment);
 
         mockMvc.perform(post(baseUri)
-                   .headers(headers)
-                   .contentType(MediaType.APPLICATION_JSON)
-                   .content(mapper.writeValueAsString(orderCreateRequest)))
+                                .headers(headers)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(orderCreateRequest)))
                .andExpect(status().isCreated());
 
         then(orderService).should(times(1)).createOrder(any(OrderCreateRequest.class), any(MemberInfo.class));
@@ -139,7 +141,7 @@ class OrderControllerTest {
         given(orderService.retrieveOrderForm(any(List.class), any(MemberInfo.class), any(AuthInfo.class)))
                 .willReturn(orderFormResponse);
         given(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), any(
-            ParameterizedTypeReference.class)))
+                ParameterizedTypeReference.class)))
                 .willReturn(responseEntity);
 
         mockMvc.perform(post(baseUri + "/order-form")
@@ -158,8 +160,8 @@ class OrderControllerTest {
         given(orderService.retrieveOrderList(any(MemberInfo.class))).willReturn(List.of());
 
         mockMvc.perform(get(baseUri)
-                   .headers(headers)
-                   .contentType(MediaType.APPLICATION_JSON))
+                                .headers(headers)
+                                .contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk());
 
         then(orderService).should(times(1)).retrieveOrderList(any(MemberInfo.class));
@@ -173,8 +175,8 @@ class OrderControllerTest {
         given(orderService.retrieveOrderDetail(anyLong(), any(MemberInfo.class))).willReturn(orderDetail);
 
         mockMvc.perform(get(baseUri + "/{orderId}", 1L)
-                   .headers(headers)
-                   .contentType(MediaType.APPLICATION_JSON))
+                                .headers(headers)
+                                .contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk());
 
         then(orderService).should(times(1))
@@ -189,12 +191,36 @@ class OrderControllerTest {
         willDoNothing().given(orderService).updateStatus(anyLong(), any(OrderUpdateStatusRequest.class));
 
         mockMvc.perform(patch(baseUri + "/{orderId}/status", 1L)
-                   .contentType(MediaType.APPLICATION_JSON)
-                   .content(mapper.writeValueAsString(updateStatus)))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(updateStatus)))
                .andExpect(status().isOk());
 
         then(orderService).should(times(1))
                           .updateStatus(anyLong(), any(OrderUpdateStatusRequest.class));
+    }
+
+    @Test
+    @DisplayName("주문 운송장 번호 발급 요청")
+    void testCreateTrackingNo() throws Exception {
+        willDoNothing().given(orderService).createTrackingNo(anyLong());
+
+        mockMvc.perform(patch(baseUri + "/{orderId}/delivery", 1L)
+                                .contentType(MediaType.APPLICATION_JSON))
+               .andExpect(status().isOk());
+
+        then(orderService).should(times(1)).createTrackingNo(anyLong());
+    }
+
+    @Test
+    @DisplayName("주문 취소")
+    void testCancelOrder() throws Exception {
+        willDoNothing().given(orderService).cancelOrder(anyLong());
+
+        mockMvc.perform(patch(baseUri + "/{orderId}", 1L)
+                                .contentType(MediaType.APPLICATION_JSON))
+               .andExpect(status().isOk());
+
+        then(orderService).should(times(1)).cancelOrder(anyLong());
     }
 
 }

@@ -4,6 +4,7 @@ import com.nhnacademy.marketgg.server.entity.QUsedCoupon;
 import com.nhnacademy.marketgg.server.entity.UsedCoupon;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class UsedCouponRepositoryImpl extends QuerydslRepositorySupport implements UsedCouponRepositoryCustom {
@@ -16,10 +17,10 @@ public class UsedCouponRepositoryImpl extends QuerydslRepositorySupport implemen
     public boolean existsCouponId(final Long couponId) {
         QUsedCoupon usedCoupon = QUsedCoupon.usedCoupon;
 
-        return from(usedCoupon)
-                .where(usedCoupon.pk.couponId.eq(couponId))
-                .select(usedCoupon.pk.couponId)
-                .fetchFirst() != null;
+        return Objects.nonNull(from(usedCoupon)
+                                       .where(usedCoupon.pk.couponId.eq(couponId))
+                                       .select(usedCoupon.pk.couponId)
+                                       .fetchFirst());
     }
 
     @Override

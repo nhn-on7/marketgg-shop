@@ -11,12 +11,17 @@ import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddres
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberGradeCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.entity.Asset;
@@ -29,13 +34,16 @@ import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.MemberGrade;
+import com.nhnacademy.marketgg.server.entity.Order;
+import com.nhnacademy.marketgg.server.entity.OrderProduct;
 import com.nhnacademy.marketgg.server.entity.Product;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Dummy {
@@ -267,6 +275,11 @@ public class Dummy {
         return new DeliveryAddress(getDummyMember(getDummyCart(1L)), getDeliveryAddressCreateRequest());
     }
 
+    public static DeliveryAddressResponse getDummyDeliveryAddressResponse() {
+        return new DeliveryAddressResponse(1L, true, 50948,
+                                           "경남 김해시 내외중앙로 55", "정우빌딩 5층");
+    }
+
     public static OrderFormResponse getDummyOrderFormResponse() {
         MemberInfo memberInfo = getDummyMemberInfo(1L, new Cart());
         AuthInfo authInfo = getDummyAuthInfo();
@@ -285,7 +298,7 @@ public class Dummy {
     public static DeliveryAddress getDummyDeliveryAddress() {
         DeliveryAddressCreateRequest request = new DeliveryAddressCreateRequest();
         ReflectionTestUtils.setField(request, "isDefaultAddress", true);
-        ReflectionTestUtils.setField(request, "zipCode", "50948");
+        ReflectionTestUtils.setField(request, "zipCode", 50948);
         ReflectionTestUtils.setField(request, "address", "경남 김해시 내외중앙로 55");
         ReflectionTestUtils.setField(request, "detailAddress", "정우빌딩 5층");
 
@@ -303,5 +316,64 @@ public class Dummy {
     //
     //     return new Coupon();
     // }
+    public static Coupon getDummyCoupon() {
+        CouponDto couponDto = new CouponDto(1L, "2022 썸머 이벤트", "정액할인", 30, 10000, 1000D);
+        // ReflectionTestUtils.setField(couponDto, "id", 1L);
+        // ReflectionTestUtils.setField(couponDto, "name", "2022 썸머 이벤트");
+        // ReflectionTestUtils.setField(couponDto, "type", "정액할인");
+        // ReflectionTestUtils.setField(couponDto, "expiredDate", 30);
+        // ReflectionTestUtils.setField(couponDto, "minimumMoney", 10000);
+        // ReflectionTestUtils.setField(couponDto, "discountAmount", 1000D);
 
+        return new Coupon(couponDto);
+    }
+
+    public static ProductToOrder getDummyProductToOrder() {
+        ProductToOrder productToOrder = new ProductToOrder();
+
+        ReflectionTestUtils.setField(productToOrder, "id", 1L);
+        ReflectionTestUtils.setField(productToOrder, "name", "상품1");
+        ReflectionTestUtils.setField(productToOrder, "price", 10000L);
+        ReflectionTestUtils.setField(productToOrder, "amount", 1);
+
+        return productToOrder;
+    }
+
+    public static OrderCreateRequest getDummyOrderCreateRequest() {
+        List<ProductToOrder> productToOrders = List.of(getDummyProductToOrder());
+        OrderCreateRequest orderCreateRequest = new OrderCreateRequest();
+
+        ReflectionTestUtils.setField(orderCreateRequest, "name", "KimDummy");
+        ReflectionTestUtils.setField(orderCreateRequest, "email", "KimDummy@dooray.com");
+        ReflectionTestUtils.setField(orderCreateRequest, "couponId", 1L);
+        ReflectionTestUtils.setField(orderCreateRequest, "deliveryAddressId", 1L);
+        ReflectionTestUtils.setField(orderCreateRequest, "products", productToOrders);
+        ReflectionTestUtils.setField(orderCreateRequest, "usedPoint", 1000);
+        ReflectionTestUtils.setField(orderCreateRequest, "totalOrigin", 10000L);
+        ReflectionTestUtils.setField(orderCreateRequest, "totalAmount", 9000L);
+        ReflectionTestUtils.setField(orderCreateRequest, "paymentType", "카드");
+        ReflectionTestUtils.setField(orderCreateRequest, "expectedSavePoint", 90);
+
+        return orderCreateRequest;
+    }
+
+    public static Order getDummyOrder() {
+        return new Order(getDummyMember(getDummyCart(1L)), getDummyDeliveryAddress(), getDummyOrderCreateRequest());
+    }
+
+    public static OrderProduct getDummyOrderProduct() {
+        return new OrderProduct(getDummyOrder(), getDummyProduct(1L), 1);
+    }
+
+    public static OrderGivenCoupon getDummyOrderGivenCoupon() {
+        Coupon coupon = getDummyCoupon();
+
+        return new OrderGivenCoupon(coupon.getId(), coupon.getName(), LocalDateTime.now(), 30,
+                                    5000, 1000D);
+    }
+
+    public static OrderRetrieveResponse getOrderRetrieveResponse() {
+        return new OrderRetrieveResponse(1L, 1L, 10000L,
+                                         "결제 대기", LocalDateTime.now());
+    }
 }

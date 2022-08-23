@@ -67,4 +67,14 @@ public class Coupon {
         this.minimumMoney = couponRequest.getMinimumMoney();
         this.discountAmount = couponRequest.getDiscountAmount();
     }
+
+    public Coupon(final CouponDto couponDto) {
+        this.name = couponDto.getName();
+        this.discountAmount = couponDto.getDiscountAmount();
+        this.type = couponDto.getType();
+        this.id = couponDto.getId();
+        this.expiredDate = couponDto.getExpiredDate();
+        this.minimumMoney = couponDto.getMinimumMoney();
+    }
+
 }
