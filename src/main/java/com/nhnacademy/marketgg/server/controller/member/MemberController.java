@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.controller.member;
 
 import static org.springframework.http.HttpStatus.OK;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.annotation.UUID;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
@@ -10,7 +11,7 @@ import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
-import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
@@ -153,13 +154,13 @@ public class MemberController {
      * Client 에서 받은 회원가입 Form 에서 입력한 정보로 회원가입을 하는 로직입니다.
      * 회원가입시 추천인을 입력했고, 해당 회원이 존재하면 추천인과 추천인을 입력한 회원은 적립금을 받습니다.
      *
-     * @param shopMemberSignUpRequest - shop
+     * @param signUpRequest - shop
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
     @PostMapping("/signup")
-    public ResponseEntity<CommonResponse> doSignUp(@RequestBody final ShopMemberSignUpRequest shopMemberSignUpRequest) {
-        memberService.signUp(shopMemberSignUpRequest);
+    public ResponseEntity<CommonResponse> doSignUp(@RequestBody @Valid final SignupRequest signUpRequest) throws JsonProcessingException {
+        memberService.signUp(signUpRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)

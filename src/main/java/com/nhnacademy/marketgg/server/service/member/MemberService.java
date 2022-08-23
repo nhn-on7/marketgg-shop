@@ -1,7 +1,8 @@
 package com.nhnacademy.marketgg.server.service.member;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
-import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import java.time.LocalDateTime;
 
@@ -50,12 +51,11 @@ public interface MemberService {
 
     /**
      * Client 에서 입력폼에 입력한 정보로 회원가입을 합니다.
-     * (Auth 서버에 들어가는 정보랑 다름)
      *
-     * @param shopMemberSignupRequest - 회원가입 정보를 담은 객체입니다.
+     * @param signupRequest - 회원가입 정보를 담은 객체입니다.
      * @since 1.0.0
      */
-    void signUp(final ShopMemberSignUpRequest shopMemberSignupRequest);
+    void signUp(final SignupRequest signupRequest) throws JsonProcessingException;
 
     void withdraw(final String uuid, final MemberWithdrawRequest memberWithdrawRequest);
 }

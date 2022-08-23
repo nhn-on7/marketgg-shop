@@ -2,7 +2,7 @@ package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
-import com.nhnacademy.marketgg.server.dto.request.member.ShopMemberSignUpRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.nhnacademy.marketgg.server.dto.response.member.SignupResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -114,18 +116,18 @@ public class Member {
     /**
      * 회원가입 처리를 위한 생성자 입니다.
      *
-     * @param shopMemberSignupRequest - 클라이언트 폼에서 가입한 회원의 정보를 담은 DTO 입니다.
+     * @param signupRequest - 클라이언트 폼에서 가입한 회원의 정보를 담은 DTO 입니다.
      * @param signUpMemberGrade       - 회원가입시 부여될 등급을 담은 객체입니다.
      * @since 1.0.0
      */
-    public Member(final ShopMemberSignUpRequest shopMemberSignupRequest, final MemberGrade signUpMemberGrade,
+    public Member(final SignupRequest signupRequest, final String uuid, final MemberGrade signUpMemberGrade,
                   final Cart cart) {
 
         this.memberGrade = signUpMemberGrade;
         this.cart = cart;
-        this.uuid = shopMemberSignupRequest.getUuid();
-        this.gender = shopMemberSignupRequest.getGender();
-        this.birthDate = shopMemberSignupRequest.getBirthDate();
+        this.uuid = uuid;
+        this.gender = signupRequest.getGender();
+        this.birthDate = signupRequest.getBirthDate();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
