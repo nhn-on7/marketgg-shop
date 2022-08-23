@@ -200,7 +200,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("주문 운송장 번호 요청")
+    @DisplayName("주문 운송장 번호 발급 요청")
     void testCreateTrackingNo() throws Exception {
         willDoNothing().given(orderService).createTrackingNo(anyLong());
 

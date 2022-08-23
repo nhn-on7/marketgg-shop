@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.exception.coupon;
 
-public class CouponNotValidException extends RuntimeException {
+public class CouponIsAlreadyUsedException extends RuntimeException {
 
     private static final String ERROR = "쿠폰이 이미 사용되었습니다.";
 
@@ -9,7 +9,7 @@ public class CouponNotValidException extends RuntimeException {
      *
      * @since 1.0.0
      */
-    public CouponNotValidException() {
+    public CouponIsAlreadyUsedException() {
         super(ERROR);
     }
 }

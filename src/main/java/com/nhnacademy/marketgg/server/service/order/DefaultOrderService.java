@@ -1,7 +1,5 @@
 package com.nhnacademy.marketgg.server.service.order;
 
-import static com.nhnacademy.marketgg.server.repository.auth.AuthAdapter.checkResult;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.constant.PaymentType;
 import com.nhnacademy.marketgg.server.delivery.DeliveryRepository;
@@ -30,7 +28,7 @@ import com.nhnacademy.marketgg.server.entity.event.OrderCouponCanceledEvent;
 import com.nhnacademy.marketgg.server.entity.event.OrderPointCanceledEvent;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotOverMinimumMoneyException;
-import com.nhnacademy.marketgg.server.exception.coupon.CouponNotValidException;
+import com.nhnacademy.marketgg.server.exception.coupon.CouponIsAlreadyUsedException;
 import com.nhnacademy.marketgg.server.exception.deliveryaddresses.DeliveryAddressNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.order.OrderMemberNotMatchedException;
@@ -48,15 +46,18 @@ import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryReposi
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.cart.CartProductService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import static com.nhnacademy.marketgg.server.repository.auth.AuthAdapter.checkResult;
 
 @Service
 @RequiredArgsConstructor
@@ -87,11 +88,11 @@ public class DefaultOrderService implements OrderService {
     @Transactional
     @Override
     public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final MemberInfo memberInfo)
-        throws JsonProcessingException {
+            throws JsonProcessingException {
         int i = 0;
         Member member = memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
         MemberInfoResponse memberResponse = checkResult(
-            authRepository.getMemberInfo(new MemberInfoRequest(member.getUuid())));
+                authRepository.getMemberInfo(new MemberInfoRequest(member.getUuid())));
         DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(orderRequest.getDeliveryAddressId())
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
         Order order = new Order(member, deliveryAddress, orderRequest);
@@ -148,7 +149,7 @@ public class DefaultOrderService implements OrderService {
         }
         Coupon coupon = couponRepository.findById(couponId).orElseThrow(CouponNotFoundException::new);
         if (usedCouponRepository.existsCouponId(couponId)) {
-            throw new CouponNotValidException();
+            throw new CouponIsAlreadyUsedException();
         }
         return Optional.of(coupon);
     }
@@ -169,7 +170,7 @@ public class DefaultOrderService implements OrderService {
         List<OrderGivenCoupon> orderGivenCoupons = givenCouponRepository.findOwnCouponsByMemberId(memberId);
         Integer totalPoint = pointRepository.findLastTotalPoints(memberId);
         List<DeliveryAddressResponse> deliveryAddresses = deliveryAddressRepository.findDeliveryAddressesByMemberId(
-            memberId);
+                memberId);
         List<String> paymentTypes = Arrays.stream(PaymentType.values())
                                           .map(PaymentType::getType)
                                           .collect(Collectors.toList());
