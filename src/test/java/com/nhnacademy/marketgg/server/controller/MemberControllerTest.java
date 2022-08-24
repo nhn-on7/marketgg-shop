@@ -81,42 +81,6 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("GG 패스 갱신일자 확인")
-    void testCheckPassUpdatedAt() throws Exception {
-        given(memberService.retrievePassUpdatedAt(any())).willReturn(LocalDateTime.now());
-
-        this.mockMvc.perform(get("/members/ggpass")
-                                 .headers(httpHeaders))
-                    .andExpect(status().isOk());
-
-        then(memberService).should(times(1)).retrievePassUpdatedAt(any());
-    }
-
-    @Test
-    @DisplayName("GG 패스 가입")
-    void testJoinPass() throws Exception {
-        willDoNothing().given(memberService).subscribePass(any());
-
-        this.mockMvc.perform(post("/members/ggpass/subscribe", 1L)
-                                 .headers(httpHeaders))
-                    .andExpect(status().isOk());
-
-        then(memberService).should(times(1)).subscribePass(any());
-    }
-
-    @Test
-    @DisplayName("GG 패스 해지")
-    void testWithdrawPass() throws Exception {
-        willDoNothing().given(memberService).withdrawPass(any());
-
-        this.mockMvc.perform(post("/members/ggpass/withdraw", 1L)
-                                 .headers(httpHeaders))
-                    .andExpect(status().isOk());
-
-        then(memberService).should(times(1)).withdrawPass(any());
-    }
-
-    @Test
     @DisplayName("사용자 조회")
     void testRetrieveMember() throws Exception {
 
@@ -129,8 +93,8 @@ class MemberControllerTest {
                                                       .build();
 
         this.mockMvc.perform(get("/members")
-                                 .headers(httpHeaders)
-                                 .accept(MediaType.APPLICATION_JSON))
+                                     .headers(httpHeaders)
+                                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.success", equalTo(true)))
                     .andDo(print());
@@ -144,9 +108,9 @@ class MemberControllerTest {
         String content = objectMapper.writeValueAsString(givenCouponCreateRequest);
 
         this.mockMvc.perform(post("/members/coupons")
-                                 .headers(httpHeaders)
-                                 .contentType(MediaType.APPLICATION_JSON)
-                                 .content(content))
+                                     .headers(httpHeaders)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(content))
                     .andExpect(status().isCreated());
 
         then(givenCouponService).should(times(1)).createGivenCoupons(any(MemberInfo.class),
@@ -158,10 +122,10 @@ class MemberControllerTest {
     void testRetrieveGivenCoupons() throws Exception {
         PageEntity<GivenCouponResponse> pageEntity = new PageEntity<>(1, 1, 1, List.of());
         given(givenCouponService.retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class))).willReturn(
-            pageEntity);
+                pageEntity);
 
         this.mockMvc.perform(get("/members/coupons")
-                                 .headers(httpHeaders))
+                                     .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(givenCouponService).should(times(1)).retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class));
@@ -172,11 +136,11 @@ class MemberControllerTest {
     void testRetrieveProductInquiryByMemberId() throws Exception {
         PageEntity<ProductInquiryPost> pageEntity = new PageEntity<>(1, 1, 1, List.of());
         given(inquiryPostService.retrieveProductInquiryByMemberId(any(MemberInfo.class), any(PageRequest.class)))
-            .willReturn(pageEntity);
+                .willReturn(pageEntity);
 
         this.mockMvc.perform(get("/members/product-inquiries")
-                                 .headers(httpHeaders)
-                                 .contentType(MediaType.APPLICATION_JSON))
+                                     .headers(httpHeaders)
+                                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
     }
 

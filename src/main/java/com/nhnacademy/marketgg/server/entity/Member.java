@@ -63,9 +63,6 @@ public class Member {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
-    @Column(name = "ggpass_updated_at")
-    private LocalDateTime ggpassUpdatedAt;
-
     @Column(name = "created_at")
     @NotNull
     private LocalDateTime createdAt;
@@ -89,7 +86,6 @@ public class Member {
         this.uuid = memberRequest.getUuid();
         this.gender = memberRequest.getGender();
         this.birthDate = memberRequest.getBirthDate();
-        this.ggpassUpdatedAt = memberRequest.getGgpassUpdateAt();
         this.createdAt = memberRequest.getCreatedAt();
         this.updatedAt = memberRequest.getUpdatedAt();
         this.deletedAt = memberRequest.getDeletedAt();
@@ -107,7 +103,6 @@ public class Member {
         this.uuid = memberRequest.getUuid();
         this.gender = memberRequest.getGender();
         this.birthDate = memberRequest.getBirthDate();
-        this.ggpassUpdatedAt = memberRequest.getGgpassUpdateAt();
         this.createdAt = memberRequest.getCreatedAt();
         this.updatedAt = memberRequest.getUpdatedAt();
         this.deletedAt = memberRequest.getDeletedAt();
@@ -130,15 +125,6 @@ public class Member {
         this.birthDate = signupRequest.getBirthDate();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
-    }
-
-    /**
-     * 회원이 GG 패스에 구독하기 위한 메소드입니다.
-     *
-     * @since 1.0.0
-     */
-    public void passSubscribe() {
-        this.ggpassUpdatedAt = (LocalDateTime.now()).plusMonths(1);
     }
 
     public Member(final MemberCreateRequest memberCreateRequest, final MemberGrade memberGrade) {
