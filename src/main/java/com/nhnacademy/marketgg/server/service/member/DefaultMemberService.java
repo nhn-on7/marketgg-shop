@@ -48,31 +48,6 @@ public class DefaultMemberService implements MemberService {
     private final ApplicationEventPublisher publisher;
     private final AuthRepository authRepository;
 
-
-    @Override
-    public LocalDateTime retrievePassUpdatedAt(final Long id) {
-        Member member = memberRepository.findById(id)
-                                        .orElseThrow(MemberNotFoundException::new);
-
-        if (Objects.isNull(member.getGgpassUpdatedAt())) {
-            return LocalDateTime.of(1, 1, 1, 1, 1, 1);
-        }
-
-        return member.getGgpassUpdatedAt();
-    }
-
-    @Transactional
-    @Override
-    public void subscribePass(final Long id) {
-        Member member = memberRepository.findById(id)
-                                        .orElseThrow(MemberNotFoundException::new);
-        member.passSubscribe();
-
-        // TODO : GG PASS 자동결제 로직 필요
-
-        memberRepository.save(member);
-    }
-
     @Override
     public MemberResponse retrieveMember(String uuid) {
         Member member = memberRepository.findByUuid(uuid)
@@ -82,18 +57,7 @@ public class DefaultMemberService implements MemberService {
                              .memberGrade(member.getMemberGrade().getGrade())
                              .gender(member.getGender())
                              .birthDay(member.getBirthDate())
-                             .ggpassUpdatedAt(member.getGgpassUpdatedAt())
                              .build();
-    }
-
-    @Transactional
-    @Override
-    public void withdrawPass(final Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
-
-        // TODO : GG PASS 자동결제 해지 로직 필요
-
-        memberRepository.save(member);
     }
 
     /**
