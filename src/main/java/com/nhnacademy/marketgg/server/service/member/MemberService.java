@@ -3,10 +3,8 @@ package com.nhnacademy.marketgg.server.service.member;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
-import java.time.LocalDateTime;
 
 /**
  * 회원 서비스입니다.
