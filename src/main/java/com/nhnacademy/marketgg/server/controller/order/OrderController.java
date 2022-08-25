@@ -69,6 +69,7 @@ public class OrderController {
                                                                   final MemberInfo memberInfo)
             throws JsonProcessingException {
 
+        log.info("createOrder method started");
         log.info("orderRequest: {}", orderCreateRequest);
 
         OrderToPayment response = orderService.createOrder(orderCreateRequest, memberInfo);
@@ -102,6 +103,9 @@ public class OrderController {
                                                                            final MemberInfo memberInfo,
                                                                            final AuthInfo authInfo) {
 
+        log.info("retrieveOrderForm method started");
+        log.info("cartResponse: {}", cartResponse);
+
         OrderFormResponse response = orderService.retrieveOrderForm(cartResponse.getProductIds(), memberInfo, authInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -127,6 +131,8 @@ public class OrderController {
                                         useReturnTypeSchema = true))
     @GetMapping
     public ResponseEntity<ShopResult<List<OrderRetrieveResponse>>> retrieveOrderList(final MemberInfo memberInfo) {
+        log.info("retrieveOrderList method started");
+
         List<OrderRetrieveResponse> responses = orderService.retrieveOrderList(memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -154,6 +160,9 @@ public class OrderController {
     @GetMapping("/{orderId}")
     public ResponseEntity<ShopResult<OrderDetailRetrieveResponse>> retrieveOrderDetail(@PathVariable final Long orderId,
                                                                                        final MemberInfo memberInfo) {
+
+        log.info("retrieveOrderDetail method started");
+        log.info("orderId: {}", orderId);
 
         OrderDetailRetrieveResponse response = orderService.retrieveOrderDetail(orderId, memberInfo);
 
@@ -183,6 +192,9 @@ public class OrderController {
     public ResponseEntity<ShopResult<String>> updateStatus(@PathVariable final Long orderId,
                                                            @RequestBody final OrderUpdateStatusRequest status) {
 
+        log.info("updateStatus method started");
+        log.info("status: {}", status);
+
         orderService.updateStatus(orderId, status);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -209,6 +221,9 @@ public class OrderController {
     @PatchMapping("/{orderId}/delivery")
     public ResponseEntity<ShopResult<String>> createTrackingNo(
             @PathVariable final Long orderId) throws JsonProcessingException {
+
+        log.info("createTrackingNo method started");
+
         orderService.createTrackingNo(orderId);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -224,8 +239,8 @@ public class OrderController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
-    @Operation(summary = "주문 삭제",
-               description = "지정한 주문을 삭제합니다.(소프트 삭제)",
+    @Operation(summary = "주문 취소",
+               description = "지정한 주문을 취소합니다.(소프트 삭제)",
                parameters = @Parameter(name = "orderId", description = "주문 식별번호", required = true),
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
@@ -233,6 +248,8 @@ public class OrderController {
                                         useReturnTypeSchema = true))
     @PatchMapping("/{orderId}")
     public ResponseEntity<ShopResult<String>> cancelOrder(@PathVariable final Long orderId) {
+        log.info("cancelOrder method started");
+
         orderService.cancelOrder(orderId);
 
         return ResponseEntity.status(HttpStatus.OK)
