@@ -6,6 +6,7 @@ import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import com.nhnacademy.marketgg.server.dto.response.member.SignupResponse;
 import com.nhnacademy.marketgg.server.exception.member.MemberInfoNotFoundException;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -92,6 +94,28 @@ public class AuthAdapter implements AuthRepository {
                 });
 
         return response.getBody();
+    }
+
+    @Override
+    public void withdraw(final LocalDateTime withdrawAt) {
+        HttpEntity<LocalDateTime> requestEntity = new HttpEntity<>(withdrawAt, buildHeaders());
+        restTemplate.exchange(
+                gateway + DEFAULT_AUTH,
+                HttpMethod.DELETE,
+                requestEntity,
+                new ParameterizedTypeReference<>() {
+                });
+    }
+
+    @Override
+    public void update(final MemberUpdateRequest memberUpdateRequest) {
+        HttpEntity<MemberUpdateRequest> requestEntity = new HttpEntity<>(memberUpdateRequest, buildHeaders());
+        restTemplate.exchange(
+                gateway + DEFAULT_AUTH,
+                HttpMethod.PUT,
+                requestEntity,
+                new ParameterizedTypeReference<>() {
+                });
     }
 
     private HttpHeaders buildHeaders() {

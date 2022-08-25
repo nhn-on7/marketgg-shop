@@ -1,7 +1,6 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,7 +18,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.nhnacademy.marketgg.server.dto.response.member.SignupResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -131,8 +129,8 @@ public class Member {
 
     }
 
-    public void withdraw(final MemberWithdrawRequest memberWithdrawRequest) {
-        this.deletedAt = memberWithdrawRequest.getDeletedAt();
+    public void withdraw(final LocalDateTime withdrawAt) {
+        this.deletedAt = withdrawAt;
     }
 
 }
