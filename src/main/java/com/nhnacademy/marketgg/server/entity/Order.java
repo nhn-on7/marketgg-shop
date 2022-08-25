@@ -102,10 +102,6 @@ public class Order {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public static Order test() {
-        return new Order();
-    }
-
     public void updateStatus(String status) {
         this.orderStatus = status;
     }

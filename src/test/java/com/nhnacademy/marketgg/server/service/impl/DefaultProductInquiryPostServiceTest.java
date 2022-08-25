@@ -110,13 +110,13 @@ class DefaultProductInquiryPostServiceTest {
     @Test
     @DisplayName("상품 문의에 대한 답글 등록 성공 테스트")
     void testUpdateProductInquiryReply() {
-        given(productInquiryPostRepository.findById(new ProductInquiryPost.Pk(1L, 1L)))
+        given(productInquiryPostRepository.findById(1L))
                 .willReturn(Optional.of(productInquiryPost));
 
         productInquiryPostService.updateProductInquiryReply(anyString(), 1L, 1L);
 
         then(productInquiryPostRepository).should(times(1))
-                                          .findById(any(ProductInquiryPost.Pk.class));
+                                          .findById(anyLong());
         then(productInquiryPostRepository).should(times(1))
                                           .save(any(ProductInquiryPost.class));
     }
@@ -124,7 +124,7 @@ class DefaultProductInquiryPostServiceTest {
     @Test
     @DisplayName("상품 문의에 대한 답글 등록 실패 테스트")
     void testUpdateProductInquiryReplyFail() {
-        given(productInquiryPostRepository.findById(new ProductInquiryPost.Pk(1L, 1L)))
+        given(productInquiryPostRepository.findById(1L))
                 .willReturn(Optional.empty());
         assertThatThrownBy(
                 () -> productInquiryPostService.updateProductInquiryReply(
@@ -135,9 +135,11 @@ class DefaultProductInquiryPostServiceTest {
     @Test
     @DisplayName("상품 문의 삭제 성공 테스트")
     void testDeleteProductInquiry() {
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
+
         productInquiryPostService.deleteProductInquiry(1L, 1L);
         then(productInquiryPostRepository).should(times(1))
-                                          .deleteById(new ProductInquiryPost.Pk(1L, 1L));
+                                          .deleteById(1L);
     }
 
 }

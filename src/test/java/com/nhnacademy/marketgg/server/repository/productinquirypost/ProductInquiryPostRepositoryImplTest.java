@@ -6,6 +6,7 @@ import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberGradeCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
+import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -44,9 +45,7 @@ class ProductInquiryPostRepositoryImplTest {
     Member member;
     Product product;
     ProductInquiryRequest productInquiryRequest;
-    ProductCreateRequest productRequest;
     Asset asset;
-    Category category;
 
     @BeforeEach
     void setUp() {
@@ -55,19 +54,16 @@ class ProductInquiryPostRepositoryImplTest {
         ReflectionTestUtils.setField(productInquiryRequest, "content", "문의 내용");
         ReflectionTestUtils.setField(productInquiryRequest, "isSecret", true);
 
-        member = new Member(new MemberCreateRequest(), new MemberGrade(new MemberGradeCreateRequest()));
+        member = Dummy.getDummyMember(Dummy.getDummyCart(1L));
         memberRepository.save(member);
-
-        productRequest = new ProductCreateRequest();
 
         asset = Asset.create();
         assetRepository.save(asset);
 
-        product = new Product(productRequest, asset, category);
+        product = Dummy.getDummyProduct(1L, 1L);
         productRepository.save(product);
 
-        productInquiryPost = new ProductInquiryPost(new ProductInquiryPost.Pk(1L, 1L),
-                                                    product, member, "제목", "내용", false,
+        productInquiryPost = new ProductInquiryPost(1L, product, member, "제목", "내용", false,
                                                     "답글", LocalDateTime.now());
     }
 
@@ -75,11 +71,10 @@ class ProductInquiryPostRepositoryImplTest {
     @DisplayName("상품의 전체 상품 문의 조회")
     void testFindALLByProductNo() {
         for (int i = 0; i < 5; i++) {
-            ProductInquiryPost.Pk pk = new ProductInquiryPost.Pk((long) i, 2L);
-            ReflectionTestUtils.setField(productInquiryPost, "pk", pk);
+            ReflectionTestUtils.setField(productInquiryPost, "productInquiryNo", i);
             productInquiryPostRepository.save(productInquiryPost);
         }
-        assertThat(productInquiryPostRepository.findAllByProductNo(2L, PageRequest.of(0, 10)))
+        assertThat(productInquiryPostRepository.findAllByProductNo(1L, PageRequest.of(0, 10)))
             .hasSize(5);
     }
 
@@ -87,8 +82,7 @@ class ProductInquiryPostRepositoryImplTest {
     @DisplayName("회원이 남긴 상품 문의 조회")
     void testFindAllByMemberNo() {
         for (int i = 0; i < 5; i++) {
-            ProductInquiryPost.Pk pk = new ProductInquiryPost.Pk((long) i, 1L);
-            ReflectionTestUtils.setField(productInquiryPost, "pk", pk);
+            ReflectionTestUtils.setField(productInquiryPost, "productInquiryNo", i);
             productInquiryPostRepository.save(productInquiryPost);
         }
         assertThat(productInquiryPostRepository.findAllByMemberNo(1L, PageRequest.of(0, 10)))
