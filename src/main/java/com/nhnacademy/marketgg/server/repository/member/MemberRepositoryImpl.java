@@ -24,7 +24,7 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
                 .where(member.uuid.eq(uuid))
                 .select(Projections.constructor(MemberInfo.class,
                                                 member.id, member.cart, member.memberGrade.grade, member.gender,
-                                                member.birthDate, member.updatedAt))
+                                                member.birthDate))
                 .fetchOne();
 
         return Optional.ofNullable(memberInfo);

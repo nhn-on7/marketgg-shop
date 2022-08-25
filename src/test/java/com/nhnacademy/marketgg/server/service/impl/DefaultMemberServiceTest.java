@@ -67,14 +67,4 @@ class DefaultMemberServiceTest {
         then(memberRepository).should(times(1)).findByUuid(uuid);
     }
 
-    // FIXME: 회원가입에 대한 테스트 코드를 작성해주세요 @김훈민
-    @Test
-    @DisplayName("회원가입")
-    void testSignUp() throws JsonProcessingException {
-        MemberInfo info = Dummy.getDummyMemberInfo(1L, new Cart());
-        given(memberRepository.findById(any()))
-                .willReturn(Optional.of(Dummy.getDummyMember(new Cart())));
-
-        memberService.withdraw(info);
-    }
 }
