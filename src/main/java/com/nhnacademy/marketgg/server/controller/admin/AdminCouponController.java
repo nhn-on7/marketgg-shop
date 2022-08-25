@@ -126,8 +126,8 @@ public class AdminCouponController {
      */
     @Operation(summary = "쿠폰 수정",
                description = "관리자가 수정할 쿠폰 정보를 입력하여 기존 쿠폰을 수정합니다.",
-               parameters = { @Parameter(name = "couponId", description = "수정할 쿠폰 번호", required = true),
-                   @Parameter(name = "couponDto", description = "수정 내용을 담은 쿠폰 요청 객체", required = true) },
+               parameters = {@Parameter(name = "couponId", description = "수정할 쿠폰 번호", required = true),
+                   @Parameter(name = "couponDto", description = "수정 내용을 담은 쿠폰 요청 객체", required = true)},
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
@@ -144,7 +144,7 @@ public class AdminCouponController {
     }
 
     /**
-     * 선택한 쿠폰을 삭제하는 DeleteMapping 을 지원합니다.
+     * 선택한 쿠폰을 소프트 삭제하는 DeleteMapping 을 지원합니다.
      *
      * @param couponId - 삭제할 쿠폰의 식별번호입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
