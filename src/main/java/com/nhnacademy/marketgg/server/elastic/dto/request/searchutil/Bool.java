@@ -14,6 +14,6 @@ import lombok.Getter;
 @Getter
 public class Bool {
 
-    private Must must;
+    private List<Must> must;
 
 }

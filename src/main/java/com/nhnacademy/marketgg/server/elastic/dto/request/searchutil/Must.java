@@ -15,6 +15,6 @@ import java.util.List;
 @Getter
 public class Must {
 
-    private List<MultiMatch> multi_match;
+    private MultiMatch multi_match;
 
 }
