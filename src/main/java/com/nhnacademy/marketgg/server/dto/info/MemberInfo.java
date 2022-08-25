@@ -18,17 +18,14 @@ public class MemberInfo {
     private final String memberGrade;
     private final Character gender;
     private final LocalDate birthDate;
-    private final LocalDateTime ggpassUpdatedAt;
     private Set<String> roles;
 
-    public MemberInfo(Long id, Cart cart, String memberGrade, Character gender, LocalDate birthDate,
-                      LocalDateTime ggpassUpdatedAt) {
+    public MemberInfo(Long id, Cart cart, String memberGrade, Character gender, LocalDate birthDate) {
         this.id = id;
         this.cart = cart;
         this.memberGrade = memberGrade;
         this.gender = gender;
         this.birthDate = birthDate;
-        this.ggpassUpdatedAt = ggpassUpdatedAt;
         this.roles = new HashSet<>();
     }
 
