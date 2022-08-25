@@ -1,16 +1,13 @@
 package com.nhnacademy.marketgg.server.controller.member;
 
-import static org.springframework.http.HttpStatus.OK;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.annotation.Auth;
-import com.nhnacademy.marketgg.server.annotation.UUID;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
@@ -25,7 +22,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import java.net.URI;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,9 +33,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+
+import static org.springframework.http.HttpStatus.OK;
 
 /**
  * 회원관리에 관련된 RestController 입니다.
@@ -96,20 +97,28 @@ public class MemberController {
     }
 
     /**
-     * Shop-Server 회원 Soft 삭제를 위한 메소드 입니다.
+     * 회원 탈퇴시 Soft 삭제를 위한 메소드 입니다.
      *
-     * @param uuid                  - 회원탈퇴를 신청한 회원입니다.
-     * @param memberWithdrawRequest - 회원탈퇴 시점을 가지고 있는 객체 입니다.
-     * @return - 상태코드를 반환합니다.
+     * @param memberInfo - 탈퇴하는 회원의 정보 입니다.
+     * @return 응답 객체를 반환합니다.
      */
     @DeleteMapping
-    public ResponseEntity<Void> withdraw(@UUID String uuid, final MemberWithdrawRequest memberWithdrawRequest) {
-        memberService.withdraw(uuid, memberWithdrawRequest);
+    public ResponseEntity<ShopResult<String>> withdraw(final MemberInfo memberInfo) throws JsonProcessingException {
+        memberService.withdraw(memberInfo);
 
         return ResponseEntity.status(OK)
-                             .location(URI.create("/members"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.successWithDefaultMessage());
+    }
+
+    @PutMapping
+    public ResponseEntity<ShopResult<String>> update(final MemberInfo memberInfo,
+                                                     @Valid @RequestBody final MemberUpdateRequest memberUpdateRequest) {
+        memberService.update(memberInfo, memberUpdateRequest);
+
+        return ResponseEntity.status(OK)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -150,12 +159,12 @@ public class MemberController {
      * @since 1.0.0
      */
     @Operation(summary = "지급 쿠폰 조회",
-               description = "회원이 자신에게 지급된 쿠폰을 조회합니다.",
-               parameters = @Parameter(name = "memberInfo", description = "쿠폰을 등록하는 회원의 정보", required = true),
-               responses = @ApiResponse(responseCode = "200",
-                                        content = @Content(mediaType = "application/json",
-                                                           schema = @Schema(implementation = ShopResult.class)),
-                                        useReturnTypeSchema = true))
+            description = "회원이 자신에게 지급된 쿠폰을 조회합니다.",
+            parameters = @Parameter(name = "memberInfo", description = "쿠폰을 등록하는 회원의 정보", required = true),
+            responses = @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ShopResult.class)),
+                    useReturnTypeSchema = true))
     @GetMapping("/coupons")
     public ResponseEntity<ShopResult<PageEntity<GivenCouponResponse>>> retrieveGivenCoupons(final MemberInfo memberInfo,
                                                                                             @PageableDefault final
@@ -179,17 +188,17 @@ public class MemberController {
      * @since 1.0.0
      */
     @Operation(summary = "회원의 상품 문의 조회",
-               description = "회원이 등록한 상품 문의에 대해 조회합니다.",
-               responses = @ApiResponse(responseCode = "200",
-                                        content = @Content(mediaType = "application/json",
-                                                           schema = @Schema(implementation = ShopResult.class)),
-                                        useReturnTypeSchema = true))
+            description = "회원이 등록한 상품 문의에 대해 조회합니다.",
+            responses = @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ShopResult.class)),
+                    useReturnTypeSchema = true))
     @GetMapping("/product-inquiries")
     public ResponseEntity<ShopResult<PageEntity<ProductInquiryPost>>> retrieveProductInquiry(
-        final MemberInfo memberInfo, @PageableDefault final Pageable pageable) {
+            final MemberInfo memberInfo, @PageableDefault final Pageable pageable) {
 
         PageEntity<ProductInquiryPost> productInquiryResponses
-            = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
+                = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)

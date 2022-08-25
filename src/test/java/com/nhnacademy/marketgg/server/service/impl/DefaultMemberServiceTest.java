@@ -2,10 +2,13 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
@@ -64,10 +67,4 @@ class DefaultMemberServiceTest {
         then(memberRepository).should(times(1)).findByUuid(uuid);
     }
 
-    // FIXME: 회원가입에 대한 테스트 코드를 작성해주세요 @김훈민
-    @Test
-    @DisplayName("회원가입")
-    void testSignUp() {
-
-    }
 }
