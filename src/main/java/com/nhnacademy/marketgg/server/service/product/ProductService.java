@@ -10,6 +10,7 @@ import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
 import java.io.IOException;
 import java.util.List;
 import org.json.simple.parser.ParseException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,7 +40,7 @@ public interface ProductService {
      * @since 1.0.0
      */
 
-    List<ProductDetailResponse> retrieveProducts(Pageable pageable);
+    Page<ProductDetailResponse> retrieveProducts(Pageable pageable);
 
     /**
      * 상품 Id를 통해 상세 정보를 조회합니다.

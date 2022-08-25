@@ -73,11 +73,11 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public List<ProductDetailResponse> retrieveProducts(final Pageable pageable) {
+    public Page<ProductDetailResponse> retrieveProducts(final Pageable pageable) {
 
         Page<ProductDetailResponse> allProducts = productRepository.findAllProducts(pageable);
 
-        return allProducts.getContent();
+        return allProducts;
     }
 
     @Override

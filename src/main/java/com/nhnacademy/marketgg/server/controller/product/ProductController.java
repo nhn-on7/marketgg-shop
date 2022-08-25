@@ -22,6 +22,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -143,7 +144,7 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/sort-price/" + option))
+                                 DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/sort-price/" + option))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(ShopResult.successWith(productList));
     }
@@ -164,17 +165,25 @@ public class ProductController {
                                         useReturnTypeSchema = true))
 
     @GetMapping
-    public ResponseEntity<ShopResult<List<ProductDetailResponse>>> retrieveProducts(
+    public ResponseEntity<PageEntity<ProductDetailResponse>> retrieveProducts(
         @RequestParam(value = "page", defaultValue = "0") final Integer page) {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page);
 
-        List<ProductDetailResponse> productDetailRespons = this.productService.retrieveProducts(pageRequest.getPageable());
+        Page<ProductDetailResponse> productDetailResponses =
+            this.productService.retrieveProducts(pageRequest.getPageable());
+
+        PageEntity<ProductDetailResponse> pageEntity = new PageEntity<>(productDetailResponses.getNumber(),
+                                                                        productDetailResponses.getSize(),
+                                                                        productDetailResponses.getTotalPages(),
+                                                                        productDetailResponses.getContent());
+
+        System.out.println(pageEntity);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(productDetailRespons));
+                             .body(pageEntity);
     }
 
     /**
@@ -193,7 +202,8 @@ public class ProductController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @GetMapping("/{productId}")
-    public ResponseEntity<ShopResult<ProductDetailResponse>> retrieveProductDetails(@PathVariable final Long productId) {
+    public ResponseEntity<ShopResult<ProductDetailResponse>> retrieveProductDetails(
+        @PathVariable final Long productId) {
 
         ProductDetailResponse productDetailResponse = this.productService.retrieveProductDetails(productId);
 
