@@ -44,6 +44,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
         return Projections.constructor(OrderRetrieveResponse.class,
                                        order.id,
                                        order.member.id,
+                                       order.orderName,
                                        order.totalAmount,
                                        order.orderStatus,
                                        order.createdAt);
@@ -53,6 +54,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
         return Projections.constructor(OrderDetailRetrieveResponse.class,
                                        order.id,
                                        order.member.id,
+                                       order.orderName,
                                        order.totalAmount,
                                        order.orderStatus,
                                        order.usedPoint,

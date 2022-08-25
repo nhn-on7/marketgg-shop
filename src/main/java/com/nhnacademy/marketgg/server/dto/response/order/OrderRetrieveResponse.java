@@ -19,6 +19,8 @@ public class OrderRetrieveResponse {
 
     private final Long memberId;
 
+    private final String orderName;
+
     private final Long totalAmount;
 
     private final String orderStatus;
