@@ -216,7 +216,7 @@ public class DefaultOrderService implements OrderService {
      */
     @Override
     public List<OrderRetrieveResponse> retrieveOrderList(final MemberInfo memberInfo) {
-        return orderRepository.findOrderList(memberInfo.getId(), memberInfo.isUser());
+        return orderRepository.findOrderList(memberInfo.getId(), memberInfo.isAdmin());
     }
 
     /**
