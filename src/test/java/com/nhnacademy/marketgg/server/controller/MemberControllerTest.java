@@ -87,7 +87,6 @@ class MemberControllerTest {
         LocalDateTime now = LocalDateTime.now();
         MemberResponse memberResponse = MemberResponse.builder()
                                                       .memberGrade(null)
-                                                      .ggpassUpdatedAt(now)
                                                       .birthDay(now.toLocalDate())
                                                       .gender('M')
                                                       .build();

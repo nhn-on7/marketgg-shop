@@ -190,7 +190,7 @@ public class Dummy {
     public static MemberInfo getDummyMemberInfo(Long id, Cart cart) {
         LocalDate birthDate = LocalDate.of(1997, 4, 6);
         LocalDateTime ggpassUpdatedAt = LocalDateTime.now();
-        return new MemberInfo(id, cart, null, 'M', birthDate, ggpassUpdatedAt);
+        return new MemberInfo(id, cart, null, 'M', birthDate);
     }
 
     public static AuthInfo getDummyAuthInfo() {
