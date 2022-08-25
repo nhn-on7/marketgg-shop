@@ -5,8 +5,6 @@ import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.QCoupon;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -27,6 +25,8 @@ public class CouponRepositoryImpl extends QuerydslRepositorySupport implements C
 
         List<CouponDto> result = from(coupon)
             .select(selectAllCouponColumns())
+            .orderBy(coupon.id.desc())
+            .where(coupon.deletedAt.isNull())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
@@ -38,8 +38,9 @@ public class CouponRepositoryImpl extends QuerydslRepositorySupport implements C
     public Optional<CouponDto> findCouponDtoById(final Long id) {
 
         CouponDto result = from(coupon)
-                .select(selectAllCouponColumns())
-                .fetchOne();
+            .select(selectAllCouponColumns())
+            .where(coupon.id.eq(id))
+            .fetchOne();
 
         return Optional.ofNullable(result);
     }
@@ -57,12 +58,12 @@ public class CouponRepositoryImpl extends QuerydslRepositorySupport implements C
     private ConstructorExpression<CouponDto> selectAllCouponColumns() {
 
         return Projections.constructor(CouponDto.class,
-            coupon.id,
-            coupon.name,
-            coupon.type,
-            coupon.expiredDate,
-            coupon.minimumMoney,
-            coupon.discountAmount);
+                                       coupon.id,
+                                       coupon.name,
+                                       coupon.type,
+                                       coupon.expiredDate,
+                                       coupon.minimumMoney,
+                                       coupon.discountAmount);
     }
 
 }

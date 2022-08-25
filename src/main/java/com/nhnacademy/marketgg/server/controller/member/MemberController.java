@@ -54,8 +54,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private static final String MEMBER_PREFIX = "/members/";
-
     private final MemberService memberService;
     private final GivenCouponService givenCouponService;
     private final ProductInquiryPostService productInquiryPostService;

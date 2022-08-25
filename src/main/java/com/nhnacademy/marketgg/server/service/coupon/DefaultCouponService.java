@@ -70,7 +70,7 @@ public class DefaultCouponService implements CouponService {
         Page<CouponDto> allCoupons = couponRepository.findAllCoupons(pageable);
 
         return new PageEntity<>(allCoupons.getNumber(), allCoupons.getSize(),
-            allCoupons.getTotalPages(), allCoupons.getContent());
+                                allCoupons.getTotalPages(), allCoupons.getContent());
     }
 
     /**
@@ -95,7 +95,7 @@ public class DefaultCouponService implements CouponService {
     /**
      * {@inheritDoc}
      *
-     * @param couponId 삭제할 쿠폰의 식별번호입니다.
+     * @param couponId 소프트 삭제할 쿠폰의 식별번호입니다.
      * @author 민아영
      * @author 김정민
      * @since 1.0.0
@@ -105,8 +105,8 @@ public class DefaultCouponService implements CouponService {
     public void deleteCoupon(final Long couponId) {
         Coupon coupon = couponRepository.findById(couponId)
                                         .orElseThrow(CouponNotFoundException::new);
-
-        couponRepository.delete(coupon);
+        coupon.deleteCoupon();
+        couponRepository.save(coupon);
     }
 
 }
