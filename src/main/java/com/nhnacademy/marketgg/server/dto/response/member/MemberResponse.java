@@ -21,7 +21,6 @@ public class MemberResponse {
     private final String memberGrade;
     private final Character gender;
     private final LocalDate birthDay;
-    private final LocalDateTime ggpassUpdatedAt;
 
     public MemberResponse(AuthInfo authInfo, MemberInfo memberInfo) {
         this.email = authInfo.getEmail();
@@ -30,7 +29,6 @@ public class MemberResponse {
         this.memberGrade = memberInfo.getMemberGrade();
         this.gender = memberInfo.getGender();
         this.birthDay = memberInfo.getBirthDate();
-        this.ggpassUpdatedAt = memberInfo.getGgpassUpdatedAt();
     }
 
 }
