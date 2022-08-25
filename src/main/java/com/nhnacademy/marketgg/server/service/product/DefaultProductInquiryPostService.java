@@ -12,6 +12,7 @@ import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryRespons
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
+import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.exception.productinquiry.ProductInquiryPostNotFoundException;
 import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
@@ -71,9 +72,9 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     /**
      * {@inheritDoc}
      *
-     * @param id  조회할 상품의 PK 입니다.
+     * @param id       조회할 상품의 PK 입니다.
      * @param pageable 요청하는 page 의 정보를 담고 있습니다.
-     * @return  상품 문의 List 와 페이지 정보를 PageEntity 에 담아 반환합니다.
+     * @return 상품 문의 List 와 페이지 정보를 PageEntity 에 담아 반환합니다.
      * @throws JsonProcessingException Json 과 관련된 예외 처리입니다.
      * @author 민아영
      * @since 1.0.0
@@ -98,8 +99,8 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     /**
      * {@inheritDoc}
      *
-     * @param memberInfo  조회할 회원의 정보입니다.
-     * @param pageable 요청하는 page 의 정보를 담고 있습니다.
+     * @param memberInfo 조회할 회원의 정보입니다.
+     * @param pageable   요청하는 page 의 정보를 담고 있습니다.
      * @return 상품 문의 List 와 페이지 정보를 PageEntity 에 담아 반환합니다.
      * @author 민아영
      * @since 1.0.0
@@ -117,9 +118,9 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     /**
      * {@inheritDoc}
      *
-     * @param inquiryReply  상품 문의 글에 대한 답글이 답긴 DTO 입니다.
-     * @param inquiryId     상품 문의 글의 PK 입니다.
-     * @param productId     상품의 PK 입니다.
+     * @param inquiryReply 상품 문의 글에 대한 답글이 답긴 DTO 입니다.
+     * @param inquiryId    상품 문의 글의 PK 입니다.
+     * @param productId    상품의 PK 입니다.
      * @author 민아영
      * @since 1.0.0
      */
@@ -129,7 +130,7 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
                                           final Long inquiryId,
                                           final Long productId) {
         ProductInquiryPost inquiryPost =
-            productInquiryPostRepository.findById(new ProductInquiryPost.Pk(inquiryId, productId))
+            productInquiryPostRepository.findById(inquiryId)
                                         .orElseThrow(ProductInquiryPostNotFoundException::new);
 
         inquiryPost.updateInquiry(inquiryReply);
@@ -140,14 +141,16 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
      * {@inheritDoc}
      *
      * @param inquiryId - 삭제할 상품 문의 글의 PK 입나다.
-     * @param productId - 상품의 PK 입니다.
      * @author 민아영
      * @since 1.0.0
      */
     @Override
     @Transactional
     public void deleteProductInquiry(final Long inquiryId, final Long productId) {
-        productInquiryPostRepository.deleteById(new ProductInquiryPost.Pk(inquiryId, productId));
+        if (productRepository.findById(productId).isEmpty()) {
+          throw new ProductNotFoundException();
+        }
+        productInquiryPostRepository.deleteById(inquiryId);
     }
 
 }

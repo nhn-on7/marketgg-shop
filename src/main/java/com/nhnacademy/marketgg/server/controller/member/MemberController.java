@@ -26,7 +26,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.net.URI;
-import java.time.LocalDateTime;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -124,8 +123,8 @@ public class MemberController {
      */
     @Operation(summary = "지급 쿠폰 생성",
                description = "회원이 쿠폰의 이름으로 쿠폰을 등록하면 지급 쿠폰이 생성됩니다.",
-               parameters = { @Parameter(name = "memberInfo", description = "쿠폰을 등록하는 회원의 정보", required = true),
-                   @Parameter(name = "givenCouponRequest", description = "등록할 쿠폰 이름을 가진 요청 객체", required = true) },
+               parameters = {@Parameter(name = "memberInfo", description = "쿠폰을 등록하는 회원의 정보", required = true),
+                   @Parameter(name = "givenCouponRequest", description = "등록할 쿠폰 이름을 가진 요청 객체", required = true)},
                responses = @ApiResponse(responseCode = "201",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
@@ -162,7 +161,7 @@ public class MemberController {
                                                                                             @PageableDefault final
                                                                                             Pageable pageable) {
         PageEntity<GivenCouponResponse> givenCouponResponses
-                = givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
+            = givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)

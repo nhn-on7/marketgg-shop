@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 
 import com.nhnacademy.marketgg.server.dto.request.coupon.UsedCouponDto;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
+import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
@@ -58,7 +59,7 @@ class DefaultUsedCouponServiceTest {
 
     @BeforeEach
     void setUp() {
-        order = Order.test();
+        order = Dummy.getDummyOrder();
         usedCouponDto = new UsedCouponDto();
         ReflectionTestUtils.setField(usedCouponDto, "orderId", 1L);
         ReflectionTestUtils.setField(usedCouponDto, "couponId", 1L);

@@ -40,12 +40,13 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
         List<ProductInquiryResponse> result = from(productInquiryPost)
             .select(Projections.constructor(ProductInquiryResponse.class,
                                             productInquiryPost.member.uuid,
+                                            productInquiryPost.product.id,
                                             productInquiryPost.title,
                                             productInquiryPost.content,
                                             productInquiryPost.isSecret,
                                             productInquiryPost.adminReply,
                                             productInquiryPost.createdDate))
-            .where(productInquiryPost.pk.productNo.eq(id))
+            .where(productInquiryPost.product.id.eq(id))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
@@ -69,7 +70,7 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
         List<ProductInquiryPost> result = from(productInquiryPost)
             .select(Projections.constructor(ProductInquiryPost.class,
                                             productInquiryPost.member.uuid,
-                                            productInquiryPost.pk.productNo,
+                                            productInquiryPost.product.id,
                                             productInquiryPost.title,
                                             productInquiryPost.content,
                                             productInquiryPost.adminReply,
