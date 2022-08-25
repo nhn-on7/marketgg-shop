@@ -86,7 +86,7 @@ class NhnStorageServiceTest {
 
         ImageCreateRequest imageCreateRequest = nhnStorageService.uploadImage(imageFile);
 
-        assertThat(imageCreateRequest.getType()).isEqualTo(".jpg");
+        assertThat(imageCreateRequest.getType()).isEqualTo(".png");
         assertThat(imageCreateRequest.getClassification()).isEqualTo("cloud");
     }
 
@@ -96,7 +96,7 @@ class NhnStorageServiceTest {
         URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile imageFile =
-                new MockMultipartFile("image", "test.png", "text", new FileInputStream(filePath));
+                new MockMultipartFile("image", "test.text", "text", new FileInputStream(filePath));
 
         assertThatThrownBy(() -> nhnStorageService.uploadImage(imageFile)).isInstanceOf(IllegalArgumentException.class);
     }

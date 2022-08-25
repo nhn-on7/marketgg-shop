@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.dummy;
 
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
@@ -39,6 +40,10 @@ import com.nhnacademy.marketgg.server.entity.OrderProduct;
 import com.nhnacademy.marketgg.server.entity.Product;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
@@ -390,6 +395,14 @@ public class Dummy {
 
         return new ReviewResponse(1L, 1L, 1L, "후기 내용입니다. 더미입니다.", 5L,
                                   Boolean.FALSE, LocalDateTime.now(), LocalDateTime.now(), null);
+    }
+
+    public static Page<ProductDetailResponse> getDummyPage() {
+        ProductDetailResponse dummyProductResponse = getDummyProductResponse();
+
+        Page<ProductDetailResponse> responsePage = new PageImpl<>(List.of(dummyProductResponse), PageRequest.of(0, 10), 1);
+
+        return responsePage;
     }
 
 }

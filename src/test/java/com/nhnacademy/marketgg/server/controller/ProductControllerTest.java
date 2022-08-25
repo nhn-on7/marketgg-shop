@@ -25,7 +25,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -48,6 +51,7 @@ class ProductControllerTest {
 
     private ProductDetailResponse productDetailResponse;
 
+    private Page<ProductDetailResponse>  page;
     @BeforeEach
     void setUp() {
         searchRequest = new SearchRequest();
@@ -58,6 +62,7 @@ class ProductControllerTest {
         ReflectionTestUtils.setField(searchRequest, "size", 10);
 
         productDetailResponse = Dummy.getDummyProductResponse();
+        page = Dummy.getDummyPage();
     }
 
     @Test
@@ -110,9 +115,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("상품 목록 전체 조회하는 테스트")
     void testRetrieveProducts() throws Exception {
-        PageRequest request = PageRequest.of(0, 5);
-
-        given(productService.retrieveProducts(request)).willReturn(List.of());
+        given(productService.retrieveProducts(any(Pageable.class))).willReturn(page);
 
         this.mockMvc.perform(get(DEFAULT_PRODUCT)
                                  .contentType(MediaType.APPLICATION_JSON))

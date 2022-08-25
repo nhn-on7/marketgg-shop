@@ -178,8 +178,6 @@ public class ProductController {
                                                                         productDetailResponses.getTotalPages(),
                                                                         productDetailResponses.getContent());
 
-        System.out.println(pageEntity);
-
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI))
                              .contentType(MediaType.APPLICATION_JSON)
