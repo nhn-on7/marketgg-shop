@@ -63,7 +63,7 @@ public class AuthInfoAspect {
         HttpServletRequest request = requestAttributes.getRequest();
 
         String jwt = request.getHeader(AUTHORIZATION);
-        String uuid = request.getHeader(AspectUtils.WWW_AUTHENTICATE);
+        String uuid = request.getHeader(AspectUtils.AUTH_ID);
 
         if (Objects.isNull(jwt) || Objects.isNull(uuid)) {
             throw new IllegalArgumentException();

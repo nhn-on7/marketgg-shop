@@ -18,12 +18,13 @@ public class ImageRepositoryImpl extends QuerydslRepositorySupport implements Im
 
         return from(image)
             .where(image.asset.id.eq(id))
-            .select(Projections.constructor(ImageResponse.class,
-                                            image.name,
-                                            image.length,
-                                            image.imageAddress,
-                                            image.imageSequence))
             .orderBy(image.imageSequence.asc())
+            .select(Projections.constructor(ImageResponse.class,
+                image.name,
+                image.length,
+                image.imageAddress,
+                image.imageSequence,
+                image.asset))
             .fetchFirst();
     }
 
@@ -33,11 +34,11 @@ public class ImageRepositoryImpl extends QuerydslRepositorySupport implements Im
 
         return from(image)
             .select(Projections.constructor(ImageResponse.class,
-                                            image.name,
-                                            image.length,
-                                            image.imageAddress,
-                                            image.imageSequence,
-                                            image.asset))
+                image.name,
+                image.length,
+                image.imageAddress,
+                image.imageSequence,
+                image.asset))
             .where(image.id.eq(id))
             .fetchOne();
     }
