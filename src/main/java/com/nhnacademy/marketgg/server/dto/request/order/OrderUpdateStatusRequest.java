@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.dto.request.order;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class OrderUpdateStatusRequest {
 
+    @Schema(title = "상태", description = "변경할 주문 상태입니다.", example = "배송중")
     @NotNull
     private String status;
 

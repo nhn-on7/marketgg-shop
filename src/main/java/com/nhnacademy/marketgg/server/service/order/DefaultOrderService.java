@@ -26,9 +26,9 @@ import com.nhnacademy.marketgg.server.entity.OrderProduct;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.event.OrderCouponCanceledEvent;
 import com.nhnacademy.marketgg.server.entity.event.OrderPointCanceledEvent;
+import com.nhnacademy.marketgg.server.exception.coupon.CouponIsAlreadyUsedException;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotOverMinimumMoneyException;
-import com.nhnacademy.marketgg.server.exception.coupon.CouponIsAlreadyUsedException;
 import com.nhnacademy.marketgg.server.exception.deliveryaddresses.DeliveryAddressNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.order.OrderMemberNotMatchedException;
@@ -36,6 +36,7 @@ import com.nhnacademy.marketgg.server.exception.order.OrderNotFoundException;
 import com.nhnacademy.marketgg.server.exception.pointhistory.PointNotEnoughException;
 import com.nhnacademy.marketgg.server.exception.product.ProductStockNotEnoughException;
 import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
+import com.nhnacademy.marketgg.server.repository.cart.CartProductRepository;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
 import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponRepository;
@@ -75,6 +76,7 @@ public class DefaultOrderService implements OrderService {
     private final GivenCouponRepository givenCouponRepository;
     private final ProductRepository productRepository;
     private final CartProductService cartProductService;
+    private final CartProductRepository cartProductRepository;
     private final ApplicationEventPublisher publisher;
 
     /**
@@ -90,21 +92,30 @@ public class DefaultOrderService implements OrderService {
     public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final MemberInfo memberInfo)
             throws JsonProcessingException {
         int i = 0;
+        // memo: 주문하는 회원
         Member member = memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
+        // memo: 주문하는 회원 정보 auth server 조회
         MemberInfoResponse memberResponse = checkResult(
                 authRepository.getMemberInfo(new MemberInfoRequest(member.getUuid())));
+        // memo: 회원이 선택한 배송지
         DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(orderRequest.getDeliveryAddressId())
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
-        Order order = new Order(member, deliveryAddress, orderRequest);
-        List<Long> productIds = orderRequest.getProducts().stream().map(ProductToOrder::getId)
-                                            .collect(Collectors.toList());
-        List<Integer> productAmounts = orderRequest.getProducts().stream().map(ProductToOrder::getAmount)
+        // memo: 주문서 폼에서 받은 주문할 상품 ID 목록
+        List<Long> productIds = orderRequest.getProductIds();
+        // memo: 위 ID로 장바구니에 담긴 상품 확인 및 정보 조회 (id, name, price, amount)
+        List<ProductToOrder> cartProducts =
+                cartProductRepository.findCartProductsByProductIds(memberInfo.getCart().getId(), productIds);
+        // memo: 상품 수량만 뽑아내기 (재고 차감을 위해)
+        List<Integer> productAmounts = cartProducts.stream().map(ProductToOrder::getAmount)
                                                    .collect(Collectors.toList());
         List<Product> products = productRepository.findByIds(productIds);
+
+        Order order = new Order(member, deliveryAddress, orderRequest, products.get(0).getName(), products.size());
 
         checkOrderValid(orderRequest, memberResponse, member.getId());
         orderRepository.save(order);
 
+        // memo: 상품 재고량 수정, 주문상품 테이블 컬럼 추가
         for (Product product : products) {
             long remain = product.getTotalStock() - productAmounts.get(i);
             if (remain < 0) {
@@ -114,17 +125,16 @@ public class DefaultOrderService implements OrderService {
             productRepository.save(product);
             orderProductRepository.save(new OrderProduct(order, product, productAmounts.get(i++)));
         }
+        // memo: 장바구니 목록 주문한 상품 삭제
         cartProductService.deleteProducts(memberInfo, productIds);
 
         return makeOrderToPayment(order, orderRequest);
     }
 
     private OrderToPayment makeOrderToPayment(final Order order, final OrderCreateRequest orderRequest) {
-        List<ProductToOrder> products = orderRequest.getProducts();
         String orderId = attachPrefix(order.getId());
-        String orderName = products.get(0).getName() + " 외 " + products.size() + "건";
 
-        return new OrderToPayment(orderId, orderName, orderRequest.getName(), orderRequest.getEmail(),
+        return new OrderToPayment(orderId, order.getOrderName(), orderRequest.getName(), orderRequest.getEmail(),
                                   orderRequest.getTotalAmount(), orderRequest.getCouponId(),
                                   orderRequest.getUsedPoint(), orderRequest.getExpectedSavePoint());
     }
@@ -157,13 +167,13 @@ public class DefaultOrderService implements OrderService {
     /**
      * {@inheritDoc}
      *
-     * @param products   - 주문할 상품 목록입니다.
+     * @param productIds - 주문할 상품 ID 목록입니다.
      * @param memberInfo - 주문하는 회원의 정보입니다.
      * @param authInfo   - 주문하는 회원의 auth 정보입니다.
      * @return 취합한 정보를 반환합니다.
      */
     @Override
-    public OrderFormResponse retrieveOrderForm(final List<ProductToOrder> products, final MemberInfo memberInfo,
+    public OrderFormResponse retrieveOrderForm(final List<Long> productIds, final MemberInfo memberInfo,
                                                final AuthInfo authInfo) {
 
         Long memberId = memberInfo.getId();
@@ -174,39 +184,40 @@ public class DefaultOrderService implements OrderService {
         List<String> paymentTypes = Arrays.stream(PaymentType.values())
                                           .map(PaymentType::getType)
                                           .collect(Collectors.toList());
+        List<ProductToOrder> cartProducts =
+                cartProductRepository.findCartProductsByProductIds(memberInfo.getCart().getId(), productIds);
 
         return OrderFormResponse.builder()
-                                .products(products)
+                                .products(cartProducts)
                                 .memberId(memberId).memberName(authInfo.getName())
                                 .memberEmail(authInfo.getEmail()).memberGrade(memberInfo.getMemberGrade())
-                                /*.haveGgpass()*/
                                 .givenCouponList(orderGivenCoupons)
                                 .totalPoint(totalPoint)
                                 .deliveryAddressList(deliveryAddresses)
                                 .paymentType(paymentTypes)
-                                .totalOrigin(calculateTotalOrigin(products))
+                                .totalOrigin(calculateTotalOrigin(cartProducts))
                                 .build();
     }
 
     private Long calculateTotalOrigin(final List<ProductToOrder> products) {
-        Long result = 0L;
+        Long totalPrice = 0L;
 
         for (ProductToOrder product : products) {
-            result += product.getPrice();
+            totalPrice += product.getPrice();
         }
 
-        return result;
+        return totalPrice;
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param memberinfo - 주문 목록을 조회하는 회원의 정보입니다.
+     * @param memberInfo - 주문 목록을 조회하는 회원의 정보입니다.
      * @return 조회하는 회원의 종류에 따라 목록을 List 로 반환합니다.
      */
     @Override
-    public List<OrderRetrieveResponse> retrieveOrderList(final MemberInfo memberinfo) {
-        return orderRepository.findOrderList(memberinfo.getId(), memberinfo.isUser());
+    public List<OrderRetrieveResponse> retrieveOrderList(final MemberInfo memberInfo) {
+        return orderRepository.findOrderList(memberInfo.getId(), memberInfo.isUser());
     }
 
     /**
@@ -246,7 +257,7 @@ public class DefaultOrderService implements OrderService {
      * {@inheritDoc}
      *
      * @param orderId - 운송장 번호를 발급받을 주문의 식별번호입니다.
-     * @throws JsonProcessingException
+     * @throws JsonProcessingException - Json 컨텐츠를 처리할 때 발생하는 모든 문제에 대한 예외처리입니다.
      */
     @Override
     public void createTrackingNo(final Long orderId) throws JsonProcessingException {

@@ -373,7 +373,8 @@ public class Dummy {
     }
 
     public static Order getDummyOrder() {
-        return new Order(getDummyMember(getDummyCart(1L)), getDummyDeliveryAddress(), getDummyOrderCreateRequest());
+        return new Order(getDummyMember(getDummyCart(1L)), getDummyDeliveryAddress(), getDummyOrderCreateRequest(),
+                         "젤리", 2);
     }
 
     public static OrderProduct getDummyOrderProduct() {

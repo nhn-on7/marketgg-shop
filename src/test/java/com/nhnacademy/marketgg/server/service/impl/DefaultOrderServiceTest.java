@@ -278,7 +278,7 @@ class DefaultOrderServiceTest {
     @Test
     @DisplayName("주문서 폼 필요정보 조회")
     void testRetrieveOrderForm() {
-        List<ProductToOrder> productToOrders = List.of(Dummy.getDummyProductToOrder());
+        List<Long> productIds = List.of(1L);
         List<OrderGivenCoupon> givenCoupons = List.of(Dummy.getDummyOrderGivenCoupon());
         List<DeliveryAddressResponse> deliveryAddressResponses = List.of(Dummy.getDummyDeliveryAddressResponse());
 
@@ -287,7 +287,7 @@ class DefaultOrderServiceTest {
         given(deliveryAddressRepository.findDeliveryAddressesByMemberId(anyLong())).willReturn(
                 deliveryAddressResponses);
 
-        OrderFormResponse response = orderService.retrieveOrderForm(productToOrders, memberInfo, authInfo);
+        OrderFormResponse response = orderService.retrieveOrderForm(productIds, memberInfo, authInfo);
 
         then(givenCouponRepository).should(times(1)).findOwnCouponsByMemberId(anyLong());
         then(pointRepository).should(times(1)).findLastTotalPoints(anyLong());

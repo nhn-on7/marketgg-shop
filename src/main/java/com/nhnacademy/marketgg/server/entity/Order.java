@@ -44,6 +44,11 @@ public class Order {
     @NotNull
     private Member member;
 
+    @Column(name = "order_name")
+    @NotBlank
+    @Size(min = 1, max = 100)
+    private String orderName;
+
     @Column(name = "total_amount")
     @NotNull
     private Long totalAmount;
@@ -89,8 +94,10 @@ public class Order {
      * @param member       - 주문을 한 회원 객체
      * @param orderRequest - 주문 요청 객체
      */
-    public Order(final Member member, final DeliveryAddress deliveryAddress, final OrderCreateRequest orderRequest) {
+    public Order(final Member member, final DeliveryAddress deliveryAddress, final OrderCreateRequest orderRequest,
+                 final String representName, final Integer productSize) {
         this.member = member;
+        this.orderName = representName + " 외 " + productSize + "건";
         this.totalAmount = orderRequest.getTotalAmount();
         this.orderStatus = orderRequest.getPaymentType().equals(PaymentType.VIRTUAL.getType())
                 ? OrderStatus.DEPOSIT_WAITING.getStatus() : OrderStatus.PAY_WAITING.getStatus();
