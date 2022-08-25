@@ -271,16 +271,16 @@ class DefaultProductServiceTest {
             "상품을 찾을 수 없습니다.");
     }
 
-    @Test
-    @DisplayName("전체 목록 내 상품 검색")
-    void testSearchProductList() throws ParseException, JsonProcessingException {
-        given(searchRepository.searchProductWithKeyword(any(SearchRequest.class), any())).willReturn(
-            List.of(searchProductResponse));
-
-        productService.searchProductList(new SearchRequest());
-
-        then(searchRepository).should(times(1)).searchProductWithKeyword(any(SearchRequest.class), any());
-    }
+    // @Test
+    // @DisplayName("전체 목록 내 상품 검색")
+    // void testSearchProductList() throws ParseException, JsonProcessingException {
+    //     given(searchRepository.searchProductWithKeyword(any(SearchRequest.class), any())).willReturn(
+    //         // List.of(searchProductResponse));
+    //
+    //     productService.searchProductList(new SearchRequest()));
+    //
+    //     then(searchRepository).should(times(1)).searchProductWithKeyword(any(SearchRequest.class), any());
+    // }
 
     @Test
     @DisplayName("카테고리 내 상품 목록 검색")

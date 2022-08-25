@@ -208,7 +208,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(productDetailResponse));
+                             .body(ShopResult.successWith(productDetailResponse));
     }
 
 }

@@ -5,6 +5,7 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
+import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostStatusUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
@@ -31,6 +32,7 @@ import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.CartProduct;
 import com.nhnacademy.marketgg.server.entity.Categorization;
 import com.nhnacademy.marketgg.server.entity.Category;
+import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.CustomerServicePost;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -341,7 +343,6 @@ public class Dummy {
         return new Coupon(couponDto);
     }
 
-<<<<<<< HEAD
     public static ProductToOrder getDummyProductToOrder() {
         ProductToOrder productToOrder = new ProductToOrder();
 

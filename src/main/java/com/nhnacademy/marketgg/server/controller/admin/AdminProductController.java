@@ -62,7 +62,7 @@ public class AdminProductController {
                                         useReturnTypeSchema = true))
 
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<ShopResult<Void>> createProduct(
+    public ResponseEntity<ShopResult<String>> createProduct(
         @RequestPart @Valid final ProductCreateRequest productRequest,
         BindingResult bindingResult,
         @RequestPart final MultipartFile image) throws IOException {
@@ -76,7 +76,7 @@ public class AdminProductController {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -101,7 +101,7 @@ public class AdminProductController {
                                         useReturnTypeSchema = true))
 
     @PutMapping("/{productId}")
-    public ResponseEntity<ShopResult<Void>> updateProduct(
+    public ResponseEntity<ShopResult<String>> updateProduct(
         @RequestPart @Valid final ProductUpdateRequest productRequest,
         BindingResult bindingResult,
         @RequestPart final MultipartFile image,
@@ -116,7 +116,7 @@ public class AdminProductController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -137,13 +137,13 @@ public class AdminProductController {
                                         useReturnTypeSchema = true))
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<ShopResult<Void>> deleteProduct(@PathVariable final Long productId) {
+    public ResponseEntity<ShopResult<String>> deleteProduct(@PathVariable final Long productId) {
         this.productService.deleteProduct(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -162,13 +162,13 @@ public class AdminProductController {
                                         useReturnTypeSchema = true))
 
     @PostMapping("/{productId}/restore")
-    public ResponseEntity<ShopResult<Void>> restoreProduct(@PathVariable final Long productId) {
+    public ResponseEntity<ShopResult<String>> restoreProduct(@PathVariable final Long productId) {
         this.productService.restoreProduct(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
 }

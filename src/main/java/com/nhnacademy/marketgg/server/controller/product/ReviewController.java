@@ -81,7 +81,7 @@ public class ReviewController {
     @Auth
     @PostMapping(value = "/{productId}/reviews", consumes = { MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<ShopResult<Void>> createReview(@PathVariable final Long productId,
+    public ResponseEntity<ShopResult<String>> createReview(@PathVariable final Long productId,
                                                          final MemberInfo memberInfo,
                                                          @RequestPart @Valid final ReviewCreateRequest reviewRequest,
                                                          BindingResult bindingResult,
@@ -92,11 +92,11 @@ public class ReviewController {
             throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
 
-        ResponseEntity<ShopResult<Void>> returnResponseEntity =
+        ResponseEntity<ShopResult<String>> returnResponseEntity =
             ResponseEntity.status(HttpStatus.CREATED)
                           .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH))
                           .contentType(MediaType.APPLICATION_JSON)
-                          .body(ShopResult.success());
+                          .body(ShopResult.successWithDefaultMessage());
 
         if (Objects.isNull(images)) {
             reviewService.createReview(reviewRequest, memberInfo);
@@ -138,7 +138,7 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_REVIEW_URI + productId + "/review"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(reviewResponses));
+                             .body(ShopResult.successWith(reviewResponses));
     }
 
     /**
@@ -168,7 +168,7 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH + reviewId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success(reviewResponse));
+                             .body(ShopResult.successWith(reviewResponse));
     }
 
     /**
@@ -194,7 +194,7 @@ public class ReviewController {
                                         useReturnTypeSchema = true))
     @Auth
     @PutMapping("/{productId}/reviews/{reviewId}")
-    public ResponseEntity<ShopResult<Void>> updateReview(@PathVariable final Long productId,
+    public ResponseEntity<ShopResult<String>> updateReview(@PathVariable final Long productId,
                                                          @PathVariable final Long reviewId,
                                                          @RequestBody @Valid final ReviewUpdateRequest reviewRequest,
                                                          BindingResult bindingResult) {
@@ -208,7 +208,7 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH + reviewId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -219,14 +219,14 @@ public class ReviewController {
      * @return - Void 타입 응답객체를 반환합니다.
      */
     @DeleteMapping("/{productId}/reviews/{reviewId}")
-    public ResponseEntity<ShopResult<Void>> deleteReview(@PathVariable final Long productId,
+    public ResponseEntity<ShopResult<String>> deleteReview(@PathVariable final Long productId,
                                                          @PathVariable final Long reviewId) {
         reviewService.deleteReview(reviewId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH + reviewId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.success());
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
 }
