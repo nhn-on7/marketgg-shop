@@ -4,14 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
 import java.io.IOException;
 import java.util.List;
 import org.json.simple.parser.ParseException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +40,7 @@ public interface ProductService {
      * @since 1.0.0
      */
 
-    DefaultPageResult<ProductDetailResponse> retrieveProducts(Pageable pageable);
+    Page<ProductDetailResponse> retrieveProducts(Pageable pageable);
 
     /**
      * 상품 Id를 통해 상세 정보를 조회합니다.
@@ -50,7 +49,7 @@ public interface ProductService {
      * @return - PK에 해당하는 상품을 반환합니다.
      * @since 1.0.0
      */
-    SingleResponse<ProductDetailResponse> retrieveProductDetails(final Long productId);
+    ProductDetailResponse retrieveProductDetails(final Long productId);
 
     /**
      * 상품 id를 인자로 받아 해당 상품이 존재할 경우 수정합니다.
@@ -63,7 +62,7 @@ public interface ProductService {
      * @since 1.0.0
      */
     void updateProduct(final ProductUpdateRequest productRequest, MultipartFile image, final Long productId)
-            throws IOException;
+        throws IOException;
 
     /**
      * 상품 id를 인자로 받아 해당 상품이 존재할 경우 소프트 삭제합니다.
@@ -87,7 +86,8 @@ public interface ProductService {
      * @since 1.0.0
      */
     PageEntity<List<ProductListResponse>> searchProductList(final SearchRequest searchRequest)
-            throws ParseException, JsonProcessingException;
+        throws ParseException, JsonProcessingException;
+
 
     /**
      * 카테고리 목록에서 검색한 상품 목록을 반환합니다.
@@ -99,7 +99,8 @@ public interface ProductService {
      * @since 1.0.0
      */
     PageEntity<List<ProductListResponse>> searchProductListByCategory(final SearchRequest searchRequest)
-            throws ParseException, JsonProcessingException;
+        throws ParseException, JsonProcessingException;
+
 
     /**
      * 카테고리 목록내에서 선택한 가격 정렬 옵션으로 정렬된 상품 목록을 반환합니다.
@@ -111,7 +112,9 @@ public interface ProductService {
      * @throws JsonProcessingException Json 과 관련된 예외 처리입니다.
      * @since 1.0.0
      */
-    PageEntity<List<ProductListResponse>> searchProductListByPrice(final String option, final SearchRequest searchRequest)
-            throws ParseException, JsonProcessingException;
+    PageEntity<List<ProductListResponse>> searchProductListByPrice(final String option,
+                                                                   final SearchRequest searchRequest)
+        throws ParseException, JsonProcessingException;
+
 
 }

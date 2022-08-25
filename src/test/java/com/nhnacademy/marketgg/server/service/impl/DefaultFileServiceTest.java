@@ -62,7 +62,7 @@ class DefaultFileServiceTest {
                 ImageCreateRequest.builder().type(".png").imageSequence(1).length(123L).classification("cloud")
                                   .imageAddress("url").name("image name").build();
 
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
 
         imageFile = new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));

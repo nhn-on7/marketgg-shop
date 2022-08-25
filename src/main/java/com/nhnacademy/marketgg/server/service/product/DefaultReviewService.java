@@ -4,6 +4,7 @@ import static com.nhnacademy.marketgg.server.constant.CouponsName.BESTREVIEW;
 import static com.nhnacademy.marketgg.server.constant.PointContent.IMAGE_REVIEW;
 import static com.nhnacademy.marketgg.server.constant.PointContent.NORMAL_REVIEW;
 
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
@@ -23,6 +24,7 @@ import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.review.ReviewRepository;
 import com.nhnacademy.marketgg.server.service.file.FileService;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -48,10 +50,11 @@ public class DefaultReviewService implements ReviewService {
 
     @Transactional
     @Override
-    public void createReview(final ReviewCreateRequest reviewRequest, MultipartFile image,
-                             final String uuid) throws IOException {
+    public void createReview(final ReviewCreateRequest reviewRequest, final MultipartFile image,
+                             final MemberInfo memberInfo) throws IOException {
 
-        Member member = memberRepository.findByUuid(uuid).orElseThrow(MemberNotFoundException::new);
+        Member member =
+            memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
 
         ImageResponse imageResponse = fileService.uploadImage(image);
 
@@ -61,8 +64,8 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
-    public void createReview(final ReviewCreateRequest reviewRequest, final String uuid) {
-        Member member = memberRepository.findByUuid(uuid).orElseThrow(MemberNotFoundException::new);
+    public void createReview(final ReviewCreateRequest reviewRequest, final MemberInfo memberInfo) {
+        Member member = memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
 
         Asset asset = assetRepository.save(Asset.create());
 
@@ -72,18 +75,16 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
-    public SingleResponse<Page<ReviewResponse>> retrieveReviews(final Pageable pageable) {
+    public List<ReviewResponse> retrieveReviews(final Pageable pageable) {
         Page<ReviewResponse> response = reviewRepository.retrieveReviews(pageable);
 
-        return new SingleResponse<>(response);
+        return response.getContent();
     }
 
 
     @Override
-    public SingleResponse<ReviewResponse> retrieveReviewDetails(final Long id) {
-        ReviewResponse response = reviewRepository.queryById(id);
-
-        return new SingleResponse<>(response);
+    public ReviewResponse retrieveReviewDetails(final Long id) {
+        return reviewRepository.queryById(id);
     }
 
     @Transactional

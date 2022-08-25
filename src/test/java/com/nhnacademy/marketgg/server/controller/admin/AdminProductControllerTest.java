@@ -2,7 +2,6 @@ package com.nhnacademy.marketgg.server.controller.admin;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
@@ -16,8 +15,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.aop.AspectUtils;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import java.io.FileInputStream;
@@ -31,7 +28,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -55,6 +51,7 @@ class AdminProductControllerTest {
     private ProductCreateRequest productRequest;
     private ProductUpdateRequest productUpdateRequest;
 
+
     HttpHeaders httpHeaders;
 
     @BeforeEach
@@ -71,11 +68,11 @@ class AdminProductControllerTest {
     void testCreateProduct() throws Exception {
         String content = objectMapper.writeValueAsString(productRequest);
 
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
 
         MockMultipartFile file =
-                new MockMultipartFile("image", "lee.png", "image/png",
+                new MockMultipartFile("image", "img/lee.png", "image/png",
                                       new FileInputStream(filePath));
 
         MockMultipartFile dto =
@@ -98,34 +95,6 @@ class AdminProductControllerTest {
     }
 
     @Test
-    @DisplayName("상품 목록 전체 조회하는 테스트")
-    void testRetrieveProducts() throws Exception {
-        PageRequest request = PageRequest.of(0, 5);
-
-        given(productService.retrieveProducts(request)).willReturn(new DefaultPageResult<>());
-
-        this.mockMvc.perform(get(DEFAULT_PRODUCT)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .headers(httpHeaders))
-                    .andExpect(status().isOk());
-
-        then(productService).should(times(1)).retrieveProducts(any());
-    }
-
-    @Test
-    @DisplayName("상품 상세 조회 테스트")
-    void testRetrieveProductDetails() throws Exception {
-        given(productService.retrieveProductDetails(anyLong())).willReturn(new SingleResponse<>());
-
-        this.mockMvc.perform(get(DEFAULT_PRODUCT + "/1")
-                                     .headers(httpHeaders)
-                                     .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk());
-
-        then(productService).should(times(1)).retrieveProductDetails(anyLong());
-    }
-
-    @Test
     @DisplayName("상품 정보 수정하는 테스트")
     void testUpdateProduct() throws Exception {
         String content = this.objectMapper.writeValueAsString(productUpdateRequest);
@@ -133,10 +102,10 @@ class AdminProductControllerTest {
                 new MockMultipartFile("productRequest", "jsondata", "application/json",
                                       content.getBytes(StandardCharsets.UTF_8));
 
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile file =
-                new MockMultipartFile("image", "lee.png", "image/png",
+                new MockMultipartFile("image", "img/lee.png", "image/png",
                                       new FileInputStream(filePath));
 
         MockMultipartHttpServletRequestBuilder builder =

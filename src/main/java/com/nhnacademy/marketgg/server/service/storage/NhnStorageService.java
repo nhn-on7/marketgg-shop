@@ -139,10 +139,10 @@ public class NhnStorageService implements StorageService {
      * @author - 조현진
      */
     private String getContentType(final MultipartFile image) {
-        if (Objects.requireNonNull(image.getContentType()).contains("image/jpeg")) {
+        if (Objects.requireNonNull(image.getOriginalFilename()).contains("jpeg")) {
             return ".jpg";
         }
-        if (Objects.requireNonNull(image.getContentType()).contains("image/png")) {
+        if (Objects.requireNonNull(image.getOriginalFilename()).contains("png")) {
             return ".png";
         } else {
             throw new IllegalArgumentException("이미지만 업로드할 수 있습니다.");

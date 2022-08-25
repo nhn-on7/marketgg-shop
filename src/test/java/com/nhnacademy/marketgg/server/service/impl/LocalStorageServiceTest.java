@@ -22,7 +22,7 @@ class LocalStorageServiceTest {
     @Test
     @DisplayName("png 파일 업로드 테스트")
     void testLocalUploadPng() throws IOException {
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile imageFile =
                 new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));
@@ -36,7 +36,7 @@ class LocalStorageServiceTest {
     @Test
     @DisplayName("jpg 파일 업로드 테스트")
     void testLocalUploadJpg() throws IOException {
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile imageFile =
                 new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream(filePath));
@@ -50,7 +50,7 @@ class LocalStorageServiceTest {
     @Test
     @DisplayName("이미지가 아닐 경우 예외처리 테스트")
     void testLocalUploadNotImageException() throws IOException {
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile imageFile =
                 new MockMultipartFile("image", "test.png", "text", new FileInputStream(filePath));

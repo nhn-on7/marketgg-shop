@@ -80,7 +80,6 @@ public class AuthInfoAspect {
                                   new ParameterizedTypeReference<>() {
                                   });
         this.validCheck(exchange);
-
         AuthInfo authInfo = Objects.requireNonNull(exchange.getBody()).getData();
         log.info("AuthInfo = {}", authInfo);
 

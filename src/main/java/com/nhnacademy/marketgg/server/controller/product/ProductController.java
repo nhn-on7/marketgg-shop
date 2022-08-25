@@ -3,6 +3,9 @@ package com.nhnacademy.marketgg.server.controller.product;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
+import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
@@ -19,19 +22,22 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 상품 Controller 입니다.
  *
- * @author 박세완
+ * @author 박세완, 조현진
  * @version 1.0.0
  */
 @RestController
@@ -97,9 +103,10 @@ public class ProductController {
         PageEntity<List<ProductListResponse>> productList =
                 productService.searchProductListByCategory(searchRequest);
 
+
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/search"))
+                                 DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/search"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(ShopResult.successWith(productList));
     }
@@ -134,11 +141,74 @@ public class ProductController {
         PageEntity<List<ProductListResponse>> productList =
                 productService.searchProductListByPrice(option, searchRequest);
 
+
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                     DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/sort-price/" + option))
+                                 DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/sort-price/" + option))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(ShopResult.successWith(productList));
+    }
+
+    /**
+     * 전체 상품 목록 조회를 위한 GET Mapping 을 지원합니다.
+     *
+     * @return - List&lt;ProductDetailResponse&gt; 를 담은 응답 객체를 반환 합니다.
+     * @since 1.0.0
+     */
+
+    @Operation(summary = "상품목록 전체 조회",
+               description = "마켓 GG에 입장하는 순간 보여야하는 상품들의 목록입니다.",
+               parameters = @Parameter(name = "page", description = "현재 페이지. 기본값은 0", required = true),
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
+
+    @GetMapping
+    public ResponseEntity<PageEntity<ProductDetailResponse>> retrieveProducts(
+        @RequestParam(value = "page", defaultValue = "0") final Integer page) {
+
+        DefaultPageRequest pageRequest = new DefaultPageRequest(page);
+
+        Page<ProductDetailResponse> productDetailResponses =
+            this.productService.retrieveProducts(pageRequest.getPageable());
+
+        PageEntity<ProductDetailResponse> pageEntity = new PageEntity<>(productDetailResponses.getNumber(),
+                                                                        productDetailResponses.getSize(),
+                                                                        productDetailResponses.getTotalPages(),
+                                                                        productDetailResponses.getContent());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(DEFAULT_PRODUCT_URI))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(pageEntity);
+    }
+
+    /**
+     * 상품 상세 정보 조회를 위한 GET Mapping 을 지원합니다.
+     *
+     * @param productId - 상품의 PK로 조회합니다.
+     * @return - ProductDetailResponse 를 담은 응답 객체를 반환 합니다.
+     * @since 1.0.0
+     */
+
+    @Operation(summary = "상품 상세 조회",
+               description = "상품을 클릭했을 때 보이는 상품의 상세정보입니다.",
+               parameters = @Parameter(name = "productId", description = "조회하려는 상품의 상품 번호", required = true),
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
+    @GetMapping("/{productId}")
+    public ResponseEntity<ShopResult<ProductDetailResponse>> retrieveProductDetails(
+        @PathVariable final Long productId) {
+
+        ProductDetailResponse productDetailResponse = this.productService.retrieveProductDetails(productId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(DEFAULT_PRODUCT_URI))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(ShopResult.successWith(productDetailResponse));
     }
 
 }

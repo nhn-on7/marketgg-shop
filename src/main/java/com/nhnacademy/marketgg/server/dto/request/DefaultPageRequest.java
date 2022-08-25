@@ -14,12 +14,12 @@ public class DefaultPageRequest {
     private int page;
     private int size;
 
-    public DefaultPageRequest() {
-        this.page = 1;
+    public DefaultPageRequest(Integer page) {
+        this.page = page;
         this.size = 10;
     }
 
     public Pageable getPageable() {
-        return PageRequest.of(page - 1, size);
+        return PageRequest.of(page, size);
     }
 }

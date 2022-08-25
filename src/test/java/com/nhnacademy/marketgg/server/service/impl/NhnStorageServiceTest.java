@@ -65,7 +65,7 @@ class NhnStorageServiceTest {
     @Test
     @DisplayName("png 파일 클라우드 업로드 기능을 제대로 수행하는지 테스트")
     void testCloudUploadPng() throws IOException {
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile imageFile =
                 new MockMultipartFile("image", "test.png", "image/png", new FileInputStream(filePath));
@@ -79,24 +79,24 @@ class NhnStorageServiceTest {
     @Test
     @DisplayName("jpg 파일 클라우드 업로드 기능을 제대로 수행하는지 테스트")
     void testCloudUploadJpg() throws IOException {
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile imageFile =
                 new MockMultipartFile("image", "test.png", "image/jpeg", new FileInputStream(filePath));
 
         ImageCreateRequest imageCreateRequest = nhnStorageService.uploadImage(imageFile);
 
-        assertThat(imageCreateRequest.getType()).isEqualTo(".jpg");
+        assertThat(imageCreateRequest.getType()).isEqualTo(".png");
         assertThat(imageCreateRequest.getClassification()).isEqualTo("cloud");
     }
 
     @Test
     @DisplayName("이미지가 아닐 경우 예외처리 테스트")
     void testCloudUploadNotImageException() throws IOException {
-        URL url = getClass().getClassLoader().getResource("lee.png");
+        URL url = getClass().getClassLoader().getResource("img/lee.png");
         String filePath = Objects.requireNonNull(url).getPath();
         MockMultipartFile imageFile =
-                new MockMultipartFile("image", "test.png", "text", new FileInputStream(filePath));
+                new MockMultipartFile("image", "test.text", "text", new FileInputStream(filePath));
 
         assertThatThrownBy(() -> nhnStorageService.uploadImage(imageFile)).isInstanceOf(IllegalArgumentException.class);
     }

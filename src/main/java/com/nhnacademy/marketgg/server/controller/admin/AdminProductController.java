@@ -1,13 +1,14 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
-import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.DefaultPageResult;
-import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.io.IOException;
 import java.net.URI;
 import javax.validation.Valid;
@@ -17,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -29,7 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 상품 관리를 위한 RestController 입니다.
  *
- * @author 박세완, 조현진
+ * @author 조현진
  * @version 1.0.0
  */
 @RestController
@@ -50,10 +50,22 @@ public class AdminProductController {
      * @throws IOException - IOException 을 던집니다.
      * @since 1.0.0
      */
+
+    @Operation(summary = "관리자의 상품 관리",
+               description = "상품에 관한 정보를 받고, 데이터베이스에 해당 정보를 영속화합니다.",
+               parameters = {
+                   @Parameter(name = "productRequest", description = "상품 등록에 필요한 정보를 담은 객체", required = true),
+                   @Parameter(name = "image", description = "상품 목록에 보이는 썸네일용 이미지", required = true) },
+               responses = @ApiResponse(responseCode = "201",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
+
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<Void> createProduct(@RequestPart @Valid final ProductCreateRequest productRequest,
-                                              BindingResult bindingResult,
-                                              @RequestPart final MultipartFile image) throws IOException {
+    public ResponseEntity<ShopResult<String>> createProduct(
+        @RequestPart @Valid final ProductCreateRequest productRequest,
+        BindingResult bindingResult,
+        @RequestPart final MultipartFile image) throws IOException {
 
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
@@ -64,43 +76,7 @@ public class AdminProductController {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
-    }
-
-    /**
-     * 전체 상품 목록 조회를 위한 GET Mapping 을 지원합니다.
-     *
-     * @return - List&lt;ProductResponse&gt; 를 담은 응답 객체를 반환 합니다.
-     * @since 1.0.0
-     */
-    @GetMapping
-    public ResponseEntity<CommonResponse> retrieveProducts(DefaultPageRequest pageRequest) {
-        DefaultPageResult<ProductDetailResponse> productList =
-            this.productService.retrieveProducts(pageRequest.getPageable());
-
-        return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_PRODUCT))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .body(productList);
-    }
-
-    /**
-     * 상품 상세 정보 조회를 위한 GET Mapping 을 지원합니다.
-     *
-     * @param productId - 상품의 PK로 조회합니다.
-     * @return - ProductResponse 를 담은 응답 객체를 반환 합니다.
-     * @since 1.0.0
-     */
-    @GetMapping("/{productId}")
-    public ResponseEntity<CommonResponse> retrieveProductDetails(
-        @PathVariable final Long productId) {
-
-        SingleResponse<ProductDetailResponse> response = this.productService.retrieveProductDetails(productId);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_PRODUCT))
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .body(response);
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -113,11 +89,23 @@ public class AdminProductController {
      * @throws IOException - 입출력에서 문제 발생 시 예외를 던집니다.
      * @since 1.0.0
      */
+
+    @Operation(summary = "관리자의 상품 관리",
+               description = "상품에 관한 정보를 받고, 데이터베이스에 해당 정보를 영속화합니다.",
+               parameters = {
+                   @Parameter(name = "productRequest", description = "상품 수정에 필요한 정보를 담은 객체", required = true),
+                   @Parameter(name = "image", description = "상품 목록에 보이는 썸네일용 이미지", required = true) },
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
+
     @PutMapping("/{productId}")
-    public ResponseEntity<Void> updateProduct(@RequestPart @Valid final ProductUpdateRequest productRequest,
-                                              BindingResult bindingResult,
-                                              @RequestPart final MultipartFile image,
-                                              @PathVariable final Long productId) throws IOException {
+    public ResponseEntity<ShopResult<String>> updateProduct(
+        @RequestPart @Valid final ProductUpdateRequest productRequest,
+        BindingResult bindingResult,
+        @RequestPart final MultipartFile image,
+        @PathVariable final Long productId) throws IOException {
 
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
@@ -128,7 +116,7 @@ public class AdminProductController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -139,14 +127,23 @@ public class AdminProductController {
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @since 1.0.0
      */
+
+    @Operation(summary = "관리자의 상품 관리",
+               description = "상품 번호를 받아서 해당 번호에 해당하는 상품을 소프트 삭제합니다.",
+               parameters = @Parameter(name = "productId", description = "상품 번호", required = true),
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
+
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable final Long productId) {
+    public ResponseEntity<ShopResult<String>> deleteProduct(@PathVariable final Long productId) {
         this.productService.deleteProduct(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -155,14 +152,23 @@ public class AdminProductController {
      * @param productId - 상품 복구를 위한 기본키입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      */
+
+    @Operation(summary = "관리자의 상품 관리",
+               description = "상품 번호를 받아서 해당 번호에 해당하는 상품을 복원합니다.",
+               parameters = @Parameter(name = "productId", description = "상품 번호", required = true),
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
+
     @PostMapping("/{productId}/restore")
-    public ResponseEntity<Void> restoreProduct(@PathVariable final Long productId) {
+    public ResponseEntity<ShopResult<String>> restoreProduct(@PathVariable final Long productId) {
         this.productService.restoreProduct(productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN_PRODUCT + "/" + productId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .build();
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
 }
