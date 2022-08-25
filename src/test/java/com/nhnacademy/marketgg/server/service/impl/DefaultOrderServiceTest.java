@@ -31,6 +31,7 @@ import com.nhnacademy.marketgg.server.exception.order.OrderMemberNotMatchedExcep
 import com.nhnacademy.marketgg.server.exception.pointhistory.PointNotEnoughException;
 import com.nhnacademy.marketgg.server.exception.product.ProductStockNotEnoughException;
 import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
+import com.nhnacademy.marketgg.server.repository.cart.CartProductRepository;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
 import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponRepository;
@@ -108,6 +109,9 @@ class DefaultOrderServiceTest {
     CartProductService cartProductService;
 
     @Mock
+    CartProductRepository cartProductRepository;
+
+    @Mock
     PointHistoryRepository pointRepository;
 
     @Mock
@@ -152,6 +156,8 @@ class DefaultOrderServiceTest {
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
         given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
+        given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
+                .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
         given(orderRepository.save(any(Order.class))).willReturn(order);
         given(productRepository.save(any(Product.class))).willReturn(product);
@@ -180,6 +186,8 @@ class DefaultOrderServiceTest {
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
         given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
+        given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
+                .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
         given(orderRepository.save(any(Order.class))).willReturn(order);
         given(productRepository.save(any(Product.class))).willReturn(product);
@@ -201,6 +209,8 @@ class DefaultOrderServiceTest {
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
         given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
+        given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
+                .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
         given(orderRepository.save(any(Order.class))).willReturn(order);
         given(productRepository.save(any(Product.class))).willReturn(product);
@@ -223,6 +233,8 @@ class DefaultOrderServiceTest {
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(strange);
         given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
+        given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
+                .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
 
         assertThatThrownBy(() -> orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo))
@@ -238,6 +250,8 @@ class DefaultOrderServiceTest {
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
         given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
+        given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
+                .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
         given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
         given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
@@ -252,6 +266,8 @@ class DefaultOrderServiceTest {
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
         given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
+        given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
+                .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
         given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
         given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
@@ -267,6 +283,8 @@ class DefaultOrderServiceTest {
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
         given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
+        given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
+                .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
         given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
         given(usedCouponRepository.existsCouponId(anyLong())).willReturn(true);
@@ -278,7 +296,7 @@ class DefaultOrderServiceTest {
     @Test
     @DisplayName("주문서 폼 필요정보 조회")
     void testRetrieveOrderForm() {
-        List<ProductToOrder> productToOrders = List.of(Dummy.getDummyProductToOrder());
+        List<Long> productIds = List.of(1L);
         List<OrderGivenCoupon> givenCoupons = List.of(Dummy.getDummyOrderGivenCoupon());
         List<DeliveryAddressResponse> deliveryAddressResponses = List.of(Dummy.getDummyDeliveryAddressResponse());
 
@@ -286,8 +304,10 @@ class DefaultOrderServiceTest {
         given(pointRepository.findLastTotalPoints(anyLong())).willReturn(20000);
         given(deliveryAddressRepository.findDeliveryAddressesByMemberId(anyLong())).willReturn(
                 deliveryAddressResponses);
+        given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
+                .willReturn(List.of(Dummy.getDummyProductToOrder()));
 
-        OrderFormResponse response = orderService.retrieveOrderForm(productToOrders, memberInfo, authInfo);
+        OrderFormResponse response = orderService.retrieveOrderForm(productIds, memberInfo, authInfo);
 
         then(givenCouponRepository).should(times(1)).findOwnCouponsByMemberId(anyLong());
         then(pointRepository).should(times(1)).findLastTotalPoints(anyLong());

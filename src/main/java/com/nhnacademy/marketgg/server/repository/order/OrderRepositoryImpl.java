@@ -22,20 +22,20 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
     QOrder order = QOrder.order;
 
     @Override
-    public List<OrderRetrieveResponse> findOrderList(final Long memberId, final boolean isUser) {
+    public List<OrderRetrieveResponse> findOrderList(final Long memberId, final boolean isAdmin) {
         return from(order).select(selectOrderResponse())
-                          .where(eqMemberId(memberId, isUser))
-                          .where(userNotSeeDeleted(isUser, order.deletedAt))
+                          .where(eqMemberId(memberId, isAdmin))
+                          .where(userNotSeeDeleted(isAdmin, order.deletedAt))
                           .where(order.orderStatus.contains("취소/환불").not())
                           .fetch();
     }
 
     @Override
-    public OrderDetailRetrieveResponse findOrderDetail(final Long orderId, final Long memberId, final boolean isUser) {
+    public OrderDetailRetrieveResponse findOrderDetail(final Long orderId, final Long memberId, final boolean isAdmin) {
         return from(order).select(selectOrderDetailResponse())
                           .where(order.id.eq(orderId))
-                          .where(eqMemberId(memberId, isUser))
-                          .where(userNotSeeDeleted(isUser, order.deletedAt))
+                          .where(eqMemberId(memberId, isAdmin))
+                          .where(userNotSeeDeleted(isAdmin, order.deletedAt))
                           .where(order.orderStatus.contains("취소/환불").not())
                           .fetchOne();
     }
@@ -44,6 +44,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
         return Projections.constructor(OrderRetrieveResponse.class,
                                        order.id,
                                        order.member.id,
+                                       order.orderName,
                                        order.totalAmount,
                                        order.orderStatus,
                                        order.createdAt);
@@ -53,6 +54,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
         return Projections.constructor(OrderDetailRetrieveResponse.class,
                                        order.id,
                                        order.member.id,
+                                       order.orderName,
                                        order.totalAmount,
                                        order.orderStatus,
                                        order.usedPoint,
@@ -63,11 +65,11 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
                                        order.createdAt);
     }
 
-    private BooleanExpression eqMemberId(final Long memberId, final boolean isUser) {
-        if (isUser) {
-            return order.member.id.eq(memberId);
+    private BooleanExpression eqMemberId(final Long memberId, final boolean isAdmin) {
+        if (isAdmin) {
+            return null;
         }
-        return null;
+        return order.member.id.eq(memberId);
     }
 
     private BooleanExpression userNotSeeDeleted(final boolean isUser, final DateTimePath<LocalDateTime> deletedAt) {

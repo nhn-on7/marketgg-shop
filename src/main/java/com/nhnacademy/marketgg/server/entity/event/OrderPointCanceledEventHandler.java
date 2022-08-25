@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class OrderPointCanceledEventHandler {
      * @since 1.0.0
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @TransactionalEventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void restorePoint(OrderPointCanceledEvent event) {
         Member member = event.getOrder().getMember();
         List<PointHistory> pointHistoryList = pointRepository.findByOrderId(event.getOrder().getId());

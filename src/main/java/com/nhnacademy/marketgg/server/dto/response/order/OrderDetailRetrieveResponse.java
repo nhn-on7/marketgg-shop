@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.dto.response.order;
 
-import com.nhnacademy.marketgg.server.dto.response.orderproduct.OrderProductResponse;
+import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +22,8 @@ public class OrderDetailRetrieveResponse {
 
     private final Long memberId;
 
+    private final String orderName;
+
     private final Long totalAmount;
 
     private final String orderStatus;
@@ -38,9 +40,9 @@ public class OrderDetailRetrieveResponse {
 
     private final LocalDateTime createdAt;
 
-    private List<OrderProductResponse> orderProductList;
+    private List<ProductToOrder> orderProductList;
 
-    public void addOrderDetail(List<OrderProductResponse> orderProductList) {
+    public void addOrderDetail(List<ProductToOrder> orderProductList) {
         this.orderProductList = orderProductList;
     }
 

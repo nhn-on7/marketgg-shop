@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.orderproduct;
 
-import com.nhnacademy.marketgg.server.dto.response.orderproduct.OrderProductResponse;
+import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.entity.OrderProduct;
 import com.nhnacademy.marketgg.server.entity.QOrderProduct;
 import com.querydsl.core.types.Projections;
@@ -15,12 +15,12 @@ public class OrderProductRepositoryImpl extends QuerydslRepositorySupport implem
     }
 
     @Override
-    public List<OrderProductResponse> findByOrderId(final Long orderId) {
+    public List<ProductToOrder> findByOrderId(final Long orderId) {
         QOrderProduct orderProduct = QOrderProduct.orderProduct;
 
         return from(orderProduct)
                 .where(orderProduct.pk.orderNo.eq(orderId))
-                .select(Projections.constructor(OrderProductResponse.class,
+                .select(Projections.constructor(ProductToOrder.class,
                                                 orderProduct.pk.productNo,
                                                 orderProduct.name,
                                                 orderProduct.price,

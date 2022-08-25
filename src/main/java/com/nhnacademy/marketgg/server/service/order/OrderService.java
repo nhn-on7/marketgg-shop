@@ -5,7 +5,6 @@ import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
-import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
@@ -34,13 +33,13 @@ public interface OrderService {
     /**
      * 주문서 작성에 필요한 정보를 취합하여 조회하는 메소드입니다.
      *
-     * @param products   - 주문할 상품 목록입니다.
+     * @param productIds - 주문할 상품 ID 목록입니다.
      * @param memberInfo - 주문하는 회원의 정보입니다.
      * @param authInfo   - 주문하는 회원의 auth 정보입니다.
      * @return 취합한 정보를 반환합니다.
      * @since 1.0.0
      */
-    OrderFormResponse retrieveOrderForm(final List<ProductToOrder> products, final MemberInfo memberInfo,
+    OrderFormResponse retrieveOrderForm(final List<Long> productIds, final MemberInfo memberInfo,
                                         final AuthInfo authInfo);
 
     /**
@@ -88,10 +87,24 @@ public interface OrderService {
      */
     void cancelOrder(final Long orderId);
 
+    /**
+     * 주문 번호에 prefix 를 붙이는 메소드입니다.
+     *
+     * @param orderId - 주문의 식별번호입니다.
+     * @return 주문 식별번호에 prefix 를 붙인 주문번호를 반환합니다.
+     * @since 1.0.0
+     */
     default String attachPrefix(final Long orderId) {
         return "GGORDER_" + orderId;
     }
 
+    /**
+     * 주문 번호에 prefix 를 떼는 메소드입니다.
+     *
+     * @param orderId - 주문의 식별번호입니다.
+     * @return 주문 번호에서 prefix 를 뗀 주문 식별번호를 반환합니다.
+     * @since 1.0.0
+     */
     default Long detachPrefix(final String orderId) {
         return Long.valueOf(orderId.substring(orderId.indexOf("_") + 1));
     }

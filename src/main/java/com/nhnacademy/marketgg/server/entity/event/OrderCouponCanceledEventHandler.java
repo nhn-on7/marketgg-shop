@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class OrderCouponCanceledEventHandler {
      * @since 1.0.0
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @TransactionalEventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void deleteUsedCoupon(OrderCouponCanceledEvent event) {
         Long orderId = event.getOrder().getId();
         Optional<Long> couponId = usedCouponRepository.findByOrderId(orderId);

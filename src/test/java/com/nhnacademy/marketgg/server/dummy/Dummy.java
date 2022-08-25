@@ -71,7 +71,6 @@ public class Dummy {
         ReflectionTestUtils.setField(memberCreateRequest, "birthDate", birthDate);
 
         LocalDateTime now = LocalDateTime.now().withNano(0);
-        ReflectionTestUtils.setField(memberCreateRequest, "ggpassUpdateAt", now);
 
         ReflectionTestUtils.setField(memberCreateRequest, "createdAt", now);
         ReflectionTestUtils.setField(memberCreateRequest, "updatedAt", now);
@@ -204,7 +203,6 @@ public class Dummy {
 
     public static MemberInfo getDummyMemberInfo(Long id, Cart cart) {
         LocalDate birthDate = LocalDate.of(1997, 4, 6);
-        LocalDateTime ggpassUpdatedAt = LocalDateTime.now();
         return new MemberInfo(id, cart, null, 'M', birthDate);
     }
 
@@ -304,7 +302,7 @@ public class Dummy {
     }
 
     public static OrderDetailRetrieveResponse getDummyOrderDetailResponse() {
-        return new OrderDetailRetrieveResponse(1L, 1L, 50_000L, "결제대기",
+        return new OrderDetailRetrieveResponse(1L, 1L, "어묵탕 밀키트 외 1건", 50_000L, "결제대기",
                                                1000, null, 12345, "주소",
                                                "상세주소", LocalDateTime.now());
 
@@ -355,14 +353,14 @@ public class Dummy {
     }
 
     public static OrderCreateRequest getDummyOrderCreateRequest() {
-        List<ProductToOrder> productToOrders = List.of(getDummyProductToOrder());
+        List<Long> productIds = List.of(1L);
         OrderCreateRequest orderCreateRequest = new OrderCreateRequest();
 
         ReflectionTestUtils.setField(orderCreateRequest, "name", "KimDummy");
         ReflectionTestUtils.setField(orderCreateRequest, "email", "KimDummy@dooray.com");
         ReflectionTestUtils.setField(orderCreateRequest, "couponId", 1L);
         ReflectionTestUtils.setField(orderCreateRequest, "deliveryAddressId", 1L);
-        ReflectionTestUtils.setField(orderCreateRequest, "products", productToOrders);
+        ReflectionTestUtils.setField(orderCreateRequest, "productIds", productIds);
         ReflectionTestUtils.setField(orderCreateRequest, "usedPoint", 1000);
         ReflectionTestUtils.setField(orderCreateRequest, "totalOrigin", 10000L);
         ReflectionTestUtils.setField(orderCreateRequest, "totalAmount", 9000L);
@@ -373,7 +371,8 @@ public class Dummy {
     }
 
     public static Order getDummyOrder() {
-        return new Order(getDummyMember(getDummyCart(1L)), getDummyDeliveryAddress(), getDummyOrderCreateRequest());
+        return new Order(getDummyMember(getDummyCart(1L)), getDummyDeliveryAddress(), getDummyOrderCreateRequest(),
+                         "젤리", 2);
     }
 
     public static OrderProduct getDummyOrderProduct() {
@@ -388,7 +387,7 @@ public class Dummy {
     }
 
     public static OrderRetrieveResponse getOrderRetrieveResponse() {
-        return new OrderRetrieveResponse(1L, 1L, 10000L,
+        return new OrderRetrieveResponse(1L, 1L, "어묵탕 밀키트 외 1건", 10000L,
                                          "결제 대기", LocalDateTime.now());
     }
 
