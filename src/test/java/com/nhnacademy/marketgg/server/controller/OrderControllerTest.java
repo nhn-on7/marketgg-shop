@@ -135,7 +135,7 @@ class OrderControllerTest {
     public void testRetrieveOrderForm() throws Exception {
         OrderFormResponse orderFormResponse = Dummy.getDummyOrderFormResponse();
         CartResponse cartResponse = new CartResponse();
-        ReflectionTestUtils.setField(cartResponse, "products", List.of());
+        ReflectionTestUtils.setField(cartResponse, "productIds", List.of());
         ResponseEntity<ShopResult<AuthInfo>> responseEntity = new ResponseEntity<>(authInfoResponse, HttpStatus.OK);
 
         given(orderService.retrieveOrderForm(any(List.class), any(MemberInfo.class), any(AuthInfo.class)))

@@ -353,14 +353,14 @@ public class Dummy {
     }
 
     public static OrderCreateRequest getDummyOrderCreateRequest() {
-        List<ProductToOrder> productToOrders = List.of(getDummyProductToOrder());
+        List<Long> productIds = List.of(1L);
         OrderCreateRequest orderCreateRequest = new OrderCreateRequest();
 
         ReflectionTestUtils.setField(orderCreateRequest, "name", "KimDummy");
         ReflectionTestUtils.setField(orderCreateRequest, "email", "KimDummy@dooray.com");
         ReflectionTestUtils.setField(orderCreateRequest, "couponId", 1L);
         ReflectionTestUtils.setField(orderCreateRequest, "deliveryAddressId", 1L);
-        ReflectionTestUtils.setField(orderCreateRequest, "products", productToOrders);
+        ReflectionTestUtils.setField(orderCreateRequest, "productIds", productIds);
         ReflectionTestUtils.setField(orderCreateRequest, "usedPoint", 1000);
         ReflectionTestUtils.setField(orderCreateRequest, "totalOrigin", 10000L);
         ReflectionTestUtils.setField(orderCreateRequest, "totalAmount", 9000L);
