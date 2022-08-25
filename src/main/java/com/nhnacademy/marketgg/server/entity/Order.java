@@ -46,7 +46,7 @@ public class Order {
 
     @Column(name = "order_name")
     @NotBlank
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     private String orderName;
 
     @Column(name = "total_amount")
