@@ -17,7 +17,6 @@ import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
-import com.nhnacademy.marketgg.server.dto.response.orderproduct.OrderProductResponse;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -231,8 +230,8 @@ public class DefaultOrderService implements OrderService {
     public OrderDetailRetrieveResponse retrieveOrderDetail(final Long orderId, final MemberInfo memberInfo) {
         OrderDetailRetrieveResponse detailResponse = orderRepository.findOrderDetail(orderId, memberInfo.getId(),
                                                                                      memberInfo.isUser());
-        List<OrderProductResponse> productResponses = orderProductRepository.findByOrderId(orderId);
-        detailResponse.addOrderDetail(productResponses);
+        List<ProductToOrder> products = orderProductRepository.findByOrderId(orderId);
+        detailResponse.addOrderDetail(products);
 
         return detailResponse;
     }

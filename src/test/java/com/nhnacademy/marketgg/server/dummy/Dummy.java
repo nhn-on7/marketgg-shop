@@ -71,7 +71,6 @@ public class Dummy {
         ReflectionTestUtils.setField(memberCreateRequest, "birthDate", birthDate);
 
         LocalDateTime now = LocalDateTime.now().withNano(0);
-        ReflectionTestUtils.setField(memberCreateRequest, "ggpassUpdateAt", now);
 
         ReflectionTestUtils.setField(memberCreateRequest, "createdAt", now);
         ReflectionTestUtils.setField(memberCreateRequest, "updatedAt", now);
@@ -204,7 +203,6 @@ public class Dummy {
 
     public static MemberInfo getDummyMemberInfo(Long id, Cart cart) {
         LocalDate birthDate = LocalDate.of(1997, 4, 6);
-        LocalDateTime ggpassUpdatedAt = LocalDateTime.now();
         return new MemberInfo(id, cart, null, 'M', birthDate);
     }
 
@@ -304,7 +302,7 @@ public class Dummy {
     }
 
     public static OrderDetailRetrieveResponse getDummyOrderDetailResponse() {
-        return new OrderDetailRetrieveResponse(1L, 1L, 50_000L, "결제대기",
+        return new OrderDetailRetrieveResponse(1L, 1L, "어묵탕 밀키트 외 1건", 50_000L, "결제대기",
                                                1000, null, 12345, "주소",
                                                "상세주소", LocalDateTime.now());
 
@@ -389,7 +387,7 @@ public class Dummy {
     }
 
     public static OrderRetrieveResponse getOrderRetrieveResponse() {
-        return new OrderRetrieveResponse(1L, 1L, 10000L,
+        return new OrderRetrieveResponse(1L, 1L, "어묵탕 밀키트 외 1건", 10000L,
                                          "결제 대기", LocalDateTime.now());
     }
 
