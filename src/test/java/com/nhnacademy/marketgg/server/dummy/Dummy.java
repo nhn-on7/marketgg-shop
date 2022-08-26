@@ -2,7 +2,6 @@ package com.nhnacademy.marketgg.server.dummy;
 
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
@@ -46,7 +45,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
@@ -367,10 +365,17 @@ public class Dummy {
                                   Boolean.FALSE, LocalDateTime.now(), LocalDateTime.now(), null, UUID.randomUUID().toString());
     }
 
-    public static Page<ProductDetailResponse> getDummyPage() {
+    public static Page<ProductDetailResponse> getDummyProductPage() {
         ProductDetailResponse dummyProductResponse = getDummyProductResponse();
 
         Page<ProductDetailResponse> responsePage = new PageImpl<>(List.of(dummyProductResponse), PageRequest.of(0, 10), 1);
+
+        return responsePage;
+    }
+
+    public static Page<ReviewResponse> getDummyReviewPage() {
+        ReviewResponse reviewResponse = getDummyReviewResponse();
+        Page<ReviewResponse> responsePage = new PageImpl<>(List.of(reviewResponse), PageRequest.of(0, 10), 1);
 
         return responsePage;
     }

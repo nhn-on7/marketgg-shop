@@ -10,7 +10,10 @@ import static org.mockito.Mockito.times;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
@@ -23,6 +26,7 @@ import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Review;
 import com.nhnacademy.marketgg.server.eventlistener.event.savepoint.SavePointEvent;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
+import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.review.ReviewRepository;
 import com.nhnacademy.marketgg.server.service.file.FileService;
@@ -74,6 +78,9 @@ class DefaultReviewServiceTest {
     @Mock
     FileService fileService;
 
+    @Mock
+    AuthRepository authRepository;
+
     @Autowired
     ObjectMapper objectMapper;
 
@@ -85,6 +92,7 @@ class DefaultReviewServiceTest {
     private ReviewUpdateRequest reviewUpdateRequest;
     private ImageResponse imageResponse;
     private MemberInfo memberInfo;
+    private MemberInfoResponse memberInfoResponse;
 
     @BeforeEach
     void setUp() {
@@ -118,6 +126,7 @@ class DefaultReviewServiceTest {
         imageResponse = new ImageResponse("이미지 응답", 1L, "이미지 주소", 1, asset);
 
         memberInfo = Dummy.getDummyMemberInfo(1L, Dummy.getDummyCart(1L));
+        memberInfoResponse = new MemberInfoResponse("admin", "ssasdfsdaf@gmail.com", "010-1234-1234");
     }
 
     @Test
@@ -160,6 +169,7 @@ class DefaultReviewServiceTest {
         List<ReviewResponse> list = List.of(reviewResponse);
         Page<ReviewResponse> page = new PageImpl<>(list, PageRequest.of(0, 1), 1);
         given(reviewRepository.retrieveReviews(PageRequest.of(0, 1))).willReturn(page);
+        given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(ShopResult.successWith(memberInfoResponse));
 
         reviewService.retrieveReviews(page.getPageable());
 
