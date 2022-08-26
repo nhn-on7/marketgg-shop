@@ -55,26 +55,11 @@ class DefaultDeliveryAddressServiceTest {
         DeliveryAddressCreateRequest deliveryAddressCreateRequest = Dummy.getDeliveryAddressCreateRequest();
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(dummyMember));
-
+        DeliveryAddress deliveryAddress = Dummy.getDummyDeliveryAddress();
+        given(deliveryAddressRepository.existsDefaultDeliveryAddress(any(Member.class))).willReturn(deliveryAddress);
         deliveryAddressService.createDeliveryAddress(dummyMemberInfo, deliveryAddressCreateRequest);
 
         then(deliveryAddressRepository).should(times(1)).save(any(DeliveryAddress.class));
-    }
-
-    @Test
-    @DisplayName("배송지 수정")
-    void testUpdateDeliveryAddress() {
-        Cart dummyCart = Dummy.getDummyCart(CART_NO);
-        Member dummyMember = Dummy.getDummyMember(dummyCart);
-        MemberInfo dummyMemberInfo = Dummy.getDummyMemberInfo(MEMBER_NO, dummyCart);
-        DeliveryAddressUpdateRequest dummyDeliveryAddressUpdateRequest = Dummy.getDeliveryAddressUpdateRequest();
-
-        given(memberRepository.findById(anyLong())).willReturn(Optional.of(dummyMember));
-        DeliveryAddress dummyDeliveryAddress = Dummy.getDeliveryAddress();
-        given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(dummyDeliveryAddress));
-        deliveryAddressService.updateDeliveryAddress(dummyMemberInfo, dummyDeliveryAddressUpdateRequest);
-
-        then(deliveryAddressRepository).should(times(1)).findById(anyLong());
     }
 
     @Test

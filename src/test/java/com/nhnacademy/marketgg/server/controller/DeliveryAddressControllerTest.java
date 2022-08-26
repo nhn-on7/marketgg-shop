@@ -107,24 +107,6 @@ class DeliveryAddressControllerTest {
     }
 
     @Test
-    @DisplayName("배송지 수정")
-    void testUpdateDeliveryAddress() throws Exception {
-        String roles = mapper.writeValueAsString(Collections.singletonList(Role.ROLE_USER));
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(AUTH_ID, uuid);
-        headers.set(WWW_AUTHENTICATE, roles);
-
-        DeliveryAddressUpdateRequest request = Dummy.getDeliveryAddressUpdateRequest();
-        String jsonRequest = mapper.writeValueAsString(request);
-
-        mockMvc.perform(put(baseUri).headers(headers)
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(jsonRequest))
-               .andExpect(status().isOk());
-    }
-
-    @Test
     @DisplayName("배송지 삭제")
     void testDeleteDeliveryAddress() throws Exception {
         String roles = mapper.writeValueAsString(Collections.singletonList(Role.ROLE_USER));
