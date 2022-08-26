@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.repository.deliveryaddress;
 
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
+import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.QDeliveryAddress;
 import com.querydsl.core.types.Projections;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -33,12 +34,33 @@ public class DeliveryAddressRepositoryImpl extends QuerydslRepositorySupport imp
         return from(deliveryAddress)
                 .where(deliveryAddress.member.id.eq(memberId))
                 .select(Projections.constructor(DeliveryAddressResponse.class,
-                                                deliveryAddress.id,
-                                                deliveryAddress.isDefaultAddress,
-                                                deliveryAddress.zipCode,
-                                                deliveryAddress.address,
-                                                deliveryAddress.detailAddress))
+                        deliveryAddress.id,
+                        deliveryAddress.isDefaultAddress,
+                        deliveryAddress.zipCode,
+                        deliveryAddress.address,
+                        deliveryAddress.detailAddress))
                 .fetch();
+    }
+
+    @Override
+    public DeliveryAddress existsDefaultDeliveryAddress(final Member member) {
+        QDeliveryAddress deliveryAddress = QDeliveryAddress.deliveryAddress;
+
+        return from(deliveryAddress)
+                .where(deliveryAddress.isDefaultAddress.isTrue())
+                .where(deliveryAddress.member.id.eq(member.getId()))
+                .select(deliveryAddress)
+                .fetchOne();
+    }
+
+    @Override
+    public Integer countMemberAddresses(final Member member) {
+        QDeliveryAddress deliveryAddress = QDeliveryAddress.deliveryAddress;
+
+        return Math.toIntExact(from(deliveryAddress)
+                .where(deliveryAddress.member.id.eq(member.getId()))
+                .select(deliveryAddress)
+                .fetchCount());
     }
 
 }

@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.repository.deliveryaddress;
 
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
+import com.nhnacademy.marketgg.server.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

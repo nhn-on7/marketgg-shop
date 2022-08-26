@@ -12,6 +12,7 @@ import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddress
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -35,33 +36,25 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
      * @param memberInfo             - 배송지를 등록하는 회원의 정보입니다.
      * @param deliveryAddressRequest - 추가할 배송지를 담은 DTO 객체 입니다.
      */
+    @Transactional
     @Override
     public void createDeliveryAddress(final MemberInfo memberInfo,
                                       final DeliveryAddressCreateRequest deliveryAddressRequest) {
-
         Member member = getMember(memberInfo);
+
+        Integer totalCount = deliveryAddressRepository.countMemberAddresses(member);
+        if (totalCount >= 3) {
+            throw new RuntimeException();
+            //throw new OverDeliveryAddressCountException();
+        }
 
         DeliveryAddress deliveryAddress = new DeliveryAddress(member, deliveryAddressRequest);
 
+        DeliveryAddress defaultAddress = deliveryAddressRepository.existsDefaultDeliveryAddress(member);
+
+        defaultAddress.convertIsDefaultAddress();
+
         deliveryAddressRepository.save(deliveryAddress);
-    }
-
-    /**
-     * 회원이 배송지를 수정할 때 사용하는 메소드 입니다.
-     *
-     * @param memberInfo                   - 배송지를 수정하는 회원의 정보입니다.
-     * @param deliveryAddressUpdateRequest - 수정할 배송지를 담은 DTO 객체 입니다.
-     */
-    @Override
-    public void updateDeliveryAddress(final MemberInfo memberInfo,
-                                      final DeliveryAddressUpdateRequest deliveryAddressUpdateRequest) {
-
-        Member member = getMember(memberInfo);
-
-        DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(deliveryAddressUpdateRequest.getId())
-                                                                   .orElseThrow(DeliveryAddressNotFoundException::new);
-
-        deliveryAddress.update(member, deliveryAddressUpdateRequest);
     }
 
     /**
@@ -70,6 +63,7 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
      * @param memberInfo        - 배송지를 삭제하는 회원의 정보입니다.
      * @param deliveryAddressId - 삭제할 배송지의 번호 입니다.
      */
+    @Transactional
     @Override
     public void deleteDeliveryAddress(final MemberInfo memberInfo,
                                       final Long deliveryAddressId) {
