@@ -233,7 +233,8 @@ class DefaultOrderServiceTest {
     @DisplayName("주문 등록 시 쿠폰 사용 최소 금액을 채우지 못한 경우")
     void testCreateOrderFailWhenNotOverCouponMinimumMoney() throws JsonProcessingException {
         OrderCreateRequest orderCreateRequest = Dummy.getDummyOrderCreateRequest();
-        ReflectionTestUtils.setField(orderCreateRequest, "totalOrigin", 3000L);
+        ReflectionTestUtils.setField(orderCreateRequest, "totalOrigin", 10L);
+        ReflectionTestUtils.setField(orderCreateRequest, "usedPoint", 0);
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);

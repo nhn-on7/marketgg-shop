@@ -69,7 +69,7 @@ class DefaultUsedCouponServiceTest {
         memberRequest = new MemberCreateRequest();
         member = new Member(memberRequest, new Cart());
         coupon
-            = new Coupon(1L, "신규쿠폰", "정률할인", 1, 1, 0.5);
+            = new Coupon(1L, "신규쿠폰", "정률할인", 1, 1, 0.5, LocalDateTime.now());
         givenCouponPk = new GivenCoupon.Pk(1L, 1L);
         givenCoupon
             = new GivenCoupon(givenCouponPk, coupon, member, LocalDateTime.now());
