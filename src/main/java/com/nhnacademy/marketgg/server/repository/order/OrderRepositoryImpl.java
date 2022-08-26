@@ -4,14 +4,17 @@ import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResp
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.QOrder;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.DateTimePath;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class OrderRepositoryImpl extends QuerydslRepositorySupport implements OrderRepositoryCustom {
 
@@ -22,12 +25,18 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
     QOrder order = QOrder.order;
 
     @Override
-    public List<OrderRetrieveResponse> findOrderList(final Long memberId, final boolean isAdmin) {
-        return from(order).select(selectOrderResponse())
-                          .where(eqMemberId(memberId, isAdmin))
-                          .where(userNotSeeDeleted(isAdmin, order.deletedAt))
-                          .where(order.orderStatus.contains("취소/환불").not())
-                          .fetch();
+    public Page<OrderRetrieveResponse> findOrderList(final Long memberId, final boolean isAdmin,
+                                                     final Pageable pageable) {
+
+        QueryResults<OrderRetrieveResponse> result = from(order).select(selectOrderResponse())
+                                                                .where(eqMemberId(memberId, isAdmin))
+                                                                .where(userNotSeeDeleted(isAdmin, order.deletedAt))
+                                                                .where(order.orderStatus.contains("취소/환불").not())
+                                                                .offset(pageable.getOffset())
+                                                                .limit(pageable.getPageSize())
+                                                                .fetchResults();
+
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
+import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderInfoRequestDto;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
@@ -51,6 +52,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -321,11 +324,12 @@ class DefaultOrderServiceTest {
     void testRetrieveOrderList() {
         OrderRetrieveResponse orderResponse = Dummy.getOrderRetrieveResponse();
 
-        given(orderRepository.findOrderList(anyLong(), anyBoolean())).willReturn(List.of(orderResponse));
+        given(orderRepository.findOrderList(anyLong(), anyBoolean(), any(Pageable.class))).willReturn(Page.empty());
 
-        orderService.retrieveOrderList(memberInfo);
+        orderService.retrieveOrderList(memberInfo, new DefaultPageRequest(1).getPageable());
 
-        then(orderRepository).should(times(1)).findOrderList(anyLong(), anyBoolean());
+        then(orderRepository).should(times(1))
+                             .findOrderList(anyLong(), anyBoolean(), any(Pageable.class));
     }
 
     @Test

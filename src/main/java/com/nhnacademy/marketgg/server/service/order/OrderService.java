@@ -9,6 +9,8 @@ import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResp
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -49,7 +51,7 @@ public interface OrderService {
      * @return 조회하는 회원의 종류에 따라 목록을 List 로 반환합니다.
      * @since 1.0.0
      */
-    List<OrderRetrieveResponse> retrieveOrderList(final MemberInfo memberInfo);
+    Page<OrderRetrieveResponse> retrieveOrderList(final MemberInfo memberInfo, final Pageable pageable);
 
     /**
      * 주문 상세를 조회하는 메소드입니다.

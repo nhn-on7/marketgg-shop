@@ -1,9 +1,11 @@
 package com.nhnacademy.marketgg.server.controller.order;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.CartResponse;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
@@ -19,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -72,12 +76,12 @@ public class OrderController {
         log.info("createOrder method started");
         log.info("orderRequest: {}", orderCreateRequest);
 
-        OrderToPayment response = orderService.createOrder(orderCreateRequest, memberInfo);
+        OrderToPayment data = orderService.createOrder(orderCreateRequest, memberInfo);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .location(URI.create("/payments/verify"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.successWith(response));
+                             .body(ShopResult.successWith(data));
     }
 
     /**
@@ -106,12 +110,12 @@ public class OrderController {
         log.info("retrieveOrderForm method started");
         log.info("cartResponse: {}", cartResponse);
 
-        OrderFormResponse response = orderService.retrieveOrderForm(cartResponse.getProductIds(), memberInfo, authInfo);
+        OrderFormResponse data = orderService.retrieveOrderForm(cartResponse.getProductIds(), memberInfo, authInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/orderForm"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.successWith(response));
+                             .body(ShopResult.successWith(data));
     }
 
     /**
@@ -130,15 +134,23 @@ public class OrderController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @GetMapping
-    public ResponseEntity<ShopResult<List<OrderRetrieveResponse>>> retrieveOrderList(final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<PageEntity<OrderRetrieveResponse>>> retrieveOrderList(final MemberInfo memberInfo,
+                                                                                     @RequestParam(value = "page",
+                                                                                                   defaultValue = "0")
+                                                                                     final Integer page) {
         log.info("retrieveOrderList method started");
 
-        List<OrderRetrieveResponse> responses = orderService.retrieveOrderList(memberInfo);
+        DefaultPageRequest pageRequest = new DefaultPageRequest(page);
+
+        Page<OrderRetrieveResponse> data = orderService.retrieveOrderList(memberInfo, pageRequest.getPageable());
+
+        PageEntity<OrderRetrieveResponse> pageEntity = new PageEntity<>(data.getNumber(), data.getSize(),
+                                                                        data.getTotalPages(), data.getContent());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.successWith(responses));
+                             .body(ShopResult.successWith(pageEntity));
     }
 
     /**
@@ -164,12 +176,12 @@ public class OrderController {
         log.info("retrieveOrderDetail method started");
         log.info("orderId: {}", orderId);
 
-        OrderDetailRetrieveResponse response = orderService.retrieveOrderDetail(orderId, memberInfo);
+        OrderDetailRetrieveResponse data = orderService.retrieveOrderDetail(orderId, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/" + orderId))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.successWith(response));
+                             .body(ShopResult.successWith(data));
     }
 
     /**
