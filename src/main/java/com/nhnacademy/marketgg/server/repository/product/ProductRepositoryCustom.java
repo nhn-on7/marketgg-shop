@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.repository.product;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import java.util.List;
 
+import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
 import com.nhnacademy.marketgg.server.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,7 @@ public interface ProductRepositoryCustom {
      * @return - 상품 리스트를 반환합니다.
      * @since 1.0.0
      */
-    Page<ProductDetailResponse> findAllProducts(Pageable pageable);
+    Page<ProductListResponse> findAllProducts(Pageable pageable);
 
     /**
      * DB에서 PK값이 같은 상품을 찾아 반환 합니다.

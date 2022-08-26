@@ -194,7 +194,7 @@ class DefaultProductServiceTest {
         Page<ProductDetailResponse> page = new PageImpl<>(list, PageRequest.of(0, 1), 1);
         given(productRepository.findAllProducts(PageRequest.of(0, 1))).willReturn(page);
 
-        Page<ProductDetailResponse> productDetailResponses = productService.retrieveProducts(PageRequest.of(0, 1));
+        Page<ProductListResponse> productDetailResponses = productService.retrieveProducts(PageRequest.of(0, 1));
 
         assertThat(productDetailResponses).isNotNull();
         then(productRepository).should(times(1)).findAllProducts(any(PageRequest.class));

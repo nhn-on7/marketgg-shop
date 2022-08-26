@@ -164,18 +164,18 @@ public class ProductController {
                                         useReturnTypeSchema = true))
 
     @GetMapping
-    public ResponseEntity<PageEntity<ProductDetailResponse>> retrieveProducts(
+    public ResponseEntity<PageEntity<ProductListResponse>> retrieveProducts(
         @RequestParam(value = "page", defaultValue = "0") final Integer page) {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page);
 
-        Page<ProductDetailResponse> productDetailResponses =
+        Page<ProductListResponse> productListResponses =
             this.productService.retrieveProducts(pageRequest.getPageable());
 
-        PageEntity<ProductDetailResponse> pageEntity = new PageEntity<>(productDetailResponses.getNumber(),
-                                                                        productDetailResponses.getSize(),
-                                                                        productDetailResponses.getTotalPages(),
-                                                                        productDetailResponses.getContent());
+        PageEntity<ProductListResponse> pageEntity = new PageEntity<>(productListResponses.getNumber(),
+                                                                        productListResponses.getSize(),
+                                                                        productListResponses.getTotalPages(),
+                                                                        productListResponses.getContent());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI))
