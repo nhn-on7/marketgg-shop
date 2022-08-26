@@ -1,9 +1,10 @@
 package com.nhnacademy.marketgg.server.repository.product;
 
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
+
 import java.util.List;
 
-import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
 import com.nhnacademy.marketgg.server.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,8 +58,8 @@ public interface ProductRepositoryCustom {
      *
      * @param productIds - 조회할 상품 식별번호 목록입니다.
      * @return 상품 식별번호 목록으로 조회한 상품 목록을 반환합니다.
-     * @since 1.0.0
      * @author 김정민
+     * @since 1.0.0
      */
     List<Product> findByIds(final List<Long> productIds);
 

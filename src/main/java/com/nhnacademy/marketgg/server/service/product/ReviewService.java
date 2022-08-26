@@ -5,10 +5,11 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
-import java.io.IOException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * 리뷰 서비스입니다.
@@ -22,16 +23,16 @@ public interface ReviewService {
      * 사진이 첨부된 리뷰를 생성합니다.
      *
      * @param reviewRequest - 리뷰 생성을 위한 dto입니다.
-     * @param memberInfo - 리뷰를 작성한 회원의 정보입니다.
+     * @param memberInfo    - 리뷰를 작성한 회원의 정보입니다.
      */
     void createReview(final ReviewCreateRequest reviewRequest, final MultipartFile image, final MemberInfo memberInfo)
-        throws IOException;
+            throws IOException;
 
     /**
      * 글로만 이루어진 리뷰를 생성합니다.
      *
      * @param reviewRequest - 리뷰 생성을 위한 dto입니다.
-     * @param memberInfo - 리뷰를 작성한 회원의 정보입니다.
+     * @param memberInfo    - 리뷰를 작성한 회원의 정보입니다.
      */
     void createReview(final ReviewCreateRequest reviewRequest, final MemberInfo memberInfo);
 

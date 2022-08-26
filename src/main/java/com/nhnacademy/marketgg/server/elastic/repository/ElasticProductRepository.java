@@ -1,12 +1,9 @@
 package com.nhnacademy.marketgg.server.elastic.repository;
 
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
-import java.util.List;
-
-import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+
+import java.util.List;
 
 /**
  * 엘라스틱 서치의 상품의 동기화를 위한 Repository 입니다.
