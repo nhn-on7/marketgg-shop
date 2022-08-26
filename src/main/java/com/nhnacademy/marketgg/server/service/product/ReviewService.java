@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.service.product;
 
-import com.nhnacademy.marketgg.server.dto.ShopResult;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
@@ -41,7 +41,7 @@ public interface ReviewService {
      * @param pageable - 사이즈는 10입니다.
      * @return - 페이지 정보가 담긴 공통 응답객체를 반환합니다.
      */
-    List<ReviewResponse> retrieveReviews(final Pageable pageable);
+    List<ReviewResponse> retrieveReviews(final Pageable pageable) throws JsonProcessingException;
 
     /**
      * 후기의 상세 정보를 조회합니다.

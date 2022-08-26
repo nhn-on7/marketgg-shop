@@ -40,6 +40,7 @@ import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.OrderProduct;
 import com.nhnacademy.marketgg.server.entity.Product;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -363,7 +364,7 @@ public class Dummy {
     public static ReviewResponse getDummyReviewResponse() {
 
         return new ReviewResponse(1L, 1L, 1L, "후기 내용입니다. 더미입니다.", 5L,
-                                  Boolean.FALSE, LocalDateTime.now(), LocalDateTime.now(), null);
+                                  Boolean.FALSE, LocalDateTime.now(), LocalDateTime.now(), null, UUID.randomUUID().toString());
     }
 
     public static Page<ProductDetailResponse> getDummyPage() {

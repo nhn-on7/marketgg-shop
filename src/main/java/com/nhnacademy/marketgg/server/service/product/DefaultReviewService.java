@@ -4,7 +4,11 @@ import static com.nhnacademy.marketgg.server.constant.CouponsName.BESTREVIEW;
 import static com.nhnacademy.marketgg.server.constant.PointContent.IMAGE_REVIEW;
 import static com.nhnacademy.marketgg.server.constant.PointContent.NORMAL_REVIEW;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
@@ -19,6 +23,7 @@ import com.nhnacademy.marketgg.server.exception.asset.AssetNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.exception.review.ReviewNotFoundException;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
+import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.review.ReviewRepository;
 import com.nhnacademy.marketgg.server.service.file.FileService;
@@ -46,6 +51,7 @@ public class DefaultReviewService implements ReviewService {
     private final AssetRepository assetRepository;
     private final ApplicationEventPublisher publisher;
     private final FileService fileService;
+    private final AuthRepository authRepository;
 
     @Transactional
     @Override
@@ -74,8 +80,13 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
-    public List<ReviewResponse> retrieveReviews(final Pageable pageable) {
+    public List<ReviewResponse> retrieveReviews(final Pageable pageable) throws JsonProcessingException {
         Page<ReviewResponse> response = reviewRepository.retrieveReviews(pageable);
+        for (ReviewResponse reviewResponse : response.getContent()) {
+            MemberInfoRequest memberInfoRequest = new MemberInfoRequest(reviewResponse.getUuid());
+            ShopResult<MemberInfoResponse> memberInfo = authRepository.getMemberInfo(memberInfoRequest);
+            reviewResponse.addMemberName(memberInfo.getData().getName());
+        }
 
         return response.getContent();
     }

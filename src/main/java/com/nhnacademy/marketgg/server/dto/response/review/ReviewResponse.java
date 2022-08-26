@@ -26,4 +26,12 @@ public class ReviewResponse {
 
     private final LocalDateTime deletedAt;
 
+    private final String uuid;
+
+    private String memberName;
+
+    public void addMemberName(String name) {
+        this.memberName = name;
+    }
+
 }

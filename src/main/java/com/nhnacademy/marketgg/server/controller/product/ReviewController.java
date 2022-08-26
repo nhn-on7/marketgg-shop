@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.product;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
@@ -127,7 +128,8 @@ public class ReviewController {
     @GetMapping("/{productId}/reviews")
     public ResponseEntity<ShopResult<List<ReviewResponse>>> retrieveReviews(@PathVariable final Long productId,
                                                                             @RequestParam(value = "page", defaultValue = "0")
-                                                                            final Integer page) {
+                                                                            final Integer page)
+        throws JsonProcessingException {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page);
         List<ReviewResponse> reviewResponses = reviewService.retrieveReviews(pageRequest.getPageable());

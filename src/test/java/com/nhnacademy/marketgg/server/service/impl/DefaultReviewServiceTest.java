@@ -8,6 +8,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
@@ -33,6 +34,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -104,7 +106,8 @@ class DefaultReviewServiceTest {
                                             true,
                                             LocalDateTime.now(),
                                             LocalDateTime.now(),
-                                            null);
+                                            null,
+                                            UUID.randomUUID().toString());
 
         reviewUpdateRequest = new ReviewUpdateRequest();
         ReflectionTestUtils.setField(reviewUpdateRequest, "reviewId", 1L);
@@ -153,7 +156,7 @@ class DefaultReviewServiceTest {
 
     @Test
     @DisplayName("후기 전체 조회 테스트")
-    void testRetrieveReviews() {
+    void testRetrieveReviews() throws JsonProcessingException {
         List<ReviewResponse> list = List.of(reviewResponse);
         Page<ReviewResponse> page = new PageImpl<>(list, PageRequest.of(0, 1), 1);
         given(reviewRepository.retrieveReviews(PageRequest.of(0, 1))).willReturn(page);
