@@ -57,10 +57,7 @@ public class ReviewController {
      * 리뷰를 생성합니다. 추후 사진 기능이 추가될 예정입니다.
      *
      * @param productId     - 후기가 달릴 상품의 PK입니다.
-     *                      <<<<<<< HEAD
-     *                      =======
      * @param memberInfo    - 후기를 작성한 회원의 정보입니다.
-     *                      >>>>>>> 704b1c34 (Fix: typo)
      * @param reviewRequest - 후기 생성을 위한 dto 입니다.
      * @param bindingResult - validation 적용을 위한 파라미터입니다.
      * @param images        - 후기 생성시 첨부된 사진들입니다.

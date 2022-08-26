@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.member;
 
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.response.dib.DibRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.dib.DibService;
@@ -58,12 +59,13 @@ public class DibController {
      * @since 1.0.0
      */
     @GetMapping
-    public ResponseEntity<List<DibRetrieveResponse>> retrieveDibs(final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<List<DibRetrieveResponse>>> retrieveDibs(final MemberInfo memberInfo) {
         List<DibRetrieveResponse> dibResponses = dibService.retrieveDibs(memberInfo.getId());
+        ShopResult<List<DibRetrieveResponse>> listShopResult = ShopResult.successWith(dibResponses);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_DIB))
-                             .body(dibResponses);
+                             .body(listShopResult);
     }
 
     /**
