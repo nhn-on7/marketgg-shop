@@ -17,6 +17,7 @@ import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
+import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,8 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -51,7 +50,7 @@ class ProductControllerTest {
 
     private ProductDetailResponse productDetailResponse;
 
-    private Page<ProductDetailResponse>  page;
+    private Page<ProductListResponse>  page;
     @BeforeEach
     void setUp() {
         searchRequest = new SearchRequest();
@@ -62,7 +61,7 @@ class ProductControllerTest {
         ReflectionTestUtils.setField(searchRequest, "size", 10);
 
         productDetailResponse = Dummy.getDummyProductResponse();
-        page = Dummy.getDummyPage();
+        page = Dummy.getDummyProductPage();
     }
 
     @Test

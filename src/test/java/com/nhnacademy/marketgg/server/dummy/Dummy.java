@@ -2,7 +2,6 @@ package com.nhnacademy.marketgg.server.dummy;
 
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.category.CategoryCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
@@ -27,6 +26,7 @@ import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
+import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.CartProduct;
@@ -40,12 +40,12 @@ import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.OrderProduct;
 import com.nhnacademy.marketgg.server.entity.Product;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
@@ -363,15 +363,28 @@ public class Dummy {
     public static ReviewResponse getDummyReviewResponse() {
 
         return new ReviewResponse(1L, 1L, 1L, "후기 내용입니다. 더미입니다.", 5L,
-                                  Boolean.FALSE, LocalDateTime.now(), LocalDateTime.now(), null);
+                                  Boolean.FALSE, LocalDateTime.now(), LocalDateTime.now(), null, UUID.randomUUID().toString());
     }
 
-    public static Page<ProductDetailResponse> getDummyPage() {
-        ProductDetailResponse dummyProductResponse = getDummyProductResponse();
+    public static Page<ProductListResponse> getDummyProductPage() {
+        ProductListResponse dummyProductResponse = getDummyProductListResponse();
 
-        Page<ProductDetailResponse> responsePage = new PageImpl<>(List.of(dummyProductResponse), PageRequest.of(0, 10), 1);
+        Page<ProductListResponse> responsePage = new PageImpl<>(List.of(dummyProductResponse), PageRequest.of(0, 10), 1);
 
         return responsePage;
+    }
+
+    public static Page<ReviewResponse> getDummyReviewPage() {
+        ReviewResponse reviewResponse = getDummyReviewResponse();
+        Page<ReviewResponse> responsePage = new PageImpl<>(List.of(reviewResponse), PageRequest.of(0, 10), 1);
+
+        return responsePage;
+    }
+
+    public static ProductListResponse getDummyProductListResponse() {
+        ProductListResponse productListResponse = new ProductListResponse(1L, "101", "계란", "맛있습니다.", "굉장히 맛있네요", "10% 할인", "img", 1000L, 1000L);
+
+        return productListResponse;
     }
 
 }

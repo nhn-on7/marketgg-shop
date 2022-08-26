@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.repository.product;
 
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
-import com.nhnacademy.marketgg.server.entity.Product;
-import com.nhnacademy.marketgg.server.entity.QProduct;
+import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
+import com.nhnacademy.marketgg.server.entity.*;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
@@ -21,11 +21,27 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     }
 
     @Override
-    public Page<ProductDetailResponse> findAllProducts(final Pageable pageable) {
+    public Page<ProductListResponse> findAllProducts(final Pageable pageable) {
         QProduct product = QProduct.product;
+        QProductLabel productLabel = QProductLabel.productLabel;
+        QLabel label = QLabel.label;
+        QImage image = QImage.image;
 
-        QueryResults<ProductDetailResponse> result = from(product)
-            .select(selectAllProductColumns())
+        QueryResults<ProductListResponse> result = from(product)
+            .select(Projections.constructor(ProductListResponse.class,
+                    product.id,
+                    product.category.id.as("categoryCode"),
+                    product.name.as("productName"),
+                    product.content,
+                    product.description,
+                    label.name.as("labelName"),
+                    image.imageAddress,
+                    product.price,
+                    product.totalStock.as("amount")
+                    )).innerJoin(productLabel).on(productLabel.product.id.eq(product.id))
+                .innerJoin(label).on(label.id.eq(productLabel.label.id))
+                .innerJoin(image).on(image.asset.id.eq(product.asset.id))
+                .where(product.deletedAt.isNull())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetchResults();

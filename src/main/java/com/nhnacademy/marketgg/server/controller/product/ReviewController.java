@@ -1,6 +1,8 @@
 package com.nhnacademy.marketgg.server.controller.product;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.annotation.Auth;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
@@ -15,11 +17,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.io.IOException;
 import java.net.URI;
-import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -57,10 +59,7 @@ public class ReviewController {
      * 리뷰를 생성합니다. 추후 사진 기능이 추가될 예정입니다.
      *
      * @param productId     - 후기가 달릴 상품의 PK입니다.
-     *                      <<<<<<< HEAD
-     *                      =======
      * @param memberInfo    - 후기를 작성한 회원의 정보입니다.
-     *                      >>>>>>> 704b1c34 (Fix: typo)
      * @param reviewRequest - 후기 생성을 위한 dto 입니다.
      * @param bindingResult - validation 적용을 위한 파라미터입니다.
      * @param images        - 후기 생성시 첨부된 사진들입니다.
@@ -82,10 +81,10 @@ public class ReviewController {
     @PostMapping(value = "/{productId}/reviews", consumes = { MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<ShopResult<String>> createReview(@PathVariable final Long productId,
-                                                         final MemberInfo memberInfo,
-                                                         @RequestPart @Valid final ReviewCreateRequest reviewRequest,
-                                                         BindingResult bindingResult,
-                                                         @RequestPart(required = false) MultipartFile images)
+                                                           final MemberInfo memberInfo,
+                                                           @RequestPart @Valid final ReviewCreateRequest reviewRequest,
+                                                           BindingResult bindingResult,
+                                                           @RequestPart(required = false) MultipartFile images)
         throws IOException {
 
         if (bindingResult.hasErrors()) {
@@ -128,17 +127,23 @@ public class ReviewController {
                                         useReturnTypeSchema = true))
 
     @GetMapping("/{productId}/reviews")
-    public ResponseEntity<ShopResult<List<ReviewResponse>>> retrieveReviews(@PathVariable final Long productId,
-                                                                            @RequestParam(value = "page", defaultValue = "0")
-                                                                            final Integer page) {
+    public ResponseEntity<PageEntity<ReviewResponse>> retrieveReviews(@PathVariable final Long productId,
+                                                                      @RequestParam(value = "page", defaultValue = "0")
+                                                                      final Integer page)
+        throws JsonProcessingException {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page);
-        List<ReviewResponse> reviewResponses = reviewService.retrieveReviews(pageRequest.getPageable());
+        Page<ReviewResponse> reviewResponses = reviewService.retrieveReviews(pageRequest.getPageable());
+
+        PageEntity<ReviewResponse> pageEntity = new PageEntity<>(reviewResponses.getNumber(),
+                                                                 reviewResponses.getSize(),
+                                                                 reviewResponses.getTotalPages(),
+                                                                 reviewResponses.getContent());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_REVIEW_URI + productId + "/review"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.successWith(reviewResponses));
+                             .body(pageEntity);
     }
 
     /**
@@ -195,9 +200,9 @@ public class ReviewController {
     @Auth
     @PutMapping("/{productId}/reviews/{reviewId}")
     public ResponseEntity<ShopResult<String>> updateReview(@PathVariable final Long productId,
-                                                         @PathVariable final Long reviewId,
-                                                         @RequestBody @Valid final ReviewUpdateRequest reviewRequest,
-                                                         BindingResult bindingResult) {
+                                                           @PathVariable final Long reviewId,
+                                                           @RequestBody @Valid final ReviewUpdateRequest reviewRequest,
+                                                           BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
@@ -220,7 +225,7 @@ public class ReviewController {
      */
     @DeleteMapping("/{productId}/reviews/{reviewId}")
     public ResponseEntity<ShopResult<String>> deleteReview(@PathVariable final Long productId,
-                                                         @PathVariable final Long reviewId) {
+                                                           @PathVariable final Long reviewId) {
         reviewService.deleteReview(reviewId);
 
         return ResponseEntity.status(HttpStatus.OK)
