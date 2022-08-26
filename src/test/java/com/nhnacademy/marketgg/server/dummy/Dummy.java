@@ -26,6 +26,7 @@ import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
+import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.CartProduct;
@@ -365,10 +366,10 @@ public class Dummy {
                                   Boolean.FALSE, LocalDateTime.now(), LocalDateTime.now(), null, UUID.randomUUID().toString());
     }
 
-    public static Page<ProductDetailResponse> getDummyProductPage() {
-        ProductDetailResponse dummyProductResponse = getDummyProductResponse();
+    public static Page<ProductListResponse> getDummyProductPage() {
+        ProductListResponse dummyProductResponse = getDummyProductListResponse();
 
-        Page<ProductDetailResponse> responsePage = new PageImpl<>(List.of(dummyProductResponse), PageRequest.of(0, 10), 1);
+        Page<ProductListResponse> responsePage = new PageImpl<>(List.of(dummyProductResponse), PageRequest.of(0, 10), 1);
 
         return responsePage;
     }
@@ -378,6 +379,12 @@ public class Dummy {
         Page<ReviewResponse> responsePage = new PageImpl<>(List.of(reviewResponse), PageRequest.of(0, 10), 1);
 
         return responsePage;
+    }
+
+    public static ProductListResponse getDummyProductListResponse() {
+        ProductListResponse productListResponse = new ProductListResponse(1L, "101", "계란", "맛있습니다.", "굉장히 맛있네요", "10% 할인", "img", 1000L, 1000L);
+
+        return productListResponse;
     }
 
 }
