@@ -310,8 +310,8 @@ public class Dummy {
 
     public static DeliveryAddress getDummyDeliveryAddress() {
         DeliveryAddressCreateRequest request = new DeliveryAddressCreateRequest();
-        ReflectionTestUtils.setField(request, "isDefaultAddress", true);
-        ReflectionTestUtils.setField(request, "zipCode", 50948);
+        ReflectionTestUtils.setField(request, "defaultAddress", true);
+        ReflectionTestUtils.setField(request, "zipcode", 50948);
         ReflectionTestUtils.setField(request, "address", "경남 김해시 내외중앙로 55");
         ReflectionTestUtils.setField(request, "detailAddress", "정우빌딩 5층");
 
