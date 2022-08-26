@@ -140,7 +140,7 @@ public class OrderController {
                                                                                      final Integer page) {
         log.info("retrieveOrderList method started");
 
-        DefaultPageRequest pageRequest = new DefaultPageRequest(page);
+        DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1); // offset 때문에 -1 처리
 
         Page<OrderRetrieveResponse> data = orderService.retrieveOrderList(memberInfo, pageRequest.getPageable());
 
