@@ -41,7 +41,7 @@ public interface ReviewService {
      * @param pageable - 사이즈는 10입니다.
      * @return - 페이지 정보가 담긴 공통 응답객체를 반환합니다.
      */
-    List<ReviewResponse> retrieveReviews(final Pageable pageable) throws JsonProcessingException;
+    Page<ReviewResponse> retrieveReviews(final Pageable pageable) throws JsonProcessingException;
 
     /**
      * 후기의 상세 정보를 조회합니다.

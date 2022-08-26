@@ -80,7 +80,7 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
-    public List<ReviewResponse> retrieveReviews(final Pageable pageable) throws JsonProcessingException {
+    public Page<ReviewResponse> retrieveReviews(final Pageable pageable) throws JsonProcessingException {
         Page<ReviewResponse> response = reviewRepository.retrieveReviews(pageable);
         for (ReviewResponse reviewResponse : response.getContent()) {
             MemberInfoRequest memberInfoRequest = new MemberInfoRequest(reviewResponse.getUuid());
@@ -88,7 +88,7 @@ public class DefaultReviewService implements ReviewService {
             reviewResponse.addMemberName(memberInfo.getData().getName());
         }
 
-        return response.getContent();
+        return response;
     }
 
 
