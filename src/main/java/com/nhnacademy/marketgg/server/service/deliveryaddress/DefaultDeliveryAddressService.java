@@ -2,10 +2,10 @@ package com.nhnacademy.marketgg.server.service.deliveryaddress;
 
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
+import com.nhnacademy.marketgg.server.exception.deliveryaddresses.OverDeliveryAddressCountException;
 import com.nhnacademy.marketgg.server.exception.deliveryaddresses.DeliveryAddressNotFoundException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
@@ -44,8 +44,7 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
 
         Integer totalCount = deliveryAddressRepository.countMemberAddresses(member);
         if (totalCount >= 3) {
-            throw new RuntimeException();
-            //throw new OverDeliveryAddressCountException();
+            throw new OverDeliveryAddressCountException();
         }
 
         DeliveryAddress deliveryAddress = new DeliveryAddress(member, deliveryAddressRequest);
