@@ -13,6 +13,7 @@ import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
@@ -26,6 +27,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -157,14 +161,16 @@ class OrderControllerTest {
     @Test
     @DisplayName("주문서 목록 조회")
     void testRetrieveOrderList() throws Exception {
-        given(orderService.retrieveOrderList(any(MemberInfo.class))).willReturn(List.of());
+        given(orderService.retrieveOrderList(any(MemberInfo.class), any(Pageable.class)))
+                .willReturn(new PageImpl<>(List.of(Dummy.getOrderRetrieveResponse())));
 
-        mockMvc.perform(get(baseUri)
+        mockMvc.perform(get(baseUri + "?page=0")
                                 .headers(headers)
                                 .contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk());
 
-        then(orderService).should(times(1)).retrieveOrderList(any(MemberInfo.class));
+        then(orderService).should(times(1))
+                          .retrieveOrderList(any(MemberInfo.class), any(Pageable.class));
     }
 
     @Test

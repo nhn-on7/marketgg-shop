@@ -48,6 +48,8 @@ import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository
 import com.nhnacademy.marketgg.server.service.cart.CartProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -215,8 +217,8 @@ public class DefaultOrderService implements OrderService {
      * @return 조회하는 회원의 종류에 따라 목록을 List 로 반환합니다.
      */
     @Override
-    public List<OrderRetrieveResponse> retrieveOrderList(final MemberInfo memberInfo) {
-        return orderRepository.findOrderList(memberInfo.getId(), memberInfo.isAdmin());
+    public Page<OrderRetrieveResponse> retrieveOrderList(final MemberInfo memberInfo, final Pageable pageable) {
+        return orderRepository.findOrderList(memberInfo.getId(), memberInfo.isAdmin(), pageable);
     }
 
     /**
