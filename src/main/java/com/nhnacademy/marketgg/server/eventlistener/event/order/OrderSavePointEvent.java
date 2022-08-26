@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.entity.event;
+package com.nhnacademy.marketgg.server.eventlistener.event.order;
 
 import com.nhnacademy.marketgg.server.entity.Member;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import static com.nhnacademy.marketgg.server.constant.PointContent.REFERRED;
  */
 @AllArgsConstructor
 @Getter
-public class SavePointEvent {
+public class OrderSavePointEvent {
 
     private Member member;
 
@@ -38,8 +38,8 @@ public class SavePointEvent {
      * @author 조현진
      * @since 1.0.0
      */
-    public static SavePointEvent dispensePointForNormalReview(Member member) {
-        return new SavePointEvent(member, NORMAL_REVIEW_POINT, NORMAL_REVIEW.getContent());
+    public static OrderSavePointEvent dispensePointForNormalReview(Member member) {
+        return new OrderSavePointEvent(member, NORMAL_REVIEW_POINT, NORMAL_REVIEW.getContent());
     }
 
     /**
@@ -50,8 +50,8 @@ public class SavePointEvent {
      * @author 조현진
      * @since 1.0.0
      */
-    public static SavePointEvent dispensePointForImageReview(Member member) {
-        return new SavePointEvent(member, IMAGE_REVIEW_POINT, IMAGE_REVIEW.getContent());
+    public static OrderSavePointEvent dispensePointForImageReview(Member member) {
+        return new OrderSavePointEvent(member, IMAGE_REVIEW_POINT, IMAGE_REVIEW.getContent());
     }
 
     /**
@@ -62,8 +62,8 @@ public class SavePointEvent {
      * @author 민아영
      * @since 1.0.0
      */
-    public static SavePointEvent dispensePointForReferred(Member member) {
-        return new SavePointEvent(member, REFERRED_POINT, REFERRED.getContent());
+    public static OrderSavePointEvent dispensePointForReferred(Member member) {
+        return new OrderSavePointEvent(member, REFERRED_POINT, REFERRED.getContent());
     }
 
 }

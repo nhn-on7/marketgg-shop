@@ -1,11 +1,11 @@
-package com.nhnacademy.marketgg.server.entity.event;
+package com.nhnacademy.marketgg.server.eventlistener.event.order;
 
 import com.nhnacademy.marketgg.server.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 주문(결제)을 했을 때 사용한 쿠폰을 재사용할 수 없도록 사용쿠폰에 등록하기 위한 이벤트 입니다.
+ * 주문(결제)을 취소했을 때 포인트 이력을 삭제하기 위한 이벤트 입니다.
  *
  * @author 김정민
  * @version 1.0.0
@@ -13,7 +13,7 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public class OrderCouponUsedEvent {
+public class OrderPointCanceledEvent {
 
     private Order order;
 

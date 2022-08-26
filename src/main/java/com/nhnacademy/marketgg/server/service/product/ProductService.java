@@ -6,7 +6,7 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
 import java.io.IOException;
 import java.util.List;
 import org.json.simple.parser.ParseException;

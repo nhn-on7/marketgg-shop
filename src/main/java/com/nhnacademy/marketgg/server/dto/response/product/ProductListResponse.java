@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.elastic.dto.response;
+package com.nhnacademy.marketgg.server.dto.response.product;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

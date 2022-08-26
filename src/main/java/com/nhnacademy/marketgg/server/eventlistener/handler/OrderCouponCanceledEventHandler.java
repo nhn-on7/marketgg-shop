@@ -1,6 +1,7 @@
-package com.nhnacademy.marketgg.server.entity.event;
+package com.nhnacademy.marketgg.server.eventlistener.handler;
 
 import com.nhnacademy.marketgg.server.entity.UsedCoupon;
+import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderCouponCanceledEvent;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

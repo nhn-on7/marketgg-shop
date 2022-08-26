@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.delivery;
+package com.nhnacademy.marketgg.server.repository.delivery;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

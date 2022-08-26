@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.delivery.DeliveryRepository;
+import com.nhnacademy.marketgg.server.repository.delivery.DeliveryRepository;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
@@ -11,7 +11,6 @@ import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderInfoRequestDto;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
-import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
@@ -24,8 +23,8 @@ import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.OrderProduct;
 import com.nhnacademy.marketgg.server.entity.Product;
-import com.nhnacademy.marketgg.server.entity.event.OrderCouponCanceledEvent;
-import com.nhnacademy.marketgg.server.entity.event.OrderPointCanceledEvent;
+import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderCouponCanceledEvent;
+import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderPointCanceledEvent;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotOverMinimumMoneyException;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponIsAlreadyUsedException;
 import com.nhnacademy.marketgg.server.exception.order.OrderMemberNotMatchedException;

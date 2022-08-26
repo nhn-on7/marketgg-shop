@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
-import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
 import java.util.List;
 import org.json.simple.parser.ParseException;
 

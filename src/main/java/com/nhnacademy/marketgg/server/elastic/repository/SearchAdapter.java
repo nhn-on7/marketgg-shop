@@ -7,7 +7,7 @@ import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequestBodyForBool;
-import com.nhnacademy.marketgg.server.elastic.dto.response.ProductListResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
 import com.nhnacademy.marketgg.server.util.KoreanToEnglishTranslator;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

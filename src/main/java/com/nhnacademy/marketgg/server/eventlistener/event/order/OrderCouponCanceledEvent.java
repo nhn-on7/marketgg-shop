@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.entity.event;
+package com.nhnacademy.marketgg.server.eventlistener.event.order;
 
 import com.nhnacademy.marketgg.server.entity.Order;
 import lombok.AllArgsConstructor;

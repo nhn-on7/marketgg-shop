@@ -1,8 +1,9 @@
-package com.nhnacademy.marketgg.server.entity.event;
+package com.nhnacademy.marketgg.server.eventlistener.handler;
 
 import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.PointHistory;
+import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderPointCanceledEvent;
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
