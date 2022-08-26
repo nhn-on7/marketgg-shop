@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.aop.AspectUtils;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.product.ReviewService;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +45,7 @@ class AdminReviewControllerTest {
     @Test
     @DisplayName("베스트 후기 선정 테스트")
     void testMakeBestReview() throws Exception {
-        given(reviewService.makeBestReview(anyLong())).willReturn(new SingleResponse<>());
+        given(reviewService.makeBestReview(anyLong())).willReturn(true);
 
         this.mockMvc.perform(post("/admin/products/{productId}/reviews/{reviewId}/make-best", 1L, 1L)
                                      .headers(httpHeaders)

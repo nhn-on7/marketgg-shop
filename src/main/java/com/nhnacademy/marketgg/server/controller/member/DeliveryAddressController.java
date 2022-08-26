@@ -1,24 +1,19 @@
 package com.nhnacademy.marketgg.server.controller.member;
 
 import com.nhnacademy.marketgg.server.annotation.Auth;
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.service.deliveryaddress.DeliveryAddressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,14 +44,14 @@ public class DeliveryAddressController {
      * @since 1.0.0
      */
     @PostMapping("/delivery-address")
-    public ResponseEntity<CommonResponse> createDeliveryAddress(@Valid @RequestBody final DeliveryAddressCreateRequest createRequest,
-                                                                final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<String>> createDeliveryAddress(@Valid @RequestBody final DeliveryAddressCreateRequest createRequest,
+                                                            final MemberInfo memberInfo) {
 
         deliveryAddressService.createDeliveryAddress(memberInfo, createRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Add success"));
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -68,14 +63,14 @@ public class DeliveryAddressController {
      * @since 1.0.0
      */
     @DeleteMapping("/delivery-address/{deliveryAddressId}")
-    public ResponseEntity<CommonResponse> deleteDeliveryAddress(final MemberInfo memberInfo,
+    public ResponseEntity<ShopResult<String>> deleteDeliveryAddress(final MemberInfo memberInfo,
                                                                 @PathVariable final Long deliveryAddressId) {
 
         deliveryAddressService.deleteDeliveryAddress(memberInfo, deliveryAddressId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Delete success"));
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -85,13 +80,13 @@ public class DeliveryAddressController {
      * @return OK 상태코드와 모든 배송정보를 담은 List 타입 입니다.
      */
     @GetMapping("/delivery-addresses")
-    public ResponseEntity<CommonResponse> retrieveDeliveryAddresses(final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<List<DeliveryAddressResponse>>> retrieveDeliveryAddresses(final MemberInfo memberInfo) {
 
         List<DeliveryAddressResponse> deliveryAddresses = deliveryAddressService.retrieveDeliveryAddresses(memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new ListResponse<>(deliveryAddresses));
+                             .body(ShopResult.successWith(deliveryAddresses));
     }
 
 }

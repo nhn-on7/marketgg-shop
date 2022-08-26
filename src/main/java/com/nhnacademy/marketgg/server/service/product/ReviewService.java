@@ -1,13 +1,12 @@
 package com.nhnacademy.marketgg.server.service.product;
 
+import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import java.io.IOException;
 import java.util.List;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -67,6 +66,6 @@ public interface ReviewService {
      */
     void deleteReview(final Long id);
 
-    SingleResponse<Boolean> makeBestReview(final Long id);
+    Boolean makeBestReview(final Long id);
 
 }

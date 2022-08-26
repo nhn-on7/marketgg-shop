@@ -7,7 +7,6 @@ import static com.nhnacademy.marketgg.server.constant.PointContent.NORMAL_REVIEW
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
@@ -107,17 +106,16 @@ public class DefaultReviewService implements ReviewService {
 
     @Transactional
     @Override
-    public SingleResponse<Boolean> makeBestReview(final Long id) {
+    public Boolean makeBestReview(final Long id) {
         Review review = reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new);
         review.makeBestReview();
 
         if (Boolean.TRUE.equals(review.getIsBest())) {
             reviewRepository.save(review);
             publisher.publishEvent(new BestReviewedEvent(BESTREVIEW.couponName(), review.getMember()));
-            return new SingleResponse<>(true);
+            return true;
         }
-
-        return new SingleResponse<>(false);
+        return false;
     }
 
 }

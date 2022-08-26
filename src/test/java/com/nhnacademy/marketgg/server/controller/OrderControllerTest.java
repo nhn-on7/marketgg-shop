@@ -164,7 +164,8 @@ class OrderControllerTest {
         given(orderService.retrieveOrderList(any(MemberInfo.class), any(Pageable.class)))
                 .willReturn(new PageImpl<>(List.of(Dummy.getOrderRetrieveResponse())));
 
-        mockMvc.perform(get(baseUri + "?page=0")
+        mockMvc.perform(get(baseUri)
+                                .param("page", "1")
                                 .headers(headers)
                                 .contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk());

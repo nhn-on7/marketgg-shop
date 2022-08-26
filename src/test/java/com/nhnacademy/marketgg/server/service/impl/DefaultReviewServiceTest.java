@@ -3,7 +3,6 @@ package com.nhnacademy.marketgg.server.service.impl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -14,7 +13,6 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
@@ -202,9 +200,9 @@ class DefaultReviewServiceTest {
     void testMakeBestReview() {
         given(reviewRepository.findById(anyLong())).willReturn(Optional.ofNullable(review));
 
-        SingleResponse<Boolean> response = this.reviewService.makeBestReview(1L);
+        Boolean response = this.reviewService.makeBestReview(1L);
 
-        assertThat(response.getData()).isTrue();
+        assertThat(response).isTrue();
         then(reviewRepository).should(times(1)).findById(anyLong());
         then(reviewRepository).should(times(1)).save(any(Review.class));
     }

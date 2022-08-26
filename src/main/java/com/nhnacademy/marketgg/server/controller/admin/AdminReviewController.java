@@ -1,8 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
 import com.nhnacademy.marketgg.server.dto.ShopResult;
-import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.service.product.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -41,17 +39,17 @@ public class AdminReviewController {
                                         useReturnTypeSchema = true))
 
     @PostMapping("/{productId}/reviews/{reviewId}/make-best")
-    public ResponseEntity<CommonResponse> makeBestReview(@PathVariable final Long productId,
+    public ResponseEntity<ShopResult<Boolean>> makeBestReview(@PathVariable final Long productId,
                                                          @PathVariable final Long reviewId) {
 
-        SingleResponse<Boolean> response = reviewService.makeBestReview(reviewId);
+        Boolean response = reviewService.makeBestReview(reviewId);
         log.info("다음의 상품이 베스트후기로 선정되었습니다:{}", productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
                                  DEFAULT_REVIEW_URI + productId + "/reviews/" + reviewId + "/makeBest"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(response);
+                             .body(ShopResult.successWith(response));
     }
 
 }

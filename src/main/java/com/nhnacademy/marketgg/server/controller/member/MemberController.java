@@ -9,8 +9,6 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
-import com.nhnacademy.marketgg.server.dto.response.common.CommonResponse;
-import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
@@ -37,8 +35,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -67,14 +63,14 @@ public class MemberController {
      * @return - 사용자 정보를 반환합니다.
      */
     @GetMapping
-    public ResponseEntity<CommonResponse> retrieveMember(final AuthInfo authInfo, final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<MemberResponse>> retrieveMember(final AuthInfo authInfo, final MemberInfo memberInfo) {
         MemberResponse memberResponse = new MemberResponse(authInfo, memberInfo);
 
         log.info("MemberResponse = {}", memberResponse);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>(memberResponse));
+                             .body(ShopResult.successWith(memberResponse));
     }
 
     /**
@@ -86,12 +82,12 @@ public class MemberController {
      * @since 1.0.0
      */
     @PostMapping("/signup")
-    public ResponseEntity<CommonResponse> doSignUp(@RequestBody @Valid final SignupRequest signUpRequest) throws JsonProcessingException {
+    public ResponseEntity<ShopResult<String>> doSignUp(@RequestBody @Valid final SignupRequest signUpRequest) throws JsonProcessingException {
         memberService.signUp(signUpRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Add success"));
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
