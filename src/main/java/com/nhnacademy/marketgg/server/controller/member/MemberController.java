@@ -55,8 +55,6 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private static final String MEMBER_PREFIX = "/members/";
-
     private final MemberService memberService;
     private final GivenCouponService givenCouponService;
     private final ProductInquiryPostService productInquiryPostService;

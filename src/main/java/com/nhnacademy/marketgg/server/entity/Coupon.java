@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -60,6 +61,9 @@ public class Coupon {
     @Positive
     private Double discountAmount;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     public void updateCoupon(final CouponDto couponRequest) {
         this.name = couponRequest.getName();
         this.type = couponRequest.getType();
@@ -68,13 +72,8 @@ public class Coupon {
         this.discountAmount = couponRequest.getDiscountAmount();
     }
 
-    public Coupon(final CouponDto couponDto) {
-        this.name = couponDto.getName();
-        this.discountAmount = couponDto.getDiscountAmount();
-        this.type = couponDto.getType();
-        this.id = couponDto.getId();
-        this.expiredDate = couponDto.getExpiredDate();
-        this.minimumMoney = couponDto.getMinimumMoney();
+    public void deleteCoupon() {
+        this.deletedAt = LocalDateTime.now();
     }
 
 }
