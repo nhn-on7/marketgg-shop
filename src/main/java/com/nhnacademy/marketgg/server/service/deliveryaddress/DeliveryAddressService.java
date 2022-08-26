@@ -24,16 +24,6 @@ public interface DeliveryAddressService {
     void createDeliveryAddress(final MemberInfo memberInfo,
                                final DeliveryAddressCreateRequest deliveryAddressRequest);
 
-
-    /**
-     * 회원이 배송지를 수정할 때 사용하는 메소드 입니다.
-     *
-     * @param memberInfo                   - 배송지를 수정하는 회원의 정보입니다.
-     * @param deliveryAddressUpdateRequest - 수정할 배송지를 담은 DTO 객체 입니다.
-     */
-    void updateDeliveryAddress(final MemberInfo memberInfo,
-                               final DeliveryAddressUpdateRequest deliveryAddressUpdateRequest);
-
     /**
      * 회원이 배송지를 삭제할 때 사용하는 메소드 입니다.
      *

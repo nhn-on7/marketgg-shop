@@ -9,7 +9,6 @@ import com.nhnacademy.marketgg.server.dto.response.common.ListResponse;
 import com.nhnacademy.marketgg.server.dto.response.common.SingleResponse;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.service.deliveryaddress.DeliveryAddressService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +22,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.List;
 
 
 /**
@@ -47,35 +49,14 @@ public class DeliveryAddressController {
      * @since 1.0.0
      */
     @PostMapping("/delivery-address")
-    public ResponseEntity<CommonResponse> createDeliveryAddress(final MemberInfo memberInfo,
-                                                                @Validated @RequestBody
-                                                                final DeliveryAddressCreateRequest createRequest) {
+    public ResponseEntity<CommonResponse> createDeliveryAddress(@Valid @RequestBody final DeliveryAddressCreateRequest createRequest,
+                                                                final MemberInfo memberInfo) {
 
         deliveryAddressService.createDeliveryAddress(memberInfo, createRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(new SingleResponse<>("Add success"));
-    }
-
-    /**
-     * 회원이 배송지를 수정할 때 사용하는 PatchMapping 메소드 입니다.
-     *
-     * @param memberInfo    - 배송지를 수정하는 회원의 정보입니다.
-     * @param updateRequest - 수정할 배송지를 담은 DTO 객체 입니다.
-     * @return OK 상태 코드를 반환합니다.
-     * @since 1.0.0
-     */
-    @PutMapping("/delivery-address")
-    public ResponseEntity<CommonResponse> updateDeliveryAddress(final MemberInfo memberInfo,
-                                                                @Validated @RequestBody
-                                                                final DeliveryAddressUpdateRequest updateRequest) {
-
-        deliveryAddressService.updateDeliveryAddress(memberInfo, updateRequest);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                             .contentType(MediaType.APPLICATION_JSON)
-                             .body(new SingleResponse<>("Update success"));
     }
 
     /**

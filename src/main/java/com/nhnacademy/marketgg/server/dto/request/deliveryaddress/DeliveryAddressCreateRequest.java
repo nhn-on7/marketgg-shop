@@ -8,16 +8,17 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
+
 @NoArgsConstructor
 @Getter
 public class DeliveryAddressCreateRequest {
 
     @NotNull
-    private boolean isDefaultAddress;
+    private boolean defaultAddress;
 
     @NotNull
     @Positive
-    private Integer zipCode;
+    private Integer zipcode;
 
     @NotBlank
     @Size(min = 5, max = 100)

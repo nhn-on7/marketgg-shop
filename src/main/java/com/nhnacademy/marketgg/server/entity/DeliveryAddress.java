@@ -35,8 +35,7 @@ public class DeliveryAddress {
     @Column(name = "delivery_address_no")
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    //@OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
     @JoinColumn(name = "member_no")
     private Member member;
 
@@ -63,17 +62,13 @@ public class DeliveryAddress {
     public DeliveryAddress(final Member member, final DeliveryAddressCreateRequest createRequest) {
         this.member = member;
         this.isDefaultAddress = createRequest.isDefaultAddress();
-        this.zipCode = createRequest.getZipCode();
+        this.zipCode = createRequest.getZipcode();
         this.address = createRequest.getAddress();
         this.detailAddress = createRequest.getDetailAddress();
     }
     
-    public void update(final Member member, final DeliveryAddressUpdateRequest updateRequest) {
-        this.member = member;
-        this.isDefaultAddress = updateRequest.isDefaultAddress();
-        this.zipCode = updateRequest.getZipCode();
-        this.address = updateRequest.getAddress();
-        this.detailAddress = updateRequest.getDetailAddress();
+    public void convertIsDefaultAddress() {
+        this.isDefaultAddress = !this.isDefaultAddress;
     }
 
 }

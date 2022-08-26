@@ -1,6 +1,8 @@
 package com.nhnacademy.marketgg.server.repository.deliveryaddress;
 
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
+import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
+import com.nhnacademy.marketgg.server.entity.Member;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;
@@ -21,5 +23,9 @@ public interface DeliveryAddressRepositoryCustom {
      * @return 회원이 가지고 있는 모든 배송지를 담은 List 입니다.
      */
     List<DeliveryAddressResponse> findDeliveryAddressesByMemberId(final Long memberId);
+
+    DeliveryAddress existsDefaultDeliveryAddress(final Member member);
+
+    Integer countMemberAddresses(Member member);
 
 }
