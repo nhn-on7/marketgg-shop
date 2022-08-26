@@ -264,24 +264,12 @@ public class Dummy {
     public static DeliveryAddressCreateRequest getDeliveryAddressCreateRequest() {
         DeliveryAddressCreateRequest createRequest = new DeliveryAddressCreateRequest();
 
-        ReflectionTestUtils.setField(createRequest, "isDefaultAddress", false);
-        ReflectionTestUtils.setField(createRequest, "zipCode", 50182);
+        ReflectionTestUtils.setField(createRequest, "defaultAddress", false);
+        ReflectionTestUtils.setField(createRequest, "zipcode", 50182);
         ReflectionTestUtils.setField(createRequest, "address", "김해시 내동 삼성아파트");
         ReflectionTestUtils.setField(createRequest, "detailAddress", "3층");
 
         return createRequest;
-    }
-
-    public static DeliveryAddressUpdateRequest getDeliveryAddressUpdateRequest() {
-        DeliveryAddressUpdateRequest updateRequest = new DeliveryAddressUpdateRequest();
-
-        ReflectionTestUtils.setField(updateRequest, "id", 1L);
-        ReflectionTestUtils.setField(updateRequest, "isDefaultAddress", true);
-        ReflectionTestUtils.setField(updateRequest, "zipCode", 50211);
-        ReflectionTestUtils.setField(updateRequest, "address", "이젠 부산시");
-        ReflectionTestUtils.setField(updateRequest, "detailAddress", "온천장 근처 허심청");
-
-        return updateRequest;
     }
 
     public static DeliveryAddress getDeliveryAddress() {
@@ -310,8 +298,8 @@ public class Dummy {
 
     public static DeliveryAddress getDummyDeliveryAddress() {
         DeliveryAddressCreateRequest request = new DeliveryAddressCreateRequest();
-        ReflectionTestUtils.setField(request, "isDefaultAddress", true);
-        ReflectionTestUtils.setField(request, "zipCode", 50948);
+        ReflectionTestUtils.setField(request, "defaultAddress", true);
+        ReflectionTestUtils.setField(request, "zipcode", 50948);
         ReflectionTestUtils.setField(request, "address", "경남 김해시 내외중앙로 55");
         ReflectionTestUtils.setField(request, "detailAddress", "정우빌딩 5층");
 

@@ -67,7 +67,8 @@ public class DeliveryAddress {
         this.detailAddress = createRequest.getDetailAddress();
     }
     
-    public void convertIsDefaultAddress() {
+    public void
+    convertIsDefaultAddress() {
         this.isDefaultAddress = !this.isDefaultAddress;
     }
 
