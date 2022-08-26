@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -12,7 +11,6 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
-import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.Coupon;
@@ -24,8 +22,7 @@ import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponReposito
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.coupon.DefaultGivenCouponService;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -89,7 +86,7 @@ class DefaultGivenCouponServiceTest {
         couponDto
             = new CouponDto(1L, "신규쿠폰", "정률할인", 1, 1, 0.5);
         coupon
-            = new Coupon(1L, "신규쿠폰", "정률할인", 1, 1, 0.5);
+            = new Coupon(1L, "신규쿠폰", "정률할인", 1, 1, 0.5, LocalDateTime.now());
         memberInfo = Dummy.getDummyMemberInfo(1L, cart);
     }
 
@@ -109,7 +106,7 @@ class DefaultGivenCouponServiceTest {
     @DisplayName("지급 쿠폰 목록 전체 조회")
     void testRetrieveGivenCoupons() {
         given(givenCouponRepository.findByMemberId(anyLong(), any(Pageable.class))).willReturn(
-                Optional.of(inquiryPosts));
+            Optional.of(inquiryPosts));
 
         givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
 
