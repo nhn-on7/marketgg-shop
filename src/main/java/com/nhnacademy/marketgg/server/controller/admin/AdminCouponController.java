@@ -144,7 +144,7 @@ public class AdminCouponController {
     }
 
     /**
-     * 선택한 쿠폰을 소프트 삭제하는 DeleteMapping 을 지원합니다.
+     * 선택한 쿠폰을 논리 삭제하는 DeleteMapping 을 지원합니다.
      *
      * @param couponId - 삭제할 쿠폰의 식별번호입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
