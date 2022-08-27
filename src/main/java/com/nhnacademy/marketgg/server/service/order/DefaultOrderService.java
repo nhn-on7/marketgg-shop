@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.service.order;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.constant.PaymentType;
+import com.nhnacademy.marketgg.server.dto.response.coupon.UsedCouponResponse;
 import com.nhnacademy.marketgg.server.repository.delivery.DeliveryRepository;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
@@ -233,7 +234,8 @@ public class DefaultOrderService implements OrderService {
         OrderDetailRetrieveResponse detailResponse = orderRepository.findOrderDetail(orderId, memberInfo.getId(),
                                                                                      memberInfo.isAdmin());
         List<ProductToOrder> products = orderProductRepository.findByOrderId(orderId);
-        detailResponse.addOrderDetail(products);
+        UsedCouponResponse couponName = usedCouponRepository.findUsedCouponName(orderId);
+        detailResponse.addOrderDetail(products, couponName);
 
         return detailResponse;
     }
