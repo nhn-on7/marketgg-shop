@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.dto.info;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -9,11 +10,11 @@ import lombok.RequiredArgsConstructor;
  * @author 박세완
  * @version 1.0.0
  */
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Getter
 public class MemberNameResponse {
 
-    private final String uuid;
-    private final String name;
+    private String uuid;
+    private String name;
 
 }

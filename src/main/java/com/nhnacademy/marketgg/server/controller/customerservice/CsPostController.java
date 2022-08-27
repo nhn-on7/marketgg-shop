@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.controller.customerservice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.constant.OtoReason;
+import com.nhnacademy.marketgg.server.constant.OtoStatus;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.customerservice.PostRequest;
@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +25,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -43,7 +45,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 박세완, 김정민
  * @version 1.0.0
  */
-@Auth
 @RestController
 @RequestMapping("/customer-services")
 @RequiredArgsConstructor
@@ -100,9 +101,9 @@ public class CsPostController {
                                         useReturnTypeSchema = true))
     @GetMapping("/categories/{categoryId}")
     public ResponseEntity<ShopResult<List<PostResponse>>> retrievePostList(
-        @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
-        @RequestParam @NotNull final Integer page,
-        final MemberInfo memberInfo) {
+            @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
+            @RequestParam @NotNull final Integer page,
+            final MemberInfo memberInfo) {
 
         List<PostResponse> data = postService.retrievePostList(categoryId, page, memberInfo);
 
@@ -162,10 +163,10 @@ public class CsPostController {
                                         useReturnTypeSchema = true))
     @PostMapping("/categories/{categoryId}/search")
     public ResponseEntity<ShopResult<List<PostResponse>>> searchPostListForCategory(
-        @PathVariable @Size(min = 1, max = 6) final String categoryId,
-        @Valid @RequestBody final SearchRequest searchRequest,
-        final MemberInfo memberInfo)
-        throws ParseException, JsonProcessingException {
+            @PathVariable @Size(min = 1, max = 6) final String categoryId,
+            @Valid @RequestBody final SearchRequest searchRequest,
+            final MemberInfo memberInfo)
+            throws ParseException, JsonProcessingException {
 
         List<PostResponse> data = postService.searchForCategory(searchRequest, memberInfo);
 
@@ -194,9 +195,9 @@ public class CsPostController {
                                         useReturnTypeSchema = true))
     @DeleteMapping("/categories/{categoryId}/{postId}")
     public ResponseEntity<ShopResult<String>> deletePost(
-        @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
-        @PathVariable @NotNull @Min(1) final Long postId,
-        final MemberInfo memberInfo) {
+            @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
+            @PathVariable @NotNull @Min(1) final Long postId,
+            final MemberInfo memberInfo) {
 
         postService.deletePost(categoryId, postId, memberInfo);
 
@@ -225,6 +226,29 @@ public class CsPostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_POST + "/reasons"))
+                             .body(ShopResult.successWith(data));
+    }
+
+    /**
+     * 1:1 문의의 상태목록을 반환하는 GET Mapping 을 지원합니다.
+     *
+     * @return 1:1 문의의 상태목록을 담은 응답 객체를 반환합니다.
+     * @since 1.0.0
+     */
+    @Operation(summary = "1:1문의 상태목록 반환",
+               description = "1:1 문의의 상태목록을 반환합니다.",
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
+    @GetMapping("/status")
+    public ResponseEntity<ShopResult<List<String>>> retrieveStatusList() {
+        List<String> data = Arrays.stream(OtoStatus.values())
+                                  .map(OtoStatus::status)
+                                  .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(DEFAULT_POST + "/status"))
                              .body(ShopResult.successWith(data));
     }
 

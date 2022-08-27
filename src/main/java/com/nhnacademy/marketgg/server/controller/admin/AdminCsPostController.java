@@ -117,29 +117,6 @@ public class AdminCsPostController {
     }
 
     /**
-     * 1:1 문의의 상태목록을 반환하는 GET Mapping 을 지원합니다.
-     *
-     * @return 1:1 문의의 상태목록을 담은 응답 객체를 반환합니다.
-     * @since 1.0.0
-     */
-    @Operation(summary = "1:1문의 상태목록 반환",
-               description = "1:1 문의의 상태목록을 반환합니다.",
-               responses = @ApiResponse(responseCode = "200",
-                                        content = @Content(mediaType = "application/json",
-                                                           schema = @Schema(implementation = ShopResult.class)),
-                                        useReturnTypeSchema = true))
-    @GetMapping("/status")
-    public ResponseEntity<ShopResult<List<String>>> retrieveStatusList() {
-        List<String> data = Arrays.stream(OtoStatus.values())
-                                  .map(OtoStatus::status)
-                                  .collect(Collectors.toList());
-
-        return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_ADMIN_POST + "/status"))
-                             .body(ShopResult.successWith(data));
-    }
-
-    /**
      * 1:1 문의의 답변 상태를 변경할 수 있는 PATCH Mapping 을 지원합니다.
      *
      * @param postId              - 상태를 변경할 게시글의 식별번호입니다.

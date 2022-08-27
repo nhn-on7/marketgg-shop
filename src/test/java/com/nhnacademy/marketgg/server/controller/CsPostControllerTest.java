@@ -157,4 +157,13 @@ class CsPostControllerTest {
                     .andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("1:1 문의 상태 목록 조회")
+    void testRetrieveStatusList() throws Exception {
+        this.mockMvc.perform(get(DEFAULT_POST + "/status")
+                .headers(headers))
+                    .andExpect(status().isOk());
+    }
+
+
 }

@@ -110,14 +110,6 @@ class AdminCsPostControllerTest {
     }
 
     @Test
-    @DisplayName("1:1 문의 상태 목록 조회")
-    void testRetrieveStatusList() throws Exception {
-        this.mockMvc.perform(get(DEFAULT_ADMIN_POST + "/status")
-                                     .headers(httpHeaders))
-                    .andExpect(status().isOk());
-    }
-
-    @Test
     @DisplayName("1:1 문의 상태 변경")
     void testUpdateInquiryStatus() throws Exception {
         willDoNothing().given(postService).updateOtoInquiryStatus(anyLong(), any(PostStatusUpdateRequest.class));
