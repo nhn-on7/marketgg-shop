@@ -167,6 +167,9 @@ class DefaultPostServiceTest {
     @Test
     @DisplayName("게시글 상세 조회")
     void testRetrievePost() throws Exception {
+        MemberNameResponse memberNameResponse = new MemberNameResponse();
+        ReflectionTestUtils.setField(memberNameResponse, "uuid", "000000000000000000000000");
+        ReflectionTestUtils.setField(memberNameResponse, "name", "박세완");
         ReflectionTestUtils.setField(memberInfo, "roles", Set.of("ROLE_ADMIN"));
 
         ReflectionTestUtils.setField(post, "id", 1L);
@@ -182,7 +185,7 @@ class DefaultPostServiceTest {
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postRepository.findByBoardNo(anyLong())).willReturn(ready);
         given(authRepository.getNameListByUuid(any())).willReturn(
-                List.of(new MemberNameResponse()));
+                List.of(memberNameResponse));
 
         PostResponseForDetail postResponseForDetail = postService.retrievePost(1L, memberInfo);
 
@@ -195,6 +198,9 @@ class DefaultPostServiceTest {
     @Test
     @DisplayName("게시글 상세 조회 (1:1)")
     void testRetrievePostForOto() throws Exception {
+        MemberNameResponse memberNameResponse = new MemberNameResponse();
+        ReflectionTestUtils.setField(memberNameResponse, "uuid", "000000000000000000000000");
+        ReflectionTestUtils.setField(memberNameResponse, "name", "박세완");
         ReflectionTestUtils.setField(post, "category", category);
         ReflectionTestUtils.setField(post, "id", 1L);
 
@@ -206,7 +212,7 @@ class DefaultPostServiceTest {
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postRepository.findOwnOtoInquiry(anyLong(), anyLong())).willReturn(ready2);
         given(authRepository.getNameListByUuid(any())).willReturn(
-                List.of(new MemberNameResponse()));
+                List.of(memberNameResponse));
 
         PostResponseForDetail postResponseForDetail = postService.retrievePost(1L, memberInfo);
 
