@@ -182,7 +182,7 @@ class DefaultPostServiceTest {
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postRepository.findByBoardNo(anyLong())).willReturn(ready);
         given(authRepository.getNameListByUuid(any())).willReturn(
-                List.of(new MemberNameResponse("99990000111122223333444455556666", "박세완")));
+                List.of(new MemberNameResponse()));
 
         PostResponseForDetail postResponseForDetail = postService.retrievePost(1L, memberInfo);
 
@@ -206,7 +206,7 @@ class DefaultPostServiceTest {
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postRepository.findOwnOtoInquiry(anyLong(), anyLong())).willReturn(ready2);
         given(authRepository.getNameListByUuid(any())).willReturn(
-                List.of(new MemberNameResponse("99990000111122223333444455556666", "박세완")));
+                List.of(new MemberNameResponse()));
 
         PostResponseForDetail postResponseForDetail = postService.retrievePost(1L, memberInfo);
 
