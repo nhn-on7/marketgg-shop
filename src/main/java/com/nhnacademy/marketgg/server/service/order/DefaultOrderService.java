@@ -231,7 +231,7 @@ public class DefaultOrderService implements OrderService {
     @Override
     public OrderDetailRetrieveResponse retrieveOrderDetail(final Long orderId, final MemberInfo memberInfo) {
         OrderDetailRetrieveResponse detailResponse = orderRepository.findOrderDetail(orderId, memberInfo.getId(),
-                                                                                     memberInfo.isUser());
+                                                                                     memberInfo.isAdmin());
         List<ProductToOrder> products = orderProductRepository.findByOrderId(orderId);
         detailResponse.addOrderDetail(products);
 

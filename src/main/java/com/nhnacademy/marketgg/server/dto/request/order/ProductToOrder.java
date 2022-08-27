@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.dto.request.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
  * @since 1.0.0
  */
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class ProductToOrder {
 
