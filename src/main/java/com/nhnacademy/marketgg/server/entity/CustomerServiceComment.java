@@ -34,7 +34,6 @@ public class CustomerServiceComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cs_comment_no")
-    @NotNull
     private Long id;
 
     @ManyToOne
