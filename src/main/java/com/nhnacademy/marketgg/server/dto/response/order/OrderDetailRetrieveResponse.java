@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.dto.response.order;
 
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
+import com.nhnacademy.marketgg.server.dto.response.coupon.UsedCouponResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +29,8 @@ public class OrderDetailRetrieveResponse {
 
     private final String orderStatus;
 
+    private UsedCouponResponse usedCoupon;
+
     private final Integer usedPoint;
 
     private final String trackingNo;
@@ -42,8 +45,9 @@ public class OrderDetailRetrieveResponse {
 
     private List<ProductToOrder> orderProductList;
 
-    public void addOrderDetail(List<ProductToOrder> orderProductList) {
+    public void addOrderDetail(List<ProductToOrder> orderProductList, UsedCouponResponse usedCoupon) {
         this.orderProductList = orderProductList;
+        this.usedCoupon = usedCoupon;
     }
 
 }

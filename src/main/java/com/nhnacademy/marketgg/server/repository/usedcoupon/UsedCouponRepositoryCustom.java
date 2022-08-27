@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.usedcoupon;
 
+import com.nhnacademy.marketgg.server.dto.response.coupon.UsedCouponResponse;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.Optional;
@@ -24,4 +25,13 @@ public interface UsedCouponRepositoryCustom {
      * @since 1.0.0
      */
     Optional<Long> findByOrderId(final Long orderId);
+
+    /**
+     * 특정 주문에 사용한 쿠폰 이름을 조회하는 메소드입니다.
+     *
+     * @param orderId - 쿠폰 이름을 조회할 주문의 식별번호입니다.
+     * @return 사용한 쿠폰의 이름을 반환합니다.
+     */
+    UsedCouponResponse findUsedCouponName(Long orderId);
+
 }
