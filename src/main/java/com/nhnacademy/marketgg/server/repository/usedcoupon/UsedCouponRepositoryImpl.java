@@ -1,7 +1,10 @@
 package com.nhnacademy.marketgg.server.repository.usedcoupon;
 
+import com.nhnacademy.marketgg.server.dto.response.coupon.UsedCouponResponse;
+import com.nhnacademy.marketgg.server.entity.QCoupon;
 import com.nhnacademy.marketgg.server.entity.QUsedCoupon;
 import com.nhnacademy.marketgg.server.entity.UsedCoupon;
+import com.querydsl.core.types.Projections;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.Objects;
@@ -33,4 +36,18 @@ public class UsedCouponRepositoryImpl extends QuerydslRepositorySupport implemen
                                            .fetchOne());
     }
 
+    @Override
+    public UsedCouponResponse findUsedCouponName(final Long orderId) {
+        QUsedCoupon usedCoupon = QUsedCoupon.usedCoupon;
+        QCoupon coupon = QCoupon.coupon;
+
+        return from(coupon)
+                .innerJoin(usedCoupon).on(coupon.id.eq(usedCoupon.pk.couponId))
+                .where(usedCoupon.pk.orderId.eq(orderId))
+                .select(Projections.constructor(UsedCouponResponse.class,
+                                                coupon.name,
+                                                coupon.discountAmount,
+                                                coupon.type))
+                .fetchOne();
+    }
 }
