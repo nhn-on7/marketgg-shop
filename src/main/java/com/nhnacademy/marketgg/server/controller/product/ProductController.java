@@ -63,7 +63,7 @@ public class ProductController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping("/search")
-    public ResponseEntity<ShopResult<PageEntity<List<ProductListResponse>>>> searchProductList(
+    public ResponseEntity<PageEntity<List<ProductListResponse>>> searchProductList(
             @Valid @RequestBody final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
@@ -72,7 +72,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI + "/search"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.successWith(productList));
+                             .body(productList);
     }
 
     /**
@@ -94,7 +94,7 @@ public class ProductController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping("/categories/{categoryId}/search")
-    public ResponseEntity<ShopResult<PageEntity<List<ProductListResponse>>>> searchProductListByCategory(
+    public ResponseEntity<PageEntity<List<ProductListResponse>>> searchProductListByCategory(
             @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
             @Valid @RequestBody final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
@@ -107,7 +107,7 @@ public class ProductController {
                              .location(URI.create(
                                  DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/search"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.successWith(productList));
+                             .body(productList);
     }
 
     /**
@@ -131,7 +131,7 @@ public class ProductController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping("/categories/{categoryId}/sort-price/{option}/search")
-    public ResponseEntity<ShopResult<PageEntity<List<ProductListResponse>>>> searchProductListByPrice(
+    public ResponseEntity<PageEntity<List<ProductListResponse>>> searchProductListByPrice(
             @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
             @PathVariable @NotBlank @Min(1) final String option,
             @Valid @RequestBody final SearchRequest searchRequest)
@@ -145,7 +145,7 @@ public class ProductController {
                              .location(URI.create(
                                  DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/sort-price/" + option))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.successWith(productList));
+                             .body(productList);
     }
 
     /**

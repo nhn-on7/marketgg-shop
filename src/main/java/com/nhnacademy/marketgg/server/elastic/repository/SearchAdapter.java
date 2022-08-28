@@ -164,9 +164,9 @@ public class SearchAdapter implements SearchRepository {
         JSONObject jsonObject = (JSONObject) parser.parse(response);
         JSONObject hits = (JSONObject) jsonObject.get("hits");
         JSONObject total = (JSONObject) hits.get("total");
-        Integer totalValue = (Integer)total.get("value");
+        Long totalValue = (Long)total.get("value");
 
-        return totalValue / PAGE_SIZE + 1;
+        return Math.toIntExact(totalValue / PAGE_SIZE + 1);
     }
 
     private HttpHeaders buildHeaders() {
