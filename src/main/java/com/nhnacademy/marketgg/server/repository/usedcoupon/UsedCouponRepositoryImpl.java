@@ -41,13 +41,13 @@ public class UsedCouponRepositoryImpl extends QuerydslRepositorySupport implemen
         QUsedCoupon usedCoupon = QUsedCoupon.usedCoupon;
         QCoupon coupon = QCoupon.coupon;
 
-        UsedCouponResponse s = from(coupon)
+        return from(coupon)
                 .innerJoin(usedCoupon).on(coupon.id.eq(usedCoupon.pk.couponId))
                 .where(usedCoupon.pk.orderId.eq(orderId))
                 .select(Projections.constructor(UsedCouponResponse.class,
                                                 coupon.name,
-                                                coupon.discountAmount))
+                                                coupon.discountAmount,
+                                                coupon.type))
                 .fetchOne();
-        return s;
     }
 }
