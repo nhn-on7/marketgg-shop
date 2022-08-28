@@ -5,6 +5,8 @@ import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,18 +43,23 @@ public class PaymentAdapter {
      * @return 결제 승인 응답 정보
      */
     public ResponseEntity<String> confirm(final PaymentConfirmRequest paymentRequest) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBasicAuth(this.getEncodedPaymentKey());
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-        JSONObject param = new JSONObject();
-        param.put("orderId", paymentRequest.getOrderId());
-        param.put("amount", paymentRequest.getAmount());
-        param.put("paymentKey", paymentRequest.getPaymentKey());
+        Map<String, Object> params = new HashMap<>();
+        params.put("orderId", paymentRequest.getOrderId());
+        params.put("amount", paymentRequest.getAmount());
+        params.put("paymentKey", paymentRequest.getPaymentKey());
+        JSONObject body = new JSONObject(params);
 
         return restTemplate.postForEntity(tosspaymentsOrigin + "/payments/confirm",
-                                          new HttpEntity<>(param, headers), String.class);
+                                          new HttpEntity<>(body, this.getHttpHeaders()), String.class);
+    }
+
+    public ResponseEntity<String> retrievePayment(String paymentKey) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("paymentKey", paymentKey);
+        JSONObject body = new JSONObject(params);
+
+        return restTemplate.postForEntity(tosspaymentsOrigin + "/payments/confirm",
+                                          new HttpEntity<>(body, this.getHttpHeaders()), String.class);
     }
 
     /**
@@ -63,16 +70,21 @@ public class PaymentAdapter {
      * @return 결제 취소 응답 정보
      */
     public ResponseEntity<String> cancel(final String paymentKey, final PaymentCancelRequest paymentRequest) {
+        Map<String, String> params = new HashMap<>();
+        params.put("cancelReason", paymentRequest.getCancelReason());
+        JSONObject body = new JSONObject(params);
+
+        return restTemplate.postForEntity(tosspaymentsOrigin + "/payments/" + paymentKey + "/cancel",
+                                          new HttpEntity<>(body, this.getHttpHeaders()), String.class);
+    }
+
+    private HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setBasicAuth(this.getEncodedPaymentKey());
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
-        JSONObject param = new JSONObject();
-        param.put("cancelReason", paymentRequest.getCancelReason());
-
-        return restTemplate.postForEntity(tosspaymentsOrigin + "/payments/" + paymentKey + "/cancel",
-                                          new HttpEntity<>(param, headers), String.class);
+        return headers;
     }
 
     private String getEncodedPaymentKey() {
