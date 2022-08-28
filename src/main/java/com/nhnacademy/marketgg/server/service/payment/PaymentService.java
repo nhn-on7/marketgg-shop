@@ -13,7 +13,6 @@ import com.nhnacademy.marketgg.server.constant.payment.SettlementStatus;
 import com.nhnacademy.marketgg.server.dto.payment.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
-import com.nhnacademy.marketgg.server.dto.payment.request.PaymentVerifyRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountCreateRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountDepositRequest;
 import com.nhnacademy.marketgg.server.dto.payment.result.CardPaymentResult;
@@ -56,12 +55,20 @@ public interface PaymentService {
     PaymentResponse pay(final PaymentConfirmRequest paymentRequest);
 
     /**
+     * 승인된 결제를 결제키로 조회합니다.
+     *
+     * @param paymentKey     - 결제 건에 대한 고유 키 값
+     * @return paymentRequest - 상세 결제 내역 데이터
+     */
+    PaymentResponse retrievePayment(final String paymentKey);
+
+    /**
      * 결제 수단이 가상계좌인 경우, 가상계좌 발급을 요청합니다.
      *
      * @param virtualAccountRequest - 가상계좌 발급을 위한 요청 데이터가 담겨있는 객체
      * @return 발급한 가상계좌 데이터를 포함한 결과 데이터
      */
-    PaymentResponse createVirtualAccounts(final VirtualAccountCreateRequest virtualAccountRequest);
+    void createVirtualAccounts(final VirtualAccountCreateRequest virtualAccountRequest);
 
     /**
      * 회원이 주문한 건에 대해 가상계좌에 입금했을 때 결제 승인 처리를 수행합니다.
