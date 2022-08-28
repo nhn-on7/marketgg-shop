@@ -81,8 +81,7 @@ public class DefaultGivenCouponService implements GivenCouponService {
                                                                 .map(this::checkAvailability)
                                                                 .collect(Collectors.toUnmodifiableList());
 
-        return new PageEntity<>(givenCoupons.getNumber(), givenCoupons.getSize(),
-                                givenCoupons.getTotalPages(), givenCouponList);
+        return new PageEntity<>(givenCoupons.getNumber(), givenCoupons.getSize(), givenCoupons.getTotalPages(), givenCouponList);
     }
 
     /**

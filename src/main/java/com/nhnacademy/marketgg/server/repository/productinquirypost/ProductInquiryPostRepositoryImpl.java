@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.repository.productinquirypost;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import com.nhnacademy.marketgg.server.entity.QProductInquiryPost;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -37,7 +38,7 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
     public Page<ProductInquiryResponse> findAllByProductNo(final Long id, final Pageable pageable) {
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
-        List<ProductInquiryResponse> result = from(productInquiryPost)
+        QueryResults<ProductInquiryResponse> result = from(productInquiryPost)
             .select(Projections.constructor(ProductInquiryResponse.class,
                                             productInquiryPost.member.uuid,
                                             productInquiryPost.product.id,
@@ -49,9 +50,9 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
             .where(productInquiryPost.product.id.eq(id))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
-            .fetch();
+            .fetchResults();
 
-        return new PageImpl<>(result, pageable, result.size());
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 
     /**
