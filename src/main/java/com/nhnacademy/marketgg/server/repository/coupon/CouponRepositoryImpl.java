@@ -3,9 +3,9 @@ package com.nhnacademy.marketgg.server.repository.coupon;
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.entity.Coupon;
 import com.nhnacademy.marketgg.server.entity.QCoupon;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,15 +23,15 @@ public class CouponRepositoryImpl extends QuerydslRepositorySupport implements C
     @Override
     public Page<CouponDto> findAllCoupons(final Pageable pageable) {
 
-        List<CouponDto> result = from(coupon)
+        QueryResults<CouponDto> result = from(coupon)
             .select(selectAllCouponColumns())
             .orderBy(coupon.id.desc())
             .where(coupon.deletedAt.isNull())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
-            .fetch();
+            .fetchResults();
 
-        return new PageImpl<>(result, pageable, result.size());
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 
     @Override
