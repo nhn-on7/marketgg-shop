@@ -1,13 +1,11 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -61,14 +59,13 @@ public class DeliveryAddress {
 
     public DeliveryAddress(final Member member, final DeliveryAddressCreateRequest createRequest) {
         this.member = member;
-        this.isDefaultAddress = createRequest.isDefaultAddress();
+        this.isDefaultAddress = createRequest.getDefaultAddress();
         this.zipCode = createRequest.getZipcode();
         this.address = createRequest.getAddress();
         this.detailAddress = createRequest.getDetailAddress();
     }
-    
-    public void
-    convertIsDefaultAddress() {
+
+    public void convertIsDefaultAddress() {
         this.isDefaultAddress = !this.isDefaultAddress;
     }
 

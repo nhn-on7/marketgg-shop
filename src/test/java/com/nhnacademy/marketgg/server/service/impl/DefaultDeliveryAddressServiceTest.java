@@ -71,6 +71,7 @@ class DefaultDeliveryAddressServiceTest {
         DeliveryAddress dummyDeliveryAddress = Dummy.getDeliveryAddress();
         given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(dummyDeliveryAddress));
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+        given(deliveryAddressRepository.countMemberAddresses(any())).willReturn(2);
         deliveryAddressService.deleteDeliveryAddress(Dummy.getDummyMemberInfo(MEMBER_NO, dummyCart), DELIVERY_NO);
 
         then(deliveryAddressRepository).should(times(1)).delete(any(DeliveryAddress.class));

@@ -5,8 +5,9 @@ import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddres
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;
-import com.nhnacademy.marketgg.server.exception.deliveryaddresses.OverDeliveryAddressCountException;
 import com.nhnacademy.marketgg.server.exception.deliveryaddresses.DeliveryAddressNotFoundException;
+import com.nhnacademy.marketgg.server.exception.deliveryaddresses.MinimumDeliveryAddressCountException;
+import com.nhnacademy.marketgg.server.exception.deliveryaddresses.OverDeliveryAddressCountException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
@@ -51,7 +52,9 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
 
         DeliveryAddress defaultAddress = deliveryAddressRepository.existsDefaultDeliveryAddress(member);
 
-        defaultAddress.convertIsDefaultAddress();
+        if (Objects.nonNull(defaultAddress)) {
+            defaultAddress.convertIsDefaultAddress();
+        }
 
         deliveryAddressRepository.save(deliveryAddress);
     }
@@ -66,6 +69,13 @@ public class DefaultDeliveryAddressService implements DeliveryAddressService {
     @Override
     public void deleteDeliveryAddress(final MemberInfo memberInfo,
                                       final Long deliveryAddressId) {
+
+        Member member = getMember(memberInfo);
+
+        Integer minimumCount = deliveryAddressRepository.countMemberAddresses(member);
+        if (minimumCount <= 1) {
+            throw new MinimumDeliveryAddressCountException();
+        }
 
         DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(deliveryAddressId)
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);

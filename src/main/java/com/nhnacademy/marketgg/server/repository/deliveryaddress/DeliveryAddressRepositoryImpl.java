@@ -47,8 +47,7 @@ public class DeliveryAddressRepositoryImpl extends QuerydslRepositorySupport imp
         QDeliveryAddress deliveryAddress = QDeliveryAddress.deliveryAddress;
 
         return from(deliveryAddress)
-                .where(deliveryAddress.isDefaultAddress.isTrue())
-                .where(deliveryAddress.member.id.eq(member.getId()))
+                .where(deliveryAddress.isDefaultAddress.isTrue(), deliveryAddress.member.id.eq(member.getId()))
                 .select(deliveryAddress)
                 .fetchOne();
     }
