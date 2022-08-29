@@ -50,4 +50,6 @@ public class ProductDetailResponse {
 
     private final LocalDateTime deletedAt;
 
+    private final String imageAddress;
+
 }

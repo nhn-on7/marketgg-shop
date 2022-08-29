@@ -42,6 +42,15 @@ public interface ProductService {
     Page<ProductListResponse> retrieveProducts(Pageable pageable);
 
     /**
+     * 카테고리로 상품을 조회합니다.
+     *
+     * @param categoryCode - 조회할 카테고리 코드입니다.
+     * @param pageable - 페이지 정보입니다.
+     * @return - 상품 리스트를 반환합니다.
+     */
+    Page<ProductListResponse> retrieveProductsByCategory(final String categoryCode, final Pageable pageable);
+
+    /**
      * 상품 Id를 통해 상세 정보를 조회합니다.
      *
      * @param productId - 상품의 PK값 입니다.

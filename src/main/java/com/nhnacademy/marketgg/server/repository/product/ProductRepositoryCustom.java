@@ -22,9 +22,20 @@ public interface ProductRepositoryCustom {
      * DB에 들어있는 모든 상품을 ProductResponse타입으로 반환합니다.
      *
      * @return - 상품 리스트를 반환합니다.
+     * @author - 조현진
      * @since 1.0.0
      */
     Page<ProductListResponse> findAllProducts(Pageable pageable);
+
+    /**
+     * DB에서 카테고리에 해당하는 모든 상품을 찾아 반환합니다.
+     * ex) 100/101 -> 상품 - 채소에 해당하는 모든 상품을 반환
+     *
+     * @param categoryCode - 카테고리 2차 분류입니다. ex) 101 - 채소
+     * @return - 상품 목록을 반환합니다.
+     * @author - 조현진
+     */
+    Page<ProductListResponse> findByCategoryCode(final String categoryCode, final Pageable pageable);
 
     /**
      * DB에서 PK값이 같은 상품을 찾아 반환 합니다.
@@ -43,15 +54,6 @@ public interface ProductRepositoryCustom {
      * @since 1.0.0
      */
     List<ProductDetailResponse> findByNameContaining(final String keyword);
-
-    /**
-     * DB에서 카테고리에 해당하는 모든 상품을 찾아 반환합니다.
-     * ex) 100/101 -> 상품 - 채소에 해당하는 모든 상품을 반환
-     *
-     * @param categoryCode - 카테고리 2차 분류입니다. ex) 101 - 채소
-     * @return - 상품 목록을 반환합니다.
-     */
-    List<ProductDetailResponse> findByCategoryCode(final String categoryCode);
 
     /**
      * 상품의 식별번호 목록으로 상품 목록을 조회합니다.
