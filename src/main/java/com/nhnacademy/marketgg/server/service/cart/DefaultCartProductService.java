@@ -16,12 +16,14 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 장바구니 로직을 처리하려는 구현체입니다.
  * <p>
  * {@link CartProductService}
  */
+@Transactional(readOnly = true)
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -30,6 +32,7 @@ public class DefaultCartProductService implements CartProductService {
     private final CartProductRepository cartProductRepository;
     private final ProductRepository productRepository;
 
+    @Transactional
     @Override
     public void addProduct(MemberInfo member, ProductToCartRequest productAddRequest) {
         Cart cart = member.getCart();
@@ -44,6 +47,7 @@ public class DefaultCartProductService implements CartProductService {
         return cartProductRepository.findCartProductsByCartId(member.getCart().getId());
     }
 
+    @Transactional
     @Override
     public void updateAmount(MemberInfo member, ProductToCartRequest productUpdateRequest) {
         CartProduct cartProduct =
@@ -53,6 +57,7 @@ public class DefaultCartProductService implements CartProductService {
         cartProduct.updateAmount(productUpdateRequest.getAmount());
     }
 
+    @Transactional
     @Override
     public void deleteProducts(MemberInfo member, List<Long> products) {
         List<CartProduct.Pk> cartProductPk = products.stream()
