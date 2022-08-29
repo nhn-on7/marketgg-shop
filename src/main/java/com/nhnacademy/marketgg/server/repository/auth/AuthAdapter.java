@@ -58,14 +58,14 @@ public class AuthAdapter implements AuthRepository {
 
         String requestBody = objectMapper.writeValueAsString(uuidList);
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, buildHeaders());
-        ResponseEntity<List<MemberNameResponse>> response = restTemplate.exchange(
+        ResponseEntity<ShopResult<List<MemberNameResponse>>> response = restTemplate.exchange(
                 gateway + DEFAULT_AUTH + "/names",
                 HttpMethod.POST,
                 requestEntity,
                 new ParameterizedTypeReference<>() {
                 });
 
-        return response.getBody();
+        return Objects.requireNonNull(response.getBody()).getData();
     }
 
     @Override
