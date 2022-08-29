@@ -132,4 +132,7 @@ public class Member {
         this.deletedAt = withdrawAt;
     }
 
+    public void updateUuid(String updatedUuid) {
+        this.uuid = updatedUuid;
+    }
 }

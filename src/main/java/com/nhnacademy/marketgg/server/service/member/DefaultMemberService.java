@@ -1,13 +1,11 @@
 package com.nhnacademy.marketgg.server.service.member;
 
-import static com.nhnacademy.marketgg.server.constant.CouponsName.SIGNUP;
-import static com.nhnacademy.marketgg.server.constant.PointContent.REFERRED;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
+import com.nhnacademy.marketgg.server.dto.response.auth.UuidTokenResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.SignupResponse;
 import com.nhnacademy.marketgg.server.entity.Cart;
@@ -26,9 +24,13 @@ import com.nhnacademy.marketgg.server.repository.membergrade.MemberGradeReposito
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.nhnacademy.marketgg.server.constant.CouponsName.SIGNUP;
+import static com.nhnacademy.marketgg.server.constant.PointContent.REFERRED;
 
 /**
  * 회원 서비스의 구현체입니다.
@@ -37,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author 김훈민
  * @version 1.0.0
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DefaultMemberService implements MemberService {
@@ -112,9 +115,21 @@ public class DefaultMemberService implements MemberService {
         authRepository.withdraw(withdrawAt);
     }
 
+    @Transactional
     @Override
-    public void update(final MemberInfo memberInfo, final MemberUpdateRequest memberUpdateRequest) {
-        authRepository.update(memberUpdateRequest);
+    public UuidTokenResponse update(final MemberInfo memberInfo,
+                                    final MemberUpdateRequest memberUpdateRequest,
+                                    final String token) {
+
+        Member member = memberRepository.findById(memberInfo.getId())
+                                        .orElseThrow(MemberNotFoundException::new);
+
+        log.info("MemberUuid:{}", member.getUuid());
+        UuidTokenResponse uuidTokenResponse = authRepository.update(memberUpdateRequest, token);
+        log.info("UuidTokenResponse.getUuid:{}", uuidTokenResponse.getUpdatedUuid());
+        member.updateUuid(uuidTokenResponse.getUpdatedUuid());
+        memberRepository.save(member);
+        return uuidTokenResponse;
     }
 
     /**

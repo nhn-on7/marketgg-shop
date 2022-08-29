@@ -7,6 +7,7 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
+import com.nhnacademy.marketgg.server.dto.response.auth.UuidTokenResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.SignupResponse;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,5 +47,5 @@ public interface AuthRepository {
 
     void withdraw(final LocalDateTime withdrawAt) throws JsonProcessingException;
 
-    void update(final MemberUpdateRequest memberUpdateRequest);
+    UuidTokenResponse update(final MemberUpdateRequest memberUpdateRequest, final String token);
 }

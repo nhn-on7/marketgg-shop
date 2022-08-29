@@ -8,6 +8,7 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
+import com.nhnacademy.marketgg.server.dto.response.auth.UuidTokenResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.SignupResponse;
 import com.nhnacademy.marketgg.server.exception.member.MemberInfoNotFoundException;
 import java.time.LocalDateTime;
@@ -108,14 +109,19 @@ public class AuthAdapter implements AuthRepository {
     }
 
     @Override
-    public void update(final MemberUpdateRequest memberUpdateRequest) {
-        HttpEntity<MemberUpdateRequest> requestEntity = new HttpEntity<>(memberUpdateRequest, buildHeaders());
-        restTemplate.exchange(
+    public UuidTokenResponse update(final MemberUpdateRequest memberUpdateRequest, final String token) {
+        HttpHeaders httpHeaders = buildHeaders();
+        httpHeaders.set(HttpHeaders.AUTHORIZATION, token);
+
+        HttpEntity<MemberUpdateRequest> requestEntity = new HttpEntity<>(memberUpdateRequest, httpHeaders);
+        ResponseEntity<ShopResult<UuidTokenResponse>> response = restTemplate.exchange(
                 gateway + DEFAULT_AUTH,
                 HttpMethod.PUT,
                 requestEntity,
                 new ParameterizedTypeReference<>() {
                 });
+
+        return Objects.requireNonNull(response.getBody()).getData();
     }
 
     private HttpHeaders buildHeaders() {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
+import com.nhnacademy.marketgg.server.dto.response.auth.UuidTokenResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 
 /**
@@ -31,5 +32,5 @@ public interface MemberService {
 
     void withdraw(final MemberInfo memberInfo) throws JsonProcessingException;
 
-    void update(final MemberInfo memberInfo, final MemberUpdateRequest memberUpdateRequest);
+    UuidTokenResponse update(final MemberInfo memberInfo, final MemberUpdateRequest memberUpdateRequest, final String token);
 }
