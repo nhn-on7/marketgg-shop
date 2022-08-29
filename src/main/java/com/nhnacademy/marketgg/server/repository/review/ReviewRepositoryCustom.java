@@ -19,7 +19,7 @@ public interface ReviewRepositoryCustom {
      * @param pageable - 페이지번호 0, 사이즈 10을 가지고있습니다.
      * @return - 페이지 객체를 반환합니다.
      */
-    Page<ReviewResponse> retrieveReviews(final Pageable pageable);
+    Page<ReviewResponse> retrieveReviews(final Pageable pageable, final Long productId);
 
     /**
      * 후기 상세 정보를 조회합니다.

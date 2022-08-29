@@ -98,7 +98,7 @@ public class ReviewController {
                           .body(ShopResult.successWithDefaultMessage());
 
         if (Objects.isNull(images)) {
-            reviewService.createReview(reviewRequest, memberInfo);
+            reviewService.createReview(reviewRequest, memberInfo, productId);
 
             return returnResponseEntity;
         }
@@ -133,7 +133,7 @@ public class ReviewController {
         throws JsonProcessingException {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page);
-        Page<ReviewResponse> reviewResponses = reviewService.retrieveReviews(pageRequest.getPageable());
+        Page<ReviewResponse> reviewResponses = reviewService.retrieveReviews(pageRequest.getPageable(), productId);
 
         PageEntity<ReviewResponse> pageEntity = new PageEntity<>(reviewResponses.getNumber(),
                                                                  reviewResponses.getSize(),
