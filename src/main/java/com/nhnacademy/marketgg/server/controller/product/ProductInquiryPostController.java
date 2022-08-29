@@ -5,6 +5,7 @@ import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -92,11 +94,13 @@ public class ProductInquiryPostController {
     @GetMapping("/products/{productId}/inquiries")
     public ResponseEntity<ShopResult<PageEntity<ProductInquiryResponse>>> retrieveProductInquiry(
         @PathVariable final Long productId,
-        @PageableDefault final Pageable pageable)
+        @RequestParam(value = "page", defaultValue = "1") final Integer page)
         throws JsonProcessingException {
 
+        DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
+
         PageEntity<ProductInquiryResponse> productInquiryResponses
-            = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageable);
+            = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)

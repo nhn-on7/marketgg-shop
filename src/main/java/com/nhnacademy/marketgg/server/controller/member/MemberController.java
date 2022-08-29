@@ -14,7 +14,7 @@ import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
-import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.member.MemberService;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
@@ -191,12 +191,12 @@ public class MemberController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @GetMapping("/product-inquiries")
-    public ResponseEntity<ShopResult<PageEntity<ProductInquiryPost>>> retrieveProductInquiry(
+    public ResponseEntity<ShopResult<PageEntity<ProductInquiryResponse>>> retrieveProductInquiry(
         final MemberInfo memberInfo, @RequestParam(value = "page", defaultValue = "1") final Integer page) {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
 
-        PageEntity<ProductInquiryPost> productInquiryResponses
+        PageEntity<ProductInquiryResponse> productInquiryResponses
             = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)

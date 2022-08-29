@@ -106,10 +106,10 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
      * @since 1.0.0
      */
     @Override
-    public PageEntity<ProductInquiryPost> retrieveProductInquiryByMemberId(final MemberInfo memberInfo,
+    public PageEntity<ProductInquiryResponse> retrieveProductInquiryByMemberId(final MemberInfo memberInfo,
                                                                            final Pageable pageable) {
 
-        Page<ProductInquiryPost> allByMemberNo = productInquiryPostRepository.findAllByMemberNo(memberInfo.getId(),
+        Page<ProductInquiryResponse> allByMemberNo = productInquiryPostRepository.findAllByMemberNo(memberInfo.getId(),
                                                                                                 pageable);
         return new PageEntity<>(allByMemberNo.getNumber(), allByMemberNo.getSize(),
                                 allByMemberNo.getTotalPages(), allByMemberNo.getContent());
