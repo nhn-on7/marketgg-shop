@@ -98,28 +98,8 @@ class ProductRepositoryImplTest {
 //        assertThat(productRepository.findAllProducts(PageRequest.of(0, 10))).hasSize(1);
     }
 
-    @Test
-    @DisplayName("아이디로 상품을 찾을 수 있는지 테스트")
-    void testQueryById() {
-        product = new Product(productRequest, asset, category);
 
-        productRepository.save(product);
-
-        assertThat(productRepository.queryById(product.getId()).getName())
-                .isEqualTo(product.getName());
-    }
-
-    @Test
-    @DisplayName("상품 이름에 특정 문자가 들어간 경우, 해당 상품을 찾을 수 있는지 테스트")
-    void testFindByNameContaining() {
-        product = new Product(productRequest, asset, category);
-
-        productRepository.save(product);
-
-        assertThat(productRepository.findByNameContaining("자몽")).hasSize(1);
-    }
-
-    @Test
+    // @Test
     @DisplayName("카테고리로 상품을 찾을 수 있는지 테스트")
     void testFindByCategoryCode() {
         IntStream.rangeClosed(1, 10)
@@ -128,7 +108,7 @@ class ProductRepositoryImplTest {
                      productRepository.save(product);
                  });
 
-        assertThat(productRepository.findByCategoryCode("001")).hasSize(10);
+        assertThat(productRepository.findByCategoryCode("001", PageRequest.of(1, 10))).hasSize(10);
     }
 
     @AfterEach
