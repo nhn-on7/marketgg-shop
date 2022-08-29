@@ -107,10 +107,10 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
      */
     @Override
     public PageEntity<ProductInquiryResponse> retrieveProductInquiryByMemberId(final MemberInfo memberInfo,
-                                                                           final Pageable pageable) {
+                                                                               final Pageable pageable) {
 
         Page<ProductInquiryResponse> allByMemberNo = productInquiryPostRepository.findAllByMemberNo(memberInfo.getId(),
-                                                                                                pageable);
+                                                                                                    pageable);
         return new PageEntity<>(allByMemberNo.getNumber(), allByMemberNo.getSize(),
                                 allByMemberNo.getTotalPages(), allByMemberNo.getContent());
     }
@@ -148,9 +148,17 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     @Transactional
     public void deleteProductInquiry(final Long inquiryId, final Long productId) {
         if (productRepository.findById(productId).isEmpty()) {
-          throw new ProductNotFoundException();
+            throw new ProductNotFoundException();
         }
         productInquiryPostRepository.deleteById(inquiryId);
+    }
+
+    @Override
+    public PageEntity<ProductInquiryResponse> retrieveProductInquiryByAdmin(final Pageable pageable) {
+        Page<ProductInquiryResponse> allByMemberNo = productInquiryPostRepository.findAllByAdmin(pageable);
+
+        return new PageEntity<>(allByMemberNo.getNumber(), allByMemberNo.getSize(),
+                                allByMemberNo.getTotalPages(), allByMemberNo.getContent());
     }
 
 }
