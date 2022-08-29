@@ -19,6 +19,7 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
+import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
@@ -96,10 +97,7 @@ class DefaultProductServiceTest {
 
     @BeforeAll
     static void beforeAll() {
-        productDetailResponse =
-            new ProductDetailResponse(null, null, null, null, null, null, null, null, null, null,
-                                      null, null, null,
-                                      null, null, null, null, null, null, null);
+        productDetailResponse = Dummy.getDummyProductResponse();
 
         productRequest = new ProductCreateRequest();
         ReflectionTestUtils.setField(productRequest, "categoryCode", "001");

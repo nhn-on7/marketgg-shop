@@ -82,7 +82,7 @@ public class ReviewController {
         MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<ShopResult<String>> createReview(@PathVariable final Long productId,
                                                            final MemberInfo memberInfo,
-                                                           @RequestPart @Valid final ReviewCreateRequest reviewRequest,
+                                                           @RequestBody @Valid final ReviewCreateRequest reviewRequest,
                                                            BindingResult bindingResult,
                                                            @RequestPart(required = false) MultipartFile images)
         throws IOException {

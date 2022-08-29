@@ -122,7 +122,7 @@ public class Dummy {
         return new ProductDetailResponse(1L, Asset.create(), 1L, "001", "채소", "자몽",
                                          "아침에 자몽 쥬스", 100L, 2000L, "자몽쥬스 설명",
                                          "1박스", "샛별 배송", "인도네시아", "냉장", LocalDate.now(),
-                                         "새우알러지", "20개", LocalDateTime.now(), LocalDateTime.now(), null);
+                                         "새우알러지", "20개", LocalDateTime.now(), LocalDateTime.now(), null, "imageAddress");
     }
 
     public static Asset getDummyAsset(Long id) {

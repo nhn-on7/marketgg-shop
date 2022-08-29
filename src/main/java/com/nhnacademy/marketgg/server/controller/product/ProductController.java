@@ -184,6 +184,30 @@ public class ProductController {
     }
 
     /**
+     * 카테고리로 상품 조회를 하기 위한 컨트롤러입니다.
+     */
+
+    @GetMapping("/categories/{categoryCode}")
+    public ResponseEntity<PageEntity<ProductListResponse>> retrieveProductsByCategory(@PathVariable final String categoryCode,
+        @RequestParam(value = "page", defaultValue = "0") final Integer page) {
+
+        DefaultPageRequest pageRequest = new DefaultPageRequest(page);
+
+        Page<ProductListResponse> productListResponses =
+            this.productService.retrieveProductsByCategory(categoryCode, pageRequest.getPageable());
+
+        PageEntity<ProductListResponse> pageEntity = new PageEntity<>(productListResponses.getNumber(),
+                                                                      productListResponses.getSize(),
+                                                                      productListResponses.getTotalPages(),
+                                                                      productListResponses.getContent());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(DEFAULT_PRODUCT_URI))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(pageEntity);
+    }
+
+    /**
      * 상품 상세 정보 조회를 위한 GET Mapping 을 지원합니다.
      *
      * @param productId - 상품의 PK로 조회합니다.

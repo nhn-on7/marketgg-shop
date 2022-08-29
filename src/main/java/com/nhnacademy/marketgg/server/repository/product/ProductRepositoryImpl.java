@@ -50,13 +50,66 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     }
 
     @Override
+    public Page<ProductListResponse> findByCategoryCode(final String categoryCode, final Pageable pageable) {
+        QProduct product = QProduct.product;
+        QProductLabel productLabel = QProductLabel.productLabel;
+        QLabel label = QLabel.label;
+        QImage image = QImage.image;
+
+        QueryResults<ProductListResponse> result = from(product)
+            .select(Projections.constructor(ProductListResponse.class,
+                                            product.id,
+                                            product.category.id.as("categoryCode"),
+                                            product.name.as("productName"),
+                                            product.content,
+                                            product.description,
+                                            label.name.as("labelName"),
+                                            image.imageAddress,
+                                            product.price,
+                                            product.totalStock.as("amount")
+            )).innerJoin(productLabel).on(productLabel.product.id.eq(product.id))
+            .innerJoin(label).on(label.id.eq(productLabel.label.id))
+            .innerJoin(image).on(image.asset.id.eq(product.asset.id))
+            .where(product.deletedAt.isNull())
+            .where(product.category.id.eq(categoryCode))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetchResults();
+
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
+    }
+
+    @Override
     public ProductDetailResponse queryById(final Long id) {
         QProduct product = QProduct.product;
+        QImage image = QImage.image;
 
         return from(product)
-                .select(selectAllProductColumns())
-                .where(product.id.eq(id))
-                .fetchOne();
+            .select(Projections.constructor(ProductDetailResponse.class,
+                                            product.id,
+                                            product.asset,
+                                            product.asset.id,
+                                            product.category.id,
+                                            product.category.name,
+                                            product.name,
+                                            product.content,
+                                            product.totalStock,
+                                            product.price,
+                                            product.description,
+                                            product.unit,
+                                            product.deliveryType,
+                                            product.origin,
+                                            product.packageType,
+                                            product.expirationDate,
+                                            product.allergyInfo,
+                                            product.capacity,
+                                            product.createdAt,
+                                            product.updatedAt,
+                                            product.deletedAt,
+                                            image.imageAddress))
+            .where(product.id.eq(id))
+            .innerJoin(image).on(image.asset.id.eq(product.asset.id))
+            .fetchOne();
     }
 
     @Override
@@ -66,16 +119,6 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
         return from(product)
                 .select(selectAllProductColumns())
                 .where(product.name.contains(keyword))
-                .fetch();
-    }
-
-    @Override
-    public List<ProductDetailResponse> findByCategoryCode(final String categoryCode) {
-        QProduct product = QProduct.product;
-
-        return from(product)
-                .select(selectAllProductColumns())
-                .where(product.category.id.eq(categoryCode))
                 .fetch();
     }
 

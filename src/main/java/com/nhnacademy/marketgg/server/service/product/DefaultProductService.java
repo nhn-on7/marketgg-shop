@@ -79,6 +79,11 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
+    public Page<ProductListResponse> retrieveProductsByCategory(final String categoryCode, final Pageable pageable) {
+        return productRepository.findByCategoryCode(categoryCode, pageable);
+    }
+
+    @Override
     public ProductDetailResponse retrieveProductDetails(final Long productId) {
         return productRepository.queryById(productId);
     }
