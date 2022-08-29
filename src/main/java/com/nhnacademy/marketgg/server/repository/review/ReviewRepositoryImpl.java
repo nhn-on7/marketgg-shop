@@ -1,6 +1,10 @@
 package com.nhnacademy.marketgg.server.repository.review;
 
+import static com.querydsl.core.QueryModifiers.offset;
+
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
+import com.nhnacademy.marketgg.server.entity.QAsset;
+import com.nhnacademy.marketgg.server.entity.QProduct;
 import com.nhnacademy.marketgg.server.entity.QReview;
 import com.nhnacademy.marketgg.server.entity.Review;
 import com.querydsl.core.QueryResults;
@@ -18,14 +22,28 @@ public class ReviewRepositoryImpl extends QuerydslRepositorySupport implements R
     }
 
     @Override
-    public Page<ReviewResponse> retrieveReviews(final Pageable pageable) {
+    public Page<ReviewResponse> retrieveReviews(final Pageable pageable, final Long productId) {
         QReview review = QReview.review;
+        QAsset asset = QAsset.asset;
+        QProduct product = QProduct.product;
 
-        QueryResults<ReviewResponse> results =
-            from(review).select(selectAllReviewColumns())
-                        .offset(pageable.getOffset())
-                        .limit(pageable.getPageSize())
-                        .fetchResults();
+        QueryResults<ReviewResponse> results = from(review)
+            .select(Projections.constructor(ReviewResponse.class,
+                                            review.id,
+                                            review.member.id,
+                                            review.asset.id,
+                                            review.content,
+                                            review.rating,
+                                            review.isBest,
+                                            review.createdAt,
+                                            review.updatedAt,
+                                            review.deletedAt,
+                                            review.member.uuid))
+            .innerJoin(asset).on(asset.id.eq(review.asset.id))
+            .innerJoin(product).on(product.asset.id.eq(asset.id))
+            .where(product.id.eq(productId))
+            .offset(pageable.getOffset()).limit(pageable.getPageSize())
+            .fetchResults();
 
         return new PageImpl<>(results.getResults(), pageable, results.getTotal());
     }
@@ -34,10 +52,7 @@ public class ReviewRepositoryImpl extends QuerydslRepositorySupport implements R
     public ReviewResponse queryById(final Long id) {
         QReview review = QReview.review;
 
-        return from(review)
-            .select(selectAllReviewColumns())
-            .where(review.id.eq(id))
-            .fetchOne();
+        return from(review).select(selectAllReviewColumns()).where(review.id.eq(id)).fetchOne();
     }
 
     private ConstructorExpression<ReviewResponse> selectAllReviewColumns() {
@@ -53,7 +68,6 @@ public class ReviewRepositoryImpl extends QuerydslRepositorySupport implements R
                                        review.createdAt,
                                        review.updatedAt,
                                        review.deletedAt,
-                                       review.member.uuid
-        );
+                                       review.member.uuid);
     }
 }

@@ -34,7 +34,7 @@ public interface ReviewService {
      * @param reviewRequest - 리뷰 생성을 위한 dto입니다.
      * @param memberInfo    - 리뷰를 작성한 회원의 정보입니다.
      */
-    void createReview(final ReviewCreateRequest reviewRequest, final MemberInfo memberInfo);
+    void createReview(final ReviewCreateRequest reviewRequest, final MemberInfo memberInfo, final Long productId);
 
     /**
      * 모든 리뷰를 조회합니다.
@@ -42,7 +42,7 @@ public interface ReviewService {
      * @param pageable - 사이즈는 10입니다.
      * @return - 페이지 정보가 담긴 공통 응답객체를 반환합니다.
      */
-    Page<ReviewResponse> retrieveReviews(final Pageable pageable) throws JsonProcessingException;
+    Page<ReviewResponse> retrieveReviews(final Pageable pageable, final Long productId) throws JsonProcessingException;
 
     /**
      * 후기의 상세 정보를 조회합니다.
