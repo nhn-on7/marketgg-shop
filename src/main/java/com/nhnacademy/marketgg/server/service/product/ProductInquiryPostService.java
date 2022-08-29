@@ -50,7 +50,7 @@ public interface ProductInquiryPostService {
      * @author 민아영
      * @since 1.0.0
      */
-    PageEntity<ProductInquiryPost> retrieveProductInquiryByMemberId(MemberInfo memberInfo, Pageable pageable);
+    PageEntity<ProductInquiryResponse> retrieveProductInquiryByMemberId(MemberInfo memberInfo, Pageable pageable);
 
     /**
      * 상품 문의 글에 대한 관리자의 답글을 상품 문의 글에 업데이트합니다.

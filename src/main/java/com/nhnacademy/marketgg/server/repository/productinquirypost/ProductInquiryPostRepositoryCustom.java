@@ -1,8 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.productinquirypost;
 
 import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
-import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -37,5 +35,5 @@ public interface ProductInquiryPostRepositoryCustom {
      * @author 민아영
      * @since 1.0.0
      */
-    Page<ProductInquiryPost> findAllByMemberNo(final Long id, Pageable pageable);
+    Page<ProductInquiryResponse> findAllByMemberNo(final Long id, Pageable pageable);
 }

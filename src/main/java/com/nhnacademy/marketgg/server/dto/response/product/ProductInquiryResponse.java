@@ -17,6 +17,10 @@ public class ProductInquiryResponse {
 
     private final Long productId;
 
+    private final Long productInquiryNo;
+
+    private final String productName;
+
     private final String title;
 
     private final String content;

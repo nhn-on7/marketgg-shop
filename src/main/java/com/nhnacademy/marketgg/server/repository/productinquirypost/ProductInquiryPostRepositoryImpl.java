@@ -42,6 +42,8 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
             .select(Projections.constructor(ProductInquiryResponse.class,
                                             productInquiryPost.member.uuid,
                                             productInquiryPost.product.id,
+                                            productInquiryPost.productInquiryNo,
+                                            productInquiryPost.product.name,
                                             productInquiryPost.title,
                                             productInquiryPost.content,
                                             productInquiryPost.isSecret,
@@ -65,22 +67,25 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
      * @since 1.0.0
      */
     @Override
-    public Page<ProductInquiryPost> findAllByMemberNo(final Long id, final Pageable pageable) {
+    public Page<ProductInquiryResponse> findAllByMemberNo(final Long id, final Pageable pageable) {
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
-        List<ProductInquiryPost> result = from(productInquiryPost)
-            .select(Projections.constructor(ProductInquiryPost.class,
+        QueryResults<ProductInquiryResponse> result = from(productInquiryPost)
+            .select(Projections.constructor(ProductInquiryResponse.class,
                                             productInquiryPost.member.uuid,
                                             productInquiryPost.product.id,
+                                            productInquiryPost.productInquiryNo,
+                                            productInquiryPost.product.name,
                                             productInquiryPost.title,
                                             productInquiryPost.content,
+                                            productInquiryPost.isSecret,
                                             productInquiryPost.adminReply,
                                             productInquiryPost.createdDate))
             .where(productInquiryPost.member.id.eq(id))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
-            .fetch();
+            .fetchResults();
 
-        return new PageImpl<>(result, pageable, result.size());
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 }
