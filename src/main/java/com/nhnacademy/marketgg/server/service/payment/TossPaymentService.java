@@ -123,12 +123,31 @@ public class TossPaymentService implements PaymentService {
     /**
      * {@inheritDoc}
      *
+     * @param paymentKey - 결제 건에 대한 고유 키 값
+     * @return 결제한 데이터에 대한 응답 결과 데이터를 포함한 {@link PaymentResponse}
+     */
+    @Override
+    public PaymentResponse retrievePayment(String paymentKey) {
+        ResponseEntity<String> response = paymentAdapter.retrievePayment(paymentKey);
+
+        PaymentResponse paymentResponse;
+        try {
+            paymentResponse = objectMapper.readValue(response.getBody(), PaymentResponse.class);
+        } catch (JsonProcessingException ex) {
+            throw new UncheckedIOException(ex);
+        }
+
+        return paymentResponse;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
      * @param virtualAccountRequest - 가상계좌 발급을 위한 요청 데이터가 담겨있는 객체
      * @return 결제 요청 데이터에 대한 응답 결과 데이터를 포함한 {@link PaymentResponse}
      */
     @Override
-    public PaymentResponse createVirtualAccounts(VirtualAccountCreateRequest virtualAccountRequest) {
-        return null;
+    public void createVirtualAccounts(VirtualAccountCreateRequest virtualAccountRequest) {
     }
 
     /**
@@ -138,7 +157,6 @@ public class TossPaymentService implements PaymentService {
      */
     @Override
     public void putMoneyInVirtualAccount(VirtualAccountDepositRequest virtualAccountRequest) {
-        // STUB: 로직 수정 중
     }
 
     /**
@@ -149,7 +167,7 @@ public class TossPaymentService implements PaymentService {
      */
     @Override
     public void cancelPayment(final String paymentKey, final PaymentCancelRequest paymentRequest) {
-        ResponseEntity<String> response = paymentAdapter.cancel(paymentKey, paymentRequest);
+        paymentAdapter.cancel(paymentKey, paymentRequest);
 
         Payment foundPayment = paymentRepository.findByPaymentKey(paymentKey)
                                                 .orElseThrow(PaymentNotFoundException::new);

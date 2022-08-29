@@ -100,15 +100,15 @@ public class PaymentController {
      * @return 발급한 가상계좌 데이터를 포함한 결과 데이터
      */
     @PostMapping("/payments/virtual-accounts")
-    public ResponseEntity<ShopResult<PaymentResponse>> createVirtualAccounts(@RequestBody @Valid final
+    public ResponseEntity<ShopResult<String>> createVirtualAccounts(@RequestBody @Valid final
                                                                              VirtualAccountCreateRequest request) {
         log.info("createVirtualAccounts: {}", request);
 
-        PaymentResponse data = paymentService.createVirtualAccounts(request);
+        paymentService.createVirtualAccounts(request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.successWith(data));
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
@@ -132,7 +132,9 @@ public class PaymentController {
 
         paymentService.putMoneyInVirtualAccount(request);
 
-        return null;
+        return ResponseEntity.status(HttpStatus.OK)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
     /**
