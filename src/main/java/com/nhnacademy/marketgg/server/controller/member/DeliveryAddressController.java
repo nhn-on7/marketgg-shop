@@ -45,7 +45,7 @@ public class DeliveryAddressController {
      */
     @PostMapping("/delivery-address")
     public ResponseEntity<ShopResult<String>> createDeliveryAddress(@Valid @RequestBody final DeliveryAddressCreateRequest createRequest,
-                                                            final MemberInfo memberInfo) {
+                                                                    final MemberInfo memberInfo) {
 
         deliveryAddressService.createDeliveryAddress(memberInfo, createRequest);
 
@@ -64,7 +64,7 @@ public class DeliveryAddressController {
      */
     @DeleteMapping("/delivery-address/{deliveryAddressId}")
     public ResponseEntity<ShopResult<String>> deleteDeliveryAddress(final MemberInfo memberInfo,
-                                                                @PathVariable final Long deliveryAddressId) {
+                                                                    @PathVariable final Long deliveryAddressId) {
 
         deliveryAddressService.deleteDeliveryAddress(memberInfo, deliveryAddressId);
 

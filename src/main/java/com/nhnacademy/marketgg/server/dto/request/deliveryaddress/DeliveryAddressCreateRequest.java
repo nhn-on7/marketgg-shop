@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 public class DeliveryAddressCreateRequest {
 
     @NotNull
-    private boolean defaultAddress;
+    private Boolean defaultAddress;
 
     @NotNull
     @Positive
