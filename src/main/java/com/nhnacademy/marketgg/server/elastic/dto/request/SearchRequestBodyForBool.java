@@ -120,7 +120,7 @@ public class SearchRequestBodyForBool<T> {
         this.size = request.getSize();
         this.query = new BoolQuery(
                 new Bool(List.of(new Must((new MultiMatch(request.getKeyword(), FUZZINESS, DEFAULT_PRODUCT_FIELD))),
-                                 new Must(new MultiMatch(convertString, NO_FUZZINESS, DEFAULT_BOARD_FIELD)))));
+                                 new Must(new MultiMatch(convertString, NO_FUZZINESS, DEFAULT_PRODUCT_FIELD)))));
     }
 
     private Boolean isBoard(final String document) {
