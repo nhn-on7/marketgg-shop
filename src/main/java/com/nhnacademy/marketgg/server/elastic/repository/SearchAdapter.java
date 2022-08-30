@@ -120,10 +120,10 @@ public class SearchAdapter implements SearchRepository {
     private Map<String, String> buildSort(final String type) {
         Map<String, String> sortMap = new LinkedHashMap<>();
 
-        sortMap.put("_score", "desc");
         if (Objects.nonNull(type)) {
             sortMap.put("price", type);
         }
+        sortMap.put("_score", "desc");
         sortMap.put("_id", "asc");
 
         return sortMap;
