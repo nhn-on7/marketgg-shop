@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.controller.admin;
 
 import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
+import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.coupon.CouponDto;
 import com.nhnacademy.marketgg.server.service.coupon.CouponService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,8 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -92,8 +92,8 @@ public class AdminCouponController {
     /**
      * 전체 쿠폰 목록을 조회하는 GetMapping 을 지원합니다.
      *
-     * @param pageable 조회하려는 페이지 정보입니다.
-     *                 (@PageableDefault - 기본값과 추가 설정을 할 수 있습니다.)
+     * @param page 조회하려는 페이지 정보입니다.
+     *             (@PageableDefault - 기본값과 추가 설정을 할 수 있습니다.)
      * @return 전체 쿠폰 목록 DTO 를 List 로 반환합니다.
      * @author 민아영
      * @author 김정민
@@ -106,8 +106,12 @@ public class AdminCouponController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @GetMapping
-    public ResponseEntity<ShopResult<PageEntity<CouponDto>>> retrieveCoupons(@PageableDefault final Pageable pageable) {
-        PageEntity<CouponDto> couponResponses = couponService.retrieveCoupons(pageable);
+    public ResponseEntity<ShopResult<PageEntity<CouponDto>>> retrieveCoupons(@RequestParam(value = "page",
+                                                                                           defaultValue = "1") final Integer page) {
+
+        DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
+
+        PageEntity<CouponDto> couponResponses = couponService.retrieveCoupons(pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -117,8 +121,8 @@ public class AdminCouponController {
     /**
      * 선택한 쿠폰을 수정하는 PutMapping 을 지원합니다.
      *
-     * @param couponId  - 수정할 쿠폰의 식별번호입니다.
-     * @param couponDto - 수정할 정보를 담은 DTO 입니다.
+     * @param couponId  수정할 쿠폰의 식별번호입니다.
+     * @param couponDto 수정할 정보를 담은 DTO 입니다.
      * @return Mapping URI 를 담은 응답 객체를 반환합니다.
      * @author 민아영
      * @author 김정민
