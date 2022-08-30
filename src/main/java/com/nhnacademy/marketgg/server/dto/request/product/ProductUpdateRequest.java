@@ -17,10 +17,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Getter
 public class ProductUpdateRequest {
 
-    @Schema(title = "자원번호", description = "썸네일의 자원번호", example = "1")
-    @NotNull(message = "자원번호는 null일수 없습니다.")
-    private Long assetNo;
-
     @Schema(title = "카테코리", description = "상품이 속한 카테고리", example = "001")
     @NotBlank(message = "카테고리는 null일수 없습니다.")
     private String categoryCode;
