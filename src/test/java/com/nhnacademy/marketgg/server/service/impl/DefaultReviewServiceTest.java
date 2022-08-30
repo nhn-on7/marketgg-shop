@@ -18,6 +18,7 @@ import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Asset;
@@ -28,6 +29,7 @@ import com.nhnacademy.marketgg.server.eventlistener.event.savepoint.SavePointEve
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
+import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.review.ReviewRepository;
 import com.nhnacademy.marketgg.server.service.file.FileService;
 import com.nhnacademy.marketgg.server.service.product.DefaultReviewService;
@@ -81,6 +83,9 @@ class DefaultReviewServiceTest {
     @Mock
     AuthRepository authRepository;
 
+    @Mock
+    ProductRepository productRepository;
+
     @Autowired
     ObjectMapper objectMapper;
 
@@ -93,6 +98,7 @@ class DefaultReviewServiceTest {
     private ImageResponse imageResponse;
     private MemberInfo memberInfo;
     private MemberInfoResponse memberInfoResponse;
+    private ProductDetailResponse productDetailResponse;
 
     @BeforeEach
     void setUp() {
@@ -127,6 +133,7 @@ class DefaultReviewServiceTest {
 
         memberInfo = Dummy.getDummyMemberInfo(1L, Dummy.getDummyCart(1L));
         memberInfoResponse = new MemberInfoResponse("admin", "ssasdfsdaf@gmail.com", "010-1234-1234");
+        productDetailResponse = Dummy.getDummyProductResponse();
     }
 
     @Test
@@ -155,9 +162,10 @@ class DefaultReviewServiceTest {
     void testTextReview() {
         given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(member));
         given(reviewRepository.save(any(Review.class))).willReturn(review);
+        given(productRepository.queryById(anyLong())).willReturn(productDetailResponse);
         willDoNothing().given(publisher).publishEvent(any(SavePointEvent.class));
 
-        this.reviewService.createReview(reviewRequest, memberInfo);
+        this.reviewService.createReview(reviewRequest, memberInfo, 1L);
 
         then(reviewRepository).should(times(1)).save(any(Review.class));
         then(publisher).should(times(1)).publishEvent(any(SavePointEvent.class));
@@ -168,12 +176,12 @@ class DefaultReviewServiceTest {
     void testRetrieveReviews() throws JsonProcessingException {
         List<ReviewResponse> list = List.of(reviewResponse);
         Page<ReviewResponse> page = new PageImpl<>(list, PageRequest.of(0, 1), 1);
-        given(reviewRepository.retrieveReviews(PageRequest.of(0, 1))).willReturn(page);
+        given(reviewRepository.retrieveReviews(PageRequest.of(0, 1), 1L)).willReturn(page);
         given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(ShopResult.successWith(memberInfoResponse));
 
-        reviewService.retrieveReviews(page.getPageable());
+        reviewService.retrieveReviews(page.getPageable(), 1L);
 
-        then(reviewRepository).should(times(1)).retrieveReviews(page.getPageable());
+        then(reviewRepository).should(times(1)).retrieveReviews(page.getPageable(), 1L);
     }
 
     @Test

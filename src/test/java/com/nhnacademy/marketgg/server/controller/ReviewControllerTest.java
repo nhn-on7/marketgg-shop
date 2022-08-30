@@ -110,13 +110,13 @@ class ReviewControllerTest {
     @Test
     @DisplayName("후기 전체 조회 테스트")
     void testRetrieveReviews() throws Exception {
-        given(reviewService.retrieveReviews(any(Pageable.class))).willReturn(Dummy.getDummyReviewPage());
+        given(reviewService.retrieveReviews(any(Pageable.class), anyLong())).willReturn(Dummy.getDummyReviewPage());
 
         this.mockMvc.perform(get("/products/{productId}/reviews/", 1L))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-        then(reviewService).should(times(1)).retrieveReviews(any(Pageable.class));
+        then(reviewService).should(times(1)).retrieveReviews(any(Pageable.class), anyLong());
     }
 
     @Test
