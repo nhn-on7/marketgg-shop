@@ -57,11 +57,10 @@ public interface ProductInquiryPostService {
      *
      * @param inquiryReply 상품 문의 글에 대한 답글이 답긴 DTO 입니다.
      * @param inquiryId    상품 문의 글의 PK 입니다.
-     * @param productId    상품의 PK 입니다.
      * @author 민아영
      * @since 1.0.0
      */
-    void updateProductInquiryReply(String inquiryReply, Long inquiryId, Long productId);
+    void updateProductInquiryReply(String inquiryReply, Long inquiryId);
 
     /**
      * 상품 문의 글을 삭제합니다.
