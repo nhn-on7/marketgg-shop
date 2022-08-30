@@ -120,10 +120,10 @@ public class SearchAdapter implements SearchRepository {
     private Map<String, String> buildSort(final String type) {
         Map<String, String> sortMap = new LinkedHashMap<>();
 
-        sortMap.put("_score", "desc");
         if (Objects.nonNull(type)) {
             sortMap.put("price", type);
         }
+        sortMap.put("_score", "desc");
         sortMap.put("_id", "asc");
 
         return sortMap;
@@ -164,9 +164,9 @@ public class SearchAdapter implements SearchRepository {
         JSONObject jsonObject = (JSONObject) parser.parse(response);
         JSONObject hits = (JSONObject) jsonObject.get("hits");
         JSONObject total = (JSONObject) hits.get("total");
-        Integer totalValue = (Integer)total.get("value");
+        Long totalValue = (Long)total.get("value");
 
-        return totalValue / PAGE_SIZE + 1;
+        return Math.toIntExact(totalValue / PAGE_SIZE + 1);
     }
 
     private HttpHeaders buildHeaders() {

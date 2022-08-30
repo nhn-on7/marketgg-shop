@@ -6,8 +6,8 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
-import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
+import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticProductRepository;
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.entity.Category;
@@ -139,8 +139,13 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public PageEntity<List<ProductListResponse>> searchProductListByPrice(final String option, final SearchRequest searchRequest)
+    public PageEntity<List<ProductListResponse>> searchProductListByPrice(final String option,
+                                                                          final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
+
+        if (searchRequest.getCategoryCode().compareTo("001") == 0) {
+            return searchRepository.searchProductWithKeyword(searchRequest, option);
+        }
 
         return searchRepository.searchProductForCategory(searchRequest, option);
     }
