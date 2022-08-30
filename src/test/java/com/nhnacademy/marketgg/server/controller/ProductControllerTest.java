@@ -125,13 +125,13 @@ class ProductControllerTest {
     @Test
     @DisplayName("상품 상세 조회 테스트")
     void testRetrieveProductDetails() throws Exception {
-        given(productService.retrieveProductDetails(anyLong())).willReturn(productDetailResponse);
+        given(productService.retrieveProductDetails(anyLong(), any())).willReturn(productDetailResponse);
 
         this.mockMvc.perform(get(DEFAULT_PRODUCT + "/1")
                                  .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
 
-        then(productService).should(times(1)).retrieveProductDetails(anyLong());
+        then(productService).should(times(1)).retrieveProductDetails(anyLong(), any());
     }
 
 }

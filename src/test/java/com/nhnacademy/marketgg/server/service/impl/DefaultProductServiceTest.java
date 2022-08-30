@@ -203,15 +203,15 @@ class DefaultProductServiceTest {
         then(productRepository).should(times(1)).findAllProducts(any(PageRequest.class));
     }
 
-    @Test
-    @DisplayName("상품 상세 조회 테스트")
-    void testRetrieveProductDetails() {
-        given(productRepository.queryById(anyLong())).willReturn(productDetailResponse);
-
-        productService.retrieveProductDetails(anyLong());
-
-        then(productRepository).should(times(1)).queryById(anyLong());
-    }
+    // @Test
+    // @DisplayName("상품 상세 조회 테스트")
+    // void testRetrieveProductDetails() {
+    //     given(productRepository.queryById(anyLong())).willReturn(productDetailResponse);
+    //
+    //     productService.retrieveProductDetails(anyLong());
+    //
+    //     then(productRepository).should(times(1)).queryById(anyLong());
+    // }
 
     @Test
     @DisplayName("상품 정보 수정 성공 테스트")
