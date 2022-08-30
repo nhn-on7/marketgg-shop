@@ -1,6 +1,8 @@
 package com.nhnacademy.marketgg.server.repository.review;
 
+import com.nhnacademy.marketgg.server.dto.response.review.ReviewRatingResponse;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -28,5 +30,7 @@ public interface ReviewRepositoryCustom {
      * @return - 후기의 정보가 담긴 DTO를 반환합니다.
      */
     ReviewResponse queryById(final Long id);
+
+    List<ReviewRatingResponse> retrieveReviewsByRating(final Long rating);
 
 }
