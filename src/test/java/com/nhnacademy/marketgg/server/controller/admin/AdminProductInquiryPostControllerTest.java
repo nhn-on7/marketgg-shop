@@ -49,20 +49,18 @@ class AdminProductInquiryPostControllerTest {
     @DisplayName("상품 문의 답글 등록 테스트")
     void testUpdateProductInquiryReply() throws Exception {
         ProductInquiryReplyRequest replyRequest = new ProductInquiryReplyRequest();
-        ReflectionTestUtils.setField(replyRequest, "productId", 1L);
-        ReflectionTestUtils.setField(replyRequest, "inquiryId", 1L);
         ReflectionTestUtils.setField(replyRequest, "adminReply", "고객님 안녕하세요 재입고 예정은 없습니다.");
         String content = objectMapper.writeValueAsString(replyRequest);
 
-        willDoNothing().given(productInquiryPostService).updateProductInquiryReply(anyString(), anyLong(), anyLong());
+        willDoNothing().given(productInquiryPostService).updateProductInquiryReply(anyString(), anyLong());
 
-        this.mockMvc.perform(put("/admin/products/inquiry-reply")
+        this.mockMvc.perform(put("/admin/products/inquiries/" + 1L)
                 .headers(httpHeaders)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
                     .andExpect(status().isOk());
 
-        then(productInquiryPostService).should(times(1)).updateProductInquiryReply(anyString(), anyLong(), anyLong());
+        then(productInquiryPostService).should(times(1)).updateProductInquiryReply(anyString(), anyLong());
     }
 
 }
