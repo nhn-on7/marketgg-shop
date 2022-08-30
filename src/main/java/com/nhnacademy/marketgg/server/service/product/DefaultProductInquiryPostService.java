@@ -120,15 +120,13 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
      *
      * @param inquiryReply 상품 문의 글에 대한 답글이 답긴 DTO 입니다.
      * @param inquiryId    상품 문의 글의 PK 입니다.
-     * @param productId    상품의 PK 입니다.
      * @author 민아영
      * @since 1.0.0
      */
     @Override
     @Transactional
     public void updateProductInquiryReply(final String inquiryReply,
-                                          final Long inquiryId,
-                                          final Long productId) {
+                                          final Long inquiryId) {
         ProductInquiryPost inquiryPost =
             productInquiryPostRepository.findById(inquiryId)
                                         .orElseThrow(ProductInquiryPostNotFoundException::new);

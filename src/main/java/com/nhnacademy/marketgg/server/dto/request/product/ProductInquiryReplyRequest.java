@@ -12,14 +12,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ProductInquiryReplyRequest {
 
-    @Schema(title = "상품 번호", description = "상품 문의가 남겨진 상품의 고유 번호 입니다.", example = "1")
-    @NotNull
-    private Long productId;
-
-    @Schema(title = "문의 번호", description = "상품 문의의 고유 번호 입니다.", example = "1")
-    @NotNull
-    private Long inquiryId;
-
     @Schema(title = "문의 답글", description = "상품 문의 글의 답글 내용 입니다.", example = "조리시간은 15~20 분 정도 입니다.")
     @NotBlank
     @Size(min = 10, max = 300, message = "문의 답변 내용은 10자 이상, 300자 이하만 가능합니다.")
