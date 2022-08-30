@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.controller.product.ReviewController;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
@@ -30,7 +29,6 @@ import java.io.FileInputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -152,7 +150,8 @@ class ReviewControllerTest {
     void testDeleteReview() throws Exception {
         willDoNothing().given(reviewService).deleteReview(anyLong());
 
-        this.mockMvc.perform(delete("/products/{productId}/reviews/{reviewId}", 1L, 1L))
+        this.mockMvc.perform(delete("/products/{productId}/reviews/{reviewId}", 1L, 1L)
+                                 .headers(headers))
                     .andExpect(status().isOk());
 
         then(reviewService).should().deleteReview(anyLong());
