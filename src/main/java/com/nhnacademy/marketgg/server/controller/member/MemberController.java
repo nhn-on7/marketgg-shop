@@ -11,6 +11,7 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import com.nhnacademy.marketgg.server.dto.response.auth.UuidTokenResponse;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
@@ -91,6 +92,7 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<ShopResult<String>> doSignUp(@RequestBody @Valid final SignupRequest signUpRequest)
             throws JsonProcessingException {
+
         memberService.signUp(signUpRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -101,12 +103,16 @@ public class MemberController {
     /**
      * 회원 탈퇴시 Soft 삭제를 위한 메소드 입니다.
      *
-     * @param memberInfo - 탈퇴하는 회원의 정보 입니다.
      * @return 응답 객체를 반환합니다.
      */
     @DeleteMapping
-    public ResponseEntity<ShopResult<String>> withdraw(final MemberInfo memberInfo) throws JsonProcessingException {
-        memberService.withdraw(memberInfo);
+    public ResponseEntity<ShopResult<String>> withdraw(MemberInfo memberInfo,
+                                                       HttpServletRequest request,
+                                                       @RequestBody @Valid final MemberWithdrawRequest memberWithdraw) throws JsonProcessingException {
+
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        memberService.withdraw(memberInfo, memberWithdraw, token);
 
         return ResponseEntity.status(OK)
                              .contentType(MediaType.APPLICATION_JSON)

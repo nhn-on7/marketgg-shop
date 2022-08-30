@@ -7,7 +7,9 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
+import com.nhnacademy.marketgg.server.dto.response.TokenResponse;
 import com.nhnacademy.marketgg.server.dto.response.auth.UuidTokenResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.SignupResponse;
 import com.nhnacademy.marketgg.server.exception.member.MemberInfoNotFoundException;
@@ -16,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -34,6 +37,7 @@ import org.springframework.web.client.RestTemplate;
  * @author 김정민
  * @version 1.0.0
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AuthAdapter implements AuthRepository {
@@ -98,8 +102,11 @@ public class AuthAdapter implements AuthRepository {
     }
 
     @Override
-    public void withdraw(final LocalDateTime withdrawAt) {
-        HttpEntity<LocalDateTime> requestEntity = new HttpEntity<>(withdrawAt, buildHeaders());
+    public void withdraw(final MemberWithdrawRequest memberWithdrawRequest, final String token) {
+        HttpHeaders httpHeaders = buildHeaders();
+        httpHeaders.set(HttpHeaders.AUTHORIZATION, token);
+
+        HttpEntity<MemberWithdrawRequest> requestEntity = new HttpEntity<>(memberWithdrawRequest, httpHeaders);
         restTemplate.exchange(
                 gateway + DEFAULT_AUTH,
                 HttpMethod.DELETE,
@@ -109,7 +116,7 @@ public class AuthAdapter implements AuthRepository {
     }
 
     @Override
-    public UuidTokenResponse update(final MemberUpdateRequest memberUpdateRequest, final String token) {
+    public ShopResult<UuidTokenResponse> update(final MemberUpdateRequest memberUpdateRequest, final String token) {
         HttpHeaders httpHeaders = buildHeaders();
         httpHeaders.set(HttpHeaders.AUTHORIZATION, token);
 
@@ -121,7 +128,7 @@ public class AuthAdapter implements AuthRepository {
                 new ParameterizedTypeReference<>() {
                 });
 
-        return Objects.requireNonNull(response.getBody()).getData();
+        return Objects.requireNonNull(response.getBody());
     }
 
     private HttpHeaders buildHeaders() {

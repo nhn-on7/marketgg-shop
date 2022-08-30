@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import com.nhnacademy.marketgg.server.dto.response.auth.UuidTokenResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
@@ -102,17 +103,17 @@ public class DefaultMemberService implements MemberService {
 
     /**
      * 회원탈퇴시 SoftDelete 를 위한 메소드입니다.
-     *
-     * @param memberInfo - 탈퇴하는 회원의 정보입니다.
      */
     @Transactional
     @Override
-    public void withdraw(final MemberInfo memberInfo) throws JsonProcessingException {
+    public void withdraw(MemberInfo memberInfo, final MemberWithdrawRequest memberWithdrawRequest, final String token) throws JsonProcessingException {
         Member member = memberRepository.findById(memberInfo.getId())
                                         .orElseThrow(MemberNotFoundException::new);
+
         LocalDateTime withdrawAt = LocalDateTime.now();
+        memberWithdrawRequest.inputWithdrawAt(withdrawAt);
+        authRepository.withdraw(memberWithdrawRequest, token);
         member.withdraw(withdrawAt);
-        authRepository.withdraw(withdrawAt);
     }
 
     @Transactional
@@ -125,11 +126,11 @@ public class DefaultMemberService implements MemberService {
                                         .orElseThrow(MemberNotFoundException::new);
 
         log.info("MemberUuid:{}", member.getUuid());
-        UuidTokenResponse uuidTokenResponse = authRepository.update(memberUpdateRequest, token);
-        log.info("UuidTokenResponse.getUuid:{}", uuidTokenResponse.getUpdatedUuid());
-        member.updateUuid(uuidTokenResponse.getUpdatedUuid());
+        ShopResult<UuidTokenResponse> uuidTokenResponse = authRepository.update(memberUpdateRequest, token);
+        log.info("UuidTokenResponse.getUuid:{}", uuidTokenResponse.getData().getUpdatedUuid());
+        member.updateUuid(uuidTokenResponse.getData().getUpdatedUuid());
         memberRepository.save(member);
-        return uuidTokenResponse;
+        return uuidTokenResponse.getData();
     }
 
     /**
