@@ -6,8 +6,8 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
-import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
+import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticProductRepository;
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.entity.Category;
@@ -24,7 +24,6 @@ import com.nhnacademy.marketgg.server.repository.productlabel.ProductLabelReposi
 import com.nhnacademy.marketgg.server.service.file.FileService;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Page;
@@ -140,10 +139,11 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public PageEntity<List<ProductListResponse>> searchProductListByPrice(final String option, final SearchRequest searchRequest)
+    public PageEntity<List<ProductListResponse>> searchProductListByPrice(final String option,
+                                                                          final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
-        if(searchRequest.getCategoryCode().compareTo("001") == 0) {
+        if (searchRequest.getCategoryCode().compareTo("001") == 0) {
             return searchRepository.searchProductWithKeyword(searchRequest, option);
         }
 

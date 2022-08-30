@@ -87,6 +87,7 @@ class DefaultProductServiceTest {
     private static ProductDetailResponse productDetailResponse;
     private static Asset asset;
     private static Category category;
+    private static Category defaultCategory;
     private static Label label;
     private static MockMultipartFile imageFile;
     private static ElasticProduct elasticProduct;
@@ -125,12 +126,16 @@ class DefaultProductServiceTest {
         Categorization categorization = new Categorization(categorizationRequest);
 
         CategoryCreateRequest categoryRequest = new CategoryCreateRequest();
-        ReflectionTestUtils.setField(categoryRequest, "categoryCode", "001");
+        ReflectionTestUtils.setField(categoryRequest, "categoryCode", "101");
         ReflectionTestUtils.setField(categoryRequest, "categorizationCode", "100");
         ReflectionTestUtils.setField(categoryRequest, "name", "채소");
         ReflectionTestUtils.setField(categoryRequest, "sequence", 1);
 
         category = new Category(categoryRequest, categorization);
+
+        ReflectionTestUtils.setField(categoryRequest, "categoryCode", "001");
+
+        defaultCategory = new Category(categoryRequest, categorization);
         image = Image.builder().build();
 
         LabelCreateRequest labelCreateRequest = new LabelCreateRequest();
@@ -269,16 +274,16 @@ class DefaultProductServiceTest {
             "상품을 찾을 수 없습니다.");
     }
 
-    // @Test
-    // @DisplayName("전체 목록 내 상품 검색")
-    // void testSearchProductList() throws ParseException, JsonProcessingException {
-    //     given(searchRepository.searchProductWithKeyword(any(SearchRequest.class), any())).willReturn(
-    //         // List.of(searchProductResponse));
-    //
-    //     productService.searchProductList(new SearchRequest()));
-    //
-    //     then(searchRepository).should(times(1)).searchProductWithKeyword(any(SearchRequest.class), any());
-    // }
+    @Test
+    @DisplayName("전체 목록 내 상품 검색")
+    void testSearchProductList() throws ParseException, JsonProcessingException {
+        given(searchRepository.searchProductWithKeyword(any(SearchRequest.class), any())).willReturn(
+                new PageEntity<>(0, 10, 1, null));
+
+        productService.searchProductList(new SearchRequest());
+
+        then(searchRepository).should(times(1)).searchProductWithKeyword(any(SearchRequest.class), any());
+    }
 
     @Test
     @DisplayName("카테고리 내 상품 목록 검색")
@@ -292,12 +297,28 @@ class DefaultProductServiceTest {
     }
 
     @Test
+    @DisplayName("지정한 가격 옵션별 상품 목록 검색")
+    void testSearchProductListByPriceDefault() throws ParseException, JsonProcessingException {
+        given(searchRepository.searchProductWithKeyword(any(SearchRequest.class), anyString())).willReturn(
+                new PageEntity<>(0, 10, 1, List.of()));
+
+        SearchRequest searchRequest = new SearchRequest();
+        ReflectionTestUtils.setField(searchRequest, "categoryCode", "001");
+        productService.searchProductListByPrice("asc", searchRequest);
+
+        then(searchRepository).should(times(1))
+                              .searchProductWithKeyword(any(SearchRequest.class), anyString());
+    }
+
+    @Test
     @DisplayName("카테고리 내 지정한 가격 옵션별 상품 목록 검색")
     void testSearchProductListByPrice() throws ParseException, JsonProcessingException {
         given(searchRepository.searchProductForCategory(any(SearchRequest.class), anyString())).willReturn(
                 new PageEntity<>(0, 10, 1, List.of()));
 
-        productService.searchProductListByPrice("asc", new SearchRequest());
+        SearchRequest searchRequest = new SearchRequest();
+        ReflectionTestUtils.setField(searchRequest, "categoryCode", "101");
+        productService.searchProductListByPrice("asc", searchRequest);
 
         then(searchRepository).should(times(1))
                               .searchProductForCategory(any(SearchRequest.class), anyString());
