@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.controller.product;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
@@ -260,9 +261,9 @@ public class ProductController {
                                         useReturnTypeSchema = true))
     @GetMapping("/{productId}")
     public ResponseEntity<ShopResult<ProductDetailResponse>> retrieveProductDetails(
-        @PathVariable final Long productId) {
+        @PathVariable final Long productId, final MemberInfo memberInfo) {
 
-        ProductDetailResponse productDetailResponse = this.productService.retrieveProductDetails(productId);
+        ProductDetailResponse productDetailResponse = this.productService.retrieveProductDetails(productId, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI))

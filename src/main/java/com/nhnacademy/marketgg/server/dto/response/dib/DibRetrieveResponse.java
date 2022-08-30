@@ -10,10 +10,10 @@ public class DibRetrieveResponse {
 
     private final Long productNo;
 
+    private final String thumbnail;
+
     private final String productName;
 
     private final Long productPrice;
-
-    private final LocalDateTime createdAt;
 
 }

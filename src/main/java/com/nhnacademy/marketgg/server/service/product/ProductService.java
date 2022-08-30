@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.service.product;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
@@ -57,7 +58,7 @@ public interface ProductService {
      * @return - PK에 해당하는 상품을 반환합니다.
      * @since 1.0.0
      */
-    ProductDetailResponse retrieveProductDetails(final Long productId);
+    ProductDetailResponse retrieveProductDetails(final Long productId, final MemberInfo memberInfo);
 
     /**
      * 상품 id를 인자로 받아 해당 상품이 존재할 경우 수정합니다.

@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.service.product;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
@@ -11,6 +12,7 @@ import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.repository.ElasticProductRepository;
 import com.nhnacademy.marketgg.server.elastic.repository.SearchRepository;
 import com.nhnacademy.marketgg.server.entity.Category;
+import com.nhnacademy.marketgg.server.entity.Dib;
 import com.nhnacademy.marketgg.server.entity.Label;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.ProductLabel;
@@ -18,6 +20,7 @@ import com.nhnacademy.marketgg.server.exception.category.CategoryNotFoundExcepti
 import com.nhnacademy.marketgg.server.exception.label.LabelNotFoundException;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.category.CategoryRepository;
+import com.nhnacademy.marketgg.server.repository.dib.DibRepository;
 import com.nhnacademy.marketgg.server.repository.label.LabelRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.productlabel.ProductLabelRepository;
@@ -46,6 +49,7 @@ public class DefaultProductService implements ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductLabelRepository productLabelRepository;
     private final LabelRepository labelRepository;
+    private final DibRepository dibRepository;
     private final FileService fileService;
 
     private final ElasticProductRepository elasticProductRepository;
@@ -84,8 +88,16 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public ProductDetailResponse retrieveProductDetails(final Long productId) {
-        return productRepository.queryById(productId);
+    public ProductDetailResponse retrieveProductDetails(final Long productId, final MemberInfo memberInfo) {
+        ProductDetailResponse detailResponse = productRepository.queryById(productId);
+
+        if (memberInfo.isNull()) {
+            detailResponse.updateIsDib(false);
+        } else {
+            detailResponse.updateIsDib(dibRepository.existsById(new Dib.Pk(memberInfo.getId(), productId)));
+        }
+
+        return detailResponse;
     }
 
     @Transactional
