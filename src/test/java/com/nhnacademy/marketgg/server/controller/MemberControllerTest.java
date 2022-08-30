@@ -20,7 +20,7 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
-import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.member.MemberService;
@@ -35,6 +35,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -92,8 +94,8 @@ class MemberControllerTest {
                                                       .build();
 
         this.mockMvc.perform(get("/members")
-                                     .headers(httpHeaders)
-                                     .accept(MediaType.APPLICATION_JSON))
+                                 .headers(httpHeaders)
+                                 .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.success", equalTo(true)))
                     .andDo(print());
@@ -107,9 +109,9 @@ class MemberControllerTest {
         String content = objectMapper.writeValueAsString(givenCouponCreateRequest);
 
         this.mockMvc.perform(post("/members/coupons")
-                                     .headers(httpHeaders)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(content))
+                                 .headers(httpHeaders)
+                                 .contentType(MediaType.APPLICATION_JSON)
+                                 .content(content))
                     .andExpect(status().isCreated());
 
         then(givenCouponService).should(times(1)).createGivenCoupons(any(MemberInfo.class),
@@ -121,10 +123,10 @@ class MemberControllerTest {
     void testRetrieveGivenCoupons() throws Exception {
         PageEntity<GivenCouponResponse> pageEntity = new PageEntity<>(1, 1, 1, List.of());
         given(givenCouponService.retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class))).willReturn(
-                pageEntity);
+            pageEntity);
 
         this.mockMvc.perform(get("/members/coupons")
-                                     .headers(httpHeaders))
+                                 .headers(httpHeaders))
                     .andExpect(status().isOk());
 
         then(givenCouponService).should(times(1)).retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class));
@@ -133,13 +135,14 @@ class MemberControllerTest {
     @Test
     @DisplayName("회원이 작성한 전체 상품 문의 조회 테스트")
     void testRetrieveProductInquiryByMemberId() throws Exception {
-        PageEntity<ProductInquiryPost> pageEntity = new PageEntity<>(1, 1, 1, List.of());
+        PageEntity<ProductInquiryResponse> pageEntity = new PageEntity<>(1, 1, 1, List.of());
+
         given(inquiryPostService.retrieveProductInquiryByMemberId(any(MemberInfo.class), any(PageRequest.class)))
-                .willReturn(pageEntity);
+            .willReturn(pageEntity);
 
         this.mockMvc.perform(get("/members/product-inquiries")
-                                     .headers(httpHeaders)
-                                     .contentType(MediaType.APPLICATION_JSON))
+                                 .headers(httpHeaders)
+                                 .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
     }
 
