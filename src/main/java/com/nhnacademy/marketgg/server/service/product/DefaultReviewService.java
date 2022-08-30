@@ -13,6 +13,7 @@ import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
+import com.nhnacademy.marketgg.server.dto.response.review.ReviewRatingResponse;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -30,6 +31,7 @@ import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.review.ReviewRepository;
 import com.nhnacademy.marketgg.server.service.file.FileService;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -92,6 +94,20 @@ public class DefaultReviewService implements ReviewService {
         }
 
         return response;
+    }
+
+    @Override
+    public List<ReviewRatingResponse> retrieveReviewsByRating(final Long productId) {
+        List<ReviewRatingResponse> reviewRatingResponses = reviewRepository.retrieveReviewsByRating(productId);
+        List<ReviewRatingResponse> list = new ArrayList<>();
+
+        for (int i = 1; i <= 5; i++) {
+            int c = i;
+            ReviewRatingResponse reviewRatingResponse =
+                reviewRatingResponses.stream().filter(o -> o.getRating() == c).findFirst().orElse(null);
+            list.add(new ReviewRatingResponse((long) i, reviewRatingResponse == null ? 0l : reviewRatingResponse.getRatingCount()));
+        }
+        return list;
     }
 
 

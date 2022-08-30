@@ -4,12 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.review.ReviewRatingResponse;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
+import java.io.IOException;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 /**
  * 리뷰 서비스입니다.
@@ -43,6 +44,8 @@ public interface ReviewService {
      * @return - 페이지 정보가 담긴 공통 응답객체를 반환합니다.
      */
     Page<ReviewResponse> retrieveReviews(final Pageable pageable, final Long productId) throws JsonProcessingException;
+
+    List<ReviewRatingResponse> retrieveReviewsByRating(final Long productId);
 
     /**
      * 후기의 상세 정보를 조회합니다.

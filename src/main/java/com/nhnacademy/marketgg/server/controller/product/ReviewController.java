@@ -8,6 +8,7 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.review.ReviewRatingResponse;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.service.product.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -174,6 +176,17 @@ public class ReviewController {
                              .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH + reviewId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(ShopResult.successWith(reviewResponse));
+    }
+
+    @GetMapping("/{productId}/reviews/rating")
+    public ResponseEntity<ShopResult<List<ReviewRatingResponse>>> retrieveReviewsByRating(
+        @PathVariable final Long productId) {
+
+        List<ReviewRatingResponse> reviewRatingResponses = reviewService.retrieveReviewsByRating(productId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(ShopResult.successWith(reviewRatingResponses));
     }
 
     /**
