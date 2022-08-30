@@ -223,6 +223,7 @@ public class ReviewController {
      * @param reviewId  - 후기의 식별번호 입니다.
      * @return - Void 타입 응답객체를 반환합니다.
      */
+    @Auth
     @DeleteMapping("/{productId}/reviews/{reviewId}")
     public ResponseEntity<ShopResult<String>> deleteReview(@PathVariable final Long productId,
                                                            @PathVariable final Long reviewId) {
