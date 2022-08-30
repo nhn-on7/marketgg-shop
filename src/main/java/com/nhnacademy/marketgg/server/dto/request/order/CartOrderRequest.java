@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class CartResponse {
+public class CartOrderRequest {
 
     @Schema(title = "주문할 상품 번호", description = "장바구니에서 선택한 주문할 상품 번호 목록입니다.",
             example = "[\"1L\",\"2L\",\"3L\"]")
     @NotNull
-    private List<Long> productIds;
+    private List<Long> id;
 
 }
