@@ -8,12 +8,11 @@ import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.order.CartResponse;
+import com.nhnacademy.marketgg.server.dto.request.order.CartOrderRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
-import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
@@ -27,7 +26,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
@@ -138,8 +136,8 @@ class OrderControllerTest {
     @DisplayName("주문서 폼 필요정보 조회")
     public void testRetrieveOrderForm() throws Exception {
         OrderFormResponse orderFormResponse = Dummy.getDummyOrderFormResponse();
-        CartResponse cartResponse = new CartResponse();
-        ReflectionTestUtils.setField(cartResponse, "productIds", List.of());
+        CartOrderRequest cartOrderRequest = new CartOrderRequest();
+        ReflectionTestUtils.setField(cartOrderRequest, "productIds", List.of());
         ResponseEntity<ShopResult<AuthInfo>> responseEntity = new ResponseEntity<>(authInfoResponse, HttpStatus.OK);
 
         given(orderService.retrieveOrderForm(any(List.class), any(MemberInfo.class), any(AuthInfo.class)))
@@ -151,7 +149,7 @@ class OrderControllerTest {
         mockMvc.perform(post(baseUri + "/order-form")
                                 .headers(headers)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(cartResponse)))
+                                .content(mapper.writeValueAsString(cartOrderRequest)))
                .andExpect(status().isOk());
 
         then(orderService).should(times(1))
