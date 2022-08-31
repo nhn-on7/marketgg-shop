@@ -37,6 +37,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,21 +83,21 @@ class DefaultPointServiceTest {
     @Test
     @DisplayName("사용자 포인트 내역 목록 조회")
     void testRetrievePointHistories() {
-        given(pointHistoryRepository.findAllByMemberId(anyLong())).willReturn(List.of(pointRetrieveResponse));
+        given(pointHistoryRepository.findAllByMemberId(any(), any())).willReturn(Page.empty());
 
-        List<PointRetrieveResponse> responses = pointService.retrievePointHistories(1L);
+        pointService.retrievePointHistories(1L, PageRequest.of(0, 10));
 
-        assertThat(responses.get(0).getPoint()).isEqualTo(1000);
+        then(pointHistoryRepository).should(times(1)).findAllByMemberId(any(), any());
     }
 
     @Test
     @DisplayName("관리자의 사용자 포인트 내역 목록 조회")
     void testAdminRetrievePointHistories() {
-        given(pointHistoryRepository.findAllForAdmin()).willReturn(List.of(pointRetrieveResponse));
+        given(pointHistoryRepository.findAllForAdmin(any())).willReturn(Page.empty());
 
-        List<PointRetrieveResponse> responses = pointService.adminRetrievePointHistories();
+        Page<PointRetrieveResponse> responses = pointService.adminRetrievePointHistories(PageRequest.of(0, 10));
 
-        assertThat(responses.get(0).getPoint()).isEqualTo(1000);
+        assertThat(responses).isEmpty();
     }
 
     @Test
