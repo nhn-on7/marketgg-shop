@@ -1,9 +1,9 @@
-package com.nhnacademy.marketgg.server.elastic.dto.request;
+package com.nhnacademy.marketgg.server.elastic.request;
 
-import com.nhnacademy.marketgg.server.elastic.dto.request.searchutil.Bool;
-import com.nhnacademy.marketgg.server.elastic.dto.request.searchutil.BoolQuery;
-import com.nhnacademy.marketgg.server.elastic.dto.request.searchutil.MultiMatch;
-import com.nhnacademy.marketgg.server.elastic.dto.request.searchutil.Must;
+import com.nhnacademy.marketgg.server.elastic.request.searchutil.Bool;
+import com.nhnacademy.marketgg.server.elastic.request.searchutil.BoolQuery;
+import com.nhnacademy.marketgg.server.elastic.request.searchutil.MultiMatch;
+import com.nhnacademy.marketgg.server.elastic.request.searchutil.Must;
 import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
