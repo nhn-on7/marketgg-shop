@@ -5,9 +5,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
 import com.nhnacademy.marketgg.server.elastic.request.SearchRequest;
 import com.nhnacademy.marketgg.server.elastic.request.SearchRequestBodyForBool;
-import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
 import com.nhnacademy.marketgg.server.util.KoreanToEnglishTranslator;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -73,7 +73,7 @@ public class SearchAdapter implements SearchRepository {
 
     @Override
     public PageEntity<List<ProductListResponse>> searchProductWithKeyword(final SearchRequest request,
-                                                              final String priceSortType)
+                                                                          final String priceSortType)
             throws ParseException, JsonProcessingException {
 
         Map<String, String> sort = this.buildSort(priceSortType);
@@ -164,7 +164,7 @@ public class SearchAdapter implements SearchRepository {
         JSONObject jsonObject = (JSONObject) parser.parse(response);
         JSONObject hits = (JSONObject) jsonObject.get("hits");
         JSONObject total = (JSONObject) hits.get("total");
-        Long totalValue = (Long)total.get("value");
+        Long totalValue = (Long) total.get("value");
 
         return Math.toIntExact(totalValue / PAGE_SIZE + 1);
     }

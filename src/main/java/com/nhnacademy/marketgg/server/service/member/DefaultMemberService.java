@@ -23,13 +23,12 @@ import com.nhnacademy.marketgg.server.repository.cart.CartRepository;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.membergrade.MemberGradeRepository;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * 회원 서비스의 구현체입니다.
@@ -72,15 +71,15 @@ public class DefaultMemberService implements MemberService {
         Cart savedCart = cartRepository.save(new Cart());
 
         ShopResult<SignupResponse> authResponse = authRepository.signup(new SignupRequest(signUpRequest.getEmail(),
-                signUpRequest.getPassword(),
-                signUpRequest.getName(),
-                signUpRequest.getPhoneNumber(),
-                signUpRequest.getReferrerEmail(),
-                signUpRequest.getProvider()));
+                                                                                          signUpRequest.getPassword(),
+                                                                                          signUpRequest.getName(),
+                                                                                          signUpRequest.getPhoneNumber(),
+                                                                                          signUpRequest.getReferrerEmail(),
+                                                                                          signUpRequest.getProvider()));
 
         Member signUpMember = memberRepository.save(new Member(signUpRequest, authResponse.getData()
                                                                                           .getUuid(),
-                registerGrade(), savedCart));
+                                                               registerGrade(), savedCart));
 
         deliveryAddressRepository.save(new DeliveryAddress(signUpMember, signUpRequest));
 

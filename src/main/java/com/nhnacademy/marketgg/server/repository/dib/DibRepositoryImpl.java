@@ -4,12 +4,9 @@ import com.nhnacademy.marketgg.server.dto.response.dib.DibRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Dib;
 import com.nhnacademy.marketgg.server.entity.QDib;
 import com.nhnacademy.marketgg.server.entity.QImage;
-import com.nhnacademy.marketgg.server.entity.QMember;
-import com.nhnacademy.marketgg.server.entity.QProduct;
 import com.querydsl.core.types.Projections;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-
 import java.util.List;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class DibRepositoryImpl extends QuerydslRepositorySupport implements DibRepositoryCustom {
 

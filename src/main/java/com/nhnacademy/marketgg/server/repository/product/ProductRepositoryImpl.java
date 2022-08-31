@@ -11,13 +11,12 @@ import com.nhnacademy.marketgg.server.entity.QProductLabel;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProductRepositoryImpl extends QuerydslRepositorySupport implements ProductRepositoryCustom {
 

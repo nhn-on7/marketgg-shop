@@ -51,6 +51,7 @@ public interface CustomerServicePostRepositoryCustom {
      * @author 박세완
      * @since 1.0.0
      */
-    Page<PostResponse> findPostByCategoryAndMember(final Pageable pageable, final String categoryId, final Long memberId);
+    Page<PostResponse> findPostByCategoryAndMember(final Pageable pageable, final String categoryId,
+                                                   final Long memberId);
 
 }

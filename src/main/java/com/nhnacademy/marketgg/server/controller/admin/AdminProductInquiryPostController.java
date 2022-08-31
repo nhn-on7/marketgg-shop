@@ -59,7 +59,7 @@ public class AdminProductInquiryPostController {
                                                                         ProductInquiryReplyRequest replyRequest) {
 
         productInquiryPostService.updateProductInquiryReply(replyRequest.getAdminReply()
-            , inquiryId);
+                , inquiryId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -82,12 +82,12 @@ public class AdminProductInquiryPostController {
                                         useReturnTypeSchema = true))
     @GetMapping("/inquiries")
     public ResponseEntity<ShopResult<PageEntity<ProductInquiryResponse>>> retrieveProductInquiry(
-        @RequestParam(value = "page", defaultValue = "1") final Integer page) {
+            @RequestParam(value = "page", defaultValue = "1") final Integer page) {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
 
         PageEntity<ProductInquiryResponse> productInquiryResponses
-            = productInquiryPostService.retrieveProductInquiryByAdmin(pageRequest.getPageable());
+                = productInquiryPostService.retrieveProductInquiryByAdmin(pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)

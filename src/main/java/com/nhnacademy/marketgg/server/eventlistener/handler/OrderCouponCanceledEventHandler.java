@@ -3,14 +3,13 @@ package com.nhnacademy.marketgg.server.eventlistener.handler;
 import com.nhnacademy.marketgg.server.entity.UsedCoupon;
 import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderCouponCanceledEvent;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-
-import java.util.Optional;
 
 /**
  * OrderCouponCanceledEvent 를 받아 처리하는 클래스입니다.

@@ -63,7 +63,8 @@ public class MemberController {
      * @return - 사용자 정보를 반환합니다.
      */
     @GetMapping
-    public ResponseEntity<ShopResult<MemberResponse>> retrieveMember(final AuthInfo authInfo, final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<MemberResponse>> retrieveMember(final AuthInfo authInfo,
+                                                                     final MemberInfo memberInfo) {
         MemberResponse memberResponse = new MemberResponse(authInfo, memberInfo);
 
         log.info("MemberResponse = {}", memberResponse);
@@ -82,7 +83,8 @@ public class MemberController {
      * @since 1.0.0
      */
     @PostMapping("/signup")
-    public ResponseEntity<ShopResult<String>> doSignUp(@RequestBody @Valid final SignupRequest signUpRequest) throws JsonProcessingException {
+    public ResponseEntity<ShopResult<String>> doSignUp(@RequestBody @Valid final SignupRequest signUpRequest)
+            throws JsonProcessingException {
         memberService.signUp(signUpRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -107,7 +109,8 @@ public class MemberController {
 
     @PutMapping
     public ResponseEntity<ShopResult<String>> update(final MemberInfo memberInfo,
-                                                     @Valid @RequestBody final MemberUpdateRequest memberUpdateRequest) {
+                                                     @Valid @RequestBody
+                                                     final MemberUpdateRequest memberUpdateRequest) {
         memberService.update(memberInfo, memberUpdateRequest);
 
         return ResponseEntity.status(OK)
@@ -126,8 +129,8 @@ public class MemberController {
      */
     @Operation(summary = "지급 쿠폰 생성",
                description = "회원이 쿠폰의 이름으로 쿠폰을 등록하면 지급 쿠폰이 생성됩니다.",
-               parameters = {@Parameter(name = "memberInfo", description = "쿠폰을 등록하는 회원의 정보", required = true),
-                   @Parameter(name = "givenCouponRequest", description = "등록할 쿠폰 이름을 가진 요청 객체", required = true)},
+               parameters = { @Parameter(name = "memberInfo", description = "쿠폰을 등록하는 회원의 정보", required = true),
+                       @Parameter(name = "givenCouponRequest", description = "등록할 쿠폰 이름을 가진 요청 객체", required = true) },
                responses = @ApiResponse(responseCode = "201",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
@@ -161,13 +164,13 @@ public class MemberController {
                                         useReturnTypeSchema = true))
     @GetMapping("/coupons")
     public ResponseEntity<ShopResult<PageEntity<GivenCouponResponse>>> retrieveGivenCoupons(
-        final MemberInfo memberInfo,
-        @RequestParam(value = "page", defaultValue = "1") final Integer page) {
+            final MemberInfo memberInfo,
+            @RequestParam(value = "page", defaultValue = "1") final Integer page) {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
 
         PageEntity<GivenCouponResponse> givenCouponResponses
-            = givenCouponService.retrieveGivenCoupons(memberInfo, pageRequest.getPageable());
+                = givenCouponService.retrieveGivenCoupons(memberInfo, pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -192,12 +195,12 @@ public class MemberController {
                                         useReturnTypeSchema = true))
     @GetMapping("/product-inquiries")
     public ResponseEntity<ShopResult<PageEntity<ProductInquiryResponse>>> retrieveProductInquiry(
-        final MemberInfo memberInfo, @RequestParam(value = "page", defaultValue = "1") final Integer page) {
+            final MemberInfo memberInfo, @RequestParam(value = "page", defaultValue = "1") final Integer page) {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
 
         PageEntity<ProductInquiryResponse> productInquiryResponses
-            = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageRequest.getPageable());
+                = productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)

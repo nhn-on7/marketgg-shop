@@ -51,8 +51,9 @@ public class DefaultCartProductService implements CartProductService {
     @Override
     public void updateAmount(MemberInfo member, ProductToCartRequest productUpdateRequest) {
         CartProduct cartProduct =
-            cartProductRepository.findById(new CartProduct.Pk(member.getCart().getId(), productUpdateRequest.getId()))
-                                 .orElseThrow(CartNotFoundException.ProductInCartNotFoundException::new);
+                cartProductRepository.findById(
+                                             new CartProduct.Pk(member.getCart().getId(), productUpdateRequest.getId()))
+                                     .orElseThrow(CartNotFoundException.ProductInCartNotFoundException::new);
 
         cartProduct.updateAmount(productUpdateRequest.getAmount());
     }
@@ -62,8 +63,8 @@ public class DefaultCartProductService implements CartProductService {
     public void deleteProducts(MemberInfo member, List<Long> products) {
         List<CartProduct.Pk> cartProductPk = products.stream()
                                                      .map(
-                                                         productId -> new CartProduct.Pk(member.getCart().getId(),
-                                                             productId))
+                                                             productId -> new CartProduct.Pk(member.getCart().getId(),
+                                                                                             productId))
                                                      .collect(toList());
         List<CartProduct> cartProducts = cartProductRepository.findAllById(cartProductPk);
         cartProductRepository.deleteAll(cartProducts);

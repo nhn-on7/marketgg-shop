@@ -53,7 +53,7 @@ public class FileController {
      */
     @PostMapping
     public ResponseEntity<ImageResponse> uploadAndRetrieveImage(@RequestBody final MultipartFile image)
-        throws IOException {
+            throws IOException {
 
         ImageResponse imageResponse = fileService.uploadImage(image);
 

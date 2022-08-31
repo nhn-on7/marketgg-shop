@@ -107,7 +107,8 @@ public class AdminCouponController {
                                         useReturnTypeSchema = true))
     @GetMapping
     public ResponseEntity<ShopResult<PageEntity<CouponDto>>> retrieveCoupons(@RequestParam(value = "page",
-                                                                                           defaultValue = "1") final Integer page) {
+                                                                                           defaultValue = "1")
+                                                                             final Integer page) {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
 
@@ -130,8 +131,8 @@ public class AdminCouponController {
      */
     @Operation(summary = "쿠폰 수정",
                description = "관리자가 수정할 쿠폰 정보를 입력하여 기존 쿠폰을 수정합니다.",
-               parameters = {@Parameter(name = "couponId", description = "수정할 쿠폰 번호", required = true),
-                   @Parameter(name = "couponDto", description = "수정 내용을 담은 쿠폰 요청 객체", required = true)},
+               parameters = { @Parameter(name = "couponId", description = "수정할 쿠폰 번호", required = true),
+                       @Parameter(name = "couponDto", description = "수정 내용을 담은 쿠폰 요청 객체", required = true) },
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),

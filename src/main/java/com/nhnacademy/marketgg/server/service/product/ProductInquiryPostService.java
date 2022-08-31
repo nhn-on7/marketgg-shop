@@ -39,7 +39,8 @@ public interface ProductInquiryPostService {
      * @author 민아영
      * @since 1.0.0
      */
-    PageEntity<ProductInquiryResponse> retrieveProductInquiryByProductId(Long id, Pageable pageable) throws JsonProcessingException;
+    PageEntity<ProductInquiryResponse> retrieveProductInquiryByProductId(Long id, Pageable pageable)
+            throws JsonProcessingException;
 
     /**
      * 회원이 남긴 모든 상품 문의 글을 조회합니다.

@@ -1,9 +1,8 @@
 package com.nhnacademy.marketgg.server.repository.orderproduct;
 
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
-import org.springframework.data.repository.NoRepositoryBean;
-
 import java.util.List;
+import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface OrderProductRepositoryCustom {

@@ -36,5 +36,4 @@ public class MultiMatch {
     private List<String> fields;
 
 
-
 }

@@ -1,8 +1,8 @@
 package com.nhnacademy.marketgg.server.entity.payment;
 
 import com.nhnacademy.marketgg.server.constant.payment.BankCode;
-import com.nhnacademy.marketgg.server.constant.payment.converter.BankCodeConverter;
 import com.nhnacademy.marketgg.server.constant.payment.SettlementStatus;
+import com.nhnacademy.marketgg.server.constant.payment.converter.BankCodeConverter;
 import com.nhnacademy.marketgg.server.constant.payment.converter.SettlementStatusConveter;
 import javax.persistence.Column;
 import javax.persistence.Convert;

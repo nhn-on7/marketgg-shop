@@ -1,9 +1,8 @@
 package com.nhnacademy.marketgg.server.repository.usedcoupon;
 
 import com.nhnacademy.marketgg.server.dto.response.coupon.UsedCouponResponse;
-import org.springframework.data.repository.NoRepositoryBean;
-
 import java.util.Optional;
+import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface UsedCouponRepositoryCustom {

@@ -40,7 +40,7 @@ public class DefaultPointService implements PointService {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
         Integer totalPoint = pointRepository.findLastTotalPoints(member.getId());
         PointHistory pointHistory =
-            new PointHistory(member, null, totalPoint + pointRequest.getPoint(), pointRequest);
+                new PointHistory(member, null, totalPoint + pointRequest.getPoint(), pointRequest);
 
         pointRepository.save(pointHistory);
     }
@@ -57,7 +57,7 @@ public class DefaultPointService implements PointService {
         this.checkMemberGrade(member.getMemberGrade().getGrade(), pointRequest);
 
         PointHistory pointHistory =
-            new PointHistory(member, order, totalPoint + pointRequest.getPoint(), pointRequest);
+                new PointHistory(member, order, totalPoint + pointRequest.getPoint(), pointRequest);
 
         pointRepository.save(pointHistory);
     }

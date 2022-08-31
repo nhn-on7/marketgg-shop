@@ -6,8 +6,8 @@ import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
-import com.nhnacademy.marketgg.server.elastic.request.SearchRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
+import com.nhnacademy.marketgg.server.elastic.request.SearchRequest;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -106,7 +106,7 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                 DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/search"))
+                                     DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/search"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productList);
     }
@@ -180,7 +180,7 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                 DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/sort-price/" + option))
+                                     DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/sort-price/" + option))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(productList);
     }
@@ -202,17 +202,17 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<PageEntity<ProductListResponse>> retrieveProducts(
-        @RequestParam(value = "page", defaultValue = "0") final Integer page) {
+            @RequestParam(value = "page", defaultValue = "0") final Integer page) {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page);
 
         Page<ProductListResponse> productListResponses =
-            this.productService.retrieveProducts(pageRequest.getPageable());
+                this.productService.retrieveProducts(pageRequest.getPageable());
 
         PageEntity<ProductListResponse> pageEntity = new PageEntity<>(productListResponses.getNumber(),
-                                                                        productListResponses.getSize(),
-                                                                        productListResponses.getTotalPages(),
-                                                                        productListResponses.getContent());
+                                                                      productListResponses.getSize(),
+                                                                      productListResponses.getTotalPages(),
+                                                                      productListResponses.getContent());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI))
@@ -225,13 +225,14 @@ public class ProductController {
      */
 
     @GetMapping("/categories/{categoryCode}")
-    public ResponseEntity<PageEntity<ProductListResponse>> retrieveProductsByCategory(@PathVariable final String categoryCode,
-        @RequestParam(value = "page", defaultValue = "0") final Integer page) {
+    public ResponseEntity<PageEntity<ProductListResponse>> retrieveProductsByCategory(
+            @PathVariable final String categoryCode,
+            @RequestParam(value = "page", defaultValue = "0") final Integer page) {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page);
 
         Page<ProductListResponse> productListResponses =
-            this.productService.retrieveProductsByCategory(categoryCode, pageRequest.getPageable());
+                this.productService.retrieveProductsByCategory(categoryCode, pageRequest.getPageable());
 
         PageEntity<ProductListResponse> pageEntity = new PageEntity<>(productListResponses.getNumber(),
                                                                       productListResponses.getSize(),
@@ -261,7 +262,7 @@ public class ProductController {
                                         useReturnTypeSchema = true))
     @GetMapping("/{productId}")
     public ResponseEntity<ShopResult<ProductDetailResponse>> retrieveProductDetails(
-        @PathVariable final Long productId, final MemberInfo memberInfo) {
+            @PathVariable final Long productId, final MemberInfo memberInfo) {
 
         ProductDetailResponse productDetailResponse = this.productService.retrieveProductDetails(productId, memberInfo);
 

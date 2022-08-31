@@ -2,10 +2,10 @@ package com.nhnacademy.marketgg.server.entity.payment;
 
 import com.nhnacademy.marketgg.server.constant.payment.AcquireStatus;
 import com.nhnacademy.marketgg.server.constant.payment.AgencyCode;
-import com.nhnacademy.marketgg.server.constant.payment.converter.AgencyCodeConverter;
 import com.nhnacademy.marketgg.server.constant.payment.CardType;
-import com.nhnacademy.marketgg.server.constant.payment.converter.CardTypeConverter;
 import com.nhnacademy.marketgg.server.constant.payment.OwnerType;
+import com.nhnacademy.marketgg.server.constant.payment.converter.AgencyCodeConverter;
+import com.nhnacademy.marketgg.server.constant.payment.converter.CardTypeConverter;
 import com.nhnacademy.marketgg.server.constant.payment.converter.OwnerTypeConverter;
 import java.io.Serializable;
 import javax.persistence.Column;

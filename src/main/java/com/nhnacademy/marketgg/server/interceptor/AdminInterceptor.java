@@ -23,7 +23,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-        throws Exception {
+            throws Exception {
 
         String roleHeader = request.getHeader(AspectUtils.WWW_AUTHENTICATE);
         String uuid = request.getHeader(AspectUtils.AUTH_ID);
@@ -49,7 +49,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 
     private boolean isInvalidHeader(String roleHeader, String uuid) {
         return (Objects.isNull(roleHeader) || Objects.isNull(uuid))
-            || (roleHeader.isBlank() || uuid.isBlank());
+                || (roleHeader.isBlank() || uuid.isBlank());
     }
 
 }

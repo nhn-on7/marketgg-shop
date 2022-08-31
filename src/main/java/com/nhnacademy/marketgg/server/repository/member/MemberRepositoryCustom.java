@@ -23,6 +23,7 @@ public interface MemberRepositoryCustom {
 
     /**
      * 해당 주문의 회원 uuid 를 조회하기 위한 메소드입니다.
+     *
      * @param orderId - 주문의 식별번호입니다.
      * @return 주문을 한 회원의 uuid 를 반환합니다.
      * @since 1.0.0

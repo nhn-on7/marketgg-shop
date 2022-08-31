@@ -30,22 +30,22 @@ public class ReviewRepositoryImpl extends QuerydslRepositorySupport implements R
         QProduct product = QProduct.product;
 
         QueryResults<ReviewResponse> results = from(review)
-            .select(Projections.constructor(ReviewResponse.class,
-                                            review.id,
-                                            review.member.id,
-                                            review.asset.id,
-                                            review.content,
-                                            review.rating,
-                                            review.isBest,
-                                            review.createdAt,
-                                            review.updatedAt,
-                                            review.deletedAt,
-                                            review.member.uuid))
-            .innerJoin(asset).on(asset.id.eq(review.asset.id))
-            .innerJoin(product).on(product.asset.id.eq(asset.id))
-            .where(product.id.eq(productId))
-            .offset(pageable.getOffset()).limit(pageable.getPageSize())
-            .fetchResults();
+                .select(Projections.constructor(ReviewResponse.class,
+                                                review.id,
+                                                review.member.id,
+                                                review.asset.id,
+                                                review.content,
+                                                review.rating,
+                                                review.isBest,
+                                                review.createdAt,
+                                                review.updatedAt,
+                                                review.deletedAt,
+                                                review.member.uuid))
+                .innerJoin(asset).on(asset.id.eq(review.asset.id))
+                .innerJoin(product).on(product.asset.id.eq(asset.id))
+                .where(product.id.eq(productId))
+                .offset(pageable.getOffset()).limit(pageable.getPageSize())
+                .fetchResults();
 
         return new PageImpl<>(results.getResults(), pageable, results.getTotal());
     }

@@ -6,8 +6,8 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
-import com.nhnacademy.marketgg.server.elastic.request.SearchRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
+import com.nhnacademy.marketgg.server.elastic.request.SearchRequest;
 import java.io.IOException;
 import java.util.List;
 import org.json.simple.parser.ParseException;
@@ -46,7 +46,7 @@ public interface ProductService {
      * 카테고리로 상품을 조회합니다.
      *
      * @param categoryCode - 조회할 카테고리 코드입니다.
-     * @param pageable - 페이지 정보입니다.
+     * @param pageable     - 페이지 정보입니다.
      * @return - 상품 리스트를 반환합니다.
      */
     Page<ProductListResponse> retrieveProductsByCategory(final String categoryCode, final Pageable pageable);
@@ -71,7 +71,7 @@ public interface ProductService {
      * @since 1.0.0
      */
     void updateProduct(final ProductUpdateRequest productRequest, MultipartFile image, final Long productId)
-        throws IOException;
+            throws IOException;
 
     /**
      * 상품 id를 인자로 받아 해당 상품이 존재할 경우 소프트 삭제합니다.
@@ -95,7 +95,7 @@ public interface ProductService {
      * @since 1.0.0
      */
     PageEntity<List<ProductListResponse>> searchProductList(final SearchRequest searchRequest)
-        throws ParseException, JsonProcessingException;
+            throws ParseException, JsonProcessingException;
 
 
     /**
@@ -108,7 +108,7 @@ public interface ProductService {
      * @since 1.0.0
      */
     PageEntity<List<ProductListResponse>> searchProductListByCategory(final SearchRequest searchRequest)
-        throws ParseException, JsonProcessingException;
+            throws ParseException, JsonProcessingException;
 
 
     /**
@@ -123,7 +123,7 @@ public interface ProductService {
      */
     PageEntity<List<ProductListResponse>> searchProductListByPrice(final String option,
                                                                    final SearchRequest searchRequest)
-        throws ParseException, JsonProcessingException;
+            throws ParseException, JsonProcessingException;
 
 
 }

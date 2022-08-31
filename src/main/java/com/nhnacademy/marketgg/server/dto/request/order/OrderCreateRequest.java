@@ -1,12 +1,11 @@
 package com.nhnacademy.marketgg.server.dto.request.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * 주문을 생성하기 위한 요청 정보를 담고 있는 DTO 클래스입니다.

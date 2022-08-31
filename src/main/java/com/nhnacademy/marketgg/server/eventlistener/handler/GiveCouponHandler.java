@@ -42,8 +42,9 @@ public class GiveCouponHandler {
                                               .orElseThrow(CouponNotFoundException::new);
 
         GivenCoupon givenCoupon
-            = new GivenCoupon(new GivenCoupon.Pk(signUpCoupon.getId(),
-            couponRequest.getMember().getId()), signUpCoupon, couponRequest.getMember(), LocalDateTime.now());
+                = new GivenCoupon(new GivenCoupon.Pk(signUpCoupon.getId(),
+                                                     couponRequest.getMember().getId()), signUpCoupon,
+                                  couponRequest.getMember(), LocalDateTime.now());
 
         givenCouponRepository.save(givenCoupon);
     }

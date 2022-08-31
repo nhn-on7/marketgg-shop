@@ -58,11 +58,11 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
 
         Member member = memberRepository.findById(memberInfo.getId())
                                         .orElseThrow(ProductInquiryPostNotFoundException
-                                                         .MemberWriteInquiryNotFoundException::new);
+                                                             .MemberWriteInquiryNotFoundException::new);
 
         Product product = productRepository.findById(id)
                                            .orElseThrow(ProductInquiryPostNotFoundException
-                                                            .ProductAtInquiryNotFoundException::new);
+                                                                .ProductAtInquiryNotFoundException::new);
 
         ProductInquiryPost inquiryPost = this.toEntity(product, member, productInquiryRequest);
 
@@ -81,7 +81,7 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
      */
     @Override
     public PageEntity<ProductInquiryResponse> retrieveProductInquiryByProductId(final Long id, final Pageable pageable)
-        throws JsonProcessingException {
+            throws JsonProcessingException {
 
         Page<ProductInquiryResponse> pageByProductNo = productInquiryPostRepository.findAllByProductNo(id, pageable);
         List<ProductInquiryResponse> productInquiryResponses = pageByProductNo.getContent();
@@ -128,8 +128,8 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     public void updateProductInquiryReply(final String inquiryReply,
                                           final Long inquiryId) {
         ProductInquiryPost inquiryPost =
-            productInquiryPostRepository.findById(inquiryId)
-                                        .orElseThrow(ProductInquiryPostNotFoundException::new);
+                productInquiryPostRepository.findById(inquiryId)
+                                            .orElseThrow(ProductInquiryPostNotFoundException::new);
 
         inquiryPost.updateInquiry(inquiryReply);
         productInquiryPostRepository.save(inquiryPost);

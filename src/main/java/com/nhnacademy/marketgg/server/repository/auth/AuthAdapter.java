@@ -10,6 +10,10 @@ import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import com.nhnacademy.marketgg.server.dto.response.member.SignupResponse;
 import com.nhnacademy.marketgg.server.exception.member.MemberInfoNotFoundException;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -20,11 +24,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * auth 서버에서 uuid 목록을 전송해 이름목록을 가져옵니다.
@@ -69,7 +68,8 @@ public class AuthAdapter implements AuthRepository {
     }
 
     @Override
-    public ShopResult<MemberInfoResponse> getMemberInfo(final MemberInfoRequest memberInfoRequest) throws JsonProcessingException {
+    public ShopResult<MemberInfoResponse> getMemberInfo(final MemberInfoRequest memberInfoRequest)
+            throws JsonProcessingException {
         String requestBody = objectMapper.writeValueAsString(memberInfoRequest);
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, buildHeaders());
         ResponseEntity<ShopResult<MemberInfoResponse>> response = restTemplate.exchange(

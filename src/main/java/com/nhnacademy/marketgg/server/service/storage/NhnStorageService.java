@@ -76,7 +76,7 @@ public class NhnStorageService implements StorageService {
 
         // 토큰 요청
         ResponseEntity<String> response =
-            this.restTemplate.exchange(identityUrl, HttpMethod.POST, httpEntity, String.class);
+                this.restTemplate.exchange(identityUrl, HttpMethod.POST, httpEntity, String.class);
 
         return response.getBody();
     }
@@ -97,7 +97,7 @@ public class NhnStorageService implements StorageService {
         RestTemplate restTemplate = new RestTemplate(requestFactory);
 
         HttpMessageConverterExtractor<String> responseExtractor =
-            new HttpMessageConverterExtractor<>(String.class, restTemplate.getMessageConverters());
+                new HttpMessageConverterExtractor<>(String.class, restTemplate.getMessageConverters());
 
         try (InputStream inputStream = new FileInputStream(objFile)) {
             cloudResponse = objectMapper.readValue(requestToken(), CloudResponse.class);

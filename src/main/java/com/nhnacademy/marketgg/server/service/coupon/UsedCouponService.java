@@ -34,11 +34,11 @@ public interface UsedCouponService {
     void deleteUsedCoupons(UsedCouponDto usedCouponDto);
 
     /**
-     *  UsedCouponDto 를 파라미터로 받아 UsedCoupon Entity 로 변환해주는 Default 메서드
+     * UsedCouponDto 를 파라미터로 받아 UsedCoupon Entity 로 변환해주는 Default 메서드
      *
      * @param usedCouponDto - 사용한 쿠폰의 주문, 사용자 정보를 담고있는 Dto
-     * @param order - 사용한 쿠폰의 주문 정보를 담고 있는 Entity 객체
-     * @param givenCoupon - 사용 쿠폰의 지급 정보를 담고 있는 Entity 객체
+     * @param order         - 사용한 쿠폰의 주문 정보를 담고 있는 Entity 객체
+     * @param givenCoupon   - 사용 쿠폰의 지급 정보를 담고 있는 Entity 객체
      * @return
      */
     default UsedCoupon toEntity(final UsedCouponDto usedCouponDto, final Order order, final GivenCoupon givenCoupon) {

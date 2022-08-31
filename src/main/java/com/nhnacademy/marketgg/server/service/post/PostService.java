@@ -60,7 +60,7 @@ public interface PostService {
      * @since 1.0.0
      */
     List<PostResponse> searchForCategory(final SearchRequest searchRequest, final MemberInfo memberInfo)
-        throws ParseException, JsonProcessingException;
+            throws ParseException, JsonProcessingException;
 
     /**
      * Reason, Status 와 같은 옵션으로 검색을 진행 할 수 있습니다.
@@ -74,7 +74,7 @@ public interface PostService {
      * @since 1.0.0
      */
     List<PostResponse> searchForOption(final SearchRequest searchRequest, final String optionType, final String option)
-        throws JsonProcessingException, ParseException;
+            throws JsonProcessingException, ParseException;
 
     /**
      * 입력받은 정보로 게시글을 수정 할 수 있습니다.

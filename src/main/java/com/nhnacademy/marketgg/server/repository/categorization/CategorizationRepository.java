@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author 박세완
  * @version 1.0.0
  */
-public interface CategorizationRepository extends JpaRepository<Categorization, String>, CategorizationRepositoryCustom {
+public interface CategorizationRepository
+        extends JpaRepository<Categorization, String>, CategorizationRepositoryCustom {
 
 }

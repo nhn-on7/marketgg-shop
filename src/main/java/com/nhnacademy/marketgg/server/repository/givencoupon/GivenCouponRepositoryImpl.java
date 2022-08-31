@@ -5,9 +5,8 @@ import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import com.nhnacademy.marketgg.server.entity.QCoupon;
 import com.nhnacademy.marketgg.server.entity.QGivenCoupon;
 import com.querydsl.core.types.Projections;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-
 import java.util.List;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class GivenCouponRepositoryImpl extends QuerydslRepositorySupport implements GivenCouponRepositoryCustom {
 

@@ -64,7 +64,7 @@ public class DefaultReviewService implements ReviewService {
                              final MemberInfo memberInfo) throws IOException {
 
         Member member =
-            memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
+                memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
 
         ImageResponse imageResponse = fileService.uploadImage(image);
 
@@ -74,7 +74,8 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
-    public void createReview(final ReviewCreateRequest reviewRequest, final MemberInfo memberInfo, final Long productId) {
+    public void createReview(final ReviewCreateRequest reviewRequest, final MemberInfo memberInfo,
+                             final Long productId) {
         Member member = memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
 
         ProductDetailResponse productDetailResponse = productRepository.queryById(productId);
@@ -85,7 +86,8 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
-    public Page<ReviewResponse> retrieveReviews(final Pageable pageable, final Long productId) throws JsonProcessingException {
+    public Page<ReviewResponse> retrieveReviews(final Pageable pageable, final Long productId)
+            throws JsonProcessingException {
         Page<ReviewResponse> response = reviewRepository.retrieveReviews(pageable, productId);
         for (ReviewResponse reviewResponse : response.getContent()) {
             MemberInfoRequest memberInfoRequest = new MemberInfoRequest(reviewResponse.getUuid());
@@ -104,8 +106,9 @@ public class DefaultReviewService implements ReviewService {
         for (int i = 1; i <= 5; i++) {
             int c = i;
             ReviewRatingResponse reviewRatingResponse =
-                reviewRatingResponses.stream().filter(o -> o.getRating() == c).findFirst().orElse(null);
-            list.add(new ReviewRatingResponse((long) i, reviewRatingResponse == null ? 0l : reviewRatingResponse.getRatingCount()));
+                    reviewRatingResponses.stream().filter(o -> o.getRating() == c).findFirst().orElse(null);
+            list.add(new ReviewRatingResponse((long) i, reviewRatingResponse == null ? 0l :
+                    reviewRatingResponse.getRatingCount()));
         }
         return list;
     }

@@ -30,7 +30,7 @@ public class GlobalControllerAdvice {
      * @return - 404 Not Found
      */
     @ExceptionHandler({
-        NotFoundException.class
+            NotFoundException.class
     })
     public ResponseEntity<ErrorEntity> notFoundExceptionHandle(final NotFoundException e) {
         log.error(e.toString());
@@ -48,7 +48,7 @@ public class GlobalControllerAdvice {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     private ResponseEntity<ErrorEntity> handleNotValidException(
-        final MethodArgumentNotValidException ex) {
+            final MethodArgumentNotValidException ex) {
 
         log.error("", ex);
         BindingResult bindingResult = ex.getBindingResult();

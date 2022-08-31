@@ -3,7 +3,6 @@ package com.nhnacademy.marketgg.server.repository.pointhistory;
 import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.PointHistory;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean

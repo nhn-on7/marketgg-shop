@@ -22,7 +22,7 @@ public class AdminFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-        throws IOException, ServletException {
+            throws IOException, ServletException {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
@@ -50,7 +50,7 @@ public class AdminFilter implements Filter {
 
     private boolean isInvalidHeader(String roleHeader, String uuid) {
         return (Objects.isNull(roleHeader) || Objects.isNull(uuid))
-            || (roleHeader.isBlank() || uuid.isBlank());
+                || (roleHeader.isBlank() || uuid.isBlank());
     }
 
 }

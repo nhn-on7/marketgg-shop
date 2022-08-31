@@ -1,6 +1,5 @@
 package com.nhnacademy.marketgg.server.dto.response.dib;
 
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

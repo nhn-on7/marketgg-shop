@@ -11,7 +11,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport
-    implements PointHistoryRepositoryCustom {
+        implements PointHistoryRepositoryCustom {
 
     public PointHistoryRepositoryImpl() {
         super(PointHistory.class);
@@ -24,17 +24,17 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport
         QOrder order = QOrder.order;
 
         return from(pointHistory)
-            .innerJoin(member)
-            .where(pointHistory.member.id.eq(id))
-            .innerJoin(order)
-            .select(Projections.constructor(PointRetrieveResponse.class,
-                                            member.id,
-                                            order.id,
-                                            pointHistory.point,
-                                            pointHistory.totalPoint,
-                                            pointHistory.content,
-                                            pointHistory.updatedAt))
-            .fetch();
+                .innerJoin(member)
+                .where(pointHistory.member.id.eq(id))
+                .innerJoin(order)
+                .select(Projections.constructor(PointRetrieveResponse.class,
+                                                member.id,
+                                                order.id,
+                                                pointHistory.point,
+                                                pointHistory.totalPoint,
+                                                pointHistory.content,
+                                                pointHistory.updatedAt))
+                .fetch();
     }
 
     @Override
@@ -44,16 +44,16 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport
         QOrder order = QOrder.order;
 
         return from(pointHistory)
-            .innerJoin(member).on(pointHistory.member.id.eq(member.id))
-            .innerJoin(order).on(pointHistory.order.id.eq(order.id))
-            .select(Projections.constructor(PointRetrieveResponse.class,
-                                            member.id,
-                                            order.id,
-                                            pointHistory.point,
-                                            pointHistory.totalPoint,
-                                            pointHistory.content,
-                                            pointHistory.updatedAt))
-            .fetch();
+                .innerJoin(member).on(pointHistory.member.id.eq(member.id))
+                .innerJoin(order).on(pointHistory.order.id.eq(order.id))
+                .select(Projections.constructor(PointRetrieveResponse.class,
+                                                member.id,
+                                                order.id,
+                                                pointHistory.point,
+                                                pointHistory.totalPoint,
+                                                pointHistory.content,
+                                                pointHistory.updatedAt))
+                .fetch();
     }
 
     @Override
@@ -61,10 +61,10 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport
         QPointHistory pointHistory = QPointHistory.pointHistory;
 
         return Optional.ofNullable(from(pointHistory)
-                                       .where(pointHistory.member.id.eq(memberId))
-                                       .orderBy(pointHistory.updatedAt.desc())
-                                       .select(pointHistory.totalPoint)
-                                       .fetchFirst()).orElse(0);
+                                           .where(pointHistory.member.id.eq(memberId))
+                                           .orderBy(pointHistory.updatedAt.desc())
+                                           .select(pointHistory.totalPoint)
+                                           .fetchFirst()).orElse(0);
     }
 
     @Override
@@ -72,9 +72,9 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport
         QPointHistory pointHistory = QPointHistory.pointHistory;
 
         return from(pointHistory)
-            .where(pointHistory.order.id.eq(orderId))
-            .select(pointHistory)
-            .fetch();
+                .where(pointHistory.order.id.eq(orderId))
+                .select(pointHistory)
+                .fetch();
     }
 
 }

@@ -19,7 +19,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-        throws Exception {
+            throws Exception {
 
         log.info("Path = {}", request.getRequestURI());
 
@@ -50,8 +50,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         List<String> roles = mapper.readValue(request.getHeader(AspectUtils.WWW_AUTHENTICATE),
-            new TypeReference<>() {
-            });
+                                              new TypeReference<>() {
+                                              });
 
         if (roles.isEmpty()) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());

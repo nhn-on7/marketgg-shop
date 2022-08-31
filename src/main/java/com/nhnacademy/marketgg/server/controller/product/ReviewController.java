@@ -71,33 +71,33 @@ public class ReviewController {
     @Operation(summary = "회원이 후기를 작성할 때 필요한 api입니다.",
                description = "후기 생성에 관한 정보를 받고, 데이터베이스에 해당 정보를 영속화합니다.",
                parameters = {
-                   @Parameter(name = "productId", description = "후기가 달린 상품의 상품번호", required = true),
-                   @Parameter(name = "memberInfo", description = "후기를 작성한 회원 정보", required = true),
-                   @Parameter(name = "reviewRequest", description = "DB에 영속화될 후기의 내용", required = true),
-                   @Parameter(name = "image", description = "후기에 보일 이미지", required = true) },
+                       @Parameter(name = "productId", description = "후기가 달린 상품의 상품번호", required = true),
+                       @Parameter(name = "memberInfo", description = "후기를 작성한 회원 정보", required = true),
+                       @Parameter(name = "reviewRequest", description = "DB에 영속화될 후기의 내용", required = true),
+                       @Parameter(name = "image", description = "후기에 보일 이미지", required = true) },
                responses = @ApiResponse(responseCode = "201",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @Auth
     @PostMapping(value = "/{productId}/reviews", consumes = { MediaType.APPLICATION_JSON_VALUE,
-        MediaType.MULTIPART_FORM_DATA_VALUE })
+            MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<ShopResult<String>> createReview(@PathVariable final Long productId,
                                                            final MemberInfo memberInfo,
                                                            @RequestBody @Valid final ReviewCreateRequest reviewRequest,
                                                            BindingResult bindingResult,
                                                            @RequestPart(required = false) MultipartFile images)
-        throws IOException {
+            throws IOException {
 
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
 
         ResponseEntity<ShopResult<String>> returnResponseEntity =
-            ResponseEntity.status(HttpStatus.CREATED)
-                          .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH))
-                          .contentType(MediaType.APPLICATION_JSON)
-                          .body(ShopResult.successWithDefaultMessage());
+                ResponseEntity.status(HttpStatus.CREATED)
+                              .location(URI.create(DEFAULT_REVIEW_URI + productId + REVIEW_PATH))
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .body(ShopResult.successWithDefaultMessage());
 
         if (Objects.isNull(images)) {
             reviewService.createReview(reviewRequest, memberInfo, productId);
@@ -120,8 +120,8 @@ public class ReviewController {
     @Operation(summary = "후기 목록 전체 조회",
                description = "상품 상세페이지 하단에서 보여야하는 후기들의 목록입니다.",
                parameters = {
-                   @Parameter(name = "productId", description = "후기가 달려있는 상품의 상품번호", required = true),
-                   @Parameter(name = "page", description = "현재 페이지. 기본값은 0", required = true)
+                       @Parameter(name = "productId", description = "후기가 달려있는 상품의 상품번호", required = true),
+                       @Parameter(name = "page", description = "현재 페이지. 기본값은 0", required = true)
                },
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
@@ -132,7 +132,7 @@ public class ReviewController {
     public ResponseEntity<PageEntity<ReviewResponse>> retrieveReviews(@PathVariable final Long productId,
                                                                       @RequestParam(value = "page", defaultValue = "0")
                                                                       final Integer page)
-        throws JsonProcessingException {
+            throws JsonProcessingException {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page);
         Page<ReviewResponse> reviewResponses = reviewService.retrieveReviews(pageRequest.getPageable(), productId);
@@ -159,8 +159,8 @@ public class ReviewController {
     @Operation(summary = "후기 상세 조회",
                description = "후기를 클릭하면 보이는 후기의 상세 정보입니다.",
                parameters = {
-                   @Parameter(name = "productId", description = "후기가 달려있는 상품의 상품번호", required = true),
-                   @Parameter(name = "reviewId", description = "후기의 PK", required = true)
+                       @Parameter(name = "productId", description = "후기가 달려있는 상품의 상품번호", required = true),
+                       @Parameter(name = "reviewId", description = "후기의 PK", required = true)
                },
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
@@ -180,7 +180,7 @@ public class ReviewController {
 
     @GetMapping("/{productId}/reviews/rating")
     public ResponseEntity<ShopResult<List<ReviewRatingResponse>>> retrieveReviewsByRating(
-        @PathVariable final Long productId) {
+            @PathVariable final Long productId) {
 
         List<ReviewRatingResponse> reviewRatingResponses = reviewService.retrieveReviewsByRating(productId);
 
@@ -202,9 +202,9 @@ public class ReviewController {
     @Operation(summary = "회원이 후기를 수정할 때 필요한 api입니다.",
                description = "후기 수정에 관한 정보를 받고, 데이터베이스에 해당 정보를 영속화합니다.",
                parameters = {
-                   @Parameter(name = "productId", description = "후기가 달린 상품의 상품번호", required = true),
-                   @Parameter(name = "memberInfo", description = "후기를 작성한 회원 정보", required = true),
-                   @Parameter(name = "reviewRequest", description = "DB에 영속화될 후기의 내용", required = true),
+                       @Parameter(name = "productId", description = "후기가 달린 상품의 상품번호", required = true),
+                       @Parameter(name = "memberInfo", description = "후기를 작성한 회원 정보", required = true),
+                       @Parameter(name = "reviewRequest", description = "DB에 영속화될 후기의 내용", required = true),
                },
                responses = @ApiResponse(responseCode = "201",
                                         content = @Content(mediaType = "application/json",

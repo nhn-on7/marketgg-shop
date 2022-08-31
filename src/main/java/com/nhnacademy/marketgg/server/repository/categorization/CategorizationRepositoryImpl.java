@@ -18,10 +18,10 @@ public class CategorizationRepositoryImpl extends QuerydslRepositorySupport impl
         QCategorization categorization = QCategorization.categorization;
 
         return from(categorization)
-            .select(Projections.constructor(CategorizationRetrieveResponse.class,
-                categorization.id,
-                categorization.name))
-            .fetch();
+                .select(Projections.constructor(CategorizationRetrieveResponse.class,
+                                                categorization.id,
+                                                categorization.name))
+                .fetch();
     }
 
 }
