@@ -12,6 +12,7 @@ import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import com.nhnacademy.marketgg.server.dto.response.TokenResponse;
 import com.nhnacademy.marketgg.server.dto.response.auth.UuidTokenResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.SignupResponse;
+import com.nhnacademy.marketgg.server.exception.auth.AuthServerResponseException;
 import com.nhnacademy.marketgg.server.exception.member.MemberInfoNotFoundException;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -28,6 +29,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ServerErrorException;
 
 /**
  * auth 서버에서 uuid 목록을 전송해 이름목록을 가져옵니다.
@@ -128,7 +130,11 @@ public class AuthAdapter implements AuthRepository {
                 new ParameterizedTypeReference<>() {
                 });
 
-        return Objects.requireNonNull(response.getBody());
+        if (Objects.isNull(response.getBody())) {
+            throw new AuthServerResponseException();
+        }
+
+        return response.getBody();
     }
 
     private HttpHeaders buildHeaders() {
