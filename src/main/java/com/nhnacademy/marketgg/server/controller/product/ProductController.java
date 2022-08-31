@@ -6,7 +6,7 @@ import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
-import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
+import com.nhnacademy.marketgg.server.elastic.request.SearchRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
