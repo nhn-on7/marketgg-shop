@@ -7,6 +7,7 @@ import com.nhnacademy.marketgg.server.dto.payment.result.Receipt;
 import com.nhnacademy.marketgg.server.dto.payment.result.TransferPaymentResult;
 import com.nhnacademy.marketgg.server.dto.payment.result.VirtualAccountPaymentResult;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -22,7 +23,9 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 @Getter
-public class PaymentResponse {
+public class PaymentResponse implements Serializable {
+
+    private static final long serialVersionUID = -8907005668287234173L;
 
     @Schema(title = "결제키", description = "결제대행사에서 발급해주는 결제 키입니다.",
             example = "EAK6k75XwlOyL0qZ4G1VOP4xk47qOroWb2MQYgmBDPdR9pxz")
