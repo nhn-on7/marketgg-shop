@@ -3,8 +3,10 @@ package com.nhnacademy.marketgg.server.aop;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
+import com.nhnacademy.marketgg.server.exception.auth.UnAuthenticException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
@@ -35,32 +37,24 @@ public class MemberInfoAspect {
         String uuid = request.getHeader(AspectUtils.AUTH_ID);
         String roleHeader = request.getHeader(AspectUtils.WWW_AUTHENTICATE);
 
-        MemberInfo memberInfo = new MemberInfo();
-        if (!(Objects.isNull(uuid) || Objects.isNull(roleHeader))) {
-            List<String> roles = mapper.readValue(roleHeader, new TypeReference<>() {
-            });
-
-            memberInfo = memberRepository.findMemberInfoByUuid(uuid)
-                                                    .orElseThrow(MemberNotFoundException::new);
-
-            memberInfo.addRoles(roles);
+        if (Objects.isNull(uuid) || Objects.isNull(roleHeader)) {
+            throw new UnAuthenticException();
         }
+        List<String> roles = mapper.readValue(roleHeader, new TypeReference<>() {
+        });
 
-        Object[] args = pjp.getArgs();
+        MemberInfo memberInfo = memberRepository.findMemberInfoByUuid(uuid)
+                                                .orElseThrow(MemberNotFoundException::new);
 
-        for (Object arg :args) {
-            if (arg instanceof MemberInfo) {
-                arg = memberInfo;
-            }
-        }
+        memberInfo.addRoles(roles);
 
-        // Object[] args = Arrays.stream(pjp.getArgs())
-        //                       .map(arg -> {
-        //                           if (arg instanceof MemberInfo) {
-        //                               arg = memberInfo;
-        //                           }
-        //                           return arg;
-        //                       }).toArray();
+        Object[] args = Arrays.stream(pjp.getArgs())
+                              .map(arg -> {
+                                  if (arg instanceof MemberInfo) {
+                                      arg = memberInfo;
+                                  }
+                                  return arg;
+                              }).toArray();
 
         return pjp.proceed(args);
     }
