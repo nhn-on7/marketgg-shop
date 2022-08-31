@@ -97,7 +97,7 @@ public class TossPaymentService implements PaymentService {
             throw new UncheckedIOException(ex);
         }
 
-        Order order = orderRepository.findById(1L).orElseThrow();
+        Order order = orderRepository.findById(orderService.detachPrefix(paymentRequest.getOrderId())).orElseThrow();
 
         Payment payment = this.toEntity(order, paymentResponse);
         Payment savedPayment = paymentRepository.save(payment);
