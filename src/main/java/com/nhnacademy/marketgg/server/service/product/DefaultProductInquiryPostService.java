@@ -152,11 +152,20 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     }
 
     @Override
-    public PageEntity<ProductInquiryResponse> retrieveProductInquiryByAdmin(final Pageable pageable) {
+    public PageEntity<ProductInquiryResponse> retrieveProductInquiryByAdmin(final Pageable pageable)
+        throws JsonProcessingException {
+
         Page<ProductInquiryResponse> allByMemberNo = productInquiryPostRepository.findAllByAdmin(pageable);
+        List<ProductInquiryResponse> productInquiryResponses = allByMemberNo.getContent();
+
+        for (ProductInquiryResponse inquiry : productInquiryResponses) {
+            MemberInfoRequest request = new MemberInfoRequest(inquiry.getUuid());
+            MemberInfoResponse nameByUuid = checkResult(authRepository.getMemberInfo(request));
+            inquiry.memberName(nameByUuid.getName());
+        }
 
         return new PageEntity<>(allByMemberNo.getNumber(), allByMemberNo.getSize(),
-                                allByMemberNo.getTotalPages(), allByMemberNo.getContent());
+                                allByMemberNo.getTotalPages(), productInquiryResponses);
     }
 
 }
