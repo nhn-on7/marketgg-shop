@@ -134,7 +134,7 @@ class OrderControllerTest {
 
     @Test
     @DisplayName("주문서 폼 필요정보 조회")
-    public void testRetrieveOrderForm() throws Exception {
+    void testRetrieveOrderForm() throws Exception {
         OrderFormResponse orderFormResponse = Dummy.getDummyOrderFormResponse();
         CartOrderRequest cartOrderRequest = new CartOrderRequest();
         ReflectionTestUtils.setField(cartOrderRequest, "id", List.of(1L));

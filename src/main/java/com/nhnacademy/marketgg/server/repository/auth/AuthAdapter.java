@@ -7,14 +7,19 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
+import com.nhnacademy.marketgg.server.dto.response.TokenResponse;
+import com.nhnacademy.marketgg.server.dto.response.auth.UuidTokenResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.SignupResponse;
+import com.nhnacademy.marketgg.server.exception.auth.AuthServerResponseException;
 import com.nhnacademy.marketgg.server.exception.member.MemberInfoNotFoundException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -24,6 +29,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ServerErrorException;
 
 /**
  * auth 서버에서 uuid 목록을 전송해 이름목록을 가져옵니다.
@@ -33,6 +39,7 @@ import org.springframework.web.client.RestTemplate;
  * @author 김정민
  * @version 1.0.0
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AuthAdapter implements AuthRepository {
@@ -97,8 +104,11 @@ public class AuthAdapter implements AuthRepository {
     }
 
     @Override
-    public void withdraw(final LocalDateTime withdrawAt) {
-        HttpEntity<LocalDateTime> requestEntity = new HttpEntity<>(withdrawAt, buildHeaders());
+    public void withdraw(final MemberWithdrawRequest memberWithdrawRequest, final String token) {
+        HttpHeaders httpHeaders = buildHeaders();
+        httpHeaders.set(HttpHeaders.AUTHORIZATION, token);
+
+        HttpEntity<MemberWithdrawRequest> requestEntity = new HttpEntity<>(memberWithdrawRequest, httpHeaders);
         restTemplate.exchange(
                 gateway + DEFAULT_AUTH,
                 HttpMethod.DELETE,
@@ -108,14 +118,23 @@ public class AuthAdapter implements AuthRepository {
     }
 
     @Override
-    public void update(final MemberUpdateRequest memberUpdateRequest) {
-        HttpEntity<MemberUpdateRequest> requestEntity = new HttpEntity<>(memberUpdateRequest, buildHeaders());
-        restTemplate.exchange(
+    public ShopResult<UuidTokenResponse> update(final MemberUpdateRequest memberUpdateRequest, final String token) {
+        HttpHeaders httpHeaders = buildHeaders();
+        httpHeaders.set(HttpHeaders.AUTHORIZATION, token);
+
+        HttpEntity<MemberUpdateRequest> requestEntity = new HttpEntity<>(memberUpdateRequest, httpHeaders);
+        ResponseEntity<ShopResult<UuidTokenResponse>> response = restTemplate.exchange(
                 gateway + DEFAULT_AUTH,
                 HttpMethod.PUT,
                 requestEntity,
                 new ParameterizedTypeReference<>() {
                 });
+
+        if (Objects.isNull(response.getBody())) {
+            throw new AuthServerResponseException();
+        }
+
+        return response.getBody();
     }
 
     private HttpHeaders buildHeaders() {
