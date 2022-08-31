@@ -88,7 +88,6 @@ public class ProductInquiryPostController {
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
-    @Auth
     @GetMapping("/products/{productId}/inquiries")
     public ResponseEntity<ShopResult<PageEntity<ProductInquiryResponse>>> retrieveProductInquiry(
             @PathVariable final Long productId,

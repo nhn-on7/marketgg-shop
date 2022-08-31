@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
@@ -48,7 +49,7 @@ public class AdminProductInquiryPostController {
     @Operation(summary = "상품 문의 답글 등록",
                description = "관리자가 상품 문의 글에 답글을 등록합니다.",
                parameters = @Parameter(name = "replyRequest",
-                                       description = "관리자가 작성한 답글이 들어있는 요청 객체", required = true),
+                                          description = "관리자가 작성한 답글이 들어있는 요청 객체", required = true),
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
@@ -82,7 +83,7 @@ public class AdminProductInquiryPostController {
                                         useReturnTypeSchema = true))
     @GetMapping("/inquiries")
     public ResponseEntity<ShopResult<PageEntity<ProductInquiryResponse>>> retrieveProductInquiry(
-            @RequestParam(value = "page", defaultValue = "1") final Integer page) {
+        @RequestParam(value = "page", defaultValue = "1") final Integer page) throws JsonProcessingException {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
 

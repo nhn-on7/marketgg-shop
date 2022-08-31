@@ -1,15 +1,5 @@
 package com.nhnacademy.marketgg.server.controller;
 
-import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
-import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATE;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.annotation.Role;
@@ -17,15 +7,11 @@ import com.nhnacademy.marketgg.server.aop.AuthInfoAspect;
 import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressUpdateRequest;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.deliveryaddress.DeliveryAddressService;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,12 +27,25 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Collections;
+import java.util.Optional;
+import java.util.UUID;
+
+import static com.nhnacademy.marketgg.server.aop.AspectUtils.AUTH_ID;
+import static com.nhnacademy.marketgg.server.aop.AspectUtils.WWW_AUTHENTICATE;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @Transactional
 @SpringBootTest
 @ActiveProfiles({ "testdb", "common", "local" })
 @Import({
-    AuthInfoAspect.class,
-    MemberInfoAspect.class
+        AuthInfoAspect.class,
+        MemberInfoAspect.class
 })
 class DeliveryAddressControllerTest {
 
@@ -116,7 +115,7 @@ class DeliveryAddressControllerTest {
         headers.set(WWW_AUTHENTICATE, roles);
 
         mockMvc.perform(delete(baseUri + "/{deliveryNo}", deliveryAddressNo)
-                   .headers(headers))
+                                .headers(headers))
                .andExpect(status().isOk());
     }
 
@@ -130,7 +129,7 @@ class DeliveryAddressControllerTest {
         headers.set(WWW_AUTHENTICATE, roles);
 
         mockMvc.perform(get("/members/delivery-addresses")
-                   .headers(headers))
+                                .headers(headers))
                .andExpect(status().isOk());
     }
 
