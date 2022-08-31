@@ -134,10 +134,10 @@ class OrderControllerTest {
 
     @Test
     @DisplayName("주문서 폼 필요정보 조회")
-    public void testRetrieveOrderForm() throws Exception {
+    void testRetrieveOrderForm() throws Exception {
         OrderFormResponse orderFormResponse = Dummy.getDummyOrderFormResponse();
         CartOrderRequest cartOrderRequest = new CartOrderRequest();
-        ReflectionTestUtils.setField(cartOrderRequest, "productIds", List.of());
+        ReflectionTestUtils.setField(cartOrderRequest, "id", List.of(1L));
         ResponseEntity<ShopResult<AuthInfo>> responseEntity = new ResponseEntity<>(authInfoResponse, HttpStatus.OK);
 
         given(orderService.retrieveOrderForm(any(List.class), any(MemberInfo.class), any(AuthInfo.class)))
