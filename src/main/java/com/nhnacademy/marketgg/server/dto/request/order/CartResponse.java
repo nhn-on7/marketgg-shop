@@ -1,11 +1,10 @@
 package com.nhnacademy.marketgg.server.dto.request.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @NoArgsConstructor
 @Getter

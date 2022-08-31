@@ -40,9 +40,9 @@ public class DefaultUsedCouponService implements UsedCouponService {
     public void createUsedCoupons(@Valid final UsedCouponDto usedCouponDto) {
         Order order = orderRepository.findById(usedCouponDto.getOrderId()).orElseThrow(OrderNotFoundException::new);
         GivenCoupon givenCoupon = givenCouponRepository.findById(new GivenCoupon.Pk(usedCouponDto.getCouponId(),
-                                                           usedCouponDto.getMemberId()))
+                                                                                    usedCouponDto.getMemberId()))
                                                        .orElseThrow(UsedCouponNotFoundException
-                                                           .GivenCouponInMemberNotFoundException::new);
+                                                                            .GivenCouponInMemberNotFoundException::new);
 
         UsedCoupon usedCoupon = this.toEntity(usedCouponDto, order, givenCoupon);
         usedCouponRepository.save(usedCoupon);
@@ -59,7 +59,8 @@ public class DefaultUsedCouponService implements UsedCouponService {
     @Transactional
     public void deleteUsedCoupons(@Valid final UsedCouponDto usedCouponDto) {
         UsedCoupon usedCoupon = usedCouponRepository.findById(new UsedCoupon.Pk(usedCouponDto.getOrderId(),
-                                                        usedCouponDto.getCouponId(), usedCouponDto.getMemberId()))
+                                                                                usedCouponDto.getCouponId(),
+                                                                                usedCouponDto.getMemberId()))
                                                     .orElseThrow(UsedCouponNotFoundException::new);
 
         usedCouponRepository.delete(usedCoupon);

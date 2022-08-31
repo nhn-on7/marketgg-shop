@@ -8,7 +8,6 @@ import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import com.nhnacademy.marketgg.server.dto.response.member.SignupResponse;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -40,7 +39,8 @@ public interface AuthRepository {
      * @throws JsonProcessingException - Json 컨텐츠를 처리할 때 발생하는 모든 문제에 대한 예외처리입니다.
      * @since 1.0.0
      */
-    ShopResult<MemberInfoResponse> getMemberInfo(final MemberInfoRequest memberInfoRequest) throws JsonProcessingException;
+    ShopResult<MemberInfoResponse> getMemberInfo(final MemberInfoRequest memberInfoRequest)
+            throws JsonProcessingException;
 
     ShopResult<SignupResponse> signup(final SignupRequest signUpRequest) throws JsonProcessingException;
 

@@ -82,10 +82,10 @@ public class AdminCategoryController {
      */
     @GetMapping("/categorizations/{categorizationId}")
     public ResponseEntity<ShopResult<List<CategoryRetrieveResponse>>> retrieveCategoriesByCategorization(
-        @PathVariable @Size(min = 1, max = 3) final String categorizationId) {
+            @PathVariable @Size(min = 1, max = 3) final String categorizationId) {
 
         List<CategoryRetrieveResponse> data = categoryService.retrieveCategoriesByCategorization(
-            categorizationId);
+                categorizationId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_CATEGORY + "/" + categorizationId))

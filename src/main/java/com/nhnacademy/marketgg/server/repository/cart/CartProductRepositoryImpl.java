@@ -6,10 +6,9 @@ import com.nhnacademy.marketgg.server.entity.CartProduct;
 import com.nhnacademy.marketgg.server.entity.QCartProduct;
 import com.nhnacademy.marketgg.server.entity.QImage;
 import com.querydsl.core.types.Projections;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class CartProductRepositoryImpl extends QuerydslRepositorySupport implements CartProductRepositoryCustom {
 

@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.Nullable;
 
 /**
  * 결제 요청에 대해 결제대행사로부터 전달받는 응답 데이터 클래스입니다.

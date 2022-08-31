@@ -6,7 +6,7 @@ import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
-import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
+import com.nhnacademy.marketgg.server.elastic.request.SearchRequest;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -125,13 +125,13 @@ class ProductControllerTest {
     @Test
     @DisplayName("상품 상세 조회 테스트")
     void testRetrieveProductDetails() throws Exception {
-        given(productService.retrieveProductDetails(anyLong())).willReturn(productDetailResponse);
+        given(productService.retrieveProductDetails(anyLong(), any())).willReturn(productDetailResponse);
 
         this.mockMvc.perform(get(DEFAULT_PRODUCT + "/1")
                                  .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
 
-        then(productService).should(times(1)).retrieveProductDetails(anyLong());
+        then(productService).should(times(1)).retrieveProductDetails(anyLong(), any());
     }
 
 }

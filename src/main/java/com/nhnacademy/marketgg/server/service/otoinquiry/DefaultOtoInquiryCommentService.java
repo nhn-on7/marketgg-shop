@@ -25,8 +25,8 @@ public class DefaultOtoInquiryCommentService implements OtoInquiryCommentService
     @Override
     public void createComment(final Long inquiryId, final Long memberId, final CommentRequest commentRequest) {
         CustomerServicePost csPost
-            = customerServicePostRepository.findById(inquiryId)
-                                           .orElseThrow(CustomerServicePostNotFoundException::new);
+                = customerServicePostRepository.findById(inquiryId)
+                                               .orElseThrow(CustomerServicePostNotFoundException::new);
 
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
 

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface ProductInquiryPostRepository extends
-    JpaRepository<ProductInquiryPost, Long>, ProductInquiryPostRepositoryCustom {
+        JpaRepository<ProductInquiryPost, Long>, ProductInquiryPostRepositoryCustom {
 
 }

@@ -9,10 +9,9 @@ import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResp
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 /**
  * 주문 Service 입니다.
@@ -30,7 +29,8 @@ public interface OrderService {
      * @return 주문 등록 후 결제에 넘겨줄 정보를 담은 DTO 를 반환합니다.
      * @since 1.0.0
      */
-    OrderToPayment createOrder(final OrderCreateRequest orderRequest, final MemberInfo memberInfo) throws JsonProcessingException;
+    OrderToPayment createOrder(final OrderCreateRequest orderRequest, final MemberInfo memberInfo)
+            throws JsonProcessingException;
 
     /**
      * 주문서 작성에 필요한 정보를 취합하여 조회하는 메소드입니다.

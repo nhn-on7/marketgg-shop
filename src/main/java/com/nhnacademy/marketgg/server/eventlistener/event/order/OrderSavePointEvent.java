@@ -1,12 +1,12 @@
 package com.nhnacademy.marketgg.server.eventlistener.event.order;
 
-import com.nhnacademy.marketgg.server.entity.Member;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import static com.nhnacademy.marketgg.server.constant.PointContent.IMAGE_REVIEW;
 import static com.nhnacademy.marketgg.server.constant.PointContent.NORMAL_REVIEW;
 import static com.nhnacademy.marketgg.server.constant.PointContent.REFERRED;
+
+import com.nhnacademy.marketgg.server.entity.Member;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * 포인트 적립에 필요한 Data 를 가진 이벤트 입니다.

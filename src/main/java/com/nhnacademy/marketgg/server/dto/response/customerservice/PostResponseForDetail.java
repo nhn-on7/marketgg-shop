@@ -69,7 +69,7 @@ public class PostResponseForDetail {
         List<CommentResponse> response = new ArrayList<>();
         for (CommentReady commentReady : ready) {
             response.add(new CommentResponse(commentReady.getContent(), this.getName(commentReady.getUuid(), nameList),
-                commentReady.getCreatedAt()));
+                                             commentReady.getCreatedAt()));
         }
         return response;
     }

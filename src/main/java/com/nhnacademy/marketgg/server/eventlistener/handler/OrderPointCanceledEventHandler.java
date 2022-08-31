@@ -1,21 +1,20 @@
 package com.nhnacademy.marketgg.server.eventlistener.handler;
 
+import static com.nhnacademy.marketgg.server.constant.PointContent.ORDER;
+import static com.nhnacademy.marketgg.server.constant.PointContent.ORDER_CANCEL;
+
 import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.PointHistory;
 import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderPointCanceledEvent;
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-
-import java.util.List;
-
-import static com.nhnacademy.marketgg.server.constant.PointContent.ORDER;
-import static com.nhnacademy.marketgg.server.constant.PointContent.ORDER_CANCEL;
 
 /**
  * OrderPointCanceledEvent 를 받아 처리하는 클래스입니다.

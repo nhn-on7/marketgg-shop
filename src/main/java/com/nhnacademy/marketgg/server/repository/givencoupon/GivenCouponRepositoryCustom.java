@@ -1,9 +1,8 @@
 package com.nhnacademy.marketgg.server.repository.givencoupon;
 
 import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
-import org.springframework.data.repository.NoRepositoryBean;
-
 import java.util.List;
+import org.springframework.data.repository.NoRepositoryBean;
 
 /**
  * 지급 쿠폰 레포지토리입니다.

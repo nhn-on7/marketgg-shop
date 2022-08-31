@@ -101,7 +101,7 @@ public class PaymentController {
      */
     @PostMapping("/payments/virtual-accounts")
     public ResponseEntity<ShopResult<String>> createVirtualAccounts(@RequestBody @Valid final
-                                                                             VirtualAccountCreateRequest request) {
+                                                                    VirtualAccountCreateRequest request) {
         log.info("createVirtualAccounts: {}", request);
 
         paymentService.createVirtualAccounts(request);

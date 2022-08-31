@@ -12,6 +12,8 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
+import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
+import com.nhnacademy.marketgg.server.dto.response.review.ReviewRatingResponse;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -25,9 +27,11 @@ import com.nhnacademy.marketgg.server.exception.review.ReviewNotFoundException;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
+import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.review.ReviewRepository;
 import com.nhnacademy.marketgg.server.service.file.FileService;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -52,6 +56,7 @@ public class DefaultReviewService implements ReviewService {
     private final ApplicationEventPublisher publisher;
     private final FileService fileService;
     private final AuthRepository authRepository;
+    private final ProductRepository productRepository;
 
     @Transactional
     @Override
@@ -59,7 +64,7 @@ public class DefaultReviewService implements ReviewService {
                              final MemberInfo memberInfo) throws IOException {
 
         Member member =
-            memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
+                memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
 
         ImageResponse imageResponse = fileService.uploadImage(image);
 
@@ -69,19 +74,21 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
-    public void createReview(final ReviewCreateRequest reviewRequest, final MemberInfo memberInfo) {
+    public void createReview(final ReviewCreateRequest reviewRequest, final MemberInfo memberInfo,
+                             final Long productId) {
         Member member = memberRepository.findById(memberInfo.getId()).orElseThrow(MemberNotFoundException::new);
 
-        Asset asset = assetRepository.save(Asset.create());
+        ProductDetailResponse productDetailResponse = productRepository.queryById(productId);
 
-        reviewRepository.save(new Review(reviewRequest, member, asset));
+        reviewRepository.save(new Review(reviewRequest, member, productDetailResponse.getAsset()));
 
         publisher.publishEvent(new NormalReviewedEvent(member, NORMAL_REVIEW.getContent()));
     }
 
     @Override
-    public Page<ReviewResponse> retrieveReviews(final Pageable pageable) throws JsonProcessingException {
-        Page<ReviewResponse> response = reviewRepository.retrieveReviews(pageable);
+    public Page<ReviewResponse> retrieveReviews(final Pageable pageable, final Long productId)
+            throws JsonProcessingException {
+        Page<ReviewResponse> response = reviewRepository.retrieveReviews(pageable, productId);
         for (ReviewResponse reviewResponse : response.getContent()) {
             MemberInfoRequest memberInfoRequest = new MemberInfoRequest(reviewResponse.getUuid());
             ShopResult<MemberInfoResponse> memberInfo = authRepository.getMemberInfo(memberInfoRequest);
@@ -89,6 +96,21 @@ public class DefaultReviewService implements ReviewService {
         }
 
         return response;
+    }
+
+    @Override
+    public List<ReviewRatingResponse> retrieveReviewsByRating(final Long productId) {
+        List<ReviewRatingResponse> reviewRatingResponses = reviewRepository.retrieveReviewsByRating(productId);
+        List<ReviewRatingResponse> list = new ArrayList<>();
+
+        for (int i = 1; i <= 5; i++) {
+            int c = i;
+            ReviewRatingResponse reviewRatingResponse =
+                    reviewRatingResponses.stream().filter(o -> o.getRating() == c).findFirst().orElse(null);
+            list.add(new ReviewRatingResponse((long) i, reviewRatingResponse == null ? 0l :
+                    reviewRatingResponse.getRatingCount()));
+        }
+        return list;
     }
 
 

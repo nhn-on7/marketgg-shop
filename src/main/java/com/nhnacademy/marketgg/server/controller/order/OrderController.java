@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -33,9 +34,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.net.URI;
-import java.util.List;
 
 /**
  * 주문에 관련된 Rest Controller 입니다.
@@ -69,8 +67,9 @@ public class OrderController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping
-    public ResponseEntity<ShopResult<OrderToPayment>> createOrder(@RequestBody final OrderCreateRequest orderCreateRequest,
-                                                                  final MemberInfo memberInfo)
+    public ResponseEntity<ShopResult<OrderToPayment>> createOrder(
+            @RequestBody final OrderCreateRequest orderCreateRequest,
+            final MemberInfo memberInfo)
             throws JsonProcessingException {
 
         log.info("createOrder method started");
@@ -135,9 +134,9 @@ public class OrderController {
                                         useReturnTypeSchema = true))
     @GetMapping
     public ResponseEntity<ShopResult<PageEntity<OrderRetrieveResponse>>> retrieveOrderList(final MemberInfo memberInfo,
-                                                                                     @RequestParam(value = "page",
-                                                                                                   defaultValue = "0")
-                                                                                     final Integer page) {
+                                                                                           @RequestParam(value = "page",
+                                                                                                         defaultValue = "0")
+                                                                                           final Integer page) {
         log.info("retrieveOrderList method started");
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1); // offset 때문에 -1 처리

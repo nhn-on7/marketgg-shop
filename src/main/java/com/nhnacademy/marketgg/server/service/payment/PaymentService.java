@@ -57,7 +57,7 @@ public interface PaymentService {
     /**
      * 승인된 결제를 결제키로 조회합니다.
      *
-     * @param paymentKey     - 결제 건에 대한 고유 키 값
+     * @param paymentKey - 결제 건에 대한 고유 키 값
      * @return paymentRequest - 상세 결제 내역 데이터
      */
     PaymentResponse retrievePayment(final String paymentKey);

@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.elastic.dto.request.searchutil;
+package com.nhnacademy.marketgg.server.elastic.request.searchutil;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -34,7 +34,6 @@ public class MultiMatch {
      * @since 1.0.0
      */
     private List<String> fields;
-
 
 
 }

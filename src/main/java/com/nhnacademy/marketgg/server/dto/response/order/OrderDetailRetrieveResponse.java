@@ -2,11 +2,10 @@ package com.nhnacademy.marketgg.server.dto.response.order;
 
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.response.coupon.UsedCouponResponse;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 주문 상세 조회시 필요한 정보를 전달하기 위한 DTO 입니다.

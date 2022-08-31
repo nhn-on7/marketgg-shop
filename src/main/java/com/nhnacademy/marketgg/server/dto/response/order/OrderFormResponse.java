@@ -2,11 +2,10 @@ package com.nhnacademy.marketgg.server.dto.response.order;
 
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 /**
  * 주문서 입력 폼 출력을 위해 취합한 정보를 전달하기 위한 DTO 입니다.

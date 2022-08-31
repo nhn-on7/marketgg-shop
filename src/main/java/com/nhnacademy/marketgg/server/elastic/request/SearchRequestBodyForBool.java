@@ -1,9 +1,9 @@
-package com.nhnacademy.marketgg.server.elastic.dto.request;
+package com.nhnacademy.marketgg.server.elastic.request;
 
-import com.nhnacademy.marketgg.server.elastic.dto.request.searchutil.Bool;
-import com.nhnacademy.marketgg.server.elastic.dto.request.searchutil.BoolQuery;
-import com.nhnacademy.marketgg.server.elastic.dto.request.searchutil.MultiMatch;
-import com.nhnacademy.marketgg.server.elastic.dto.request.searchutil.Must;
+import com.nhnacademy.marketgg.server.elastic.request.searchutil.Bool;
+import com.nhnacademy.marketgg.server.elastic.request.searchutil.BoolQuery;
+import com.nhnacademy.marketgg.server.elastic.request.searchutil.MultiMatch;
+import com.nhnacademy.marketgg.server.elastic.request.searchutil.Must;
 import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
@@ -120,7 +120,7 @@ public class SearchRequestBodyForBool<T> {
         this.size = request.getSize();
         this.query = new BoolQuery(
                 new Bool(List.of(new Must((new MultiMatch(request.getKeyword(), FUZZINESS, DEFAULT_PRODUCT_FIELD))),
-                                 new Must(new MultiMatch(convertString, NO_FUZZINESS, DEFAULT_BOARD_FIELD)))));
+                                 new Must(new MultiMatch(convertString, NO_FUZZINESS, DEFAULT_PRODUCT_FIELD)))));
     }
 
     private Boolean isBoard(final String document) {

@@ -1,10 +1,9 @@
 package com.nhnacademy.marketgg.server.dto.request.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 주문 상태를 변경하기 위한 DTO 입니다.

@@ -21,10 +21,10 @@ public class CategoryRepositoryImpl extends QuerydslRepositorySupport implements
         QCategorization categorization = QCategorization.categorization;
 
         return from(category)
-            .innerJoin(categorization).on(category.categorization.id.eq(categorization.id))
-            .where(category.id.eq(id))
-            .select(selectAllCategoryColumns(category, categorization))
-            .fetchOne();
+                .innerJoin(categorization).on(category.categorization.id.eq(categorization.id))
+                .where(category.id.eq(id))
+                .select(selectAllCategoryColumns(category, categorization))
+                .fetchOne();
     }
 
     @Override
@@ -32,9 +32,9 @@ public class CategoryRepositoryImpl extends QuerydslRepositorySupport implements
         QCategory category = QCategory.category;
 
         return from(category)
-            .where(category.name.eq(name))
-            .select(category.id)
-            .fetchOne();
+                .where(category.name.eq(name))
+                .select(category.id)
+                .fetchOne();
     }
 
     @Override
@@ -43,10 +43,10 @@ public class CategoryRepositoryImpl extends QuerydslRepositorySupport implements
         QCategorization categorization = QCategorization.categorization;
 
         return from(category)
-            .innerJoin(categorization).on(category.categorization.id.eq(categorization.id))
-            .where(categorization.id.eq(categorizationId))
-            .select(selectAllCategoryColumns(category, categorization))
-            .fetch();
+                .innerJoin(categorization).on(category.categorization.id.eq(categorization.id))
+                .where(categorization.id.eq(categorizationId))
+                .select(selectAllCategoryColumns(category, categorization))
+                .fetch();
     }
 
     @Override
@@ -55,17 +55,18 @@ public class CategoryRepositoryImpl extends QuerydslRepositorySupport implements
         QCategorization categorization = QCategorization.categorization;
 
         return from(category)
-            .innerJoin(categorization).on(category.categorization.id.eq(categorization.id))
-            .select(selectAllCategoryColumns(category, categorization))
-            .fetch();
+                .innerJoin(categorization).on(category.categorization.id.eq(categorization.id))
+                .select(selectAllCategoryColumns(category, categorization))
+                .fetch();
     }
 
-    private ConstructorExpression<CategoryRetrieveResponse> selectAllCategoryColumns(QCategory category, QCategorization categorization) {
+    private ConstructorExpression<CategoryRetrieveResponse> selectAllCategoryColumns(QCategory category,
+                                                                                     QCategorization categorization) {
         return Projections.constructor(CategoryRetrieveResponse.class,
-            category.id,
-            categorization.name,
-            category.name,
-            category.sequence);
+                                       category.id,
+                                       categorization.name,
+                                       category.name,
+                                       category.sequence);
     }
 
 }

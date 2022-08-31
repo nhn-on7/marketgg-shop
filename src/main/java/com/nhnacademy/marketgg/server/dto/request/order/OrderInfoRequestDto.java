@@ -1,10 +1,9 @@
 package com.nhnacademy.marketgg.server.dto.request.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
 
 /**
  * 배송 서버에 주문 정보를 보내기 위한 DTO 입니다.

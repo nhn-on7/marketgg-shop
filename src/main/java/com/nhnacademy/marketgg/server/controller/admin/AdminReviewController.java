@@ -30,8 +30,8 @@ public class AdminReviewController {
     @Operation(summary = "베스트후기 선정",
                description = "선택한 후기를 베스트후기로 선정한다. 관리자만 가능하다.",
                parameters = {
-                   @Parameter(name = "productId", description = "후기가 달려있는 상품의 상품번호", required = true),
-                   @Parameter(name = "reviewId", description = "후기의 PK", required = true)
+                       @Parameter(name = "productId", description = "후기가 달려있는 상품의 상품번호", required = true),
+                       @Parameter(name = "reviewId", description = "후기의 PK", required = true)
                },
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
@@ -40,14 +40,14 @@ public class AdminReviewController {
 
     @PostMapping("/{productId}/reviews/{reviewId}/make-best")
     public ResponseEntity<ShopResult<Boolean>> makeBestReview(@PathVariable final Long productId,
-                                                         @PathVariable final Long reviewId) {
+                                                              @PathVariable final Long reviewId) {
 
         Boolean response = reviewService.makeBestReview(reviewId);
         log.info("다음의 상품이 베스트후기로 선정되었습니다:{}", productId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                 DEFAULT_REVIEW_URI + productId + "/reviews/" + reviewId + "/makeBest"))
+                                     DEFAULT_REVIEW_URI + productId + "/reviews/" + reviewId + "/makeBest"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(ShopResult.successWith(response));
     }
