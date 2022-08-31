@@ -11,7 +11,9 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.coupon.GivenCouponCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
+import com.nhnacademy.marketgg.server.dto.response.auth.UuidTokenResponse;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
@@ -23,9 +25,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +39,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 /**
  * 회원관리에 관련된 RestController 입니다.
@@ -54,6 +59,8 @@ public class MemberController {
     private final MemberService memberService;
     private final GivenCouponService givenCouponService;
     private final ProductInquiryPostService productInquiryPostService;
+
+    public static final String JWT_EXPIRE = "JWT-Expire";
 
     /**
      * 사용자 정보를 반환합니다.
@@ -85,6 +92,7 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<ShopResult<String>> doSignUp(@RequestBody @Valid final SignupRequest signUpRequest)
             throws JsonProcessingException {
+
         memberService.signUp(signUpRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -95,12 +103,16 @@ public class MemberController {
     /**
      * 회원 탈퇴시 Soft 삭제를 위한 메소드 입니다.
      *
-     * @param memberInfo - 탈퇴하는 회원의 정보 입니다.
      * @return 응답 객체를 반환합니다.
      */
     @DeleteMapping
-    public ResponseEntity<ShopResult<String>> withdraw(final MemberInfo memberInfo) throws JsonProcessingException {
-        memberService.withdraw(memberInfo);
+    public ResponseEntity<ShopResult<String>> withdraw(MemberInfo memberInfo,
+                                                       HttpServletRequest request,
+                                                       @RequestBody @Valid final MemberWithdrawRequest memberWithdraw) throws JsonProcessingException {
+
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        memberService.withdraw(memberInfo, memberWithdraw, token);
 
         return ResponseEntity.status(OK)
                              .contentType(MediaType.APPLICATION_JSON)
@@ -109,12 +121,20 @@ public class MemberController {
 
     @PutMapping
     public ResponseEntity<ShopResult<String>> update(final MemberInfo memberInfo,
-                                                     @Valid @RequestBody
-                                                     final MemberUpdateRequest memberUpdateRequest) {
-        memberService.update(memberInfo, memberUpdateRequest);
+                                                     HttpServletRequest request,
+                                                     @Valid @RequestBody final MemberUpdateRequest memberUpdateRequest) {
+
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        UuidTokenResponse update = memberService.update(memberInfo, memberUpdateRequest, token);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setBearerAuth(update.getJwt());
+        httpHeaders.set(JWT_EXPIRE, update.getExpiredDate().toString());
 
         return ResponseEntity.status(OK)
                              .contentType(MediaType.APPLICATION_JSON)
+                             .headers(httpHeaders)
                              .body(ShopResult.successWithDefaultMessage());
     }
 
@@ -128,13 +148,13 @@ public class MemberController {
      * @since 1.0.0
      */
     @Operation(summary = "지급 쿠폰 생성",
-               description = "회원이 쿠폰의 이름으로 쿠폰을 등록하면 지급 쿠폰이 생성됩니다.",
-               parameters = { @Parameter(name = "memberInfo", description = "쿠폰을 등록하는 회원의 정보", required = true),
-                       @Parameter(name = "givenCouponRequest", description = "등록할 쿠폰 이름을 가진 요청 객체", required = true) },
-               responses = @ApiResponse(responseCode = "201",
-                                        content = @Content(mediaType = "application/json",
-                                                           schema = @Schema(implementation = ShopResult.class)),
-                                        useReturnTypeSchema = true))
+            description = "회원이 쿠폰의 이름으로 쿠폰을 등록하면 지급 쿠폰이 생성됩니다.",
+            parameters = {@Parameter(name = "memberInfo", description = "쿠폰을 등록하는 회원의 정보", required = true),
+                    @Parameter(name = "givenCouponRequest", description = "등록할 쿠폰 이름을 가진 요청 객체", required = true)},
+            responses = @ApiResponse(responseCode = "201",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ShopResult.class)),
+                    useReturnTypeSchema = true))
     @PostMapping("/coupons")
     public ResponseEntity<ShopResult<String>> createGivenCoupons(final MemberInfo memberInfo,
                                                                  @Valid @RequestBody final
