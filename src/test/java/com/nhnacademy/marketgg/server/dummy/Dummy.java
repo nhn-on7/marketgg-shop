@@ -112,7 +112,7 @@ public class Dummy {
         ReflectionTestUtils.setField(productRequest, "expirationDate", LocalDate.now());
         ReflectionTestUtils.setField(productRequest, "capacity", "20개");
         ReflectionTestUtils.setField(productRequest, "labelNo", 1L);
-        ReflectionTestUtils.setField(productRequest, "assetNo", 1L);
+
 
         return productRequest;
     }
