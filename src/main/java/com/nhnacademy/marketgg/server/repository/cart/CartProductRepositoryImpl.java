@@ -22,15 +22,15 @@ public class CartProductRepositoryImpl extends QuerydslRepositorySupport impleme
         QImage image = QImage.image;
 
         return from(cartProduct)
-                .innerJoin(cartProduct.product)
-                .innerJoin(cartProduct.product.asset)
-                .innerJoin(image).on(image.asset.id.eq(cartProduct.product.asset.id))
-                .where(cartProduct.pk.cartId.eq(cartId))
-                .select(Projections.constructor(CartProductResponse.class,
-                                                cartProduct.product.id, image.imageAddress,
-                                                cartProduct.product.name, cartProduct.amount,
-                                                cartProduct.product.price))
-                .fetch();
+            .innerJoin(cartProduct.product)
+            .innerJoin(cartProduct.product.asset)
+            .innerJoin(image).on(image.asset.id.eq(cartProduct.product.asset.id))
+            .where(cartProduct.pk.cartId.eq(cartId))
+            .select(Projections.constructor(CartProductResponse.class,
+                                            cartProduct.product.id, image.imageAddress,
+                                            cartProduct.product.name, cartProduct.amount,
+                                            cartProduct.product.price))
+            .fetch();
     }
 
     @Override
@@ -40,15 +40,14 @@ public class CartProductRepositoryImpl extends QuerydslRepositorySupport impleme
 
         for (Long id : productIds) {
             result.add(from(cartProduct)
-                               .where(cartProduct.pk.cartId.eq(cartId))
-                               .where(cartProduct.pk.productId.eq(id))
-                               .select(Projections.constructor(ProductToOrder.class,
-                                                               cartProduct.pk.productId,
-                                                               cartProduct.product.name,
-                                                               cartProduct.product.price,
-                                                               cartProduct.amount,
-                                                               null))
-                               .fetchOne());
+                           .where(cartProduct.pk.cartId.eq(cartId))
+                           .where(cartProduct.pk.productId.eq(id))
+                           .select(Projections.constructor(ProductToOrder.class,
+                                                           cartProduct.pk.productId,
+                                                           cartProduct.product.name,
+                                                           cartProduct.product.price,
+                                                           cartProduct.amount))
+                           .fetchOne());
         }
 
         return result;

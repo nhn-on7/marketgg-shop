@@ -6,7 +6,7 @@ import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
-import com.nhnacademy.marketgg.server.dto.request.order.CartResponse;
+import com.nhnacademy.marketgg.server.dto.request.order.CartOrderRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
@@ -61,16 +61,16 @@ public class OrderController {
     @Operation(summary = "주문 등록",
                description = "주문 등록을 위해 들어온 값들을 검증하고 주문 등록을 처리합니다.",
                parameters = { @Parameter(name = "orderCreateRequest", description = "주문 등록 요청 데이터", required = true),
-                       @Parameter(name = "memberInfo", description = "주문하는 회원 정보", required = true) },
+                   @Parameter(name = "memberInfo", description = "주문하는 회원 정보", required = true) },
                responses = @ApiResponse(responseCode = "201",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping
-    public ResponseEntity<ShopResult<OrderToPayment>> createOrder(
-            @RequestBody final OrderCreateRequest orderCreateRequest,
-            final MemberInfo memberInfo)
-            throws JsonProcessingException {
+    public ResponseEntity<ShopResult<OrderToPayment>> createOrder(@RequestBody final
+                                                                  OrderCreateRequest orderCreateRequest,
+                                                                  final MemberInfo memberInfo)
+        throws JsonProcessingException {
 
         log.info("createOrder method started");
         log.info("orderRequest: {}", orderCreateRequest);
@@ -86,30 +86,31 @@ public class OrderController {
     /**
      * 주문서 작성에 필요한 정보를 취합하여 제공하는 GET Mapping 을 지원합니다.
      *
-     * @param cartResponse - 장바구니에서 주문할 상품 ID 목록 입니다.
-     * @param memberInfo   - 주문하는 회원의 정보입니다.
-     * @param authInfo     - 주문하는 회원의 auth 정보입니다.
+     * @param cartRequest - 장바구니에서 주문할 상품 ID 목록 입니다.
+     * @param memberInfo  - 주문하는 회원의 정보입니다.
+     * @param authInfo    - 주문하는 회원의 auth 정보입니다.
      * @return 회원의 정보를 토대로 주문서 작성에 필요한 값들과 상품목록을 취합하여 반환합니다.
      * @since 1.0.0
      */
     @Operation(summary = "주문서 정보 요청",
                description = "주문서 입력폼에 필요한 정보들을 취합하여 반환합니다.",
                parameters = { @Parameter(name = "cartResponse", description = "장바구니에서 선택한 주문할 상품", required = true),
-                       @Parameter(name = "memberInfo", description = "주문하는 회원 정보", required = true),
-                       @Parameter(name = "AuthInfo", description = "주문하는 회원 auth 정보", required = true) },
+                   @Parameter(name = "memberInfo", description = "주문하는 회원 정보", required = true),
+                   @Parameter(name = "AuthInfo", description = "주문하는 회원 auth 정보", required = true) },
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping("/order-form")
-    public ResponseEntity<ShopResult<OrderFormResponse>> retrieveOrderForm(@RequestBody final CartResponse cartResponse,
+    public ResponseEntity<ShopResult<OrderFormResponse>> retrieveOrderForm(@RequestBody final
+                                                                           CartOrderRequest cartRequest,
                                                                            final MemberInfo memberInfo,
                                                                            final AuthInfo authInfo) {
 
         log.info("retrieveOrderForm method started");
-        log.info("cartResponse: {}", cartResponse);
+        log.info("cartOrderRequest: {}", cartRequest);
 
-        OrderFormResponse data = orderService.retrieveOrderForm(cartResponse.getProductIds(), memberInfo, authInfo);
+        OrderFormResponse data = orderService.retrieveOrderForm(cartRequest.getId(), memberInfo, authInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(ORDER_PREFIX + "/orderForm"))
@@ -163,7 +164,7 @@ public class OrderController {
     @Operation(summary = "주문 상세 조회",
                description = "지정한 주문의 상세 정보를 조회합니다.(회원이라면 본인의 상세 정보만 조회 가능합니다.)",
                parameters = { @Parameter(name = "orderId", description = "주문 식별번호", required = true),
-                       @Parameter(name = "memberInfo", description = "주문하는 회원 정보", required = true) },
+                   @Parameter(name = "memberInfo", description = "주문하는 회원 정보", required = true) },
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
@@ -194,7 +195,7 @@ public class OrderController {
     @Operation(summary = "주문 상태 변경",
                description = "주문의 상태를 변경합니다.",
                parameters = { @Parameter(name = "orderId", description = "주문 식별번호", required = true),
-                       @Parameter(name = "status", description = "변경할 상태값", required = true) },
+                   @Parameter(name = "status", description = "변경할 상태값", required = true) },
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
@@ -230,8 +231,8 @@ public class OrderController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PatchMapping("/{orderId}/delivery")
-    public ResponseEntity<ShopResult<String>> createTrackingNo(
-            @PathVariable final Long orderId) throws JsonProcessingException {
+    public ResponseEntity<ShopResult<String>> createTrackingNo(@PathVariable final
+                                                               Long orderId) throws JsonProcessingException {
 
         log.info("createTrackingNo method started");
 
