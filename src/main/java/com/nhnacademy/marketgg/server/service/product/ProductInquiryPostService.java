@@ -102,5 +102,5 @@ public interface ProductInquiryPostService {
      * @return 조회한 상품 문의를 담은 객체를 반환합니다.
      * @since 1.0.0
      */
-    PageEntity<ProductInquiryResponse> retrieveProductInquiryByAdmin(Pageable pageable);
+    PageEntity<ProductInquiryResponse> retrieveProductInquiryByAdmin(Pageable pageable) throws JsonProcessingException;
 }
