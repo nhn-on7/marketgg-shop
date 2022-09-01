@@ -170,7 +170,7 @@ public class DefaultMemberService implements MemberService {
                   .limit(pageable.getPageSize())
                   .collect(toList());
 
-        return new PageEntity<>(result.getPageNumber(), result.getPageSize(), result.getPageSize(), responses);
+        return new PageEntity<>(result.getPageNumber(), result.getPageSize(), result.getTotalPages(), responses);
     }
 
 }
