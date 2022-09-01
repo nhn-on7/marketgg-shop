@@ -16,7 +16,7 @@ public class PaymentTypeConverter implements AttributeConverter<PaymentType, Str
 
     @Override
     public String convertToDatabaseColumn(PaymentType attribute) {
-        return attribute.getName();
+        return attribute.getType();
     }
 
     @Override
