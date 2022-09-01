@@ -39,17 +39,19 @@ public class AdminReviewController {
                                         useReturnTypeSchema = true))
 
     @PostMapping("/{productId}/reviews/{reviewId}/make-best")
-    public ResponseEntity<ShopResult<Boolean>> makeBestReview(@PathVariable final Long productId,
+    public ResponseEntity<ShopResult<String>> makeBestReview(@PathVariable final Long productId,
                                                               @PathVariable final Long reviewId) {
 
         Boolean response = reviewService.makeBestReview(reviewId);
-        log.info("다음의 상품이 베스트후기로 선정되었습니다:{}", productId);
+        if (response) {
+            log.info("다음의 상품이 베스트후기로 선정되었습니다:{}", productId);
+        }
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
                                      DEFAULT_REVIEW_URI + productId + "/reviews/" + reviewId + "/makeBest"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.successWith(response));
+                             .body(ShopResult.successWithDefaultMessage());
     }
 
 }
