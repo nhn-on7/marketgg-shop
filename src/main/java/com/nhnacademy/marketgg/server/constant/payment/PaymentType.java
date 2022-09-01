@@ -21,7 +21,7 @@ public enum PaymentType {
     TRANSFER("계좌이체"),
     MOBILE_PHONE("휴대폰");
 
-    private final String name;
+    private final String type;
 
     /**
      * 문자열로 구성된 결제 수단 구분을 통해 열거형을 추출합니다.
@@ -31,7 +31,7 @@ public enum PaymentType {
      */
     public static PaymentType of(String type) {
         return Arrays.stream(PaymentType.values())
-                     .filter(v -> v.getName().equals(type))
+                     .filter(v -> v.getType().equals(type))
                      .findAny()
                      .orElseThrow(IllegalArgumentException::new);
     }

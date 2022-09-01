@@ -85,7 +85,7 @@ class TossPaymentServiceTest {
     @Test
     @DisplayName("결제 수단에 따른 결제 승인")
     void testPay() throws JsonProcessingException {
-        PaymentResponse spyPaymentResponse = spy(PaymentDummy.createPaymentResponse(PaymentType.CARD.getName()));
+        PaymentResponse spyPaymentResponse = spy(PaymentDummy.createPaymentResponse(PaymentType.CARD.getType()));
         doReturn(spyPaymentResponse).when(objectMapper).readValue(anyString(), eq(PaymentResponse.class));
 
         given(objectMapper.writeValueAsString(spyPaymentResponse))
@@ -130,7 +130,7 @@ class TossPaymentServiceTest {
     @Test
     @DisplayName("결제된 건에 대하여 결제 조회")
     void testRetrievePayment() throws JsonProcessingException {
-        PaymentResponse spyPaymentResponse = spy(PaymentDummy.createPaymentResponse(PaymentType.CARD.getName()));
+        PaymentResponse spyPaymentResponse = spy(PaymentDummy.createPaymentResponse(PaymentType.CARD.getType()));
         doReturn(spyPaymentResponse).when(objectMapper).readValue(anyString(), eq(PaymentResponse.class));
 
         given(objectMapper.writeValueAsString(spyPaymentResponse))
