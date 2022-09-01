@@ -113,7 +113,6 @@ public class OrderController {
         OrderFormResponse data = orderService.retrieveOrderForm(cartRequest.getId(), memberInfo, authInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(ORDER_PREFIX + "/orderForm"))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(ShopResult.successWith(data));
     }

@@ -3,7 +3,7 @@ package com.nhnacademy.marketgg.server.service.order;
 import static com.nhnacademy.marketgg.server.repository.auth.AuthAdapter.checkResult;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.constant.PaymentType;
+import com.nhnacademy.marketgg.server.constant.payment.PaymentType;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;

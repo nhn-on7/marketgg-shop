@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.entity;
 
 import com.nhnacademy.marketgg.server.constant.OrderStatus;
-import com.nhnacademy.marketgg.server.constant.PaymentType;
+import com.nhnacademy.marketgg.server.constant.payment.PaymentType;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -98,7 +98,7 @@ public class Order {
         this.member = member;
         this.orderName = representName + " 외 " + productSize + "건";
         this.totalAmount = orderRequest.getTotalAmount();
-        this.orderStatus = orderRequest.getPaymentType().equals(PaymentType.VIRTUAL.getType())
+        this.orderStatus = orderRequest.getPaymentType().equals(PaymentType.VIRTUAL_ACCOUNT.getType())
                 ? OrderStatus.DEPOSIT_WAITING.getStatus() : OrderStatus.PAY_WAITING.getStatus();
         this.usedPoint = orderRequest.getUsedPoint();
         this.zipCode = deliveryAddress.getZipCode();
