@@ -73,6 +73,7 @@ public class CustomerServicePostRepositoryImpl
                                                                             csPost.reason,
                                                                             csPost.status,
                                                                             csPost.createdAt))
+                .orderBy(csPost.id.desc())
                                                         .offset(pageable.getOffset())
                                                         .limit(pageable.getPageSize())
                                                         .fetchResults();
@@ -93,6 +94,7 @@ public class CustomerServicePostRepositoryImpl
                                                                             csPost.reason,
                                                                             csPost.status,
                                                                             csPost.createdAt))
+                .orderBy(csPost.id.desc())
                                                         .offset(pageable.getOffset())
                                                         .limit(pageable.getPageSize())
                                                         .fetchResults();
