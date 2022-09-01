@@ -39,6 +39,7 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
 
         QueryResults<ProductInquiryPost> result = from(productInquiryPost)
             .where(productInquiryPost.product.id.eq(id))
+            .orderBy(productInquiryPost.createdDate.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetchResults();

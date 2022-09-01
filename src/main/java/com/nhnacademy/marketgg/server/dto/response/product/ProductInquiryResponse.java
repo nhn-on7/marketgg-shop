@@ -11,28 +11,29 @@ import lombok.RequiredArgsConstructor;
  *
  * @version 1.0.0
  */
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
 public class ProductInquiryResponse {
 
-    private String uuid;
+    private final String uuid;
 
-    private Long productId;
+    private final Long productId;
 
-    private Long productInquiryNo;
+    private final Long productInquiryNo;
 
-    private String productName;
+    private final String productName;
 
-    private String title;
+    private final String title;
 
-    private String content;
+    private final String content;
 
-    private Boolean isSecret;
+    private final Boolean isSecret;
 
-    private String adminReply;
+    private final String adminReply;
 
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
 
     private String name;
 
