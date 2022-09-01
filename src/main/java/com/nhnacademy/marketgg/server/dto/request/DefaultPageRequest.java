@@ -22,4 +22,5 @@ public class DefaultPageRequest {
     public Pageable getPageable() {
         return PageRequest.of(page, size);
     }
+
 }

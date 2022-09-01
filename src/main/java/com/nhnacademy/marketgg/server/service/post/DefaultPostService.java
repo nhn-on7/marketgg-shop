@@ -25,6 +25,7 @@ import com.nhnacademy.marketgg.server.repository.customerservicepost.CustomerSer
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.PageRequest;
@@ -149,6 +150,9 @@ public class DefaultPostService implements PostService {
                 return !memberInfo.isAdmin() && !otoNonExistList.contains(categoryCode);
             }
             default:
+                if(memberInfo.isNull() && !otoExistList.contains(categoryCode)) {
+                    return true;
+                }
                 return memberInfo.isAdmin() || !otoExistList.contains(categoryCode);
         }
     }
