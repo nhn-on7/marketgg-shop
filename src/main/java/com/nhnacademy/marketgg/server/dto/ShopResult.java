@@ -1,6 +1,6 @@
 package com.nhnacademy.marketgg.server.dto;
 
-import com.nhnacademy.marketgg.server.dto.payment.PaymentResponse;
+import com.nhnacademy.marketgg.server.dto.payment.response.PaymentResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

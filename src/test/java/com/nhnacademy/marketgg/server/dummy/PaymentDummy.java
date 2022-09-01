@@ -1,12 +1,12 @@
 package com.nhnacademy.marketgg.server.dummy;
 
-import com.nhnacademy.marketgg.server.dto.payment.PaymentResponse;
+import com.nhnacademy.marketgg.server.dto.payment.response.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountCreateRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountDepositRequest;
 import com.nhnacademy.marketgg.server.dto.payment.result.CardPaymentResult;
-import com.nhnacademy.marketgg.server.dto.payment.result.Receipt;
+import com.nhnacademy.marketgg.server.dto.payment.response.Receipt;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.entity.payment.Payment;
 import java.time.LocalDateTime;

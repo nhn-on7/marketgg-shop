@@ -10,7 +10,7 @@ import com.nhnacademy.marketgg.server.constant.payment.PaymentStatus;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentType;
 import com.nhnacademy.marketgg.server.constant.payment.RefundStatus;
 import com.nhnacademy.marketgg.server.constant.payment.SettlementStatus;
-import com.nhnacademy.marketgg.server.dto.payment.PaymentResponse;
+import com.nhnacademy.marketgg.server.dto.payment.response.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountCreateRequest;
