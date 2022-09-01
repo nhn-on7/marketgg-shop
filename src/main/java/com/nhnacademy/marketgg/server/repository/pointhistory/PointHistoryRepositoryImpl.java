@@ -25,7 +25,6 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport implem
         QueryResults<PointRetrieveResponse> queryResults = from(pointHistory)
             .select(Projections.constructor(PointRetrieveResponse.class,
                                             pointHistory.member.id,
-                                            pointHistory.order.id,
                                             pointHistory.point,
                                             pointHistory.totalPoint,
                                             pointHistory.content,
@@ -45,7 +44,6 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport implem
         QueryResults<PointRetrieveResponse> queryResults = from(pointHistory)
             .select(Projections.constructor(PointRetrieveResponse.class,
                                             pointHistory.member.id,
-                                            pointHistory.order.id,
                                             pointHistory.point,
                                             pointHistory.totalPoint,
                                             pointHistory.content,
