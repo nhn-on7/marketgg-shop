@@ -1,6 +1,7 @@
 package com.nhnacademy.marketgg.server.repository.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
@@ -9,9 +10,10 @@ import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
 import com.nhnacademy.marketgg.server.dto.response.auth.UuidTokenResponse;
+import com.nhnacademy.marketgg.server.dto.response.member.AdminAuthResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.SignupResponse;
-
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 /**
  * auth 서버와의 전송을 위한 Repository 입니다.
@@ -42,11 +44,14 @@ public interface AuthRepository {
      * @since 1.0.0
      */
     ShopResult<MemberInfoResponse> getMemberInfo(final MemberInfoRequest memberInfoRequest)
-            throws JsonProcessingException;
+        throws JsonProcessingException;
 
     ShopResult<SignupResponse> signup(final SignupRequest signUpRequest) throws JsonProcessingException;
 
     void withdraw(final MemberWithdrawRequest memberWithdrawRequest, final String token) throws JsonProcessingException;
 
+    PageEntity<AdminAuthResponse> retrieveMemberList(String jwt, Pageable pageable);
+
     ShopResult<UuidTokenResponse> update(final MemberUpdateRequest memberUpdateRequest, final String token);
+
 }
