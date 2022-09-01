@@ -19,6 +19,7 @@ public class SecurityFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String origin = request.getRemoteAddr();
         log.warn("Origin: {}", origin);
+        log.warn("Request URI: {}", request.getRequestURI());
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
