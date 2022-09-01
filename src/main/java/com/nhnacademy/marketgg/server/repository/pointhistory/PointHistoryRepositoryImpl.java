@@ -32,6 +32,7 @@ public class PointHistoryRepositoryImpl extends QuerydslRepositorySupport implem
             .where(pointHistory.member.id.eq(id))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
+            .orderBy(pointHistory.updatedAt.desc())
             .fetchResults();
 
         return new PageImpl<>(queryResults.getResults(), pageable, queryResults.getTotal());
