@@ -34,20 +34,10 @@ public class ProductInquiryPostRepositoryImpl extends QuerydslRepositorySupport
      * @since 1.0.0
      */
     @Override
-    public Page<ProductInquiryResponse> findAllByProductNo(final Long id, final Pageable pageable) {
+    public Page<ProductInquiryPost> findAllByProductNo(final Long id, final Pageable pageable) {
         QProductInquiryPost productInquiryPost = QProductInquiryPost.productInquiryPost;
 
-        QueryResults<ProductInquiryResponse> result = from(productInquiryPost)
-            .select(Projections.constructor(ProductInquiryResponse.class,
-                                            productInquiryPost.member.uuid,
-                                            productInquiryPost.product.id,
-                                            productInquiryPost.productInquiryNo,
-                                            productInquiryPost.product.name,
-                                            productInquiryPost.title,
-                                            productInquiryPost.content,
-                                            productInquiryPost.isSecret,
-                                            productInquiryPost.adminReply,
-                                            productInquiryPost.createdDate))
+        QueryResults<ProductInquiryPost> result = from(productInquiryPost)
             .where(productInquiryPost.product.id.eq(id))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())

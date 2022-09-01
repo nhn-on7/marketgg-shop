@@ -73,6 +73,7 @@ public class DefaultReviewService implements ReviewService {
         publisher.publishEvent(new PhotoReviewEvent(member, IMAGE_REVIEW.getContent()));
     }
 
+    @Transactional
     @Override
     public void createReview(final ReviewCreateRequest reviewRequest, final MemberInfo memberInfo,
                              final Long productId) {
