@@ -1,5 +1,16 @@
 package com.nhnacademy.marketgg.server.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.controller.product.ProductController;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
@@ -8,6 +19,7 @@ import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
 import com.nhnacademy.marketgg.server.dummy.Dummy;
 import com.nhnacademy.marketgg.server.elastic.request.SearchRequest;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,17 +31,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
@@ -115,7 +116,7 @@ class ProductControllerTest {
     void testRetrieveProducts() throws Exception {
         given(productService.retrieveProducts(any(Pageable.class))).willReturn(page);
 
-        this.mockMvc.perform(get(DEFAULT_PRODUCT)
+        this.mockMvc.perform(get(DEFAULT_PRODUCT+"?page=1")
                                  .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
 
