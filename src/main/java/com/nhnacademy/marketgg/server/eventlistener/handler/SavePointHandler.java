@@ -5,9 +5,9 @@ import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.eventlistener.event.savepoint.SavePointEvent;
 import com.nhnacademy.marketgg.server.service.point.PointService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 /**
@@ -18,6 +18,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
  */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class SavePointHandler {
 
     private final PointService pointService;
@@ -31,12 +32,13 @@ public class SavePointHandler {
      * @since 1.0.0
      */
     @Async
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @TransactionalEventListener
     public void savePointByEvent(final SavePointEvent pointRequest) {
         Member member = pointRequest.getMember();
         PointHistoryRequest pointHistoryRequest = pointRequest.getPointHistory();
-
+        log.info("일반 리뷰 적립. 회원번호: {}, 내용: {}", pointRequest.getMember().getId(), pointRequest.getContent());
         pointService.createPointHistory(member.getId(), pointHistoryRequest);
     }
 
 }
+

@@ -25,7 +25,7 @@ public class DibRepositoryImpl extends QuerydslRepositorySupport implements DibR
                                                 image.imageAddress,
                                                 dib.product.name,
                                                 dib.product.price))
-                .innerJoin(image).on(dib.product.asset.id.eq(image.id))
+                .innerJoin(image).on(dib.product.asset.id.eq(image.asset.id))
                 .where(dib.member.id.eq(memberId))
                 .fetch();
     }

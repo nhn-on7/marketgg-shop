@@ -135,7 +135,7 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<ShopResult<PageEntity<OrderRetrieveResponse>>> retrieveOrderList(final MemberInfo memberInfo,
                                                                                            @RequestParam(value = "page",
-                                                                                                         defaultValue = "0")
+                                                                                                         defaultValue = "1")
                                                                                            final Integer page) {
         log.info("retrieveOrderList method started");
 
