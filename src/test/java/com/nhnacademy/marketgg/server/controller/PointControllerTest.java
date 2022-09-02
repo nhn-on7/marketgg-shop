@@ -42,7 +42,7 @@ class PointControllerTest {
 
         given(pointService.retrievePointHistories(any(), any())).willReturn(Page.empty());
         mockMvc.perform(get(DEFAULT_MEMBER + "/points")
-                                .param("page", "0")
+                                .param("page", "1")
                    .headers(httpHeaders))
                .andExpect(status().isOk());
 

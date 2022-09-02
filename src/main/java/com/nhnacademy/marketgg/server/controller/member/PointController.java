@@ -4,6 +4,7 @@ import com.nhnacademy.marketgg.server.annotation.Auth;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
+import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.point.PointService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,8 +15,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +49,7 @@ public class PointController {
     @Operation(summary = "회원 포인트 내역 조회",
                description = "지정한 회원의 포인트 내역을 반환합니다.",
                parameters = { @Parameter(name = "memberInfo", description = "회원 정보", required = true),
-                       @Parameter(name = "page", description = "페이지정보입니다.", required = true) },
+                   @Parameter(name = "page", description = "페이지정보입니다.", required = true) },
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
@@ -56,11 +57,15 @@ public class PointController {
     @GetMapping
     public ResponseEntity<PageEntity<PointRetrieveResponse>> retrievePointHistory(final MemberInfo memberInfo,
                                                                                   @RequestParam final Integer page) {
+
+        DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
+
         Page<PointRetrieveResponse> data =
-                pointService.retrievePointHistories(memberInfo.getId(), PageRequest.of(page, 10));
+            pointService.retrievePointHistories(memberInfo.getId(), pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_MEMBER + "/points"))
+                             .contentType(MediaType.APPLICATION_JSON)
                              .body(new PageEntity<>(data.getNumber(),
                                                     data.getSize(),
                                                     data.getTotalPages(),

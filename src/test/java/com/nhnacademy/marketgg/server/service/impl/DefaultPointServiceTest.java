@@ -26,7 +26,6 @@ import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
 import com.nhnacademy.marketgg.server.service.point.DefaultPointService;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,8 +38,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,7 +67,7 @@ class DefaultPointServiceTest {
     @BeforeEach
     void setUp() {
         pointRetrieveResponse =
-                new PointRetrieveResponse(1L, 1L, 1000, 1000, "결제", LocalDateTime.now());
+                new PointRetrieveResponse( 1L, 1000, 1000, "결제", LocalDateTime.now());
         pointHistoryRequest = new PointHistoryRequest();
         memberCreateRequest = new MemberCreateRequest();
         memberGradeCreateRequest = new MemberGradeCreateRequest();
