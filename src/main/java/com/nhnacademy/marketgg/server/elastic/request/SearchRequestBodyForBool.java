@@ -19,8 +19,8 @@ public class SearchRequestBodyForBool<T> {
 
     private static final List<String> CATEGORY_FIELD = List.of("categoryCode");
     private static final List<String> DEFAULT_PRODUCT_FIELD =
-            List.of("productName", "productName.forSyno", "content", "content.forSyno",
-                    "description", "description.forSyno");
+            List.of("productName^1.3", "productName.forSyno^1.3", "content^0.8", "content.forSyno^0.8",
+                    "description^0.4", "description.forSyno^0.4");
     private static final String NO_FUZZINESS = "0";
     private static final String FUZZINESS = "AUTO";
 
