@@ -18,7 +18,6 @@ import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
-import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
 import java.util.List;
 import java.util.UUID;
@@ -28,10 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -73,29 +69,30 @@ class ProductInquiryPostControllerTest {
                        .createProductInquiry(any(MemberInfo.class), any(ProductInquiryRequest.class), anyLong());
 
         this.mockMvc.perform(post("/products/" + 1L + "/inquiry")
-                .headers(httpHeaders)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content))
+                                 .headers(httpHeaders)
+                                 .contentType(MediaType.APPLICATION_JSON)
+                                 .content(content))
                     .andExpect(status().isCreated());
         then(productInquiryPostService).should(times(1))
                                        .createProductInquiry(any(MemberInfo.class), any(ProductInquiryRequest.class),
-                                           anyLong());
+                                                             anyLong());
     }
 
     @Test
     @DisplayName("상품에 대한 전체 문의 조회 테스트")
     void testRetrieveProductInquiryByProductId() throws Exception {
         PageEntity<ProductInquiryResponse> pageEntity = new PageEntity<>(1, 1, 1, List.of());
-        given(productInquiryPostService.retrieveProductInquiryByProductId(anyLong(), any(PageRequest.class)))
+        given(
+            productInquiryPostService.retrieveProductInquiryByProductId(any(MemberInfo.class), anyLong(), any(PageRequest.class)))
             .willReturn(pageEntity);
 
         this.mockMvc.perform(get("/products/" + 1L + "/inquiries")
-                .headers(httpHeaders)
-                .contentType(MediaType.APPLICATION_JSON))
+                                 .headers(httpHeaders)
+                                 .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
 
         then(productInquiryPostService).should(times(1))
-                                       .retrieveProductInquiryByProductId(anyLong(), any(PageRequest.class));
+                                       .retrieveProductInquiryByProductId(any(MemberInfo.class), anyLong(), any(PageRequest.class));
     }
 
     @Test
@@ -105,8 +102,8 @@ class ProductInquiryPostControllerTest {
                        .deleteProductInquiry(anyLong(), anyLong());
 
         this.mockMvc.perform(delete("/products/" + 1L + "/inquiry/" + 1L)
-                .headers(httpHeaders)
-                .contentType(MediaType.APPLICATION_JSON))
+                                 .headers(httpHeaders)
+                                 .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNoContent());
 
         then(productInquiryPostService).should(times(1)).deleteProductInquiry(anyLong(), anyLong());

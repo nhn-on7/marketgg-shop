@@ -39,8 +39,8 @@ public interface ProductInquiryPostService {
      * @author 민아영
      * @since 1.0.0
      */
-    PageEntity<ProductInquiryResponse> retrieveProductInquiryByProductId(Long id, Pageable pageable)
-            throws JsonProcessingException;
+    PageEntity<ProductInquiryResponse> retrieveProductInquiryByProductId(MemberInfo memberInfo, Long id, Pageable pageable)
+        throws JsonProcessingException;
 
     /**
      * 회원이 남긴 모든 상품 문의 글을 조회합니다.
@@ -93,6 +93,28 @@ public interface ProductInquiryPostService {
                                  .isSecret(productInquiryRequest.getIsSecret())
                                  .createdDate(LocalDateTime.now())
                                  .build();
+    }
+
+    /**
+     * 상품 문의 Entity 에서 상품 문의 Dto 로 변환합니다.
+     *
+     * @param productInquiryPost 상품 문의 Entity 입니다.
+     * @return - 상품 문의 Dto 를 반환합니다.
+     * @since 1.0.0
+     */
+    default ProductInquiryResponse toDto(final ProductInquiryPost productInquiryPost,
+                                         final String name) {
+        return ProductInquiryResponse.builder()
+                                     .productId(productInquiryPost.getProduct().getId())
+                                     .productInquiryNo(productInquiryPost.getProductInquiryNo())
+                                     .productName(productInquiryPost.getProduct().getName())
+                                     .title(productInquiryPost.getTitle())
+                                     .content(productInquiryPost.getContent())
+                                     .isSecret(productInquiryPost.getIsSecret())
+                                     .adminReply(productInquiryPost.getAdminReply())
+                                     .createdAt(productInquiryPost.getCreatedDate())
+                                     .name(name)
+                                     .build();
     }
 
     /**

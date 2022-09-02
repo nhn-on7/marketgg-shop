@@ -18,7 +18,9 @@ import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.productinquirypost.ProductInquiryPostRepository;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -58,11 +60,11 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
 
         Member member = memberRepository.findById(memberInfo.getId())
                                         .orElseThrow(ProductInquiryPostNotFoundException
-                                                             .MemberWriteInquiryNotFoundException::new);
+                                                         .MemberWriteInquiryNotFoundException::new);
 
         Product product = productRepository.findById(id)
                                            .orElseThrow(ProductInquiryPostNotFoundException
-                                                                .ProductAtInquiryNotFoundException::new);
+                                                            .ProductAtInquiryNotFoundException::new);
 
         ProductInquiryPost inquiryPost = this.toEntity(product, member, productInquiryRequest);
 
@@ -80,16 +82,21 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
      * @since 1.0.0
      */
     @Override
-    public PageEntity<ProductInquiryResponse> retrieveProductInquiryByProductId(final Long id, final Pageable pageable)
-            throws JsonProcessingException {
+    public PageEntity<ProductInquiryResponse> retrieveProductInquiryByProductId(final MemberInfo memberInfo,
+                                                                                final Long id, final Pageable pageable)
+        throws JsonProcessingException {
 
-        Page<ProductInquiryResponse> pageByProductNo = productInquiryPostRepository.findAllByProductNo(id, pageable);
-        List<ProductInquiryResponse> productInquiryResponses = pageByProductNo.getContent();
+        Page<ProductInquiryPost> pageByProductNo = productInquiryPostRepository.findAllByProductNo(id, pageable);
+        List<ProductInquiryResponse> productInquiryResponses = new ArrayList<>();
 
-        for (ProductInquiryResponse inquiry : productInquiryResponses) {
-            MemberInfoRequest request = new MemberInfoRequest(inquiry.getUuid());
+        for (ProductInquiryPost inquiry : pageByProductNo.getContent()) {
+            MemberInfoRequest request = new MemberInfoRequest(inquiry.getMember().getUuid());
             MemberInfoResponse nameByUuid = checkResult(authRepository.getMemberInfo(request));
-            inquiry.memberName(nameByUuid.getName());
+            ProductInquiryResponse productInquiryResponse = this.toDto(inquiry, nameByUuid.getName());
+            if (Objects.equals(inquiry.getMember().getId(), memberInfo.getId())) {
+                productInquiryResponse.setIsReadable();
+            }
+            productInquiryResponses.add(productInquiryResponse);
         }
 
         return new PageEntity<>(pageByProductNo.getNumber(), pageByProductNo.getSize(),
@@ -128,8 +135,8 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     public void updateProductInquiryReply(final String inquiryReply,
                                           final Long inquiryId) {
         ProductInquiryPost inquiryPost =
-                productInquiryPostRepository.findById(inquiryId)
-                                            .orElseThrow(ProductInquiryPostNotFoundException::new);
+            productInquiryPostRepository.findById(inquiryId)
+                                        .orElseThrow(ProductInquiryPostNotFoundException::new);
 
         inquiryPost.updateInquiry(inquiryReply);
         productInquiryPostRepository.save(inquiryPost);
