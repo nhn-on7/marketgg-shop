@@ -202,9 +202,9 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<PageEntity<ProductListResponse>> retrieveProducts(
-            @RequestParam(value = "page", defaultValue = "0") final Integer page) {
+            @RequestParam final Integer page) {
 
-        DefaultPageRequest pageRequest = new DefaultPageRequest(page);
+        DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
 
         Page<ProductListResponse> productListResponses =
                 this.productService.retrieveProducts(pageRequest.getPageable());
@@ -227,9 +227,9 @@ public class ProductController {
     @GetMapping("/categories/{categoryCode}")
     public ResponseEntity<PageEntity<ProductListResponse>> retrieveProductsByCategory(
             @PathVariable final String categoryCode,
-            @RequestParam(value = "page", defaultValue = "0") final Integer page) {
+            @RequestParam final Integer page) {
 
-        DefaultPageRequest pageRequest = new DefaultPageRequest(page);
+        DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
 
         Page<ProductListResponse> productListResponses =
                 this.productService.retrieveProductsByCategory(categoryCode, pageRequest.getPageable());

@@ -130,11 +130,11 @@ public class ReviewController {
 
     @GetMapping("/{productId}/reviews")
     public ResponseEntity<PageEntity<ReviewResponse>> retrieveReviews(@PathVariable final Long productId,
-                                                                      @RequestParam(value = "page", defaultValue = "0")
+                                                                      @RequestParam(value = "page", defaultValue = "1")
                                                                       final Integer page)
             throws JsonProcessingException {
 
-        DefaultPageRequest pageRequest = new DefaultPageRequest(page);
+        DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
         Page<ReviewResponse> reviewResponses = reviewService.retrieveReviews(pageRequest.getPageable(), productId);
 
         PageEntity<ReviewResponse> pageEntity = new PageEntity<>(reviewResponses.getNumber(),
