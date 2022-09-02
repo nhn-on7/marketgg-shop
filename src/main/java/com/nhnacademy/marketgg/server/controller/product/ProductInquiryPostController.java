@@ -90,14 +90,15 @@ public class ProductInquiryPostController {
                                         useReturnTypeSchema = true))
     @GetMapping("/products/{productId}/inquiries")
     public ResponseEntity<ShopResult<PageEntity<ProductInquiryResponse>>> retrieveProductInquiry(
-            @PathVariable final Long productId,
-            @RequestParam(value = "page", defaultValue = "1") final Integer page)
-            throws JsonProcessingException {
+        @PathVariable final Long productId,
+        @RequestParam(value = "page", defaultValue = "1") final Integer page,
+        final MemberInfo memberInfo)
+        throws JsonProcessingException {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
 
         PageEntity<ProductInquiryResponse> productInquiryResponses
-                = productInquiryPostService.retrieveProductInquiryByProductId(productId, pageRequest.getPageable());
+            = productInquiryPostService.retrieveProductInquiryByProductId(memberInfo, productId, pageRequest.getPageable());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)

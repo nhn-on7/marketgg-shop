@@ -27,7 +27,7 @@ import org.springframework.data.annotation.CreatedDate;
  */
 @Table(name = "product_inquires_post")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
