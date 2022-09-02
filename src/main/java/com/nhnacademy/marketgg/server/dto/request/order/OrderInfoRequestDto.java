@@ -36,4 +36,6 @@ public class OrderInfoRequestDto {
     @NotBlank
     private final String orderNo;
 
+    private final String successHost;
+
 }

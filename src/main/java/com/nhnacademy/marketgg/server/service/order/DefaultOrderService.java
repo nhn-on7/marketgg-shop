@@ -1,9 +1,8 @@
 package com.nhnacademy.marketgg.server.service.order;
 
-import static com.nhnacademy.marketgg.server.repository.auth.AuthAdapter.checkResult;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentType;
+import com.nhnacademy.marketgg.server.constant.OrderStatus;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
@@ -49,17 +48,22 @@ import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryReposi
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.cart.CartProductService;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Value;
+
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.nhnacademy.marketgg.server.repository.auth.AuthAdapter.checkResult;
 
 @Service
 @RequiredArgsConstructor
@@ -79,6 +83,8 @@ public class DefaultOrderService implements OrderService {
     private final CartProductService cartProductService;
     private final CartProductRepository cartProductRepository;
     private final ApplicationEventPublisher publisher;
+    @Value("${gg.eggplant.success-host}")
+    private String successHost;
 
     /**
      * {@inheritDoc}
@@ -136,8 +142,8 @@ public class DefaultOrderService implements OrderService {
         String orderId = attachPrefix(order.getId());
 
         return new OrderToPayment(orderId, order.getOrderName(), orderRequest.getName(), orderRequest.getEmail(),
-                                  orderRequest.getTotalAmount(), orderRequest.getCouponId(),
-                                  orderRequest.getUsedPoint(), orderRequest.getExpectedSavePoint());
+                orderRequest.getTotalAmount(), orderRequest.getCouponId(),
+                orderRequest.getUsedPoint(), orderRequest.getExpectedSavePoint());
     }
 
     private void checkOrderValid(final OrderCreateRequest orderRequest, final MemberInfoResponse memberResponse,
@@ -231,7 +237,7 @@ public class DefaultOrderService implements OrderService {
     @Override
     public OrderDetailRetrieveResponse retrieveOrderDetail(final Long orderId, final MemberInfo memberInfo) {
         OrderDetailRetrieveResponse detailResponse = orderRepository.findOrderDetail(orderId, memberInfo.getId(),
-                                                                                     memberInfo.isAdmin());
+                memberInfo.isAdmin());
         List<ProductToOrder> products = orderProductRepository.findByOrderId(orderId);
         UsedCouponResponse couponName = usedCouponRepository.findUsedCouponName(orderId);
         detailResponse.addOrderDetail(products, couponName);
@@ -247,12 +253,33 @@ public class DefaultOrderService implements OrderService {
      */
     @Transactional
     @Override
-    public void updateStatus(final Long orderId, final OrderUpdateStatusRequest status) {
-        Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
+    public void updateStatus(final Long orderId,
+                             final OrderUpdateStatusRequest status) {
 
-        order.updateStatus(status.getStatus());
+        Order order = orderRepository.findById(orderId)
+                                     .orElseThrow(OrderNotFoundException::new);
+
+        order.updateStatus(checkDeliveryStatus(status.getStatus()));
 
         orderRepository.save(order);
+    }
+
+    private String checkDeliveryStatus(String status) {
+        String newStatus = status;
+
+        if (status.equals("READY")) {
+            newStatus = OrderStatus.DELIVERY_WAITING.getStatus();
+        }
+
+        if (status.equals("DELIVERING")) {
+            newStatus = OrderStatus.DELIVERY_SHIPPING.getStatus();
+        }
+
+        if (status.equals("ARRIVAL")) {
+            newStatus = OrderStatus.DELIVERY_COMPLETE.getStatus();
+        }
+
+        return newStatus;
     }
 
     /**
@@ -268,9 +295,10 @@ public class DefaultOrderService implements OrderService {
         MemberInfoResponse memberResponse = checkResult(authRepository.getMemberInfo(new MemberInfoRequest(uuid)));
 
         OrderInfoRequestDto orderRequest = new OrderInfoRequestDto(memberResponse.getName(), order.getAddress(),
-                                                                   order.getDetailAddress(),
-                                                                   memberResponse.getPhoneNumber(),
-                                                                   String.valueOf(orderId));
+                order.getDetailAddress(),
+                memberResponse.getPhoneNumber(),
+                String.valueOf(orderId),
+                successHost);
 
         deliveryRepository.createTrackingNo(orderRequest);
     }
