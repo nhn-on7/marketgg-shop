@@ -14,7 +14,7 @@ public class DefaultPageRequest {
 
     public DefaultPageRequest(Integer page) {
         this.page = page;
-        this.size = 10;
+        this.size = 9;
     }
 
     public Pageable getPageable() {
