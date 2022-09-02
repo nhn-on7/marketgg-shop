@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Client 서버에서 처리된 배송서버의 정보를 처리하기 위한 컨트롤러 입니다.
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author 김훈민
  * @version 1.0.0
  */
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/delivery")
 public class DeliveryController {
