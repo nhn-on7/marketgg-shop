@@ -122,7 +122,8 @@ public class Dummy {
         return new ProductDetailResponse(1L, Asset.create(), 1L, "001", "채소", "자몽",
                                          "아침에 자몽 쥬스", 100L, 2000L, "자몽쥬스 설명",
                                          "1박스", "샛별 배송", "인도네시아", "냉장", LocalDate.now(),
-                                         "새우알러지", "20개", LocalDateTime.now(), LocalDateTime.now(), null, "imageAddress");
+                                         "새우알러지", "20개", LocalDateTime.now(), LocalDateTime.now(), null,
+                                         "imageAddress");
     }
 
     public static Asset getDummyAsset(Long id) {
@@ -271,7 +272,7 @@ public class Dummy {
         MemberInfo memberInfo = getDummyMemberInfo(1L, new Cart());
         AuthInfo authInfo = getDummyAuthInfo();
         return new OrderFormResponse(List.of(), memberInfo.getId(), authInfo.getName(), authInfo.getEmail(),
-                                     memberInfo.getMemberGrade(), true, List.of(), 10000,
+                                     memberInfo.getMemberGrade(), List.of(), 10000,
                                      List.of(), List.of(), 50_000L);
     }
 
@@ -349,13 +350,15 @@ public class Dummy {
     public static ReviewResponse getDummyReviewResponse() {
 
         return new ReviewResponse(1L, 1L, 1L, "후기 내용입니다. 더미입니다.", 5L,
-                                  Boolean.FALSE, LocalDateTime.now(), LocalDateTime.now(), null, UUID.randomUUID().toString());
+                                  Boolean.FALSE, LocalDateTime.now(), LocalDateTime.now(), null,
+                                  UUID.randomUUID().toString());
     }
 
     public static Page<ProductListResponse> getDummyProductPage() {
         ProductListResponse dummyProductResponse = getDummyProductListResponse();
 
-        Page<ProductListResponse> responsePage = new PageImpl<>(List.of(dummyProductResponse), PageRequest.of(0, 10), 1);
+        Page<ProductListResponse> responsePage = new PageImpl<>(List.of(dummyProductResponse), PageRequest.of(0, 10),
+                                                                1);
 
         return responsePage;
     }
@@ -368,7 +371,8 @@ public class Dummy {
     }
 
     public static ProductListResponse getDummyProductListResponse() {
-        ProductListResponse productListResponse = new ProductListResponse(1L, "101", "계란", "맛있습니다.", "굉장히 맛있네요", "10% 할인", "img", 1000L, 1000L);
+        ProductListResponse productListResponse = new ProductListResponse(1L, "101", "계란", "맛있습니다.", "굉장히 맛있네요",
+                                                                          "10% 할인", "img", 1000L, 1000L);
 
         return productListResponse;
     }
