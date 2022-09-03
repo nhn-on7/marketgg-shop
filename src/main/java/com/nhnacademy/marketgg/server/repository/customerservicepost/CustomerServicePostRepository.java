@@ -10,7 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author 박세완, 김정민
  * @version 1.0.0
  */
-public interface CustomerServicePostRepository extends JpaRepository<CustomerServicePost, Long>, CustomerServicePostRepositoryCustom {
+public interface CustomerServicePostRepository
+        extends JpaRepository<CustomerServicePost, Long>, CustomerServicePostRepositoryCustom {
 
     Boolean existsByCategory(final Category category);
 

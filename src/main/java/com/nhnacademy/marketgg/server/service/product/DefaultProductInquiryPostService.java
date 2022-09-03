@@ -18,7 +18,9 @@ import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.productinquirypost.ProductInquiryPostRepository;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -80,16 +82,21 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
      * @since 1.0.0
      */
     @Override
-    public PageEntity<ProductInquiryResponse> retrieveProductInquiryByProductId(final Long id, final Pageable pageable)
+    public PageEntity<ProductInquiryResponse> retrieveProductInquiryByProductId(final MemberInfo memberInfo,
+                                                                                final Long id, final Pageable pageable)
         throws JsonProcessingException {
 
-        Page<ProductInquiryResponse> pageByProductNo = productInquiryPostRepository.findAllByProductNo(id, pageable);
-        List<ProductInquiryResponse> productInquiryResponses = pageByProductNo.getContent();
+        Page<ProductInquiryPost> pageByProductNo = productInquiryPostRepository.findAllByProductNo(id, pageable);
+        List<ProductInquiryResponse> productInquiryResponses = new ArrayList<>();
 
-        for (ProductInquiryResponse inquiry : productInquiryResponses) {
-            MemberInfoRequest request = new MemberInfoRequest(inquiry.getUuid());
+        for (ProductInquiryPost inquiry : pageByProductNo.getContent()) {
+            MemberInfoRequest request = new MemberInfoRequest(inquiry.getMember().getUuid());
             MemberInfoResponse nameByUuid = checkResult(authRepository.getMemberInfo(request));
-            inquiry.memberName(nameByUuid.getName());
+            ProductInquiryResponse productInquiryResponse = this.toDto(inquiry, nameByUuid.getName());
+            if (Objects.equals(inquiry.getMember().getId(), memberInfo.getId())) {
+                productInquiryResponse.setIsReadable();
+            }
+            productInquiryResponses.add(productInquiryResponse);
         }
 
         return new PageEntity<>(pageByProductNo.getNumber(), pageByProductNo.getSize(),
@@ -106,11 +113,11 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
      * @since 1.0.0
      */
     @Override
-    public PageEntity<ProductInquiryPost> retrieveProductInquiryByMemberId(final MemberInfo memberInfo,
-                                                                           final Pageable pageable) {
+    public PageEntity<ProductInquiryResponse> retrieveProductInquiryByMemberId(final MemberInfo memberInfo,
+                                                                               final Pageable pageable) {
 
-        Page<ProductInquiryPost> allByMemberNo = productInquiryPostRepository.findAllByMemberNo(memberInfo.getId(),
-                                                                                                pageable);
+        Page<ProductInquiryResponse> allByMemberNo = productInquiryPostRepository.findAllByMemberNo(memberInfo.getId(),
+                                                                                                    pageable);
         return new PageEntity<>(allByMemberNo.getNumber(), allByMemberNo.getSize(),
                                 allByMemberNo.getTotalPages(), allByMemberNo.getContent());
     }
@@ -120,15 +127,13 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
      *
      * @param inquiryReply 상품 문의 글에 대한 답글이 답긴 DTO 입니다.
      * @param inquiryId    상품 문의 글의 PK 입니다.
-     * @param productId    상품의 PK 입니다.
      * @author 민아영
      * @since 1.0.0
      */
     @Override
     @Transactional
     public void updateProductInquiryReply(final String inquiryReply,
-                                          final Long inquiryId,
-                                          final Long productId) {
+                                          final Long inquiryId) {
         ProductInquiryPost inquiryPost =
             productInquiryPostRepository.findById(inquiryId)
                                         .orElseThrow(ProductInquiryPostNotFoundException::new);
@@ -148,9 +153,26 @@ public class DefaultProductInquiryPostService implements ProductInquiryPostServi
     @Transactional
     public void deleteProductInquiry(final Long inquiryId, final Long productId) {
         if (productRepository.findById(productId).isEmpty()) {
-          throw new ProductNotFoundException();
+            throw new ProductNotFoundException();
         }
         productInquiryPostRepository.deleteById(inquiryId);
+    }
+
+    @Override
+    public PageEntity<ProductInquiryResponse> retrieveProductInquiryByAdmin(final Pageable pageable)
+        throws JsonProcessingException {
+
+        Page<ProductInquiryResponse> allByMemberNo = productInquiryPostRepository.findAllByAdmin(pageable);
+        List<ProductInquiryResponse> productInquiryResponses = allByMemberNo.getContent();
+
+        for (ProductInquiryResponse inquiry : productInquiryResponses) {
+            MemberInfoRequest request = new MemberInfoRequest(inquiry.getUuid());
+            MemberInfoResponse nameByUuid = checkResult(authRepository.getMemberInfo(request));
+            inquiry.memberName(nameByUuid.getName());
+        }
+
+        return new PageEntity<>(allByMemberNo.getNumber(), allByMemberNo.getSize(),
+                                allByMemberNo.getTotalPages(), productInquiryResponses);
     }
 
 }

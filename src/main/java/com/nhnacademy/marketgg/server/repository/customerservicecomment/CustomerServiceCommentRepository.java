@@ -9,7 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author 박세완, 김정민
  * @version 1.0.0
  */
-public interface CustomerServiceCommentRepository extends JpaRepository<CustomerServiceComment, Long>, CustomerServiceCommentRepositoryCustom {
+public interface CustomerServiceCommentRepository
+        extends JpaRepository<CustomerServiceComment, Long>, CustomerServiceCommentRepositoryCustom {
 
     /**
      * 삭제할 게시글 번호로 연관 댓글목록을 전체 삭제하는 메소드입니다.

@@ -12,7 +12,7 @@ Market GG Shop 서비스는 애플리케이션 이용에 필요한 API 를 제�
 
 # Project Architecture
 
-![marketgg-architecture-v1-0-3](https://user-images.githubusercontent.com/38161720/183289639-452bfe2d-792e-4260-a10a-652a87b62928.png)
+![marketgg-architecture-v1-0-4](https://user-images.githubusercontent.com/82259868/187658218-b220f53c-ffa5-4b9b-b967-afcc18ac62c2.png)
 
 # Features
 

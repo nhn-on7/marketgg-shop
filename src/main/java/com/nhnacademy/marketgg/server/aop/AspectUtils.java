@@ -14,7 +14,7 @@ public class AspectUtils {
 
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes requestAttributes =
-            (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         return requestAttributes.getRequest();
     }
 

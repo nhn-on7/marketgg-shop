@@ -23,7 +23,7 @@ public class MemberControllerAdvice {
 
 
     @ExceptionHandler({
-        MemberNotFoundException.class
+            MemberNotFoundException.class
     })
     public ResponseEntity<ErrorEntity> memberExceptionHandler(MemberNotFoundException e) {
         log.error(e.toString());
@@ -33,7 +33,7 @@ public class MemberControllerAdvice {
     }
 
     @ExceptionHandler({
-        UnAuthenticException.class
+            UnAuthenticException.class
     })
     public ResponseEntity<ErrorEntity> memberExceptionHandler(UnAuthenticException e) {
         log.error("", e);

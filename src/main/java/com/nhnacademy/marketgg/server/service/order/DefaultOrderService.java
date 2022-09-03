@@ -1,9 +1,8 @@
 package com.nhnacademy.marketgg.server.service.order;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.marketgg.server.constant.PaymentType;
-import com.nhnacademy.marketgg.server.dto.response.coupon.UsedCouponResponse;
-import com.nhnacademy.marketgg.server.repository.delivery.DeliveryRepository;
+import com.nhnacademy.marketgg.server.constant.payment.PaymentType;
+import com.nhnacademy.marketgg.server.constant.OrderStatus;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
@@ -12,6 +11,7 @@ import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderInfoRequestDto;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
+import com.nhnacademy.marketgg.server.dto.response.coupon.UsedCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
@@ -38,6 +38,7 @@ import com.nhnacademy.marketgg.server.exception.product.ProductStockNotEnoughExc
 import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.repository.cart.CartProductRepository;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
+import com.nhnacademy.marketgg.server.repository.delivery.DeliveryRepository;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
 import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
@@ -53,6 +54,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Value;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -80,6 +83,8 @@ public class DefaultOrderService implements OrderService {
     private final CartProductService cartProductService;
     private final CartProductRepository cartProductRepository;
     private final ApplicationEventPublisher publisher;
+    @Value("${gg.eggplant.success-host}")
+    private String successHost;
 
     /**
      * {@inheritDoc}
@@ -137,8 +142,8 @@ public class DefaultOrderService implements OrderService {
         String orderId = attachPrefix(order.getId());
 
         return new OrderToPayment(orderId, order.getOrderName(), orderRequest.getName(), orderRequest.getEmail(),
-                                  orderRequest.getTotalAmount(), orderRequest.getCouponId(),
-                                  orderRequest.getUsedPoint(), orderRequest.getExpectedSavePoint());
+                orderRequest.getTotalAmount(), orderRequest.getCouponId(),
+                orderRequest.getUsedPoint(), orderRequest.getExpectedSavePoint());
     }
 
     private void checkOrderValid(final OrderCreateRequest orderRequest, final MemberInfoResponse memberResponse,
@@ -232,7 +237,7 @@ public class DefaultOrderService implements OrderService {
     @Override
     public OrderDetailRetrieveResponse retrieveOrderDetail(final Long orderId, final MemberInfo memberInfo) {
         OrderDetailRetrieveResponse detailResponse = orderRepository.findOrderDetail(orderId, memberInfo.getId(),
-                                                                                     memberInfo.isAdmin());
+                memberInfo.isAdmin());
         List<ProductToOrder> products = orderProductRepository.findByOrderId(orderId);
         UsedCouponResponse couponName = usedCouponRepository.findUsedCouponName(orderId);
         detailResponse.addOrderDetail(products, couponName);
@@ -248,12 +253,33 @@ public class DefaultOrderService implements OrderService {
      */
     @Transactional
     @Override
-    public void updateStatus(final Long orderId, final OrderUpdateStatusRequest status) {
-        Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
+    public void updateStatus(final Long orderId,
+                             final OrderUpdateStatusRequest status) {
 
-        order.updateStatus(status.getStatus());
+        Order order = orderRepository.findById(orderId)
+                                     .orElseThrow(OrderNotFoundException::new);
+
+        order.updateStatus(checkDeliveryStatus(status.getStatus()));
 
         orderRepository.save(order);
+    }
+
+    private String checkDeliveryStatus(String status) {
+        String newStatus = status;
+
+        if (status.equals("READY")) {
+            newStatus = OrderStatus.DELIVERY_WAITING.getStatus();
+        }
+
+        if (status.equals("DELIVERING")) {
+            newStatus = OrderStatus.DELIVERY_SHIPPING.getStatus();
+        }
+
+        if (status.equals("ARRIVAL")) {
+            newStatus = OrderStatus.DELIVERY_COMPLETE.getStatus();
+        }
+
+        return newStatus;
     }
 
     /**
@@ -269,9 +295,10 @@ public class DefaultOrderService implements OrderService {
         MemberInfoResponse memberResponse = checkResult(authRepository.getMemberInfo(new MemberInfoRequest(uuid)));
 
         OrderInfoRequestDto orderRequest = new OrderInfoRequestDto(memberResponse.getName(), order.getAddress(),
-                                                                   order.getDetailAddress(),
-                                                                   memberResponse.getPhoneNumber(),
-                                                                   String.valueOf(orderId));
+                order.getDetailAddress(),
+                memberResponse.getPhoneNumber(),
+                String.valueOf(orderId),
+                successHost);
 
         deliveryRepository.createTrackingNo(orderRequest);
     }

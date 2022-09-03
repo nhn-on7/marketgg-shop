@@ -17,7 +17,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -109,8 +108,8 @@ public class Member {
     /**
      * 회원가입 처리를 위한 생성자 입니다.
      *
-     * @param signupRequest - 클라이언트 폼에서 가입한 회원의 정보를 담은 DTO 입니다.
-     * @param signUpMemberGrade       - 회원가입시 부여될 등급을 담은 객체입니다.
+     * @param signupRequest     - 클라이언트 폼에서 가입한 회원의 정보를 담은 DTO 입니다.
+     * @param signUpMemberGrade - 회원가입시 부여될 등급을 담은 객체입니다.
      * @since 1.0.0
      */
     public Member(final SignupRequest signupRequest, final String uuid, final MemberGrade signUpMemberGrade,
@@ -133,4 +132,7 @@ public class Member {
         this.deletedAt = withdrawAt;
     }
 
+    public void updateUuid(String updatedUuid) {
+        this.uuid = updatedUuid;
+    }
 }

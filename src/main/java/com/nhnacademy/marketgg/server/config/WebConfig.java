@@ -1,11 +1,13 @@
 package com.nhnacademy.marketgg.server.config;
 
 import com.nhnacademy.marketgg.server.filter.AdminFilter;
+import com.nhnacademy.marketgg.server.filter.SecurityFilter;
 import java.time.Duration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -27,9 +29,9 @@ public class WebConfig {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder
-            .setReadTimeout(Duration.ofSeconds(10L))
-            .setConnectTimeout(Duration.ofSeconds(5L))
-            .build();
+                .setReadTimeout(Duration.ofSeconds(10L))
+                .setConnectTimeout(Duration.ofSeconds(5L))
+                .build();
     }
 
     @Bean
@@ -46,6 +48,17 @@ public class WebConfig {
     public FilterRegistrationBean<CharacterEncodingFilter> utf8CharacterEncodingFilter() {
         FilterRegistrationBean<CharacterEncodingFilter> filter = new FilterRegistrationBean<>();
         filter.setFilter(new CharacterEncodingFilter("UTF-8", true));
+        filter.setOrder(10);
+        filter.addUrlPatterns("/*");
+
+        return filter;
+    }
+
+    @Profile("prod")
+    @Bean
+    public FilterRegistrationBean<SecurityFilter> securityFilterFilterRegistrationBean() {
+        FilterRegistrationBean<SecurityFilter> filter = new FilterRegistrationBean<>();
+        filter.setFilter(new SecurityFilter());
         filter.setOrder(1);
         filter.addUrlPatterns("/*");
 

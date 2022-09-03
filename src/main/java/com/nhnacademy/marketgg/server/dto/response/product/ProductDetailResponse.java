@@ -52,4 +52,10 @@ public class ProductDetailResponse {
 
     private final String imageAddress;
 
+    private boolean dib;
+
+    public void updateIsDib(final Boolean isDib) {
+        this.dib = isDib;
+    }
+
 }

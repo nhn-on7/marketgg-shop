@@ -3,21 +3,22 @@ package com.nhnacademy.marketgg.server.dto.info;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Getter
 public class MemberInfo {
 
-    private final Long id;
-    private final Cart cart;
-    private final String memberGrade;
-    private final Character gender;
-    private final LocalDate birthDate;
+    private Long id;
+    private Cart cart;
+    private String memberGrade;
+    private Character gender;
+    private LocalDate birthDate;
     private Set<String> roles;
 
     public MemberInfo(Long id, Cart cart, String memberGrade, Character gender, LocalDate birthDate) {

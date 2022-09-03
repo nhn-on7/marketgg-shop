@@ -3,10 +3,11 @@ package com.nhnacademy.marketgg.server.controller.product;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
-import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
+import com.nhnacademy.marketgg.server.elastic.request.SearchRequest;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -63,7 +64,7 @@ public class ProductController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping("/search")
-    public ResponseEntity<ShopResult<PageEntity<List<ProductListResponse>>>> searchProductList(
+    public ResponseEntity<PageEntity<List<ProductListResponse>>> searchProductList(
             @Valid @RequestBody final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
 
@@ -72,7 +73,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI + "/search"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.successWith(productList));
+                             .body(productList);
     }
 
     /**
@@ -94,7 +95,7 @@ public class ProductController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping("/categories/{categoryId}/search")
-    public ResponseEntity<ShopResult<PageEntity<List<ProductListResponse>>>> searchProductListByCategory(
+    public ResponseEntity<PageEntity<List<ProductListResponse>>> searchProductListByCategory(
             @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
             @Valid @RequestBody final SearchRequest searchRequest)
             throws ParseException, JsonProcessingException {
@@ -105,9 +106,45 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                 DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/search"))
+                                     DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/search"))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.successWith(productList));
+                             .body(productList);
+    }
+
+    /**
+     * 선택한 가격 정렬 옵션으로 정렬된 상품 목록을 반환합니다.
+     *
+     * @param option        - 검색한 목록을 정렬할 가격옵션을 정렬 값입니다.
+     * @param searchRequest - 검색을 진행할 정보입니다.
+     * @return 카테고리 목록내에서 선택한 가격 정렬 옵션으로 정렬된 상품 목록을 반환합니다.
+     * @throws ParseException          파싱 도중 예외 처리입니다.
+     * @throws JsonProcessingException Json 과 관련된 예외 처리입니다.
+     * @since 1.0.0
+     */
+    @Operation(summary = "옵션에 따른 상품 목록조회",
+               description = "지정한 가격 옵션에따른 상품 목록을 검색합니다.",
+               parameters = { @Parameter(name = "categoryId", description = "카테고리 식별번호", required = true),
+                       @Parameter(name = "option", description = "지정한 옵션의 값", required = true),
+                       @Parameter(name = "searchRequest", description = "검색 정보", required = true) },
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
+    @PostMapping("/sort-price/{option}/search")
+    public ResponseEntity<PageEntity<List<ProductListResponse>>> searchProductListByPrice(
+            @PathVariable @NotBlank @Min(1) final String option,
+            @Valid @RequestBody final SearchRequest searchRequest)
+            throws ParseException, JsonProcessingException {
+
+        PageEntity<List<ProductListResponse>> productList =
+                productService.searchProductListByPrice(option, searchRequest);
+
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .location(URI.create(
+                                     DEFAULT_PRODUCT_URI + "/sort-price/" + option))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(productList);
     }
 
     /**
@@ -131,7 +168,7 @@ public class ProductController {
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @PostMapping("/categories/{categoryId}/sort-price/{option}/search")
-    public ResponseEntity<ShopResult<PageEntity<List<ProductListResponse>>>> searchProductListByPrice(
+    public ResponseEntity<PageEntity<List<ProductListResponse>>> searchProductListByPriceFromCategory(
             @PathVariable @NotBlank @Size(min = 1, max = 6) final String categoryId,
             @PathVariable @NotBlank @Min(1) final String option,
             @Valid @RequestBody final SearchRequest searchRequest)
@@ -143,9 +180,9 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(
-                                 DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/sort-price/" + option))
+                                     DEFAULT_PRODUCT_URI + "/categories/" + categoryId + "/sort-price/" + option))
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(ShopResult.successWith(productList));
+                             .body(productList);
     }
 
     /**
@@ -165,17 +202,17 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<PageEntity<ProductListResponse>> retrieveProducts(
-        @RequestParam(value = "page", defaultValue = "0") final Integer page) {
+            @RequestParam final Integer page) {
 
-        DefaultPageRequest pageRequest = new DefaultPageRequest(page);
+        DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
 
         Page<ProductListResponse> productListResponses =
-            this.productService.retrieveProducts(pageRequest.getPageable());
+                this.productService.retrieveProducts(pageRequest.getPageable());
 
         PageEntity<ProductListResponse> pageEntity = new PageEntity<>(productListResponses.getNumber(),
-                                                                        productListResponses.getSize(),
-                                                                        productListResponses.getTotalPages(),
-                                                                        productListResponses.getContent());
+                                                                      productListResponses.getSize(),
+                                                                      productListResponses.getTotalPages(),
+                                                                      productListResponses.getContent());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI))
@@ -188,13 +225,14 @@ public class ProductController {
      */
 
     @GetMapping("/categories/{categoryCode}")
-    public ResponseEntity<PageEntity<ProductListResponse>> retrieveProductsByCategory(@PathVariable final String categoryCode,
-        @RequestParam(value = "page", defaultValue = "0") final Integer page) {
+    public ResponseEntity<PageEntity<ProductListResponse>> retrieveProductsByCategory(
+            @PathVariable final String categoryCode,
+            @RequestParam final Integer page) {
 
-        DefaultPageRequest pageRequest = new DefaultPageRequest(page);
+        DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
 
         Page<ProductListResponse> productListResponses =
-            this.productService.retrieveProductsByCategory(categoryCode, pageRequest.getPageable());
+                this.productService.retrieveProductsByCategory(categoryCode, pageRequest.getPageable());
 
         PageEntity<ProductListResponse> pageEntity = new PageEntity<>(productListResponses.getNumber(),
                                                                       productListResponses.getSize(),
@@ -224,9 +262,9 @@ public class ProductController {
                                         useReturnTypeSchema = true))
     @GetMapping("/{productId}")
     public ResponseEntity<ShopResult<ProductDetailResponse>> retrieveProductDetails(
-        @PathVariable final Long productId) {
+            @PathVariable final Long productId, final MemberInfo memberInfo) {
 
-        ProductDetailResponse productDetailResponse = this.productService.retrieveProductDetails(productId);
+        ProductDetailResponse productDetailResponse = this.productService.retrieveProductDetails(productId, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_PRODUCT_URI))

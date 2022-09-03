@@ -2,8 +2,6 @@ package com.nhnacademy.marketgg.server.eventlistener.event.savepoint;
 
 import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.entity.Member;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * 포토 리뷰를 작성하면 발행하는 이벤트 구현체 입니다.

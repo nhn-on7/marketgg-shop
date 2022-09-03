@@ -5,9 +5,8 @@ import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.QMember;
 import com.nhnacademy.marketgg.server.entity.QOrder;
 import com.querydsl.core.types.Projections;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-
 import java.util.Optional;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 public class MemberRepositoryImpl extends QuerydslRepositorySupport implements MemberRepositoryCustom {
 

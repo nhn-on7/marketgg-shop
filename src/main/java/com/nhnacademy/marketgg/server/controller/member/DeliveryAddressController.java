@@ -6,6 +6,8 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.service.deliveryaddress.DeliveryAddressService;
+import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,9 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
-import java.util.List;
 
 
 /**
@@ -44,8 +43,9 @@ public class DeliveryAddressController {
      * @since 1.0.0
      */
     @PostMapping("/delivery-address")
-    public ResponseEntity<ShopResult<String>> createDeliveryAddress(@Valid @RequestBody final DeliveryAddressCreateRequest createRequest,
-                                                                    final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<String>> createDeliveryAddress(
+            @Valid @RequestBody final DeliveryAddressCreateRequest createRequest,
+            final MemberInfo memberInfo) {
 
         deliveryAddressService.createDeliveryAddress(memberInfo, createRequest);
 
@@ -80,7 +80,8 @@ public class DeliveryAddressController {
      * @return OK 상태코드와 모든 배송정보를 담은 List 타입 입니다.
      */
     @GetMapping("/delivery-addresses")
-    public ResponseEntity<ShopResult<List<DeliveryAddressResponse>>> retrieveDeliveryAddresses(final MemberInfo memberInfo) {
+    public ResponseEntity<ShopResult<List<DeliveryAddressResponse>>> retrieveDeliveryAddresses(
+            final MemberInfo memberInfo) {
 
         List<DeliveryAddressResponse> deliveryAddresses = deliveryAddressService.retrieveDeliveryAddresses(memberInfo);
 

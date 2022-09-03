@@ -54,8 +54,8 @@ public class AdminProductController {
     @Operation(summary = "관리자의 상품 관리",
                description = "상품에 관한 정보를 받고, 데이터베이스에 해당 정보를 영속화합니다.",
                parameters = {
-                   @Parameter(name = "productRequest", description = "상품 등록에 필요한 정보를 담은 객체", required = true),
-                   @Parameter(name = "image", description = "상품 목록에 보이는 썸네일용 이미지", required = true) },
+                       @Parameter(name = "productRequest", description = "상품 등록에 필요한 정보를 담은 객체", required = true),
+                       @Parameter(name = "image", description = "상품 목록에 보이는 썸네일용 이미지", required = true) },
                responses = @ApiResponse(responseCode = "201",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
@@ -63,9 +63,9 @@ public class AdminProductController {
 
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<ShopResult<String>> createProduct(
-        @RequestPart @Valid final ProductCreateRequest productRequest,
-        BindingResult bindingResult,
-        @RequestPart final MultipartFile image) throws IOException {
+            @RequestPart @Valid final ProductCreateRequest productRequest,
+            BindingResult bindingResult,
+            @RequestPart final MultipartFile image) throws IOException {
 
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
@@ -93,8 +93,8 @@ public class AdminProductController {
     @Operation(summary = "관리자의 상품 관리",
                description = "상품에 관한 정보를 받고, 데이터베이스에 해당 정보를 영속화합니다.",
                parameters = {
-                   @Parameter(name = "productRequest", description = "상품 수정에 필요한 정보를 담은 객체", required = true),
-                   @Parameter(name = "image", description = "상품 목록에 보이는 썸네일용 이미지", required = true) },
+                       @Parameter(name = "productRequest", description = "상품 수정에 필요한 정보를 담은 객체", required = true),
+                       @Parameter(name = "image", description = "상품 목록에 보이는 썸네일용 이미지", required = true) },
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
@@ -102,10 +102,10 @@ public class AdminProductController {
 
     @PutMapping("/{productId}")
     public ResponseEntity<ShopResult<String>> updateProduct(
-        @RequestPart @Valid final ProductUpdateRequest productRequest,
-        BindingResult bindingResult,
-        @RequestPart final MultipartFile image,
-        @PathVariable final Long productId) throws IOException {
+            @RequestPart @Valid final ProductUpdateRequest productRequest,
+            BindingResult bindingResult,
+            @RequestPart final MultipartFile image,
+            @PathVariable final Long productId) throws IOException {
 
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());

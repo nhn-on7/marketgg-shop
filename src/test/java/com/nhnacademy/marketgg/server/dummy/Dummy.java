@@ -24,7 +24,7 @@ import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse
 import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
-import com.nhnacademy.marketgg.server.elastic.dto.request.SearchRequest;
+import com.nhnacademy.marketgg.server.elastic.request.SearchRequest;
 import com.nhnacademy.marketgg.server.entity.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -112,7 +112,7 @@ public class Dummy {
         ReflectionTestUtils.setField(productRequest, "expirationDate", LocalDate.now());
         ReflectionTestUtils.setField(productRequest, "capacity", "20개");
         ReflectionTestUtils.setField(productRequest, "labelNo", 1L);
-        ReflectionTestUtils.setField(productRequest, "assetNo", 1L);
+
 
         return productRequest;
     }

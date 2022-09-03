@@ -3,7 +3,6 @@ package com.nhnacademy.marketgg.server.dto.request.product;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,14 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class ProductInquiryReplyRequest {
-
-    @Schema(title = "상품 번호", description = "상품 문의가 남겨진 상품의 고유 번호 입니다.", example = "1")
-    @NotNull
-    private Long productId;
-
-    @Schema(title = "문의 번호", description = "상품 문의의 고유 번호 입니다.", example = "1")
-    @NotNull
-    private Long inquiryId;
 
     @Schema(title = "문의 답글", description = "상품 문의 글의 답글 내용 입니다.", example = "조리시간은 15~20 분 정도 입니다.")
     @NotBlank

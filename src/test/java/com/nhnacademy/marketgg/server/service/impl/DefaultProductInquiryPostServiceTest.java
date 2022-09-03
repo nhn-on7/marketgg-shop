@@ -59,8 +59,8 @@ class DefaultProductInquiryPostServiceTest {
     private MemberInfo memberInfo;
 
     Pageable pageable = PageRequest.of(0, 20);
+    Page<ProductInquiryPost> inquiryPosts = new PageImpl<>(List.of(), pageable, 0);
     Page<ProductInquiryResponse> inquiryPosts1 = new PageImpl<>(List.of(), pageable, 0);
-    Page<ProductInquiryPost> inquiryPosts2 = new PageImpl<>(List.of(), pageable, 0);
 
     @Test
     @DisplayName("상품 문의 등록 성공 테스트")
@@ -81,16 +81,16 @@ class DefaultProductInquiryPostServiceTest {
         given(memberRepository.findById(anyLong())).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> productInquiryPostService
-                .createProductInquiry(memberInfo, productInquiryRequest, 2L))
-                .isInstanceOf(ProductInquiryPostNotFoundException.MemberWriteInquiryNotFoundException.class);
+            .createProductInquiry(memberInfo, productInquiryRequest, 2L))
+            .isInstanceOf(ProductInquiryPostNotFoundException.MemberWriteInquiryNotFoundException.class);
     }
 
     @Test
     @DisplayName("상품에 대해서 상품 문의 전체 조회 성공 테스트")
     void testRetrieveProductInquiryByProductId() throws JsonProcessingException {
         given(productInquiryPostRepository.findAllByProductNo(anyLong(), any(PageRequest.class)))
-                .willReturn(inquiryPosts1);
-        productInquiryPostService.retrieveProductInquiryByProductId(1L, pageable);
+            .willReturn(inquiryPosts);
+        productInquiryPostService.retrieveProductInquiryByProductId(memberInfo, 1L, pageable);
 
         then(productInquiryPostRepository).should(times(1))
                                           .findAllByProductNo(anyLong(), any(PageRequest.class));
@@ -100,7 +100,7 @@ class DefaultProductInquiryPostServiceTest {
     @DisplayName("특정 회원이 작성한 상품 문의 전체 조회 성공 테스트")
     void testRetrieveProductInquiryByMemberId() {
         given(productInquiryPostRepository.findAllByMemberNo(anyLong(), any(PageRequest.class)))
-                .willReturn(inquiryPosts2);
+            .willReturn(inquiryPosts1);
         productInquiryPostService.retrieveProductInquiryByMemberId(memberInfo, pageable);
 
         then(productInquiryPostRepository).should(times(1))
@@ -111,9 +111,9 @@ class DefaultProductInquiryPostServiceTest {
     @DisplayName("상품 문의에 대한 답글 등록 성공 테스트")
     void testUpdateProductInquiryReply() {
         given(productInquiryPostRepository.findById(1L))
-                .willReturn(Optional.of(productInquiryPost));
+            .willReturn(Optional.of(productInquiryPost));
 
-        productInquiryPostService.updateProductInquiryReply(anyString(), 1L, 1L);
+        productInquiryPostService.updateProductInquiryReply(anyString(), 1L);
 
         then(productInquiryPostRepository).should(times(1))
                                           .findById(anyLong());
@@ -125,11 +125,11 @@ class DefaultProductInquiryPostServiceTest {
     @DisplayName("상품 문의에 대한 답글 등록 실패 테스트")
     void testUpdateProductInquiryReplyFail() {
         given(productInquiryPostRepository.findById(1L))
-                .willReturn(Optional.empty());
+            .willReturn(Optional.empty());
         assertThatThrownBy(
-                () -> productInquiryPostService.updateProductInquiryReply(
-                        anyString(), 1L, 1L))
-                .isInstanceOf(ProductInquiryPostNotFoundException.class);
+            () -> productInquiryPostService.updateProductInquiryReply(
+                anyString(), 1L))
+            .isInstanceOf(ProductInquiryPostNotFoundException.class);
     }
 
     @Test

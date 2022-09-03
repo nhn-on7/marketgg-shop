@@ -33,8 +33,8 @@ public class DefaultCategoryService implements CategoryService {
     @Override
     public void createCategory(final CategoryCreateRequest createRequest) {
         Categorization categorization =
-            categorizationRepository.findById(createRequest.getCategorizationCode())
-                                    .orElseThrow(CategorizationNotFoundException::new);
+                categorizationRepository.findById(createRequest.getCategorizationCode())
+                                        .orElseThrow(CategorizationNotFoundException::new);
 
         Category category = new Category(createRequest, categorization);
 
@@ -48,7 +48,7 @@ public class DefaultCategoryService implements CategoryService {
 
     @Override
     public List<CategoryRetrieveResponse> retrieveCategoriesByCategorization(
-        String categorizationId) {
+            String categorizationId) {
         return categoryRepository.findByCategorizationCode(categorizationId);
     }
 
@@ -74,7 +74,7 @@ public class DefaultCategoryService implements CategoryService {
         Category category = categoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
 
         if (productRepository.existsByCategory(category) ||
-            customerServicePostRepository.existsByCategory(category)) {
+                customerServicePostRepository.existsByCategory(category)) {
             return;
         }
         categoryRepository.delete(category);

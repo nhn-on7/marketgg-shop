@@ -59,7 +59,7 @@ public class AuthInfoAspect {
         log.info("Method: {}", pjp.getSignature().getName());
 
         ServletRequestAttributes requestAttributes
-            = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+                = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
 
         String jwt = request.getHeader(AUTHORIZATION);
@@ -76,9 +76,9 @@ public class AuthInfoAspect {
         HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
 
         ResponseEntity<ShopResult<AuthInfo>> exchange =
-            restTemplate.exchange(gateway + "/auth/v1/members/info", GET, httpEntity,
-                                  new ParameterizedTypeReference<>() {
-                                  });
+                restTemplate.exchange(gateway + "/auth/v1/members/info", GET, httpEntity,
+                                      new ParameterizedTypeReference<>() {
+                                      });
 
         this.validCheck(exchange);
 

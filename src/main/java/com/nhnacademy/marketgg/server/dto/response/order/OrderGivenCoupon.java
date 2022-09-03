@@ -1,9 +1,8 @@
 package com.nhnacademy.marketgg.server.dto.response.order;
 
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDateTime;
 
 /**
  * 주문서 작성 시 회원이 보유한 쿠폰 정보를 전달하기 위한 DTO 입니다.

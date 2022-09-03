@@ -3,21 +3,21 @@ package com.nhnacademy.marketgg.server.aop;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
-import com.nhnacademy.marketgg.server.exception.auth.UnAuthenticException;
 import com.nhnacademy.marketgg.server.exception.member.MemberNotFoundException;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.elasticsearch.monitor.os.OsStats;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Aspect
@@ -37,24 +37,24 @@ public class MemberInfoAspect {
         String uuid = request.getHeader(AspectUtils.AUTH_ID);
         String roleHeader = request.getHeader(AspectUtils.WWW_AUTHENTICATE);
 
-        if (Objects.isNull(uuid) || Objects.isNull(roleHeader)) {
-            throw new UnAuthenticException();
+        MemberInfo memberInfo = new MemberInfo();
+        if (!(Objects.isNull(uuid) || Objects.isNull(roleHeader))) {
+            List<String> roles = mapper.readValue(roleHeader, new TypeReference<>() {
+            });
+
+            memberInfo = memberRepository.findMemberInfoByUuid(uuid)
+                                         .orElseThrow(MemberNotFoundException::new);
+
+            memberInfo.addRoles(roles);
         }
-        List<String> roles = mapper.readValue(roleHeader, new TypeReference<>() {
-        });
 
-        MemberInfo memberInfo = memberRepository.findMemberInfoByUuid(uuid)
-                                                .orElseThrow(MemberNotFoundException::new);
+        Object[] args = pjp.getArgs();
 
-        memberInfo.addRoles(roles);
-
-        Object[] args = Arrays.stream(pjp.getArgs())
-                              .map(arg -> {
-                                  if (arg instanceof MemberInfo) {
-                                      arg = memberInfo;
-                                  }
-                                  return arg;
-                              }).toArray();
+        for (int i = 0; i < args.length; i++) {
+            if (args[i] instanceof MemberInfo) {
+                args[i] = memberInfo;
+            }
+        }
 
         return pjp.proceed(args);
     }

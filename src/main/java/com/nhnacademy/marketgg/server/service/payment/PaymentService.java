@@ -10,7 +10,7 @@ import com.nhnacademy.marketgg.server.constant.payment.PaymentStatus;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentType;
 import com.nhnacademy.marketgg.server.constant.payment.RefundStatus;
 import com.nhnacademy.marketgg.server.constant.payment.SettlementStatus;
-import com.nhnacademy.marketgg.server.dto.payment.PaymentResponse;
+import com.nhnacademy.marketgg.server.dto.payment.response.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountCreateRequest;
@@ -57,7 +57,7 @@ public interface PaymentService {
     /**
      * 승인된 결제를 결제키로 조회합니다.
      *
-     * @param paymentKey     - 결제 건에 대한 고유 키 값
+     * @param paymentKey - 결제 건에 대한 고유 키 값
      * @return paymentRequest - 상세 결제 내역 데이터
      */
     PaymentResponse retrievePayment(final String paymentKey);

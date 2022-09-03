@@ -26,7 +26,6 @@ import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
 import com.nhnacademy.marketgg.server.service.point.DefaultPointService;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,6 +36,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,7 +67,7 @@ class DefaultPointServiceTest {
     @BeforeEach
     void setUp() {
         pointRetrieveResponse =
-                new PointRetrieveResponse(1L, 1L, 1000, 1000, "결제", LocalDateTime.now());
+                new PointRetrieveResponse( 1L, 1000, 1000, "결제", LocalDateTime.now());
         pointHistoryRequest = new PointHistoryRequest();
         memberCreateRequest = new MemberCreateRequest();
         memberGradeCreateRequest = new MemberGradeCreateRequest();
@@ -79,21 +80,21 @@ class DefaultPointServiceTest {
     @Test
     @DisplayName("사용자 포인트 내역 목록 조회")
     void testRetrievePointHistories() {
-        given(pointHistoryRepository.findAllByMemberId(anyLong())).willReturn(List.of(pointRetrieveResponse));
+        given(pointHistoryRepository.findAllByMemberId(any(), any())).willReturn(Page.empty());
 
-        List<PointRetrieveResponse> responses = pointService.retrievePointHistories(1L);
+        pointService.retrievePointHistories(1L, PageRequest.of(0, 10));
 
-        assertThat(responses.get(0).getPoint()).isEqualTo(1000);
+        then(pointHistoryRepository).should(times(1)).findAllByMemberId(any(), any());
     }
 
     @Test
     @DisplayName("관리자의 사용자 포인트 내역 목록 조회")
     void testAdminRetrievePointHistories() {
-        given(pointHistoryRepository.findAllForAdmin()).willReturn(List.of(pointRetrieveResponse));
+        given(pointHistoryRepository.findAllForAdmin(any())).willReturn(Page.empty());
 
-        List<PointRetrieveResponse> responses = pointService.adminRetrievePointHistories();
+        Page<PointRetrieveResponse> responses = pointService.adminRetrievePointHistories(PageRequest.of(0, 10));
 
-        assertThat(responses.get(0).getPoint()).isEqualTo(1000);
+        assertThat(responses).isEmpty();
     }
 
     @Test

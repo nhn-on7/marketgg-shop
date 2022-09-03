@@ -18,9 +18,6 @@ public class PointRetrieveResponse {
     @Schema(name = "회원 번호", description = "회원의 식별번호입니다.", example = "1")
     private final Long memberId;
 
-    @Schema(name = "주문 번호", description = "주문의 식별번호입니다.", example = "1")
-    private final Long orderNo;
-
     @Schema(name = "포인트", description = "포인트의 값입니다.", example = "1000")
     private final Integer point;
 

@@ -1,6 +1,8 @@
 package com.nhnacademy.marketgg.server.dto.response.product;
 
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -10,12 +12,18 @@ import lombok.RequiredArgsConstructor;
  * @version 1.0.0
  */
 @RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 @Getter
 public class ProductInquiryResponse {
 
     private final String uuid;
 
     private final Long productId;
+
+    private final Long productInquiryNo;
+
+    private final String productName;
 
     private final String title;
 
@@ -29,8 +37,14 @@ public class ProductInquiryResponse {
 
     private String name;
 
+    private Boolean isReadable;
+
     public void memberName(final String name) {
         this.name = name;
+    }
+
+    public void setIsReadable() {
+        this.isReadable = true;
     }
 
 }

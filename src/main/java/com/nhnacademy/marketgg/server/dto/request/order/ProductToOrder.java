@@ -1,18 +1,17 @@
 package com.nhnacademy.marketgg.server.dto.request.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
  * 장바구니로부터 주문할 상품에 대한 정보를 전달하기 위한 DTO 입니다.
  *
  * @author 김정민
+ * @author 이제훈
  * @version 1.0.0
  * @since 1.0.0
  */
@@ -41,5 +40,20 @@ public class ProductToOrder {
             description = "주문할 상품의 썸네일입니다.",
             example = "https://api-storage.cloud.toast.com/v1/AUTH_8a2dd42738a0427180466a56561b5eef/on7_storage/2a01e362-b7b7-49e2-8e31-6ed5aa674761.jpg")
     private String imageAddress;
+
+    /**
+     * 상품 썸네일을 제외한 Projection 용 생성자입니다.
+     *
+     * @param id     상품 번호
+     * @param name   상품 이름
+     * @param price  상품 가격
+     * @param amount 상품 수량
+     */
+    public ProductToOrder(Long id, String name, Long price, Integer amount) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.amount = amount;
+    }
 
 }

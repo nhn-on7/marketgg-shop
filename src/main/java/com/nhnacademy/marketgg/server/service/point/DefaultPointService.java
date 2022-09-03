@@ -10,8 +10,9 @@ import com.nhnacademy.marketgg.server.exception.order.OrderNotFoundException;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,13 +26,13 @@ public class DefaultPointService implements PointService {
     private final OrderRepository orderRepository;
 
     @Override
-    public List<PointRetrieveResponse> retrievePointHistories(final Long id) {
-        return pointRepository.findAllByMemberId(id);
+    public Page<PointRetrieveResponse> retrievePointHistories(final Long id, final Pageable pageable) {
+        return pointRepository.findAllByMemberId(id, pageable);
     }
 
     @Override
-    public List<PointRetrieveResponse> adminRetrievePointHistories() {
-        return pointRepository.findAllForAdmin();
+    public Page<PointRetrieveResponse> adminRetrievePointHistories(final Pageable pageable) {
+        return pointRepository.findAllForAdmin(pageable);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -40,7 +41,7 @@ public class DefaultPointService implements PointService {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
         Integer totalPoint = pointRepository.findLastTotalPoints(member.getId());
         PointHistory pointHistory =
-            new PointHistory(member, null, totalPoint + pointRequest.getPoint(), pointRequest);
+                new PointHistory(member, null, totalPoint + pointRequest.getPoint(), pointRequest);
 
         pointRepository.save(pointHistory);
     }
@@ -57,7 +58,7 @@ public class DefaultPointService implements PointService {
         this.checkMemberGrade(member.getMemberGrade().getGrade(), pointRequest);
 
         PointHistory pointHistory =
-            new PointHistory(member, order, totalPoint + pointRequest.getPoint(), pointRequest);
+                new PointHistory(member, order, totalPoint + pointRequest.getPoint(), pointRequest);
 
         pointRepository.save(pointHistory);
     }

@@ -1,9 +1,7 @@
-package com.nhnacademy.marketgg.server.elastic.dto.request.searchutil;
+package com.nhnacademy.marketgg.server.elastic.request.searchutil;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.List;
 
 /**
  * 반드시 조건에 만족해야 하는 Must 조건 입니다.
@@ -13,7 +11,7 @@ import java.util.List;
  */
 @AllArgsConstructor
 @Getter
-public class Must {
+public class Should {
 
     private MultiMatch multi_match;
 

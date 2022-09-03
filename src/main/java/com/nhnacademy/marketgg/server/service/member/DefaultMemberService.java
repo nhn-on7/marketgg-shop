@@ -2,12 +2,18 @@ package com.nhnacademy.marketgg.server.service.member;
 
 import static com.nhnacademy.marketgg.server.constant.CouponsName.SIGNUP;
 import static com.nhnacademy.marketgg.server.constant.PointContent.REFERRED;
+import static java.util.stream.Collectors.toList;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.member.MemberUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.request.member.MemberWithdrawRequest;
 import com.nhnacademy.marketgg.server.dto.request.member.SignupRequest;
+import com.nhnacademy.marketgg.server.dto.response.auth.UuidTokenResponse;
+import com.nhnacademy.marketgg.server.dto.response.member.AdminAuthResponse;
+import com.nhnacademy.marketgg.server.dto.response.member.AdminMemberResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.SignupResponse;
 import com.nhnacademy.marketgg.server.entity.Cart;
@@ -23,13 +29,16 @@ import com.nhnacademy.marketgg.server.repository.cart.CartRepository;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.membergrade.MemberGradeRepository;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * 회원 서비스의 구현체입니다.
@@ -38,6 +47,7 @@ import java.util.Objects;
  * @author 김훈민
  * @version 1.0.0
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DefaultMemberService implements MemberService {
@@ -72,15 +82,16 @@ public class DefaultMemberService implements MemberService {
         Cart savedCart = cartRepository.save(new Cart());
 
         ShopResult<SignupResponse> authResponse = authRepository.signup(new SignupRequest(signUpRequest.getEmail(),
-                signUpRequest.getPassword(),
-                signUpRequest.getName(),
-                signUpRequest.getPhoneNumber(),
-                signUpRequest.getReferrerEmail(),
-                signUpRequest.getProvider()));
+            signUpRequest.getPassword(),
+            signUpRequest.getName(),
+            signUpRequest.getPhoneNumber(),
+            signUpRequest.getReferrerEmail(),
+            signUpRequest.getProvider()));
 
         Member signUpMember = memberRepository.save(new Member(signUpRequest, authResponse.getData()
                                                                                           .getUuid(),
-                registerGrade(), savedCart));
+            registerGrade(), savedCart));
+
 
         deliveryAddressRepository.save(new DeliveryAddress(signUpMember, signUpRequest));
 
@@ -100,22 +111,35 @@ public class DefaultMemberService implements MemberService {
 
     /**
      * 회원탈퇴시 SoftDelete 를 위한 메소드입니다.
-     *
-     * @param memberInfo - 탈퇴하는 회원의 정보입니다.
      */
     @Transactional
     @Override
-    public void withdraw(final MemberInfo memberInfo) throws JsonProcessingException {
+    public void withdraw(MemberInfo memberInfo, final MemberWithdrawRequest memberWithdrawRequest, final String token)
+        throws JsonProcessingException {
         Member member = memberRepository.findById(memberInfo.getId())
                                         .orElseThrow(MemberNotFoundException::new);
+
         LocalDateTime withdrawAt = LocalDateTime.now();
+        memberWithdrawRequest.inputWithdrawAt(withdrawAt);
+        authRepository.withdraw(memberWithdrawRequest, token);
         member.withdraw(withdrawAt);
-        authRepository.withdraw(withdrawAt);
     }
 
+    @Transactional
     @Override
-    public void update(final MemberInfo memberInfo, final MemberUpdateRequest memberUpdateRequest) {
-        authRepository.update(memberUpdateRequest);
+    public UuidTokenResponse update(final MemberInfo memberInfo,
+                                    final MemberUpdateRequest memberUpdateRequest,
+                                    final String token) {
+
+        Member member = memberRepository.findById(memberInfo.getId())
+                                        .orElseThrow(MemberNotFoundException::new);
+
+        log.info("MemberUuid:{}", member.getUuid());
+        ShopResult<UuidTokenResponse> uuidTokenResponse = authRepository.update(memberUpdateRequest, token);
+        log.info("UuidTokenResponse.getUuid:{}", uuidTokenResponse.getData().getUpdatedUuid());
+        member.updateUuid(uuidTokenResponse.getData().getUpdatedUuid());
+        memberRepository.save(member);
+        return uuidTokenResponse.getData();
     }
 
     /**
@@ -126,6 +150,27 @@ public class DefaultMemberService implements MemberService {
     private MemberGrade registerGrade() {
         return memberGradeRepository.findByGrade("Member")
                                     .orElseThrow(MemberGradeNotFoundException::new);
+    }
+
+    @Override
+    public PageEntity<AdminMemberResponse> retrieveMembers(String jwt, Pageable pageable) {
+
+        PageEntity<AdminAuthResponse> result = authRepository.retrieveMemberList(jwt, pageable);
+
+        List<AdminMemberResponse> responses =
+            result.getData()
+                  .stream()
+                  .map(auth -> {
+                      String uuid = auth.getUuid();
+                      Optional<MemberInfo> memberInfo =
+                          memberRepository.findMemberInfoByUuid(uuid);
+                      return memberInfo.map(info -> new AdminMemberResponse(auth, info))
+                                       .orElse(null);
+                  }).filter(Objects::nonNull)
+                  .limit(pageable.getPageSize())
+                  .collect(toList());
+
+        return new PageEntity<>(result.getPageNumber(), result.getPageSize(), result.getTotalPages(), responses);
     }
 
 }

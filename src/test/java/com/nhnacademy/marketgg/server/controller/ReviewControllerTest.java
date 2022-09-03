@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.controller.product.ReviewController;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
-import com.nhnacademy.marketgg.server.dto.request.DefaultPageRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
@@ -30,7 +29,6 @@ import java.io.FileInputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -110,13 +108,13 @@ class ReviewControllerTest {
     @Test
     @DisplayName("후기 전체 조회 테스트")
     void testRetrieveReviews() throws Exception {
-        given(reviewService.retrieveReviews(any(Pageable.class))).willReturn(Dummy.getDummyReviewPage());
+        given(reviewService.retrieveReviews(any(Pageable.class), anyLong())).willReturn(Dummy.getDummyReviewPage());
 
         this.mockMvc.perform(get("/products/{productId}/reviews/", 1L))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-        then(reviewService).should(times(1)).retrieveReviews(any(Pageable.class));
+        then(reviewService).should(times(1)).retrieveReviews(any(Pageable.class), anyLong());
     }
 
     @Test
@@ -152,7 +150,8 @@ class ReviewControllerTest {
     void testDeleteReview() throws Exception {
         willDoNothing().given(reviewService).deleteReview(anyLong());
 
-        this.mockMvc.perform(delete("/products/{productId}/reviews/{reviewId}", 1L, 1L))
+        this.mockMvc.perform(delete("/products/{productId}/reviews/{reviewId}", 1L, 1L)
+                                 .headers(headers))
                     .andExpect(status().isOk());
 
         then(reviewService).should().deleteReview(anyLong());

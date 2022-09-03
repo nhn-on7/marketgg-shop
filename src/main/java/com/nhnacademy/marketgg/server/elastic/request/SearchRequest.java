@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.elastic.dto.request;
+package com.nhnacademy.marketgg.server.elastic.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.Min;

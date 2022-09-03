@@ -1,19 +1,23 @@
 package com.nhnacademy.marketgg.server.controller.admin;
 
+import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
 import com.nhnacademy.marketgg.server.service.point.PointService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.net.URI;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -39,17 +43,22 @@ public class AdminPointController {
      */
     @Operation(summary = "전체 회원 포인트 내역 조회",
                description = "전제 회원의 포인트 내역목록을 반환합니다.",
+               parameters = @Parameter(name = "page", description = "페이지 정보입니다.", required = true),
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @GetMapping
-    public ResponseEntity<ShopResult<List<PointRetrieveResponse>>> adminRetrievePointHistory() {
-        List<PointRetrieveResponse> data = pointService.adminRetrievePointHistories();
+    public ResponseEntity<PageEntity<PointRetrieveResponse>> adminRetrievePointHistory(
+            @RequestParam final Integer page) {
+        Page<PointRetrieveResponse> data = pointService.adminRetrievePointHistories(PageRequest.of(page, 10));
 
         return ResponseEntity.status(HttpStatus.OK)
                              .location(URI.create(DEFAULT_ADMIN + "/points"))
-                             .body(ShopResult.successWith(data));
+                             .body(new PageEntity<>(data.getNumber(),
+                                                    data.getSize(),
+                                                    data.getTotalPages(),
+                                                    data.getContent()));
     }
 
 }

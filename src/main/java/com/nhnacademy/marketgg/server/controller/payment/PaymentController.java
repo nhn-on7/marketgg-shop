@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.controller.payment;
 
 import com.nhnacademy.marketgg.server.dto.ShopResult;
-import com.nhnacademy.marketgg.server.dto.payment.PaymentResponse;
+import com.nhnacademy.marketgg.server.dto.payment.response.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountCreateRequest;
@@ -101,7 +101,7 @@ public class PaymentController {
      */
     @PostMapping("/payments/virtual-accounts")
     public ResponseEntity<ShopResult<String>> createVirtualAccounts(@RequestBody @Valid final
-                                                                             VirtualAccountCreateRequest request) {
+                                                                    VirtualAccountCreateRequest request) {
         log.info("createVirtualAccounts: {}", request);
 
         paymentService.createVirtualAccounts(request);
