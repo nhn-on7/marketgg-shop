@@ -45,7 +45,7 @@ class AdminCouponControllerTest {
 
     private static final String DEFAULT_COUPON = "/admin/coupons";
 
-    Pageable pageable = PageRequest.of(0, 10);
+    Pageable pageable = PageRequest.of(0, 9);
     CouponDto couponDto;
 
     HttpHeaders httpHeaders;
