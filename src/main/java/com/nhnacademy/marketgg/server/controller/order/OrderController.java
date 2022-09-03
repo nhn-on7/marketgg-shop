@@ -11,6 +11,7 @@ import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderPaymentKey;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.service.order.OrderService;
@@ -267,6 +268,34 @@ public class OrderController {
                              .location(URI.create(ORDER_PREFIX + "/" + orderId))
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(ShopResult.successWithDefaultMessage());
+    }
+
+    /**
+     * 주문에 대한 paymentKey 조회를 할 수 있는 GET Mapping 을 지원합니다.
+     *
+     * @param orderId - paymentKey 를 조회할 주문의 식별번호입니다.
+     * @return 조회한 paymentKey 를 반환합니다.
+     * @since 1.0.0
+     */
+    @Operation(summary = "주문의 paymentKey 조회",
+               description = "지정한 주문의 paymentKey 를 조회합니다.",
+               parameters = { @Parameter(name = "orderId", description = "주문 식별번호", required = true),
+                       @Parameter(name = "memberInfo", description = "조회하는 회원 정보", required = true) },
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = ShopResult.class)),
+                                        useReturnTypeSchema = true))
+    @GetMapping("/{orderId}/paymentKey")
+    public ResponseEntity<ShopResult<OrderPaymentKey>> retrieveOrderPaymentKey(@PathVariable final Long orderId,
+                                                                               final MemberInfo memberInfo) {
+        log.info("retrieveOrderPaymentKey method started");
+
+        OrderPaymentKey data = orderService.retrieveOrderPaymentKey(orderId, memberInfo);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .location(URI.create(ORDER_PREFIX + "/" + orderId + "/paymentKey"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ShopResult.successWith(data));
     }
 
 }

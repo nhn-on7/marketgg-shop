@@ -19,6 +19,7 @@ import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddre
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderPaymentKey;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
@@ -363,6 +364,11 @@ public class DefaultOrderService implements OrderService {
 
         publisher.publishEvent(new OrderPointCanceledEvent(order));
         publisher.publishEvent(new OrderCouponCanceledEvent(order));
+    }
+
+    @Override
+    public OrderPaymentKey retrieveOrderPaymentKey(final Long orderId, final MemberInfo memberInfo) {
+        return orderRepository.findPaymentKeyById(orderId, memberInfo.getId(), memberInfo.isAdmin());
     }
 
 }
