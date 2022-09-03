@@ -7,6 +7,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class OrderPaymentKey {
 
-    String paymentKey;
+    private final String paymentKey;
 
 }
