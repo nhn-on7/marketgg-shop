@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.service.payment;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.server.constant.OrderStatus;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentStatus;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
@@ -117,6 +118,7 @@ public class TossPaymentService implements PaymentService {
             mobilePhonePaymentRepository.save(mobilePhonePayment);
         }
 
+        order.updateStatus(OrderStatus.PAY_COMPLETE.getStatus());
         return paymentResponse;
     }
 
