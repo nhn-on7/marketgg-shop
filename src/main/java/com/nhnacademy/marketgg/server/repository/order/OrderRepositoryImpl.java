@@ -32,7 +32,6 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
         QueryResults<OrderRetrieveResponse> result = from(order).select(selectOrderResponse())
                                                                 .where(eqMemberId(memberId, isAdmin))
                                                                 .where(userNotSeeDeleted(isAdmin, order.deletedAt))
-                                                                .where(order.orderStatus.contains("취소/환불").not())
                                                                 .offset(pageable.getOffset())
                                                                 .limit(pageable.getPageSize())
                                                                 .fetchResults();
@@ -46,7 +45,6 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
                           .where(order.id.eq(orderId))
                           .where(eqMemberId(memberId, isAdmin))
                           .where(userNotSeeDeleted(isAdmin, order.deletedAt))
-                          .where(order.orderStatus.contains("취소/환불").not())
                           .fetchOne();
     }
 
