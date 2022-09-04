@@ -42,8 +42,6 @@ public class DefaultFileService implements FileService {
                                  .length(imageCreateRequest.getLength())
                                  .build();
 
-        imageEntity.setImageSequence(imageCreateRequest.getImageSequence());
-
         Image saveImage = imageRepository.save(imageEntity);
 
         return imageRepository.queryById(saveImage.getId());

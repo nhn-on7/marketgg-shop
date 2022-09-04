@@ -115,7 +115,6 @@ public class NhnStorageService implements StorageService {
                                  .name(fileName)
                                  .imageAddress(url)
                                  .classification("cloud")
-                                 .imageSequence(1)
                                  .length(image.getSize())
                                  .type(type)
                                  .build();

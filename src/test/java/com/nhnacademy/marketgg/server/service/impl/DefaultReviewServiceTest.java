@@ -129,7 +129,7 @@ class DefaultReviewServiceTest {
         ReflectionTestUtils.setField(reviewUpdateRequest, "content", "리뷰 수정합니다~");
         ReflectionTestUtils.setField(reviewUpdateRequest, "rating", 5L);
 
-        imageResponse = new ImageResponse("이미지 응답", 1L, "이미지 주소", 1, asset);
+        imageResponse = new ImageResponse("이미지 응답", 1L, "이미지 주소",  asset);
 
         memberInfo = Dummy.getDummyMemberInfo(1L, Dummy.getDummyCart(1L));
         memberInfoResponse = new MemberInfoResponse("admin", "ssasdfsdaf@gmail.com", "010-1234-1234");

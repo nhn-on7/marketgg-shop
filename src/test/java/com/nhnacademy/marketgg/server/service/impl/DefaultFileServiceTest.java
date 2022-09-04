@@ -59,7 +59,7 @@ class DefaultFileServiceTest {
     @BeforeEach
     void setUp() throws IOException {
         imageCreateRequest =
-                ImageCreateRequest.builder().type(".png").imageSequence(1).length(123L).classification("cloud")
+                ImageCreateRequest.builder().type(".png").length(123L).classification("cloud")
                                   .imageAddress("url").name("image name").build();
 
         URL url = getClass().getClassLoader().getResource("img/lee.png");
@@ -69,7 +69,7 @@ class DefaultFileServiceTest {
 
         asset = Asset.create();
 
-        imageResponse = new ImageResponse("이미지 응답", 1L, "이미지 주소", 1, asset);
+        imageResponse = new ImageResponse("이미지 응답", 1L, "이미지 주소",  asset);
 
         imageEntity = Image.builder().build();
         ReflectionTestUtils.setField(imageEntity, "id", 1L);

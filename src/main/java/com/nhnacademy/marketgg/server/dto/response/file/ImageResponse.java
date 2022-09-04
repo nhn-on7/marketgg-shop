@@ -14,8 +14,6 @@ public class ImageResponse {
 
     private final String imageAddress;
 
-    private final Integer imageSequence;
-
     private final Asset asset;
 
 }

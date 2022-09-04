@@ -150,7 +150,7 @@ class DefaultProductServiceTest {
 
         productListResponse = new ProductListResponse();
 
-        imageResponse = new ImageResponse("이미지 응답", 1L, "이미지 주소", 1, asset);
+        imageResponse = new ImageResponse("이미지 응답", 1L, "이미지 주소",  asset);
     }
 
     @Test
