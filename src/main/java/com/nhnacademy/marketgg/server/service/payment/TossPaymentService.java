@@ -27,15 +27,16 @@ import com.nhnacademy.marketgg.server.repository.payment.PaymentRepository;
 import com.nhnacademy.marketgg.server.repository.payment.TransferPaymentRepository;
 import com.nhnacademy.marketgg.server.repository.payment.VirtualAccountPaymentRepository;
 import com.nhnacademy.marketgg.server.service.order.OrderService;
-import java.io.UncheckedIOException;
-import java.util.Objects;
-import java.util.function.BooleanSupplier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.UncheckedIOException;
+import java.util.Objects;
+import java.util.function.BooleanSupplier;
 
 /**
  * 토스 결제대행사를 통한 결제 기능을 수행하기 위한 서비스 클래스입니다.
@@ -173,8 +174,11 @@ public class TossPaymentService implements PaymentService {
 
         Payment foundPayment = paymentRepository.findByPaymentKey(paymentKey)
                                                 .orElseThrow(PaymentNotFoundException::new);
+        Order order = orderRepository.findById(foundPayment.getOrder().getId())
+                                     .orElseThrow(OrderNotFoundException::new);
 
         foundPayment.changePaymentStatus(PaymentStatus.CANCELED);
+        order.updateStatus(OrderStatus.CANCEL_COMPLETE.getStatus());
     }
 
 }
