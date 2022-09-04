@@ -189,6 +189,7 @@ public class DefaultOrderService implements OrderService {
      */
     private GivenCoupon checkOrderValid(final OrderCreateRequest orderRequest, final MemberInfoResponse memberResponse,
                                         final Long memberId) {
+
         if (!memberResponse.getEmail().equals(orderRequest.getEmail())) {
             throw new OrderMemberNotMatchedException();
         }
@@ -314,21 +315,16 @@ public class DefaultOrderService implements OrderService {
     }
 
     private String checkDeliveryStatus(String status) {
-        String newStatus = status;
-
-        if (status.equals("READY")) {
-            newStatus = OrderStatus.DELIVERY_WAITING.getStatus();
+        switch (status) {
+            case "READY":
+                return OrderStatus.DELIVERY_WAITING.getStatus();
+            case "DELIVERING":
+                return OrderStatus.DELIVERY_SHIPPING.getStatus();
+            case "ARRIVAL":
+                return OrderStatus.DELIVERY_COMPLETE.getStatus();
+            default:
+                return status;
         }
-
-        if (status.equals("DELIVERING")) {
-            newStatus = OrderStatus.DELIVERY_SHIPPING.getStatus();
-        }
-
-        if (status.equals("ARRIVAL")) {
-            newStatus = OrderStatus.DELIVERY_COMPLETE.getStatus();
-        }
-
-        return newStatus;
     }
 
     /**
