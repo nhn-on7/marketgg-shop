@@ -24,7 +24,6 @@ public class DefaultFileService implements FileService {
     private final ImageRepository imageRepository;
     private final AssetRepository assetRepository;
 
-    private static final String DIR = System.getProperty("user.home");
     @Value(("${gg.storage.option}"))
     private String option;
 

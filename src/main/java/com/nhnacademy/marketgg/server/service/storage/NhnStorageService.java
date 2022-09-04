@@ -33,11 +33,6 @@ public class NhnStorageService implements StorageService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    private PasswordCredentials passwordCredentials;
-    private Auth auth;
-    private TokenRequest tokenRequest;
-    private CloudResponse cloudResponse;
-
     @Value("${gg.storage.auth-url}")
     private String authUrl;
     @Value("${gg.storage.user-name}")
@@ -57,11 +52,11 @@ public class NhnStorageService implements StorageService {
      * @return - Storage 이용에 필요한 토큰을 반환합니다.
      * @author - 조현진
      */
-    public String requestToken() {
+    private String requestToken() {
 
-        passwordCredentials = new PasswordCredentials(userName, password);
-        auth = new Auth(tenantId, passwordCredentials);
-        tokenRequest = new TokenRequest(auth);
+        PasswordCredentials passwordCredentials = new PasswordCredentials(userName, password);
+        Auth auth = new Auth(tenantId, passwordCredentials);
+        TokenRequest tokenRequest = new TokenRequest(auth);
 
         String identityUrl = this.authUrl + "/tokens";
 
@@ -69,7 +64,7 @@ public class NhnStorageService implements StorageService {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        HttpEntity<TokenRequest> httpEntity = new HttpEntity<>(this.tokenRequest, headers);
+        HttpEntity<TokenRequest> httpEntity = new HttpEntity<>(tokenRequest, headers);
 
         // 토큰 요청
         ResponseEntity<String> response =
@@ -89,13 +84,13 @@ public class NhnStorageService implements StorageService {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setBufferRequestBody(false);
 
-        RestTemplate restTemplate = new RestTemplate(requestFactory);
+        RestTemplate storageRestTemplate = new RestTemplate(requestFactory);
 
         HttpMessageConverterExtractor<String> responseExtractor =
-                new HttpMessageConverterExtractor<>(String.class, restTemplate.getMessageConverters());
+                new HttpMessageConverterExtractor<>(String.class, storageRestTemplate.getMessageConverters());
 
         try (InputStream inputStream = image.getInputStream()) {
-            cloudResponse = objectMapper.readValue(requestToken(), CloudResponse.class);
+            CloudResponse cloudResponse = objectMapper.readValue(requestToken(), CloudResponse.class);
             String tokenId = cloudResponse.getAccess().getToken().getId();
 
             requestCallback = request -> {
@@ -103,7 +98,7 @@ public class NhnStorageService implements StorageService {
                 IOUtils.copy(inputStream, request.getBody());
             };
 
-            restTemplate.execute(url, PUT, requestCallback, responseExtractor);
+            storageRestTemplate.execute(url, PUT, requestCallback, responseExtractor);
             log.info("업로드 성공");
 
         } catch (IOException e) {
