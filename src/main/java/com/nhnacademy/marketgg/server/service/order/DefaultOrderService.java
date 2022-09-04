@@ -174,7 +174,8 @@ public class DefaultOrderService implements OrderService {
     private OrderToPayment makeOrderToPayment(final Order order, final OrderCreateRequest orderRequest) {
         String orderId = attachPrefix(order.getId());
 
-        return new OrderToPayment(orderId, order.getOrderName(), orderRequest.getName(), orderRequest.getEmail(),
+        return new OrderToPayment(orderId, order.getOrderName(), orderRequest.getName(),
+                                  orderRequest.getPhone(), orderRequest.getEmail(),
                                   orderRequest.getTotalAmount(), orderRequest.getCouponId(),
                                   orderRequest.getUsedPoint(), orderRequest.getExpectedSavePoint());
     }
