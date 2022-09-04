@@ -259,7 +259,7 @@ public class DefaultOrderService implements OrderService {
         Long totalPrice = 0L;
 
         for (ProductToOrder product : products) {
-            totalPrice += product.getPrice();
+            totalPrice += product.getAmount() * product.getPrice();
         }
 
         return totalPrice;
