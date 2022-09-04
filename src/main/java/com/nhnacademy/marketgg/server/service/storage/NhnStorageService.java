@@ -8,8 +8,6 @@ import com.nhnacademy.marketgg.server.dto.request.file.cloud.Auth;
 import com.nhnacademy.marketgg.server.dto.request.file.cloud.PasswordCredentials;
 import com.nhnacademy.marketgg.server.dto.request.file.cloud.TokenRequest;
 import com.nhnacademy.marketgg.server.dto.response.file.cloud.CloudResponse;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
@@ -52,7 +50,6 @@ public class NhnStorageService implements StorageService {
     private String storageUrl;
 
     private static final String HEADER_NAME = "X-Auth-Token";
-    private static final String DIR = System.getProperty("java.io.tmpdir");
 
     /**
      * NHN Cloud의 ObjectStorage를 사용하기 위한 메소드입니다.
@@ -86,9 +83,7 @@ public class NhnStorageService implements StorageService {
 
         String type = getContentType(image);
         String fileName = UUID.randomUUID() + type;
-        File objFile = new File(DIR, Objects.requireNonNull(fileName));
         String url = this.getUrl(fileName);
-        image.transferTo(objFile);
 
         RequestCallback requestCallback;
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
@@ -99,7 +94,7 @@ public class NhnStorageService implements StorageService {
         HttpMessageConverterExtractor<String> responseExtractor =
                 new HttpMessageConverterExtractor<>(String.class, restTemplate.getMessageConverters());
 
-        try (InputStream inputStream = new FileInputStream(objFile)) {
+        try (InputStream inputStream = image.getInputStream()) {
             cloudResponse = objectMapper.readValue(requestToken(), CloudResponse.class);
             String tokenId = cloudResponse.getAccess().getToken().getId();
 
@@ -121,7 +116,7 @@ public class NhnStorageService implements StorageService {
                                  .imageAddress(url)
                                  .classification("cloud")
                                  .imageSequence(1)
-                                 .length(objFile.length())
+                                 .length(image.getSize())
                                  .type(type)
                                  .build();
     }
