@@ -25,18 +25,15 @@ public class ImageCreateRequest {
 
     private Long length;
 
-    private Integer imageSequence;
-
     private String classification;
 
     @Builder
     private ImageCreateRequest(String imageAddress, String name, String type, Long length,
-                               Integer imageSequence, String classification) {
+                               String classification) {
         this.imageAddress = imageAddress;
         this.name = name;
         this.type = type;
         this.length = length;
         this.classification = classification;
-        this.imageSequence = imageSequence;
     }
 }

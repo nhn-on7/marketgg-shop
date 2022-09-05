@@ -8,8 +8,6 @@ import com.nhnacademy.marketgg.server.dto.request.file.cloud.Auth;
 import com.nhnacademy.marketgg.server.dto.request.file.cloud.PasswordCredentials;
 import com.nhnacademy.marketgg.server.dto.request.file.cloud.TokenRequest;
 import com.nhnacademy.marketgg.server.dto.response.file.cloud.CloudResponse;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
@@ -35,11 +33,6 @@ public class NhnStorageService implements StorageService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    private PasswordCredentials passwordCredentials;
-    private Auth auth;
-    private TokenRequest tokenRequest;
-    private CloudResponse cloudResponse;
-
     @Value("${gg.storage.auth-url}")
     private String authUrl;
     @Value("${gg.storage.user-name}")
@@ -52,7 +45,6 @@ public class NhnStorageService implements StorageService {
     private String storageUrl;
 
     private static final String HEADER_NAME = "X-Auth-Token";
-    private static final String DIR = System.getProperty("java.io.tmpdir");
 
     /**
      * NHN Cloud의 ObjectStorage를 사용하기 위한 메소드입니다.
@@ -60,11 +52,11 @@ public class NhnStorageService implements StorageService {
      * @return - Storage 이용에 필요한 토큰을 반환합니다.
      * @author - 조현진
      */
-    public String requestToken() {
+    private String requestToken() {
 
-        passwordCredentials = new PasswordCredentials(userName, password);
-        auth = new Auth(tenantId, passwordCredentials);
-        tokenRequest = new TokenRequest(auth);
+        PasswordCredentials passwordCredentials = new PasswordCredentials(userName, password);
+        Auth auth = new Auth(tenantId, passwordCredentials);
+        TokenRequest tokenRequest = new TokenRequest(auth);
 
         String identityUrl = this.authUrl + "/tokens";
 
@@ -72,7 +64,7 @@ public class NhnStorageService implements StorageService {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        HttpEntity<TokenRequest> httpEntity = new HttpEntity<>(this.tokenRequest, headers);
+        HttpEntity<TokenRequest> httpEntity = new HttpEntity<>(tokenRequest, headers);
 
         // 토큰 요청
         ResponseEntity<String> response =
@@ -86,21 +78,19 @@ public class NhnStorageService implements StorageService {
 
         String type = getContentType(image);
         String fileName = UUID.randomUUID() + type;
-        File objFile = new File(DIR, Objects.requireNonNull(fileName));
         String url = this.getUrl(fileName);
-        image.transferTo(objFile);
 
         RequestCallback requestCallback;
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setBufferRequestBody(false);
 
-        RestTemplate restTemplate = new RestTemplate(requestFactory);
+        RestTemplate storageRestTemplate = new RestTemplate(requestFactory);
 
         HttpMessageConverterExtractor<String> responseExtractor =
-                new HttpMessageConverterExtractor<>(String.class, restTemplate.getMessageConverters());
+                new HttpMessageConverterExtractor<>(String.class, storageRestTemplate.getMessageConverters());
 
-        try (InputStream inputStream = new FileInputStream(objFile)) {
-            cloudResponse = objectMapper.readValue(requestToken(), CloudResponse.class);
+        try (InputStream inputStream = image.getInputStream()) {
+            CloudResponse cloudResponse = objectMapper.readValue(requestToken(), CloudResponse.class);
             String tokenId = cloudResponse.getAccess().getToken().getId();
 
             requestCallback = request -> {
@@ -108,7 +98,7 @@ public class NhnStorageService implements StorageService {
                 IOUtils.copy(inputStream, request.getBody());
             };
 
-            restTemplate.execute(url, PUT, requestCallback, responseExtractor);
+            storageRestTemplate.execute(url, PUT, requestCallback, responseExtractor);
             log.info("업로드 성공");
 
         } catch (IOException e) {
@@ -120,8 +110,7 @@ public class NhnStorageService implements StorageService {
                                  .name(fileName)
                                  .imageAddress(url)
                                  .classification("cloud")
-                                 .imageSequence(1)
-                                 .length(objFile.length())
+                                 .length(image.getSize())
                                  .type(type)
                                  .build();
     }
@@ -140,6 +129,9 @@ public class NhnStorageService implements StorageService {
      */
     private String getContentType(final MultipartFile image) {
         if (Objects.requireNonNull(image.getOriginalFilename()).contains("jpeg")) {
+            return ".jpg";
+        }
+        if (Objects.requireNonNull(image.getOriginalFilename()).contains("jpg")) {
             return ".jpg";
         }
         if (Objects.requireNonNull(image.getOriginalFilename()).contains("png")) {

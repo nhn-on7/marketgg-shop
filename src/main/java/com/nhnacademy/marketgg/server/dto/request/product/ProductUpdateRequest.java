@@ -2,6 +2,8 @@ package com.nhnacademy.marketgg.server.dto.request.product;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
@@ -17,7 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Getter
 public class ProductUpdateRequest {
 
-    @Schema(title = "카테코리", description = "상품이 속한 카테고리", example = "001")
+    @Schema(title = "카테고리", description = "상품이 속한 카테고리", example = "001")
     @NotBlank(message = "카테고리는 null일수 없습니다.")
     private String categoryCode;
 
@@ -35,6 +37,8 @@ public class ProductUpdateRequest {
 
     @Schema(title = "재고", description = "상품의 남은 개수", example = "500")
     @NotNull(message = "재고는 null일수 없습니다.")
+    @Max(value = 65535, message = "재고의 max는 65535를 넘을 수 없습니다.")
+    @Min(value = 1, message = "재고의 min은 65535를 1보다 작을 수 없습니다.")
     private Long totalStock;
 
     @Schema(title = "가격", description = "상품 가격", example = "1200")

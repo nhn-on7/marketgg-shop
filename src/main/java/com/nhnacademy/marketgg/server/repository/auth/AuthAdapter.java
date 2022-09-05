@@ -172,12 +172,15 @@ public class AuthAdapter implements AuthRepository {
         return httpHeaders;
     }
 
-    // memo: 주문뿐 아니라 상품문의에서도 쓰이고 있어서 우선 static 메소드로 만들어놓음
+    /**
+     * 인증 서버로부터 회원 정보를 가져오는 정적 메서드입니다.
+     */
     public static MemberInfoResponse checkResult(final ShopResult<MemberInfoResponse> shopResult) {
-        if (shopResult.isSuccess() && Objects.nonNull(shopResult.getData())) {
-            return shopResult.getData();
+        if (!shopResult.isSuccess() || Objects.isNull(shopResult.getData())) {
+            throw new MemberInfoNotFoundException(shopResult.getError().getMessage());
         }
-        throw new MemberInfoNotFoundException(shopResult.getError().getMessage());
+
+        return shopResult.getData();
     }
 
 }

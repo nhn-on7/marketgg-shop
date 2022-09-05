@@ -38,9 +38,6 @@ public class Image {
     @Column(name = "image_address")
     private String imageAddress;
 
-    @Column(name = "image_sequence")
-    private Integer imageSequence;
-
     @Column
     private String name;
 
@@ -62,10 +59,6 @@ public class Image {
         this.type = type;
         this.length = length;
         this.classification = classification;
-    }
-
-    public void setImageSequence(Integer sequence) {
-        this.imageSequence = sequence;
     }
 
 }
