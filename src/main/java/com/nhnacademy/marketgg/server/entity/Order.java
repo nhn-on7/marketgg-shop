@@ -96,7 +96,7 @@ public class Order {
     public Order(final Member member, final DeliveryAddress deliveryAddress, final OrderCreateRequest orderRequest,
                  final String representName, final Integer productSize) {
         this.member = member;
-        this.orderName = representName + " 외 " + productSize + "건";
+        this.orderName = productSize == 1 ? representName : representName + " 외 " + (productSize - 1) + "건";
         this.totalAmount = orderRequest.getTotalAmount();
         this.orderStatus = orderRequest.getPaymentType().equals(PaymentType.VIRTUAL_ACCOUNT.getType())
                 ? OrderStatus.DEPOSIT_WAITING.getStatus() : OrderStatus.PAY_WAITING.getStatus();

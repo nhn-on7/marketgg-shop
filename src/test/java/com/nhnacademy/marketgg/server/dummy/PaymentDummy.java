@@ -18,7 +18,7 @@ public class PaymentDummy {
     public static final String PAYMENT_KEY = "EAK6k75XwlOyL0qZ4G1VOP4xk47qOroWb2MQYgmBDPdR9pxz";
 
     public static OrderToPayment getOrderToPayment() {
-        return new OrderToPayment("GGORDER_1", "orderName", "강태풍",
+        return new OrderToPayment("GGORDER_1", "orderName", "강태풍", "01012345678",
                                   "strong.storm@gmail.com", 30_000L, 1L,
                                   2_000, 300);
     }

@@ -7,6 +7,7 @@ import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderPaymentKey;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import java.util.List;
@@ -88,6 +89,15 @@ public interface OrderService {
      * @since 1.0.0
      */
     void cancelOrder(final Long orderId);
+
+    /**
+     * 주문의 paymentKey 를 조회하는 메소드입니다.
+     *
+     * @param orderId - 조회할 주문의 식별번호입니다.
+     * @param memberInfo - 조회하는 회원의 정보입니다.
+     * @return 조회한 payment 를 반환합니다.
+     */
+    OrderPaymentKey retrieveOrderPaymentKey(final Long orderId, final MemberInfo memberInfo);
 
     /**
      * 주문 번호에 prefix 를 붙이는 메소드입니다.

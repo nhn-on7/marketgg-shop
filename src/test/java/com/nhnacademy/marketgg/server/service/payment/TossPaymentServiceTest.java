@@ -177,16 +177,16 @@ class TossPaymentServiceTest {
         paymentService.putMoneyInVirtualAccount(PaymentDummy.getVirtualAccountDepositRequest());
     }
 
-    @Test
-    @DisplayName("승인된 결제 취소")
-    void cancelPayment() throws JsonProcessingException {
-        ResponseEntity<String> response = spy(ResponseEntity.ok().contentType(APPLICATION_JSON).body(""));
-        given(paymentAdapter.cancel(anyString(), any(PaymentCancelRequest.class))).willReturn(response);
-
-        Payment payment = PaymentDummy.createPayment();
-        given(paymentRepository.findByPaymentKey(anyString())).willReturn(Optional.of(payment));
-
-        paymentService.cancelPayment(PaymentDummy.PAYMENT_KEY, PaymentDummy.getPaymentCancelRequest());
-    }
+    // @Test
+    // @DisplayName("승인된 결제 취소")
+    // void cancelPayment() throws JsonProcessingException {
+    //     ResponseEntity<String> response = spy(ResponseEntity.ok().contentType(APPLICATION_JSON).body(""));
+    //     given(paymentAdapter.cancel(anyString(), any(PaymentCancelRequest.class))).willReturn(response);
+    //
+    //     Payment payment = PaymentDummy.createPayment();
+    //     given(paymentRepository.findByPaymentKey(anyString())).willReturn(Optional.of(payment));
+    //
+    //     paymentService.cancelPayment(PaymentDummy.PAYMENT_KEY, PaymentDummy.getPaymentCancelRequest());
+    // }
 
 }

@@ -21,6 +21,10 @@ public class OrderCreateRequest {
     @NotBlank
     private String name;
 
+    @Schema(title = "회원 휴대폰 번호", description = "주문하는 회원의 휴대폰 번호입니다.", example = "010-3333-7800")
+    @NotBlank
+    private String phone;
+
     @Schema(title = "회원 이메일", description = "주문하는 회원의 이메일입니다.", example = "woosik@gmail.com")
     @NotBlank
     private String email;
