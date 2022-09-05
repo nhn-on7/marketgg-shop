@@ -116,7 +116,7 @@ class OrderControllerTest {
     @DisplayName("주문 등록")
     void testCreateOrder() throws Exception {
         OrderCreateRequest orderCreateRequest = new OrderCreateRequest();
-        OrderToPayment orderToPayment = new OrderToPayment("GGORDER_1", "orderName", "name",
+        OrderToPayment orderToPayment = new OrderToPayment("GGORDER_1", "orderName", "name", "01012345678",
                                                            "email", 30000L, 1L,
                                                            2000, 300);
 

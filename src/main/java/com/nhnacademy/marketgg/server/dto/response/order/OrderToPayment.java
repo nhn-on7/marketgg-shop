@@ -34,6 +34,11 @@ public class OrderToPayment {
     @Size(max = 100)
     private final String memberName;
 
+    @Schema(title = "고객 휴대폰 번호", description = "주문 및 결제 요청을 한 회원(고객)의 휴대폰 번호입니다.", example = "010-1234-5678")
+    @NotBlank
+    @Size(max = 20)
+    private final String memberPhone;
+
     @Schema(title = "고객 이메일 주소", description = "주문 및 결제 요청을 한 회원(고객)의 이메일 주소입니다.",
             example = "strong.storm@gmail.com")
     @NotBlank

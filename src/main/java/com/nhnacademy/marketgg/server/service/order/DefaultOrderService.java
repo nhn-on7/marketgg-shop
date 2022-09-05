@@ -1,7 +1,5 @@
 package com.nhnacademy.marketgg.server.service.order;
 
-import static com.nhnacademy.marketgg.server.repository.auth.AuthAdapter.checkResult;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.marketgg.server.constant.OrderStatus;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentType;
@@ -14,11 +12,12 @@ import com.nhnacademy.marketgg.server.dto.request.order.OrderInfoRequestDto;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
+import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.coupon.UsedCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
-import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderPaymentKey;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
@@ -45,7 +44,6 @@ import com.nhnacademy.marketgg.server.repository.cart.CartProductRepository;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import com.nhnacademy.marketgg.server.repository.delivery.DeliveryRepository;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
-import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.orderproduct.OrderProductRepository;
@@ -53,11 +51,7 @@ import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryReposi
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.cart.CartProductService;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -65,6 +59,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.nhnacademy.marketgg.server.repository.auth.AuthAdapter.checkResult;
 
 /**
  * 기본적인 주문 서비스 기능을 수행합니다.
@@ -82,7 +84,7 @@ public class DefaultOrderService implements OrderService {
     private final PointHistoryRepository pointRepository;
     private final CouponRepository couponRepository;
     private final UsedCouponRepository usedCouponRepository;
-    private final GivenCouponRepository givenCouponRepository;
+    private final GivenCouponService givenCouponService;
     private final ProductRepository productRepository;
     private final CartProductService cartProductService;
     private final CartProductRepository cartProductRepository;
@@ -101,7 +103,7 @@ public class DefaultOrderService implements OrderService {
     @Transactional
     @Override
     public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final MemberInfo memberInfo)
-        throws JsonProcessingException {
+            throws JsonProcessingException {
 
         // MEMO: 주문하는 회원 찾기
         Member member = memberRepository.findById(memberInfo.getId())
@@ -109,7 +111,7 @@ public class DefaultOrderService implements OrderService {
 
         // MEMO: 주문하는 회원 정보 auth server 조회
         MemberInfoResponse memberResponse
-            = checkResult(authRepository.getMemberInfo(new MemberInfoRequest(member.getUuid())));
+                = checkResult(authRepository.getMemberInfo(new MemberInfoRequest(member.getUuid())));
 
         // MEMO: 주문한 회원이 선택한 배송지 조회
         DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(orderRequest.getDeliveryAddressId())
@@ -172,7 +174,8 @@ public class DefaultOrderService implements OrderService {
     private OrderToPayment makeOrderToPayment(final Order order, final OrderCreateRequest orderRequest) {
         String orderId = attachPrefix(order.getId());
 
-        return new OrderToPayment(orderId, order.getOrderName(), orderRequest.getName(), orderRequest.getEmail(),
+        return new OrderToPayment(orderId, order.getOrderName(), orderRequest.getName(),
+                                  orderRequest.getPhone(), orderRequest.getEmail(),
                                   orderRequest.getTotalAmount(), orderRequest.getCouponId(),
                                   orderRequest.getUsedPoint(), orderRequest.getExpectedSavePoint());
     }
@@ -186,6 +189,7 @@ public class DefaultOrderService implements OrderService {
      */
     private GivenCoupon checkOrderValid(final OrderCreateRequest orderRequest, final MemberInfoResponse memberResponse,
                                         final Long memberId) {
+
         if (!memberResponse.getEmail().equals(orderRequest.getEmail())) {
             throw new OrderMemberNotMatchedException();
         }
@@ -229,19 +233,24 @@ public class DefaultOrderService implements OrderService {
                                                final AuthInfo authInfo) {
 
         Long memberId = memberInfo.getId();
-        List<OrderGivenCoupon> orderGivenCoupons = givenCouponRepository.findOwnCouponsByMemberId(memberId);
+        // List<GivenCoupon> orderGivenCoupons = givenCouponRepository.findOwnCouponsByMemberId(memberId);
+        List<GivenCouponResponse> orderGivenCoupons = givenCouponService.retrieveGivenCoupons(memberInfo,
+                                                                                              Pageable.unpaged())
+                                                                        .getData();
+
         Integer totalPoint = pointRepository.findLastTotalPoints(memberId);
         List<DeliveryAddressResponse> deliveryAddresses = deliveryAddressRepository.findDeliveryAddressesByMemberId(
-            memberId);
+                memberId);
         List<String> paymentTypes = Arrays.stream(PaymentType.values())
                                           .map(PaymentType::getType)
                                           .collect(Collectors.toList());
         List<ProductToOrder> cartProducts =
-            cartProductRepository.findCartProductsByProductIds(memberInfo.getCart().getId(), productIds);
+                cartProductRepository.findCartProductsByProductIds(memberInfo.getCart().getId(), productIds);
 
         return OrderFormResponse.builder()
                                 .products(cartProducts)
                                 .memberId(memberId).memberName(authInfo.getName())
+                                .memberPhone(authInfo.getPhoneNumber())
                                 .memberEmail(authInfo.getEmail()).memberGrade(memberInfo.getMemberGrade())
                                 .givenCouponList(orderGivenCoupons)
                                 .totalPoint(totalPoint)
@@ -255,7 +264,7 @@ public class DefaultOrderService implements OrderService {
         Long totalPrice = 0L;
 
         for (ProductToOrder product : products) {
-            totalPrice += product.getPrice();
+            totalPrice += product.getAmount() * product.getPrice();
         }
 
         return totalPrice;
@@ -310,21 +319,16 @@ public class DefaultOrderService implements OrderService {
     }
 
     private String checkDeliveryStatus(String status) {
-        String newStatus = status;
-
-        if (status.equals("READY")) {
-            newStatus = OrderStatus.DELIVERY_WAITING.getStatus();
+        switch (status) {
+            case "READY":
+                return OrderStatus.DELIVERY_WAITING.getStatus();
+            case "DELIVERING":
+                return OrderStatus.DELIVERY_SHIPPING.getStatus();
+            case "ARRIVAL":
+                return OrderStatus.DELIVERY_COMPLETE.getStatus();
+            default:
+                return status;
         }
-
-        if (status.equals("DELIVERING")) {
-            newStatus = OrderStatus.DELIVERY_SHIPPING.getStatus();
-        }
-
-        if (status.equals("ARRIVAL")) {
-            newStatus = OrderStatus.DELIVERY_COMPLETE.getStatus();
-        }
-
-        return newStatus;
     }
 
     /**
@@ -363,6 +367,11 @@ public class DefaultOrderService implements OrderService {
 
         publisher.publishEvent(new OrderPointCanceledEvent(order));
         publisher.publishEvent(new OrderCouponCanceledEvent(order));
+    }
+
+    @Override
+    public OrderPaymentKey retrieveOrderPaymentKey(final Long orderId, final MemberInfo memberInfo) {
+        return orderRepository.findPaymentKeyById(orderId, memberInfo.getId(), memberInfo.isAdmin());
     }
 
 }

@@ -1,9 +1,11 @@
 package com.nhnacademy.marketgg.server.repository.order;
 
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderPaymentKey;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.QOrder;
+import com.nhnacademy.marketgg.server.entity.payment.QPayment;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
@@ -30,7 +32,6 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
         QueryResults<OrderRetrieveResponse> result = from(order).select(selectOrderResponse())
                                                                 .where(eqMemberId(memberId, isAdmin))
                                                                 .where(userNotSeeDeleted(isAdmin, order.deletedAt))
-                                                                .where(order.orderStatus.contains("취소/환불").not())
                                                                 .offset(pageable.getOffset())
                                                                 .limit(pageable.getPageSize())
                                                                 .fetchResults();
@@ -44,8 +45,20 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
                           .where(order.id.eq(orderId))
                           .where(eqMemberId(memberId, isAdmin))
                           .where(userNotSeeDeleted(isAdmin, order.deletedAt))
-                          .where(order.orderStatus.contains("취소/환불").not())
                           .fetchOne();
+    }
+
+    @Override
+    public OrderPaymentKey findPaymentKeyById(Long orderId, Long memberId, boolean isAdmin) {
+        QPayment payment = QPayment.payment;
+
+        return from(order)
+                .select(Projections.constructor(OrderPaymentKey.class,
+                                                payment.paymentKey))
+                .innerJoin(payment).on(order.id.eq(payment.order.id))
+                .where(order.id.eq(orderId))
+                .where(eqMemberId(memberId, isAdmin))
+                .fetchOne();
     }
 
     private ConstructorExpression<OrderRetrieveResponse> selectOrderResponse() {
