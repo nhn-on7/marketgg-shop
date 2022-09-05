@@ -14,6 +14,7 @@ import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
@@ -271,7 +272,8 @@ public class Dummy {
     public static OrderFormResponse getDummyOrderFormResponse() {
         MemberInfo memberInfo = getDummyMemberInfo(1L, new Cart());
         AuthInfo authInfo = getDummyAuthInfo();
-        return new OrderFormResponse(List.of(), memberInfo.getId(), authInfo.getName(), authInfo.getEmail(),
+        return new OrderFormResponse(List.of(), memberInfo.getId(), authInfo.getName(),
+                                     authInfo.getPhoneNumber(), authInfo.getEmail(),
                                      memberInfo.getMemberGrade(), List.of(), 10000,
                                      List.of(), List.of(), 50_000L);
     }
