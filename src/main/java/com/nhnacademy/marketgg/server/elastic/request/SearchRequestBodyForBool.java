@@ -17,6 +17,7 @@ import lombok.Getter;
 @Getter
 public class SearchRequestBodyForBool<T> {
 
+    private static final int MIN_SCORE = 2;
     private static final List<String> CATEGORY_FIELD = List.of("categoryCode");
     private static final List<String> DEFAULT_PRODUCT_FIELD =
             List.of("productName^1.3", "productName.forSyno^1.3", "content^0.8", "content.forSyno^0.8",
@@ -49,6 +50,13 @@ public class SearchRequestBodyForBool<T> {
     private final Integer size;
 
     /**
+     * 검색 결과의 정확도 개선을 위한 최소 점수 조건입니다.
+     *
+     * @since 1.0.0
+     */
+    private final Integer min_score;
+
+    /**
      * 검색 기준을 지정합니다. 검색어 및 검색을 진행 할 필드를 지정할 수 있습니다.
      *
      * @since 1.0.0
@@ -73,6 +81,7 @@ public class SearchRequestBodyForBool<T> {
         this.sort = Collections.singletonList(sortMap);
         this.from = request.getPage();
         this.size = request.getSize();
+        this.min_score = MIN_SCORE;
         if (Boolean.TRUE.equals(this.isBoard(option))) {
             requestOption = DEFAULT_BOARD_FIELD;
         }
@@ -99,6 +108,7 @@ public class SearchRequestBodyForBool<T> {
         this.sort = Collections.singletonList(sortMap);
         this.from = request.getPage();
         this.size = request.getSize();
+        this.min_score = MIN_SCORE;
         this.query = new BoolQuery(
                 new Bool(List.of(new Should(new MultiMatch(categoryCode, NO_FUZZINESS, CATEGORY_FIELD)),
                                  new Should(new MultiMatch(optionCode, NO_FUZZINESS, List.of(option))),
@@ -118,6 +128,7 @@ public class SearchRequestBodyForBool<T> {
         this.sort = Collections.singletonList(sortMap);
         this.from = request.getPage();
         this.size = request.getSize();
+        this.min_score = MIN_SCORE;
         this.query = new BoolQuery(
                 new Bool(List.of(new Should((new MultiMatch(request.getKeyword(), FUZZINESS, DEFAULT_PRODUCT_FIELD))),
                                  new Should(new MultiMatch(convertString, NO_FUZZINESS, DEFAULT_PRODUCT_FIELD)))));
