@@ -41,9 +41,9 @@ import com.nhnacademy.marketgg.server.exception.pointhistory.PointNotEnoughExcep
 import com.nhnacademy.marketgg.server.exception.product.ProductStockNotEnoughException;
 import com.nhnacademy.marketgg.server.repository.auth.AuthRepository;
 import com.nhnacademy.marketgg.server.repository.cart.CartProductRepository;
-import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import com.nhnacademy.marketgg.server.repository.delivery.DeliveryRepository;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
+import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.orderproduct.OrderProductRepository;
@@ -82,7 +82,7 @@ public class DefaultOrderService implements OrderService {
     private final DeliveryAddressRepository deliveryAddressRepository;
     private final DeliveryRepository deliveryRepository;
     private final PointHistoryRepository pointRepository;
-    private final CouponRepository couponRepository;
+    private final GivenCouponRepository givenCouponRepository;
     private final UsedCouponRepository usedCouponRepository;
     private final GivenCouponService givenCouponService;
     private final ProductRepository productRepository;
