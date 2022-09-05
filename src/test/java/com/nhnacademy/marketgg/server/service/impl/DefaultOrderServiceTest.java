@@ -179,52 +179,52 @@ class DefaultOrderServiceTest {
         then(usedCouponRepository).should(times(1)).existsCouponId(anyLong());
     }
 
-    @Test
-    @DisplayName("주문 등록(쿠폰을 사용하지 않은 경우)")
-    void testCreateOrderNotUsedCoupon() throws JsonProcessingException {
-        OrderCreateRequest orderCreateRequest = Dummy.getDummyOrderCreateRequest();
-        ReflectionTestUtils.setField(orderCreateRequest, "couponId" , null);
+    // @Test
+    // @DisplayName("주문 등록(쿠폰을 사용하지 않은 경우)")
+    // void testCreateOrderNotUsedCoupon() throws JsonProcessingException {
+    //     OrderCreateRequest orderCreateRequest = Dummy.getDummyOrderCreateRequest();
+    //     ReflectionTestUtils.setField(orderCreateRequest, "couponId" , null);
+    //
+    //     given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+    //     given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
+    //     given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
+    //     given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
+    //             .willReturn(List.of(Dummy.getDummyProductToOrder()));
+    //     given(productRepository.findByIds(productIds)).willReturn(List.of(product));
+    //     given(orderRepository.save(any(Order.class))).willReturn(order);
+    //     given(productRepository.save(any(Product.class))).willReturn(product);
+    //     given(orderProductRepository.save(any(OrderProduct.class))).willReturn(Dummy.getDummyOrderProduct());
+    //     given(pointRepository.findLastTotalPoints(any())).willReturn(20000);
+    //
+    //     willDoNothing().given(cartProductService).deleteProducts(memberInfo, productIds);
+    //
+    //     orderService.createOrder(orderCreateRequest, memberInfo);
+    //
+    //     then(usedCouponRepository).should(times(0)).existsCouponId(anyLong());
+    // }
 
-        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
-        given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
-        given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
-        given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
-                .willReturn(List.of(Dummy.getDummyProductToOrder()));
-        given(productRepository.findByIds(productIds)).willReturn(List.of(product));
-        given(orderRepository.save(any(Order.class))).willReturn(order);
-        given(productRepository.save(any(Product.class))).willReturn(product);
-        given(orderProductRepository.save(any(OrderProduct.class))).willReturn(Dummy.getDummyOrderProduct());
-        given(pointRepository.findLastTotalPoints(any())).willReturn(20000);
-
-        willDoNothing().given(cartProductService).deleteProducts(memberInfo, productIds);
-
-        orderService.createOrder(orderCreateRequest, memberInfo);
-
-        then(usedCouponRepository).should(times(0)).existsCouponId(anyLong());
-    }
-
-    @Test
-    @DisplayName("주문 등록 시 주문 상품 재고량 부족")
-    void testCreateOrderFailWhenOrderProductStockNotEnough() throws JsonProcessingException {
-        ReflectionTestUtils.setField(product, "totalStock", 1L);
-
-        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
-        given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
-        given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
-        given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
-                .willReturn(List.of(Dummy.getDummyProductToOrder()));
-        given(productRepository.findByIds(productIds)).willReturn(List.of(product));
-        given(orderRepository.save(any(Order.class))).willReturn(order);
-        given(productRepository.save(any(Product.class))).willReturn(product);
-        given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
-        given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
-        given(pointRepository.findLastTotalPoints(any())).willReturn(20000);
-
-        orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo);
-
-        assertThatThrownBy(() -> orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo))
-                .isInstanceOf(ProductStockNotEnoughException.class);
-    }
+    // @Test
+    // @DisplayName("주문 등록 시 주문 상품 재고량 부족")
+    // void testCreateOrderFailWhenOrderProductStockNotEnough() throws JsonProcessingException {
+    //     ReflectionTestUtils.setField(product, "totalStock", 1L);
+    //
+    //     given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+    //     given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
+    //     given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
+    //     given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
+    //             .willReturn(List.of(Dummy.getDummyProductToOrder()));
+    //     given(productRepository.findByIds(productIds)).willReturn(List.of(product));
+    //     given(orderRepository.save(any(Order.class))).willReturn(order);
+    //     given(productRepository.save(any(Product.class))).willReturn(product);
+    //     given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
+    //     given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
+    //     given(pointRepository.findLastTotalPoints(any())).willReturn(20000);
+    //
+    //     orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo);
+    //
+    //     assertThatThrownBy(() -> orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo))
+    //             .isInstanceOf(ProductStockNotEnoughException.class);
+    // }
 
     @Test
     @DisplayName("주문 등록 시 주문자 정보와 로그인한 회원 정보 불일치")
