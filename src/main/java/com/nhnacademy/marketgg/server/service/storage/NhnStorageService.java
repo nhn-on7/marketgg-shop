@@ -131,6 +131,9 @@ public class NhnStorageService implements StorageService {
         if (Objects.requireNonNull(image.getOriginalFilename()).contains("jpeg")) {
             return ".jpg";
         }
+        if (Objects.requireNonNull(image.getOriginalFilename()).contains("jpg")) {
+            return ".jpg";
+        }
         if (Objects.requireNonNull(image.getOriginalFilename()).contains("png")) {
             return ".png";
         } else {
