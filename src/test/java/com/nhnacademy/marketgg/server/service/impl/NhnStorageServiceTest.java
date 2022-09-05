@@ -2,10 +2,6 @@ package com.nhnacademy.marketgg.server.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.request.file.ImageCreateRequest;
@@ -21,7 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
@@ -49,17 +44,6 @@ class NhnStorageServiceTest {
         ReflectionTestUtils.setField(nhnStorageService,
                                      "storageUrl",
                                      "https://api-storage.cloud.toast.com/v1/AUTH_8a2dd42738a0427180466a56561b5eef");
-    }
-
-    @Test
-    @DisplayName("토큰 요청을 제대로 수행하는지 테스트")
-    void testRequestToken() {
-        String token = nhnStorageService.requestToken();
-
-        assertThat(token).isNotNull();
-
-
-        then(restTemplate).should(times(1)).exchange(anyString(), any(), any(HttpEntity.class), any(Class.class));
     }
 
     @Test

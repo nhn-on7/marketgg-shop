@@ -24,7 +24,6 @@ public class DefaultFileService implements FileService {
     private final ImageRepository imageRepository;
     private final AssetRepository assetRepository;
 
-    private static final String DIR = System.getProperty("user.home");
     @Value(("${gg.storage.option}"))
     private String option;
 
@@ -41,8 +40,6 @@ public class DefaultFileService implements FileService {
                                  .classification(imageCreateRequest.getClassification())
                                  .length(imageCreateRequest.getLength())
                                  .build();
-
-        imageEntity.setImageSequence(imageCreateRequest.getImageSequence());
 
         Image saveImage = imageRepository.save(imageEntity);
 

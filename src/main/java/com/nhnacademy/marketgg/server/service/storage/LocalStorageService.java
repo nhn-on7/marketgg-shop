@@ -39,7 +39,6 @@ public class LocalStorageService implements StorageService {
                                  .classification("local")
                                  .length(dest.length())
                                  .type(type)
-                                 .imageSequence(1)
                                  .build();
     }
 

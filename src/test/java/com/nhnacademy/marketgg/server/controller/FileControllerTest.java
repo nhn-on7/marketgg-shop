@@ -43,7 +43,7 @@ class FileControllerTest {
 
     @BeforeEach
     void setUp() {
-        imageResponse = new ImageResponse("이미지 응답", 1L, "이미지 주소", 1, Asset.create());
+        imageResponse = new ImageResponse("이미지 응답", 1L, "이미지 주소",  Asset.create());
 
     }
 
