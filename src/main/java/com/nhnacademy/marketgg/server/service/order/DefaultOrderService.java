@@ -129,19 +129,20 @@ public class DefaultOrderService implements OrderService {
         // MEMO: 주문 엔티티 생성 및 검증 후 데이터 저장
         Order order = new Order(member, deliveryAddress, orderRequest, products.get(0).getName(), products.size());
         Long memberId = member.getId();
-        GivenCoupon givenCoupon = this.checkOrderValid(orderRequest, memberResponse, memberId);
+        Optional<GivenCoupon> givenCoupon = this.checkOrderValid(orderRequest, memberResponse, memberId);
         orderRepository.saveAndFlush(order);
 
         // MEMO: 사용 쿠폰 적용
-        UsedCoupon usedCoupon = UsedCoupon.builder()
-                                          .pk(new UsedCoupon.Pk(order.getId(),
-                                                                givenCoupon.getPk().getCouponId(),
-                                                                memberId))
-                                          .order(order)
-                                          .givenCoupon(givenCoupon)
-                                          .build();
-
-        usedCouponRepository.save(usedCoupon);
+        if (givenCoupon.isPresent()) {
+            UsedCoupon usedCoupon = UsedCoupon.builder()
+                                              .pk(new UsedCoupon.Pk(order.getId(),
+                                                                    givenCoupon.get().getPk().getCouponId(),
+                                                                    memberId))
+                                              .order(order)
+                                              .givenCoupon(givenCoupon.get())
+                                              .build();
+            usedCouponRepository.save(usedCoupon);
+        }
 
         int usedPoint = -orderRequest.getUsedPoint();
         pointRepository.save(new PointHistory(member, order,
@@ -187,8 +188,9 @@ public class DefaultOrderService implements OrderService {
      * @param memberResponse 주문한 회원 정보
      * @param memberId       주문한 회원 아이디
      */
-    private GivenCoupon checkOrderValid(final OrderCreateRequest orderRequest, final MemberInfoResponse memberResponse,
-                                        final Long memberId) {
+    private Optional<GivenCoupon> checkOrderValid(final OrderCreateRequest orderRequest,
+                                                  final MemberInfoResponse memberResponse,
+                                                  final Long memberId) {
 
         if (!memberResponse.getEmail().equals(orderRequest.getEmail())) {
             throw new OrderMemberNotMatchedException();
@@ -203,7 +205,7 @@ public class DefaultOrderService implements OrderService {
             throw new PointNotEnoughException();
         }
 
-        return givenCoupon.get();
+        return givenCoupon;
     }
 
     private Optional<GivenCoupon> checkCouponValid(final Long couponId, final Long memberId) {
@@ -233,7 +235,7 @@ public class DefaultOrderService implements OrderService {
                                                final AuthInfo authInfo) {
 
         Long memberId = memberInfo.getId();
-        // List<GivenCoupon> orderGivenCoupons = givenCouponRepository.findOwnCouponsByMemberId(memberId);
+
         List<GivenCouponResponse> orderGivenCoupons = givenCouponService.retrieveGivenCoupons(memberInfo,
                                                                                               Pageable.unpaged())
                                                                         .getData();
