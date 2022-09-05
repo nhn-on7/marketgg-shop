@@ -23,6 +23,7 @@ public class OrderFormResponse {
 
     private final Long memberId;
     private final String memberName;
+    private final String memberPhone;
     private final String memberEmail;
     private final String memberGrade;
 
