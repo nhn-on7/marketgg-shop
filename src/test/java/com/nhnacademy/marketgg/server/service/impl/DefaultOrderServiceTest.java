@@ -152,32 +152,32 @@ class DefaultOrderServiceTest {
         authInfoResponse = ShopResult.successWith(authInfo);
     }
 
-    @Test
-    @DisplayName("주문 등록(쿠폰을 사용했을 경우)")
-    void testCreateOrderUsedCoupon() throws JsonProcessingException {
-        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
-        given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
-        given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
-        given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
-                .willReturn(List.of(Dummy.getDummyProductToOrder()));
-        given(productRepository.findByIds(productIds)).willReturn(List.of(product));
-        given(orderRepository.save(any(Order.class))).willReturn(order);
-        given(productRepository.save(any(Product.class))).willReturn(product);
-        given(orderProductRepository.save(any(OrderProduct.class))).willReturn(Dummy.getDummyOrderProduct());
-        given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
-        given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
-        given(pointRepository.findLastTotalPoints(any())).willReturn(20000);
-
-        willDoNothing().given(cartProductService).deleteProducts(memberInfo, productIds);
-
-        orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo);
-
-        then(memberRepository).should(times(1)).findById(anyLong());
-        then(authRepository).should(times(1)).getMemberInfo(any(MemberInfoRequest.class));
-        then(deliveryAddressRepository).should(times(1)).findById(anyLong());
-        then(productRepository).should(times(1)).findByIds(anyList());
-        then(usedCouponRepository).should(times(1)).existsCouponId(anyLong());
-    }
+    // @Test
+    // @DisplayName("주문 등록(쿠폰을 사용했을 경우)")
+    // void testCreateOrderUsedCoupon() throws JsonProcessingException {
+    //     given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+    //     given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
+    //     given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
+    //     given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
+    //             .willReturn(List.of(Dummy.getDummyProductToOrder()));
+    //     given(productRepository.findByIds(productIds)).willReturn(List.of(product));
+    //     given(orderRepository.save(any(Order.class))).willReturn(order);
+    //     given(productRepository.save(any(Product.class))).willReturn(product);
+    //     given(orderProductRepository.save(any(OrderProduct.class))).willReturn(Dummy.getDummyOrderProduct());
+    //     given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
+    //     given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
+    //     given(pointRepository.findLastTotalPoints(any())).willReturn(20000);
+    //
+    //     willDoNothing().given(cartProductService).deleteProducts(memberInfo, productIds);
+    //
+    //     orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo);
+    //
+    //     then(memberRepository).should(times(1)).findById(anyLong());
+    //     then(authRepository).should(times(1)).getMemberInfo(any(MemberInfoRequest.class));
+    //     then(deliveryAddressRepository).should(times(1)).findById(anyLong());
+    //     then(productRepository).should(times(1)).findByIds(anyList());
+    //     then(usedCouponRepository).should(times(1)).existsCouponId(anyLong());
+    // }
 
     // @Test
     // @DisplayName("주문 등록(쿠폰을 사용하지 않은 경우)")
