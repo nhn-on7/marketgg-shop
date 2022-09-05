@@ -12,11 +12,11 @@ import com.nhnacademy.marketgg.server.dto.request.order.OrderInfoRequestDto;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
+import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.coupon.UsedCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
-import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderPaymentKey;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
@@ -44,7 +44,6 @@ import com.nhnacademy.marketgg.server.repository.cart.CartProductRepository;
 import com.nhnacademy.marketgg.server.repository.coupon.CouponRepository;
 import com.nhnacademy.marketgg.server.repository.delivery.DeliveryRepository;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
-import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.orderproduct.OrderProductRepository;
@@ -52,6 +51,7 @@ import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryReposi
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.cart.CartProductService;
+import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -84,7 +84,7 @@ public class DefaultOrderService implements OrderService {
     private final PointHistoryRepository pointRepository;
     private final CouponRepository couponRepository;
     private final UsedCouponRepository usedCouponRepository;
-    private final GivenCouponRepository givenCouponRepository;
+    private final GivenCouponService givenCouponService;
     private final ProductRepository productRepository;
     private final CartProductService cartProductService;
     private final CartProductRepository cartProductRepository;
@@ -233,7 +233,11 @@ public class DefaultOrderService implements OrderService {
                                                final AuthInfo authInfo) {
 
         Long memberId = memberInfo.getId();
-        List<OrderGivenCoupon> orderGivenCoupons = givenCouponRepository.findOwnCouponsByMemberId(memberId);
+        // List<GivenCoupon> orderGivenCoupons = givenCouponRepository.findOwnCouponsByMemberId(memberId);
+        List<GivenCouponResponse> orderGivenCoupons = givenCouponService.retrieveGivenCoupons(memberInfo,
+                                                                                              Pageable.unpaged())
+                                                                        .getData();
+
         Integer totalPoint = pointRepository.findLastTotalPoints(memberId);
         List<DeliveryAddressResponse> deliveryAddresses = deliveryAddressRepository.findDeliveryAddressesByMemberId(
                 memberId);
