@@ -92,20 +92,6 @@ public class AdminCategoryController {
                              .body(ShopResult.successWith(data));
     }
 
-    /**
-     * 전체 카테고리 목록을 조회하는 GET Mapping 을 지원합니다.
-     *
-     * @return 카테고리 전체 목록을 List 로 반환합니다.
-     * @since 1.0.0
-     */
-    @GetMapping
-    public ResponseEntity<ShopResult<List<CategoryRetrieveResponse>>> retrieveCategories() {
-        List<CategoryRetrieveResponse> data = categoryService.retrieveCategories();
-
-        return ResponseEntity.status(HttpStatus.OK)
-                             .location(URI.create(DEFAULT_CATEGORY))
-                             .body(ShopResult.successWith(data));
-    }
 
     /**
      * 입력한 정보로 선택한 카테고리 정보를 수정하는 PUT Mapping 을 지원합니다.
