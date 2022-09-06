@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.dummy;
+package com.nhnacademy.marketgg.dummy;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nhnacademy.marketgg.server.dto.PageEntity;

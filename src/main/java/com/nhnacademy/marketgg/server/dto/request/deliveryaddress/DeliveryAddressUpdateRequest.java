@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class DeliveryAddressUpdateRequest {
 
-    // 배송지 Id
     @NotNull
     private Long id;
 

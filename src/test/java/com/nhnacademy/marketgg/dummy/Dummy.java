@@ -1,5 +1,6 @@
-package com.nhnacademy.marketgg.server.dummy;
+package com.nhnacademy.marketgg.dummy;
 
+import com.nhnacademy.marketgg.server.constant.CouponStatus;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
@@ -19,7 +20,6 @@ import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
-import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
@@ -279,7 +279,7 @@ public class Dummy {
     }
 
     public static OrderDetailRetrieveResponse getDummyOrderDetailResponse() {
-        return new OrderDetailRetrieveResponse(1L, 1L, "어묵탕 밀키트 외 1건", 50_000L, "결제대기",
+        return new OrderDetailRetrieveResponse(1L, 82L, "어묵탕 밀키트 외 1건", 50_000L, "결제대기",
                                                1000, null, 12345, "주소",
                                                "상세주소", LocalDateTime.now());
 
@@ -337,13 +337,6 @@ public class Dummy {
         return new OrderProduct(getDummyOrder(), getDummyProduct(1L), 1);
     }
 
-    public static OrderGivenCoupon getDummyOrderGivenCoupon() {
-        Coupon coupon = getDummyCoupon();
-
-        return new OrderGivenCoupon(coupon.getId(), coupon.getName(), LocalDateTime.now(), 30,
-                                    5000, 1000D);
-    }
-
     public static OrderRetrieveResponse getOrderRetrieveResponse() {
         return new OrderRetrieveResponse(1L, 1L, "어묵탕 밀키트 외 1건", 10000L,
                                          "결제 대기", LocalDateTime.now());
@@ -379,4 +372,17 @@ public class Dummy {
         return productListResponse;
     }
 
+    public static GivenCoupon getDummyGivenCoupon() {
+        GivenCoupon givenCoupon = new GivenCoupon(new GivenCoupon.Pk(1L, 1L), getDummyCoupon(),
+                                                  getDummyMember(new Cart()), LocalDateTime.now());
+
+        return givenCoupon;
+    }
+
+    public static List<GivenCouponResponse> getDummyGivenCouponResponse() {
+        GivenCouponResponse givenCouponResponse = new GivenCouponResponse(1L, 1L, "coupon", "type", 10000, 1000D,
+                                                                          LocalDateTime.now(), CouponStatus.VALID.getStatus());
+
+        return List.of(givenCouponResponse);
+    }
 }

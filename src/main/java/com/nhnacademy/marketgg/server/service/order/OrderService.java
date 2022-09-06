@@ -62,7 +62,7 @@ public interface OrderService {
      * @return 조회하는 회원의 종류에 따라 상세 조회 정보를 반환합니다.
      * @since 1.0.0
      */
-    OrderDetailRetrieveResponse retrieveOrderDetail(final Long orderId, final MemberInfo memberInfo);
+    OrderDetailRetrieveResponse retrieveOrderDetail(final Long orderId, final MemberInfo memberInfo) throws JsonProcessingException;
 
     /**
      * 주문 상태를 변경하는 메소드입니다.
