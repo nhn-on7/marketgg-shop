@@ -48,9 +48,9 @@ class DefaultCouponServiceTest {
     @BeforeAll
     static void beforeAll() {
         couponDto
-            = new CouponDto(1L, "신규쿠폰", "정률할인", 1, 1, 0.5);
+            = new CouponDto(1L, "신규쿠폰", "정률할인", 1, 1, 0.5, false);
         coupon
-            = new Coupon(1L, "신규쿠폰", "정률할인", 1, 1, 0.5, LocalDateTime.now());
+            = new Coupon(1L, "신규쿠폰", "정률할인", 1, 1, 0.5, false, LocalDateTime.now());
     }
 
     @Test
