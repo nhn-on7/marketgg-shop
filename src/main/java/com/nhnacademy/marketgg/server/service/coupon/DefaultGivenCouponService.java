@@ -59,6 +59,10 @@ public class DefaultGivenCouponService implements GivenCouponService {
         Coupon coupon = couponRepository.findCouponByName(givenCouponRequest.getName())
                                         .orElseThrow(GivenCouponNotFoundException.CouponInfoNotFoundException::new);
 
+        if (givenCouponRepository.findById(new GivenCoupon.Pk(coupon.getId(), member.getId())).isPresent()) {
+            throw new GivenCouponNotFoundException.CouponAlreadyExistException();
+        }
+
         givenCouponRepository.save(this.toEntity(coupon, member));
     }
 
