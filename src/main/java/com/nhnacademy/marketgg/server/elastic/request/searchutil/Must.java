@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public class Should {
+public class Must {
 
     private MultiMatch multi_match;
 

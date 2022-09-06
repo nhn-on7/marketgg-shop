@@ -3,7 +3,7 @@ package com.nhnacademy.marketgg.server.elastic.request;
 import com.nhnacademy.marketgg.server.elastic.request.searchutil.Bool;
 import com.nhnacademy.marketgg.server.elastic.request.searchutil.BoolQuery;
 import com.nhnacademy.marketgg.server.elastic.request.searchutil.MultiMatch;
-import com.nhnacademy.marketgg.server.elastic.request.searchutil.Should;
+import com.nhnacademy.marketgg.server.elastic.request.searchutil.Must;
 import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
@@ -86,9 +86,9 @@ public class SearchRequestBodyForBool<T> {
             requestOption = DEFAULT_BOARD_FIELD;
         }
         this.query = new BoolQuery(
-                new Bool(List.of(new Should(new MultiMatch(optionCode, NO_FUZZINESS, CATEGORY_FIELD)),
-                                 new Should(new MultiMatch(request.getKeyword(), FUZZINESS, requestOption)),
-                                 new Should(new MultiMatch(convertString, NO_FUZZINESS, requestOption)))));
+                new Bool(List.of(new Must(new MultiMatch(optionCode, NO_FUZZINESS, CATEGORY_FIELD)),
+                                 new Must(new MultiMatch(request.getKeyword(), FUZZINESS, requestOption)),
+                                 new Must(new MultiMatch(convertString, NO_FUZZINESS, requestOption)))));
     }
 
     /**
@@ -110,10 +110,10 @@ public class SearchRequestBodyForBool<T> {
         this.size = request.getSize();
         this.min_score = MIN_SCORE;
         this.query = new BoolQuery(
-                new Bool(List.of(new Should(new MultiMatch(categoryCode, NO_FUZZINESS, CATEGORY_FIELD)),
-                                 new Should(new MultiMatch(optionCode, NO_FUZZINESS, List.of(option))),
-                                 new Should(new MultiMatch(request.getKeyword(), FUZZINESS, DEFAULT_BOARD_FIELD)),
-                                 new Should(new MultiMatch(convertString, NO_FUZZINESS, DEFAULT_BOARD_FIELD)))));
+                new Bool(List.of(new Must(new MultiMatch(categoryCode, NO_FUZZINESS, CATEGORY_FIELD)),
+                                 new Must(new MultiMatch(optionCode, NO_FUZZINESS, List.of(option))),
+                                 new Must(new MultiMatch(request.getKeyword(), FUZZINESS, DEFAULT_BOARD_FIELD)),
+                                 new Must(new MultiMatch(convertString, NO_FUZZINESS, DEFAULT_BOARD_FIELD)))));
     }
 
     /**
@@ -130,8 +130,8 @@ public class SearchRequestBodyForBool<T> {
         this.size = request.getSize();
         this.min_score = MIN_SCORE;
         this.query = new BoolQuery(
-                new Bool(List.of(new Should((new MultiMatch(request.getKeyword(), FUZZINESS, DEFAULT_PRODUCT_FIELD))),
-                                 new Should(new MultiMatch(convertString, NO_FUZZINESS, DEFAULT_PRODUCT_FIELD)))));
+                new Bool(List.of(new Must((new MultiMatch(request.getKeyword(), FUZZINESS, DEFAULT_PRODUCT_FIELD))),
+                                 new Must(new MultiMatch(convertString, NO_FUZZINESS, DEFAULT_PRODUCT_FIELD)))));
     }
 
     private Boolean isBoard(final String document) {
