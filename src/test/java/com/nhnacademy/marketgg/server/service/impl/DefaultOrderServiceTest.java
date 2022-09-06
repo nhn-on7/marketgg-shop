@@ -316,8 +316,6 @@ class DefaultOrderServiceTest {
     @Test
     @DisplayName("주문 목록 조회")
     void testRetrieveOrderList() {
-        OrderRetrieveResponse orderResponse = Dummy.getOrderRetrieveResponse();
-
         given(orderRepository.findOrderList(anyLong(), anyBoolean(), any(Pageable.class))).willReturn(Page.empty());
 
         orderService.retrieveOrderList(memberInfo, new DefaultPageRequest(1).getPageable());
@@ -328,7 +326,7 @@ class DefaultOrderServiceTest {
 
     @Test
     @DisplayName("주문 상세 조회")
-    void testRetrieveOrderDetail() {
+    void testRetrieveOrderDetail() throws JsonProcessingException {
         OrderDetailRetrieveResponse orderDetailResponse = Dummy.getDummyOrderDetailResponse();
 
         given(orderRepository.findOrderDetail(anyLong(), anyLong(), anyBoolean())).willReturn(orderDetailResponse);

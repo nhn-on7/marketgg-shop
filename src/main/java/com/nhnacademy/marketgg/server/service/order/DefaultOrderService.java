@@ -7,6 +7,7 @@ import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoRequest;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfoResponse;
+import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderInfoRequestDto;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
@@ -224,8 +225,8 @@ public class DefaultOrderService implements OrderService {
         Long memberId = memberInfo.getId();
 
         List<GivenCouponResponse> givenCoupons = givenCouponService.retrieveGivenCoupons(memberInfo,
-                                                                                              Pageable.unpaged())
-                                                                        .getData();
+                                                                                         Pageable.unpaged())
+                                                                   .getData();
 
         Integer totalPoint = pointRepository.findLastTotalPoints(memberId);
         List<DeliveryAddressResponse> deliveryAddresses = deliveryAddressRepository.findDeliveryAddressesByMemberId(
@@ -278,12 +279,17 @@ public class DefaultOrderService implements OrderService {
      * @return 조회하는 회원의 종류에 따라 상세 조회 정보를 반환합니다.
      */
     @Override
-    public OrderDetailRetrieveResponse retrieveOrderDetail(final Long orderId, final MemberInfo memberInfo) {
+    public OrderDetailRetrieveResponse retrieveOrderDetail(final Long orderId, final MemberInfo memberInfo)
+            throws JsonProcessingException {
+
         OrderDetailRetrieveResponse detailResponse = orderRepository.findOrderDetail(orderId, memberInfo.getId(),
                                                                                      memberInfo.isAdmin());
+        String uuid = memberRepository.findUuidByMemberId(detailResponse.getMemberId())
+                                      .orElseThrow(MemberNotFoundException::new);
+        List<MemberNameResponse> memberName = authRepository.getNameListByUuid(List.of(uuid));
         List<ProductToOrder> products = orderProductRepository.findByOrderId(orderId);
         UsedCouponResponse couponName = usedCouponRepository.findUsedCouponName(orderId);
-        detailResponse.addOrderDetail(products, couponName);
+        detailResponse.addOrderDetail(products, couponName, memberName.get(0).getName());
 
         return detailResponse;
     }
