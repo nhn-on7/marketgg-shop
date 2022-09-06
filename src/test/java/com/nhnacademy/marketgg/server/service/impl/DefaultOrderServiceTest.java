@@ -1,6 +1,14 @@
 package com.nhnacademy.marketgg.server.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.marketgg.server.dto.PageEntity;
+import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
+import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
+import com.nhnacademy.marketgg.server.entity.GivenCoupon;
+import com.nhnacademy.marketgg.server.exception.coupon.CouponIsAlreadyUsedException;
+import com.nhnacademy.marketgg.server.exception.coupon.CouponNotOverMinimumMoneyException;
+import com.nhnacademy.marketgg.server.exception.pointhistory.PointNotEnoughException;
 import com.nhnacademy.marketgg.server.repository.delivery.DeliveryRepository;
 import com.nhnacademy.marketgg.server.dto.ShopResult;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
@@ -36,6 +44,8 @@ import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryReposi
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.cart.CartProductService;
+import com.nhnacademy.marketgg.server.service.coupon.DefaultGivenCouponService;
+import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.order.DefaultOrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -93,9 +103,6 @@ class DefaultOrderServiceTest {
     ProductRepository productRepository;
 
     @Mock
-    CouponRepository couponRepository;
-
-    @Mock
     UsedCouponRepository usedCouponRepository;
 
     @Mock
@@ -114,6 +121,9 @@ class DefaultOrderServiceTest {
     GivenCouponRepository givenCouponRepository;
 
     @Mock
+    GivenCouponService givenCouponService;
+
+    @Mock
     AuthRepository authRepository;
 
     Member member;
@@ -128,6 +138,7 @@ class DefaultOrderServiceTest {
     AuthInfo authInfo;
     ShopResult<AuthInfo> authInfoResponse;
     Coupon coupon;
+    GivenCoupon givenCoupon;
 
     @BeforeEach
     void setUp() {
@@ -142,6 +153,7 @@ class DefaultOrderServiceTest {
         product = Dummy.getDummyProduct(1L);
         memberInfo = Dummy.getDummyMemberInfo(1L, Dummy.getDummyCart(1L));
         coupon = Dummy.getDummyCoupon();
+        givenCoupon = Dummy.getDummyGivenCoupon();
         authInfo = Dummy.getDummyAuthInfo();
         authInfoResponse = ShopResult.successWith(authInfo);
     }
@@ -155,10 +167,9 @@ class DefaultOrderServiceTest {
         given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
                 .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
-        given(orderRepository.save(any(Order.class))).willReturn(order);
         given(productRepository.save(any(Product.class))).willReturn(product);
         given(orderProductRepository.save(any(OrderProduct.class))).willReturn(Dummy.getDummyOrderProduct());
-        given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
+        given(givenCouponRepository.findById(any(GivenCoupon.Pk.class))).willReturn(Optional.of(givenCoupon));
         given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
         given(pointRepository.findLastTotalPoints(any())).willReturn(20000);
 
@@ -185,7 +196,6 @@ class DefaultOrderServiceTest {
         given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
                 .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
-        given(orderRepository.save(any(Order.class))).willReturn(order);
         given(productRepository.save(any(Product.class))).willReturn(product);
         given(orderProductRepository.save(any(OrderProduct.class))).willReturn(Dummy.getDummyOrderProduct());
         given(pointRepository.findLastTotalPoints(any())).willReturn(20000);
@@ -208,9 +218,8 @@ class DefaultOrderServiceTest {
         given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
                 .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
-        given(orderRepository.save(any(Order.class))).willReturn(order);
         given(productRepository.save(any(Product.class))).willReturn(product);
-        given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
+        given(givenCouponRepository.findById(any(GivenCoupon.Pk.class))).willReturn(Optional.of(givenCoupon));
         given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
         given(pointRepository.findLastTotalPoints(any())).willReturn(20000);
 
@@ -237,81 +246,80 @@ class DefaultOrderServiceTest {
                 .isInstanceOf(OrderMemberNotMatchedException.class);
     }
 
-    // @Test
-    // @DisplayName("주문 등록 시 쿠폰 사용 최소 금액을 채우지 못한 경우")
-    // void testCreateOrderFailWhenNotOverCouponMinimumMoney() throws JsonProcessingException {
-    //     OrderCreateRequest orderCreateRequest = Dummy.getDummyOrderCreateRequest();
-    //     ReflectionTestUtils.setField(orderCreateRequest, "totalOrigin", 10L);
-    //     ReflectionTestUtils.setField(orderCreateRequest, "usedPoint", 0);
-    //
-    //     given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
-    //     given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
-    //     given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
-    //     given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
-    //             .willReturn(List.of(Dummy.getDummyProductToOrder()));
-    //     given(productRepository.findByIds(productIds)).willReturn(List.of(product));
-    //     given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
-    //     given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
-    //
-    //     assertThatThrownBy(() -> orderService.createOrder(orderCreateRequest, memberInfo))
-    //             .isInstanceOf(CouponNotOverMinimumMoneyException.class);
-    // }
+    @Test
+    @DisplayName("주문 등록 시 쿠폰 사용 최소 금액을 채우지 못한 경우")
+    void testCreateOrderFailWhenNotOverCouponMinimumMoney() throws JsonProcessingException {
+        OrderCreateRequest orderCreateRequest = Dummy.getDummyOrderCreateRequest();
+        ReflectionTestUtils.setField(orderCreateRequest, "totalOrigin", 10L);
+        ReflectionTestUtils.setField(orderCreateRequest, "usedPoint", 0);
 
-    // @Test
-    // @DisplayName("주문 등록 시 보유 포인트보다 많은 사용 포인트 입력")
-    // void testCreateOrderFailWhenPointNotEnough() throws JsonProcessingException {
-    //     given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
-    //     given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
-    //     given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
-    //     given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
-    //             .willReturn(List.of(Dummy.getDummyProductToOrder()));
-    //     given(productRepository.findByIds(productIds)).willReturn(List.of(product));
-    //     given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
-    //     given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
-    //     given(pointRepository.findLastTotalPoints(any())).willReturn(100);
-    //
-    //     assertThatThrownBy(() -> orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo))
-    //             .isInstanceOf(PointNotEnoughException.class);
-    // }
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+        given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
+        given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
+        given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
+                .willReturn(List.of(Dummy.getDummyProductToOrder()));
+        given(productRepository.findByIds(productIds)).willReturn(List.of(product));
+        given(givenCouponRepository.findById(any(GivenCoupon.Pk.class))).willReturn(Optional.of(givenCoupon));
+        given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
 
-    // @Test
-    // @DisplayName("주문 등록 시 이미 사용된 쿠폰을 사용함")
-    // void testCreateOrderFailWhenUsedCouponIsAlreadyUsed() throws JsonProcessingException {
-    //     given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
-    //     given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
-    //     given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
-    //     given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
-    //             .willReturn(List.of(Dummy.getDummyProductToOrder()));
-    //     given(productRepository.findByIds(productIds)).willReturn(List.of(product));
-    //     given(couponRepository.findById(anyLong())).willReturn(Optional.of(coupon));
-    //     given(usedCouponRepository.existsCouponId(anyLong())).willReturn(true);
-    //
-    //     assertThatThrownBy(() -> orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo))
-    //             .isInstanceOf(CouponIsAlreadyUsedException.class);
-    // }
+        assertThatThrownBy(() -> orderService.createOrder(orderCreateRequest, memberInfo))
+                .isInstanceOf(CouponNotOverMinimumMoneyException.class);
+    }
 
-    // @Test
-    // @DisplayName("주문서 폼 필요정보 조회")
-    // void testRetrieveOrderForm() {
-    //     List<Long> productIds = List.of(1L);
-    //     List<OrderGivenCoupon> givenCoupons = List.of(Dummy.getGivenCouponResponse());
-    //     List<DeliveryAddressResponse> deliveryAddressResponses = List.of(Dummy.getDummyDeliveryAddressResponse());
-    //
-    //     given(givenCouponRepository.findOwnCouponsByMemberId(anyLong())).willReturn(givenCoupons);
-    //     given(pointRepository.findLastTotalPoints(anyLong())).willReturn(20000);
-    //     given(deliveryAddressRepository.findDeliveryAddressesByMemberId(anyLong())).willReturn(
-    //             deliveryAddressResponses);
-    //     given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
-    //             .willReturn(List.of(Dummy.getDummyProductToOrder()));
-    //
-    //     OrderFormResponse response = orderService.retrieveOrderForm(productIds, memberInfo, authInfo);
-    //
-    //     then(givenCouponRepository).should(times(1)).findOwnCouponsByMemberId(anyLong());
-    //     then(pointRepository).should(times(1)).findLastTotalPoints(anyLong());
-    //     then(deliveryAddressRepository).should(times(1)).findDeliveryAddressesByMemberId(anyLong());
-    //
-    //     assertThat(response.getMemberName()).isEqualTo("김더미");
-    // }
+    @Test
+    @DisplayName("주문 등록 시 보유 포인트보다 많은 사용 포인트 입력")
+    void testCreateOrderFailWhenPointNotEnough() throws JsonProcessingException {
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+        given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
+        given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
+        given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
+                .willReturn(List.of(Dummy.getDummyProductToOrder()));
+        given(productRepository.findByIds(productIds)).willReturn(List.of(product));
+        given(givenCouponRepository.findById(any(GivenCoupon.Pk.class))).willReturn(Optional.of(givenCoupon));
+        given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
+        given(pointRepository.findLastTotalPoints(any())).willReturn(100);
+
+        assertThatThrownBy(() -> orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo))
+                .isInstanceOf(PointNotEnoughException.class);
+    }
+
+    @Test
+    @DisplayName("주문 등록 시 이미 사용된 쿠폰을 사용함")
+    void testCreateOrderFailWhenUsedCouponIsAlreadyUsed() throws JsonProcessingException {
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+        given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
+        given(deliveryAddressRepository.findById(anyLong())).willReturn(Optional.of(deliveryAddress));
+        given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
+                .willReturn(List.of(Dummy.getDummyProductToOrder()));
+        given(productRepository.findByIds(productIds)).willReturn(List.of(product));
+        given(givenCouponRepository.findById(any(GivenCoupon.Pk.class))).willReturn(Optional.of(givenCoupon));
+        given(usedCouponRepository.existsCouponId(anyLong())).willReturn(true);
+
+        assertThatThrownBy(() -> orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo))
+                .isInstanceOf(CouponIsAlreadyUsedException.class);
+    }
+
+    @Test
+    @DisplayName("주문서 폼 필요정보 조회")
+    void testRetrieveOrderForm() {
+        List<Long> productIds = List.of(1L);
+        List<DeliveryAddressResponse> deliveryAddressResponses = List.of(Dummy.getDummyDeliveryAddressResponse());
+
+        given(pointRepository.findLastTotalPoints(anyLong())).willReturn(20000);
+        given(deliveryAddressRepository.findDeliveryAddressesByMemberId(anyLong())).willReturn(
+                deliveryAddressResponses);
+        given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
+                .willReturn(List.of(Dummy.getDummyProductToOrder()));
+        given(givenCouponService.retrieveGivenCoupons(any(MemberInfo.class), any(Pageable.class)))
+                .willReturn(new PageEntity<>(1, 10, 1, Dummy.getDummyGivenCouponResponse()));
+
+        OrderFormResponse response = orderService.retrieveOrderForm(productIds, memberInfo, authInfo);
+
+        then(pointRepository).should(times(1)).findLastTotalPoints(anyLong());
+        then(deliveryAddressRepository).should(times(1)).findDeliveryAddressesByMemberId(anyLong());
+
+        assertThat(response.getMemberName()).isEqualTo("김더미");
+    }
 
     @Test
     @DisplayName("주문 목록 조회")
@@ -328,7 +336,11 @@ class DefaultOrderServiceTest {
     @DisplayName("주문 상세 조회")
     void testRetrieveOrderDetail() throws JsonProcessingException {
         OrderDetailRetrieveResponse orderDetailResponse = Dummy.getDummyOrderDetailResponse();
+        MemberNameResponse memberNameResponse = new MemberNameResponse();
+        ReflectionTestUtils.setField(memberNameResponse, "name", "nameSample");
 
+        given(memberRepository.findUuidByOrderId(anyLong())).willReturn("uuidSample");
+        given(authRepository.getNameListByUuid(anyList())).willReturn(List.of(memberNameResponse));
         given(orderRepository.findOrderDetail(anyLong(), anyLong(), anyBoolean())).willReturn(orderDetailResponse);
 
         orderService.retrieveOrderDetail(1L, memberInfo);

@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.dummy;
 
+import com.nhnacademy.marketgg.server.constant.CouponStatus;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
@@ -14,6 +15,7 @@ import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
+import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
@@ -277,7 +279,7 @@ public class Dummy {
     }
 
     public static OrderDetailRetrieveResponse getDummyOrderDetailResponse() {
-        return new OrderDetailRetrieveResponse(1L, 1L, "어묵탕 밀키트 외 1건", 50_000L, "결제대기",
+        return new OrderDetailRetrieveResponse(1L, 82L, "어묵탕 밀키트 외 1건", 50_000L, "결제대기",
                                                1000, null, 12345, "주소",
                                                "상세주소", LocalDateTime.now());
 
@@ -370,4 +372,17 @@ public class Dummy {
         return productListResponse;
     }
 
+    public static GivenCoupon getDummyGivenCoupon() {
+        GivenCoupon givenCoupon = new GivenCoupon(new GivenCoupon.Pk(1L, 1L), getDummyCoupon(),
+                                                  getDummyMember(new Cart()), LocalDateTime.now());
+
+        return givenCoupon;
+    }
+
+    public static List<GivenCouponResponse> getDummyGivenCouponResponse() {
+        GivenCouponResponse givenCouponResponse = new GivenCouponResponse(1L, 1L, "coupon", "type", 10000, 1000D,
+                                                                          LocalDateTime.now(), CouponStatus.VALID.getStatus());
+
+        return List.of(givenCouponResponse);
+    }
 }

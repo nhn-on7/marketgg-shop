@@ -284,8 +284,7 @@ public class DefaultOrderService implements OrderService {
 
         OrderDetailRetrieveResponse detailResponse = orderRepository.findOrderDetail(orderId, memberInfo.getId(),
                                                                                      memberInfo.isAdmin());
-        String uuid = memberRepository.findUuidByMemberId(detailResponse.getMemberId())
-                                      .orElseThrow(MemberNotFoundException::new);
+        String uuid = memberRepository.findUuidByOrderId(detailResponse.getId());
         List<MemberNameResponse> memberName = authRepository.getNameListByUuid(List.of(uuid));
         List<ProductToOrder> products = orderProductRepository.findByOrderId(orderId);
         UsedCouponResponse couponName = usedCouponRepository.findUsedCouponName(orderId);
