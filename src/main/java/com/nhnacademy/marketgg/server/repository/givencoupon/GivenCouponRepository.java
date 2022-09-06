@@ -22,6 +22,6 @@ public interface GivenCouponRepository extends JpaRepository<GivenCoupon, GivenC
      * @author 민아영
      * @since 1.0.0
      */
-    Optional<Page<GivenCoupon>> findByMemberId(Long id, Pageable pageable);
+    Optional<Page<GivenCoupon>> findByMemberIdOrderByCreatedAtDesc(Long id, Pageable pageable);
 
 }
