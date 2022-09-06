@@ -20,7 +20,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -35,6 +34,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
 
 /**
  * 주문에 관련된 Rest Controller 입니다.
@@ -62,7 +63,7 @@ public class OrderController {
     @Operation(summary = "주문 등록",
                description = "주문 등록을 위해 들어온 값들을 검증하고 주문 등록을 처리합니다.",
                parameters = { @Parameter(name = "orderCreateRequest", description = "주문 등록 요청 데이터", required = true),
-                   @Parameter(name = "memberInfo", description = "주문하는 회원 정보", required = true) },
+                       @Parameter(name = "memberInfo", description = "주문하는 회원 정보", required = true) },
                responses = @ApiResponse(responseCode = "201",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
@@ -71,7 +72,7 @@ public class OrderController {
     public ResponseEntity<ShopResult<OrderToPayment>> createOrder(@RequestBody final
                                                                   OrderCreateRequest orderCreateRequest,
                                                                   final MemberInfo memberInfo)
-        throws JsonProcessingException {
+            throws JsonProcessingException {
 
         log.info("createOrder method started");
         log.info("orderRequest: {}", orderCreateRequest);
@@ -96,8 +97,8 @@ public class OrderController {
     @Operation(summary = "주문서 정보 요청",
                description = "주문서 입력폼에 필요한 정보들을 취합하여 반환합니다.",
                parameters = { @Parameter(name = "cartResponse", description = "장바구니에서 선택한 주문할 상품", required = true),
-                   @Parameter(name = "memberInfo", description = "주문하는 회원 정보", required = true),
-                   @Parameter(name = "AuthInfo", description = "주문하는 회원 auth 정보", required = true) },
+                       @Parameter(name = "memberInfo", description = "주문하는 회원 정보", required = true),
+                       @Parameter(name = "AuthInfo", description = "주문하는 회원 auth 정보", required = true) },
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
@@ -136,8 +137,7 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<ShopResult<PageEntity<OrderRetrieveResponse>>> retrieveOrderList(final MemberInfo memberInfo,
                                                                                            @RequestParam(value = "page",
-                                                                                                         defaultValue = "1")
-                                                                                           final Integer page) {
+                                                                                                         defaultValue = "1") final Integer page) {
         log.info("retrieveOrderList method started");
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1); // offset 때문에 -1 처리
@@ -164,14 +164,14 @@ public class OrderController {
     @Operation(summary = "주문 상세 조회",
                description = "지정한 주문의 상세 정보를 조회합니다.(회원이라면 본인의 상세 정보만 조회 가능합니다.)",
                parameters = { @Parameter(name = "orderId", description = "주문 식별번호", required = true),
-                   @Parameter(name = "memberInfo", description = "주문하는 회원 정보", required = true) },
+                       @Parameter(name = "memberInfo", description = "주문하는 회원 정보", required = true) },
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
                                         useReturnTypeSchema = true))
     @GetMapping("/{orderId}")
     public ResponseEntity<ShopResult<OrderDetailRetrieveResponse>> retrieveOrderDetail(@PathVariable final Long orderId,
-                                                                                       final MemberInfo memberInfo) {
+                                                                                       final MemberInfo memberInfo) throws JsonProcessingException {
 
         log.info("retrieveOrderDetail method started");
         log.info("orderId: {}", orderId);
@@ -195,7 +195,7 @@ public class OrderController {
     @Operation(summary = "주문 상태 변경",
                description = "주문의 상태를 변경합니다.",
                parameters = { @Parameter(name = "orderId", description = "주문 식별번호", required = true),
-                   @Parameter(name = "status", description = "변경할 상태값", required = true) },
+                       @Parameter(name = "status", description = "변경할 상태값", required = true) },
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
@@ -293,9 +293,9 @@ public class OrderController {
         OrderPaymentKey data = orderService.retrieveOrderPaymentKey(orderId, memberInfo);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .location(URI.create(ORDER_PREFIX + "/" + orderId + "/paymentKey"))
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(ShopResult.successWith(data));
+                             .location(URI.create(ORDER_PREFIX + "/" + orderId + "/paymentKey"))
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(ShopResult.successWith(data));
     }
 
 }

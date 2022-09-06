@@ -22,6 +22,8 @@ public class OrderDetailRetrieveResponse {
 
     private final Long memberId;
 
+    private String memberName;
+
     private final String orderName;
 
     private final Long totalAmount;
@@ -44,9 +46,10 @@ public class OrderDetailRetrieveResponse {
 
     private List<ProductToOrder> orderProductList;
 
-    public void addOrderDetail(List<ProductToOrder> orderProductList, UsedCouponResponse usedCoupon) {
+    public void addOrderDetail(List<ProductToOrder> orderProductList, UsedCouponResponse usedCoupon, String memberName) {
         this.orderProductList = orderProductList;
         this.usedCoupon = usedCoupon;
+        this.memberName = memberName;
     }
 
 }

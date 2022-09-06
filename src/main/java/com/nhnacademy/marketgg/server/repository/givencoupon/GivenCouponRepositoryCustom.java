@@ -1,7 +1,5 @@
 package com.nhnacademy.marketgg.server.repository.givencoupon;
 
-import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
-import java.util.List;
 import org.springframework.data.repository.NoRepositoryBean;
 
 /**
@@ -12,7 +10,5 @@ import org.springframework.data.repository.NoRepositoryBean;
  */
 @NoRepositoryBean
 public interface GivenCouponRepositoryCustom {
-
-    List<OrderGivenCoupon> findOwnCouponsByMemberId(final Long memberId);
 
 }

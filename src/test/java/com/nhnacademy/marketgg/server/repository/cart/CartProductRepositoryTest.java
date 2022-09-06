@@ -2,16 +2,13 @@ package com.nhnacademy.marketgg.server.repository.cart;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.dto.response.cart.CartProductResponse;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
-import com.nhnacademy.marketgg.server.dummy.Dummy;
+import com.nhnacademy.marketgg.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Asset;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.CartProduct;
 import com.nhnacademy.marketgg.server.entity.Image;
-import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
 import com.nhnacademy.marketgg.server.repository.categorization.CategorizationRepository;

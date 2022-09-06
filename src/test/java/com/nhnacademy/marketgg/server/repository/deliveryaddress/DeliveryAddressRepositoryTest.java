@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.nhnacademy.marketgg.server.dto.request.member.MemberGradeCreateRequest;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
-import com.nhnacademy.marketgg.server.dummy.Dummy;
+import com.nhnacademy.marketgg.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.entity.DeliveryAddress;
 import com.nhnacademy.marketgg.server.entity.Member;

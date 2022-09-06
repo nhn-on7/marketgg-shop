@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.aop.AspectUtils;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
-import com.nhnacademy.marketgg.server.dummy.Dummy;
+import com.nhnacademy.marketgg.dummy.Dummy;
 import com.nhnacademy.marketgg.server.service.product.ProductService;
 import java.io.FileInputStream;
 import java.net.URL;

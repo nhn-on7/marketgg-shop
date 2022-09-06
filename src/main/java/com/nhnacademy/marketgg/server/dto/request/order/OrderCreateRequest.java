@@ -46,11 +46,11 @@ public class OrderCreateRequest {
 
     @Schema(title = "주문 상품 총액", description = "주문할 상품들의 총 금액입니다.", example = "30000")
     @NotNull
-    private Long totalOrigin; // 원가
+    private Long totalOrigin;
 
     @Schema(title = "최종 결제 금액", description = "할인 적용 후 실제 결제할 최종 금액입니다.", example = "26000")
     @NotNull
-    private Long totalAmount; // 최종 결제 금액
+    private Long totalAmount;
 
     @Schema(title = "결제 수단", description = "회원이 선택한 결제 수단입니다.", example = "카드")
     @NotBlank
