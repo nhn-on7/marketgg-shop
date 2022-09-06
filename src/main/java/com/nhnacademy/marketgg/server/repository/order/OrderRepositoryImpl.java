@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.order;
 
+import com.nhnacademy.marketgg.server.constant.OrderStatus;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderPaymentKey;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
@@ -11,6 +12,7 @@ import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.DateTimePath;
+import com.querydsl.core.types.dsl.StringPath;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +35,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
         QueryResults<OrderRetrieveResponse> result = from(order).select(selectOrderResponse())
                                                                 .where(eqMemberId(memberId, isAdmin))
                                                                 .where(userNotSeeDeleted(isAdmin, order.deletedAt))
+                                                                .where(userNotSeePayReady(isAdmin, order.orderStatus))
                                                                 .orderBy(order.id.desc())
                                                                 .offset(pageable.getOffset())
                                                                 .limit(pageable.getPageSize())
@@ -47,6 +50,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
                           .where(order.id.eq(orderId))
                           .where(eqMemberId(memberId, isAdmin))
                           .where(userNotSeeDeleted(isAdmin, order.deletedAt))
+                          .where(userNotSeePayReady(isAdmin, order.orderStatus))
                           .fetchOne();
     }
 
@@ -95,11 +99,18 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
         return order.member.id.eq(memberId);
     }
 
-    private BooleanExpression userNotSeeDeleted(final boolean isUser, final DateTimePath<LocalDateTime> deletedAt) {
-        if (isUser) {
-            return deletedAt.isNull();
+    private BooleanExpression userNotSeeDeleted(final boolean isAdmin, final DateTimePath<LocalDateTime> deletedAt) {
+        if (isAdmin) {
+            return null;
         }
-        return null;
+        return deletedAt.isNull();
+    }
+
+    private BooleanExpression userNotSeePayReady(final boolean isAdmin, final StringPath status) {
+        if (isAdmin) {
+            return null;
+        }
+        return status.ne(OrderStatus.PAY_WAITING.getStatus());
     }
 
 }
