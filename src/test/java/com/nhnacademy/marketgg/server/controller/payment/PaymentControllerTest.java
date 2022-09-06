@@ -21,7 +21,7 @@ import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountCreateRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountDepositRequest;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
-import com.nhnacademy.marketgg.server.dummy.PaymentDummy;
+import com.nhnacademy.marketgg.dummy.PaymentDummy;
 import com.nhnacademy.marketgg.server.service.payment.PaymentService;
 import java.util.function.BooleanSupplier;
 import org.hamcrest.Matchers;

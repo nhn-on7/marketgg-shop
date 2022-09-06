@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.dummy;
+package com.nhnacademy.marketgg.dummy;
 
 import com.nhnacademy.marketgg.server.dto.payment.response.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;

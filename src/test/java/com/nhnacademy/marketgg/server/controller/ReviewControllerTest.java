@@ -23,7 +23,7 @@ import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.review.ReviewUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
-import com.nhnacademy.marketgg.server.dummy.Dummy;
+import com.nhnacademy.marketgg.dummy.Dummy;
 import com.nhnacademy.marketgg.server.service.product.ReviewService;
 import java.io.FileInputStream;
 import java.net.URL;

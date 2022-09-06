@@ -2,15 +2,10 @@ package com.nhnacademy.marketgg.server.repository.productinquirypost;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-import com.nhnacademy.marketgg.server.dto.request.member.MemberCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.member.MemberGradeCreateRequest;
-import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductInquiryRequest;
-import com.nhnacademy.marketgg.server.dummy.Dummy;
+import com.nhnacademy.marketgg.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Asset;
-import com.nhnacademy.marketgg.server.entity.Category;
 import com.nhnacademy.marketgg.server.entity.Member;
-import com.nhnacademy.marketgg.server.entity.MemberGrade;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.entity.ProductInquiryPost;
 import com.nhnacademy.marketgg.server.repository.asset.AssetRepository;
@@ -19,7 +14,6 @@ import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;

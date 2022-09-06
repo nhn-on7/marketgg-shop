@@ -7,7 +7,7 @@ import com.nhnacademy.marketgg.server.aop.AuthInfoAspect;
 import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.deliveryaddress.DeliveryAddressCreateRequest;
-import com.nhnacademy.marketgg.server.dummy.Dummy;
+import com.nhnacademy.marketgg.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.repository.deliveryaddress.DeliveryAddressRepository;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;

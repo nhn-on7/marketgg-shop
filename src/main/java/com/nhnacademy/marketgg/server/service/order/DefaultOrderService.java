@@ -105,34 +105,24 @@ public class DefaultOrderService implements OrderService {
     public OrderToPayment createOrder(final OrderCreateRequest orderRequest, final MemberInfo memberInfo)
             throws JsonProcessingException {
 
-        // MEMO: 주문하는 회원 찾기
         Member member = memberRepository.findById(memberInfo.getId())
                                         .orElseThrow(MemberNotFoundException::new);
-
-        // MEMO: 주문하는 회원 정보 auth server 조회
         MemberInfoResponse memberResponse
                 = checkResult(authRepository.getMemberInfo(new MemberInfoRequest(member.getUuid())));
-
-        // MEMO: 주문한 회원이 선택한 배송지 조회
         DeliveryAddress deliveryAddress = deliveryAddressRepository.findById(orderRequest.getDeliveryAddressId())
                                                                    .orElseThrow(DeliveryAddressNotFoundException::new);
-        // MEMO: 주문서 폼에서 받은 주문할 상품 ID 목록
         List<Long> productIds = orderRequest.getProductIds();
-
-        // MEMO: 받아온 상품 ID로 장바구니에 담긴 상품 확인 및 정보 조회 (id, name, price, amount)
         List<ProductToOrder> cartProducts = cartProductRepository.findCartProductsByProductIds(memberInfo.getCart()
                                                                                                          .getId(),
                                                                                                productIds);
-
         List<Product> products = productRepository.findByIds(productIds);
 
-        // MEMO: 주문 엔티티 생성 및 검증 후 데이터 저장
         Order order = new Order(member, deliveryAddress, orderRequest, products.get(0).getName(), products.size());
         Long memberId = member.getId();
+
         Optional<GivenCoupon> givenCoupon = this.checkOrderValid(orderRequest, memberResponse, memberId);
         orderRepository.saveAndFlush(order);
 
-        // MEMO: 사용 쿠폰 적용
         if (givenCoupon.isPresent()) {
             UsedCoupon usedCoupon = UsedCoupon.builder()
                                               .pk(new UsedCoupon.Pk(order.getId(),
@@ -149,12 +139,10 @@ public class DefaultOrderService implements OrderService {
                                               pointRepository.findLastTotalPoints(memberId) + usedPoint,
                                               new PointHistoryRequest(usedPoint, "포인트 사용")));
 
-        // MEMO: 재고 차감을 위해 상품 수량만 뽑아내기
         List<Integer> productAmounts = cartProducts.stream()
                                                    .map(ProductToOrder::getAmount)
                                                    .collect(Collectors.toList());
 
-        // MEMO: 상품 재고량 수정, 주문상품 테이블 컬럼 추가
         int i = 0;
         for (Product product : products) {
             long remain = product.getTotalStock() - productAmounts.get(i);
@@ -166,7 +154,6 @@ public class DefaultOrderService implements OrderService {
             orderProductRepository.save(new OrderProduct(order, product, productAmounts.get(i++)));
         }
 
-        // MEMO: 장바구니 목록 주문한 상품 삭제
         cartProductService.deleteProducts(memberInfo, productIds);
 
         return makeOrderToPayment(order, orderRequest);
@@ -236,7 +223,7 @@ public class DefaultOrderService implements OrderService {
 
         Long memberId = memberInfo.getId();
 
-        List<GivenCouponResponse> orderGivenCoupons = givenCouponService.retrieveGivenCoupons(memberInfo,
+        List<GivenCouponResponse> givenCoupons = givenCouponService.retrieveGivenCoupons(memberInfo,
                                                                                               Pageable.unpaged())
                                                                         .getData();
 
@@ -254,7 +241,7 @@ public class DefaultOrderService implements OrderService {
                                 .memberId(memberId).memberName(authInfo.getName())
                                 .memberPhone(authInfo.getPhoneNumber())
                                 .memberEmail(authInfo.getEmail()).memberGrade(memberInfo.getMemberGrade())
-                                .givenCouponList(orderGivenCoupons)
+                                .givenCouponList(givenCoupons)
                                 .totalPoint(totalPoint)
                                 .deliveryAddressList(deliveryAddresses)
                                 .paymentType(paymentTypes)

@@ -19,7 +19,7 @@ import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
 import com.nhnacademy.marketgg.server.dto.response.file.ImageResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
-import com.nhnacademy.marketgg.server.dummy.Dummy;
+import com.nhnacademy.marketgg.dummy.Dummy;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticProduct;
 import com.nhnacademy.marketgg.server.elastic.request.SearchRequest;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;

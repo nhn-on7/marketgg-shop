@@ -31,7 +31,7 @@ import com.nhnacademy.marketgg.server.controller.advice.MemberControllerAdvice;
 import com.nhnacademy.marketgg.server.controller.cart.CartController;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
-import com.nhnacademy.marketgg.server.dummy.Dummy;
+import com.nhnacademy.marketgg.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.exception.product.ProductNotFoundException;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;

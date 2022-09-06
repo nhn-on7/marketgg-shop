@@ -1,4 +1,4 @@
-package com.nhnacademy.marketgg.server.dummy;
+package com.nhnacademy.marketgg.dummy;
 
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
@@ -14,12 +14,10 @@ import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductToCartRequest;
 import com.nhnacademy.marketgg.server.dto.request.product.ProductUpdateRequest;
-import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.customerservice.PostResponse;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
-import com.nhnacademy.marketgg.server.dto.response.order.OrderGivenCoupon;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductDetailResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductListResponse;
@@ -335,13 +333,6 @@ public class Dummy {
 
     public static OrderProduct getDummyOrderProduct() {
         return new OrderProduct(getDummyOrder(), getDummyProduct(1L), 1);
-    }
-
-    public static OrderGivenCoupon getDummyOrderGivenCoupon() {
-        Coupon coupon = getDummyCoupon();
-
-        return new OrderGivenCoupon(coupon.getId(), coupon.getName(), LocalDateTime.now(), 30,
-                                    5000, 1000D);
     }
 
     public static OrderRetrieveResponse getOrderRetrieveResponse() {
