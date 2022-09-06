@@ -3,6 +3,7 @@ package com.nhnacademy.marketgg.server.config;
 import com.nhnacademy.marketgg.server.filter.AdminFilter;
 import com.nhnacademy.marketgg.server.filter.SecurityFilter;
 import java.time.Duration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -29,9 +30,9 @@ public class WebConfig {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder
-                .setReadTimeout(Duration.ofSeconds(10L))
-                .setConnectTimeout(Duration.ofSeconds(5L))
-                .build();
+            .setReadTimeout(Duration.ofSeconds(10L))
+            .setConnectTimeout(Duration.ofSeconds(5L))
+            .build();
     }
 
     @Bean
@@ -56,9 +57,11 @@ public class WebConfig {
 
     @Profile("prod")
     @Bean
-    public FilterRegistrationBean<SecurityFilter> securityFilterFilterRegistrationBean() {
+    public FilterRegistrationBean<SecurityFilter> securityFilterFilterRegistrationBean(
+        @Value("${gg.gateway.origin}") String gateway) {
+
         FilterRegistrationBean<SecurityFilter> filter = new FilterRegistrationBean<>();
-        filter.setFilter(new SecurityFilter());
+        filter.setFilter(new SecurityFilter(gateway));
         filter.setOrder(1);
         filter.addUrlPatterns("/*");
 
