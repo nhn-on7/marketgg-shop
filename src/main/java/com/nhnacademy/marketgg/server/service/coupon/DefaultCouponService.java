@@ -52,7 +52,6 @@ public class DefaultCouponService implements CouponService {
      */
     @Override
     public CouponDto retrieveCoupon(final Long id) {
-
         return couponRepository.findCouponDtoById(id).orElseThrow(CouponNotFoundException::new);
     }
 
@@ -85,10 +84,39 @@ public class DefaultCouponService implements CouponService {
     @Transactional
     @Override
     public void updateCoupon(final Long couponId, @Valid final CouponDto couponDto) {
-        Coupon coupon = couponRepository.findById(couponId)
-                                        .orElseThrow(CouponNotFoundException::new);
+        Coupon coupon = this.findCoupon(couponId);
         coupon.updateCoupon(couponDto);
 
+        couponRepository.save(coupon);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param couponId 활성화할 쿠폰의 식별번호입니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
+    @Override
+    public void activateCoupon(Long couponId) {
+        Coupon coupon = this.findCoupon(couponId);
+
+        coupon.isActiveCoupon();
+        couponRepository.save(coupon);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param couponId 비활성화할 쿠폰의 식별번호입니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
+    @Override
+    public void deactivateCoupon(Long couponId) {
+        Coupon coupon = this.findCoupon(couponId);
+
+        coupon.inActiveCoupon();
         couponRepository.save(coupon);
     }
 
@@ -103,10 +131,28 @@ public class DefaultCouponService implements CouponService {
     @Transactional
     @Override
     public void deleteCoupon(final Long couponId) {
-        Coupon coupon = couponRepository.findById(couponId)
-                                        .orElseThrow(CouponNotFoundException::new);
+        Coupon coupon = this.findCoupon(couponId);
         coupon.deleteCoupon();
         couponRepository.save(coupon);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @author 민아영
+     * @since 1.0.0
+     */
+    @Override
+    public PageEntity<CouponDto> retrieveActivateCoupons(Pageable pageable) {
+        Page<CouponDto> activateCouponDto = couponRepository.findActivateCouponDto(pageable);
+
+        return new PageEntity<>(activateCouponDto.getNumber(), activateCouponDto.getSize(),
+                                activateCouponDto.getTotalPages(), activateCouponDto.getContent());
+    }
+
+    private Coupon findCoupon(final Long couponId) {
+        return couponRepository.findById(couponId)
+                               .orElseThrow(CouponNotFoundException::new);
     }
 
 }

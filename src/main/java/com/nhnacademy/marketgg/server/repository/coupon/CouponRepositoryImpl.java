@@ -24,12 +24,12 @@ public class CouponRepositoryImpl extends QuerydslRepositorySupport implements C
     public Page<CouponDto> findAllCoupons(final Pageable pageable) {
 
         QueryResults<CouponDto> result = from(coupon)
-                .select(selectAllCouponColumns())
-                .orderBy(coupon.id.desc())
-                .where(coupon.deletedAt.isNull())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchResults();
+            .select(selectAllCouponColumns())
+            .orderBy(coupon.id.desc())
+            .where(coupon.deletedAt.isNull())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetchResults();
 
         return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
@@ -38,9 +38,9 @@ public class CouponRepositoryImpl extends QuerydslRepositorySupport implements C
     public Optional<CouponDto> findCouponDtoById(final Long id) {
 
         CouponDto result = from(coupon)
-                .select(selectAllCouponColumns())
-                .where(coupon.id.eq(id))
-                .fetchOne();
+            .select(selectAllCouponColumns())
+            .where(coupon.id.eq(id))
+            .fetchOne();
 
         return Optional.ofNullable(result);
     }
@@ -49,11 +49,25 @@ public class CouponRepositoryImpl extends QuerydslRepositorySupport implements C
     public Optional<Coupon> findCouponByName(final String name) {
 
         Coupon result = from(coupon)
-                .where(coupon.name.eq(name))
-                .orderBy(coupon.id.desc())
-                .fetchFirst();
+            .where(coupon.name.eq(name))
+            .orderBy(coupon.id.desc())
+            .fetchFirst();
 
         return Optional.ofNullable(result);
+    }
+
+    @Override
+    public Page<CouponDto> findActivateCouponDto(Pageable pageable) {
+
+        QueryResults<CouponDto> result = from(coupon)
+            .select(selectAllCouponColumns())
+            .orderBy(coupon.id.desc())
+            .where(coupon.deletedAt.isNull().and(coupon.isActive.eq(true)))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetchResults();
+
+        return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 
     private ConstructorExpression<CouponDto> selectAllCouponColumns() {
@@ -64,7 +78,8 @@ public class CouponRepositoryImpl extends QuerydslRepositorySupport implements C
                                        coupon.type,
                                        coupon.expiredDate,
                                        coupon.minimumMoney,
-                                       coupon.discountAmount);
+                                       coupon.discountAmount,
+                                       coupon.isActive);
     }
 
 }

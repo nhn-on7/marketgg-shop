@@ -49,4 +49,18 @@ public class GivenCouponNotFoundException extends NotFoundException {
         }
     }
 
+    /**
+     * 이미 회원에게 지급된 쿠폰일 때 예외처리입니다.
+     *
+     * @version 1.0.0
+     */
+    public static class CouponAlreadyExistException extends NotFoundException {
+
+        private static final String ERROR = "이미 지급된 쿠폰입니다.";
+
+        public CouponAlreadyExistException() {
+            super(ERROR);
+        }
+    }
+
 }

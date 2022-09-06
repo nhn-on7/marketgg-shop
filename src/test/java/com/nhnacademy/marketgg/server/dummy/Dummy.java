@@ -296,7 +296,7 @@ public class Dummy {
     }
 
     public static Coupon getDummyCoupon() {
-        return new Coupon(1L, "쿠폰이름", "정액할인", 10, 1000, 1000D, LocalDateTime.now());
+        return new Coupon(1L, "쿠폰이름", "정액할인", 10, 1000, 1000D, false, LocalDateTime.now());
     }
 
     public static ProductToOrder getDummyProductToOrder() {

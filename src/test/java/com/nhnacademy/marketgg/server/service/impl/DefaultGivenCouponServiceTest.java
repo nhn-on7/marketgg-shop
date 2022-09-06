@@ -84,9 +84,9 @@ class DefaultGivenCouponServiceTest {
 
         cart = cartRepository.save(new Cart());
         couponDto
-            = new CouponDto(1L, "신규쿠폰", "정률할인", 1, 1, 0.5);
+            = new CouponDto(1L, "신규쿠폰", "정률할인", 1, 1, 0.5, false);
         coupon
-            = new Coupon(1L, "신규쿠폰", "정률할인", 1, 1, 0.5, LocalDateTime.now());
+            = new Coupon(1L, "신규쿠폰", "정률할인", 1, 1, 0.5, false, LocalDateTime.now());
         memberInfo = Dummy.getDummyMemberInfo(1L, cart);
     }
 
@@ -105,12 +105,12 @@ class DefaultGivenCouponServiceTest {
     @Test
     @DisplayName("지급 쿠폰 목록 전체 조회")
     void testRetrieveGivenCoupons() {
-        given(givenCouponRepository.findByMemberId(anyLong(), any(Pageable.class))).willReturn(
+        given(givenCouponRepository.findByMemberIdOrderByCreatedAtDesc(anyLong(), any(Pageable.class))).willReturn(
             Optional.of(inquiryPosts));
 
         givenCouponService.retrieveGivenCoupons(memberInfo, pageable);
 
-        then(givenCouponRepository).should(times(1)).findByMemberId(any(), any(Pageable.class));
+        then(givenCouponRepository).should(times(1)).findByMemberIdOrderByCreatedAtDesc(any(), any(Pageable.class));
     }
 
 }

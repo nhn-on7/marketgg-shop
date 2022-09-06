@@ -57,6 +57,24 @@ public interface CouponService {
     void updateCoupon(Long couponId, CouponDto couponDto);
 
     /**
+     * 선택한 쿠폰을 활성화하는 PutMapping 을 지원합니다.
+     *
+     * @param couponId 수정할 쿠폰의 식별번호입니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
+    void activateCoupon(Long couponId);
+
+    /**
+     * 선택한 쿠폰을 비활성화하는 PutMapping 을 지원합니다.
+     *
+     * @param couponId 수정할 쿠폰의 식별번호입니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
+    void deactivateCoupon(Long couponId);
+
+    /**
      * 선택한 쿠폰을 삭제합니다.
      *
      * @param couponId - 삭제할 쿠폰의 식별번호입니다.
@@ -79,7 +97,17 @@ public interface CouponService {
                      .expiredDate(couponDto.getExpiredDate())
                      .minimumMoney(couponDto.getMinimumMoney())
                      .discountAmount(couponDto.getDiscountAmount())
+                     .isActive(false)
                      .build();
     }
+
+    /**
+     * 활성화된 쿠폰 목록을 조회합니다.
+     *
+     * @return - 활성화 쿠폰 목록을 List 로 반환합니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
+    PageEntity<CouponDto> retrieveActivateCoupons(Pageable pageable);
 
 }

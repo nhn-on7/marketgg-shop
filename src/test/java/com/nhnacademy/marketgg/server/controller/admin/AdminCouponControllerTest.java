@@ -57,7 +57,7 @@ class AdminCouponControllerTest {
         httpHeaders.add(AspectUtils.WWW_AUTHENTICATE, "[\"ROLE_ADMIN\"]");
 
         couponDto
-            = new CouponDto(1L, "신규쿠폰", "정률할인", 1, 1, 0.5);
+            = new CouponDto(1L, "신규쿠폰", "정률할인", 1, 1, 0.5, false);
     }
 
     @Test

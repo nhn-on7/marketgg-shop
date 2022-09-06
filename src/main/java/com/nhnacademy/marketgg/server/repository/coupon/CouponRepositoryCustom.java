@@ -45,4 +45,12 @@ public interface CouponRepositoryCustom {
      */
     Optional<Coupon> findCouponByName(String name);
 
+    /**
+     * 활성화 쿠폰 목록을 반환합니다.
+     *
+     * @return 활성화 쿠폰 목록을 List 로 반환합니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
+    Page<CouponDto> findActivateCouponDto(Pageable pageable);
 }
