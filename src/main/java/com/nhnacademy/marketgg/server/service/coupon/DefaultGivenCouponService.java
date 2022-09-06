@@ -59,6 +59,10 @@ public class DefaultGivenCouponService implements GivenCouponService {
         Coupon coupon = couponRepository.findCouponByName(givenCouponRequest.getName())
                                         .orElseThrow(GivenCouponNotFoundException.CouponInfoNotFoundException::new);
 
+        if (givenCouponRepository.findById(new GivenCoupon.Pk(coupon.getId(), member.getId())).isPresent()) {
+            throw new GivenCouponNotFoundException.CouponAlreadyExistException();
+        }
+
         givenCouponRepository.save(this.toEntity(coupon, member));
     }
 
@@ -74,8 +78,8 @@ public class DefaultGivenCouponService implements GivenCouponService {
     @Override
     public PageEntity<GivenCouponResponse> retrieveGivenCoupons(final MemberInfo memberInfo, final Pageable pageable) {
         Page<GivenCoupon> givenCoupons
-                = givenCouponRepository.findByMemberId(memberInfo.getId(), pageable)
-                                       .orElseThrow(GivenCouponNotFoundException::new);
+            = givenCouponRepository.findByMemberIdOrderByCreatedAtDesc(memberInfo.getId(), pageable)
+                                   .orElseThrow(GivenCouponNotFoundException::new);
 
         List<GivenCouponResponse> givenCouponList = givenCoupons.getContent().stream()
                                                                 .map(this::checkAvailability)

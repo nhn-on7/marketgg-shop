@@ -46,4 +46,8 @@ public class CouponDto {
     @Positive(message = "할인량은 음수가 될 수 없습니다.")
     private final Double discountAmount;
 
+    @Schema(title = "활성화 여부",
+            description = "쿠폰의 활성화 여부입니다. true 일 때 회원이 쿠폰을 발급받을 수 있습니다.", example = "true")
+    private final Boolean isActive;
+
 }
