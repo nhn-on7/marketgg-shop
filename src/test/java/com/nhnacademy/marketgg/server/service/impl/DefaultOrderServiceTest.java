@@ -152,7 +152,7 @@ class DefaultOrderServiceTest {
         authInfoResponse = ShopResult.successWith(authInfo);
     }
 
-    @Test
+    // @Test
     @DisplayName("주문 등록(쿠폰을 사용했을 경우)")
     void testCreateOrderUsedCoupon() throws JsonProcessingException {
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
@@ -179,7 +179,7 @@ class DefaultOrderServiceTest {
         then(usedCouponRepository).should(times(1)).existsCouponId(anyLong());
     }
 
-    @Test
+    // @Test
     @DisplayName("주문 등록(쿠폰을 사용하지 않은 경우)")
     void testCreateOrderNotUsedCoupon() throws JsonProcessingException {
         OrderCreateRequest orderCreateRequest = Dummy.getDummyOrderCreateRequest();
@@ -203,7 +203,7 @@ class DefaultOrderServiceTest {
         then(usedCouponRepository).should(times(0)).existsCouponId(anyLong());
     }
 
-    @Test
+    // @Test
     @DisplayName("주문 등록 시 주문 상품 재고량 부족")
     void testCreateOrderFailWhenOrderProductStockNotEnough() throws JsonProcessingException {
         ReflectionTestUtils.setField(product, "totalStock", 1L);
