@@ -61,6 +61,10 @@ public class Coupon {
     @Positive
     private Double discountAmount;
 
+    @Column(name = "is_active")
+    @NotNull
+    private Boolean isActive;
+
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
@@ -74,6 +78,14 @@ public class Coupon {
 
     public void deleteCoupon() {
         this.deletedAt = LocalDateTime.now();
+    }
+
+    public void isActiveCoupon() {
+        this.isActive = true;
+    }
+
+    public void inActiveCoupon() {
+        this.isActive = false;
     }
 
 }

@@ -107,8 +107,7 @@ public class AdminCouponController {
                                         useReturnTypeSchema = true))
     @GetMapping
     public ResponseEntity<ShopResult<PageEntity<CouponDto>>> retrieveCoupons(@RequestParam(value = "page",
-                                                                                           defaultValue = "1")
-                                                                             final Integer page) {
+                                                                                           defaultValue = "1") final Integer page) {
 
         DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
 
@@ -124,15 +123,15 @@ public class AdminCouponController {
      *
      * @param couponId  수정할 쿠폰의 식별번호입니다.
      * @param couponDto 수정할 정보를 담은 DTO 입니다.
-     * @return Mapping URI 를 담은 응답 객체를 반환합니다.
+     * @return 성공 응답을 반환합니다.
      * @author 민아영
      * @author 김정민
      * @since 1.0.0
      */
     @Operation(summary = "쿠폰 수정",
                description = "관리자가 수정할 쿠폰 정보를 입력하여 기존 쿠폰을 수정합니다.",
-               parameters = { @Parameter(name = "couponId", description = "수정할 쿠폰 번호", required = true),
-                       @Parameter(name = "couponDto", description = "수정 내용을 담은 쿠폰 요청 객체", required = true) },
+               parameters = {@Parameter(name = "couponId", description = "수정할 쿠폰 번호", required = true),
+                   @Parameter(name = "couponDto", description = "수정 내용을 담은 쿠폰 요청 객체", required = true)},
                responses = @ApiResponse(responseCode = "200",
                                         content = @Content(mediaType = "application/json",
                                                            schema = @Schema(implementation = ShopResult.class)),
@@ -142,6 +141,40 @@ public class AdminCouponController {
                                                            @Valid @RequestBody final CouponDto couponDto) {
 
         couponService.updateCoupon(couponId, couponDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(ShopResult.successWithDefaultMessage());
+    }
+
+    /**
+     * 선택한 쿠폰을 활성화하는 PutMapping 을 지원합니다.
+     *
+     * @param couponId 수정할 쿠폰의 식별번호입니다.
+     * @return 성공 응답을 반환합니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
+    @PutMapping("/{couponId}/activate")
+    public ResponseEntity<ShopResult<String>> activateCoupon(@PathVariable final Long couponId) {
+        couponService.activateCoupon(couponId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(ShopResult.successWithDefaultMessage());
+    }
+
+    /**
+     * 선택한 쿠폰을 비활성화하는 PutMapping 을 지원합니다.
+     *
+     * @param couponId 수정할 쿠폰의 식별번호입니다.
+     * @return 성공 응답을 반환합니다.
+     * @author 민아영
+     * @since 1.0.0
+     */
+    @PutMapping("/{couponId}/deactivate")
+    public ResponseEntity<ShopResult<String>> deactivateCoupon(@PathVariable final Long couponId) {
+        couponService.deactivateCoupon(couponId);
 
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
