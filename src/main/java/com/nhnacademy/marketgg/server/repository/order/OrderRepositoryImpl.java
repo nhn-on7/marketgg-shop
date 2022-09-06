@@ -11,11 +11,12 @@ import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.DateTimePath;
-import java.time.LocalDateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+
+import java.time.LocalDateTime;
 
 public class OrderRepositoryImpl extends QuerydslRepositorySupport implements OrderRepositoryCustom {
 
@@ -32,6 +33,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
         QueryResults<OrderRetrieveResponse> result = from(order).select(selectOrderResponse())
                                                                 .where(eqMemberId(memberId, isAdmin))
                                                                 .where(userNotSeeDeleted(isAdmin, order.deletedAt))
+                                                                .orderBy(order.id.desc())
                                                                 .offset(pageable.getOffset())
                                                                 .limit(pageable.getPageSize())
                                                                 .fetchResults();
