@@ -331,6 +331,7 @@ public class DefaultOrderService implements OrderService {
      * @param orderId - 운송장 번호를 발급받을 주문의 식별번호입니다.
      * @throws JsonProcessingException - Json 컨텐츠를 처리할 때 발생하는 모든 문제에 대한 예외처리입니다.
      */
+    @Transactional
     @Override
     public void createTrackingNo(final Long orderId) throws JsonProcessingException {
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
