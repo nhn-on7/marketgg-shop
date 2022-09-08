@@ -334,6 +334,7 @@ public class DefaultOrderService implements OrderService {
     @Override
     public void createTrackingNo(final Long orderId) throws JsonProcessingException {
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        order.updateStatus(OrderStatus.DELIVERY_WAITING.getStatus());
         String uuid = memberRepository.findUuidByOrderId(orderId);
         MemberInfoResponse memberResponse = checkResult(authRepository.getMemberInfo(new MemberInfoRequest(uuid)));
 
