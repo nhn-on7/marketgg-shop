@@ -72,4 +72,5 @@ public interface ReviewService {
 
     Boolean makeBestReview(final Long id);
 
+    Page<ReviewResponse> retrieveReviewsByMember(MemberInfo memberInfo, Pageable pageable);
 }

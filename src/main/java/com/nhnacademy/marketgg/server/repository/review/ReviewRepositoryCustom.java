@@ -1,5 +1,6 @@
 package com.nhnacademy.marketgg.server.repository.review;
 
+import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewRatingResponse;
 import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import java.util.List;
@@ -33,4 +34,5 @@ public interface ReviewRepositoryCustom {
 
     List<ReviewRatingResponse> retrieveReviewsByRating(final Long rating);
 
+    Page<ReviewResponse> retrieveReviewsByMember(MemberInfo memberInfo, Pageable pageable);
 }
