@@ -177,7 +177,7 @@ public class DefaultOrderService implements OrderService {
         GivenCoupon givenCoupon = givenCouponRepository.findById(new GivenCoupon.Pk(couponId, memberId))
                                                        .orElseThrow(CouponNotFoundException::new);
 
-        if (usedCouponRepository.existsCouponId(couponId)) {
+        if (usedCouponRepository.existsCouponId(couponId, memberId)) {
             throw new CouponIsAlreadyUsedException();
         }
 

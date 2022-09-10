@@ -16,11 +16,12 @@ public class UsedCouponRepositoryImpl extends QuerydslRepositorySupport implemen
     }
 
     @Override
-    public boolean existsCouponId(final Long couponId) {
+    public boolean existsCouponId(final Long couponId, final Long memberId) {
         QUsedCoupon usedCoupon = QUsedCoupon.usedCoupon;
 
         return Objects.nonNull(from(usedCoupon)
                                        .where(usedCoupon.pk.couponId.eq(couponId))
+                                       .where(usedCoupon.pk.memberId.eq(memberId))
                                        .select(usedCoupon.pk.couponId)
                                        .fetchFirst());
     }
