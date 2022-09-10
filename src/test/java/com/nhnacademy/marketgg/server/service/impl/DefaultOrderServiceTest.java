@@ -143,6 +143,7 @@ class DefaultOrderServiceTest {
     @BeforeEach
     void setUp() {
         member = Dummy.getDummyMember(Dummy.getDummyCart(1L));
+        ReflectionTestUtils.setField(member, "id", 1L);
         memberInfoRequest = new MemberInfoRequest(Dummy.DUMMY_UUID);
         memberInfoResponse = new MemberInfoResponse("KimDummy", "KimDummy@dooray.com",
                                                     "010-1111-1111");
@@ -158,7 +159,7 @@ class DefaultOrderServiceTest {
         authInfoResponse = ShopResult.successWith(authInfo);
     }
 
-    // @Test
+    @Test
     @DisplayName("주문 등록(쿠폰을 사용했을 경우)")
     void testCreateOrderUsedCoupon() throws JsonProcessingException {
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
@@ -167,13 +168,10 @@ class DefaultOrderServiceTest {
         given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
                 .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
-        given(productRepository.save(any(Product.class))).willReturn(product);
         given(orderProductRepository.save(any(OrderProduct.class))).willReturn(Dummy.getDummyOrderProduct());
         given(givenCouponRepository.findById(any(GivenCoupon.Pk.class))).willReturn(Optional.of(givenCoupon));
         given(usedCouponRepository.existsCouponId(anyLong(), anyLong())).willReturn(false);
         given(pointRepository.findLastTotalPoints(any())).willReturn(20000);
-
-        willDoNothing().given(cartProductService).deleteProducts(memberInfo, productIds);
 
         orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo);
 
@@ -184,7 +182,7 @@ class DefaultOrderServiceTest {
         then(usedCouponRepository).should(times(1)).existsCouponId(anyLong(), anyLong());
     }
 
-    // @Test
+    @Test
     @DisplayName("주문 등록(쿠폰을 사용하지 않은 경우)")
     void testCreateOrderNotUsedCoupon() throws JsonProcessingException {
         OrderCreateRequest orderCreateRequest = Dummy.getDummyOrderCreateRequest();
@@ -196,21 +194,18 @@ class DefaultOrderServiceTest {
         given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
                 .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
-        given(productRepository.save(any(Product.class))).willReturn(product);
         given(orderProductRepository.save(any(OrderProduct.class))).willReturn(Dummy.getDummyOrderProduct());
         given(pointRepository.findLastTotalPoints(any())).willReturn(20000);
-
-        willDoNothing().given(cartProductService).deleteProducts(memberInfo, productIds);
 
         orderService.createOrder(orderCreateRequest, memberInfo);
 
         then(usedCouponRepository).should(times(0)).existsCouponId(anyLong(), anyLong());
     }
 
-    // @Test
+    @Test
     @DisplayName("주문 등록 시 주문 상품 재고량 부족")
     void testCreateOrderFailWhenOrderProductStockNotEnough() throws JsonProcessingException {
-        ReflectionTestUtils.setField(product, "totalStock", 1L);
+        ReflectionTestUtils.setField(product, "totalStock", 0L);
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(authRepository.getMemberInfo(any(MemberInfoRequest.class))).willReturn(shopResult);
@@ -218,12 +213,9 @@ class DefaultOrderServiceTest {
         given(cartProductRepository.findCartProductsByProductIds(anyLong(), anyList()))
                 .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
-        given(productRepository.save(any(Product.class))).willReturn(product);
         given(givenCouponRepository.findById(any(GivenCoupon.Pk.class))).willReturn(Optional.of(givenCoupon));
         given(usedCouponRepository.existsCouponId(anyLong(), anyLong())).willReturn(false);
         given(pointRepository.findLastTotalPoints(any())).willReturn(20000);
-
-        orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo);
 
         assertThatThrownBy(() -> orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo))
                 .isInstanceOf(ProductStockNotEnoughException.class);
