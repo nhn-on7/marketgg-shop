@@ -12,7 +12,6 @@ import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderInfoRequestDto;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
-import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.coupon.UsedCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
@@ -26,9 +25,7 @@ import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import com.nhnacademy.marketgg.server.entity.Member;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.OrderProduct;
-import com.nhnacademy.marketgg.server.entity.PointHistory;
 import com.nhnacademy.marketgg.server.entity.Product;
-import com.nhnacademy.marketgg.server.entity.UsedCoupon;
 import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderCouponCanceledEvent;
 import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderPointCanceledEvent;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponIsAlreadyUsedException;
@@ -51,7 +48,6 @@ import com.nhnacademy.marketgg.server.repository.orderproduct.OrderProductReposi
 import com.nhnacademy.marketgg.server.repository.pointhistory.PointHistoryRepository;
 import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
 import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
-import com.nhnacademy.marketgg.server.service.cart.CartProductService;
 import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -87,7 +83,6 @@ public class DefaultOrderService implements OrderService {
     private final UsedCouponRepository usedCouponRepository;
     private final GivenCouponService givenCouponService;
     private final ProductRepository productRepository;
-    private final CartProductService cartProductService;
     private final CartProductRepository cartProductRepository;
     private final ApplicationEventPublisher publisher;
     @Value("${gg.eggplant.success-host}")
@@ -121,24 +116,8 @@ public class DefaultOrderService implements OrderService {
         Order order = new Order(member, deliveryAddress, orderRequest, products.get(0).getName(), products.size());
         Long memberId = member.getId();
 
-        Optional<GivenCoupon> givenCoupon = this.checkOrderValid(orderRequest, memberResponse, memberId);
+        this.checkOrderValid(orderRequest, memberResponse, memberId);
         orderRepository.saveAndFlush(order);
-
-        if (givenCoupon.isPresent()) {
-            UsedCoupon usedCoupon = UsedCoupon.builder()
-                                              .pk(new UsedCoupon.Pk(order.getId(),
-                                                                    givenCoupon.get().getPk().getCouponId(),
-                                                                    memberId))
-                                              .order(order)
-                                              .givenCoupon(givenCoupon.get())
-                                              .build();
-            usedCouponRepository.save(usedCoupon);
-        }
-
-        int usedPoint = -orderRequest.getUsedPoint();
-        pointRepository.save(new PointHistory(member, order,
-                                              pointRepository.findLastTotalPoints(memberId) + usedPoint,
-                                              new PointHistoryRequest(usedPoint, "포인트 사용")));
 
         List<Integer> productAmounts = cartProducts.stream()
                                                    .map(ProductToOrder::getAmount)
@@ -150,12 +129,8 @@ public class DefaultOrderService implements OrderService {
             if (remain < 0) {
                 throw new ProductStockNotEnoughException();
             }
-            product.updateTotalStock(remain);
-            productRepository.save(product);
             orderProductRepository.save(new OrderProduct(order, product, productAmounts.get(i++)));
         }
-
-        cartProductService.deleteProducts(memberInfo, productIds);
 
         return makeOrderToPayment(order, orderRequest);
     }
@@ -176,9 +151,9 @@ public class DefaultOrderService implements OrderService {
      * @param memberResponse 주문한 회원 정보
      * @param memberId       주문한 회원 아이디
      */
-    private Optional<GivenCoupon> checkOrderValid(final OrderCreateRequest orderRequest,
-                                                  final MemberInfoResponse memberResponse,
-                                                  final Long memberId) {
+    private void checkOrderValid(final OrderCreateRequest orderRequest,
+                                 final MemberInfoResponse memberResponse,
+                                 final Long memberId) {
 
         if (!memberResponse.getEmail().equals(orderRequest.getEmail())) {
             throw new OrderMemberNotMatchedException();
@@ -192,14 +167,13 @@ public class DefaultOrderService implements OrderService {
         if (pointRepository.findLastTotalPoints(memberId) < orderRequest.getUsedPoint()) {
             throw new PointNotEnoughException();
         }
-
-        return givenCoupon;
     }
 
     private Optional<GivenCoupon> checkCouponValid(final Long couponId, final Long memberId) {
         if (Objects.isNull(couponId)) {
             return Optional.empty();
         }
+
         GivenCoupon givenCoupon = givenCouponRepository.findById(new GivenCoupon.Pk(couponId, memberId))
                                                        .orElseThrow(CouponNotFoundException::new);
 
