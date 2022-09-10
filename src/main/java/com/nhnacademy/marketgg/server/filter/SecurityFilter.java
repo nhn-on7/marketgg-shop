@@ -36,9 +36,10 @@ public class SecurityFilter implements Filter {
         if (Objects.nonNull(xForwardedFor)) {
             log.warn("Origin: {}", xForwardedFor);
             log.warn("URI: {}", request.getRequestURI());
-            // if (!Objects.equals(xForwardedFor, gatewayUrl)) {
-            //     response.sendError(HttpStatus.FORBIDDEN.value());
-            // }
+            if (!Objects.equals(xForwardedFor, gatewayUrl)) {
+                log.info("!Objects.equals(xForwardedFor, gatewayUrl): {}", !Objects.equals(xForwardedFor, gatewayUrl));
+                response.sendError(HttpStatus.FORBIDDEN.value());
+            }
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
