@@ -129,7 +129,7 @@ class DefaultPointServiceTest {
 
         pointService.createPointHistoryForOrder(1L, 1L, pointHistoryRequest);
 
-        then(pointHistoryRepository).should(times(1)).save(any(PointHistory.class));
+        then(pointHistoryRepository).should(times(2)).save(any(PointHistory.class));
     }
 
     @Test
@@ -152,7 +152,7 @@ class DefaultPointServiceTest {
 
         pointService.createPointHistoryForOrder(1L, 1L, pointHistoryRequest);
 
-        then(pointHistoryRepository).should(times(1)).save(any(PointHistory.class));
+        then(pointHistoryRepository).should(times(2)).save(any(PointHistory.class));
     }
 
 }

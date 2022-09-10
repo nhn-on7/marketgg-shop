@@ -10,6 +10,7 @@ import com.nhnacademy.marketgg.server.dto.payment.response.Receipt;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.entity.payment.Payment;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -24,7 +25,12 @@ public class PaymentDummy {
     }
 
     public static PaymentConfirmRequest getPaymentConfirmRequest() {
-        return new PaymentConfirmRequest("GGORDER_1", PAYMENT_KEY, 3_200L);
+        PaymentConfirmRequest request = new PaymentConfirmRequest("GGORDER_1", PAYMENT_KEY, 3_200L);
+        ReflectionTestUtils.setField(request, "couponId", Optional.ofNullable(1L));
+        ReflectionTestUtils.setField(request, "usedPoint", 100);
+        ReflectionTestUtils.setField(request, "orderedProducts", List.of(1L));
+
+        return request;
     }
 
     public static PaymentCancelRequest getPaymentCancelRequest() {

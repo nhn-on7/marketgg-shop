@@ -7,8 +7,10 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -19,24 +21,33 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentType;
 import com.nhnacademy.marketgg.server.dto.payment.response.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
+import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.dummy.Dummy;
 import com.nhnacademy.marketgg.dummy.PaymentDummy;
 import com.nhnacademy.marketgg.server.entity.Order;
 import com.nhnacademy.marketgg.server.entity.payment.Payment;
+import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderCartUpdatedEvent;
+import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderPointSavedEvent;
+import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderProductUpdatedEvent;
 import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
+import com.nhnacademy.marketgg.server.repository.orderproduct.OrderProductRepository;
 import com.nhnacademy.marketgg.server.repository.payment.PaymentAdapter;
 import com.nhnacademy.marketgg.server.repository.payment.PaymentRepository;
 import com.nhnacademy.marketgg.server.service.order.DefaultOrderService;
 import java.io.UncheckedIOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +61,9 @@ class TossPaymentServiceTest {
     TossPaymentService paymentService;
 
     @Mock
+    ApplicationEventPublisher publisher = mock(ApplicationEventPublisher.class);
+
+    @Mock
     DefaultOrderService orderService;
 
     @Mock
@@ -57,6 +71,9 @@ class TossPaymentServiceTest {
 
     @Mock
     PaymentRepository paymentRepository;
+
+    @Mock
+    OrderProductRepository orderProductRepository;
 
     @Mock
     PaymentAdapter paymentAdapter;
@@ -98,15 +115,20 @@ class TossPaymentServiceTest {
 
         PaymentConfirmRequest dummyPaymentRequest = spy(PaymentDummy.getPaymentConfirmRequest());
 
-        Order spyOrder = spy(Dummy.getDummyOrder());
+        Order spyOrder = Dummy.getDummyOrder();
+        given(orderService.detachPrefix(anyString())).willReturn(1L);
         given(orderRepository.findById(anyLong())).willReturn(Optional.of(spyOrder));
-        given(paymentRepository.save(any(Payment.class))).willReturn(any(Payment.class));
+        given(paymentRepository.save(any(Payment.class))).willReturn(Dummy.getDummyPayment());
+        given(orderProductRepository.findByOrderId(anyLong())).willReturn(List.of(Dummy.getDummyProductToOrder()));
 
         PaymentResponse paymentResponse = paymentService.pay(dummyPaymentRequest);
 
         assertThat(paymentResponse).isNotNull();
 
         verify(objectMapper, times(1)).readValue(anyString(), eq(PaymentResponse.class));
+        then(publisher).should(times(1)).publishEvent(any(OrderPointSavedEvent.class));
+        then(publisher).should(times(1)).publishEvent(any(OrderProductUpdatedEvent.class));
+        then(publisher).should(times(1)).publishEvent(any(OrderCartUpdatedEvent.class));
     }
 
     @Test

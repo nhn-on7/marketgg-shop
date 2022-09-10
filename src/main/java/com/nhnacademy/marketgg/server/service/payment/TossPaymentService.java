@@ -24,6 +24,10 @@ import com.nhnacademy.marketgg.server.entity.payment.MobilePhonePayment;
 import com.nhnacademy.marketgg.server.entity.payment.Payment;
 import com.nhnacademy.marketgg.server.entity.payment.TransferPayment;
 import com.nhnacademy.marketgg.server.entity.payment.VirtualAccountPayment;
+import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderCartUpdatedEvent;
+import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderCouponUsedEvent;
+import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderPointSavedEvent;
+import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderProductUpdatedEvent;
 import com.nhnacademy.marketgg.server.exception.givencoupon.GivenCouponNotFoundException;
 import com.nhnacademy.marketgg.server.exception.order.OrderNotFoundException;
 import com.nhnacademy.marketgg.server.exception.payment.PaymentNotFoundException;
@@ -43,6 +47,7 @@ import com.nhnacademy.marketgg.server.service.order.OrderService;
 import com.nhnacademy.marketgg.server.service.point.PointService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -86,6 +91,8 @@ public class TossPaymentService implements PaymentService {
     private final VirtualAccountPaymentRepository virtualAccountPaymentRepository;
     private final TransferPaymentRepository transferPaymentRepository;
     private final MobilePhonePaymentRepository mobilePhonePaymentRepository;
+
+    private final ApplicationEventPublisher publisher;
 
     /**
      * {@inheritDoc}
@@ -156,72 +163,17 @@ public class TossPaymentService implements PaymentService {
      * @param paymentRequest - 결제 승인 확정 요청 정보
      */
     private void confirmOrder(Order order, PaymentConfirmRequest paymentRequest) {
-        Long memberId = order.getMember().getId();
         Optional<Long> coupon = paymentRequest.getCouponId();
         Integer usedPoint = paymentRequest.getUsedPoint();
         List<Long> productIds = paymentRequest.getOrderedProducts();
         List<Integer> productAmounts = orderProductRepository.findByOrderId(order.getId())
                                                              .stream().map(ProductToOrder::getAmount).collect(toList());
 
-        this.discountConfirm(memberId, order, coupon, usedPoint);
-        this.orderedProductConfirm(productIds, productAmounts);
-        this.cartConfirm(order, productIds);
-    }
-
-    /**
-     * 할인 적용 부분에 대한 확정 처리입니다.
-     *
-     * @param memberId - 주문자 Id
-     * @param order - 결제완료 한 주문
-     * @param coupon - 주문에 사용한 쿠폰
-     * @param usedPoint - 주문에 사용한 포인트 금액
-     */
-    private void discountConfirm(Long memberId, Order order, Optional<Long> coupon, Integer usedPoint) {
-        if (coupon.isPresent()) {
-            Long couponId = coupon.get();
-            GivenCoupon givenCoupon = givenCouponRepository.findById(new GivenCoupon.Pk(couponId, memberId))
-                                                           .orElseThrow(GivenCouponNotFoundException::new);
-            UsedCoupon usedCoupon = UsedCoupon.builder()
-                                              .pk(new UsedCoupon.Pk(order.getId(), couponId, memberId))
-                                              .order(order)
-                                              .givenCoupon(givenCoupon)
-                                              .build();
-            usedCouponRepository.save(usedCoupon);
-        }
-        pointService.createPointHistoryForOrder(memberId, order.getId(),
-                                                new PointHistoryRequest(-usedPoint, PointContent.USE.getContent()));
-    }
-
-    /**
-     * 주문한 상품 재고량 변동 확정 처리입니다.
-     *
-     * @param productIds - 주문한 상품 id 목록
-     * @param productAmounts - 주문한 상품 수량 목록
-     */
-    private void orderedProductConfirm(List<Long> productIds, List<Integer> productAmounts) {
-        List<Product> products = productRepository.findByIds(productIds);
-
-        int i = 0;
-        for (Product product : products) {
-            long remain = product.getTotalStock() - productAmounts.get(i++);
-            product.updateTotalStock(remain);
-            productRepository.save(product);
-        }
-    }
-
-    /**
-     * 장바구니에서 주문한 상품 삭제 확정 처리입니다.
-     *
-     * @param order - 결제완료한 주문
-     * @param productIds - 주문한 상품 Id 목록
-     */
-    private void cartConfirm(Order order, List<Long> productIds) {
-        List<CartProduct.Pk> cartProductPk = productIds.stream()
-                                                       .map(productId -> new CartProduct.Pk(
-                                                               order.getMember().getCart().getId(),
-                                                               productId))
-                                                       .collect(toList());
-        cartProductRepository.deleteAllById(cartProductPk);
+        coupon.ifPresent(couponId -> publisher.publishEvent(new OrderCouponUsedEvent(order, couponId)));
+        publisher.publishEvent(new OrderPointSavedEvent(order, new PointHistoryRequest(-usedPoint,
+                                                                                       PointContent.USE.getContent())));
+        publisher.publishEvent(new OrderProductUpdatedEvent(productIds, productAmounts));
+        publisher.publishEvent(new OrderCartUpdatedEvent(order, productIds));
     }
 
     /**

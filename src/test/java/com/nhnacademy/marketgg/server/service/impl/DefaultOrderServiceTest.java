@@ -170,7 +170,7 @@ class DefaultOrderServiceTest {
         given(productRepository.save(any(Product.class))).willReturn(product);
         given(orderProductRepository.save(any(OrderProduct.class))).willReturn(Dummy.getDummyOrderProduct());
         given(givenCouponRepository.findById(any(GivenCoupon.Pk.class))).willReturn(Optional.of(givenCoupon));
-        given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
+        given(usedCouponRepository.existsCouponId(anyLong(), anyLong())).willReturn(false);
         given(pointRepository.findLastTotalPoints(any())).willReturn(20000);
 
         willDoNothing().given(cartProductService).deleteProducts(memberInfo, productIds);
@@ -181,7 +181,7 @@ class DefaultOrderServiceTest {
         then(authRepository).should(times(1)).getMemberInfo(any(MemberInfoRequest.class));
         then(deliveryAddressRepository).should(times(1)).findById(anyLong());
         then(productRepository).should(times(1)).findByIds(anyList());
-        then(usedCouponRepository).should(times(1)).existsCouponId(anyLong());
+        then(usedCouponRepository).should(times(1)).existsCouponId(anyLong(), anyLong());
     }
 
     // @Test
@@ -204,7 +204,7 @@ class DefaultOrderServiceTest {
 
         orderService.createOrder(orderCreateRequest, memberInfo);
 
-        then(usedCouponRepository).should(times(0)).existsCouponId(anyLong());
+        then(usedCouponRepository).should(times(0)).existsCouponId(anyLong(), anyLong());
     }
 
     // @Test
@@ -220,7 +220,7 @@ class DefaultOrderServiceTest {
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
         given(productRepository.save(any(Product.class))).willReturn(product);
         given(givenCouponRepository.findById(any(GivenCoupon.Pk.class))).willReturn(Optional.of(givenCoupon));
-        given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
+        given(usedCouponRepository.existsCouponId(anyLong(), anyLong())).willReturn(false);
         given(pointRepository.findLastTotalPoints(any())).willReturn(20000);
 
         orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo);
@@ -260,7 +260,7 @@ class DefaultOrderServiceTest {
                 .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
         given(givenCouponRepository.findById(any(GivenCoupon.Pk.class))).willReturn(Optional.of(givenCoupon));
-        given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
+        given(usedCouponRepository.existsCouponId(anyLong(), anyLong())).willReturn(false);
 
         assertThatThrownBy(() -> orderService.createOrder(orderCreateRequest, memberInfo))
                 .isInstanceOf(CouponNotOverMinimumMoneyException.class);
@@ -276,7 +276,7 @@ class DefaultOrderServiceTest {
                 .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
         given(givenCouponRepository.findById(any(GivenCoupon.Pk.class))).willReturn(Optional.of(givenCoupon));
-        given(usedCouponRepository.existsCouponId(anyLong())).willReturn(false);
+        given(usedCouponRepository.existsCouponId(anyLong(), anyLong())).willReturn(false);
         given(pointRepository.findLastTotalPoints(any())).willReturn(100);
 
         assertThatThrownBy(() -> orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo))
@@ -293,7 +293,7 @@ class DefaultOrderServiceTest {
                 .willReturn(List.of(Dummy.getDummyProductToOrder()));
         given(productRepository.findByIds(productIds)).willReturn(List.of(product));
         given(givenCouponRepository.findById(any(GivenCoupon.Pk.class))).willReturn(Optional.of(givenCoupon));
-        given(usedCouponRepository.existsCouponId(anyLong())).willReturn(true);
+        given(usedCouponRepository.existsCouponId(anyLong(), anyLong())).willReturn(true);
 
         assertThatThrownBy(() -> orderService.createOrder(Dummy.getDummyOrderCreateRequest(), memberInfo))
                 .isInstanceOf(CouponIsAlreadyUsedException.class);

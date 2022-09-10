@@ -2,7 +2,9 @@ package com.nhnacademy.marketgg.server.eventlistener.event.order;
 
 import static com.nhnacademy.marketgg.server.constant.PointContent.ORDER;
 
+import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.entity.Order;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -12,20 +14,11 @@ import lombok.Getter;
  * @version 1.0.0
  */
 @Getter
+@AllArgsConstructor
 public class OrderPointSavedEvent {
 
     private Order order;
-    private Integer point;
-    private String content;
 
-    private OrderPointSavedEvent(final Order order, final Integer point, final String content) {
-        this.order = order;
-        this.point = point;
-        this.content = content;
-    }
-
-    public static OrderPointSavedEvent restorePointHistory(final Order order, final Integer point) {
-        return new OrderPointSavedEvent(order, point, order.getId() + " " + ORDER.getContent());
-    }
+    private PointHistoryRequest pointRequest;
 
 }
