@@ -5,6 +5,7 @@ import com.nhnacademy.marketgg.server.dto.PageEntity;
 import com.nhnacademy.marketgg.server.dto.info.MemberNameResponse;
 import com.nhnacademy.marketgg.server.dto.response.deliveryaddress.DeliveryAddressResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderPaymentKey;
 import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponIsAlreadyUsedException;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotOverMinimumMoneyException;
@@ -386,6 +387,19 @@ class DefaultOrderServiceTest {
         then(orderRepository).should(times(1)).save(any(Order.class));
         then(publisher).should(times(1)).publishEvent(any(OrderPointCanceledEvent.class));
         then(publisher).should(times(1)).publishEvent(any(OrderCouponCanceledEvent.class));
+    }
+
+    @Test
+    @DisplayName("주문의 결제키 조회")
+    void testRetrievePaymentKey() {
+        OrderPaymentKey paymentKey = new OrderPaymentKey("paymentKey");
+
+        given(orderRepository.findPaymentKeyById(anyLong(), anyLong(), anyBoolean())).willReturn(paymentKey);
+
+        orderService.retrieveOrderPaymentKey(1L, memberInfo);
+
+        then(orderRepository).should(times(1))
+                             .findPaymentKeyById(anyLong(), anyLong(), anyBoolean());
     }
 
 }

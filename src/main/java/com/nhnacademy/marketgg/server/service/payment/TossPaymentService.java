@@ -14,11 +14,7 @@ import com.nhnacademy.marketgg.server.dto.payment.response.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.request.order.ProductToOrder;
 import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
-import com.nhnacademy.marketgg.server.entity.CartProduct;
-import com.nhnacademy.marketgg.server.entity.GivenCoupon;
 import com.nhnacademy.marketgg.server.entity.Order;
-import com.nhnacademy.marketgg.server.entity.Product;
-import com.nhnacademy.marketgg.server.entity.UsedCoupon;
 import com.nhnacademy.marketgg.server.entity.payment.CardPayment;
 import com.nhnacademy.marketgg.server.entity.payment.MobilePhonePayment;
 import com.nhnacademy.marketgg.server.entity.payment.Payment;
@@ -28,11 +24,8 @@ import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderCartUpdated
 import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderCouponUsedEvent;
 import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderPointSavedEvent;
 import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderProductUpdatedEvent;
-import com.nhnacademy.marketgg.server.exception.givencoupon.GivenCouponNotFoundException;
 import com.nhnacademy.marketgg.server.exception.order.OrderNotFoundException;
 import com.nhnacademy.marketgg.server.exception.payment.PaymentNotFoundException;
-import com.nhnacademy.marketgg.server.repository.cart.CartProductRepository;
-import com.nhnacademy.marketgg.server.repository.givencoupon.GivenCouponRepository;
 import com.nhnacademy.marketgg.server.repository.order.OrderRepository;
 import com.nhnacademy.marketgg.server.repository.orderproduct.OrderProductRepository;
 import com.nhnacademy.marketgg.server.repository.payment.CardPaymentRepository;
@@ -41,10 +34,7 @@ import com.nhnacademy.marketgg.server.repository.payment.PaymentAdapter;
 import com.nhnacademy.marketgg.server.repository.payment.PaymentRepository;
 import com.nhnacademy.marketgg.server.repository.payment.TransferPaymentRepository;
 import com.nhnacademy.marketgg.server.repository.payment.VirtualAccountPaymentRepository;
-import com.nhnacademy.marketgg.server.repository.product.ProductRepository;
-import com.nhnacademy.marketgg.server.repository.usedcoupon.UsedCouponRepository;
 import com.nhnacademy.marketgg.server.service.order.OrderService;
-import com.nhnacademy.marketgg.server.service.point.PointService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -80,11 +70,6 @@ public class TossPaymentService implements PaymentService {
     private final OrderService orderService;
     private final OrderRepository orderRepository;
     private final OrderProductRepository orderProductRepository;
-    private final UsedCouponRepository usedCouponRepository;
-    private final GivenCouponRepository givenCouponRepository;
-    private final PointService pointService;
-    private final ProductRepository productRepository;
-    private final CartProductRepository cartProductRepository;
 
     private final PaymentRepository paymentRepository;
     private final CardPaymentRepository cardPaymentRepository;
@@ -159,7 +144,7 @@ public class TossPaymentService implements PaymentService {
     /**
      * 결제 승인 확정 후 주문에 대한 변동사항을 확정 처리합니다.
      *
-     * @param order - 결제완료 한 주문
+     * @param order          - 결제완료 한 주문
      * @param paymentRequest - 결제 승인 확정 요청 정보
      */
     private void confirmOrder(Order order, PaymentConfirmRequest paymentRequest) {
