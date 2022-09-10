@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum MemberBenefits {
 
+    MEMBER(1),
     VIP(3),
     G_VIP(5);
 

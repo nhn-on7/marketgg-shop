@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.marketgg.server.constant.OrderStatus;
+import com.nhnacademy.marketgg.server.constant.PointContent;
 import com.nhnacademy.marketgg.server.constant.payment.PaymentStatus;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
@@ -187,7 +188,8 @@ public class TossPaymentService implements PaymentService {
                                               .build();
             usedCouponRepository.save(usedCoupon);
         }
-        pointService.createPointHistoryForOrder(memberId, order.getId(), new PointHistoryRequest(-usedPoint, "포인트 사용"));
+        pointService.createPointHistoryForOrder(memberId, order.getId(),
+                                                new PointHistoryRequest(-usedPoint, PointContent.USE.getContent()));
     }
 
     /**
@@ -277,7 +279,7 @@ public class TossPaymentService implements PaymentService {
                                      .orElseThrow(OrderNotFoundException::new);
 
         foundPayment.changePaymentStatus(PaymentStatus.CANCELED);
-        order.updateStatus(OrderStatus.CANCEL_COMPLETE.getStatus());
+        orderService.cancelOrder(order.getId());
     }
 
 }
