@@ -11,12 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 
 @Slf4j
 @RequiredArgsConstructor
-public class SecurityFilter implements Filter {
+public class WhiteListFilter implements Filter {
 
     private final String gateway;
 
@@ -39,6 +38,7 @@ public class SecurityFilter implements Filter {
             if (!Objects.equals(xForwardedFor, gatewayUrl)) {
                 log.info("!Objects.equals(xForwardedFor, gatewayUrl): {}", !Objects.equals(xForwardedFor, gatewayUrl));
                 response.sendError(HttpStatus.FORBIDDEN.value());
+                return;
             }
         }
 
