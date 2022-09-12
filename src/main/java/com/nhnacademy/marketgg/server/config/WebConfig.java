@@ -1,7 +1,7 @@
 package com.nhnacademy.marketgg.server.config;
 
 import com.nhnacademy.marketgg.server.filter.AdminFilter;
-import com.nhnacademy.marketgg.server.filter.SecurityFilter;
+import com.nhnacademy.marketgg.server.filter.WhiteListFilter;
 import java.time.Duration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -57,11 +57,11 @@ public class WebConfig {
 
     @Profile("prod")
     @Bean
-    public FilterRegistrationBean<SecurityFilter> securityFilterFilterRegistrationBean(
+    public FilterRegistrationBean<WhiteListFilter> securityFilterFilterRegistrationBean(
         @Value("${gg.gateway.origin}") String gateway) {
 
-        FilterRegistrationBean<SecurityFilter> filter = new FilterRegistrationBean<>();
-        filter.setFilter(new SecurityFilter(gateway));
+        FilterRegistrationBean<WhiteListFilter> filter = new FilterRegistrationBean<>();
+        filter.setFilter(new WhiteListFilter(gateway));
         filter.setOrder(1);
         filter.addUrlPatterns("/*");
 
