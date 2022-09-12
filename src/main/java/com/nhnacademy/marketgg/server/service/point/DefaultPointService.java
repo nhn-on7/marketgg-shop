@@ -1,5 +1,7 @@
 package com.nhnacademy.marketgg.server.service.point;
 
+import com.nhnacademy.marketgg.server.constant.MemberBenefits;
+import com.nhnacademy.marketgg.server.constant.PointContent;
 import com.nhnacademy.marketgg.server.dto.request.point.PointHistoryRequest;
 import com.nhnacademy.marketgg.server.dto.response.point.PointRetrieveResponse;
 import com.nhnacademy.marketgg.server.entity.Member;
@@ -55,20 +57,34 @@ public class DefaultPointService implements PointService {
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
         Integer totalPoint = pointRepository.findLastTotalPoints(member.getId());
 
-        this.checkMemberGrade(member.getMemberGrade().getGrade(), pointRequest);
+        Integer savePoint = this.checkMemberGrade(member.getMemberGrade().getGrade(), order.getTotalAmount());
 
-        PointHistory pointHistory =
+        PointHistory pointHistoryMinus =
                 new PointHistory(member, order, totalPoint + pointRequest.getPoint(), pointRequest);
-
-        pointRepository.save(pointHistory);
+        pointRepository.save(pointHistoryMinus);
+        PointHistory pointHistoryPlus =
+                new PointHistory(member, order, totalPoint + pointRequest.getPoint() + savePoint,
+                                 new PointHistoryRequest(savePoint, PointContent.ORDER.getContent()));
+        pointRepository.save(pointHistoryPlus);
     }
 
-    private void checkMemberGrade(final String grade, final PointHistoryRequest pointRequest) {
-        if ((grade.compareTo("VIP") == 0) && pointRequest.getPoint() > 0) {
-            pointRequest.vipBenefit();
-        } else if ((grade.compareTo("G-VIP") == 0) && pointRequest.getPoint() > 0) {
-            pointRequest.gVipBenefit();
+    private Integer checkMemberGrade(final String grade, final Long totalAmount) {
+        int savePoint;
+        switch (grade) {
+            case "Member":
+                savePoint = (int) Math.round(totalAmount * 0.01 * MemberBenefits.MEMBER.getBenefit());
+                break;
+            case "VIP":
+                savePoint = (int) Math.round(totalAmount * 0.01 * MemberBenefits.VIP.getBenefit());
+                break;
+            case "G-VIP":
+                savePoint = (int) Math.round(totalAmount * 0.01 * MemberBenefits.G_VIP.getBenefit());
+                break;
+            default:
+                savePoint = (int) Math.round(totalAmount * 0.01);
+                break;
         }
+        return savePoint;
     }
 
 }

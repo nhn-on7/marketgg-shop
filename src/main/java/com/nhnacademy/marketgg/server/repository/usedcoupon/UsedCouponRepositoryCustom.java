@@ -14,7 +14,7 @@ public interface UsedCouponRepositoryCustom {
      * @return 등록되어 있다면 true(사용불가), 등록되어 있지 않다면 false(사용가능)를 반환합니다.
      * @since 1.0.0
      */
-    boolean existsCouponId(final Long couponId);
+    boolean existsCouponId(final Long couponId, final Long memberId);
 
     /**
      * 특정 주문에 사용한 쿠폰 번호를 조회하는 메소드입니다.

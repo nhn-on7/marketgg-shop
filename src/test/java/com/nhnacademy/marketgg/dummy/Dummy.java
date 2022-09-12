@@ -1,6 +1,8 @@
 package com.nhnacademy.marketgg.dummy;
 
 import com.nhnacademy.marketgg.server.constant.CouponStatus;
+import com.nhnacademy.marketgg.server.constant.payment.PaymentStatus;
+import com.nhnacademy.marketgg.server.constant.payment.PaymentType;
 import com.nhnacademy.marketgg.server.dto.info.AuthInfo;
 import com.nhnacademy.marketgg.server.dto.info.MemberInfo;
 import com.nhnacademy.marketgg.server.dto.request.category.CategorizationCreateRequest;
@@ -27,6 +29,7 @@ import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.elastic.document.ElasticBoard;
 import com.nhnacademy.marketgg.server.elastic.request.SearchRequest;
 import com.nhnacademy.marketgg.server.entity.*;
+import com.nhnacademy.marketgg.server.entity.payment.Payment;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -329,8 +332,11 @@ public class Dummy {
     }
 
     public static Order getDummyOrder() {
-        return new Order(getDummyMember(getDummyCart(1L)), getDummyDeliveryAddress(), getDummyOrderCreateRequest(),
-                         "젤리", 2);
+        Order order = new Order(getDummyMember(getDummyCart(1L)), getDummyDeliveryAddress(),
+                               getDummyOrderCreateRequest(), "젤리", 2);
+        ReflectionTestUtils.setField(order, "id", 1L);
+
+        return order;
     }
 
     public static OrderProduct getDummyOrderProduct() {
@@ -384,5 +390,10 @@ public class Dummy {
                                                                           LocalDateTime.now(), CouponStatus.VALID.getStatus());
 
         return List.of(givenCouponResponse);
+    }
+
+    public static Payment getDummyPayment() {
+        return new Payment(1L, Dummy.getDummyOrder(), "orderName", "paymentKey", PaymentType.CARD, 10000L, 100L, 100L
+                , PaymentStatus.DONE, "transactionKey", LocalDateTime.now(), LocalDateTime.now(), null);
     }
 }
