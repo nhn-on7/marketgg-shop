@@ -26,6 +26,7 @@ import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.member.MemberService;
 import com.nhnacademy.marketgg.server.service.point.PointService;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
+import com.nhnacademy.marketgg.server.service.product.ReviewService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -35,8 +36,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -67,6 +66,9 @@ class MemberControllerTest {
 
     @MockBean
     ProductInquiryPostService inquiryPostService;
+
+    @MockBean
+    ReviewService reviewService;
 
     HttpHeaders httpHeaders;
 
