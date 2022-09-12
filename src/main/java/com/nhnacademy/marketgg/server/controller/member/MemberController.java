@@ -17,9 +17,11 @@ import com.nhnacademy.marketgg.server.dto.response.auth.UuidTokenResponse;
 import com.nhnacademy.marketgg.server.dto.response.coupon.GivenCouponResponse;
 import com.nhnacademy.marketgg.server.dto.response.member.MemberResponse;
 import com.nhnacademy.marketgg.server.dto.response.product.ProductInquiryResponse;
+import com.nhnacademy.marketgg.server.dto.response.review.ReviewResponse;
 import com.nhnacademy.marketgg.server.service.coupon.GivenCouponService;
 import com.nhnacademy.marketgg.server.service.member.MemberService;
 import com.nhnacademy.marketgg.server.service.product.ProductInquiryPostService;
+import com.nhnacademy.marketgg.server.service.product.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,6 +29,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -46,7 +49,7 @@ import javax.validation.Valid;
 /**
  * 회원관리에 관련된 RestController 입니다.
  *
- * @author 김훈민, 민아영, 박세완
+ * @author 김훈민, 민아영, 박세완, 조현진
  * @version 1.0.0
  */
 @Slf4j
@@ -59,6 +62,7 @@ public class MemberController {
     private final MemberService memberService;
     private final GivenCouponService givenCouponService;
     private final ProductInquiryPostService productInquiryPostService;
+    private final ReviewService reviewService;
 
     public static final String JWT_EXPIRE = "JWT-Expire";
 
@@ -225,6 +229,37 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(ShopResult.successWith(productInquiryResponses));
+    }
+
+    /**
+     * 회원이 작성한 후기를 조회하기위한 컨트롤러입니다.
+     *
+     * @param memberInfo
+     * @param page
+     * @return
+     */
+    @Operation(summary = "회원의 후기",
+               description = "회원이 등록한 후기에 대해 조회합니다.",
+               responses = @ApiResponse(responseCode = "200",
+                                        content = @Content(mediaType = "application/json",
+                                                           schema = @Schema(implementation = PageEntity.class)),
+                                        useReturnTypeSchema = true))
+    @GetMapping("/reviews")
+    public ResponseEntity<PageEntity<ReviewResponse>> retrieveReviewsByMember(
+        final MemberInfo memberInfo, @RequestParam(value = "page", defaultValue = "1") final Integer page) {
+
+        DefaultPageRequest pageRequest = new DefaultPageRequest(page - 1);
+        Page<ReviewResponse> responsePage =
+            reviewService.retrieveReviewsByMember(memberInfo, pageRequest.getPageable());
+
+        PageEntity<ReviewResponse> pageEntity = new PageEntity<>(responsePage.getNumber(),
+                                                                 responsePage.getSize(),
+                                                                 responsePage.getTotalPages(),
+                                                                 responsePage.getContent());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(pageEntity);
     }
 
 }
