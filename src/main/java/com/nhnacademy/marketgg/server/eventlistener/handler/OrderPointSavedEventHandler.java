@@ -20,7 +20,7 @@ public class OrderPointSavedEventHandler {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void createUsedCoupon(OrderPointSavedEvent event) {
+    public void createPointHistory(OrderPointSavedEvent event) {
         Order order = event.getOrder();
         Long memberId = order.getMember().getId();
         PointHistoryRequest request = event.getPointRequest();

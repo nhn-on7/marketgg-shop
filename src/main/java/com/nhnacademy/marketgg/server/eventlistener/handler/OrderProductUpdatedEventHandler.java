@@ -20,7 +20,7 @@ public class OrderProductUpdatedEventHandler {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void createUsedCoupon(OrderProductUpdatedEvent event) {
+    public void updateProductStock(OrderProductUpdatedEvent event) {
         List<Product> products = productRepository.findByIds(event.getProductIds());
 
         int i = 0;

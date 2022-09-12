@@ -28,6 +28,7 @@ import com.nhnacademy.marketgg.server.entity.OrderProduct;
 import com.nhnacademy.marketgg.server.entity.Product;
 import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderCouponCanceledEvent;
 import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderPointCanceledEvent;
+import com.nhnacademy.marketgg.server.eventlistener.event.order.OrderProductCanceledEvent;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponIsAlreadyUsedException;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotFoundException;
 import com.nhnacademy.marketgg.server.exception.coupon.CouponNotOverMinimumMoneyException;
@@ -151,8 +152,7 @@ public class DefaultOrderService implements OrderService {
      * @param memberResponse 주문한 회원 정보
      * @param memberId       주문한 회원 아이디
      */
-    private void checkOrderValid(final OrderCreateRequest orderRequest,
-                                 final MemberInfoResponse memberResponse,
+    private void checkOrderValid(final OrderCreateRequest orderRequest, final MemberInfoResponse memberResponse,
                                  final Long memberId) {
 
         if (!memberResponse.getEmail().equals(orderRequest.getEmail())) {
@@ -337,6 +337,7 @@ public class DefaultOrderService implements OrderService {
 
         publisher.publishEvent(new OrderPointCanceledEvent(order));
         publisher.publishEvent(new OrderCouponCanceledEvent(order));
+        publisher.publishEvent(new OrderProductCanceledEvent(order));
     }
 
     @Override
