@@ -152,4 +152,10 @@ public class DefaultReviewService implements ReviewService {
         return false;
     }
 
+    @Override
+    public Page<ReviewResponse> retrieveReviewsByMember(final MemberInfo memberInfo, final Pageable pageable) {
+
+        return reviewRepository.retrieveReviewsByMember(memberInfo, pageable);
+    }
+
 }
