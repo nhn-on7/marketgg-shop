@@ -10,9 +10,10 @@ import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderPaymentKey;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * 주문 Service 입니다.
@@ -93,7 +94,7 @@ public interface OrderService {
     /**
      * 주문의 paymentKey 를 조회하는 메소드입니다.
      *
-     * @param orderId - 조회할 주문의 식별번호입니다.
+     * @param orderId    - 조회할 주문의 식별번호입니다.
      * @param memberInfo - 조회하는 회원의 정보입니다.
      * @return 조회한 payment 를 반환합니다.
      */

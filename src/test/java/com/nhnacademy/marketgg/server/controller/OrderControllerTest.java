@@ -2,6 +2,7 @@ package com.nhnacademy.marketgg.server.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.marketgg.dummy.Dummy;
 import com.nhnacademy.marketgg.server.annotation.Role;
 import com.nhnacademy.marketgg.server.aop.AuthInfoAspect;
 import com.nhnacademy.marketgg.server.aop.MemberInfoAspect;
@@ -13,8 +14,8 @@ import com.nhnacademy.marketgg.server.dto.request.order.OrderCreateRequest;
 import com.nhnacademy.marketgg.server.dto.request.order.OrderUpdateStatusRequest;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderDetailRetrieveResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderFormResponse;
+import com.nhnacademy.marketgg.server.dto.response.order.OrderPaymentKey;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
-import com.nhnacademy.marketgg.dummy.Dummy;
 import com.nhnacademy.marketgg.server.entity.Cart;
 import com.nhnacademy.marketgg.server.repository.member.MemberRepository;
 import com.nhnacademy.marketgg.server.service.order.OrderService;
@@ -226,6 +227,21 @@ class OrderControllerTest {
                .andExpect(status().isOk());
 
         then(orderService).should(times(1)).cancelOrder(anyLong());
+    }
+
+    @Test
+    @DisplayName("주문 결제키 조회")
+    void testRetrieveOrderPaymentKey() throws Exception {
+        OrderPaymentKey paymentKey = new OrderPaymentKey("paymentKey");
+
+        given(orderService.retrieveOrderPaymentKey(anyLong(), any(MemberInfo.class))).willReturn(paymentKey);
+
+        mockMvc.perform(get(baseUri + "/{orderId}/paymentKey", 1L)
+                                .contentType(MediaType.APPLICATION_JSON))
+               .andExpect(status().isOk());
+
+        then(orderService).should(times(1))
+                          .retrieveOrderPaymentKey(anyLong(), any(MemberInfo.class));
     }
 
 }

@@ -1,11 +1,11 @@
 package com.nhnacademy.marketgg.server.controller.payment;
 
 import com.nhnacademy.marketgg.server.dto.ShopResult;
-import com.nhnacademy.marketgg.server.dto.payment.response.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentCancelRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.PaymentConfirmRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountCreateRequest;
 import com.nhnacademy.marketgg.server.dto.payment.request.VirtualAccountDepositRequest;
+import com.nhnacademy.marketgg.server.dto.payment.response.PaymentResponse;
 import com.nhnacademy.marketgg.server.dto.response.order.OrderToPayment;
 import com.nhnacademy.marketgg.server.service.payment.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,9 +13,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import java.net.URI;
-import java.util.function.BooleanSupplier;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,6 +22,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.util.function.BooleanSupplier;
 
 /**
  * 결제와 관련된 요청 및 응답을 제공합니다.

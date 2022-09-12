@@ -1,12 +1,15 @@
 package com.nhnacademy.marketgg.server.dto.payment.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 결제 승인 요청을 처리하기 위한 요청 클래스입니다.
@@ -34,5 +37,16 @@ public class PaymentConfirmRequest {
     @Schema(title = "총 결제금액", description = "적립금 및 쿠폰 내역이 반영된 최종 결제 금액입니다.", example = "75600")
     @NotNull
     private final Long amount;
+
+    @Schema(title = "사용한 쿠폰 ID", description = "주문서 작성에서 사용한 쿠폰 ID 입니다.", example = "1L")
+    private Optional<Long> couponId;
+
+    @Schema(title = "사용한 포인트", description = "주문서 작성에서 사용한 포인트 금액입니다.", example = "100")
+    @NotNull
+    private Integer usedPoint;
+
+    @Schema(title = "주문한 상품 ID 목록", description = "장바구니에서 주문한 상품 ID 목록입니다.", example = "1L, 2L")
+    @NotNull
+    private List<Long> orderedProducts;
 
 }

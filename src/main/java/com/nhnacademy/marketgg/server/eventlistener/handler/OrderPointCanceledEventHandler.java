@@ -42,11 +42,16 @@ public class OrderPointCanceledEventHandler {
         List<PointHistory> pointHistoryList = pointRepository.findByOrderId(event.getOrder().getId());
         Integer oldTotalPoint = pointRepository.findLastTotalPoints(member.getId());
 
+        Integer point;
+        Integer newTotalPoint;
         for (PointHistory pointHistory : pointHistoryList) {
-            Integer point = pointHistory.getPoint();
-            Integer newTotalPoint = pointHistory.getContent().equals(ORDER.getContent())
-                    ? oldTotalPoint - point
-                    : oldTotalPoint + point;
+            if (pointHistory.getContent().equals(ORDER.getContent())) {
+                point = pointHistory.getPoint();
+                newTotalPoint = oldTotalPoint - point;
+            } else {
+                point = -pointHistory.getPoint();
+                newTotalPoint = oldTotalPoint + point;
+            }
 
             PointHistoryRequest pointRequest = new PointHistoryRequest(point, ORDER_CANCEL.getContent());
 

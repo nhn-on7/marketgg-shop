@@ -17,4 +17,6 @@ public class OrderCouponUsedEvent {
 
     private Order order;
 
+    private Long couponId;
+
 }

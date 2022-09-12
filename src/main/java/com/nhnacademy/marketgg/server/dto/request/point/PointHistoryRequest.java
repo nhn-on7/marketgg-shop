@@ -30,12 +30,4 @@ public class PointHistoryRequest {
     @Size(min = 1, max = 100)
     private String content;
 
-    public void vipBenefit() {
-        this.point = point * VIP.getBenefit();
-    }
-
-    public void gVipBenefit() {
-        this.point = point * G_VIP.getBenefit();
-    }
-
 }
