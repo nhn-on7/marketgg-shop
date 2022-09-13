@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
@@ -35,6 +37,7 @@ public class GiveCouponHandler {
      * @since 1.0.0
      */
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void createGivenCoupon(final GiveCouponEvent couponRequest) {
 
@@ -42,9 +45,9 @@ public class GiveCouponHandler {
                                               .orElseThrow(CouponNotFoundException::new);
 
         GivenCoupon givenCoupon
-                = new GivenCoupon(new GivenCoupon.Pk(signUpCoupon.getId(),
-                                                     couponRequest.getMember().getId()), signUpCoupon,
-                                  couponRequest.getMember(), LocalDateTime.now());
+            = new GivenCoupon(new GivenCoupon.Pk(signUpCoupon.getId(),
+                                                 couponRequest.getMember().getId()), signUpCoupon,
+                              couponRequest.getMember(), LocalDateTime.now());
 
         givenCouponRepository.save(givenCoupon);
     }
