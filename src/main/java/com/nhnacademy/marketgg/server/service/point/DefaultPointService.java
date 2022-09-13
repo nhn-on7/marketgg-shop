@@ -37,7 +37,7 @@ public class DefaultPointService implements PointService {
         return pointRepository.findAllForAdmin(pageable);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     @Override
     public void createPointHistory(final Long id, final PointHistoryRequest pointRequest) {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
@@ -48,7 +48,7 @@ public class DefaultPointService implements PointService {
         pointRepository.save(pointHistory);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     @Override
     public void createPointHistoryForOrder(final Long memberId, final Long orderId,
                                            final PointHistoryRequest pointRequest) {
